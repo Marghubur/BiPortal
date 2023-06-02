@@ -1008,6 +1008,9 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
   closePopUp() {
     $('#viewFileModal').modal('hide');
+    this.isClientSelected = false;
+    this.allTimesheet = [];
+    this.loadPageLevelData();
   }
 
   goToAttendencePage(empId: any) {
@@ -1178,6 +1181,9 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         if (response.ResponseBody) {
           Toast("Email send successfully");
           $('#viewFileModal').modal('hide');
+          this.isClientSelected = false;
+          this.allTimesheet = [];
+          this.loadPageLevelData();
         } else {
           ErrorToast("Fail to send email. Please contact to admin.");
         }

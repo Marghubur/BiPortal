@@ -189,6 +189,7 @@ export class HolidayComponent implements OnInit {
   }
 
   addHolidayPopup() {
+    this.submitted = false;
     this.fromModel = { day: new Date().getDate(), month:new Date().getMonth() + 1, year:new Date().getFullYear()};
     this.toModel = { day: new Date().getDate(), month:new Date().getMonth() + 1, year:new Date().getFullYear()};
     this.selectedHoliday = new CompanyHoliday();
@@ -279,6 +280,7 @@ export class HolidayComponent implements OnInit {
     this.loadData();
     this.holidayDetail.DescriptionNote="";
     this.holidayDetail.Country = null;
+    this.holidayDetail.IsHalfDay = null;
   }
 
   arrangeDetails(flag: any, FieldName: string) {

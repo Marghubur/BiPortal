@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminDeclaration, AdminForm12B, AdminFreeTaxFilling, AdminPreferences, AdminSalary, AdminSummary, AdminDeclarationApprovalRule, AccountsBaseRoute, UserAccountsBaseRoute, Declaration, Preferences, Form12B, Summary, Salary } from 'src/providers/constants';
+import { AdminDeclaration, AdminForm12B, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import 'bootstrap';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -70,7 +70,7 @@ export class PreviousincomeComponent implements OnInit {
       return;
     }
     this.http.get(`Declaration/GetPreviousEmployemnt/${this.userDetail.UserId}`).then(res => {
-      if (res.ResponseBody) {
+      if (res.ResponseBody && res.ResponseBody.lengh > 0) {
         this.previousEmploymentDetail = res.ResponseBody;
         this.initForm();
         this.isRecordFound = true;
@@ -126,7 +126,8 @@ export class PreviousincomeComponent implements OnInit {
           Professional: new FormControl(this.previousEmploymentDetail[i].Professional),
           IncomeTax: new FormControl(this.previousEmploymentDetail[i].IncomeTax),
           OtherTax: new FormControl(this.previousEmploymentDetail[i].OtherTax),
-          OtherTaxable: new FormControl(this.previousEmploymentDetail[i].OtherTaxable)
+          OtherTaxable: new FormControl(this.previousEmploymentDetail[i].OtherTaxable),
+          MonthNumber: new FormControl(this.previousEmploymentDetail[i].MonthNumber)
         }));
         i++;
       }
@@ -138,6 +139,7 @@ export class PreviousincomeComponent implements OnInit {
           EmployeeId: new FormControl(this.userDetail.UserId),
           PreviousEmpDetailId: new FormControl(0),
           Month: new FormControl(this.getMonthName(monthNumber)),
+          MonthNumber: new FormControl(monthNumber),
           Year: new FormControl(this.currentYear),
           Gross: new FormControl(0),
           Basic: new FormControl(0),
@@ -172,18 +174,33 @@ export class PreviousincomeComponent implements OnInit {
     return this.previousIncomForm.get('PreviousIncomes') as FormArray;
   }
 
+  savePreviousIncome() {
+    this.isLoading = true;
+    let value = this.previousIncomForm.value.PreviousIncomes;
+    if (value) {
+      this.http.post(`Declaration/PreviousEmployemnt/${this.employeeId}`, value).then(res => {
+        if (res.ResponseBody) {
+          Toast("Previous employment details added/updated successfully");
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
+  }
+
   activateMe(ele: string) {
     switch(ele) {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Salary, this.cachedData);
+        this.nav.navigateRoot(AdminSalary, this.cachedData);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Summary, this.cachedData);
+        this.nav.navigateRoot(AdminSummary, this.cachedData);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Preferences, this.cachedData);
+        this.nav.navigateRoot(AdminPreferences, this.cachedData);
         break;
     }
   }
@@ -191,12 +208,12 @@ export class PreviousincomeComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "declaration-tab":
-        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Declaration, this.cachedData);
+        this.nav.navigateRoot(AdminDeclaration, this.cachedData);
         break;
       case "previous-income-tab":
         break;
       case "form-12-tab":
-        this.nav.navigateRoot(UserAccountsBaseRoute +"/" + Form12B, this.cachedData);
+        this.nav.navigateRoot(AdminForm12B, this.cachedData);
         break;
     }
   }
@@ -219,4 +236,5 @@ class PreviousEmploymentDetail {
   EmployeeId: number = 0;
   PreviousEmpDetailId: number = 0;
   Year: number = 0;
+  MonthNumber: number = 0;
 }

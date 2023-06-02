@@ -72,7 +72,17 @@ export class documentsComponent implements OnInit, OnDestroy {
       this.currentUser.Name = userDetail.FirstName +" "+ userDetail.LastName
     }
     if(this.currentUser) {
-      this.rootLocation = `${this.rootLocation}${environment.FolderDelimiter}${this.currentUser.Email.replace("@", "_").replace(/\./g, "_")}`;
+      let userType = "";
+      switch (this.currentUser.UserTypeId) {
+        case UserType.Employee:
+          userType = "Employee"
+          break;
+        default:
+          userType = "Client"
+          break;
+      }
+      // this.rootLocation = `${this.rootLocation}${environment.FolderDelimiter}${this.currentUser.Email.replace("@", "_").replace(/\./g, "_")}`;
+      this.rootLocation = `${this.rootLocation}${environment.FolderDelimiter}${userType}_${this.currentUser.UserId}`;
     } else {
       ErrorToast("UnAuthorized access.")
     }

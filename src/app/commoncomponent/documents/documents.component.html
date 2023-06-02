@@ -37,7 +37,7 @@
     </div>
     <div class="x_content mt-4">
       <ng-container *ngIf="isPageReady">
-        <a href="javascript:void(0)" *ngFor="let f of folderNav" (click)="navigateTo(f.name, f.route)"
+        <a href="javascript:void(0)" *ngFor="let f of folderNav; let i = index;" (click)="navigateTo(f.name, f.route)" [ngClass]="{'pe-none': (folderNav.length == 1 || i+1 == folderNav.length)}"
           class="navigation-link">
           /{{f.name}}
         </a>

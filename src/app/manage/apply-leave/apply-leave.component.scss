@@ -76,3 +76,7 @@
 textarea {
   resize: none;
 }
+
+ngb-datepicker.dropdown-menu {
+  transform: translate(50%) !important;
+}

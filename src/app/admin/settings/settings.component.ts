@@ -5,7 +5,7 @@ import { CompanyGroup, PTax } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { AccountsBaseRoute, CompanyInfo, CompanySettings, CustomSalaryStructure, OrganizationSetting, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
+import { CompanyInfo, CompanySettings, CustomSalaryStructure, OrganizationSetting, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 

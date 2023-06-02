@@ -32,7 +32,7 @@
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Total Days" readonly>
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Announcement Code" readonly>
                       <div class="t-filter">
                         <a href="javascript:void(0)" class="">Announcement Code</a>
                       </div>
@@ -40,7 +40,7 @@
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" placeholder="Search by Name" [(ngModel)]="notifiCationDetail.Topic"
+                      <input class="form-control form-control-sm" placeholder="Search by Topic" [(ngModel)]="notifiCationDetail.Topic"
                         (keydown.esc)="resetFilter()" oninput="this.value = this.value.toUpperCase()"
                         (keyup.enter)="filterRecords()" autofocus>
                       <div class="t-filter" (click)="arrangeDetails(orderByTopicAsc, 'Topic')">
@@ -72,7 +72,7 @@
                   </div>
                   <div class="th fe-3">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Name"
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Breif Detail"
                       [(ngModel)]="notifiCationDetail.BriefDetail" (keydown.esc)="resetFilter()" oninput="this.value = this.value.toUpperCase()"
                       (keyup.enter)="filterRecords()">
                       <div class="t-filter" (click)="arrangeDetails(orderByBriefDetailDateAsc, 'BriefDetail')">
@@ -104,7 +104,14 @@
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-index text-center" *ngIf="isAdmin">ACTIONS</div>
+                  <div class="th fe-index text-center">
+                    <div class="cell-wrapper">
+                      <button class="btn btn-danger" (click)="resetFilter()"><i class="fa fa-repeat"></i></button>
+                      <div class="t-filter">
+                        ACTIONS
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="t-body">
@@ -145,8 +152,8 @@
                         {{item.IsExpired == true ? 'Expired': 'Not Expired'}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-index" *ngIf="isAdmin">
-                      <div class="d-flex flex-row justify-content-evenly">
+                    <div class="td align-middle fe-index">
+                      <div class="d-flex flex-row justify-content-evenly" *ngIf="isAdmin">
                         <a href="javascript:void(0)" (click)="editNotificationPopup(item)">
                           <i class="fa fa-edit text-primary" aria-hidden="true"></i>
                         </a>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ConfigPerformance } from 'src/providers/constants';
@@ -33,17 +34,30 @@ export class AppraisalSettingComponent implements OnInit {
   selfAppraisalFromDate: NgbDate | null;;
   selfAppraisalToDate: NgbDate | null;;
   projectDetails: Array<any> = [];
-  assignedEmployee: Array<any> = [];
+  selectedProject: any = null;
   userDetail: any = null;
   appraisalCyclePeriod: string = null;
   isViewInList: boolean = true;
-  isObjectiveFound: boolean = true;
-  aurrentAppraisalObjective: Array<any> = [];
+  isObjectiveFound: boolean = false;
+  currentAppraisalObjective: Array<any> = [];
+  active = 1;
+  currentCompny: any = null;
+  objectDetail: Objective = new Objective();
+  objectiveData: Filter = new Filter();
+  orderByObjectiveAsc: boolean = null;
+  orderBTargetValueAsc: boolean = null;
+  objectiveDetails: Array<any> = [];
+  objectForm: FormGroup;
+  currentObject: Objective = new Objective();
+  htmlText: any = null;
+  selectedObjective: Array<any> = [];
+  isProjectDetailReady: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
               private calendar: NgbCalendar,
               private nav: iNavigation,
+              private local: ApplicationStorage,
               public formatter: NgbDateParserFormatter,
               private user: UserService) {
     this.fromDate = calendar.getToday();
@@ -51,22 +65,27 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.currentCompny = this.local.findRecord("Companies")[0];
     this.userDetail = this.user.getInstance();
+    this.objectiveData.SearchString += ` And CompanyId = ${this.currentCompny.CompanyId}`;
     if (this.userDetail.UserId <= 0) {
       ErrorToast("Invalid user. Please login again;")
       return;
     }
     this.loadData();
     this.initForm();
+    this.initObjetiveForm();
   }
 
   initForm() {
     this.appraisalForm = this.fb.group({
       ObjectiveCatagoryId: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryId),
-      ObjectiveCatagoryType: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryType),
+      ObjectiveCatagoryType: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryType, [Validators.required]),
       TypeDescription: new FormControl(this.currentApprisalCycle.TypeDescription, [Validators.required]),
       FromDate: new FormControl(this.currentApprisalCycle.FromDate, [Validators.required]),
       ToDate: new FormControl(this.currentApprisalCycle.ToDate, [Validators.required]),
+      IsTagByRole: new FormControl(this.currentApprisalCycle.IsTagByRole),
+      IsTagByDepartment: new FormControl(this.currentApprisalCycle.IsTagByDepartment)
     })
   }
 
@@ -98,7 +117,6 @@ export class AppraisalSettingComponent implements OnInit {
           this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].Total;
         else
           this.apprisalData.TotalRecords = 0;
-
         this.isPageReady = true;
       } else {
         Toast("No record found. Please create one.");
@@ -282,7 +300,11 @@ export class AppraisalSettingComponent implements OnInit {
 
   showOffCanvas(item: any) {
     if (item) {
+      this.isProjectDetailReady = false;
       this.currentApprisalCycle = item;
+      var offcanvasRight = document.getElementById('offcanvasRight');
+      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
+      bsOffcanvas.show();
       this.getProjects();
     }
   }
@@ -291,79 +313,8 @@ export class AppraisalSettingComponent implements OnInit {
     $('#offcanvasRight').offcanvas('hide');
   }
 
-  activeDeactiveAll(e: any, item: any) {
-    let value = e.target.checked;
-    let name = `activeMember${item[0].ProjectId}`;
-    let elem = document.querySelectorAll(`input[name=${name}]`);
-    for (let i = 0; i < elem.length; i++) {
-      if (value) {
-        (elem[i]  as HTMLInputElement).checked = true;
-      } else {
-        (elem[i]  as HTMLInputElement).checked = false;
-      }
-    }
-    if (item && item.length > 0) {
-      for (let j = 0; j < item.length; j++) {
-        if (value) {
-          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item[j].EmployeeId && x.ProjectId == item[j].ProjectId);
-          if (index < 0) {
-            this.assignedEmployee.push({
-              ProjectId: item.ProjectId,
-              EmployeeId: item[j].EmployeeId
-            });
-          }
-        } else {
-          let index = this.assignedEmployee.findIndex(x => x.EmployeeId == item[j].EmployeeId && x.ProjectId == item[j].ProjectId);
-          if (index > -1) {
-            this.assignedEmployee.splice(index, 1);
-          }
-        }
-      }
-    }
-  }
-
-  checkActiveMember(e: any, projectId: number, employeeId: number) {
-    let name = `activeMember${projectId}`;
-    let elem = document.querySelectorAll(`input[name=${name}]`);
-    let status = 0;
-    for (let i = 0; i < elem.length; i++) {
-      if ((elem[i]  as HTMLInputElement).checked) {
-        status++;
-      } else {
-        status--;
-      }
-    }
-    name = `activeAllMember${projectId}`;
-    if (status == elem.length)
-      (document.querySelector(`input[name=${name}]`) as HTMLInputElement).checked = true;
-    else
-      (document.querySelector(`input[name=${name}]`) as HTMLInputElement).checked = false;
-
-    let value = e.target.checked;
-    if (value) {
-      let index = this.assignedEmployee.findIndex(x => x.EmployeeId == employeeId && x.ProjectId == projectId);
-      if (index < 0) {
-        this.assignedEmployee.push({
-          ProjectId: projectId,
-          EmployeeId: employeeId
-        })
-      }
-    } else {
-      let index = this.assignedEmployee.findIndex(x => x.EmployeeId == employeeId && x.ProjectId == projectId);
-      if (index >= 0) {
-        this.assignedEmployee.splice(index, 1);
-      }
-    }
-  }
-
   startCycle() {
     this.isLoading = true;
-    if (this.assignedEmployee.length <=0) {
-      this.isLoading = false;
-      ErrorToast("Please select employee first");
-      return;
-    }
-
     this.currentApprisalCycle.Status = "Started";
     this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,
     this.currentApprisalCycle, true).then(res => {
@@ -378,10 +329,10 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   getProjects() {
-    this.isLoading = true;
     this.projectDetails = [];
+    this.selectedProject = null;
     this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then(res => {
-      if (res.ResponseBody) {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
         let result = res.ResponseBody.reduce((a, b) => {
           a[b.ProjectId] = a[b.ProjectId] || [];
           a[b.ProjectId].push(b);
@@ -391,22 +342,30 @@ export class AppraisalSettingComponent implements OnInit {
         let keys = Object.keys(result);
         let i = 0;
         while(i < keys.length) {
-          this.projectDetails.push(result[keys[i]]);
+          this.projectDetails.push({
+            ProjectId:result[keys[0]][0].ProjectId,
+            ProjectName:result[keys[0]][0].ProjectName,
+            ProjectDescription:result[keys[0]][0].ProjectDescription,
+            ProjectMembers: result[keys[i]]
+          });
           i++;
         }
-
-        this.isLoading = false;
+        this.selectedProject = this.projectDetails[0];
+        this.isProjectDetailReady = true;
         Toast("Project details found");
       } else {
         WarningToast("Please add project and their team members first");
-        this.isLoading = false;
+        this.isProjectDetailReady = true;
       }
-      var offcanvasRight = document.getElementById('offcanvasRight');
-      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
-      bsOffcanvas.show();
     }).catch(e => {
-      this.isLoading = false;
+      this.isProjectDetailReady = true;
     })
+  }
+
+  changeProject(item: any) {
+    if (item) {
+      this.selectedProject = this.projectDetails.find(x => x.ProjectId == item.ProjectId);
+    }
   }
 
   onSelfAppraisalDateSelection(date: NgbDate) {
@@ -418,14 +377,17 @@ export class AppraisalSettingComponent implements OnInit {
       this.selfAppraisalToDate = null;
 			this.selfAppraisalFromDate = date;
 		}
+
     if (this.selfAppraisalToDate) {
       let todate = new Date(this.selfAppraisalToDate.year, this.selfAppraisalToDate.month - 1, this.selfAppraisalToDate.day);
       this.appraisalForm.get('ToDate').setValue(todate);
     }
+
     if (this.selfAppraisalFromDate) {
       let fromdate = new Date(this.selfAppraisalFromDate.year, this.selfAppraisalFromDate.month - 1, this.selfAppraisalFromDate.day);
       this.appraisalForm.get('FromDate').setValue(fromdate);
     }
+
     this.appraisalCyclePeriod = this.appraisalForm.get('FromDate').value.toLocaleDateString() +" - "+ this.appraisalForm.get('ToDate').value.toLocaleDateString();
 	}
 
@@ -447,6 +409,7 @@ export class AppraisalSettingComponent implements OnInit {
 			this.isHovered(date)
 		);
 	}
+
   closeCanvasRight() {
     var offcanvasRight = document.getElementById('offcanvasRight');
     var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
@@ -465,11 +428,251 @@ export class AppraisalSettingComponent implements OnInit {
       }
 
       result[index].classList.add('active-tab');
-      this.isObjectiveFound = true;
+      this.getObjectiveByObjtiveId();
+
     } else {
-      ErrorToast("Please select a company.")
+      ErrorToast("Please select a appraisal group.")
     }
   }
+
+  getObjectiveByObjtiveId() {
+    this.isObjectiveFound = false;
+    this.http.get(`eps/apprisalcatagory/getObjectiveByCategoryId/${this.currentApprisalCycle.ObjectiveCatagoryId}`, true).then(res => {
+      if (res.ResponseBody) {
+        this.currentAppraisalObjective = res.ResponseBody;
+        this.isObjectiveFound = true;
+      }
+    })
+  }
+
+  loadAllObjective() {
+    this.isPageReady = false;
+    this.getAllPerformanceObjective();
+  }
+
+  getAllPerformanceObjective() {
+    this.objectiveDetails = [];
+    if (this.currentCompny.CompanyId > 0) {
+      this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true)
+      .then(res => {
+        if (res.ResponseBody) {
+          this.bindData(res);
+          this.isPageReady = true;
+          Toast("Record found");
+        }
+      }).catch(e => {
+        this.isPageReady = true;
+      })
+    }
+  }
+
+  bindData(res: any) {
+    if (res.ResponseBody.length > 0) {
+      this.objectiveDetails = res.ResponseBody;
+      this.objectiveData.TotalRecords = this.objectiveDetails[0].Total;
+      if (this.currentAppraisalObjective && this.currentAppraisalObjective.length > 0) {
+        this.objectiveDetails.forEach(x => {
+          let value = this.currentAppraisalObjective.find(i => i.ObjectiveId == x.ObjectiveId);
+          if (value)
+            x.IsAdded = true;
+          else
+            x.IsAdded = false;
+        });
+      }
+    }
+    else
+      this.objectiveData.TotalRecords = 0;
+  }
+
+  initObjetiveForm() {
+    this.objectForm = this.fb.group({
+      ObjectiveId: new FormControl(this.currentObject.ObjectiveId),
+      Objective: new FormControl(this.currentObject.Objective, [Validators.required]),
+      CanManagerSee: new FormControl(this.currentObject.CanManagerSee ? 'true' :'false', [Validators.required]),
+      IsIncludeReview: new FormControl(this.currentObject.IsIncludeReview),
+      CompanyId: new FormControl(this.currentCompny.CompanyId),
+      ProgressMeassureType: new FormControl(this.currentObject.ProgressMeassureType == 1 ? '1' : this.currentObject.ProgressMeassureType == 2 ? '2' : '3'),
+      StartValue: new FormControl(this.currentObject.StartValue, [Validators.required]),
+      TargetValue: new FormControl(this.currentObject.TargetValue, [Validators.required]),
+      Description: new FormControl(''),
+    })
+  }
+
+  get m() {
+    return this.objectForm.controls;
+  }
+
+  addObjectivePopUp() {
+    this.isSubmitted = false;
+    this.currentObject = new Objective();
+    this.initForm();
+    $('#addObjectiveModal').modal('show');
+  }
+
+  addObjective() {
+    this.isLoading = true;
+    this.isSubmitted = true;
+    let errroCounter = 0;
+    if (this.objectForm.get('Objective').errors !== null)
+      errroCounter++;
+
+    if (this.objectForm.get('CanManagerSee').errors !== null)
+      errroCounter++;
+
+    if (this.objectForm.get('StartValue').errors !== null)
+      errroCounter++;
+
+    if (this.objectForm.get('TargetValue').errors !== null)
+      errroCounter++;
+
+    let value = this.objectForm.value;
+    if (errroCounter === 0 && value.CompanyId > 0) {
+      let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+      if (data)
+        value.Description = data;
+
+      value.CanManagerSee = value.CanManagerSee == "true" ? true : false;
+      this.http.post("eps/performance/objectiveInsertUpdate", value, true).then(res => {
+        if (res.ResponseBody) {
+          this.bindData(res);
+          $('#addObjectiveModal').modal('hide');
+          Toast("Objective insert/updated successfully");
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    } else {
+      this.isLoading = false;
+      ErrorToast("Please correct all the mandaroty field marked red");
+    }
+  }
+
+  resetFilterObjective() {
+    this.objectiveData.SearchString = "1=1";
+    this.objectiveData.PageIndex = 1;
+    this.objectiveData.PageSize = 10;
+    this.objectiveData.StartIndex = 1;
+    this.objectiveData.ActivePageNumber = 1;
+    this.objectiveData.EndIndex = (this.objectiveData.PageSize * this.objectiveData.PageIndex);
+    this.getAllPerformanceObjective();
+    this.objectDetail.Objective="";
+    this.objectDetail.TargetValue = 0;
+  }
+
+  filterRecordsObjective() {
+    let searchQuery = "";
+    let delimiter = "";
+    this.objectiveData.reset();
+    if(this.objectDetail.Objective !== null && this.objectDetail.Objective !== "") {
+      searchQuery += ` ${delimiter} Objective like '%${this.objectDetail.Objective}%' `;
+        delimiter = "and";
+    }
+
+    if(this.objectDetail.TargetValue !== null && this.objectDetail.TargetValue > 0) {
+      searchQuery += ` ${delimiter} TargetValue like '%${this.objectDetail.TargetValue}%' `;
+        delimiter = "and";
+    }
+
+    if(searchQuery !== "") {
+      this.objectiveData.SearchString = `${searchQuery}`;
+    }
+
+    this.getAllPerformanceObjective();
+  }
+
+  arrangeObjectiveDetails(flag: any, FieldName: string) {
+    let Order = '';
+    if(flag || flag == null) {
+      Order = 'ASC';
+    } else {
+      Order = 'DESC';
+    }
+    if (FieldName == 'Objective')
+      this.orderByObjectiveAsc = !flag;
+
+    if (FieldName == 'TargetValue')
+      this.orderBTargetValueAsc = !flag;
+
+    this.objectiveData = new Filter();
+    this.objectiveData.SortBy = FieldName + " " + Order;
+    this.getAllPerformanceObjective()
+  }
+
+  GetFilterObjectiveResult(e: Filter) {
+    if(e != null) {
+      this.objectiveData = e;
+      this.getAllPerformanceObjective();
+    }
+  }
+
+  changeProgressMeassur(e: any) {
+    let value = Number(e.target.value);
+    if (value == 1) {
+      this.objectForm.get('TargetValue').setValue(0);
+      this.objectForm.get('StartValue').setValue(0);
+    }
+  }
+
+  editObjectivePopUp(item: Objective) {
+    if (item) {
+      this.currentObject = item;
+      this.htmlText = item.Description;
+      this.initObjetiveForm();
+      this.isSubmitted = false;
+      $('#addObjectiveModal').modal('show');
+    }
+  }
+
+  manageAppraisalObjectivePopUp() {
+    this.getAllPerformanceObjective();
+    this.selectedObjective = [...this.currentAppraisalObjective]
+    $('#addAppraisalObjective').modal('show');
+  }
+
+  manageObjective(e: any, item: Objective) {
+    let value = e.target.checked;
+    if (value) {
+      let objective = this.selectedObjective.find(x => x.ObjectiveId == item.ObjectiveId);
+      if (objective == null)
+        this.selectedObjective.push(item);
+    } else {
+      let index = this.selectedObjective.findIndex( x=> x.ObjectiveId == item.ObjectiveId);
+      if (index != -1)
+        this.selectedObjective.splice(index, 1);
+    }
+  }
+
+  addAppraisalObjective() {
+    this.isLoading = true;
+    if (this.selectedObjective && this.selectedObjective.length > 0 && this.currentApprisalCycle && this.currentApprisalCycle.ObjectiveCatagoryId > 0) {
+      this.currentApprisalCycle.ObjectiveIds = this.selectedObjective.map(x => x.ObjectiveId);
+      this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,this.currentApprisalCycle, true).then(res => {
+        if (res.ResponseBody) {
+          this.getObjectiveByObjtiveId();
+          Toast("Objective added/updated in appraisal category successfully");
+          $('#addAppraisalObjective').modal('hide');
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    } else {
+      ErrorToast("Please select objective first");
+      this.isLoading = false;
+    }
+  }
+
+  listview() {
+    this.isObjectiveFound = false;
+    this.isViewInList = !this.isViewInList;
+    if (!this.isViewInList) {
+      if (this.apprisalCycleDetail.length > 0)
+      this.currentApprisalCycle = this.apprisalCycleDetail[0];
+      this.getObjectiveByObjtiveId();
+    }
+  }
+
 }
 
 class ApprisalCycle {
@@ -481,4 +684,18 @@ class ApprisalCycle {
   ObjectiveCatagoryId: number = 0;
   Index: number = 0;
   Status: String = null;
+  ObjectiveIds: Array<number> = [];
+  IsTagByRole: boolean = false;
+  IsTagByDepartment: boolean = false;
+}
+
+class Objective {
+  ObjectiveId: number = 0;
+  Objective: string = null;
+  CanManagerSee: boolean = false;
+  IsIncludeReview: boolean = false;
+  ProgressMeassureType: number = 1;
+  StartValue: number = 0;
+  TargetValue: number = 0;
+  Description: string = null;
 }

@@ -334,7 +334,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     let data = this.userFiles.filter(x => x.FileUid === FileUid);
     let newData = data[0];
     this.http.post(`OnlineDocument/EditFile`, newData).then(response => {
-      this.common.ShowToast("File Reterive");
+      Toast("File Reterive");
     }).catch(e => { console.log(e) });
   }
 
@@ -718,7 +718,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
 
     if (this.RaisedBilloption == "after") {
        toDateValue= '2099-1-1'
-       if (this.toDate == null) {
+       if (this.fromDate == null) {
         ErrorToast("Please select to date first")
         this.isLoading = false;
         return;

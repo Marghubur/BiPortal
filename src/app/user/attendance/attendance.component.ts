@@ -227,7 +227,6 @@ export class AttendanceComponent implements OnInit {
     );
 
     this.tomorrow = this.today;
-
     this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
     this.commentValue = "";

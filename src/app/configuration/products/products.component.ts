@@ -1,12 +1,14 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Catagory, Product } from 'src/app/adminmodal/admin-modals';
 import { Files } from 'src/app/commonmodal/common-modals';
+import { ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { AdminNotification, AImage, EmailLinkConfig, JImage, PImage, Txt } from 'src/providers/constants';
+import { AdminNotification, AImage, Doc, Docx, EmailLinkConfig, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -50,10 +52,12 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
   orderByGroupIdAsc: boolean = null;
   orderByCatagoryCodeAsc: boolean = null;
   orderByCatagoryDescriptionAsc: boolean = null;
+  renderedDocxFile: any = null;
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
               private http: AjaxService,
+              private sanitizer: DomSanitizer,
               private nav: iNavigation) { }
 
   ngAfterViewChecked(): void {
@@ -254,17 +258,46 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
   }
 
   viewFile(file: Files) {
-    switch(file.FileExtension) {
+    switch(file.FileExtension.toLowerCase()) {
+      case Pdf:
+        this.viewer = document.getElementById("viewfile-container");
+        this.viewer.classList.remove('d-none');
+        this.viewer.querySelector('iframe').classList.remove('bg-white');
+        this.viewer.querySelector('iframe').setAttribute('src',
+        `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
+      break;
+      case Docx:
+      case Doc:
+        this.getDocxHtml(file);
+        break;
       case Txt:
       case JImage:
       case PImage:
       case AImage:
-        this.viewer = document.getElementById("productfile-container");
+        this.viewer = document.getElementById("viewfile-container");
         this.viewer.classList.remove('d-none');
         this.viewer.querySelector('iframe').classList.add('bg-white');
         this.viewer.querySelector('iframe').setAttribute('src',
         `${this.baseUrl}${environment.FolderDelimiter}${file.FilePath}${environment.FolderDelimiter}${file.FileName}`);
     }
+  }
+
+  getDocxHtml(file: Files) {
+    this.renderedDocxFile = null;
+    let filePath = `${file.FilePath}${environment.FolderDelimiter}${file.FileName}`;
+    this.http.post("FileMaker/GetDocxHtml", { DiskFilePath: file.FilePath, FilePath: filePath }).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        this.renderedDocxFile = this.sanitizer.bypassSecurityTrustHtml(response.ResponseBody);
+        $('#showDocxFile').modal('show');
+      } else {
+        ErrorToast("Unable to render the file");
+      }
+    })
+  }
+
+  CloseDocxViewer() {
+    $('#showDocxFile').modal('hide');
+    this.renderedDocxFile = null;
   }
 
   closePdfViewer() {

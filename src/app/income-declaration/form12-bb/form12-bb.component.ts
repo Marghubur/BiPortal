@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminDeclaration, AdminFreeTaxFilling, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule, AccountsBaseRoute, Declaration } from 'src/providers/constants';
+import { AdminDeclaration, AdminFreeTaxFilling, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule, Declaration } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -23,13 +23,13 @@ export class Form12BbComponent implements OnInit {
       case "declaration-tab":
         break;
       case "salary-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSalary, null);
+        this.nav.navigateRoot(AdminSalary, null);
         break;
       case "summary-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminSummary, null);
+        this.nav.navigateRoot(AdminSummary, null);
         break;
       case "preference-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" +AdminPreferences, null);
+        this.nav.navigateRoot(AdminPreferences, null);
         break;
     }
   }
@@ -37,10 +37,10 @@ export class Form12BbComponent implements OnInit {
   activeTab(e: string) {
     switch(e) {
       case "declaration-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminDeclaration, this.cachedData);
+        this.nav.navigateRoot( AdminDeclaration, this.cachedData);
         break;
       case "previous-income-tab":
-        this.nav.navigateRoot(AccountsBaseRoute + "/" + AdminPreviousIncome, this.cachedData);
+        this.nav.navigateRoot( AdminPreviousIncome, this.cachedData);
         break;
       case "form-12-tab":
         break;
