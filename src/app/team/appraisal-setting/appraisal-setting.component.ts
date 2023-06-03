@@ -31,12 +31,30 @@ export class AppraisalSettingComponent implements OnInit {
   hoveredDate: NgbDate | null = null;
 	fromDate: NgbDate | null;
 	toDate: NgbDate | null;
-  selfAppraisalFromDate: NgbDate | null;;
-  selfAppraisalToDate: NgbDate | null;;
+  selfAppraisalFromDate: NgbDate | null;
+  selfAppraisalToDate: NgbDate | null;
+  selectionPeriodFromDate: NgbDate | null;
+  selectionPeriodToDate: NgbDate | null;
+  feedbackFromDate: NgbDate | null;
+  feedbackToDate: NgbDate | null;
+  reviewFromDate: NgbDate | null;
+  reviewToDate: NgbDate | null;
+  normalizationToDate: NgbDate | null;
+  normalizationFromDate: NgbDate | null;
+  selfAppraisalhoveredDate: NgbDate | null = null;
+  selectionhoveredDate: NgbDate | null = null;
+  feedbackhoveredDate: NgbDate | null = null;
+  reviewhoveredDate: NgbDate | null = null;
+  normallizationhoveredDate: NgbDate | null = null;
   projectDetails: Array<any> = [];
   selectedProject: any = null;
   userDetail: any = null;
   appraisalCyclePeriod: string = null;
+  selfAppraisalCyclePeriod: string = null;
+  selectionCyclePeriod: string = null;
+  feedbackCyclePeriod: string = null;
+  reviewCyclePeriod: string = null;
+  normalizationCyclePeriod: string = null;
   isViewInList: boolean = true;
   isObjectiveFound: boolean = false;
   currentAppraisalObjective: Array<any> = [];
@@ -79,33 +97,34 @@ export class AppraisalSettingComponent implements OnInit {
 
   initForm() {
     this.appraisalForm = this.fb.group({
-      ObjectiveCatagoryId: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryId),
       ObjectiveCatagoryType: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryType, [Validators.required]),
       TypeDescription: new FormControl(this.currentApprisalCycle.TypeDescription, [Validators.required]),
-      FromDate: new FormControl(this.currentApprisalCycle.FromDate, [Validators.required]),
-      ToDate: new FormControl(this.currentApprisalCycle.ToDate, [Validators.required]),
+      ApprisalCycleFromDate: new FormControl(this.currentApprisalCycle.ApprisalCycleFromDate, [Validators.required]),
+      ApprisalCycleToDate: new FormControl(this.currentApprisalCycle.ApprisalCycleToDate, [Validators.required]),
       IsTagByRole: new FormControl(this.currentApprisalCycle.IsTagByRole),
-      IsTagByDepartment: new FormControl(this.currentApprisalCycle.IsTagByDepartment)
+      IsTagByDepartment: new FormControl(this.currentApprisalCycle.IsTagByDepartment),
+      IsSelfAppraisal: new FormControl(this.currentApprisalCycle.IsSelfAppraisal),
+      SelfApprisalFromDate: new FormControl(this.currentApprisalCycle.SelfApprisalFromDate, [Validators.required]),
+      SelfApprisalToDate: new FormControl(this.currentApprisalCycle.SelfApprisalToDate, [Validators.required]),
+      IsMultiRaterFeedback: new FormControl(this.currentApprisalCycle.IsMultiRaterFeedback),
+      SelectionPeriodFromDate: new FormControl(this.currentApprisalCycle.SelectionPeriodFromDate, [Validators.required]),
+      SelectionPeriodToDate: new FormControl(this.currentApprisalCycle.SelectionPeriodToDate, [Validators.required]),
+      FeedbackFromDate: new FormControl(this.currentApprisalCycle.FeedbackFromDate, [Validators.required]),
+      FeedbackToDate: new FormControl(this.currentApprisalCycle.FeedbackToDate, [Validators.required]),
+      IsDefaultRater: new FormControl(this.currentApprisalCycle.IsDefaultRater),
+      IsAllowSelfAppraisal: new FormControl(this.currentApprisalCycle.IsAllowSelfAppraisal),
+      RoleIds: new FormControl(this.currentApprisalCycle.RoleIds),
+      DepartmentIds: new FormControl(this.currentApprisalCycle.DepartmentIds),
+      ReviewFromDate: new FormControl(this.currentApprisalCycle.ReviewFromDate, [Validators.required]),
+      ReviewToDate: new FormControl(this.currentApprisalCycle.ReviewToDate, [Validators.required]),
+      NormalizationFromDate: new FormControl(this.currentApprisalCycle.NormalizationFromDate, [Validators.required]),
+      NormalizationToDate: new FormControl(this.currentApprisalCycle.NormalizationToDate, [Validators.required]),
+      IsHikeApproval: new FormControl(this.currentApprisalCycle.IsHikeApproval)
     })
   }
 
   get f() {
     return this.appraisalForm.controls;
-  }
-
-  addAprisalCyclePopUp() {
-    this.isSubmitted = false;
-    this.currentApprisalCycle = new ApprisalCycle();
-    let date = new Date();
-    this.fromDate.day= date.getDate()
-    this.fromDate.month= date.getMonth() + 1;
-    this.fromDate.year= date.getFullYear();
-    date.setDate(date.getDate() +10 );
-    this.toDate.day= date.getDate()
-    this.toDate.month= date.getMonth() + 1;
-    this.toDate.year= date.getFullYear();
-    this.initForm();
-    $('#manageApprisal').modal('show');
   }
 
   loadData() {
@@ -177,18 +196,78 @@ export class AppraisalSettingComponent implements OnInit {
     this.loadData()
   }
 
-  editApprisalPopUp(item: ApprisalCycle) {
-    this.currentApprisalCycle = item;
-    let date = new Date(this.currentApprisalCycle.FromDate);
+  addAprisalCyclePopUp() {
+    this.isSubmitted = false;
+    this.currentApprisalCycle = new ApprisalCycle();
+    let date = new Date();
     this.fromDate.day= date.getDate()
     this.fromDate.month= date.getMonth() + 1;
     this.fromDate.year= date.getFullYear();
-    date = new Date(this.currentApprisalCycle.ToDate);
+    date.setDate(date.getDate() +10 );
     this.toDate.day= date.getDate()
     this.toDate.month= date.getMonth() + 1;
     this.toDate.year= date.getFullYear();
     this.initForm();
-    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('FromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('ToDate').value).toLocaleDateString();
+    $('#manageApprisal').modal('show');
+  }
+
+  editApprisalPopUp(item: ApprisalCycle) {
+    this.currentApprisalCycle = item;
+    let date = new Date(this.currentApprisalCycle.ApprisalCycleFromDate);
+    this.fromDate.day= date.getDate()
+    this.fromDate.month= date.getMonth() + 1;
+    this.fromDate.year= date.getFullYear();
+    date = new Date(this.currentApprisalCycle.ApprisalCycleToDate);
+    this.toDate.day= date.getDate()
+    this.toDate.month= date.getMonth() + 1;
+    this.toDate.year= date.getFullYear();
+    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('ApprisalCycleFromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('ApprisalCycleToDate').value).toLocaleDateString();
+    date = new Date(this.currentApprisalCycle.SelfApprisalFromDate);
+    this.selfAppraisalFromDate.day= date.getDate()
+    this.selfAppraisalFromDate.month= date.getMonth() + 1;
+    this.selfAppraisalFromDate.year= date.getFullYear();
+    date = new Date(this.currentApprisalCycle.SelfApprisalToDate);
+    this.selfAppraisalToDate.day= date.getDate()
+    this.selfAppraisalToDate.month= date.getMonth() + 1;
+    this.selfAppraisalToDate.year= date.getFullYear();
+    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('SelfApprisalFromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('SelfApprisalToDate').value).toLocaleDateString();
+    date = new Date(this.currentApprisalCycle.SelectionPeriodFromDate);
+    this.selectionPeriodFromDate.day= date.getDate()
+    this.selectionPeriodFromDate.month= date.getMonth() + 1;
+    this.selectionPeriodFromDate.year= date.getFullYear();
+    date = new Date(this.currentApprisalCycle.SelectionPeriodToDate);
+    this.selectionPeriodToDate.day= date.getDate()
+    this.selectionPeriodToDate.month= date.getMonth() + 1;
+    this.selectionPeriodToDate.year= date.getFullYear();
+    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('SelectionPeriodFromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('SelectionPeriodToDate').value).toLocaleDateString();
+    date = new Date(this.currentApprisalCycle.FeedbackFromDate);
+    this.feedbackFromDate.day= date.getDate()
+    this.feedbackFromDate.month= date.getMonth() + 1;
+    this.feedbackFromDate.year= date.getFullYear();
+    date = new Date(this.currentApprisalCycle.FeedbackToDate);
+    this.feedbackToDate.day= date.getDate()
+    this.feedbackToDate.month= date.getMonth() + 1;
+    this.feedbackToDate.year= date.getFullYear();
+    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('FeedbackFromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('FeedbackToDate').value).toLocaleDateString();
+    date = new Date(this.currentApprisalCycle.ReviewFromDate);
+    this.reviewFromDate.day= date.getDate()
+    this.reviewFromDate.month= date.getMonth() + 1;
+    this.reviewFromDate.year= date.getFullYear();
+    date = new Date(this.currentApprisalCycle.ReviewToDate);
+    this.reviewToDate.day= date.getDate()
+    this.reviewToDate.month= date.getMonth() + 1;
+    this.reviewToDate.year= date.getFullYear();
+    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('ReviewFromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('ReviewToDate').value).toLocaleDateString();
+    date = new Date(this.currentApprisalCycle.NormalizationFromDate);
+    this.normalizationFromDate.day= date.getDate()
+    this.normalizationFromDate.month= date.getMonth() + 1;
+    this.normalizationFromDate.year= date.getFullYear();
+    date = new Date(this.currentApprisalCycle.NormalizationToDate);
+    this.normalizationToDate.day= date.getDate()
+    this.normalizationToDate.month= date.getMonth() + 1;
+    this.normalizationToDate.year= date.getFullYear();
+    this.initForm();
+    this.appraisalCyclePeriod = new Date(this.appraisalForm.get('NormalizationFromDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('NormalizationToDate').value).toLocaleDateString();
     $('#manageApprisal').modal('show');
   }
 
@@ -261,13 +340,16 @@ export class AppraisalSettingComponent implements OnInit {
 		}
     if (this.toDate) {
       let todate = new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day);
-      this.appraisalForm.get('ToDate').setValue(todate);
+      this.appraisalForm.get('ApprisalCycleToDate').setValue(todate);
     }
     if (this.fromDate) {
       let fromdate = new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day);
-      this.appraisalForm.get('FromDate').setValue(fromdate);
+      this.appraisalForm.get('ApprisalCycleFromDate').setValue(fromdate);
     }
-    this.appraisalCyclePeriod = this.appraisalForm.get('FromDate').value.toLocaleDateString() +" - "+ this.appraisalForm.get('ToDate').value.toLocaleDateString();
+    let fromDateValue = this.appraisalForm.get('ApprisalCycleFromDate').value;
+    let toDateValue = this.appraisalForm.get('ApprisalCycleToDate').value;
+    if (fromDateValue && toDateValue)
+      this.appraisalCyclePeriod = fromDateValue.toLocaleDateString() +" - "+ toDateValue.toLocaleDateString();
 	}
 
 	isHovered(date: NgbDate) {
@@ -292,6 +374,227 @@ export class AppraisalSettingComponent implements OnInit {
 	validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
 		const parsed = this.formatter.parse(input);
 		return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+	}
+
+  onSelfAppraisalDateSelection(date: NgbDate) {
+		if (!this.selfAppraisalFromDate && !this.selfAppraisalToDate) {
+			this.selfAppraisalFromDate = date;
+		} else if (this.selfAppraisalFromDate && !this.selfAppraisalToDate && date && date.after(this.selfAppraisalFromDate)) {
+      this.selfAppraisalToDate = date;
+		} else {
+      this.selfAppraisalToDate = null;
+			this.selfAppraisalFromDate = date;
+		}
+
+    if (this.selfAppraisalToDate) {
+      let todate = new Date(this.selfAppraisalToDate.year, this.selfAppraisalToDate.month - 1, this.selfAppraisalToDate.day);
+      this.appraisalForm.get('SelfApprisalToDate').setValue(todate);
+    }
+
+    if (this.selfAppraisalFromDate) {
+      let fromdate = new Date(this.selfAppraisalFromDate.year, this.selfAppraisalFromDate.month - 1, this.selfAppraisalFromDate.day);
+      this.appraisalForm.get('SelfApprisalFromDate').setValue(fromdate);
+    }
+
+    let fromDateValue = this.appraisalForm.get('SelfApprisalFromDate').value;
+    let toDateValue = this.appraisalForm.get('SelfApprisalToDate').value;
+    if (fromDateValue && toDateValue)
+      this.selfAppraisalCyclePeriod = fromDateValue.toLocaleDateString() +" - "+ toDateValue.toLocaleDateString();
+	}
+
+	isSelfHovered(date: NgbDate) {
+		return (
+			this.selfAppraisalFromDate && !this.selfAppraisalToDate && this.selfAppraisalhoveredDate && date.after(this.selfAppraisalFromDate) && date.before(this.selfAppraisalhoveredDate)
+		);
+	}
+
+	isSelfInside(date: NgbDate) {
+		return this.selfAppraisalToDate && date.after(this.selfAppraisalFromDate) && date.before(this.selfAppraisalToDate);
+	}
+
+	isSelfRange(date: NgbDate) {
+		return (
+			date.equals(this.selfAppraisalFromDate) ||
+			(this.selfAppraisalToDate && date.equals(this.selfAppraisalToDate)) ||
+			this.isInside(date) ||
+			this.isHovered(date)
+		);
+	}
+
+  onSelectionPeriodDateSelection(date: NgbDate) {
+		if (!this.selectionPeriodFromDate && !this.selectionPeriodToDate) {
+			this.selectionPeriodFromDate = date;
+		} else if (this.selectionPeriodFromDate && !this.selectionPeriodToDate && date && date.after(this.selectionPeriodFromDate)) {
+      this.selectionPeriodToDate = date;
+		} else {
+      this.selectionPeriodToDate = null;
+			this.selectionPeriodFromDate = date;
+		}
+
+    if (this.selectionPeriodToDate) {
+      let todate = new Date(this.selectionPeriodToDate.year, this.selectionPeriodToDate.month - 1, this.selectionPeriodToDate.day);
+      this.appraisalForm.get('SelectionPeriodToDate').setValue(todate);
+    }
+
+    if (this.selectionPeriodFromDate) {
+      let fromdate = new Date(this.selectionPeriodFromDate.year, this.selectionPeriodFromDate.month - 1, this.selectionPeriodFromDate.day);
+      this.appraisalForm.get('SelectionPeriodFromDate').setValue(fromdate);
+    }
+    let fromDateValue = this.appraisalForm.get('SelectionPeriodFromDate').value;
+    let toDateValue = this.appraisalForm.get('SelectionPeriodToDate').value;
+    if (fromDateValue && toDateValue)
+      this.selectionCyclePeriod = fromDateValue.toLocaleDateString() +" - "+ toDateValue.toLocaleDateString();
+	}
+
+	isSelectionHovered(date: NgbDate) {
+		return (
+			this.selectionPeriodFromDate && !this.selectionPeriodToDate && this.selectionhoveredDate && date.after(this.selectionPeriodFromDate) && date.before(this.selectionhoveredDate)
+		);
+	}
+
+	isSelectionnInside(date: NgbDate) {
+		return this.selectionPeriodToDate && date.after(this.selectionPeriodFromDate) && date.before(this.selectionPeriodToDate);
+	}
+
+	isSelectionRange(date: NgbDate) {
+		return (
+			date.equals(this.selectionPeriodFromDate) ||
+			(this.selectionPeriodToDate && date.equals(this.selectionPeriodToDate)) ||
+			this.isInside(date) ||
+			this.isHovered(date)
+		);
+	}
+
+  onFeedbackDateSelection(date: NgbDate) {
+		if (!this.feedbackFromDate && !this.feedbackToDate) {
+			this.feedbackFromDate = date;
+		} else if (this.feedbackFromDate && !this.feedbackToDate && date && date.after(this.feedbackFromDate)) {
+      this.feedbackToDate = date;
+		} else {
+      this.feedbackToDate = null;
+			this.feedbackFromDate = date;
+		}
+
+    if (this.feedbackToDate) {
+      let todate = new Date(this.feedbackToDate.year, this.feedbackToDate.month - 1, this.feedbackToDate.day);
+      this.appraisalForm.get('FeedbackToDate').setValue(todate);
+    }
+
+    if (this.feedbackFromDate) {
+      let fromdate = new Date(this.feedbackFromDate.year, this.feedbackFromDate.month - 1, this.feedbackFromDate.day);
+      this.appraisalForm.get('FeedbackFromDate').setValue(fromdate);
+    }
+    let fromDateValue = this.appraisalForm.get('FeedbackFromDate').value;
+    let toDateValue = this.appraisalForm.get('FeedbackToDate').value;
+    if (fromDateValue && toDateValue)
+      this.feedbackCyclePeriod = fromDateValue.toLocaleDateString() +" - "+ toDateValue.toLocaleDateString();
+	}
+
+	isFeedbackHovered(date: NgbDate) {
+		return (
+			this.feedbackFromDate && !this.feedbackToDate && this.feedbackhoveredDate && date.after(this.feedbackFromDate) && date.before(this.feedbackhoveredDate)
+		);
+	}
+
+	isFeedbackInside(date: NgbDate) {
+		return this.feedbackToDate && date.after(this.feedbackFromDate) && date.before(this.feedbackToDate);
+	}
+
+	isFeedbackRange(date: NgbDate) {
+		return (
+			date.equals(this.feedbackFromDate) ||
+			(this.feedbackToDate && date.equals(this.feedbackToDate)) ||
+			this.isInside(date) ||
+			this.isHovered(date)
+		);
+	}
+
+  onReviewDateSelection(date: NgbDate) {
+		if (!this.reviewFromDate && !this.reviewToDate) {
+			this.reviewFromDate = date;
+		} else if (this.reviewFromDate && !this.reviewToDate && date && date.after(this.reviewFromDate)) {
+      this.reviewToDate = date;
+		} else {
+      this.reviewToDate = null;
+			this.reviewFromDate = date;
+		}
+
+    if (this.reviewToDate) {
+      let todate = new Date(this.reviewToDate.year, this.reviewToDate.month - 1, this.reviewToDate.day);
+      this.appraisalForm.get('ReviewToDate').setValue(todate);
+    }
+
+    if (this.reviewFromDate) {
+      let fromdate = new Date(this.reviewFromDate.year, this.reviewFromDate.month - 1, this.reviewFromDate.day);
+      this.appraisalForm.get('ReviewFromDate').setValue(fromdate);
+    }
+    let fromDateValue = this.appraisalForm.get('ReviewFromDate').value;
+    let toDateValue = this.appraisalForm.get('ReviewToDate').value;
+    if (fromDateValue && toDateValue)
+      this.reviewCyclePeriod = fromDateValue.toLocaleDateString() +" - "+ toDateValue.toLocaleDateString();
+	}
+
+	isReviewHovered(date: NgbDate) {
+		return (
+			this.reviewFromDate && !this.reviewToDate && this.reviewhoveredDate && date.after(this.reviewFromDate) && date.before(this.reviewhoveredDate)
+		);
+	}
+
+	isReviewInside(date: NgbDate) {
+		return this.reviewToDate && date.after(this.reviewFromDate) && date.before(this.reviewToDate);
+	}
+
+	isReviewRange(date: NgbDate) {
+		return (
+			date.equals(this.reviewFromDate) ||
+			(this.reviewToDate && date.equals(this.reviewToDate)) ||
+			this.isInside(date) ||
+			this.isHovered(date)
+		);
+	}
+
+  onNormalizationDateSelection(date: NgbDate) {
+		if (!this.normalizationFromDate && !this.normalizationToDate) {
+			this.normalizationFromDate = date;
+		} else if (this.normalizationFromDate && !this.normalizationToDate && date && date.after(this.normalizationFromDate)) {
+      this.normalizationToDate = date;
+		} else {
+      this.normalizationToDate = null;
+			this.normalizationFromDate = date;
+		}
+
+    if (this.normalizationToDate) {
+      let todate = new Date(this.normalizationToDate.year, this.normalizationToDate.month - 1, this.normalizationToDate.day);
+      this.appraisalForm.get('NormalizationToDate').setValue(todate);
+    }
+
+    if (this.normalizationFromDate) {
+      let fromdate = new Date(this.normalizationFromDate.year, this.normalizationFromDate.month - 1, this.normalizationFromDate.day);
+      this.appraisalForm.get('NormalizationFromDate').setValue(fromdate);
+    }
+    let fromDateValue = this.appraisalForm.get('NormalizationFromDate').value;
+    let toDateValue = this.appraisalForm.get('NormalizationToDate').value;
+    if (fromDateValue && toDateValue)
+      this.normalizationCyclePeriod = fromDateValue.toLocaleDateString() +" - "+ toDateValue.toLocaleDateString();
+	}
+
+	isNormalizationHovered(date: NgbDate) {
+		return (
+			this.normalizationFromDate && !this.normalizationToDate && this.normallizationhoveredDate && date.after(this.normalizationFromDate) && date.before(this.normallizationhoveredDate)
+		);
+	}
+
+	isNormalizationInside(date: NgbDate) {
+		return this.normalizationToDate && date.after(this.normalizationFromDate) && date.before(this.normalizationToDate);
+	}
+
+	isNormalizationRange(date: NgbDate) {
+		return (
+			date.equals(this.normalizationFromDate) ||
+			(this.normalizationToDate && date.equals(this.normalizationToDate)) ||
+			this.isInside(date) ||
+			this.isHovered(date)
+		);
 	}
 
   navigateToObjective(item: ApprisalCycle) {
@@ -367,48 +670,6 @@ export class AppraisalSettingComponent implements OnInit {
       this.selectedProject = this.projectDetails.find(x => x.ProjectId == item.ProjectId);
     }
   }
-
-  onSelfAppraisalDateSelection(date: NgbDate) {
-		if (!this.selfAppraisalFromDate && !this.selfAppraisalToDate) {
-			this.selfAppraisalFromDate = date;
-		} else if (this.selfAppraisalFromDate && !this.selfAppraisalToDate && date && date.after(this.selfAppraisalFromDate)) {
-      this.selfAppraisalToDate = date;
-		} else {
-      this.selfAppraisalToDate = null;
-			this.selfAppraisalFromDate = date;
-		}
-
-    if (this.selfAppraisalToDate) {
-      let todate = new Date(this.selfAppraisalToDate.year, this.selfAppraisalToDate.month - 1, this.selfAppraisalToDate.day);
-      this.appraisalForm.get('ToDate').setValue(todate);
-    }
-
-    if (this.selfAppraisalFromDate) {
-      let fromdate = new Date(this.selfAppraisalFromDate.year, this.selfAppraisalFromDate.month - 1, this.selfAppraisalFromDate.day);
-      this.appraisalForm.get('FromDate').setValue(fromdate);
-    }
-
-    this.appraisalCyclePeriod = this.appraisalForm.get('FromDate').value.toLocaleDateString() +" - "+ this.appraisalForm.get('ToDate').value.toLocaleDateString();
-	}
-
-	isSelfHovered(date: NgbDate) {
-		return (
-			this.selfAppraisalFromDate && !this.selfAppraisalToDate && this.hoveredDate && date.after(this.selfAppraisalFromDate) && date.before(this.hoveredDate)
-		);
-	}
-
-	isSelfInside(date: NgbDate) {
-		return this.selfAppraisalToDate && date.after(this.selfAppraisalFromDate) && date.before(this.selfAppraisalToDate);
-	}
-
-	isSelfRange(date: NgbDate) {
-		return (
-			date.equals(this.selfAppraisalFromDate) ||
-			(this.selfAppraisalToDate && date.equals(this.selfAppraisalToDate)) ||
-			this.isInside(date) ||
-			this.isHovered(date)
-		);
-	}
 
   closeCanvasRight() {
     var offcanvasRight = document.getElementById('offcanvasRight');
@@ -678,8 +939,8 @@ export class AppraisalSettingComponent implements OnInit {
 class ApprisalCycle {
   ObjectiveCatagoryType: string = null;
   TypeDescription: string = null;
-  FromDate: Date = null;
-  ToDate: Date = null;
+  ApprisalCycleFromDate: Date = null;
+  ApprisalCycleToDate: Date = null;
   Total: number = 0;
   ObjectiveCatagoryId: number = 0;
   Index: number = 0;
@@ -687,6 +948,23 @@ class ApprisalCycle {
   ObjectiveIds: Array<number> = [];
   IsTagByRole: boolean = false;
   IsTagByDepartment: boolean = false;
+  IsSelfAppraisal: boolean = false;
+  SelfApprisalFromDate: Date = null;
+  SelfApprisalToDate: Date = null;
+  SelectionPeriodFromDate: Date = null;
+  SelectionPeriodToDate: Date = null;
+  FeedbackFromDate: Date = null;
+  FeedbackToDate: Date = null;
+  RoleIds: number = 1;
+  DepartmentIds: number = 1;
+  ReviewFromDate: Date = null;
+  ReviewToDate: Date = null;
+  NormalizationFromDate: Date = null;
+  NormalizationToDate: Date = null;
+  IsHikeApproval: boolean = false;
+  IsMultiRaterFeedback: boolean = false;
+  IsDefaultRater: boolean = false;
+  IsAllowSelfAppraisal: boolean = false;
 }
 
 class Objective {
