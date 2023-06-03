@@ -70,17 +70,19 @@ export class PreviousincomeComponent implements OnInit {
       return;
     }
     this.http.get(`Declaration/GetPreviousEmployemnt/${this.userDetail.UserId}`).then(res => {
-      if (res.ResponseBody && res.ResponseBody.lengh > 0) {
-        this.previousEmploymentDetail = res.ResponseBody;
-        this.initForm();
-        this.isRecordFound = true;
-      } else {
-        this.getPreviousIncome();
-      }
-      this.isPageReady = true;
-      }).catch(e => {
-      this.isPageReady = true;
+      this.bindPageData(res);
     })
+  }
+
+  bindPageData(res: any) {
+    if (res.ResponseBody && res.ResponseBody.length > 0) {
+      this.previousEmploymentDetail = res.ResponseBody;
+      this.initForm();
+      this.isRecordFound = true;
+    } else {
+      this.getPreviousIncome();
+    }
+    this.isPageReady = true;
   }
 
   getPreviousIncome() {
@@ -190,10 +192,8 @@ export class PreviousincomeComponent implements OnInit {
     let value = this.previousIncomForm.value.PreviousIncomes;
     if (value) {
       this.http.post(`Declaration/PreviousEmployemnt/${this.employeeId}`, value).then(res => {
-        if (res.ResponseBody) {
-          Toast("Previous employment details added/updated successfully");
-          this.isLoading = false;
-        }
+        this.bindPageData(res);
+        Toast("Previous employment details added/updated successfully");
       }).catch(e => {
         this.isLoading = false;
       })
