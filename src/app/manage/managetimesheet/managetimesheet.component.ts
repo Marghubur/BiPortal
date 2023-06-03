@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, GetWeekNumber, Toast, UserDetail } from 'src/providers/common-service/common.service';
+import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 
@@ -26,6 +27,7 @@ export class ManagetimesheetComponent implements OnInit {
   totalActualBurnHrs: string = null;
   weekNumber: string = null;
   currentWeekTimesheet: any = {};
+  isAdmin: boolean = false;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -36,6 +38,9 @@ export class ManagetimesheetComponent implements OnInit {
   ngOnInit(): void {
     this.pageData = this.nav.getValue();
     this.userDetail = this.user.getInstance() as UserDetail;
+    if (this.userDetail.RoleId == UserType.Admin)
+      this.isAdmin = true;
+
     this.loadTimesheetData();
   }
 

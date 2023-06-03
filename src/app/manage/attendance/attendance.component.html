@@ -9,24 +9,26 @@
                 <app-breadcrums [title]="'Attendance'"></app-breadcrums>
               </div>
             </div>
-            <div class="col-8 row justify-content-end align-items-center" *ngIf="isEmployeesReady">
+            <div class="col-8 row justify-content-end align-items-center" *ngIf="isEmployeesReady && isAdmin">
               <div class="col-2">
-                <input type="checkbox" checked>
+                <input type="checkbox" class="form-check-input" [checked]="isMyAttendance" (click)="viewAttendance()">
                 <span class="ps-2">My attendance</span>
               </div>
               <div class="col-2">
-                <input type="checkbox">
+                <input type="checkbox" class="form-check-input" [checked]="!isMyAttendance" (click)="viewAttendance()">
                 <span class="ps-2">View others</span>
               </div>
-              <div class="col-md-3 d-none">
-                <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
-                [ngModelOptions]="{standalone: true}">
-                </app-iautocomplete>
-              </div>
-              <div class="col-md-3 d-none p-0 m-0">
-                <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-                </app-iautocomplete>
-              </div>
+              <ng-container *ngIf="!isMyAttendance">
+                <div class="col-md-3">
+                  <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
+                  [ngModelOptions]="{standalone: true}">
+                  </app-iautocomplete>
+                </div>
+                <div class="col-md-3 p-0 m-0">
+                  <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+                  </app-iautocomplete>
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>
@@ -96,7 +98,7 @@
                               <th class="custom-th">GROSS HOURS</th>
                               <th class="custom-th">ARRIVAL</th>
                               <th class="custom-th">STATUS</th>
-                              <th class="custom-th">LOG</th>
+                              <th class="custom-th" *ngIf="isMyAttendance">LOG</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -178,7 +180,7 @@
                                   </div>
                                 </div>
                               </td>
-                              <td class="align-middle">
+                              <td class="align-middle" *ngIf="isMyAttendance">
                                 <div class="d-flex align-items-center">
                                   <div class="col" *ngIf="item.PresentDayStatus == 0 || item.PresentDayStatus == 5">
                                     <div ngbDropdown class="d-inline-block">

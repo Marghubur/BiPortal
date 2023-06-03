@@ -66,6 +66,8 @@ export class AttendanceComponent implements OnInit {
   employees: Array<any> = [];
   shiftDetail: any = null;
   activeMonth: number = 0;
+  isMyAttendance: boolean = true;
+  isAdmin: boolean = false;
 
   constructor(private http: AjaxService,
     private nav: iNavigation,
@@ -91,15 +93,18 @@ export class AttendanceComponent implements OnInit {
     this.time = new Date();
     this.DayValue = this.time.getDay();
     let user = this.user.getInstance() as UserDetail;
+    if (user.RoleId == UserType.Admin)
+      this.isAdmin = true;
     this.userDetail = this.nav.getValue();
     this.loadAutoComplete();
-    if(this.userDetail || user.RoleId != UserType.Admin) {
+    if(this.userDetail || user.RoleId != UserType.Admin || this.isMyAttendance) {
       this.isRedirected = true;
       this.employeeId = this.userDetail != null ? this.userDetail.EmployeeUid : user.UserId;
       this.userName = this.userDetail != null ? this.userDetail.FirstName + " " + this.userDetail.LastName : user.FirstName + " " + user.LastName;
       this.clientId = this.userDetail != null ? this.userDetail.CompanyId : user.CompanyId;
       if (this.userDetail == null)
         this.userDetail = user;
+      this.isMyAttendance = true;
       this.loadAttendanceData();
     } else {
       this.isRedirected = false;
@@ -196,7 +201,13 @@ export class AttendanceComponent implements OnInit {
 
       this.AttendanceId = response.ResponseBody.AttendanceId;
       this.employee = response.ResponseBody.EmployeeDetail;
-      this.getMonths();
+      let doj = new Date(this.employee.CreatedOn);
+      if (doj.getFullYear() == new Date().getFullYear() && doj.getMonth() == new Date().getMonth()) {
+        this.monthName = [];
+      }
+       else
+        this.getMonths();
+
       if (response.ResponseBody.AttendacneDetails) {
         this.bindAttendace(response.ResponseBody.AttendacneDetails);
         this.isAttendanceDataLoaded = true;
@@ -662,5 +673,13 @@ export class AttendanceComponent implements OnInit {
     let totalmin = min+startmin+endmin;
     let time =  ( (totalhrs < 10 ? "0" : "") + totalhrs.toString() + ":" +(totalmin < 10 ? "0" : "") + totalmin.toString());
     return time;
+  }
+
+  viewAttendance() {
+    this.isMyAttendance = !this.isMyAttendance;
+    if (!this.isMyAttendance) {
+      this.isLoading = false;
+      this.isEmployeeSelected = false;
+    }
   }
 }

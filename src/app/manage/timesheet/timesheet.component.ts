@@ -178,6 +178,7 @@ export class TimesheetComponent implements OnInit {
     if(item && item.TimesheetId > 0) {
       let client = this.clientDetail.data.find(x => x.value == item.ClientId);
       item.ClientName = client.text;
+      item.UserName = this.currentEmployee.FirstName + " " + this.currentEmployee.LastName;
       this.nav.navigate(AdminManageTimesheet, item);
     } else {
       WarningToast("Invalid timesheet selected. Please contact to admin.");

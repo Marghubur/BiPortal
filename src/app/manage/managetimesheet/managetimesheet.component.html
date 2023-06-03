@@ -28,9 +28,9 @@
           <div class="col-md-12 row justify-content-between align-items-center">
             <div class="col-md-4 mt-3">
               <label for="" class="form-label me-2 fw-bold fs-5">Developer Name:</label>
-              <label for="" class="form-label me-2 fw-bold fs-5">{{userDetail.FirstName}} {{userDetail.LastName}}</label>
+              <label for="" class="form-label me-2 fw-bold fs-5">{{pageData.UserName}}</label>
             </div>
-            <div class="col-auto mt-3 row">
+            <div class="col-auto mt-3 row" *ngIf="!isAdmin">
               <div class="col-auto">
                 <button type="button" class="btn btn-warning" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9" (click)="saveTimesheet()">
                   <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
