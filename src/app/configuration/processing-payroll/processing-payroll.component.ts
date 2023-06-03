@@ -146,7 +146,7 @@ export class ProcessingPayrollComponent implements OnInit {
   leaveAttendanceWagesPopUp() {
     this.activeIndex = 1;
     this.isLoading = true;
-    this.http.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true).then(res => {
+    this.http.get(`ef/runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true).then(res => {
       if (res.ResponseBody) {
         if (res.ResponseBody[0].length > 0)
           this.appliedLeaveDetail = res.ResponseBody[0];
@@ -505,10 +505,10 @@ export class ProcessingPayrollComponent implements OnInit {
 
     switch(requestState) {
       case 'Approved':
-        endPoint = `runpayroll/leaveApproval`;
+        endPoint = `ef/runpayroll/leaveApproval`;
         break;
       case 'Rejected':
-        endPoint = `runpayroll/RejectLeaveRequest`;
+        endPoint = `ef/runpayroll/RejectLeaveRequest`;
         break;
     }
 
