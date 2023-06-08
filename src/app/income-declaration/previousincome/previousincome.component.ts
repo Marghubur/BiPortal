@@ -194,6 +194,7 @@ export class PreviousincomeComponent implements OnInit {
       this.http.post(`Declaration/PreviousEmployemnt/${this.employeeId}`, value).then(res => {
         this.bindPageData(res);
         Toast("Previous employment details added/updated successfully");
+        this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;
       })
