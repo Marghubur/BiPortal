@@ -89,6 +89,7 @@ export const Performance = `${TeamBaseRoute}/performance`;
 
 export const ProjectBaseRoute = "ems/project"
 export const ProjectWiki = `${ProjectBaseRoute}/projectlist/wiki`;
+export const ProjectBudget = `${ProjectBaseRoute}/projectlist/budget`;
 export const ProjectList = `${ProjectBaseRoute}/projectlist`;
 export const ManageProject = `${ProjectBaseRoute}/projectlist/manage-project`;
 
