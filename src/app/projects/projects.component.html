@@ -104,7 +104,12 @@
                             {{project.ProjectStartedOn | date}}
                           </div>
                         </div>
-                        <div class="td align-middle fe-1">
+                        <div class="td justify-content-center d-flex fe-1">
+                          <div class="d-flex flex-row pe-2 justify-content-evenly">
+                            <a href="javascript:void(0)" (click)="loadProjectBudgetPage(project)">
+                              <span class="badge bg-success"><i class="fa fa-money" aria-hidden="true"></i></span>
+                            </a>
+                          </div>
                           <div class="d-flex flex-row justify-content-evenly">
                             <a href="javascript:void(0)" (click)="addUpdateWiki(project)">
                               <span class="badge bg-primary"><i class="fa fa-wikipedia-w" aria-hidden="true"></i></span>
