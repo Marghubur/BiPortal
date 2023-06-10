@@ -7,12 +7,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ManageProjectComponent } from './manage-project/manage-project.component';
 import { NgModule } from '@angular/core';
+import { BudgetComponent } from './budget/budget.component';
 
 @NgModule({
   declarations: [
     ProjectsComponent,
     WikiComponent,
-    ManageProjectComponent
+    ManageProjectComponent,
+    BudgetComponent
   ],
   imports: [
     CommonModule,
