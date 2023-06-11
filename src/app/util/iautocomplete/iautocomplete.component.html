@@ -17,7 +17,7 @@
         style="position: relative; max-height: 300px; z-index: 9999;" title="bt-autocomplete">
         <div class="autocomplete-suggestion d-flex justify-content-start" *ngFor="let item of BindingData; let index = index" data="index"
           (click)="select(index, true, $event)" title="bt-autocomplete">
-          <input type="checkbox" title="bt-autocomplete" *ngIf="IsMultiSelect" [(ngModel)]="item.selected" class="me-2" (click)="SelectCurrent($event)">
+          <input type="checkbox" title="bt-autocomplete" *ngIf="IsMultiSelect" [(ngModel)]="item.selected" class="me-2">
           <span title="bt-autocomplete">{{item.text}}</span>
         </div>
       </div>
