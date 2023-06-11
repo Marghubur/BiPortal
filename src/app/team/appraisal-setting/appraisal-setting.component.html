@@ -21,8 +21,8 @@
               </div>
               <div *ngSwitchDefault>
                 <div class="text-end pe-2 my-2">
-                  <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList" class="text-decoration-none"><i class="fa fa-plus pe-1"></i> Add Objective</a>
-                  <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()"><i class="fa fa-plus pe-1"></i> Add Aprisal Cycle</button>
+                  <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList" class="text-decoration-none pe-3"><i class="fa fa-plus pe-1"></i> Add Objective</a>
+                  <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()" *ngIf="isViewInList"><i class="fa fa-plus pe-1"></i> Add Aprisal Cycle</button>
                   <a href="javascript:void(0)" class="text-decoration-none" (click)="listview()">
                     <i class="fa fa-bars fa-lg"></i>
                   </a>
@@ -85,7 +85,7 @@
                                     </div>
                                   </div>
                                   <p class="mb-0 text-dark ps-2 pb-2 pt-2">
-                                    {{item.FromDate | date}} - {{item.ToDate | date}}
+                                    {{item.AppraisalCycleFromDate | date}} - {{item.AppraisalCycleToDate | date}}
                                   </p>
                                 </a>
                               </li>
@@ -202,7 +202,7 @@
                             <div class="cell-wrapper">
                               <input class="form-control form-control-sm" placeholder="Search by Description"
                               (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()" readonly>
-                              <div class="t-filter" (click)="arrangeDetails(orderByCyclePeriodAsc, 'FromDate')">
+                              <div class="t-filter" (click)="arrangeDetails(orderByCyclePeriodAsc, 'AppraisalCycleFromDate')">
                                 <a href="javascript:void()" class="pe-2">Apprisal Cycle Period</a>
                                 <i class="fa fa-sort-amount-asc"
                                   [ngClass]="{'d-none': orderByCyclePeriodAsc == null || !orderByCyclePeriodAsc }" aria-hidden="true"></i>
@@ -385,7 +385,7 @@
 <!-- Add or update apprisal Modal -->
 <div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="manageApprisal" aria-labelledby="manageApprisalModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="manageApprisalModalLabel">Add/Update Apprisal Cycle</h5>
@@ -401,20 +401,19 @@
           </div>
 
           <ng-container>
-            <div class="col-md-4 ">
-              <label class="form-label">Self Appraisal</label>
+            <div class="col-md-12 mt-4">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" formControlName="IsSelfAppraisal">
+                <input class="form-check-input" type="checkbox" (click)="selectSelfAppraisal($event)" formControlName="IsSelfAppraisal">
                 <label class="form-check-label">
-                  Enable
+                  Self Appraisal
                 </label>
               </div>
             </div>
-            
+
             <fieldset>
               <legend>Appraisal Process</legend>
               <div class="row">
-                <div class=" col-md-4">
+                <div class=" col-md-6">
                   <label class="form-label">Apprisal Cycle Period</label>
                   <form class="row row-cols-sm-auto">
                     <div class="col-12">
@@ -432,16 +431,16 @@
                       </div>
                       <div class="input-group">
                         <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd"
-                          name="dpFromDate" readonly
+                          name="dpFromDate" readonly [ngClass]="{'error-field': isSubmitted && ((f.AppraisalCycleFromDate.errors !== null && f.AppraisalCycleFromDate.errors.required) || (f.AppraisalCycleToDate.errors !== null && f.AppraisalCycleToDate.errors.required))}"
                           [value]="appraisalCyclePeriod" (input)="fromDate = validateInput(fromDate, dpFromDate.value)"/>
-                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()" type="button">
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()" [disabled]="appraisalForm.controls.IsSelfAppraisal.value == false " type="button">
                           <i class="fa fa-calendar"></i>
                         </button>
                       </div>
                     </div>
                   </form>
                 </div>
-                <div class=" col-md-4">
+                <div class=" col-md-6">
                   <label class="form-label">Self Apprisal Period</label>
                   <form class="row row-cols-sm-auto">
                     <div class="col-12">
@@ -460,9 +459,81 @@
                       </div>
                       <div class="input-group">
                         <input #dpAFromDate class="form-control" placeholder="yyyy-mm-dd"
-                          name="dpAFromDate" readonly
+                          name="dpAFromDate" readonly [ngClass]="{'error-field': isSubmitted && ((f.SelfAppraisalFromDate.errors !== null && f.SelfAppraisalFromDate.errors.required) || (f.SelfAppraisalToDate.errors !== null && f.SelfAppraisalToDate.errors.required))}"
                           [value]="selfAppraisalCyclePeriod" (input)="selfAppraisalFromDate = validateInput(selfAppraisalFromDate, dpAFromDate.value)"/>
-                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="selfdatepicker.toggle()" type="button">
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="selfdatepicker.toggle()" type="button" [disabled]="appraisalForm.controls.IsSelfAppraisal.value == false ">
+                          <i class="fa fa-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </fieldset>
+          </ng-container>
+          <ng-container >
+            <div class="col-md-12 mt-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" (click)="selectMultiraterFeedback($event)" formControlName="IsMultiRaterFeedback">
+                <label class="form-check-label">
+                  Multi-rater Feedback
+                </label>
+              </div>
+            </div>
+            <fieldset>
+              <legend>Feedback Process</legend>
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Selection Period</label>
+                  <form class="row row-cols-sm-auto">
+                    <div class="col-12">
+                      <div class="dp-hidden position-absolute">
+                        <div class="input-group">
+                          <input name="selectiondatepicker" class="form-control" ngbDatepicker #selectiondatepicker="ngbDatepicker" [autoClose]="'outside'"
+                            (dateSelect)="onSelectionPeriodDateSelection($event)" [displayMonths]="2" [dayTemplate]="tb" outsideDays="hidden" [startDate]="selectionPeriodFromDate!" tabindex="-1"/>
+                          <ng-template #tb let-date let-focused="focused">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isSelectionRange(date)" [class.faded]="isSelectionHovered(date) || isSelectionnInside(date)"
+                              (mouseenter)="selectionhoveredDate = date" (mouseleave)="selectionhoveredDate = null">
+                              {{ date.day }}
+                            </span>
+                          </ng-template>
+                        </div>
+                      </div>
+                      <div class="input-group">
+                        <input #selectionFromDate class="form-control" placeholder="yyyy-mm-dd"
+                          name="selectionFromDate" readonly [ngClass]="{'error-field': isSubmitted && ((f.SelectionPeriodFromDate.errors !== null && f.SelectionPeriodFromDate.errors.required) || (f.SelectionPeriodToDate.errors !== null && f.SelectionPeriodToDate.errors.required))}"
+                          [value]="selectionCyclePeriod" (input)="selectionPeriodFromDate = validateInput(selectionPeriodFromDate, selectionFromDate.value)"/>
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="selectiondatepicker.toggle()" type="button"
+                          [disabled]="appraisalForm.controls.IsMultiRaterFeedback.value == false ">
+                          <i class="fa fa-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Feedback Period</label>
+                  <form class="row row-cols-sm-auto">
+                    <div class="col-12">
+                      <div class="dp-hidden position-absolute">
+                        <div class="input-group">
+                          <input name="feeddatepicker" class="form-control" ngbDatepicker #feeddatepicker="ngbDatepicker" [autoClose]="'outside'"
+                            (dateSelect)="onFeedbackDateSelection($event)" [displayMonths]="2" [dayTemplate]="tc" outsideDays="hidden" [startDate]="feedbackFromDate!"
+                            tabindex="-1"/>
+                          <ng-template #tc let-date let-focused="focused">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isFeedbackRange(date)" [class.faded]="isFeedbackHovered(date) || isFeedbackInside(date)"
+                              (mouseenter)="feedbackhoveredDate = date" (mouseleave)="feedbackhoveredDate = null">
+                              {{ date.day }}
+                            </span>
+                          </ng-template>
+                        </div>
+                      </div>
+                      <div class="input-group">
+                        <input #feedFromDate class="form-control" placeholder="yyyy-mm-dd"
+                          name="feedFromDate" readonly [ngClass]="{'error-field': isSubmitted && ((f.FeedbackFromDate.errors !== null && f.FeedbackFromDate.errors.required) || (f.FeedbackToDate.errors !== null && f.FeedbackToDate.errors.required))}"
+                          [value]="feedbackCyclePeriod" (input)="feedbackFromDate = validateInput(feedbackFromDate, feedFromDate.value)"/>
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="feeddatepicker.toggle()" type="button"
+                          [disabled]="appraisalForm.controls.IsMultiRaterFeedback.value == false ">
                           <i class="fa fa-calendar"></i>
                         </button>
                       </div>
@@ -473,148 +544,59 @@
             </fieldset>
           </ng-container>
           <fieldset>
-            <legend>Feedback Process</legend>
-            <div class="row">
-              <div class="col-md-4 ">
-                <label class="form-label">Multi-rater Feedback</label>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" formControlName="IsMultiRaterFeedback">
-                  <label class="form-check-label">
-                    Enable
-                  </label>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">Selection Period</label>
-                <form class="row row-cols-sm-auto">
-                  <div class="col-12">
-                    <div class="dp-hidden position-absolute">
-                      <div class="input-group">
-                        <input name="selectiondatepicker" class="form-control" ngbDatepicker #selectiondatepicker="ngbDatepicker" [autoClose]="'outside'"
-                          (dateSelect)="onSelectionPeriodDateSelection($event)" [displayMonths]="2" [dayTemplate]="tb" outsideDays="hidden" [startDate]="selectionPeriodFromDate!" tabindex="-1"/>
-                        <ng-template #tb let-date let-focused="focused">
-                          <span class="custom-day" [class.focused]="focused" [class.range]="isSelectionRange(date)" [class.faded]="isSelectionHovered(date) || isSelectionnInside(date)"
-                            (mouseenter)="selectionhoveredDate = date" (mouseleave)="selectionhoveredDate = null">
-                            {{ date.day }}
-                          </span>
-                        </ng-template>
-                      </div>
-                    </div>
-                    <div class="input-group">
-                      <input #selectionFromDate class="form-control" placeholder="yyyy-mm-dd"
-                        name="selectionFromDate" readonly
-                        [value]="selectionCyclePeriod" (input)="selectionPeriodFromDate = validateInput(selectionPeriodFromDate, selectionFromDate.value)"/>
-                      <button class="btn btn-outline-secondary bi bi-calendar3" (click)="selectiondatepicker.toggle()" type="button">
-                        <i class="fa fa-calendar"></i>
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">Feedback Period</label>
-                <form class="row row-cols-sm-auto">
-                  <div class="col-12">
-                    <div class="dp-hidden position-absolute">
-                      <div class="input-group">
-                        <input name="feeddatepicker" class="form-control" ngbDatepicker #feeddatepicker="ngbDatepicker" [autoClose]="'outside'"
-                          (dateSelect)="onFeedbackDateSelection($event)" [displayMonths]="2" [dayTemplate]="tc" outsideDays="hidden" [startDate]="feedbackFromDate!"
-                          tabindex="-1"/>
-                        <ng-template #tc let-date let-focused="focused">
-                          <span class="custom-day" [class.focused]="focused" [class.range]="isFeedbackRange(date)" [class.faded]="isFeedbackHovered(date) || isFeedbackInside(date)"
-                            (mouseenter)="feedbackhoveredDate = date" (mouseleave)="feedbackhoveredDate = null">
-                            {{ date.day }}
-                          </span>
-                        </ng-template>
-                      </div>
-                    </div>
-                    <div class="input-group">
-                      <input #feedFromDate class="form-control" placeholder="yyyy-mm-dd"
-                        name="feedFromDate" readonly
-                        [value]="feedbackCyclePeriod" (input)="feedbackFromDate = validateInput(feedbackFromDate, feedFromDate.value)"/>
-                      <button class="btn btn-outline-secondary bi bi-calendar3" (click)="feeddatepicker.toggle()" type="button">
-                        <i class="fa fa-calendar"></i>
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </fieldset>
-          <fieldset>
             <legend>Raters Configuration</legend>
             <div class="row">
-              <div class="col-md-4 ">
-                <label class="form-label">Add reportees as Raters by default</label>
+              <div class="col-md-6 ">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" formControlName="IsDefaultRater">
                   <label class="form-check-label">
-                    Enable
+                    Add reportees as Raters by default
                   </label>
                 </div>
               </div>
-              <div class="col-md-4 ">
-                <label class="form-label">Raters selected by</label>
-                <select class="form-select" disabled>
-                  <option value="" selected>Default Reporting Manager</option>
-                </select>
-              </div>
-              <div class="col-md-4 pt-4">
-                <div class="form-check pt-2">
+              <div class="col-md-6">
+                <div class="form-check">
                   <input class="form-check-input" type="checkbox" formControlName="IsAllowSelfAppraisal">
                   <label class="form-check-label">
                     Allow Raters to view Self Appraisal
                   </label>
                 </div>
               </div>
+              <div class="col-md-6 mt-3">
+                <label class="form-label">Raters selected by</label>
+                <select class="form-select" disabled>
+                  <option value="" selected>Default Reporting Manager</option>
+                </select>
+              </div>
             </div>
           </fieldset>
           <fieldset>
             <legend>Tags</legend>
             <div class="row">
-              <div class="col-md-6 ">
-                <div class="row">
-                  <div class="col-md-4">
-                    <label class="form-label">Tag by Role</label>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" formControlName="IsTagByRole">
-                      <label class="form-check-label">
-                        Enable
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-5">
-                    <label class="form-label">Role</label>
-                    <select [disabled]="appraisalForm.controls.IsTagByRole.value == false " class="form-select">
-                      <option value=0>Role</option>
-                      <option [value]=r.RoleId *ngFor="let r of roles">{{r.RoleName}}</option>
-                    </select>
-                  </div>
-                </div>
+              <div class="col-md-4">
+                <label class="form-label">Role</label>
+                <ng-container *ngIf="roleList.data.length > 0">
+                  <bot-multiselect [data]="roleList" (OnSelect)="selectedroles($event)" >
+                  </bot-multiselect>
+                </ng-container>
               </div>
-              <div class="col-md-6 ">
-                <div class="row">
-                  <div class="col-md-4">
-                    <label class="form-label">Tag by Department</label>
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" formControlName="IsTagByDepartment">
-                      <label class="form-check-label">
-                        Enable
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-5">
-                    <label class="form-label">Department</label>
-                    <select [disabled]="appraisalForm.controls.IsTagByDepartment.value == true " class="form-select" formControlName="DepartmentIds">
-                      <option value=0>Department</option>
-                      <option [value]=d.DepartmentId *ngFor="let d of deparments">{{d.DepartmentName}}</option>
-                    </select>
-                  </div>
-                </div>
+              <div class="col-md-8">
+                <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let item of selectedRoles">
+                {{item.RoleName}}
+              </span>
               </div>
             </div>
           </fieldset>
           <div class="row">
+            <div class="col-md-4 mt-3">
+              <label class="form-label">Hike Approval</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" formControlName="IsHikeApproval">
+                <label class="form-check-label">
+                  Enable
+                </label>
+              </div>
+            </div>
             <div class="mt-3 col-md-4">
               <label class="form-label">Review Period</label>
               <form class="row row-cols-sm-auto">
@@ -634,7 +616,7 @@
                   </div>
                   <div class="input-group">
                     <input #revewFromDate class="form-control" placeholder="yyyy-mm-dd"
-                      name="revewFromDate" readonly
+                      name="revewFromDate" readonly [ngClass]="{'error-field': isSubmitted && ((f.ReviewFromDate.errors !== null && f.ReviewFromDate.errors.required) || (f.ReviewToDate.errors !== null && f.ReviewToDate.errors.required))}"
                       [value]="reviewCyclePeriod" (input)="reviewFromDate = validateInput(reviewFromDate, revewFromDate.value)"/>
                     <button class="btn btn-outline-secondary bi bi-calendar3" (click)="reviewdatepicker.toggle()" type="button">
                       <i class="fa fa-calendar"></i>
@@ -642,15 +624,6 @@
                   </div>
                 </div>
               </form>
-            </div>
-            <div class="col-md-4 mt-3">
-              <label class="form-label">Hike Approval</label>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" formControlName="IsHikeApproval">
-                <label class="form-check-label">
-                  Enable
-                </label>
-              </div>
             </div>
             <div class="mt-3 col-md-4">
               <label class="form-label">Normalization Period</label>
@@ -671,7 +644,7 @@
                   </div>
                   <div class="input-group">
                     <input #normFromDate class="form-control" placeholder="yyyy-mm-dd"
-                      name="normFromDate" readonly
+                      name="normFromDate" readonly [ngClass]="{'error-field': isSubmitted && ((f.NormalizationFromDate.errors !== null && f.NormalizationFromDate.errors.required) || (f.NormalizationToDate.errors !== null && f.NormalizationToDate.errors.required))}"
                       [value]="normalizationCyclePeriod" (input)="normalizationFromDate = validateInput(normalizationFromDate, normFromDate.value)"/>
                     <button class="btn btn-outline-secondary bi bi-calendar3" (click)="normdatepicker.toggle()" type="button">
                       <i class="fa fa-calendar"></i>
