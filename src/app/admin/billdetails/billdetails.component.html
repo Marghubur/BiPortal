@@ -17,9 +17,9 @@
               <div class="d-flex col-md-5" *ngIf="fileLoaded">
                 <label class="form-label pe-3 mt-1">Developer</label>
                 <div class="col-md-9">
-                  <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
+                  <bot-autocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
                     (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
-                  </app-iautocomplete>
+                  </bot-autocomplete>
                 </div>
               </div>
               <div class="col-md-4 d-flex">
@@ -559,9 +559,9 @@
           <div class="col-md-3" *ngIf="fileLoaded">
             <label class="form-label pe-3">Employee</label>
             <div>
-              <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
+              <bot-autocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
                 (keyup.enter)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
-              </app-iautocomplete>
+              </bot-autocomplete>
             </div>
           </div>
           <div class="col-md-3">

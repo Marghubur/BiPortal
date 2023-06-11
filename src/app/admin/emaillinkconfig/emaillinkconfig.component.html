@@ -59,7 +59,7 @@
             </div>
             <div class="col-md-3 mt-3" *ngIf="isEmployeesReady">
               <label for="" class="form-label">Email</label>
-              <app-iautocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail()" [(ngModel)]="employeeId" [ngModelOptions]="{standalone: true}"></app-iautocomplete>
+              <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail()" [(ngModel)]="employeeId" [ngModelOptions]="{standalone: true}"></bot-autocomplete>
             </div>
           </div>
           <div class="col-md-12 row">

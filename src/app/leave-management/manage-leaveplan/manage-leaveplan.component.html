@@ -1647,9 +1647,9 @@
                                               <div class="col-md-8 position-relative">
                                                   <div [ngClass]="{'block-tag': !last}">
                                                   </div>
-                                                  <app-iautocomplete [data]="employeesAutoComplete" name="AssignieId" [(ngModel)]="item.AssignieId"
+                                                  <bot-autocomplete [data]="employeesAutoComplete" name="AssignieId" [(ngModel)]="item.AssignieId"
                                                     [ngModelOptions]="{standalone: true}">
-                                                  </app-iautocomplete>
+                                                  </bot-autocomplete>
                                                   <div class="d-flex align-items-center mt-3" data-name="skip-section">
                                                       <div class="form-check">
                                                           <input class="form-check-input" [checked]="item.IsRequired" type="checkbox" disabled>
