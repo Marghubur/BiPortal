@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
@@ -71,6 +71,10 @@ export class AppraisalSettingComponent implements OnInit {
   selectedObjective: Array<any> = [];
   isProjectDetailReady: boolean = false;
   designation: Array<any> = [];
+  appraisalHikeForm: FormGroup;
+  allProjectAppraisal: Array<any> = [];
+  currentProjectAppraisal: any = null;
+  isAmountExceed: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -616,9 +620,6 @@ export class AppraisalSettingComponent implements OnInit {
     if (item) {
       this.isProjectDetailReady = false;
       this.currentApprisalCycle = item;
-      var offcanvasRight = document.getElementById('offcanvasRight');
-      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
-      bsOffcanvas.show();
       this.getProjects();
     }
   }
@@ -629,26 +630,38 @@ export class AppraisalSettingComponent implements OnInit {
 
   startCycle() {
     this.isLoading = true;
-    this.currentApprisalCycle.Status = "Started";
-    this.http.put(`eps/apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,
-    this.currentApprisalCycle, true).then(res => {
-      if (res.ResponseBody) {
-        this.isLoading = false;
-        this.closeCanvasRight();
-        Toast("Appraisal cycle started successfully");
-      }
-    }).catch(e => {
+    if (this.appraisalHikeForm.invalid) {
+      ErrorToast("Please fill all the manditory field");
       this.isLoading = false;
-    })
+      return;
+    }
+    if (this.isAmountExceed) {
+      ErrorToast("Hike amount is exceed from project appraisal budget");
+      this.isLoading = false;
+      return;
+    }
+    let value = this.appraisalHikeForm.value;
+    // this.http.put(`eps/apprisalcatagory//${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
+    //   if (res.ResponseBody) {
+    //     this.isLoading = false;
+    //     this.closeCanvasRight();
+    //     Toast("Appraisal cycle started successfully");
+    //   }
+    // }).catch(e => {
+    //   this.isLoading = false;
+    // })
+    console.log(value)
   }
 
   getProjects() {
     this.projectDetails = [];
     this.selectedProject = null;
-    this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then(res => {
+    // ${this.userDetail.UserId}
+    this.http.get(`ps/projects/get/26`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
         this.designation = res.ResponseBody.Designation;
+        this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
         if (project.length > 0) {
           let result = project.reduce((a, b) => {
             a[b.ProjectId] = a[b.ProjectId] || [];
@@ -668,12 +681,26 @@ export class AppraisalSettingComponent implements OnInit {
             i++;
           }
           this.selectedProject = this.projectDetails[0];
+          this.currentProjectAppraisal = this.allProjectAppraisal.find(x => x.ProjectId == this.selectedProject.ProjectId);
+          if (this.currentProjectAppraisal && this.selectedProject.ProjectMembers.length > 0) {
+            var offcanvasRight = document.getElementById('offcanvasRight');
+            var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
+            bsOffcanvas.show();
+            this.initAppraisalHike();
+            this.isTotalAmountExceed();
+          } else if(this.selectedProject.ProjectMembers.length <= 0) {
+            ErrorToast("Please add team members");
+            return;
+          } else {
+            ErrorToast("Please add project appraisal budgest");
+            return;
+          }
+          this.isProjectDetailReady = true;
+          Toast("Project details found");
+        } else {
+          WarningToast("Please add project and their team members first");
           this.isProjectDetailReady = true;
         }
-        Toast("Project details found");
-      } else {
-        WarningToast("Please add project and their team members first");
-        this.isProjectDetailReady = true;
       }
     }).catch(e => {
       this.isProjectDetailReady = true;
@@ -683,6 +710,15 @@ export class AppraisalSettingComponent implements OnInit {
   changeProject(item: any) {
     if (item) {
       this.selectedProject = this.projectDetails.find(x => x.ProjectId == item.ProjectId);
+      this.currentProjectAppraisal = this.allProjectAppraisal.find(x => x.ProjectId == this.selectedProject.ProjectId);
+      if (this.currentProjectAppraisal) {
+        this.initAppraisalHike();
+        this.isTotalAmountExceed();
+      }
+      else {
+        ErrorToast("Please add project appraisal budgest");
+        return;
+      }
     }
   }
 
@@ -949,6 +985,111 @@ export class AppraisalSettingComponent implements OnInit {
     }
   }
 
+  initAppraisalHike() {
+    this.appraisalHikeForm = this.fb.group({
+      ProjectMemberHike: this.buildProjectMemberHike()
+    })
+  }
+
+  buildProjectMemberHike(): FormArray {
+    let data = this.selectedProject.ProjectMembers;
+    console.log(data)
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          FullName: new FormControl(data[i].FullName),
+          MemberType: new FormControl(data[i].MemberType),
+          DesignationName: new FormControl(data[i].DesignationName),
+          AssignedOn: new FormControl(data[i].AssignedOn),
+          CTC: new FormControl(data[i].CTC),
+          ProposedPromotion: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
+          ProposedHikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
+          ProposedHikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
+          Experience: new FormControl(data[i].Experience != null ? data[i].Experience : 0)
+        }));
+        i++;
+      }
+    } else {
+      ErrorToast("No recoed found");
+      return;
+    }
+    return dataArray;
+  }
+
+  get hikeDetail() {
+    return this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+  }
+
+  proposedHikeCheck(e: any, i: number) {
+    let name = e.target.attributes.name.value;
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    if (name == "ProposedHikePercentage") {
+      let elem = document.getElementsByName("ProposedHikeAmount")[i];
+      elem.setAttribute("readonly", "");
+      elem = document.getElementsByName("ProposedHikePercentage")[i];
+      elem.removeAttribute("readonly");
+      formArray.controls[i].get("ProposedHikeAmount").setValue(0);
+      let value = Number(e.target.value);
+      if (value > 0) {
+        let ctc = formArray.controls[i].get("CTC").value;
+        let hikeAmount = (ctc * value)/100;
+        formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+      }
+    } else {
+      let elem = document.getElementsByName("ProposedHikePercentage")[i];
+      elem.setAttribute("readonly", "");
+      elem = document.getElementsByName("ProposedHikeAmount")[i];
+      elem.removeAttribute("readonly");
+      formArray.controls[i].get("ProposedHikePercentage").setValue(0);
+      let value = Number(e.target.value);
+      if (value > 0) {
+        let ctc = formArray.controls[i].get("CTC").value;
+        let hikePercentage = (value * 100)/ctc;
+        formArray.controls[i].get("ProposedHikePercentage").setValue(hikePercentage);
+      }
+    }
+  }
+
+  proposedHikeAmountCheck(e: any, i: number) {
+    let name = e.target.attributes.name.value;
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    let value = Number(e.target.value);
+    if (value > 0) {
+      if (name == "ProposedHikePercentage") {
+        let ctc = formArray.controls[i].get("CTC").value;
+        let hikeAmount = (ctc * value)/100;
+        formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+      } else {
+        let ctc = formArray.controls[i].get("CTC").value;
+        let hikePercentage = (value * 100)/ctc;
+        formArray.controls[i].get("ProposedHikePercentage").setValue(hikePercentage);
+      }
+      this.isTotalAmountExceed();
+    }
+  }
+
+  isTotalAmountExceed() {
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    this.isAmountExceed = false;
+    let totalAmount = formArray.value.map(x => Number(x.ProposedHikeAmount)).reduce((a, b) => {return a + b;}, 0);
+    if (totalAmount > this.currentProjectAppraisal.ProjectAppraisalBudget)
+      this.isAmountExceed = true;
+  }
+
+  equalPercentage() {
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    let equalpercent = 100 / formArray.length;
+    for (let i = 0; i < formArray.length; i++) {
+      let ctc = formArray.controls[i].get("CTC").value;
+      let hikeAmount = (ctc * equalpercent)/100;
+      formArray.controls[i].get("ProposedHikePercentage").setValue(equalpercent);
+      formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+    }
+    this.isTotalAmountExceed();
+  }
 }
 
 class ApprisalCycle {
