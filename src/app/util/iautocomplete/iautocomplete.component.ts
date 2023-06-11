@@ -108,13 +108,13 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
 
   // ----------------------  ends ----------------------
 
-  constructor(private commonService: CommonService, 
+  constructor(private commonService: CommonService,
     private elem: ElementRef) {
-    
+
       this.HeightValue = 250;
       this.AutofillDroopdownHeight = this.HeightValue.toString() + "px";
       switch(elem.nativeElement.tagName) {
-        case "BOT-MULTISELECT": 
+        case "BOT-MULTISELECT":
           this.IsMultiSelect = true;
           break;
         default:
@@ -406,7 +406,7 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
     var c = this.BindingData[a];
     if(this.IsMultiSelect) {
       let elem = e.currentTarget.querySelector('input');
-      if (c.selected) { 
+      if (c.selected) {
         c.selected = false;
       }
       else {
@@ -623,11 +623,11 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
   }
 }
 
-export class 
+export class
 pairData {
   value: any = null;
   text: string = "";
-  seleted?: boolean = false;
+  selected?: boolean = false;
   email?: string = "";
 }
 

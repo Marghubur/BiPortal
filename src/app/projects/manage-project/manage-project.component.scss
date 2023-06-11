@@ -11,3 +11,8 @@ textarea {
 .bg-ant {
   background-color: antiquewhite;
 }
+
+.teammember-container {
+  max-height: 33vh !important;
+  overflow: auto !important;
+}
