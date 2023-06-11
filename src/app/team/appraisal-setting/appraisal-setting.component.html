@@ -576,8 +576,8 @@
               <div class="col-md-4">
                 <label class="form-label">Role</label>
                 <ng-container *ngIf="roleList.data.length > 0">
-                  <app-iautocomplete [data]="roleList" (OnSelect)="selectedroles($event)" [(ngModel)]="roleId" [ngModelOptions]="{standalone: true}">
-                  </app-iautocomplete>
+                  <bot-multiselect [data]="roleList" (OnSelect)="selectedroles($event)" >
+                  </bot-multiselect>
                 </ng-container>
               </div>
               <div class="col-md-8">

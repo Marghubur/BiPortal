@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { ApplicationStorage, GetDepartments, GetEmployees, GetRoles } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ConfigPerformance } from 'src/providers/constants';
@@ -79,7 +79,6 @@ export class AppraisalSettingComponent implements OnInit {
   roles: Array<any> = [];
   roleList: autoCompleteModal = null;
   selectedRoles: Array<any> = [];
-  roleId: number = 0;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -107,11 +106,11 @@ export class AppraisalSettingComponent implements OnInit {
     this.roleList = new autoCompleteModal();
     this.roleList.placeholder = "Select Role";
     this.roleList.className = "";
-    this.roleList.isMultiSelect = true;
     this.roles.forEach(x => {
       this.roleList.data.push({
         text: x.RoleName,
-        value: x.RoleId
+        value: x.RoleId,
+        selected: false
       })
     })
 
@@ -344,7 +343,12 @@ export class AppraisalSettingComponent implements OnInit {
           RoleId : role.RoleId,
           RoleName: role.RoleName
         })
-      })
+        this.roleList.data.map(p => {
+          if (p.value == x)
+            p.selected = true;
+        })
+      });
+
     }
     $('#manageApprisal').modal('show');
   }

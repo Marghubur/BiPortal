@@ -27,8 +27,6 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   clients: Array<any> = [];
   projectId: number = 0;
   employees: Array<any> = [];
-  projectManagerName: string = "";
-  architectName: string = "";
   teamMembers: Array<any> = [];
   employeesList: autoCompleteModal = null;
 
@@ -91,7 +89,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
 
         this.employees = GetEmployees();
         this.clients = response.ResponseBody.Clients;
-        
+
         if (response.ResponseBody.TeamMembers && response.ResponseBody.TeamMembers.length > 0) {
           this.teamMembers = response.ResponseBody.TeamMembers;
 
@@ -127,8 +125,6 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       ProjectName: new FormControl(this.projectDetail.ProjectName, [Validators.required]),
       ProjectDescription: new FormControl(this.projectDetail.ProjectDescription),
       HomePageUrl: new FormControl(this.projectDetail.HomePageUrl),
-      ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId , [Validators.required]),
-      ArchitectId: new FormControl(this.projectDetail.ArchitectId, [Validators.required]),
       ClientId: new FormControl({value: this.projectDetail.ClientId, disabled: this.projectDetail.IsClientProject ? false : true}),
       IsClientProject: new FormControl(this.projectDetail.IsClientProject ? 'true' : 'false'),
       ProjectStartedOn: new FormControl(this.projectDetail.ProjectStartedOn),
@@ -213,17 +209,6 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   }
 
   addMemberPopUp() {
-    let projectManagerid = this.projectForm.get('ProjectManagerId').value;
-    if (projectManagerid > 0){
-      let manager = this.employees.find(x => x.EmployeeUid == projectManagerid);
-      this.projectManagerName = manager.FirstName + " " + manager.LastName;
-    }
-    let architectid = this.projectForm.get('ArchitectId').value;
-    if (architectid > 0){
-      let manager = this.employees.find(x => x.EmployeeUid == architectid);
-      this.architectName = manager.FirstName + " " + manager.LastName;
-    }
-    
     $("#teamMemberModal").modal('show');
   }
 
@@ -238,7 +223,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         DesignationId : 0,
         FullName : emp.text,
         Email : emp.email,
-        MemberType: 0, // 1 = Team Lead, 2 = Team Member
+        MemberType: 13,
         Grade: null,
         IsActive : true
       });
@@ -292,8 +277,6 @@ export class ProjectModal {
   ProjectName: string = null;
   ProjectDescription: string = null;
   HomePageUrl: string = null;
-  ProjectManagerId: number = 0;
-  ArchitectId: number = 0;
   IsClientProject: boolean = true;
   ClientId: number = 0;
   ProjectStartedOn: Date = null;
