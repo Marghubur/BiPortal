@@ -142,3 +142,31 @@ export function GetEmployees(): Array<pairData> {
 
   return employees;
 }
+
+export function GetDepartments(): Array<any> {
+  let departments: Array<any> = [];
+  let Data: any = localStorage.getItem(Master);
+  if (Data && Data.trim().length > 0) {
+    Data = JSON.parse(Data);
+    departments = Data['Department'];      
+    if (!departments) {
+      ErrorToast("Unable to load department list. Please contact to admin.");
+    }
+  }
+
+  return departments;
+}
+
+export function GetRoles(): Array<any> {
+  let roles: Array<any> = [];
+  let Data: any = localStorage.getItem(Master);
+  if (Data && Data.trim().length > 0) {
+    Data = JSON.parse(Data);
+    roles = Data['Roles'];      
+    if (!roles) {
+      ErrorToast("Unable to load role list. Please contact to admin.");
+    }
+  }
+
+  return roles;
+}

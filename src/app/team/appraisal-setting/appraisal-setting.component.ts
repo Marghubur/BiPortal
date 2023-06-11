@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetDepartments, GetEmployees, GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ConfigPerformance } from 'src/providers/constants';
@@ -75,6 +75,8 @@ export class AppraisalSettingComponent implements OnInit {
   allProjectAppraisal: Array<any> = [];
   currentProjectAppraisal: any = null;
   isAmountExceed: boolean = false;
+  roles: Array<any> = [];
+  deparments: Array<any> = [];
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -98,6 +100,9 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.roles = GetRoles();
+    this.deparments = GetDepartments();
+
     this.currentCompny = this.local.findRecord("Companies")[0];
     this.userDetail = this.user.getInstance();
     this.objectiveData.SearchString += ` And CompanyId = ${this.currentCompny.CompanyId}`;
