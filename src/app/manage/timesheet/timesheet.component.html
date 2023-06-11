@@ -13,13 +13,13 @@
                 </div>
                 <div class="col-8 row justify-content-end align-items-center">
                   <div class="col-md-3" *ngIf="!isRedirected">
-                    <app-iautocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
+                    <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
                       [ngModelOptions]="{standalone: true}">
-                    </app-iautocomplete>
+                    </bot-autocomplete>
                   </div>
                   <div class="col-md-3 p-0 m-0">
-                    <app-iautocomplete [data]="clientDetail" [(ngModel)]="clientId" (OnSelect)="presentWeek()" [ngModelOptions]="{standalone: true}">
-                    </app-iautocomplete>
+                    <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" (OnSelect)="presentWeek()" [ngModelOptions]="{standalone: true}">
+                    </bot-autocomplete>
                   </div>
                   <div class="col-md-2">
                     <select class="form-select" [disabled]="clientId == 0" (change)="filterTimesheet()" [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">

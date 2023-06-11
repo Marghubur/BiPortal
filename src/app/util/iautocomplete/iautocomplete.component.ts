@@ -1,5 +1,4 @@
-import { ThisReceiver } from "@angular/compiler";
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, HostListener } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, HostListener, ElementRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import * as $ from "jquery";
 import { CommonService } from "src/providers/common-service/common.service";
@@ -16,8 +15,8 @@ import { API } from "src/providers/constants";
 
   let placehosderName = 'Placeholder name';
 
-  <app-iautocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
-  (OnSelect)="your-fn($event)"></app-iautocomplete>
+  <bot-autocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
+  (OnSelect)="your-fn($event)"></bot-autocomplete>
 
 
 
@@ -27,7 +26,7 @@ import { API } from "src/providers/constants";
 */
 
 @Component({
-  selector: "app-iautocomplete",
+  selector: "bot-autocomplete, bot-multiselect",
   templateUrl: "./iautocomplete.component.html",
   styleUrls: ["./iautocomplete.component.scss"],
   providers: [
@@ -67,25 +66,13 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
   $CurrentAutoComplete: any;
   manualFocus: boolean = false;
   DefaultValue: any = null;
-  IsSingleMode: boolean = false;
+  IsMultiSelect: boolean = false;
   ClassName: string = ""
   Tabindex: string  = "0";
 
   @Output() OnSelect = new EventEmitter();
   @Output() onKeyup = new EventEmitter();
   @Output() onFocus = new EventEmitter();
-
-  // @Input()
-  // set SingleMode(mode: string) {
-  //   if (typeof mode !== "undefined") {
-  //     if (mode === "on") {
-  //       this.IsSingleMode = true;
-  //     } else {
-  //       this.IsSingleMode = false;
-  //     }
-  //   }
-  // }
-
 
   @Input()
   set data(dataModal: autoCompleteModal) {
@@ -94,7 +81,6 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
       this.ClassName = dataModal.className;
       this.DropdownData = dataModal.data;
       this.OriginalData = dataModal.data;
-      this.IsSingleMode = dataModal.isMultiSelect;
     }
 
     this.ManageBindingData();
@@ -122,9 +108,20 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
 
   // ----------------------  ends ----------------------
 
-  constructor(private commonService: CommonService) {
-    this.HeightValue = 250;
-    this.AutofillDroopdownHeight = this.HeightValue.toString() + "px";
+  constructor(private commonService: CommonService, 
+    private elem: ElementRef) {
+    
+      this.HeightValue = 250;
+      this.AutofillDroopdownHeight = this.HeightValue.toString() + "px";
+      console.log(elem.nativeElement.tagName);
+      switch(elem.nativeElement.tagName) {
+        case "BOT-MULTISELECT": 
+          this.IsMultiSelect = true;
+          break;
+        default:
+          this.IsMultiSelect = false;
+          break;
+      }
     // this.RegisterListener();
   }
 
@@ -135,7 +132,7 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
 
   @HostListener('document:click', ['$event'])
   CloseSuggestionBox(e: any) {
-    if(this.IsSingleMode) {
+    if(this.IsMultiSelect) {
       if (e.target.getAttribute('title') == "bt-autocomplete") {
         // do nothing
       } else {
@@ -284,30 +281,30 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
     }
   }
 
-  onKeyPress(a: any) {
-    switch (a.keyCode) {
+  onKeyPress(e: any) {
+    switch (e.keyCode) {
       case 27:
         this.el.val(this.currentValue);
         this.hide();
         break;
       case 9:
         if (-1 === this.selectedIndex) {
-          let fulltext = $(event.currentTarget).val();
+          let fulltext = $(e.currentTarget).val();
           this.selectOption({ value: fulltext, data: "" }, -1);
           this.hide();
           return;
         }
-        this.select(this.selectedIndex, true);
+        this.select(this.selectedIndex, true, e);
         break;
       case 13:
         if (-1 === this.selectedIndex) {
-          let fulltext = $(event.currentTarget).val();
+          let fulltext = $(e.currentTarget).val();
           this.selectOption({ value: fulltext, data: "" }, -1);
           this.hide();
           return;
         }
-        this.select(this.selectedIndex, 13 === a.keyCode);
-        if (9 === a.keyCode && !1 === this.options.tabDisabled) return;
+        this.select(this.selectedIndex, 13 === e.keyCode, e);
+        if (9 === e.keyCode && !1 === this.options.tabDisabled) return;
         break;
       case 38:
         this.moveUp();
@@ -318,8 +315,8 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
       default:
         return;
     }
-    a.stopImmediatePropagation();
-    a.preventDefault();
+    e.stopImmediatePropagation();
+    e.preventDefault();
   }
 
   onKeyUp(a: any) {
@@ -406,17 +403,17 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
       : null;
   }
 
-  select(a, b) {
+  select(a, b, e: any) {
     var c = this.BindingData[a];
-    if(this.IsSingleMode) {
-      let classlist = (event.currentTarget as any).querySelector('span[name="selected-check"]').classList;
-      if (classlist.length > 0)
-        classlist.remove('d-none');
-      else
-        classlist.add('d-none');
+    if(this.IsMultiSelect) {
+      let elem = e.currentTarget.querySelector('input');
+      if (c.selected) { 
+        c.selected = false;
+      }
+      else {
+        c.selected = true;
+      }
 
-      this.DefaultValue = c.value;
-      this.onChange(this.DefaultValue);
       this.OnSelect.emit(c);
       return;
     }
@@ -443,17 +440,6 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
     this.DefaultValue = c.value;
     this.onChange(this.DefaultValue);
     this.OnSelect.emit(c.value);
-
-    // if (this.IsSingleMode) {
-    //   let index = 0;
-    //   while (index < this.BindingData.length) {
-    //     if (this.BindingData[index].value === c.value) {
-    //       this.BindingData.splice(index, 1);
-    //     }
-    //     index++;
-    //   }
-    //   this.ToggleRemoveIcon(JSON.stringify(c), false);
-    // }
   }
 
   AddToAutoFillList() {
@@ -551,7 +537,7 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
   }
 
   onBlur() {
-    if(!this.IsSingleMode) {
+    if(!this.IsMultiSelect) {
       this.hide();
       this.killSuggestions();
     }
@@ -638,9 +624,11 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
   }
 }
 
-export class pairData {
+export class 
+pairData {
   value: any = null;
   text: string = "";
+  seleted?: boolean = false;
   email?: string = "";
 }
 
@@ -648,6 +636,7 @@ export class autoCompleteModal {
   constructor(text: string = 'Select your option') {
     this.placeholder = text;
   }
+
   data: Array<pairData> = [];
   className?: string = 'disabled-input';
   placeholder?: string = null;

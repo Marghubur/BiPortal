@@ -46,7 +46,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     this.employeesList.data = [];
     this.employeesList.placeholder = "Team Member";
     this.employeesList.className = "";
-    this.employeesList.isMultiSelect = true;
+
     if (value)
       this.projectId = value.ProjectId;
     let data = this.local.findRecord("Companies");
@@ -91,11 +91,23 @@ export class ManageProjectComponent implements OnInit, DoCheck {
 
         this.employees = GetEmployees();
         this.clients = response.ResponseBody.Clients;
-        this.employeesList.data = this.employees;
-
+        
         if (response.ResponseBody.TeamMembers && response.ResponseBody.TeamMembers.length > 0) {
           this.teamMembers = response.ResponseBody.TeamMembers;
+
+          this.employees.map(item => {
+            if(this.teamMembers.find(x => x.EmployeeId == item.value)) {
+              item.selected = true;
+            } else {
+              item.selected = false;
+            }
+
+            this.employeesList.data.push(item);
+          });
+        } else {
+          this.employeesList.data = this.employees;
         }
+
         this.initForm();
         this.isReady = true;
       }

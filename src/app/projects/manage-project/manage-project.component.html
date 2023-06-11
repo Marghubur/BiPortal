@@ -230,8 +230,8 @@
             </div>
           </div>
           <div class="col-md-12 row my-4" *ngIf="isReady">
-            <app-iautocomplete [data]="employeesList" (OnSelect)="selectedEmployee($event)" [(ngModel)]="employeeIds" [ngModelOptions]="{standalone: true}">
-            </app-iautocomplete>
+            <bot-multiselect [data]="employeesList" (OnSelect)="selectedEmployee($event)">
+            </bot-multiselect>
           </div>
         </div>
       </div>

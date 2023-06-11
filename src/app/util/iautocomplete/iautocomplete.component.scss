@@ -368,7 +368,8 @@ a:hover {
   -webkit-transition: all 0.2s linear;
   -moz-transition: all 0.2s linear;
   transition: all 0.2s linear;
-  font-size: 0.8rem;
+  font-size: 1.0rem;
+  padding: 0.4rem 0.75rem !important;
 }
 
 #iautofill-searchfield .biginput:focus {
@@ -477,9 +478,9 @@ input:focus {
   font-size: 12px !important;
 }
 
-.autocomplete-suggestions div:first-child {
-  margin-top: 30px !important;
-}
+// .autocomplete-suggestions div:first-child {
+//   margin-top: 30px !important;
+// }
 
 .normal {
   font-size: 1rem !important;
@@ -498,4 +499,9 @@ input:focus {
   a {
     text-decoration: none;
   }
+}
+
+.selected-item-chip {
+  border-bottom: 1px solid #d9d9d9;
+  padding: 0.4rem 0.75rem;
 }

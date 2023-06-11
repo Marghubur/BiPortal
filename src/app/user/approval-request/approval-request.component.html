@@ -281,8 +281,8 @@
                   <div class="row col-md-10">
                     <div class="col-md-4 py-2">
                       <label class="form-label">Filter by name</label>
-                      <app-iautocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
-                      </app-iautocomplete>
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      </bot-autocomplete>
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by requested on </label>

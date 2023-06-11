@@ -743,8 +743,8 @@
           <div class="row">
             <div class="col-md-6 mt-3" *ngIf="isPageReady">
               <label for="" class="form-label">Select employee to have a 1:1</label>
-              <app-iautocomplete [data]="employeesList" [ngModelOptions]="{standalone: true}" [(ngModel)]="empId" (OnSelect)="onSelectEmp($event)">
-              </app-iautocomplete>
+              <bot-autocomplete [data]="employeesList" [ngModelOptions]="{standalone: true}" [(ngModel)]="empId" (OnSelect)="onSelectEmp($event)">
+              </bot-autocomplete>
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">Meeting title</label>

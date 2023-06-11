@@ -252,8 +252,8 @@
                                 </div>
                               </div>
                               <div class="mt-3">
-                                <app-iautocomplete [data]="employeesList"  (OnSelect)="selectedEmployee($event)" [(ngModel)]="employeeIds" [ngModelOptions]="{standalone: true}">
-                                </app-iautocomplete>
+                                <bot-autocomplete [data]="employeesList"  (OnSelect)="selectedEmployee($event)" [(ngModel)]="employeeIds" [ngModelOptions]="{standalone: true}">
+                                </bot-autocomplete>
                               </div>
                           </div>
                       </ng-container>
