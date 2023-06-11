@@ -11,8 +11,8 @@
               </div>
               <div class="col-4 row align-items-center">
                 <div class="col-md-7" *ngIf="isEmployeesReady">
-                  <app-iautocomplete [data]="clientDetail" (OnSelect)="presentWeek()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-                  </app-iautocomplete>
+                  <bot-autocomplete [data]="clientDetail" (OnSelect)="presentWeek()"  [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+                  </bot-autocomplete>
                 </div>
                 <div class="col-md-4">
                   <select class="form-select" [disabled]="clientId == 0" (change)="filterTimesheet()" [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">

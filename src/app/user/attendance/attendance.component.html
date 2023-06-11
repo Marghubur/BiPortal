@@ -514,9 +514,9 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
         </div>
         <div class="mt-3" *ngIf="isEmployeesReady">
           <label for="" class="form-label">Notify</label>
-          <app-iautocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
+          <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
             [ngModelOptions]="{standalone: true}">
-          </app-iautocomplete>
+          </bot-autocomplete>
         </div>
         <p class="mb-0">These employees will be notified through email when you WFH request applied.</p>
       </div>
@@ -579,9 +579,9 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
         </div>
         <div class="mt-3" *ngIf="isEmployeesReady">
           <label for="" class="form-label">Notify</label>
-          <app-iautocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
+          <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
             [ngModelOptions]="{standalone: true}">
-          </app-iautocomplete>
+          </bot-autocomplete>
         </div>
         <p class="mb-0">These employees will be notified through email when you WFH request applied.</p>
       </div>

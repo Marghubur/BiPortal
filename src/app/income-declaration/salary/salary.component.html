@@ -15,9 +15,9 @@
       </li>
     </ul>
     <div class="col-md-3 pe-2 my-3" *ngIf="isSalaryReady">
-      <app-iautocomplete [data]="employeesList" (OnSelect)="getSalaryBreakup($event)"
+      <bot-autocomplete [data]="employeesList" (OnSelect)="getSalaryBreakup($event)"
         [(ngModel)]="EmployeeId" [ngModelOptions]="{standalone: true}">
-      </app-iautocomplete>
+      </bot-autocomplete>
     </div>
   </div>
   <div class="col-12 x_panel p-0 m-0">
