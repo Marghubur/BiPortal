@@ -75,6 +75,7 @@ export class LoginComponent implements OnInit {
         AccessToken: null,
         UserTypeId: this.userType == 'employee' ? UserType.Employee : UserType.Admin
       };
+      
       let userId: any = document.getElementById("EmailOrMobile");
       let password: any = document.getElementById("Password");
       if (!userId.value) {

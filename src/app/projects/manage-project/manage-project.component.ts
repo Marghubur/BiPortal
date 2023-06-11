@@ -24,17 +24,13 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   currentCompany: any = null;
   isLoading: boolean = false;
   submitted: boolean = false;
-  projectManagers: Array<any> = [];
   clients: Array<any> = [];
-  architects: Array<any> = [];
   projectId: number = 0;
   employees: Array<any> = [];
   projectManagerName: string = "";
   architectName: string = "";
   teamMembers: Array<any> = [];
   employeesList: autoCompleteModal = null;
-  teamLead: Array<any> = [];
-  teamLeadId: number = 0;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -92,19 +88,11 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         } else {
           this.projectDetail = new ProjectModal();
         }
-        this.employees = response.ResponseBody.Employees;
-        this.teamLead = response.ResponseBody.Employees.filter(x => x.DesignationId == 19);
-        this.projectManagers = response.ResponseBody.Employees.filter(x => x.DesignationId == 2);
-        this.architects = response.ResponseBody.Employees.filter(x => x.DesignationId == 3);
+
+        this.employees = GetEmployees();
         this.clients = response.ResponseBody.Clients;
-        let teamember = response.ResponseBody.Employees.filter(x => x.DesignationId != 19 &&  x.DesignationId != 2 &&  x.DesignationId != 3 && x.DesignationId != 1);
-        teamember.forEach(element => {
-          this.employeesList.data.push({
-            value : element.EmployeeUid,
-            text : element.FirstName+ " "+ element.LastName,
-            email : element.Email
-          })
-        });
+        this.employeesList.data = this.employees;
+
         if (response.ResponseBody.TeamMembers && response.ResponseBody.TeamMembers.length > 0) {
           this.teamMembers = response.ResponseBody.TeamMembers;
         }
@@ -182,6 +170,11 @@ export class ManageProjectComponent implements OnInit, DoCheck {
           });
         }
       }
+
+      if(value.ArchitectId == null) {
+        value.ArchitectId = 0;
+      }
+
       this.http.post("Project/AddUpdateProjectDetail", value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           if (res.ResponseBody) {
@@ -218,25 +211,21 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       let manager = this.employees.find(x => x.EmployeeUid == architectid);
       this.architectName = manager.FirstName + " " + manager.LastName;
     }
-    if (this.teamMembers.length > 0) {
-      let emp = this.teamMembers.find(x => x.DesignationId == 19);
-      if (emp)
-        this.teamLeadId =  emp.EmployeeId;
-    }
+    
     $("#teamMemberModal").modal('show');
   }
 
   selectedEmployee(e: any) {
     let index = this.teamMembers.findIndex(x => x.EmployeeId == e.value);
     if(index == -1) {
-      let emp = this.employees.find(x => x.EmployeeUid == e.value);
+      let emp = this.employees.find(x => x.value == e.value);
       this.teamMembers.push({
         ProjectMemberDetailId : 0,
         ProjectId : 0,
-        EmployeeId : emp.EmployeeUid,
-        DesignationId : emp.DesignationId,
-        FullName : emp.FirstName + " " + emp.LastName,
-        Email : emp.Email,
+        EmployeeId : emp.value,
+        DesignationId : 0,
+        FullName : emp.text,
+        Email : emp.email,
         MemberType: 0, // 1 = Team Lead, 2 = Team Member
         Grade: null,
         IsActive : true
