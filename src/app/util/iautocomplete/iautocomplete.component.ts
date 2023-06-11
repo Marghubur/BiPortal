@@ -113,7 +113,6 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
     
       this.HeightValue = 250;
       this.AutofillDroopdownHeight = this.HeightValue.toString() + "px";
-      console.log(elem.nativeElement.tagName);
       switch(elem.nativeElement.tagName) {
         case "BOT-MULTISELECT": 
           this.IsMultiSelect = true;
