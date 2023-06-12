@@ -745,7 +745,7 @@ export class AppraisalSettingComponent implements OnInit {
     this.projectDetails = [];
     this.selectedProject = null;
     // ${this.userDetail.UserId}
-    this.http.get(`ps/projects/get/26`, true).then(res => {
+    this.http.get(`ps/projects/memberdetail/26`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
