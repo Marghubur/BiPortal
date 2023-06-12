@@ -304,7 +304,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       IFSCCode: new FormControl(this.employeeModal.IFSCCode, [Validators.required]),
       Domain: new FormControl(this.employeeModal.Domain),
       Specification: new FormControl(this.employeeModal.Specification),
-      ExprienceInYear: new FormControl(PlaceEmpty(this.employeeModal.ExprienceInYear)),
+      ExprienceInYear: new FormControl(PlaceEmpty(this.employeeModal.ExprienceInYear), [Validators.required]),
       LastCompanyName: new FormControl(this.employeeModal.LastCompanyName),
       IsPermanent: new FormControl(this.employeeModal.IsPermanent),
       IsActive: new FormControl(this.employeeModal.IsActive),

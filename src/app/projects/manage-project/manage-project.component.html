@@ -23,22 +23,6 @@
                   <label for="" class="form-label">Company Name</label>
                   <input type="text" class="form-control" readonly formControlName="CompanyName" placeholder="Company Name">
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Project Name</label>
-                  <textarea type="text" rows="2" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="100" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}"></textarea>
-                </div>
-                <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Project Description</label>
-                  <textarea type="text" rows="2" maxlength="400" formControlName="ProjectDescription" class="form-control" placeholder="Project Description"></textarea>
-                </div>
-                <div class="col-md-4 mt-3">
-                  <label class="form-label">Homepage URL</label>
-                  <textarea type="text" maxlength="150" rows="2" formControlName="HomePageUrl" class="form-control" placeholder="Home Page URL"></textarea>
-                </div>
-              </div>
-              <div class="row">
                 <div class="col-md-4 mt-3">
                   <label class="form-label">IsClient Project</label>
                   <select class="form-select" formControlName="IsClientProject">
@@ -46,6 +30,8 @@
                     <option value="false">No</option>
                   </select>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Client Name</label>
                   <select class="form-select" formControlName="ClientId">
@@ -69,8 +55,6 @@
                     </div>
                   </form>
                 </div>
-              </div>
-              <div class="row">
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Project Ended On</label>
                   <form class="form-inline">
@@ -86,6 +70,20 @@
                       </div>
                     </div>
                   </form>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mt-3">
+                  <label for="" class="form-label">Project Name</label>
+                  <textarea type="text" rows="2" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="100" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}"></textarea>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label for="" class="form-label">Project Description</label>
+                  <textarea type="text" rows="2" maxlength="400" formControlName="ProjectDescription" class="form-control" placeholder="Project Description"></textarea>
+                </div>
+                <div class="col-md-4 mt-3">
+                  <label class="form-label">Homepage URL</label>
+                  <textarea type="text" maxlength="150" rows="2" formControlName="HomePageUrl" class="form-control" placeholder="Home Page URL"></textarea>
                 </div>
               </div>
               <div class="col-md-12 text-end mt-2 py-2">
@@ -109,16 +107,11 @@
                       <td>{{item.FullName}}</td>
                       <td>{{item.Email}}</td>
                       <td>
-                        <ng-container *ngIf="item.DesignationId ==2 || item.DesignationId ==3">
-                          {{item.DesignationId ==2 ? 'Project Manager' : 'Project Architect'}}
-                        </ng-container>
-                        <ng-container *ngIf="item.DesignationId !=2 && item.DesignationId !=3">
-                          {{item.MemberType == 1 ? 'Team Lead' : item.MemberType == 2 ? 'Team Member' : 'Not Selected' }}
-                        </ng-container>
+                          {{item.MemberType == 19 ? 'Team Lead' : item.MemberType == 2 ? 'Project Manager' : item.MemberType == 3 ? 'Project Architect' : item.MemberType == 13 ? 'Team Member' : 'Not Selected' }}
                       </td>
                       <td>{{item.Grade != null ? item.Grade : "Not Selected"}}</td>
                       <td>
-                        <a href="javascript:void(0)" class="text-decoration-none text-danger" [ngClass]="{'pe-none': item.DesignationId == 3 || item.DesignationId == 19 || item.DesignationId == 2}" (click)="deleteTeamMember(item)">
+                        <a href="javascript:void(0)" class="text-decoration-none text-danger" [ngClass]="{'pe-none': item.MemberType == 3 || item.DesignationId == 19 || item.DesignationId == 2}" (click)="deleteTeamMember(item)">
                           <i class="fa" *ngIf="!isLoading" [ngClass]="{'fa-trash': item.DesignationId != 3 && item.DesignationId != 19 && item.DesignationId != 2, 'fa-ban' : item.DesignationId == 3 || item.DesignationId == 19 || item.DesignationId == 2}"></i>
                           <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
                         </a>
@@ -179,7 +172,7 @@
               </thead>
               <tbody>
                 <ng-container *ngFor="let item of teamMembers; let i = index;">
-                  <tr *ngIf="item.DesignationId != 3 && item.DesignationId != 2">
+                  <tr >
                     <td>{{i+1}}</td>
                     <td>{{item.FullName}}</td>
                     <td>
