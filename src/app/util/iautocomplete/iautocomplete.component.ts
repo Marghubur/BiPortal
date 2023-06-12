@@ -402,10 +402,16 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
       : null;
   }
 
+  // onBlur() {
+  //   if(!this.IsMultiSelect) {
+  //     this.hide();
+  //     this.killSuggestions();
+  //   }
+  // }
+
   select(a, b, e: any) {
     var c = this.BindingData[a];
     if(this.IsMultiSelect) {
-      let elem = e.currentTarget.querySelector('input');
       if (c.selected) {
         c.selected = false;
       }
@@ -533,13 +539,6 @@ export class IautocompleteComponent implements OnInit, OnDestroy , ControlValueA
     this.el.off(".autocomplete").removeData("autocomplete");
     this.disableKillerFn();
     $(this.suggestionsContainer).remove();
-  }
-
-  onBlur() {
-    if(!this.IsMultiSelect) {
-      this.hide();
-      this.killSuggestions();
-    }
   }
 
   setOptions(a) {

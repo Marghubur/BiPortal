@@ -153,22 +153,7 @@
                           <select name="DesignationId" class="form-control" formControlName="DesignationId"
                             [ngClass]="{'error-field': submitted && (f.DesignationId.errors !== null && f.DesignationId.errors.required)}">
                             <option value=null disabled>Select Designation</option>
-                            <option value="2">Project Manager</option>
-                            <option value="3">Architect</option>
-                            <option value="10">Networking</option>
-                            <option value="12">Full stack Developer</option>
-                            <option value="13">Backend (Server side) Developer</option>
-                            <option value="15">Database Developer</option>
-                            <option value="16">Frontend (UI) Developer</option>
-                            <option value="17">System Engineer</option>
-                            <option value="18">Associate Engineer</option>
-                            <option value="11">Test Lead</option>
-                            <option value="1">Admin</option>
-                            <option value="5">Senior HR</option>
-                            <option value="6">Direct HR</option>
-                            <option value="4">Tester</option>
-                            <option value="19">Team Lead</option>
-                            <option value="15">Other</option>
+                            <option [value]="e.RoleId" *ngFor="let e of designations">{{e.RoleName}}</option>
                           </select>
                         </div>
                         <div class="col-md-4 mb-3">

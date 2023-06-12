@@ -4,6 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { AssignedClients, EmployeeDetail } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
+import { GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, PlaceEmpty, Toast, ToFixed, ToLocateDate } from 'src/providers/common-service/common.service';
 import { EmailLinkConfig, Employees, ManageEmployee, OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
@@ -62,6 +63,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   isSubmitted: boolean = false;
   shiftDetail: autoCompleteModal = null;
   shifts: Array<any> = [];
+  designations: Array<any> = [];
 
   get f() {
     let data = this.employeeForm.controls;
@@ -80,6 +82,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     //this.calculateExpressionUsingInfixDS('(40 % 1000 + (((20 + 60) % 10) % 10');
+    this.designations = GetRoles();
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
     this.managerList.placeholder = "Reporting Manager";
