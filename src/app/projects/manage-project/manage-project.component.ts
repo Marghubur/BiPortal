@@ -29,6 +29,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   employees: Array<any> = [];
   teamMembers: Array<any> = [];
   employeesList: autoCompleteModal = null;
+  projectMembers: Array<PairData> = [];
   projectManagerId: number = 0;
   teamName: string = null;
 
@@ -77,7 +78,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
 
   loadData() {
     this.isReady = false;
-    this.http.get(`Project/GetProjectPageDetail/${this.projectId}`).then((response: ResponseModel) => {
+    this.http.get(`ps/projects/getProjectDetail/${this.projectId}`, true).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         if (response.ResponseBody.Project && response.ResponseBody.Project.length > 0) {
           this.projectDetail = response.ResponseBody.Project[0];
@@ -92,19 +93,27 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         this.employees = GetEmployees();
         this.clients = response.ResponseBody.Clients;
 
-        if (response.ResponseBody.TeamMembers && response.ResponseBody.TeamMembers.length > 0) {
-          this.teamMembers = response.ResponseBody.TeamMembers;
-          this.teamName = this.teamMembers[0].Team;
-          this.projectManagerId = this.teamMembers[0].ProjectManagerId;
-          this.employees.map(item => {
-            if(this.teamMembers.find(x => x.EmployeeId == item.value)) {
-              item.selected = true;
-            } else {
-              item.selected = false;
-            }
+        if (response.ResponseBody.Members) {
+          let teamMembers = response.ResponseBody.Members;
+          let keys = Object.keys(response.ResponseBody.Members);
+          let i = 0;
+          while(i < keys.length) {
+            this.projectMembers.push({
+              key: keys[i],
+              value: teamMembers[keys[i]]
+            });
+            i++;
+          }
 
-            this.employeesList.data.push(item);
-          });
+          // this.employees.map(item => {
+          //   if(this.projectMembers.map(i => i.value).find(x => x.EmployeeId == item.value)) {
+          //     item.selected = true;
+          //   } else {
+          //     item.selected = false;
+          //   }
+
+          //   this.employeesList.data.push(item);
+          // });
         } else {
           this.employeesList.data = this.employees;
         }
@@ -321,4 +330,9 @@ export class ProjectModal {
   ClientId: number = 0;
   ProjectStartedOn: Date = null;
   ProjectEndedOn: Date = null;
+}
+
+interface PairData {
+  key: string;
+  value: any
 }
