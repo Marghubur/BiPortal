@@ -113,7 +113,7 @@ export class AppraisalSettingComponent implements OnInit {
         selected: false
       })
     })
-
+    this.designation = GetRoles();
     this.currentCompny = this.local.findRecord("Companies")[0];
     this.userDetail = this.user.getInstance();
     this.objectiveData.SearchString += ` And CompanyId = ${this.currentCompny.CompanyId}`;
@@ -230,6 +230,7 @@ export class AppraisalSettingComponent implements OnInit {
   addAprisalCyclePopUp() {
     this.isSubmitted = false;
     this.currentApprisalCycle = new ApprisalCycle();
+    this.selectedRoles = [];
     let date = new Date();
     this.fromDate.day= date.getDate()
     this.fromDate.month= date.getMonth() + 1;
@@ -239,6 +240,9 @@ export class AppraisalSettingComponent implements OnInit {
     this.toDate.month= date.getMonth() + 1;
     this.toDate.year= date.getFullYear();
     this.initForm();
+    this.roleList.data.map(i => {
+      i.selected = false;
+    })
     $('#manageApprisal').modal('show');
   }
 
@@ -343,12 +347,14 @@ export class AppraisalSettingComponent implements OnInit {
           RoleId : role.RoleId,
           RoleName: role.RoleName
         })
-        this.roleList.data.map(p => {
-          if (p.value == x)
-            p.selected = true;
-        })
-      });
 
+      });
+      this.roleList.data.map(i => {
+        if (this.selectedRoles.find(a => a.RoleId == i.value))
+          i.selected = true;
+        else
+          i.selected = false;
+      })
     }
     $('#manageApprisal').modal('show');
   }
@@ -742,7 +748,6 @@ export class AppraisalSettingComponent implements OnInit {
     this.http.get(`ps/projects/memberdetail/26`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
-        this.designation = res.ResponseBody.Designation;
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
         if (project.length > 0) {
           let result = project.reduce((a, b) => {
@@ -785,6 +790,7 @@ export class AppraisalSettingComponent implements OnInit {
         }
       }
     }).catch(e => {
+      ErrorToast(e.error);
       this.isProjectDetailReady = true;
     })
   }
@@ -855,6 +861,7 @@ export class AppraisalSettingComponent implements OnInit {
           Toast("Record found");
         }
       }).catch(e => {
+        ErrorToast(e.error);
         this.isPageReady = true;
       })
     }
@@ -934,6 +941,7 @@ export class AppraisalSettingComponent implements OnInit {
           this.isLoading = false;
         }
       }).catch(e => {
+        ErrorToast(e.error);
         this.isLoading = false;
       })
     } else {
@@ -1049,6 +1057,7 @@ export class AppraisalSettingComponent implements OnInit {
           this.isLoading = false;
         }
       }).catch(e => {
+        ErrorToast(e.error);
         this.isLoading = false;
       })
     } else {

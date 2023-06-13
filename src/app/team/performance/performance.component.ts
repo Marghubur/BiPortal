@@ -185,7 +185,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       Status: new FormControl(null, [Validators.required]),
       Comments: new FormControl(null, [Validators.required]),
       TargetValue: new FormControl(this.selectedObjective != null ? this.selectedObjective.TargetValue : 0),
-      Rating: new FormControl(this.selectedObjective.Rating, [Validators.required])
+      Rating: new FormControl(this.selectedObjective.Rating, [Validators.required]),
+      ProjectId: new FormControl(0)
     })
   }
 
@@ -406,8 +407,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       this.selectedMeeting.createBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.createdBy).text;
       this.selectedMeeting.employeesMeeting.forEach(y => {
         let emp: any = this.employeesList.data.find(x => x.value == y);
-        emp.userNameIcon = this.getUserNameIcon(emp.text)
-        this.selectedEmployee.push(emp);
+        if (emp) {
+          emp.userNameIcon = this.getUserNameIcon(emp.text)
+          this.selectedEmployee.push(emp);
+        }
       })
     } else {
       this.resetMeeting();
@@ -423,8 +426,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       this.selectedMeeting.createBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.createdBy).text;
       this.selectedMeeting.employeesMeeting.forEach(y => {
         let emp: any = this.employeesList.data.find(x => x.value == y);
-        emp.userNameIcon = this.getUserNameIcon(emp.text)
-        this.selectedEmployee.push(emp);
+        if (emp) {
+          emp.userNameIcon = this.getUserNameIcon(emp.text)
+          this.selectedEmployee.push(emp);
+        }
       })
       let elem = document.getElementsByName("meetingevents");
       elem.forEach(x => {
@@ -602,7 +607,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
             Toast("Objective submitted successfully");
             this.isLoading = false;
           }
-        }).then(e => {
+        }).catch(e => {
+          ErrorToast(e.error);
           this.isLoading = false;
         })
       } else {

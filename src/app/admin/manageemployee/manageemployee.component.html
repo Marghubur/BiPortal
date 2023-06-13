@@ -302,7 +302,7 @@
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Work Exprience in month</label>
                             <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="3" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                              name="ExprienceInYear" formControlName="ExprienceInYear" />
+                              name="ExprienceInYear" formControlName="ExprienceInYear"  [ngClass]="{'error-field': submitted && f.ExprienceInYear.errors !== null && f.ExprienceInYear.errors.required}"/>
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Date of joining</label>
