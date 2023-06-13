@@ -29,6 +29,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   employees: Array<any> = [];
   teamMembers: Array<any> = [];
   employeesList: autoCompleteModal = null;
+  projectManagerId: number = 0;
+  teamName: string = null;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -92,7 +94,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
 
         if (response.ResponseBody.TeamMembers && response.ResponseBody.TeamMembers.length > 0) {
           this.teamMembers = response.ResponseBody.TeamMembers;
-
+          this.teamName = this.teamMembers[0].Team;
+          this.projectManagerId = this.teamMembers[0].ProjectManagerId;
           this.employees.map(item => {
             if(this.teamMembers.find(x => x.EmployeeId == item.value)) {
               item.selected = true;
@@ -113,8 +116,6 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       this.isReady = true;
     });
   }
-
-
 
   initForm() {
     this.projectForm = this.fb.group({
@@ -166,6 +167,15 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         ErrorToast("Please add type of the employee first");
         return;
       }
+      if (this.projectManagerId <= 0) {
+        this.isLoading = false;
+        ErrorToast("Please select project manager first");
+        return;
+      }
+      this.teamMembers.map(x => {
+        x.ProjectManagerId = this.projectManagerId,
+        x.Team = this.teamName
+      })
     }
     if (errroCounter === 0) {
       let value = this.projectForm.value;
@@ -182,30 +192,60 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       if(value.ArchitectId == null) {
         value.ArchitectId = 0;
       }
+      if (value.ProjectId == 0) {
+        this.addProject(value);
+      } else {
+        this.updateProject(value.ProjectId, value);
+      }
 
-      this.http.post("ps/projects/add", value, true).then((res:ResponseModel) => {
-        if (res.ResponseBody) {
-          if (res.ResponseBody) {
-            this.projectDetail =res.ResponseBody;
-            this.projectId = this.projectDetail.ProjectId;
-            let date = new Date(this.projectDetail.ProjectStartedOn);
-            this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-            date = new Date(this.projectDetail.ProjectEndedOn);
-            this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-            if (res.ResponseBody.TeamMembers && res.ResponseBody.TeamMembers.length > 0)
-              this.teamMembers = res.ResponseBody.TeamMembers;
-          }
-
-          Toast("Project created/updated successfully.");
-          this.isLoading = false;
-        }
-      }).catch(e => {
-        this.isLoading = false;
-      })
     } else {
       ErrorToast("Please correct all the mandaroty field marked red");
       this.isLoading = false;
     }
+  }
+
+  addProject(value: any) {
+    this.http.post("ps/projects/add", value, true).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        if (res.ResponseBody) {
+          this.projectDetail =res.ResponseBody;
+          this.projectId = this.projectDetail.ProjectId;
+          let date = new Date(this.projectDetail.ProjectStartedOn);
+          this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          date = new Date(this.projectDetail.ProjectEndedOn);
+          this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          if (res.ResponseBody.TeamMembers && res.ResponseBody.TeamMembers.length > 0)
+            this.teamMembers = res.ResponseBody.TeamMembers;
+        }
+
+        Toast("Project created/updated successfully.");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  updateProject(projectId: number, value: any) {
+    this.http.put(`ps/projects/update/${projectId}`, value, true).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        if (res.ResponseBody) {
+          this.projectDetail =res.ResponseBody;
+          this.projectId = this.projectDetail.ProjectId;
+          let date = new Date(this.projectDetail.ProjectStartedOn);
+          this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          date = new Date(this.projectDetail.ProjectEndedOn);
+          this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          if (res.ResponseBody.TeamMembers && res.ResponseBody.TeamMembers.length > 0)
+            this.teamMembers = res.ResponseBody.TeamMembers;
+        }
+
+        Toast("Project created/updated successfully.");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   addMemberPopUp() {
