@@ -91,36 +91,35 @@
               <div class="col-md-12 text-end mt-2 py-2">
                 <a href="javascript:void(0)" (click)="addMemberPopUp()"><i class="fa fa-plus pe-1"></i>Manage Team Members</a>
               </div>
-              <div class="col-md-12 mt-3" *ngIf="teamMembers.length > 0">
+              <div class="col-md-12 mt-3" *ngIf="projectMembers.length > 0">
                 <table class="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Designation</th>
-                      <th>Grade</th>
-                      <th>Action</th>
+                      <th>Team</th>
+                      <th>Members</th>
+                      <th>Activity</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let item of teamMembers; let i = index;">
+                    <tr *ngFor="let item of projectMembers; let i = index;">
                       <td>{{i+1}}</td>
-                      <td>{{item.FullName}}</td>
-                      <td>{{item.Email}}</td>
                       <td>
-                        <ng-container *ngIf="item.DesignationId ==2 || item.DesignationId ==3">
-                          {{item.DesignationId ==2 ? 'Project Manager' : 'Project Architect'}}
-                        </ng-container>
-                        <ng-container *ngIf="item.DesignationId !=2 && item.DesignationId !=3">
-                          {{item.MemberType == 1 ? 'Team Lead' : item.MemberType == 2 ? 'Team Member' : 'Not Selected' }}
-                        </ng-container>
+                        <i class="fa fa-university fs-5 text-primary-c pe-2" aria-hidden="true"></i>
+                        <span class="text-primary">{{item.key}}</span>
                       </td>
-                      <td>{{item.Grade != null ? item.Grade : "Not Selected"}}</td>
                       <td>
-                        <a href="javascript:void(0)" class="text-decoration-none text-danger" [ngClass]="{'pe-none': item.DesignationId == 3 || item.DesignationId == 19 || item.DesignationId == 2}" (click)="deleteTeamMember(item)">
-                          <i class="fa" *ngIf="!isLoading" [ngClass]="{'fa-trash': item.DesignationId != 3 && item.DesignationId != 19 && item.DesignationId != 2, 'fa-ban' : item.DesignationId == 3 || item.DesignationId == 19 || item.DesignationId == 2}"></i>
-                          <i *ngIf="isLoading" class="fa fa-spin fa-spinner"></i>
+                        <div class="badge bg-success me-2" *ngFor="let m of item.value; let index = index;">
+                          {{m.FullName}}
+                          <a href="javascript:void(0)" class="text-white text-decoration-none">
+                            <i class="ps-2 fa fa-eye"></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td>
+                        <a href="javascript:void(0)" class="fw-bold">
+                          <i class="fa fa-plus-square-o pe-1"></i>
+                          Update members
                         </a>
                       </td>
                     </tr>
@@ -157,7 +156,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="teamMemberModalLabel">Manage Team Members</h5>
+        <h5 class="modal-title" id="teamMemberModalLabel">Add new team</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="projectForm">
