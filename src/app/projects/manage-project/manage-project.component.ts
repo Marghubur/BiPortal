@@ -183,7 +183,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         value.ArchitectId = 0;
       }
 
-      this.http.post("Project/AddUpdateProjectDetail", value).then((res:ResponseModel) => {
+      this.http.post("ps/projects/add", value, true).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           if (res.ResponseBody) {
             this.projectDetail =res.ResponseBody;

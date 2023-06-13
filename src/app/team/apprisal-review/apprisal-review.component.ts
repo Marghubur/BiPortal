@@ -89,13 +89,13 @@ export class ApprisalReviewComponent implements OnInit{
     if (item) {
       this.isProjectDetailReady = false;
       this.selectedProject = item;
-      this.getProjects();
+      this.getProjectsMembers();
     }
   }
 
-  getProjects() {
+  getProjectsMembers() {
     this.selectedProject = null;
-    this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then(res => {
+    this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
         this.designation = res.ResponseBody.Designation;
