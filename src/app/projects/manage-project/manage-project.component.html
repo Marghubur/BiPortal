@@ -95,7 +95,7 @@
                   </select>
                 </div>
               </div>
-              <div class="col-md-12 text-end mt-2 py-2" *ngIf="projectDetail.ProjectId > 0">
+              <div class="col-md-12 text-end mt-2 py-2">
                 <a href="javascript:void(0)" (click)="addMemberPopUp()"><i class="fa fa-plus pe-1"></i>Add Team</a>
               </div>
               <div class="col-md-12 mt-3" *ngIf="projectMembers.length > 0">
@@ -163,7 +163,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="teamMemberModalLabel">{{isUpdateProjectMember ? 'Update' : 'Add new'}} team</h5>
+        <h5 class="modal-title" id="teamMemberModalLabel">Manage team</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="projectForm">
@@ -230,11 +230,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="addProjectMember()" *ngIf="!isUpdateProjectMember">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Add Member' }}
-        </button>
-        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="updateProjectMember()" *ngIf="isUpdateProjectMember">
+        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="closeAddMemberPopUp()">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add Member' }}
         </button>
