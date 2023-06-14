@@ -30,8 +30,9 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   teamMembers: Array<any> = [];
   employeesList: autoCompleteModal = null;
   projectMembers: Array<PairData> = [];
-  projectManagerId: number = 0;
   teamName: string = null;
+  selectedMember: any = null;
+  isUpdateProjectMember: boolean = false;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -94,36 +95,34 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         this.clients = response.ResponseBody.Clients;
 
         if (response.ResponseBody.Members) {
-          let teamMembers = response.ResponseBody.Members;
-          let keys = Object.keys(response.ResponseBody.Members);
-          let i = 0;
-          while(i < keys.length) {
-            this.projectMembers.push({
-              key: keys[i],
-              value: teamMembers[keys[i]]
-            });
-            i++;
-          }
-
-          // this.employees.map(item => {
-          //   if(this.projectMembers.map(i => i.value).find(x => x.EmployeeId == item.value)) {
-          //     item.selected = true;
-          //   } else {
-          //     item.selected = false;
-          //   }
-
-          //   this.employeesList.data.push(item);
-          // });
-        } else {
-          this.employeesList.data = this.employees;
+          this.bindProjectMembers(response.ResponseBody.Members);
         }
+        this.employeesList.data = this.employees;
 
         this.initForm();
         this.isReady = true;
       }
     }).catch(e => {
+      ErrorToast(e.error);
       this.isReady = true;
     });
+  }
+
+  bindProjectMembers(res: any) {
+    let teamMembers = res;
+    this.projectMembers = [];
+    let keys = Object.keys(res);
+    if (keys.length > 0) {
+      let i = 0;
+      while(i < keys.length) {
+        this.projectMembers.push({
+          key: keys[i],
+          value: teamMembers[keys[i]]
+        });
+        i++;
+      }
+      //this.projectManagerId = this.projectMembers[0].value[0].ProjectManagerId;
+    }
   }
 
   initForm() {
@@ -138,7 +137,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       ClientId: new FormControl({value: this.projectDetail.ClientId, disabled: this.projectDetail.IsClientProject ? false : true}),
       IsClientProject: new FormControl(this.projectDetail.IsClientProject ? 'true' : 'false'),
       ProjectStartedOn: new FormControl(this.projectDetail.ProjectStartedOn),
-      ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn)
+      ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn),
+      ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId)
     })
   }
 
@@ -162,45 +162,45 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     let errroCounter = 0;
     if(this.projectForm.get("ProjectName").value == null || this.projectForm.get("ProjectName").value == "")
         errroCounter++;
-    let teammember = this.teamMembers.filter(x => x.DesignationId != 2 && x.DesignationId != 3);
-    if (teammember.length > 0) {
-      let notSelectedGrade = teammember.filter(x => x.Grade == null || x.Grade == "");
-      if (notSelectedGrade.length > 0) {
-        ErrorToast("Please add employee's grade first");
-        this.isLoading = false;
-        return;
-      }
-      let membertype = teammember.filter(x => x.MemberType == null || x.MemberType == 0);
-      if (membertype.length > 0) {
-        this.isLoading = false;
-        ErrorToast("Please add type of the employee first");
-        return;
-      }
-      if (this.projectManagerId <= 0) {
-        this.isLoading = false;
-        ErrorToast("Please select project manager first");
-        return;
-      }
-      this.teamMembers.map(x => {
-        x.ProjectManagerId = this.projectManagerId,
-        x.Team = this.teamName
-      })
-    }
+    // let teammember = this.teamMembers.filter(x => x.DesignationId != 2 && x.DesignationId != 3);
+    // if (teammember.length > 0) {
+    //   let notSelectedGrade = teammember.filter(x => x.Grade == null || x.Grade == "");
+    //   if (notSelectedGrade.length > 0) {
+    //     ErrorToast("Please add employee's grade first");
+    //     this.isLoading = false;
+    //     return;
+    //   }
+    //   let membertype = teammember.filter(x => x.MemberType == null || x.MemberType == 0);
+    //   if (membertype.length > 0) {
+    //     this.isLoading = false;
+    //     ErrorToast("Please add type of the employee first");
+    //     return;
+    //   }
+    //   if (this.projectManagerId <= 0) {
+    //     this.isLoading = false;
+    //     ErrorToast("Please select project manager first");
+    //     return;
+    //   }
+    //   this.teamMembers.map(x => {
+    //     x.ProjectManagerId = this.projectManagerId,
+    //     x.Team = this.teamName
+    //   })
+    // }
     if (errroCounter === 0) {
       let value = this.projectForm.value;
-      if (this.teamMembers.length > 0) {
-        value.TeamMembers = this.teamMembers;
-        let member = value.TeamMembers.filter(x => x.MemberType == null)
-        if (member.length > 0) {
-          member.forEach(y => {
-            y.MemberType = 0;
-          });
-        }
-      }
+      // if (this.teamMembers.length > 0) {
+      //   value.TeamMembers = this.teamMembers;
+      //   let member = value.TeamMembers.filter(x => x.MemberType == null)
+      //   if (member.length > 0) {
+      //     member.forEach(y => {
+      //       y.MemberType = 0;
+      //     });
+      //   }
+      // }
 
-      if(value.ArchitectId == null) {
+      if(value.ArchitectId == null)
         value.ArchitectId = 0;
-      }
+
       if (value.ProjectId == 0) {
         this.addProject(value);
       } else {
@@ -223,8 +223,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
           this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
           date = new Date(this.projectDetail.ProjectEndedOn);
           this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-          if (res.ResponseBody.TeamMembers && res.ResponseBody.TeamMembers.length > 0)
-            this.teamMembers = res.ResponseBody.TeamMembers;
+          // if (res.ResponseBody.TeamMembers && res.ResponseBody.TeamMembers.length > 0)
+          //   this.teamMembers = res.ResponseBody.TeamMembers;
         }
 
         Toast("Project created/updated successfully.");
@@ -245,8 +245,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
           this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
           date = new Date(this.projectDetail.ProjectEndedOn);
           this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-          if (res.ResponseBody.TeamMembers && res.ResponseBody.TeamMembers.length > 0)
-            this.teamMembers = res.ResponseBody.TeamMembers;
+          // if (res.ResponseBody.TeamMembers && res.ResponseBody.TeamMembers.length > 0)
+          //   this.teamMembers = res.ResponseBody.TeamMembers;
         }
 
         Toast("Project created/updated successfully.");
@@ -257,7 +257,89 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     })
   }
 
+  manageProjectMember() {
+    this.isLoading = true;
+    let teammember = this.teamMembers.filter(x => x.DesignationId != 2 && x.DesignationId != 3);
+    if (teammember.length > 0) {
+      let notSelectedGrade = teammember.filter(x => x.Grade == null || x.Grade == "");
+      if (notSelectedGrade.length > 0) {
+        ErrorToast("Please add employee's grade first");
+        this.isLoading = false;
+        return;
+      }
+      let membertype = teammember.filter(x => x.MemberType == null || x.MemberType == 0);
+      if (membertype.length > 0) {
+        this.isLoading = false;
+        ErrorToast("Please add type of the employee first");
+        return;
+      }
+      this.teamMembers.map(x => {
+        x.Team = this.teamName;
+        x.ProjectManagerId = this.projectDetail.ProjectManagerId
+      })
+      // if (this.projectManagerId <= 0) {
+      //   this.isLoading = false;
+      //   ErrorToast("Please select project manager first");
+      //   return;
+      // }
+      // this.teamMembers.map(x => {
+      //   x.ProjectManagerId = this.projectManagerId,
+      //   x.Team = this.teamName
+      // })
+    }
+  }
+
+  addProjectMember() {
+    this.manageProjectMember();
+    this.http.post(`ps/projects/addProjectMembers/${this.projectDetail.ProjectId}`, this.teamMembers, true).then(res => {
+      if (res.ResponseBody) {
+        this.bindProjectMembers(res.ResponseBody);
+        this.isLoading = false;
+        $('#teamMemberModal').modal('hide');
+        Toast("Project members added successfully");
+      }
+    }).catch(e => {
+      ErrorToast(e.error);
+      this.isLoading = false;
+    })
+  }
+
+  updateProjectMember() {
+    this.manageProjectMember();
+    this.http.put(`ps/projects/updateProjectMembers/${this.projectDetail.ProjectId}`, this.teamMembers, true).then(res => {
+      if (res.ResponseBody) {
+        this.bindProjectMembers(res.ResponseBody);
+        this.isLoading = false;
+        $('#teamMemberModal').modal('hide');
+        Toast("Project members updated successfully");
+      }
+    }).catch(e => {
+      ErrorToast(e.error);
+      this.isLoading = false;
+    })
+  }
+
   addMemberPopUp() {
+    this.teamName = null;
+    this.isUpdateProjectMember = false;
+    this.employeesList.data.map(x => x.selected = false);
+    this.teamMembers = [];
+    $("#teamMemberModal").modal('show');
+  }
+
+  updateMemberPopUp(item: PairData) {
+    this.isUpdateProjectMember = true;
+    this.teamName = item.key;
+    this.teamMembers = item.value;
+    this.isReady = false;
+    this.employeesList.data.map(i => {
+      if(this.teamMembers.find(x => x.EmployeeId == i.value)) {
+        i.selected = true;
+      } else {
+        i.selected = false;
+      }
+    });
+    this.isReady = true;
     $("#teamMemberModal").modal('show');
   }
 
@@ -319,6 +401,11 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     }
   }
 
+  viewProjectMember(item: any) {
+    this.selectedMember = item;
+    $("#viewMemberModal").modal('show');
+  }
+
 }
 
 export class ProjectModal {
@@ -330,6 +417,7 @@ export class ProjectModal {
   ClientId: number = 0;
   ProjectStartedOn: Date = null;
   ProjectEndedOn: Date = null;
+  ProjectManagerId: number = 0;
 }
 
 interface PairData {

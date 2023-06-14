@@ -89,23 +89,23 @@
               <div class="row">
                 <div class="col-md-4 mt-3">
                   <label for="" class="form-label">Project Manager</label>
-                  <select class="form-select" [(ngModel)]="projectManagerId" [ngModelOptions]="{standalone: true}">
+                  <select class="form-select" formControlName="ProjectManagerId">
                     <option value=0 disabled>Select Project Manager</option>
                     <option [value]="item.value" *ngFor="let item of employees">{{item.text}}</option>
                   </select>
                 </div>
               </div>
-              <div class="col-md-12 text-end mt-2 py-2">
-                <a href="javascript:void(0)" (click)="addMemberPopUp()"><i class="fa fa-plus pe-1"></i>Manage Team Members</a>
+              <div class="col-md-12 text-end mt-2 py-2" *ngIf="projectDetail.ProjectId > 0">
+                <a href="javascript:void(0)" (click)="addMemberPopUp()"><i class="fa fa-plus pe-1"></i>Add Team</a>
               </div>
               <div class="col-md-12 mt-3" *ngIf="projectMembers.length > 0">
                 <table class="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Team</th>
+                      <th width="10%">Team</th>
                       <th>Members</th>
-                      <th>Activity</th>
+                      <th width="15%">Activity</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -117,14 +117,14 @@
                       </td>
                       <td>
                         <div class="badge bg-success me-2" *ngFor="let m of item.value; let index = index;">
-                          {{m.FullName}}
-                          <a href="javascript:void(0)" class="text-white text-decoration-none">
+                          <a href="javascript:void(0)" class="text-white text-decoration-none" (click)="viewProjectMember(m)">
+                            {{m.FullName}}
                             <i class="ps-2 fa fa-eye"></i>
                           </a>
                         </div>
                       </td>
                       <td>
-                        <a href="javascript:void(0)" class="fw-bold">
+                        <a href="javascript:void(0)" class="fw-bold" (click)="updateMemberPopUp(item)">
                           <i class="fa fa-plus-square-o pe-1"></i>
                           Update members
                         </a>
@@ -163,7 +163,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="teamMemberModalLabel">Add new team</h5>
+        <h5 class="modal-title" id="teamMemberModalLabel">{{isUpdateProjectMember ? 'Update' : 'Add new'}} team</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="projectForm">
@@ -230,10 +230,50 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="closeAddMemberPopUp()">
+        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="addProjectMember()" *ngIf="!isUpdateProjectMember">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add Member' }}
         </button>
+        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="updateProjectMember()" *ngIf="isUpdateProjectMember">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Add Member' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--View Member Modal -->
+<div class="modal fade" id="viewMemberModal" tabindex="-1" aria-labelledby="viewMemberModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="viewMemberModalLabel">View Member Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedMember != null">
+        <div class="row">
+          <div class="col-md-4">Full Name :</div>
+          <div class="col-md-8">{{selectedMember.FullName}}</div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-4">Email :</div>
+          <div class="col-md-8">{{selectedMember.Email}}</div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-4">Grade :</div>
+          <div class="col-md-8">{{selectedMember.MemberType == 20 ? "Team manager" : selectedMember.MemberType == 3 ? "Project architect" : selectedMember.MemberType == 19 ? "Team lead" : "Team member"}}</div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-4">Member Type :</div>
+          <div class="col-md-8">{{selectedMember.Grade}}</div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-4">Assigned On :</div>
+          <div class="col-md-8">{{selectedMember.AssignedOn | date}}</div>
+        </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
