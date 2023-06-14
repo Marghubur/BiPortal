@@ -174,17 +174,21 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       let value = this.projectForm.value;
       if (this.teamMembers.length > 0) {
         this.teamMembers.map(x => {
-          x.ProjectManagerId = value.ProjectManagerId,
           x.Team = this.teamName
         })
-        let member = this.projectMembers.map(x => x.value);
-        let allmembers = [];
-        member.forEach(x => {
-          allmembers.push(...x);
-        })
-        value.TeamMembers = allmembers;
       }
-      value.TeamMembers = this.teamMembers;
+      let member = this.projectMembers.map(x => x.value);
+      let allmembers = [];
+      member.forEach(x => {
+        x.map(i => i.ProjectManagerId = value.ProjectManagerId);
+        allmembers.push(...x);
+      })
+      this.teamMembers.forEach(x => {
+        let newmember = allmembers.indexOf(i => i.EmployeeId == x.EmployeeId);
+        if (newmember < 0)
+          allmembers.push(x);
+      })
+      value.TeamMembers = allmembers;
       this.http.put(`ps/projects/addUpdateProject/${value.ProjectId}`, value, true).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.bindProjectData(res.ResponseBody);
@@ -241,25 +245,6 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       this.teamMembers.splice(index, 1);
     }
   }
-
-  // selectedTeamLead(e: any) {
-  //   let value = Number(e.target.value);
-  //   let index = this.teamMembers.findIndex(x => x.EmployeeId == value);
-  //   if(index == -1) {
-  //     let emp = this.employees.find(x => x.EmployeeUid == value);
-  //     this.teamMembers.push({
-  //       ProjectMemberDetailId : 0,
-  //       ProjectId : 0,
-  //       EmployeeId : emp.EmployeeUid,
-  //       DesignationId : emp.DesignationId,
-  //       FullName : emp.FirstName + " " + emp.LastName,
-  //       Email : emp.Email,
-  //       IsActive : true
-  //     });
-  //   } else {
-  //     this.teamMembers.splice(index, 1);
-  //   }
-  // }
 
   closeAddMemberPopUp() {
     $('#teamMemberModal').modal('hide');
