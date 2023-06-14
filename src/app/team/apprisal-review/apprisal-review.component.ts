@@ -52,10 +52,6 @@ export class ApprisalReviewComponent implements OnInit{
     this.nav.navigate(ProjectBudget, project);
   }
 
-  addProject() {
-    this.nav.navigate(ManageProject, null);
-  }
-
   loadData() {
     this.isFileFound= false;
     this.isLoaded = false;

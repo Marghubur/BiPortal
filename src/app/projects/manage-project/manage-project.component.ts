@@ -32,6 +32,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   projectMembers: Array<PairData> = [];
   teamName: string = null;
   selectedMember: any = null;
+  isAddingTeam: boolean = false;
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -184,7 +185,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         allmembers.push(...x);
       })
       this.teamMembers.forEach(x => {
-        let newmember = allmembers.indexOf(i => i.EmployeeId == x.EmployeeId);
+        let newmember = allmembers.findIndex(i => i.EmployeeId == x.EmployeeId);
         if (newmember < 0)
           allmembers.push(x);
       })
@@ -206,12 +207,14 @@ export class ManageProjectComponent implements OnInit, DoCheck {
 
   addMemberPopUp() {
     this.teamName = null;
+    this.isAddingTeam= true;
     this.employeesList.data.map(x => x.selected = false);
     this.teamMembers = [];
     $("#teamMemberModal").modal('show');
   }
 
   updateMemberPopUp(item: PairData) {
+    this.isAddingTeam = false;
     this.teamName = item.key;
     this.teamMembers = item.value;
     this.isReady = false;
@@ -247,6 +250,12 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   }
 
   closeAddMemberPopUp() {
+    if (this.isAddingTeam) {
+      this.projectMembers.push({
+        key: this.teamName,
+        value: this.teamMembers
+      })
+    }
     $('#teamMemberModal').modal('hide');
   }
 
