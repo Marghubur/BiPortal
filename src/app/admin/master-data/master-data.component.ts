@@ -35,34 +35,33 @@ export class MasterDataComponent implements OnInit {
 
   readExcelData(e: any) {
     this.file = e.target.files[0];
-    if (this.file !== undefined && this.file !== null) { 
-      readXlsxFile(this.file).then(data => {
-        // `rows` is an array of rows
-        // each row being an array of cells.
-        if (data) {
-          this.recordToUpload = data;
-          this.fileSize = (this.file.size / 1024).toFixed(2);
-          this.fileName = this.file.name;
-          this.noOfRecords = this.recordToUpload.length;
-          this.isFileReady = true;
-          this.isDisable = false;
-          this.isUploadFile = false;
-          let excelData = data;
-          console.log(excelData);
-          if (excelData) {
-            this.tableConfiguration = new tableConfiguration();
-            this.tableConfiguration.totalRecords = 1;
-            this.tableConfiguration.header = excelData[0];
-            this.tableConfiguration.data = excelData.slice(1);
-            this.tableConfiguration.sampleData = this.tableConfiguration.data.slice(0, 10);
-            this.masterDataDetails = this.tableConfiguration.data;
-            this.tableConfiguration.isEnableAction = true;
-          }
-        } else {
-          this.cleanFileHandler();
-          ErrorToast("Excel data is not valid.");
-        }
-      })
+    if (this.file !== undefined && this.file !== null) {
+      this.fileSize = (this.file.size / 1024).toFixed(2);
+      this.fileName = this.file.name;
+      this.isFileReady = true;
+      this.isDisable = false;
+      this.isUploadFile = false;
+      // readXlsxFile(this.file).then(data => {
+      //   // `rows` is an array of rows
+      //   // each row being an array of cells.
+      //   if (data) {
+      //     this.recordToUpload = data;
+      //     let excelData = data;
+      //     console.log(excelData);
+      //     if (excelData) {
+      //       this.tableConfiguration = new tableConfiguration();
+      //       this.tableConfiguration.totalRecords = 1;
+      //       this.tableConfiguration.header = excelData[0];
+      //       this.tableConfiguration.data = excelData.slice(1);
+      //       this.tableConfiguration.sampleData = this.tableConfiguration.data.slice(0, 10);
+      //       this.masterDataDetails = this.tableConfiguration.data;
+      //       this.tableConfiguration.isEnableAction = true;
+      //     }
+      //   } else {
+      //     this.cleanFileHandler();
+      //     ErrorToast("Excel data is not valid.");
+      //   }
+      // })
     }
   }
 
@@ -185,14 +184,12 @@ export class MasterDataComponent implements OnInit {
     this.isLoading = false;
   }
 
-  uploadExcelSheet($e: any) {
+  uploadExcelSheet() {
     this.isLoading = true;
-    $e.preventDefault();
-    $e.stopPropagation();
-    let errroCounter = 0;
-
-    if (errroCounter === 0 && this.masterDataDetails.length > 0) {
-      this.http.post("Employee/UploadEmployeeExcel", this.masterDataDetails)
+    if (this.file) {
+      let formData = new FormData();
+      formData.append("payrolldata", this.file);
+      this.http.post("UploadPayrollData/UploadPayrollExcel", formData)
       .then((response: ResponseModel) => {
         if (response.ResponseBody) {
           let data = response.ResponseBody;
@@ -205,6 +202,7 @@ export class MasterDataComponent implements OnInit {
           ErrorToast("Unable to upload the data");
         }
       }).catch(e => {
+        ErrorToast(e.error)
         this.isLoading = false;
       });
     } else {
@@ -212,6 +210,34 @@ export class MasterDataComponent implements OnInit {
       WarningToast("Please upload atleast one record");
     }
   }
+
+  // uploadExcelSheet($e: any) {
+  //   this.isLoading = true;
+  //   $e.preventDefault();
+  //   $e.stopPropagation();
+  //   let errroCounter = 0;
+
+  //   if (this.masterDataDetails.length > 0) {
+  //     this.http.post("Employee/UploadEmployeeExcel", this.masterDataDetails)
+  //     .then((response: ResponseModel) => {
+  //       if (response.ResponseBody) {
+  //         let data = response.ResponseBody;
+  //         if (data.length > 0) {
+  //           this.cleanFileHandler();
+  //           Toast("Data Uploaded successfull");
+  //           this.isLoading = false;
+  //         }
+  //       } else {
+  //         ErrorToast("Unable to upload the data");
+  //       }
+  //     }).catch(e => {
+  //       this.isLoading = false;
+  //     });
+  //   } else {
+  //     this.isLoading = false;
+  //     WarningToast("Please upload atleast one record");
+  //   }
+  // }
 
 }
 
