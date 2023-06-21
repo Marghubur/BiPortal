@@ -242,7 +242,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         Email : emp.email,
         MemberType: 13,
         Grade: null,
-        IsActive : true
+        IsActive : true,
+        Team: this.teamName
       });
     } else {
       this.teamMembers.splice(index, 1);
