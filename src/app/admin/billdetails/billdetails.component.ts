@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap'
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { AddNumbers, CommonService, ErrorToast, GetStatus, MonthName, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
+import { AddNumbers, ErrorToast, MonthName, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
 import { BuildPdf, Employees, ManageEmployee, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
@@ -85,11 +85,11 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   bodyContent: any = null;
   allSendRecEmails: Array<any> = [];
   maxDate: any = null;
+  companyId: number = 0;
 
   constructor(private fb: FormBuilder,
     private http: AjaxService,
     private nav: iNavigation,
-    private common: CommonService,
     private calendar: NgbCalendar,
     private local: ApplicationStorage,
     private sanitizer: DomSanitizer
@@ -114,6 +114,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.companyId = this.local.findRecord("UserDetail").CompanyId;
     this.fromModel = null;
     this.toModel = null;
     this.model = null;
@@ -549,6 +550,8 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     let empid = this.local.getByKey("EmployeeId");
     if (empid > 0)
       this.employeeId = empid;
+
+    this.singleEmployee.SearchString = this.singleEmployee.SearchString + " and CompanyId =" + this.companyId;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       this.employeeDetails = [];

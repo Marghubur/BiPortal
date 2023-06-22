@@ -48,7 +48,11 @@ export class IncometaxComponent implements OnInit {
   ngOnInit(): void {
     this.currentYear = new Date().getFullYear();
     this.userDetail = this.user.getInstance() as UserDetail;
-    this.EmployeeId = this.userDetail.UserId;
+    let data = this.nav.getValue();
+    if (data)
+      this.EmployeeId = data;
+    else
+      this.EmployeeId = this.userDetail.UserId;
 
     if (this.userDetail.RoleId == 1) {
       this.loadTaxModule();

@@ -96,7 +96,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.EmployeeId = this.userDetail.UserId;
         this.employeeName = this.userDetail.FirstName + " " + this.userDetail.LastName;
       }
+    } else {
+      this.EmployeeId = this.userDetail.UserId;
+      this.employeeName = this.userDetail.FirstName + " " + this.userDetail.LastName;
     }
+    this.local.setByKey("EmployeeId", this.EmployeeId);
     this.loadUserModule();
   }
 

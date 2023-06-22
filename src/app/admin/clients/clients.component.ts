@@ -108,6 +108,7 @@ export class ClientsComponent implements OnInit {
 
     if (Mobile !== "" || Email !== "") {
       filter.SearchString = `1 `;
+      this.clientsData.SearchString = this.clientsData.SearchString + " and CompanyId =" + this.user.CompanyId;
       this.http.post("Clients/GetClients", this.clientsData).then((response: ResponseModel) => {
         if (response.ResponseBody) {
           this.clients = response.ResponseBody;

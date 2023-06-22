@@ -32,28 +32,16 @@ export class EmailTemplateComponent implements OnInit {
               private nav:iNavigation) { }
 
   ngOnInit(): void {
-    let data = this.local.findRecord("Companies");
+    this.companyId = this.local.findRecord("UserDetail").CompanyId;
     this.templateDetail = new EmailTemplate();
     this.templateData = new Filter();
-    this.templateData.SearchString = `1=1 and CompanyId=${this.companyId}`;
-    if (!data) {
-      return;
-    } else {
-      let currentCompany = data.find(x => x.IsPrimaryCompany == 1);
-      if (!currentCompany) {
-        ErrorToast("Fail to get company detail. Please contact to admin.");
-        return;
-      } else {
-        this.companyId = currentCompany.CompanyId;
-        this.templateData = new Filter();
-        this.loadData();
-      }
-    }
+    this.loadData();
   }
 
   loadData() {
     this.isRecordFound = false;
     this.isPageLoading = true;
+    this.templateData.SearchString = this.templateData.SearchString + " and CompanyId = " + this.companyId;
     this.http.post("Email/GetEmailTemplate", this.templateData).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.allEmailtemplate = res.ResponseBody;
