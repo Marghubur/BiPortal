@@ -64,6 +64,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   shiftDetail: autoCompleteModal = null;
   shifts: Array<any> = [];
   designations: Array<any> = [];
+  salaryGroup: Array<any> = [];
 
   get f() {
     let data = this.employeeForm.controls;
@@ -160,10 +161,18 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.joiningDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         if (this.employeeModal.DesignationId == 0)
           this.employeeModal.DesignationId = null;
-      }
+
+        if (this.employeeModal.SalaryGroupId > 0)
+          this.employeeModal.IsPayrollOnCTC = false;
+        else
+          this.employeeModal.SalaryGroupId = null;
+        }
 
       if(response.ResponseBody.Roles)
         this.userRoles = response.ResponseBody.Roles;
+
+      if(response.ResponseBody.SalaryGroup)
+        this.salaryGroup = response.ResponseBody.SalaryGroup;
 
       this.allocatedClients = response.ResponseBody.AllocatedClients;
       if (this.allocatedClients.length > 0) {
@@ -286,6 +295,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   }
 
   bindForm() {
+    if (this.employeeModal.IsPayrollOnCTC == null)
+      this.employeeModal.IsPayrollOnCTC = true;
+
     this.employeeForm = this.fb.group({
       FirstName: new FormControl(this.employeeModal.FirstName, [Validators.required]),
       LastName: new FormControl(this.employeeModal.LastName, [Validators.required]),
@@ -327,8 +339,14 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       CTC: new FormControl(this.employeeModal.CTC, [Validators.required]),
       Gender: new FormControl(this.employeeModal.Gender ? 'true' : 'false'),
       OldFileName: new FormControl(this.employeeModal.OldFileName),
-      WorkShiftId: new FormControl(this.employeeModal.WorkShiftId, [Validators.required])
+      WorkShiftId: new FormControl(this.employeeModal.WorkShiftId, [Validators.required]),
+      IsPayrollOnCTC: new FormControl(this.employeeModal.IsPayrollOnCTC ),
+      SalaryGroupId: new FormControl(this.employeeModal.SalaryGroupId),
     });
+    if (this.employeeModal.IsPayrollOnCTC)
+      this.employeeForm.controls['SalaryGroupId'].disable();
+    else
+      this.employeeForm.controls['SalaryGroupId'].enable();
   }
 
   bindClientDetails() {
@@ -375,6 +393,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ErrorToast("Invalid email address!")
       return ;
     }
+
+    this.employeeModal = this.employeeForm.value;
+    if (this.employeeForm.get('IsPayrollOnCTC').value == "true")
+      this.employeeModal.SalaryGroupId = 0;
+
     if (this.employeeForm.get('Mobile').value.length < 10 || this.employeeForm.get('Mobile').value.length > 10) {
       this.isLoading = false;
       ErrorToast("Mobile number must be 10 digit only");
@@ -433,6 +456,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.employeeForm.get('Mobile').errors !== null)
       errroCounter++;
 
+    if (this.employeeForm.get('SalaryGroupId').errors !== null)
+      errroCounter++;
+
     if (this.employeeForm.get('OrganizationId').value == 0)
       errroCounter++;
 
@@ -442,12 +468,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.employeeForm.get('DateOfJoining').value == null)
       this.employeeForm.get('DateOfJoining').setValue(new Date());
 
-    this.employeeModal = this.employeeForm.value;
+    if (this.employeeForm.get('ExprienceInYear').errors !== null)
+      errroCounter++;
+
     if (this.employeeModal.Pincode === null)
       this.employeeModal.Pincode = 0;
-
-    if (this.employeeModal.ExprienceInYear === null)
-      this.employeeModal.ExprienceInYear = 0;
 
     if (this.employeeModal.AllocatedClientId === null)
       this.employeeModal.AllocatedClientId = 0;
@@ -746,5 +771,20 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, ManageEmployee);
+  }
+
+  changePayrollCalculationType(e: any) {
+    let value = e.target.value;
+    if (value == "true") {
+      this.employeeForm.get('SalaryGroupId').setValue(null);
+      this.employeeForm.get('SalaryGroupId').removeValidators(Validators.required);
+      this.employeeForm.get('SalaryGroupId').updateValueAndValidity();
+      this.employeeForm.controls['SalaryGroupId'].disable();
+    } else {
+      this.employeeForm.get('SalaryGroupId').setValue(null);
+      this.employeeForm.get('SalaryGroupId').setValidators(Validators.required);
+      this.employeeForm.get('SalaryGroupId').updateValueAndValidity();
+      this.employeeForm.controls['SalaryGroupId'].enable();
+    }
   }
 }

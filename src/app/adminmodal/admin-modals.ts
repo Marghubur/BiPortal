@@ -61,6 +61,8 @@ export class AssignedClients {
     OrganizationId: number = 0;
     OldFileName: string | null = null;
     WorkShiftId: number = 0;
+    IsPayrollOnCTC: boolean = true;
+    SalaryGroupId: number = null;
   }
 
   export class ApprovalRequest {

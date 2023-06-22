@@ -14,14 +14,19 @@
           href="javascript:void(0)">PREFERENCE</a>
       </li>
     </ul>
-    <div class="col-md-3 pe-2 my-3" *ngIf="isEmployeesReady">
-      <bot-autocomplete [data]="employeesList" (OnSelect)="getDeclaration($event)" [(ngModel)]="EmployeeId"
-        [ngModelOptions]="{standalone: true}"></bot-autocomplete>
-    </div>
   </div>
   <div class="col-12 x_panel p-0 m-0">
-    <div class="">
-      <app-breadcrums></app-breadcrums>
+    <div class="x_header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Employee declaration'" [subtitle]="'Add or update details'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4 text-end">
+          <h5 class="pe-2 text-dark">{{employeeName}}</h5>
+        </div>
+      </div>
     </div>
     <div [ngClass]="{'blur-section': !SectionIsReady}">
       <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
@@ -1091,7 +1096,7 @@
       <div class="modal-footer border-top-0 mb-2">
         <input type="file" id="uploadAttachment" class="d-none" multiple (change)="UploadAttachment($event)" />
         <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="fireFileBrowser()"><i class="fa fa-paperclip pe-2"></i>Add Attachment</a>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeDeclarationModal()">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
         <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="saveDeclaration(selectDeclaration)" [disabled]="isLargeFile">
           <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Save' }}
