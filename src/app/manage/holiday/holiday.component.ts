@@ -76,6 +76,7 @@ export class HolidayComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
+    this.holidayData.SearchString = this.holidayData.SearchString + " and CompanyId = " + this.companyId;
     this.http.post('CompanyCalender/GetAllHoliday', this.holidayData).then(res => {
       if (res.ResponseBody) {
         this.bindData(res.ResponseBody);
