@@ -20,6 +20,7 @@ import { SalarycomponentStructureComponent } from './salarycomponent-structure/s
 import { AdminmodalModule } from '../adminmodal/adminmodal.module';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { NgModule } from '@angular/core';
+import { EmployeeDeclarationlistComponent } from '../income-declaration/employee-declarationlist/employee-declarationlist.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { NgModule } from '@angular/core';
     TaxRegimeComponent,
     CustomsalaryStructureComponent,
     SalarycomponentStructureComponent,
+    EmployeeDeclarationlistComponent,
   ],
   imports: [
     CommonModule,

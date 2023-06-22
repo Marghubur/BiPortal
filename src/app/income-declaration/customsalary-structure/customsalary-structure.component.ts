@@ -379,8 +379,8 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   addFormula() {
-    let elem = document.querySelector('[name="addedFormula"]');
-    this.componentFields.Formula = elem.innerHTML;
+    let elem = document.querySelector('[name="addedFormula"]') as HTMLInputElement;
+    this.componentFields.Formula = elem.innerText;
   }
 
   addComponentModal() {
@@ -599,9 +599,12 @@ export class CustomsalaryStructureComponent implements OnInit {
           case '/':
           case '%':
           case '*':
+          case '>':
+          case '<':
+          case '=':
             if(operatorStact.length > 0) {
               lastOp = operatorStact[operatorStact.length - 1];
-              if(lastOp == '+' || lastOp == '-' || lastOp == '/' || lastOp == '*' || lastOp == '%') {
+              if(lastOp == '+' || lastOp == '-' || lastOp == '/' || lastOp == '*' || lastOp == '%' || lastOp == '<' || lastOp == '=' || lastOp == '>') {
                 lastOp = operatorStact.pop();
                 expressionStact.push(lastOp);
               }

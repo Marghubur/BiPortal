@@ -101,6 +101,7 @@ export const ManageProject = `${ProjectBaseRoute}/projectlist/manage-project`;
 export const AccountsBaseRoute = "ems/accounts"
 export const AdminSummary = `${AccountsBaseRoute}/summary`;
 export const AdminDeclaration = `${AccountsBaseRoute}/declaration`;
+export const EmployeeDeclarationList = `${AccountsBaseRoute}/employeedeclarationlist`;
 export const AdminSalary = `${AccountsBaseRoute}/salary`;
 export const AdminPreferences = `${AccountsBaseRoute}/preferences`;
 export const AdminPreviousIncome = `${AccountsBaseRoute}/declaration/previousincome`;

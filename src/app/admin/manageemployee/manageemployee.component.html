@@ -118,7 +118,23 @@
                             [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
                         </div>
                       </div>
-
+                      <div class="col-md-12 row m-0">
+                        <div class="col-md-4">
+                          <label class="form-label">Payroll Calculate On</label>
+                          <select class="form-select" formControlName="IsPayrollOnCTC" (change)="changePayrollCalculationType($event)">
+                            <option value=true>CTC</option>
+                            <option value=false>Salary Group</option>
+                          </select>
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">Salary Group</label>
+                          <select class="form-select" formControlName="SalaryGroupId"
+                          [ngClass]="{'error-field': submitted && f.SalaryGroupId.errors !== null && f.SalaryGroupId.errors.required}">
+                            <option value=null disabled>Please select salary group</option>
+                            <option [value]="item.SalaryGroupId" *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
+                          </select>
+                        </div>
+                      </div>
                       <div class="col-md-12 m-0 row">
                         <div class="col-6 p-3 pt-4">
                           <p>Select your gender</p>
@@ -454,7 +470,7 @@
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <label for="" class="form-label">Assign Date</label>
+                  <label class="form-label">Assign Date</label>
                   <form class="form-inline">
                     <div class="form-group w-100">
                       <div class="input-group w-100" [ngClass]="{'error-field': isSubmitted && n.AssigneDate.errors !== null && n.AssigneDate.errors.required}">

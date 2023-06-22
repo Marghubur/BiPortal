@@ -6,11 +6,10 @@ import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/commo
 import { AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
-import 'bootstrap';
 import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { Files } from 'src/app/commonmodal/common-modals';
+import 'bootstrap';
 declare var $: any;
 
 @Component({
@@ -51,9 +50,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   ExemptionDeclaration: Array<any> = [];
   OtherDeclaration: Array<any> = [];
   TaxSavingAlloance: Array<any> = [];
-  isEmployeesReady: boolean = false;
   applicationData: any = [];
-  employeesList: autoCompleteModal = new autoCompleteModal();
   isAmountExceed: boolean = false;
   salaryDetails: any = null;
   TaxDetails: Array<any> = [];
@@ -73,6 +70,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   deleteType: string = '';
   currentMonth: string = "";
   selectDeclaration: any = null;
+  employeeName: string = null;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -89,19 +87,17 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.basePath = this.http.GetImageBasePath();
 
     if (this.userDetail.RoleId == 1) {
-      this.loadAdminModule();
-    } else {
-      this.loadUserModule();
+      let data = this.nav.getValue();
+      if (data) {
+        this.EmployeeId = data.EmployeeUid;
+        this.employeeName = data.FirstName + " " + data.LastName;
+      }
+      else {
+        this.EmployeeId = this.userDetail.UserId;
+        this.employeeName = this.userDetail.FirstName + " " + this.userDetail.LastName;
+      }
     }
-  }
-
-  loadAdminModule(): void {
-    this.monthlyTaxAmount = new MonthlyTax();
-    this.employeesList.placeholder = "Employee";
-    this.employeesList.className = 'disable-field';
-    this.isEmployeesReady = true;
-    this.loadData();
-    this.userDetail = this.user.getInstance() as UserDetail;
+    this.loadUserModule();
   }
 
   loadUserModule(): void {
@@ -357,10 +353,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     } else {
       this.isAmountExceed = false;
     }
-  }
-
-   closeDeclarationModal() {
-    this.loadData();
   }
 
   deleteDeclaration() {
@@ -624,28 +616,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       else
         WarningToast("Only numeric value is allowed");
     }
-  }
-
-  loadData() {
-    this.isEmployeesReady = false;
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
-        this.employeesList.data = [];
-        this.employeesList.placeholder = "Employee";
-        this.employeesList.data = GetEmployees();
-        this.employeesList.className = "";
-        this.isEmployeesReady = true;
-      }
-
-      if(this.EmployeeId != null){
-        if (isNaN(Number(this.EmployeeId))) {
-          WarningToast("Unable to fetch previous EmployeeId. Please selecte from given dropdown.");
-        } else {
-          this.getDeclaration(Number(this.EmployeeId));
-        }
-      }
-    });
   }
 
   rentedDecalrationPopup() {
