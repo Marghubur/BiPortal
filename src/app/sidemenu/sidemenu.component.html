@@ -14,7 +14,7 @@
           [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
           <div class="">
             <ng-container *ngFor="let item of catagory.Value">
-              <a [routerLink]="['/' + item.Link]" class="nav-link a-font"
+              <a [routerLink]="['/' + item.Link]" class="nav-link a-font" (click)="cleanupEmpId(item.Link)"
                 routerLinkActive="active-link">
                 <div class="row align-items-center">
                   <div class="col-md-1">

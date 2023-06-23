@@ -131,6 +131,11 @@ export class SidemenuComponent implements OnInit {
 
   }
 
+  cleanupEmpId(link: string) {
+    if (link == "accounts/declaration" || link == "accounts/salary" || link == "accounts/preferences")
+      this.local.removeByKey("EmployeeId");
+  }
+
   NavigatetoHome() {
     this.nav.navigate("", null);
   }

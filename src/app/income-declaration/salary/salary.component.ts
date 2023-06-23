@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
-import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -23,16 +21,11 @@ export class SalaryComponent implements OnInit {
   isSalaryDetail: boolean = true;
   isLoading: boolean = false;
   currentYear: number = 0;
-  employeesList: autoCompleteModal = new autoCompleteModal();
-  applicationData: any = [];
-  isSalaryReady: boolean = false;
   EmployeeId: number = 0;
   salaryBreakupForm: FormGroup = null;
   salaryComponents: Array<any> = [];
   salaryDetail: any = null;
   isReady: boolean = false;
-  SectionIsReady: boolean = false;
-  isEmployeeSelect: boolean = false;
   taxRegimeDetails: any = [];
   taxSlab: Array<any> = [];
   currentEmployee: any = null;
@@ -51,39 +44,19 @@ export class SalaryComponent implements OnInit {
               private fb:FormBuilder) { }
 
   ngOnInit(): void {
-    this.dataSetup();
-    this.userDetail = this.user.getInstance() as UserDetail;
-    this.currentEmployee = this.userDetail;
-    this.EmployeeId = this.userDetail.UserId;
+    let empid = this.local.getByKey("EmployeeId");
+    if (empid)
+      this.EmployeeId = empid;
+    else {
+      this.userDetail = this.user.getInstance() as UserDetail;
+      this.currentEmployee = this.userDetail;
+      this.EmployeeId = this.userDetail.UserId;
+    }
     this.currentYear = new Date().getFullYear();
+    this.getSalaryBreakup();
     this.initBonusForm();
 
-    if (this.userDetail.RoleId == 1) {
-      this.loadSalaryModule();
-    } else {
-      this.loadUserSalaryModule();
-    }
-  }
-
-
-  loadSalaryModule(): void {
     this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
-    this.loadData();
-  }
-
-  loadUserSalaryModule() {
-      this.getSalaryBreakup(this.EmployeeId);
-  }
-
-  dataSetup() {
-    this.EmployeeId = 0;
-    this.employeesList.data = GetEmployees();
-    this.employeesList.placeholder = "Employee";
-    this.employeesList.className = "";
-    let empId = Number(this.local.getByKey("EmployeeId"));
-    if (!isNaN(empId)){
-      this.EmployeeId = empId;
-    }
   }
 
   newIncomeTaxRegimePopUp() {
@@ -107,29 +80,14 @@ export class SalaryComponent implements OnInit {
     this.taxSlab = this.taxRegimeDetails.taxRegime.filter(x => x.RegimeDescId == this.active && x.StartAgeGroup < age && x.EndAgeGroup >= age);
   }
 
-  loadData() {
-    this.isSalaryReady = false;
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
-        this.isSalaryReady = true;
-        if (this.EmployeeId > 0) {
-          this.getSalaryBreakup(this.EmployeeId);
-        }
-      }
-    });
-  }
-
-  getSalaryBreakup(e) {
-    this.isEmployeeSelect = true;
-    this.SectionIsReady= false;
+  getSalaryBreakup() {
     this.isReady = false;
     this.myAnnualSalary = new MyAnnualSalary();
-    this.EmployeeId = e;
     this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
       let completeSalaryDetail = [];
       if(res.ResponseBody) {
-        this.salaryDetail = res.ResponseBody;
+        this.salaryDetail = res.ResponseBody.completeSalaryBreakup;
+        this.currentEmployee = res.ResponseBody.userDetail;
         if (this.salaryDetail.CompleteSalaryDetail != null && this.salaryDetail.CompleteSalaryDetail != '{}') {
           completeSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
         } else {
@@ -174,7 +132,7 @@ export class SalaryComponent implements OnInit {
           Bonus: 0,
           Other: other,
           Total: annual + other,
-          Effective: this.currentEmployee.UpdatedOn,
+          Effective: this.salaryDetail.UpdatedOn,
           PFperMonth: other/12,
           Perks: 0,
           SalaryMonth: salary
@@ -189,8 +147,6 @@ export class SalaryComponent implements OnInit {
     }
 
     this.initForm();
-    this.isEmployeeSelect = false;
-    this.SectionIsReady= true;
   }
 
   initForm() {
@@ -261,8 +217,7 @@ export class SalaryComponent implements OnInit {
     }
     this.http.post("Declaration/SwitchEmployeeTaxRegime", value).then(res => {
       if (res.ResponseBody) {
-        let emp = this.applicationData.Employees.find(x => x.EmployeeUid == this.EmployeeId);
-        emp.EmployeeCurrentRegime = this.active;
+        this.currentEmployee.EmployeeCurrentRegime = this.active;
         Toast("Tax regime switced successfully");
       }
       $('#newIncomeTaxRegime').modal('hide');
