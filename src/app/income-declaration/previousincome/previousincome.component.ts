@@ -42,7 +42,11 @@ export class PreviousincomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.userDetail = this.user.getInstance() as UserDetail;
-    this.employeeId = this.userDetail.UserId;
+    let data = this.local.getByKey("EmployeeId");
+    if (data)
+      this.employeeId = data;
+    else
+      this.employeeId = this.userDetail.UserId;
 
     if (this.userDetail.RoleId == 1) {
       this.loadPrevioudIncome();
@@ -54,7 +58,7 @@ export class PreviousincomeComponent implements OnInit {
   loadPrevioudIncome(): void {
     this.isRecordFound = false;
     this.currentYear = new Date().getFullYear();
-    this.employeeId = this.local.getByKey("EmployeeId");
+    //this.employeeId = this.local.getByKey("EmployeeId");
     this.loadData();
   }
 

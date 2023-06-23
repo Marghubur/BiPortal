@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -88,9 +88,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
     if (this.userDetail.RoleId == 1) {
       let data = this.nav.getValue();
+      let emp = this.local.getByKey("EmployeeId");
       if (data) {
         this.EmployeeId = data.EmployeeUid;
         this.employeeName = data.FirstName + " " + data.LastName;
+      } else if (emp) {
+        this.EmployeeId = emp;
       }
       else {
         this.EmployeeId = this.userDetail.UserId;

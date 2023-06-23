@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary, Declaration } from 'src/providers/constants';
+import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import { UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -42,16 +41,20 @@ export class IncometaxComponent implements OnInit {
   userDetail: UserDetail = new UserDetail();
 
   constructor(private nav: iNavigation,
-    private user: UserService,
+    private local: ApplicationStorage,
     private http: AjaxService) { }
 
   ngOnInit(): void {
     this.currentYear = new Date().getFullYear();
     let id = this.nav.getValue();
+    let empid = this.local.getByKey("EmployeeId");
     if(id > 0) {
       this.EmployeeId = id;
       this.loadUserTaxModule();
-    } else {
+    } else if (empid) {
+      this.EmployeeId = empid;
+      this.loadUserTaxModule();
+    }else {
       ErrorToast("Not able to find employee declaration detail. Please contact to admin.");
     }
   }

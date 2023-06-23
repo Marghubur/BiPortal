@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -19,9 +18,6 @@ export class PreferencesComponent implements OnInit {
   salaryDeposit: SalaryDeposit = new SalaryDeposit();
   satutoryInformation: StatutoryInformation = new StatutoryInformation();
   cachedData: any = null;
-  employeesList: autoCompleteModal = new autoCompleteModal();
-  applicationData: any = [];
-  isPreferenceReady: boolean = false;
   employeeDetail: EmployeeDetail = new EmployeeDetail();
   EmployeeId: number = 0;
   SectionIsReady: boolean = false;
@@ -30,6 +26,7 @@ export class PreferencesComponent implements OnInit {
 
   constructor(private nav: iNavigation,
               private user: UserService,
+              private local: ApplicationStorage,
               private http: AjaxService) { }
 
   ngOnInit(): void {
@@ -46,30 +43,13 @@ export class PreferencesComponent implements OnInit {
     }
 
     this.userDetail = this.user.getInstance();
-    this.EmployeeId = this.userDetail.UserId;
+    let empid = this.local.getByKey("EmployeeId");
+    if (empid)
+      this.EmployeeId = empid;
+    else
+      this.EmployeeId = this.userDetail.UserId;
 
-    if (this.userDetail.RoleId == 1) {
-      this.loadPreferences();
-    } else {
-      this.loadUserPreferences();
-    }
-  }
-
-  loadPreferences(): void {
-    this.getEmployees();
-  }
-
-  loadUserPreferences(): void {
     this.LoadData();
-  }
-
-  getPreference(id: any) {
-    if (id > 0) {
-      this.EmployeeId = id;
-      this.LoadData();
-    }else {
-      ErrorToast("Unable to get data. Please contact to admin.");
-    }
   }
 
   LoadData() {
@@ -92,22 +72,6 @@ export class PreferencesComponent implements OnInit {
         ErrorToast("No record found");
       });
     }
-  }
-
-  getEmployees() {
-    this.isPreferenceReady = false;
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
-        this.employeesList.data = [];
-        this.employeesList.placeholder = "Employee";
-        this.employeesList.data = GetEmployees();
-        this.employeesList.className = "";
-
-        this.LoadData();
-        this.isPreferenceReady = true;
-      }
-    });
   }
 
   activateMe(ele: string) {
