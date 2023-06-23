@@ -47,13 +47,12 @@ export class IncometaxComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentYear = new Date().getFullYear();
-    this.userDetail = this.user.getInstance() as UserDetail;
-    this.EmployeeId = this.userDetail.UserId;
-
-    if (this.userDetail.RoleId == 1) {
-      this.loadTaxModule();
-    } else {
+    let id = this.nav.getValue();
+    if(id > 0) {
+      this.EmployeeId = id;
       this.loadUserTaxModule();
+    } else {
+      ErrorToast("Not able to find employee declaration detail. Please contact to admin.");
     }
   }
 
@@ -114,10 +113,11 @@ export class IncometaxComponent implements OnInit {
         let finalAmount = 0;
         let totalAmounts: Array<any> = [];
         while(i < annualSalaryDetail.length) {
-          let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.find(x => x.ComponentId == "Gross");
-          // totalAmount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
-          finalAmount += salaryComponent.FinalAmount;
-          totalAmounts.push({ FinalAmount: salaryComponent.FinalAmount });
+          let amount = 0;
+          let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC");
+          amount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+          finalAmount += amount;
+          totalAmounts.push({ FinalAmount: amount });
           i++;
         }
 
@@ -130,7 +130,7 @@ export class IncometaxComponent implements OnInit {
           let value = "";
           let selectedComponent = [];
           let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName}) => { return { ComponentId, ComponentName } });
-          props = props.filter(x => x.ComponentId != "ECI" && x.ComponentId != "EPER-PF" && x.ComponentId != "GRA");
+          // props = props.filter(x => x.ComponentId != "ECI" && x.ComponentId != "EPER-PF" && x.ComponentId != "GRA");
           while(i < props.length) {
             value = props[i].ComponentId;
             selectedComponent = annualSalaryDetail.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));

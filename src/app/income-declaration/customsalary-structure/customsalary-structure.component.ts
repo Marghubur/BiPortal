@@ -356,12 +356,12 @@ export class CustomsalaryStructureComponent implements OnInit {
         case 'basic':
           index = 1;
           break;
-        case 'gross':
-          index = 1;
-          break;
-        // case 'net':
-        //   index = 2;
+        // case 'gross':
+        //   index = 1;
         //   break;
+        case 'auto':
+          index = 2;
+          break;
       }
 
       let elem = document.querySelectorAll('div[name="formulaComponent"] a');
@@ -489,11 +489,16 @@ export class CustomsalaryStructureComponent implements OnInit {
       value.CalculateInPercentage = true;
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
-    let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
-    if (isNaN(formula)) {
-      ErrorToast("Invalid formula entered");
-      this.isLoading = false;
-      return;
+
+    if(this.componentFields.Formula != "([AUTO])") {
+      let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
+      if (isNaN(formula)) {
+        ErrorToast("Invalid formula entered");
+        this.isLoading = false;
+        return;
+      }
+    } else {
+      this.componentFields.Formula = this.componentFields.Formula.replace(/\(/g, '').replace(/\)/g, '');
     }
 
     let isincludeInPayslip = (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked;
