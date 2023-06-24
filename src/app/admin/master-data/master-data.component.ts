@@ -202,7 +202,7 @@ export class MasterDataComponent implements OnInit {
           ErrorToast("Unable to upload the data");
         }
       }).catch(e => {
-        ErrorToast(e.error)
+        ErrorToast(e.HttpStatusMessage)
         this.isLoading = false;
       });
     } else {
