@@ -20,8 +20,7 @@ export class PreferencesComponent implements OnInit {
   cachedData: any = null;
   employeeDetail: EmployeeDetail = new EmployeeDetail();
   EmployeeId: number = 0;
-  SectionIsReady: boolean = false;
-  isEmployeeSelect: boolean = false;
+  isPageReady: boolean = false;
   userDetail: UserDetail = new UserDetail();
 
   constructor(private nav: iNavigation,
@@ -53,20 +52,18 @@ export class PreferencesComponent implements OnInit {
   }
 
   LoadData() {
-    this.isEmployeeSelect = true;
-    this.SectionIsReady= false;
+    this.isPageReady= false;
     if (this.EmployeeId > 0) {
-      this.http.get(`employee/GetAllManageEmployeeDetail/${this.EmployeeId}`).then((response: ResponseModel) => {
+      this.http.get(`employee/GetEmployeeById/${this.EmployeeId}/1`).then((response: ResponseModel) => {
         if(response.ResponseBody) {
-          if (response.ResponseBody.Employee.length > 0) {
-            this.employeeDetail = response.ResponseBody.Employee[0] as EmployeeDetail;
+          if (response.ResponseBody) {
+            this.employeeDetail = response.ResponseBody;
             this.employeeDetail.DOB = new Date(this.employeeDetail.DOB);
             Toast("Record found.")
           } else {
             ErrorToast("Record not found");
           }
-          this.isEmployeeSelect = false;
-          this.SectionIsReady= true;
+          this.isPageReady= true;
         }
       }).catch(e => {
         ErrorToast("No record found");

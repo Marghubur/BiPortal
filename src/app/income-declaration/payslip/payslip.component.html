@@ -11,109 +11,123 @@
         <a class="nav-link text-dark" id="leave-tab" (click)="activateMe('preference-tab')" href="javascript:void(0)">PREFERENCE</a>
       </li>
     </ul>
-    <div class="col-md-3 pe-2 my-3" *ngIf="isPageReady">
-      <bot-autocomplete [data]="employeesList" (OnSelect)="getPayslipList($event)" [(ngModel)]="EmployeeId" [ngModelOptions]="{standalone: true}"></bot-autocomplete>
-    </div>
   </div>
   <div class="col-12 x_panel p-0 m-0">
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
-    <div [ngClass]="{'blur-section': !SectionIsReady}">
-      <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
-        <div class="blur-section__content">
-          {{isEmployeeSelect? 'Please wait......': 'Please select Employee first'}}
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Pay Slips Detail'"></app-breadcrums>
+          </div>
         </div>
       </div>
-      <div class="blur-this">
-        <div class="right-panel col-md-12 p-0">
-          <ng-container>
-            <div class="container-fluid pt-4">
-              <div class="col-md-12 bg-light mb-3 mt-3">
-                <ul class="nav">
-                  <li class="nav-item">
-                    <a class="nav-link new-nav-link text-dark" id="attendance-tab"
-                      (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link text-dark new-nav-active" id="timesheet-tab" (click)="activeTab('PaySlips')"
-                      href="javascript:void(0)">Pay Slips</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('IncomeTax')"
-                      href="javascript:void(0)">Income Tax</a>
-                  </li>
-                </ul>
+    </div>
+    <div class="right-panel col-md-12 p-0">
+      <ng-container *ngIf="isPageReady">
+        <div class="container-fluid">
+          <div class="col-md-12 bg-light mb-3 mt-3">
+            <ul class="nav">
+              <li class="nav-item">
+                <a class="nav-link new-nav-link text-dark" id="attendance-tab"
+                  (click)="activeTab('MySalary')" aria-current="page" href="javascript:void(0)">My Salary</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-dark new-nav-active" id="timesheet-tab" (click)="activeTab('PaySlips')"
+                  href="javascript:void(0)">Pay Slips</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-dark" id="leave-tab" (click)="activeTab('IncomeTax')"
+                  href="javascript:void(0)">Income Tax</a>
+              </li>
+            </ul>
+          </div>
+          <ng-container >
+            <span class="text-dark ps-3 fw-bold">Pay Slips</span>
+            <span class="mb-0 ps-3">Here you can manage all hiringBell payslips for applicable years.</span>
+            <div class="d-flex px-3 justify-content-between">
+              <div class="col-md-2 pt-3 pe-3">
+                <select class="form-select" (change)="changeYear($event.target.value)">
+                  <option value="{{item}}" [selected]="i == 0" *ngFor="let item of payslipYear; let i = index;">Year {{item}}</option>
+                </select>
               </div>
-              <ng-container >
-                <span class="text-dark ps-3 fw-bold">Pay Slips</span>
-                <span class="mb-0 ps-3">Here you can manage all hiringBell payslips for applicable years.</span>
-                <div class="d-flex px-3 justify-content-between">
-                  <div class="col-md-2 pt-3 pe-3">
-                    <select class="form-select" (change)="changeYear($event.target.value)">
-                      <option value="{{item}}" [selected]="i == 0" *ngFor="let item of payslipYear; let i = index;">Year {{item}}</option>
-                    </select>
-                  </div>
-                  <div *ngIf="paySlipDate != null">
-                    <button class="btn btn-outline-success" [disabled]="isLoading" (click)="downloadPdf()"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
-                  </div>
+              <div *ngIf="paySlipDate != null">
+                <button class="btn btn-outline-success" [disabled]="isLoading" (click)="downloadPdf()"><i class="fa fa-download pe-3"></i> {{paySlipDate.Month}} {{paySlipDate.Year}} Pay Slip</button>
+              </div>
+            </div>
+            <div class="row mx-3 my-3 box-height">
+              <div class="col-md-2 ps-0">
+                <div class="card border-0">
+                  <p class="mb-0 py-2 ps-3">PAYSLIPS</p>
+                  <ng-container *ngIf="paySlipSchedule.length > 0">
+                    <div class="list-group" *ngFor="let item of paySlipSchedule">
+                      <a href="javascript:void(0)" data-name="payslipmonth" (click)="getPaySlip(item.paySlipMonth, item.paySlipYear, $event)" class="ps-3 list-group-item list-group-item-action py-1 fs-5 text-dark rounded-0">{{item.paySlipMonth | date: 'MMM'}} {{item.paySlipYear}}</a>
+                    </div>
+                  </ng-container>
                 </div>
-                <div class="row mx-3 my-3 box-height">
-                  <div class="col-md-2 ps-0">
-                    <div class="card border-0">
-                      <p class="mb-0 py-2 ps-3">PAYSLIPS</p>
-                      <ng-container *ngIf="paySlipSchedule.length > 0">
-                        <div class="list-group" *ngFor="let item of paySlipSchedule">
-                          <a href="javascript:void(0)" data-name="payslipmonth" (click)="getPaySlip(item.paySlipMonth, item.paySlipYear, $event)" class="ps-3 list-group-item list-group-item-action py-1 fs-5 text-dark rounded-0">{{item.paySlipMonth | date: 'MMM'}} {{item.paySlipYear}}</a>
-                        </div>
-                      </ng-container>
+              </div>
+              <div class="col-md-9 border">
+                <ng-container>
+                  <div class="position-absolute col-md-9" [ngClass]="{'d-none': isReady && isLoading}">
+                    <div class="d-none file-container position-relative" id="file-container">
+                      <iframe src="" width="100%" height="600px" style="border: none;"></iframe>
                     </div>
                   </div>
-                  <div class="col-md-9 border">
-                    <ng-container>
-                      <div class="position-absolute col-md-9" [ngClass]="{'d-none': isReady && isLoading}">
-                        <div class="d-none file-container position-relative" id="file-container">
-                          <iframe src="" width="100%" height="600px" style="border: none;"></iframe>
-                        </div>
+                  <div *ngIf=" !isFileFound && isReady && !isLoading" class="my-5 py-5">
+                    <div class="py-5 text-center fw-bold fs-4 text-danger my-5">No Record Found</div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!isReady && !isLoading">
+                  <ng-container *ngIf="paySlipSchedule.length > 0">
+                    <div  *ngIf=" !isFileFound" class="d-flex align-items-center justify-content-center py-5 my-5">
+                      <div class="py-5 my-5 fw-bold fs-5">
+                        Please select Pay Slip month first.
                       </div>
-                      <div *ngIf=" !isFileFound && isReady && !isLoading" class="my-5 py-5">
-                        <div class="py-5 text-center fw-bold fs-4 text-danger my-5">No Record Found</div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="paySlipSchedule.length == 0 && isJoinInCurrentMonth">
+                    <div class="d-flex align-items-center justify-content-center py-5 my-5">
+                      <div class="py-5 my-5 fw-bold fs-5">
+                        You joined in this current month.
                       </div>
-                    </ng-container>
-                    <ng-container *ngIf="!isReady && !isLoading">
-                      <ng-container *ngIf="paySlipSchedule.length > 0">
-                        <div  *ngIf=" !isFileFound" class="d-flex align-items-center justify-content-center py-5 my-5">
-                          <div class="py-5 my-5 fw-bold fs-5">
-                            Please select Pay Slip month first.
-                          </div>
-                        </div>
-                      </ng-container>
-                      <ng-container *ngIf="paySlipSchedule.length == 0">
-                        <div class="d-flex align-items-center justify-content-center py-5 my-5">
-                          <div class="py-5 my-5 fw-bold fs-5">
-                            You joined in this current month.
-                          </div>
-                        </div>
-                      </ng-container>
-                    </ng-container>
-                    <div class="py-5 my-5 x_panel border-0" *ngIf="isLoading">
-                      <h6 class="fw-bold fs-3 text-center text-dark mt-5 pt-5">Payslip is loading</h6>
-                      <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                        <div class="col-md-3 modal-container  text-center cog-wheel">
-                          <img src="assets/images/cog.gif" alt="" />
-                          <h6 class="modal-title title-message">
-                            Please Wait ........
-                          </h6>
-                        </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="paySlipSchedule.length == 0 && !isJoinInCurrentMonth">
+                    <div class="d-flex align-items-center justify-content-center py-5 my-5">
+                      <div class="py-5 my-5 fw-bold fs-5">
+                        No record found. Please contact to admin.
                       </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <div class="py-5 my-5 x_panel border-0" *ngIf="isLoading">
+                  <h6 class="fw-bold fs-3 text-center text-dark mt-5 pt-5">Payslip is loading</h6>
+                  <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                    <div class="col-md-3 modal-container  text-center cog-wheel">
+                      <img src="assets/images/cog.gif" alt="" />
+                      <h6 class="modal-title title-message">
+                        Please Wait ........
+                      </h6>
                     </div>
                   </div>
                 </div>
-              </ng-container>
+              </div>
             </div>
           </ng-container>
         </div>
-      </div>
+      </ng-container>
+      <ng-container *ngIf="!isPageReady">
+        <div class="py-5 my-5 x_panel border-0">
+          <h6 class="fw-bold fs-3 text-center text-dark mt-5 pt-5">Payslip is loading</h6>
+          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+            <div class="col-md-3 modal-container  text-center cog-wheel">
+              <img src="assets/images/cog.gif" alt="" />
+              <h6 class="modal-title title-message">
+                Please Wait ........
+              </h6>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

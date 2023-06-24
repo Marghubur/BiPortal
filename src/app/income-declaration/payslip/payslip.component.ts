@@ -20,11 +20,7 @@ export class PayslipComponent implements OnInit {
   EmployeeId: number = 0;
   isReady: boolean = false;
   isPageReady: boolean = false;
-  employeesList: autoCompleteModal = new autoCompleteModal();
-  applicationData: any = [];
   paySlipDate: any = null;
-  SectionIsReady: boolean = false;
-  isEmployeeSelect: boolean = false;
   basePath: string = "";
   viewer: any = null;
   fileDetail: any = null;
@@ -33,6 +29,7 @@ export class PayslipComponent implements OnInit {
   payslipschedule: Array<any> = [];
   isFileFound: boolean = false;
   userDetail: UserDetail = new UserDetail();
+  isJoinInCurrentMonth: boolean = false;
 
   constructor(private nav: iNavigation,
               private local: ApplicationStorage,
@@ -44,45 +41,36 @@ export class PayslipComponent implements OnInit {
     this.currentYear = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
     this.userDetail = this.user.getInstance() as UserDetail;
-    this.EmployeeId = this.userDetail.UserId;
-
-    if (this.userDetail.RoleId == 1) {
-      this.loadPayslipModule();
-    } else {
-      this.loadUserPayslipModule();
-    }
+    let empid = this.local.getByKey("EmployeeId");
+    if (empid)
+      this.EmployeeId = empid;
+    else
+      this.EmployeeId = this.userDetail.UserId;
+    this.getPayslipList();
   }
 
-  loadPayslipModule(): void {
-    this.loadData();
-  }
-
-  loadUserPayslipModule(): void {
-    this.getPayslipList(this.EmployeeId);
-  }
-
-  getPayslipList(e: any) {
-    this.isEmployeeSelect = true;
-    this.SectionIsReady= false;
-    this.EmployeeId = e;
+  getPayslipList() {
+    this.isPageReady= false;
     if (this.EmployeeId > 0) {
       this.paySlipSchedule = [];
       this.payslipYear = [];
-      let joiningDate = new Date(this.userDetail.CreatedOn);
-      this.payslipYear.push(this.currentYear);
-      if (joiningDate.getFullYear() != this.currentYear)
-        this.payslipYear.push(this.currentYear-1);
-
-      this.isEmployeeSelect = false;
-      this.SectionIsReady= true;
-      if (joiningDate.getMonth() == new Date().getMonth() && joiningDate.getFullYear() == new Date().getFullYear()) {
-        WarningToast("Joining month of the employee is current month");
-        return;
-      }
-
+      this.isJoinInCurrentMonth = false;;
       this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
         if (res.ResponseBody) {
-          let annulSalaryBreakup = JSON.parse(res.ResponseBody.CompleteSalaryDetail);
+          this.userDetail = res.ResponseBody.userDetail;
+          let joiningDate = new Date(this.userDetail.CreatedOn);
+          this.payslipYear.push(this.currentYear);
+          if (joiningDate.getFullYear() != this.currentYear)
+            this.payslipYear.push(this.currentYear-1);
+
+          if (joiningDate.getMonth() == new Date().getMonth() && joiningDate.getFullYear() == new Date().getFullYear()) {
+            WarningToast("Joining month of the employee is current month");
+            this.isJoinInCurrentMonth = true;
+            this.isPageReady= true;
+            return;
+          }
+          let data = res.ResponseBody.completeSalaryBreakup
+          let annulSalaryBreakup = JSON.parse(data.CompleteSalaryDetail);
           if (annulSalaryBreakup.length > 0) {
             for (let i = 0; i < annulSalaryBreakup.length; i++) {
               if (annulSalaryBreakup[i].IsActive && annulSalaryBreakup[i].IsPayrollExecutedForThisMonth) {
@@ -95,8 +83,10 @@ export class PayslipComponent implements OnInit {
             }
             this.changeYear(this.currentYear);
           }
+          this.isPageReady= true;
         }
-        this.SectionIsReady= true;
+      }).catch(e => {
+        this.isPageReady = true;
       })
     }
   }
@@ -115,20 +105,6 @@ export class PayslipComponent implements OnInit {
     this.viewer = document.getElementById("file-container");
     this.viewer.classList.remove('d-none');
     this.viewer.querySelector('iframe').setAttribute('src', fileLocation);
-  }
-
-  loadData() {
-    this.isPageReady = false;
-    this.http.get("User/GetEmployeeAndChients").then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        this.applicationData = response.ResponseBody;
-        this.employeesList.placeholder = "Employee";
-        this.employeesList.data = GetEmployees();
-        this.employeesList.className = "";
-        this.getPayslipList(this.EmployeeId);
-        this.isPageReady = true;
-      }
-    });
   }
 
   activateMe(ele: string) {
