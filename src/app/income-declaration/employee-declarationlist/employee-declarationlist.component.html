@@ -45,8 +45,7 @@
                   <div class="th fe-5">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                        (keyup.enter)="filterRecords()" autofocus [(ngModel)]="employeeDetails.Name"
-                        placeholder="Search by Name" id="namefilter">
+                        (keyup.enter)="filterRecords()" autofocus                         placeholder="Search by Name" id="namefilter">
                       <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
                         <a href="javascript:void()" class="pe-2">Full Name</a>
                         <i class="fa fa-sort-amount-asc"
@@ -58,116 +57,78 @@
                   </div>
                   <div class="th fe-2">
                     <div class="cell-wrapper">
-                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
-                        placeholder="Search by MobileNumber">
-                      <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
-                        <a href="javascript:void()" class="pe-2">Mobile Number</a>
-                        <i class="fa fa-sort-amount-asc"
-                          [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
-                          [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
+                      <input class="form-control  form-control-sm" readonly placeholder="Current Month CTC">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Current Month CTC</a>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-2">
                     <div class="cell-wrapper">
-                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
-                      <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
-                        <a href="javascript:void()" class="pe-2">Email Id</a>
-                        <i class="fa fa-sort-amount-asc"
-                          [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
-                          [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
+                      <input class="form-control  form-control-sm" readonly placeholder="Next Month CTC">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Next Month CTC</a>
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-1 text-center">ACTIONS</div>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" readonly placeholder="Current Month Salary">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Current Month Salary</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" readonly placeholder="Next Month Salary">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Next Month Salary</a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="t-body">
-                <ng-container *ngIf="employeeDetail.length > 0">
-                  <div class="tr py-2" *ngFor="let user of employeeDetail; let i = index;">
+                <ng-container *ngIf="employeeSalaries.length > 0">
+                  <div class="tr py-2" *ngFor="let user of employeeSalaries; let i = index;">
                     <div class="td align-middle text-center fe-index">
                       <div class="cell-wrapper">
-                        {{employeeData.StartIndex + i}}
+                        {{user.Index}}
                       </div>
                     </div>
                     <div class="td align-middle fe-5">
                       <div class="cell-wrapper">
-                        <a href="javascript:void(0)" (click)="viewDeclaration(user)">{{user.FirstName}}
-                          {{user.LastName}}
+                        <a href="javascript:void(0)" (click)="viewDeclaration(user)">{{user.FullName}}
                           <small class="text-muted text-decoration-none ps-2">
-                            [EmpId: {{user.EmployeeUid}}]
+                            [EmpId: {{user.EmployeeId}}]
                           </small>
                         </a>
-                        <div class="float-end">
-                          <a href="javascript:void(0)"  data-bs-toggle="tooltip"
-                            data-bs-placement="right" title="View Employee Performance"><span class="badge bg-secondary me-3"><i
-                                class="fa fa-line-chart"></i></span></a>
-                          <a href="javascript:void(0)" data-bs-toggle="tooltip"
-                            data-bs-placement="right" title="View Profile"><span class="badge bg-dark me-3"><i
-                                class="fa fa-user-circle-o user-edit-icon"></i></span></a>
-                          <a href="javascript:void(0)">
-                            <span class="badge bg-primary fa fa-building-o"
-                              data-bs-toggle="tooltip" data-bs-placement="right"
-                              title="{{user.FirstName}} {{user.LastName}}">
-                              &nbsp;
-                              <span></span>
-                            </span>
-                          </a>
-                          <a href="javascript:void(0)" class="ms-3"
-                            data-bs-toggle="tooltip" data-bs-placement="right" title="View Attendance">
-                            <span class="text-sm-left text-muted">Attendance</span>
-                            <span class="ms-2 badge bg-success">
-                              <i class="fa fa-id-badge"></i>
-                            </span>
-                          </a>
-                        </div>
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        {{user.Mobile}}
+                        &#8377; {{user.CurrentCTC | number : "1.2-2"}}
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        {{user.Email}}
+                        &#8377; {{user.NextCTC | number : "1.2-2"}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-1">
-                      <div class="d-flex flex-row justify-content-evenly">
-                        <a href="javascript:void(0)" (click)="ViewFiles(user)" [ngClass]="{'pe-none': isLoading}" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="View Files">
-                          <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"></i></span>
-                        </a>
-                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="AddEditDocuments(user)" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="View Documents">
-                          <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
-                        </a>
-                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="CreatePopup(user)" [ngClass]="{'pe-none': user.EmployeeUid == 1}">
-                          <ng-container [ngSwitch]="user.IsActive">
-                            <span *ngSwitchCase="true">
-                              <span class="badge bg-danger" data-bs-toggle="tooltip"
-                              data-bs-placement="right" title="Inactive employee">
-                                <i class="fa " [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash-o': !isLoading}" aria-hidden="true"></i>
-                              </span>
-                            </span>
-                            <span *ngSwitchDefault>
-                              <span class="badge bg-success" data-bs-toggle="tooltip"
-                              data-bs-placement="right" title="Active Employee">
-                                <i class="fa " [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-random': !isLoading}" aria-hidden="true" aria-hidden="true"></i>
-                              </span>
-                            </span>
-                          </ng-container>
-                        </a>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        &#8377; {{user.CurrentSalary | number : "1.2-2"}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        &#8377; {{user.NextSalary | number : "1.2-2"}}
                       </div>
                     </div>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="employeeDetail.length == 0">
+                <ng-container *ngIf="employeeSalaries.length == 0">
                   <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                     <p class="my-5 py-5">Record Not Found</p>
                   </div>

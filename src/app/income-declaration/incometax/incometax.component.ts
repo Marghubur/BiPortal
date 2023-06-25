@@ -330,7 +330,7 @@ export class IncometaxComponent implements OnInit {
     switch(index) {
       case 1:
         value = (this.salaryDetail.GrossIncome - this.totalAllowTaxExemptAmount -
-          52400 - this.totalOtherExemptAmount - this.totalSection80CExempAmount -
+          this.Sec16TaxExemptAmount - this.totalOtherExemptAmount - this.totalSection80CExempAmount -
           this.allDeclarationSalaryDetails.HRADeatils.HRAAmount * 12);
         break;
       case 2:

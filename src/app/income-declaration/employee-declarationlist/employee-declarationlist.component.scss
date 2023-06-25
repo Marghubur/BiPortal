@@ -22,5 +22,10 @@
 
 
 .hide-bar {
-  height: 2.9rem !important;
+  height: 3.35rem !important;
+}
+
+.form-control[readonly] {
+  background-color: #e9ecef !important;
+  opacity: 1 !important;
 }
