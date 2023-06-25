@@ -507,9 +507,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
       this.http.post(url, formData)
       .then(res => {
-        this.buildPageData(res);
-        this.bindForm();
-        this.bindClientDetails();
         if(this.isUpdate)
           Toast("Profile updated successfully");
         else
