@@ -16,10 +16,10 @@ export class EmployeeDeclarationlistComponent implements OnInit {
   anyFilter: string = "";
   employeeData: Filter = new Filter();
   employeeDetail: Array<any> = [];
-  employeeDetails: employeeModel = new employeeModel();
   orderByNameAsc: boolean = null;
   orderByMobileAsc: boolean = null;
   orderByEmailAsc: boolean = null;
+  employeeSalaries: Array<any> = null;
 
   constructor(private http: AjaxService,
               private nav: iNavigation) {}
@@ -30,22 +30,49 @@ export class EmployeeDeclarationlistComponent implements OnInit {
 
   LoadData() {
     this.isEmpPageReady = false;
-    this.http.post("Employee/GetEmployees", this.employeeData).then((response: ResponseModel) => {
-      this.employeeDetail = response.ResponseBody;
-      if (this.employeeDetail.length > 0) {
-        this.employeeData.TotalRecords = this.employeeDetail[0].Total;
+    this.http.post("SalaryComponent/GetAllSalaryDetail", this.employeeData).
+    then((response: ResponseModel) => {
+      if (response.ResponseBody) {
+        this.employeeDetail = response.ResponseBody.SalaryDetail;
+        if (this.employeeDetail.length > 0) {
+          this.employeeData.TotalRecords = this.employeeDetail[0].Total;
+          this.isEmpPageReady = true;
+        } else {
+          this.employeeData.TotalRecords = 0;
+        }
+        this.bindData();
         this.isEmpPageReady = true;
-      } else {
-        this.employeeData.TotalRecords = 0;
+        let elem = document.getElementById('namefilter');
+        if(elem)elem.focus();
       }
-      this.isEmpPageReady = true;
-      let elem = document.getElementById('namefilter');
-      if(elem)elem.focus();
     });
   }
 
   resetFilter() {
 
+  }
+
+  bindData() {
+    let currentMonth = new Date().getMonth() +1;
+    this.employeeSalaries = [];
+    this.employeeDetail.forEach(x => {
+      let data = JSON.parse(x.CompleteSalaryDetail)
+      let prsentMonth = data.find(x => x.MonthNumber == currentMonth);
+      let nextMonth  = data.find(x => x.MonthNumber == currentMonth+1);
+      let salaryComponent = prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC");
+      let currentSalary = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+      let nextSalaryComponeny = nextMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC");
+      let nextSalary = nextSalaryComponeny.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+      this.employeeSalaries.push({
+        Index: x.Index,
+        FullName: x.FirstName + " " + x.LastName,
+        EmployeeId: x.EmployeeId,
+        CurrentCTC: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "CTC").FinalAmount,
+        NextCTC: nextMonth.SalaryBreakupDetails.find(x => x.ComponentId == "CTC").FinalAmount,
+        CurrentSalary: currentSalary,
+        NextSalary: nextSalary
+      })
+    })
   }
 
   globalFilter() {
