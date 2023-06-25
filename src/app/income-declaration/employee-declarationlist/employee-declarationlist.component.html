@@ -45,8 +45,7 @@
                   <div class="th fe-5">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                        (keyup.enter)="filterRecords()" autofocus [(ngModel)]="employeeDetails.Name"
-                        placeholder="Search by Name" id="namefilter">
+                        (keyup.enter)="filterRecords()" autofocus                         placeholder="Search by Name" id="namefilter">
                       <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
                         <a href="javascript:void()" class="pe-2">Full Name</a>
                         <i class="fa fa-sort-amount-asc"
@@ -59,7 +58,7 @@
                   <div class="th fe-2">
                     <div class="cell-wrapper">
                       <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
+                        (keydown.esc)="resetFilter()"
                         placeholder="Search by MobileNumber">
                       <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
                         <a href="javascript:void()" class="pe-2">Mobile Number</a>
@@ -73,7 +72,7 @@
                   <div class="th fe-2">
                     <div class="cell-wrapper">
                       <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
+                        (keydown.esc)="resetFilter()"  placeholder="Search by Email">
                       <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
                         <a href="javascript:void()" class="pe-2">Email Id</a>
                         <i class="fa fa-sort-amount-asc"
@@ -87,19 +86,18 @@
                 </div>
               </div>
               <div class="t-body">
-                <ng-container *ngIf="employeeDetail.length > 0">
-                  <div class="tr py-2" *ngFor="let user of employeeDetail; let i = index;">
+                <ng-container *ngIf="employeeSalaries.length > 0">
+                  <div class="tr py-2" *ngFor="let user of employeeSalaries; let i = index;">
                     <div class="td align-middle text-center fe-index">
                       <div class="cell-wrapper">
-                        {{employeeData.StartIndex + i}}
+                        {{user.Index}}
                       </div>
                     </div>
                     <div class="td align-middle fe-5">
                       <div class="cell-wrapper">
-                        <a href="javascript:void(0)" (click)="viewDeclaration(user)">{{user.FirstName}}
-                          {{user.LastName}}
+                        <a href="javascript:void(0)" (click)="viewDeclaration(user)">{{user.FullName}}
                           <small class="text-muted text-decoration-none ps-2">
-                            [EmpId: {{user.EmployeeUid}}]
+                            [EmpId: {{user.EmployeeId}}]
                           </small>
                         </a>
                         <div class="float-end">
@@ -112,7 +110,7 @@
                           <a href="javascript:void(0)">
                             <span class="badge bg-primary fa fa-building-o"
                               data-bs-toggle="tooltip" data-bs-placement="right"
-                              title="{{user.FirstName}} {{user.LastName}}">
+                              title="{{user.FullName}}">
                               &nbsp;
                               <span></span>
                             </span>
@@ -129,12 +127,22 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        {{user.Mobile}}
+                        {{user.CurrentCTC}}
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        {{user.Email}}
+                        {{user.NextCTC}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{user.CurrentSalary}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{user.NextSalary}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
@@ -167,7 +175,7 @@
                     </div>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="employeeDetail.length == 0">
+                <ng-container *ngIf="employeeSalaries.length == 0">
                   <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                     <p class="my-5 py-5">Record Not Found</p>
                   </div>
