@@ -91,8 +91,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       let data = this.nav.getValue();
       let emp = this.local.getByKey("EmployeeId");
       if (data) {
-        this.EmployeeId = data.EmployeeUid;
-        this.employeeName = data.FirstName + " " + data.LastName;
+        this.EmployeeId = data.EmployeeId;
+        this.employeeName = data.FullName;
       } else if (emp) {
         this.EmployeeId = emp;
       }

@@ -67,8 +67,8 @@ export class EmployeeDeclarationlistComponent implements OnInit {
         Index: x.Index,
         FullName: x.FirstName + " " + x.LastName,
         EmployeeId: x.EmployeeId,
-        CurrentCTC: prsentMonth.SalaryBreakupDetails.find( x.ComponentId == "CTC"),
-        NextCTC: nextMonth.SalaryBreakupDetails.find( x.ComponentId == "CTC"),
+        CurrentCTC: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "CTC").FinalAmount,
+        NextCTC: nextMonth.SalaryBreakupDetails.find(x => x.ComponentId == "CTC").FinalAmount,
         CurrentSalary: currentSalary,
         NextSalary: nextSalary
       })

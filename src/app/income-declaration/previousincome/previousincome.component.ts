@@ -28,8 +28,8 @@ export class PreviousincomeComponent implements OnInit {
   employeeId: number = 0;
   isPageReady: boolean = false;
   employeementDeatil: Array<any> = [];
-  userDetail: UserDetail = new UserDetail();
-
+  userDetail: any = null;
+  DOJ: Date = null;
   constructor(private nav: iNavigation,
               private user: UserService,
               private local: ApplicationStorage,
@@ -45,8 +45,10 @@ export class PreviousincomeComponent implements OnInit {
     let data = this.local.getByKey("EmployeeId");
     if (data)
       this.employeeId = data;
-    else
+    else {
       this.employeeId = this.userDetail.UserId;
+      this.DOJ = this.userDetail.CreatedOn;
+    }
 
     if (this.userDetail.RoleId == 1) {
       this.loadPrevioudIncome();
@@ -73,24 +75,29 @@ export class PreviousincomeComponent implements OnInit {
       ErrorToast("Invalid employee. Please login again");
       return;
     }
-    this.http.get(`Declaration/GetPreviousEmployemnt/${this.userDetail.UserId}`).then(res => {
+    this.http.get(`Declaration/GetPreviousEmployemnt/${this.employeeId}`).then(res => {
       this.bindPageData(res);
     })
   }
 
   bindPageData(res: any) {
-    if (res.ResponseBody && res.ResponseBody.length > 0) {
-      this.previousEmploymentDetail = res.ResponseBody;
-      this.initForm();
-      this.isRecordFound = true;
-    } else {
-      this.getPreviousIncome();
+    this.previousEmploymentDetail = [];
+    if (res.ResponseBody) {
+      this.userDetail = res.ResponseBody.Employee
+      this.DOJ = this.userDetail.DOJ;
+      if (res.ResponseBody.PreviousSalary > 0) {
+        this.previousEmploymentDetail = res.ResponseBody;
+        this.initForm();
+        this.isRecordFound = true;
+      } else {
+        this.getPreviousIncome();
+      }
     }
     this.isPageReady = true;
   }
 
   getPreviousIncome() {
-    let doj = new Date(this.userDetail.CreatedOn);
+    let doj = new Date(this.DOJ);
     let joiningMonth = doj.getMonth();
     let date = new Date();
     this.currentYear = date.getFullYear();
