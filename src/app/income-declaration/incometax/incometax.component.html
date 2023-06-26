@@ -112,9 +112,9 @@
                           <div class="th ps-2">
                             <span>INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TotalAmount | number : '1.2-2') : (allDeclarationSalaryDetails.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
                           </div>
-                          <div class="th ps-2">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.SurChargesAndCess | number:'1.2-2') : (allDeclarationSalaryDetails.SurChargesAndCessOnNewRegim | number:'1.2-2')}}</div>
-                          <div class="th ps-2">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TaxNeedToPay | number : '1.2-2') : (allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</div>
-                          <div class="th ps-2">{{allDeclarationSalaryDetails.TaxPaid | number:'1.2-2'}}</div>
+                          <div class="th ps-2">INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.SurChargesAndCess | number:'1.2-2') : (allDeclarationSalaryDetails.SurChargesAndCessOnNewRegim | number:'1.2-2')}}</div>
+                          <div class="th ps-2">INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TaxNeedToPay | number : '1.2-2') : (allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</div>
+                          <div class="th ps-2">INR {{allDeclarationSalaryDetails.TaxPaid | number:'1.2-2'}}</div>
                           <div class="th ps-2">
                             <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime == 1">INR {{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
                             <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime != 1">INR {{allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
@@ -177,13 +177,13 @@
                             </div>
                             <div class="td fe-1">
                               <div class="cell-wrapper">
-                                {{item.total | number: '1.2-2'}}
+                                <i class="fa fa-inr pe-1"></i> {{item.total | number: '1.0-0'}}
                               </div>
                             </div>
                             <ng-container *ngIf="item.value">
                               <div class="td fe-1" *ngFor="let elem of item.value">
                                 <div class="cell-wrapper">
-                                  {{elem.FinalAmount | number: '1.2-2'}}
+                                  <i class="fa fa-inr pe-1"></i> {{elem.FinalAmount | number: '1.0-0'}}
                                 </div>
                               </div>
                             </ng-container>
