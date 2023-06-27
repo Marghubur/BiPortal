@@ -46,6 +46,7 @@ export class CustomsalaryStructureComponent implements OnInit {
   compnayDetail: any = null;
   salaryCompFilterData: string = null;
   selectedComponent: Array<any> = [];
+  isClone: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -265,6 +266,7 @@ export class CustomsalaryStructureComponent implements OnInit {
       this.isEditSalaryGroup = true;
       this.selectedSalaryStructure = item;
       this.salaryGroup();
+      this.isClone = false;
       $('#addSalaryGroupModal').modal('show');
     }
   }
@@ -478,6 +480,7 @@ export class CustomsalaryStructureComponent implements OnInit {
     this.isEditSalaryGroup = false;
     this.selectedSalaryStructure = new SalaryStructureType();
     this.salaryGroup();
+    this.isClone = false;
     $('#addSalaryGroupModal').modal('show');
   }
 
@@ -743,6 +746,51 @@ export class CustomsalaryStructureComponent implements OnInit {
     } else {
       term = [];
       ErrorToast("Invalid expression");
+    }
+  }
+
+  cloneSalaryGroupPopup(item: any) {
+    if (item) {
+      this.isEditSalaryGroup = true;
+      this.selectedSalaryStructure = new SalaryStructureType();
+      this.selectedSalaryStructure.SalaryGroupId = item.SalaryGroupId;
+      this.salaryGroup();
+      this.isClone = true;
+      $('#addSalaryGroupModal').modal('show');
+    }
+  }
+
+  cloneSalaryGroup() {
+    this.isEditSalaryGroup = false;
+    this.isLoading = true;
+    this.submitted = true;
+    let errorCounter = 0;
+    if (this.SalaryGroupForm.get('GroupName').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('GroupDescription').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MinAmount').errors !== null)
+      errorCounter++;
+    if (this.SalaryGroupForm.get('MaxAmount').errors !== null)
+      errorCounter++;
+
+    let value:SalaryStructureType = this.SalaryGroupForm.value;
+    if (value && errorCounter === 0 && value.SalaryGroupId > 0) {
+      this.http.post("SalaryComponent/CloneSalaryGroup", value).then ((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.salaryStructureType = response.ResponseBody;
+          Toast("Salary Group added suuccessfully.");
+          $('#addSalaryGroupModal').modal('hide');
+          this.isLoading = false;
+        } else {
+          ErrorToast("Unable to add salary group.")
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    } else {
+      this.isLoading = false;
+      ErrorToast("Please correct all the mandaroty field marded red");
     }
   }
 }
