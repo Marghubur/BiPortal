@@ -71,7 +71,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   currentMonth: string = "";
   selectDeclaration: any = null;
   employeeName: string = null;
-  downlodexcelFilePath: any = null;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -776,33 +775,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   gotoTaxSection() {
     this.nav.navigateRoot(AdminIncomeTax, this.EmployeeId)
-  }
-
-  downDeclaration() {
-    this.isLoading = true;
-    if (this.EmployeeId > 0) {
-      this.http.get(`Declaration/ExportDeclaration/${this.EmployeeId}`).then(res => {
-        if (res.ResponseBody) {
-          console.log(res.ResponseBody);
-          let fileLocation = `${this.basePath}${res.ResponseBody}`;
-          this.downlodexcelFilePath = fileLocation;
-          $('#downloadDeclarationExcel').click();
-          let link = document.createElement('a');
-          link.setAttribute('target', '_blank');
-          link.setAttribute('type', 'hidden');
-          link.href = fileLocation;
-          link.download = `${this.downlodexcelFilePath}`;
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-          Toast("Declaration exported successfully");
-          this.isLoading = false;
-        }
-      }).catch(e => {
-        ErrorToast(e.HttpStatusMessage);
-        this.isLoading = false;
-      })
-    }
   }
 }
 
