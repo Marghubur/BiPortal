@@ -39,6 +39,7 @@ export class IncometaxComponent implements OnInit {
   isEmployeesReady:boolean = false;
   isEmployeeSelect: boolean = false;
   userDetail: UserDetail = new UserDetail();
+  lastIncomeTaxSlab: any = null;
 
   constructor(private nav: iNavigation,
     private local: ApplicationStorage,
@@ -89,6 +90,7 @@ export class IncometaxComponent implements OnInit {
       if (response.ResponseBody) {
         this.allDeclarationSalaryDetails = response.ResponseBody;
         this.allDeclarationSalaryDetails.IncomeTaxSlab = Object.entries(response.ResponseBody.IncomeTaxSlab).reverse();
+        this.lastIncomeTaxSlab= this.allDeclarationSalaryDetails.IncomeTaxSlab.slice(-1).pop()[0];
         this.allDeclarationSalaryDetails.NewRegimIncomeTaxSlab = Object.entries(response.ResponseBody.NewRegimIncomeTaxSlab).reverse();
         this.ExemptionDeclaration = response.ResponseBody.ExemptionDeclaration;
         if ((this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0).length <= 0))
