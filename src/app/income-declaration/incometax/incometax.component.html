@@ -78,10 +78,15 @@
                       Current Income tax calculation is considering <span class="fw-bold">DECLARED</span> amounts of
                       Investment Declaration irrespective on approval status
                     </li>
-                    <li *ngIf="allDeclarationSalaryDetails != null">
-                      Your Income and tax liability is being computed as per <span class="fw-bold">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? 'Old': 'New'}} income tax
-                        regime.</span>
-                    </li>
+                    <ng-container *ngIf="allDeclarationSalaryDetails != null">
+                      <li>
+                        Your Income and tax liability is being computed as per <span class="fw-bold">{{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? 'Old': 'New'}} income tax
+                          regime.</span>
+                      </li>
+                      <li>
+                        Your Income and tax liability is being computed on <span class="fw-bold">{{lastIncomeTaxSlab}}% income tax slab.</span>
+                      </li>
+                    </ng-container>
                   </ul>
                 </div>
               </div>
