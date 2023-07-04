@@ -83,8 +83,8 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
         FullName: x.FirstName + " " + x.LastName,
         EmployeeId: x.EmployeeId,
         Salary: prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC"),
-        Gross:prsentMonth.IsArrearMonth ? 0 : prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
-        ArrearGross: prsentMonth.IsArrearMonth ? prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+        Gross: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
+        ArrearGross: prevMonth.IsArrearMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
         PreMonthGross: prevMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0
       });
     });
@@ -149,8 +149,8 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
           FullName: x.FirstName + " " + x.LastName,
           EmployeeId: x.EmployeeId,
           Salary: prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC"),
-          Gross:prsentMonth.IsArrearMonth ? 0 : prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
-          ArrearGross: prsentMonth.IsArrearMonth ? prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+          Gross: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
+          ArrearGross: prevMonth.IsArrearMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
           PreMonthGross: prevMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0
         });
       });
