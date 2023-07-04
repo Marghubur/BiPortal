@@ -193,12 +193,12 @@
                       </div>
                     </div>
                     <div class="mt-4">
-                      <button type="button" class="btn btn-primary-c" (click)="uploadExcelSheet()" [disabled]="isDisable">
+                      <button type="button" class="btn btn-primary-c" (click)="uploadExcelSheet()" [disabled]="isDisable || isLoading">
                         <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-upload': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
                       </button>
                       <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
-                        [disabled]="isDisable">
+                        [disabled]="isDisable || isLoading">
                         <i class="fa fa-eraser pe-2"></i> Cancel
                       </button>
                     </div>

@@ -78,11 +78,14 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     this.employeeDetail.forEach(x => {
       let data = JSON.parse(x.CompleteSalaryDetail)
       let prsentMonth = data.find(x => x.MonthNumber == currentMonth);
+      let prevMonth = data.find(x => x.MonthNumber == currentMonth - 1);
       this.employeeSalaries.push({
         FullName: x.FirstName + " " + x.LastName,
         EmployeeId: x.EmployeeId,
         Salary: prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC"),
-        CTC: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "CTC").FinalAmount
+        Gross:prsentMonth.IsArrearMonth ? 0 : prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
+        ArrearGross: prsentMonth.IsArrearMonth ? prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+        PreMonthGross: prevMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0
       });
     });
     if (this.companySetting) {
@@ -141,11 +144,14 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       this.employeeDetail.forEach(x => {
         let data = JSON.parse(x.CompleteSalaryDetail)
         let prsentMonth = data.find(x => x.MonthNumber == item.Month+1);
+        let prevMonth = data.find(x => x.MonthNumber == item.Month);
         this.employeeSalaries.push({
           FullName: x.FirstName + " " + x.LastName,
           EmployeeId: x.EmployeeId,
           Salary: prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC"),
-          CTC: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "CTC").FinalAmount
+          Gross:prsentMonth.IsArrearMonth ? 0 : prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
+          ArrearGross: prsentMonth.IsArrearMonth ? prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+          PreMonthGross: prevMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0
         });
       });
     }

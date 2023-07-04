@@ -37,7 +37,7 @@
           </div>
           <div class="col-md-3 mt-3">
             <label class="form-label">Mobile No.</label>
-            <input type="text" class="form-control" placeholder="Enter Mobile Name" formControlName="Mobile" OnlyNumber="10" onkeypress="return event.charCode >= 48 && event.charCode <= 57" [ngClass]="{'error-field': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}">
+            <input type="text" class="form-control" maxlength="10" placeholder="Enter Mobile Name" formControlName="Mobile" onkeypress="return event.charCode >= 48 && event.charCode <= 57" [ngClass]="{'error-field': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}">
           </div>
           <div class="col-md-3 mt-3">
             <label class="form-label">First Address</label>
@@ -65,7 +65,8 @@
         <div class="row">
           <div class="col-md-3 mt-3">
             <label class="form-label">State</label>
-            <input type="text" class="form-control" placeholder="Enter State" formControlName="State" oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" placeholder="Enter State" formControlName="State" oninput="this.value = this.value.toUpperCase()"
+            [ngClass]="{'error-field': submitted && f.State.errors !== null && f.State.errors.required}">
           </div>
           <div class="col-md-3 mt-3">
             <label class="form-label">City</label>
@@ -173,6 +174,63 @@
                   <option value="false">No</option>
                 </select>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-3">
+        <div class="x_panel">
+          <div class="x_header">
+            <div class="x_header_title">
+              <h2>Company Setting<small>Company basic settings.</small></h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">Declaration Start Month</label>
+              <select formControlName="DeclarationStartMonth" class="form-select" (change)="selectDeclartionStartMonth($event)">
+                <option value="1">Jan</option>
+                <option value="2">Feb</option>
+                <option value="3">Mar</option>
+                <option value="4">Apr</option>
+                <option value="5">May</option>
+                <option value="6">Jun</option>
+                <option value="7">Jul</option>
+                <option value="8">Aug</option>
+                <option value="9">Sep</option>
+                <option value="10">Oct</option>
+                <option value="11">Nov</option>
+                <option value="12">Dec</option>
+              </select>
+              <!-- <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">Declaration End Month</label>
+              <select formControlName="DeclarationEndMonth" class="form-select" >
+                <option value="1">Jan</option>
+                <option value="2">Feb</option>
+                <option value="3">Mar</option>
+                <option value="4">Apr</option>
+                <option value="5">May</option>
+                <option value="6">Jun</option>
+                <option value="7">Jul</option>
+                <option value="8">Aug</option>
+                <option value="9">Sep</option>
+                <option value="10">Oct</option>
+                <option value="11">Nov</option>
+                <option value="12">Dec</option>
+              </select>
+              <!-- <input maxlength="2" type="text" class="form-control" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">Financial Year</label>
+              <input maxlength="4" type="text" class="form-control" formControlName="FinancialYear" placeholder="Enter financial year" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            </div>
+            <div class="col-md-6 mt-3">
+              <label for="" class="form-label">Attendance Appling Back Days Limit</label>
+              <input maxlength="2" type="number" class="form-control" formControlName="AttendanceSubmissionLimit" placeholder="Enter attendance limit to apply in back date." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
           </div>
         </div>

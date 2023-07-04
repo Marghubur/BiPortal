@@ -56,8 +56,12 @@ export class InitialpageComponent implements OnInit {
       ThirdAddress: new FormControl(null),
       ForthAddress: new FormControl(null),
       Country: new FormControl(null),
-      State: new FormControl(null),
+      State: new FormControl(null, [Validators.required]),
       City: new FormControl(null),
+      DeclarationStartMonth: new FormControl(4),
+      DeclarationEndMonth: new FormControl(3),
+      FinancialYear: new FormControl(new Date().getFullYear()),
+      AttendanceSubmissionLimit: new FormControl(3),
     })
   }
 
@@ -87,6 +91,19 @@ export class InitialpageComponent implements OnInit {
   gotoLoginPage() {
     $('#messageModal').modal('hide');
     this.nav.navigate(Login, null);
+  }
+
+  selectDeclartionStartMonth(e: any) {
+    let value = Number(e.target.value);
+    if (value > 0) {
+      let month = 0;
+      if (value == 1)
+        month = 12;
+      else
+        month = value - 1;
+
+      this.initialForm.get('DeclarationEndMonth').setValue(month);
+    }
   }
 
 }
