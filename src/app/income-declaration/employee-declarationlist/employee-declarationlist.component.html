@@ -63,14 +63,17 @@
                 <thead>
                   <ng-container *ngIf="employeeSalaries.length > 0">
                     <tr>
-                      <th class='fix'>Full Name</th>
+                      <th class='fix' rowspan="2">Full Name</th>
+                      <th colspan="9" class="text-center">Aug</th>
+                      <th rowspan="2">Arrear</th>
+                      <th rowspan="2">July Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="Previous Month Gross"></i></th>
+                    </tr>
+                    <tr>
                       <th class="text-truncate" *ngFor="let data of employeeSalaries[0].Salary" >
                         {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="{{data.ComponentName}}"></i></th>
                       <th>Gross</th>
-                      <th>Arrear Gross</th>
-                      <th>Pre Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="Previous Month Gross"></i></th>
                     </tr>
                   </ng-container>
                 </thead>
