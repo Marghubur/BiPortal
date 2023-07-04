@@ -81,6 +81,7 @@ export class CompanySettingsComponent implements OnInit {
       LeaveAccrualRunCronDayOfMonth: new FormControl(this.companySetting.LeaveAccrualRunCronDayOfMonth),
       EveryMonthLastDayOfDeclaration: new FormControl(this.companySetting.EveryMonthLastDayOfDeclaration),
       AttendanceSubmissionLimit: new FormControl(this.companySetting.AttendanceSubmissionLimit),
+      IsJoiningBerierDayPassed: new FormControl(this.companySetting.IsJoiningBerierDayPassed)
     })
   }
 

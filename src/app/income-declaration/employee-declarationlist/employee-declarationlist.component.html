@@ -64,10 +64,13 @@
                   <ng-container *ngIf="employeeSalaries.length > 0">
                     <tr>
                       <th class='fix'>Full Name</th>
-                      <th>CTC</th>
                       <th class="text-truncate" *ngFor="let data of employeeSalaries[0].Salary" >
-                      {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
-                      data-bs-placement="right" title="{{data.ComponentName}}"></i></th>
+                        {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="{{data.ComponentName}}"></i></th>
+                      <th>Gross</th>
+                      <th>Arrear Gross</th>
+                      <th>Pre Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="Previous Month Gross"></i></th>
                     </tr>
                   </ng-container>
                 </thead>
@@ -82,8 +85,10 @@
                           </small>
                         </a>
                       </td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.CTC | number : "1.2-2"}}</td>
                       <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{data.FinalAmount | number : "1.2-2"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.Gross | number : "1.2-2"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross | number : "1.2-2"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.PreMonthGross | number : "1.2-2"}}</td>
                     </tr>
                   </ng-container>
                   <ng-container *ngIf="employeeSalaries.length == 0">

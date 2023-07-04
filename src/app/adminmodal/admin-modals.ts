@@ -194,6 +194,7 @@ export class CompanySetting {
     AttendanceSubmissionLimit: number = null;
     LeaveAccrualRunCronDayOfMonth: number = 0;
     EveryMonthLastDayOfDeclaration: number = 0;
+    IsJoiningBerierDayPassed: boolean = false;
 }
 
 export class UserProfile {
