@@ -230,9 +230,14 @@
             <div class="col">
               <app-pagination [pagination]="employeeData" (onPageChange)="GetFilterResult($event)"></app-pagination>
             </div>
-            <div class="col-auto">
-              <div id="scroll-dv" class="scroll-bar-dv border-0">
-                <div class="inner-scroller" id="inner-scroller"></div>
+            <div class="col-auto row align-items-center">
+              <div class="col-auto text-muted">
+                Scroll
+              </div>
+              <div class="col-auto">
+                <div id="scroll-dv" class="scroll-bar-dv border-0">
+                  <div class="inner-scroller" id="inner-scroller"></div>
+                </div>
               </div>
             </div>
           </div>
