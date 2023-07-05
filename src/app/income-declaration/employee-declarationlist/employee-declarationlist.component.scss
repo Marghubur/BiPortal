@@ -11,13 +11,11 @@
   width: 7px !important;
   height: 10px !important;
 }
-
 .excel-table {
   overflow-y: auto;
-  // overflow-x: hidden;
+  overflow-x: hidden;
   min-height: 10vh;
   max-height: 55vh;
-  width: 1000px;
   border: 1px solid #ccc;
 
   table th, table td {
@@ -49,7 +47,7 @@
       position: sticky;
       top: 0;
       z-index: 9;
-  }        
+  }
 
   table {
     border-collapse: collapse; /* make the table borders collapse to each other */
@@ -71,11 +69,11 @@
 
 .scroll-bar-dv {
   border: 1px solid #d9d9d9;
-  width: 400px;
-  height: 100px;
+  width: 15rem;
+  height: 11px;
   overflow-x: auto;
 
   .inner-scroller {
-    width: 1000px;
+    width: 30rem;
   }
 }
