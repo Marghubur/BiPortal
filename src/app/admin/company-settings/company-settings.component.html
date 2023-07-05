@@ -30,20 +30,23 @@
                 </div>
               </div>
               <ul class="list-group list-group">
-                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 1)">
-                  <li class="list-group-item border-0 active-tab" data-name="activetab"><i class="fa fa-cog pe-2"></i> Company Basic Setting</li>
+                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(1)">
+                  <li class="list-group-item border-0 active-tab" data-name="activetab"><i class="fa fa-cog pe-2"></i> Basic</li>
                 </a>
-                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 2)">
-                  <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cog pe-2"></i> Company Setting</li>
+                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(2)">
+                  <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-building-o pe-2"></i> Company</li>
                 </a>
-                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 3)">
-                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cog pe-2"></i> Declaration Setting</li>
+                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(3)">
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-handshake-o pe-2"></i> Declaration</li>
                   </a>
-                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 4)">
-                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cog pe-2"></i> Cron Setting</li>
+                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(4)">
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cogs pe-2"></i> Cron</li>
                   </a>
-                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab($event, 5)">
-                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cog pe-2"></i> Attendance Setting</li>
+                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(5)">
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-address-book-o pe-2"></i> Attendance</li>
+                  </a>
+                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(6)">
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-wrench pe-2"></i> Payroll Barrier</li>
                   </a>
                 </ul>
               </div>
@@ -93,14 +96,6 @@
                             <option value="true">Yes</option>
                             <option value="false">No</option>
                           </select>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-4 mt-3">
-                          <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="StartJoiningBerierDay" formControlName="IsJoiningBerierDayPassed">
-                            <label class="form-check-label" for="StartJoiningBerierDay">Start Joining Berier Day </label>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -190,6 +185,23 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-md-12" *ngIf="menuIndex == 6">
+                    <div class="x_panel">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <h2>Payroll Barrier<small>Setup rules.</small></h2>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4 mt-3">
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="StartJoiningBerierDay" formControlName="IsJoiningBarrierDayPassed">
+                            <label class="form-check-label" for="StartJoiningBerierDay">Start Joining Barrier Day </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </ng-container>
                 <ng-container *ngIf="!isReady">
                   <div class="py-5 my-5">
@@ -207,7 +219,7 @@
               </div>
             </div>
             <div class="text-end mt-3">
-              <button type="button" class="btn btn-primary-c" (click)="saveSetting()">
+              <button type="button" class="btn btn-primary-c" (click)="saveSetting()" [disabled]="isLoading">
                 <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
                 <span class="ps-2">{{ isLoading ? 'Wait' : 'Save setting' }}</span>
               </button>

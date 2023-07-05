@@ -182,7 +182,7 @@ export class IncometaxComponent implements OnInit {
         i = 0;
         let typeId = 0;
         while( i < annualSalaryDetail.length) {
-          let date = new Date(annualSalaryDetail[i].MonthFirstDate);
+          let date = new Date(annualSalaryDetail[i].PresentMonthDate);
           if(annualSalaryDetail[i].IsActive) {
             if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
               typeId = 1;

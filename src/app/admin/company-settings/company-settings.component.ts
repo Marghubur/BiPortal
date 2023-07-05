@@ -81,7 +81,7 @@ export class CompanySettingsComponent implements OnInit {
       LeaveAccrualRunCronDayOfMonth: new FormControl(this.companySetting.LeaveAccrualRunCronDayOfMonth),
       EveryMonthLastDayOfDeclaration: new FormControl(this.companySetting.EveryMonthLastDayOfDeclaration),
       AttendanceSubmissionLimit: new FormControl(this.companySetting.AttendanceSubmissionLimit),
-      IsJoiningBerierDayPassed: new FormControl(this.companySetting.IsJoiningBerierDayPassed)
+      IsJoiningBarrierDayPassed: new FormControl(this.companySetting.IsJoiningBarrierDayPassed)
     })
   }
 
@@ -117,7 +117,7 @@ export class CompanySettingsComponent implements OnInit {
       ErrorToast("Please select company first.");
   }
 
-  activeTab(e: any, index: number) {
+  activeTab(index: number) {
     this.isReady = false;
     this.menuIndex = index;
     let elem = document.querySelectorAll('li[data-name="activetab"]');
@@ -125,7 +125,7 @@ export class CompanySettingsComponent implements OnInit {
       for (let i = 0; i < elem.length; i++) {
         elem[i].classList.remove('active-tab');
       }
-      e.target.classList.add('active-tab');
+      elem[index-1].classList.add('active-tab');
     }
     this.isReady = true;
   }
