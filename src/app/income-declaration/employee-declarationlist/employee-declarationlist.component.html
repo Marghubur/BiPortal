@@ -58,21 +58,19 @@
                 </a>
               </div>
             </div>
-            <div class="wrapper">
+            <div class="excel-table">
               <table>
                 <thead>
                   <ng-container *ngIf="employeeSalaries.length > 0">
                     <tr>
-                      <th class='fix' rowspan="2">Full Name</th>
-                      <th colspan="9" class="text-center">Aug</th>
-                      <th rowspan="2">Arrear</th>
-                      <th rowspan="2">July Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="Previous Month Gross"></i></th>
-                    </tr>
-                    <tr>
+                      <th>Full Name</th>
                       <th class="text-truncate" *ngFor="let data of employeeSalaries[0].Salary" >
                         {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="{{data.ComponentName}}"></i></th>
+                        data-bs-placement="right" title="{{data.ComponentName}}"></i>
+                      </th>
+                      <th>Arrear</th>
+                      <th>July Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="Previous Month Gross"></i></th>
                       <th>Gross</th>
                     </tr>
                   </ng-container>
@@ -80,7 +78,7 @@
                 <tbody>
                   <ng-container *ngIf="employeeSalaries.length > 0">
                     <tr *ngFor="let item of employeeSalaries">
-                      <td class='fix'>
+                      <td>
                         <a href="javascript:void(0)" class="text-decoration-none" (click)="viewDeclaration(item)">
                           <span class="text-decoration-underline">{{item.FullName}}</span>
                           <small class="text-muted  ps-2">
