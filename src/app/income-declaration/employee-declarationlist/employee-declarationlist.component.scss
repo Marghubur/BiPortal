@@ -44,9 +44,10 @@ table {
   border-collapse: collapse;
   background: white;
 }
-tr {
+tr > td{
   border-top: 1px solid #ccc;
 }
+
 th {
   color: #222 !important;
 }
@@ -61,7 +62,7 @@ td, th {
 }
 .fix:first-child {
   left:0;
-  width:19vw;
+  width:18vw;
 }
 
 ::-webkit-scrollbar {
