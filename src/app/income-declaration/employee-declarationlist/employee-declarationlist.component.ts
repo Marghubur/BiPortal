@@ -50,7 +50,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
 
     if(this.scrollDiv == null) {
       this.scrollDiv = document.getElementById("scroll-dv");
-      
+
       if(this.scrollDiv != null) {
         this.initHandler();
       }
@@ -62,7 +62,10 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       var elem = document.getElementById("excel-table");
       var innerElem = document.getElementById("inner-scroller");
       var left = ((elem.clientWidth) / (innerElem.clientWidth)) * e.currentTarget.scrollLeft;
-      elem.scrollLeft = left;
+      if (e.currentTarget.scrollLeft > 0)
+        elem.scrollLeft = left;
+      else
+        elem.scrollLeft = left;
       console.log('Excel: ' + left + ', Inner: ' + e.currentTarget.scrollLeft);
     });
   }
