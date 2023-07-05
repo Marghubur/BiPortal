@@ -98,11 +98,11 @@
                           </small>
                         </a>
                       </td>
-                      <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{data.FinalAmount | number : "1.2-2"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.Gross | number : "1.2-2"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross | number : "1.2-2"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross + item.Gross | number : "1.2-2"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.PreMonthGross | number : "1.2-2"}}</td>
+                      <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{data.FinalAmount | number : "1.0-0"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.Gross | number : "1.0-0"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross | number : "1.0-0"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross + item.Gross | number : "1.0-0"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.PreMonthGross | number : "1.0-0"}}</td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -198,22 +198,22 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        &#8377; {{user.CurrentCTC | number : "1.2-2"}}
+                        &#8377; {{user.CurrentCTC | number : "1.0-0"}}
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        &#8377; {{user.NextCTC | number : "1.2-2"}}
+                        &#8377; {{user.NextCTC | number : "1.0-0"}}
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        &#8377; {{user.CurrentSalary | number : "1.2-2"}}
+                        &#8377; {{user.CurrentSalary | number : "1.0-0"}}
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        &#8377; {{user.NextSalary | number : "1.2-2"}}
+                        &#8377; {{user.NextSalary | number : "1.0-0"}}
                       </div>
                     </div>
                   </div>
