@@ -86,7 +86,7 @@
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Net Taxable Income</p>
                     <p class="text-dark fs-2 mb-0 ">
-                      <span>INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TotalAmount | number : '1.2-2') : (employeeDeclaration.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
+                      <span>INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TotalAmount | number : '1.0-0') : (employeeDeclaration.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
                       <span class="float-end pe-2">
                         <a href="javascript:void(0)" (click)="gotoTaxSection()" class="text-decoration-none fs-6">
                           Income Tax Computitation
@@ -100,13 +100,13 @@
                     <p class="mb-0">Total Tax Payable <i class="fa fa-exclamation-circle float-end fa-lg pe-3"
                         data-bs-placement="right" data-toggle="tooltip"
                         title="Net tax amount of after round Off is"></i></p>
-                    <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TaxNeedToPay | number : '1.2-2') : (employeeDeclaration.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</p>
+                    <p class="text-dark fs-2 mb-0">INR {{employeeDeclaration.EmployeeCurrentRegime == 1 ? (employeeDeclaration.TaxNeedToPay | number : '1.0-0') : (employeeDeclaration.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</p>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="card py-3 ps-3">
                     <p class="mb-0">Tax Already Paid</p>
-                    <p class="text-dark fs-2 mb-0 vhide">INR {{employeeDeclaration.TaxPaid | number : '1.2-2'}}</p>
+                    <p class="text-dark fs-2 mb-0 vhide">INR {{employeeDeclaration.TaxPaid | number : '1.0-0'}}</p>
                   </div>
                 </div>
               </div>
