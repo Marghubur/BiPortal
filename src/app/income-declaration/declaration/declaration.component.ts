@@ -229,7 +229,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             this.taxCalender = [];
             let typeId = 0;
             while( i < annualSalaryDetail.length) {
-              let date = new Date(annualSalaryDetail[i].MonthFirstDate);
+              let date = new Date(annualSalaryDetail[i].PresentMonthDate);
               if(annualSalaryDetail[i].IsActive) {
                 if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
                   typeId = 1;
