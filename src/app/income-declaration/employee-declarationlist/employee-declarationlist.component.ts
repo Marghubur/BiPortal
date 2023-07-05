@@ -28,6 +28,8 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   isLoading: boolean = false;
   downlodexcelFilePath: any = null;
   basePath: string = '';
+  scrollDiv: any = null;
+  excelTable: any = null;
 
   constructor(private http: AjaxService,
               private nav: iNavigation) {}
@@ -44,6 +46,24 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
 
     $('[data-bs-toggle="tooltip"]').on('click', function () {
       $(this).tooltip('dispose');
+    });
+
+    if(this.scrollDiv == null) {
+      this.scrollDiv = document.getElementById("scroll-dv");
+      
+      if(this.scrollDiv != null) {
+        this.initHandler();
+      }
+    }
+  }
+
+  initHandler() {
+    this.scrollDiv.addEventListener('scroll', function(e) {
+      var elem = document.getElementById("excel-table");
+      var innerElem = document.getElementById("inner-scroller");
+      var left = ((elem.clientWidth) / (innerElem.clientWidth)) * e.currentTarget.scrollLeft;
+      elem.scrollLeft = left;
+      console.log('Excel: ' + left + ', Inner: ' + e.currentTarget.scrollLeft);
     });
   }
 

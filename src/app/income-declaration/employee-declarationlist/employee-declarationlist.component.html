@@ -58,7 +58,7 @@
                 </a>
               </div>
             </div>
-            <div class="excel-table">
+            <div class="excel-table" id="excel-table">
               <table>
                 <thead>
                   <ng-container *ngIf="employeeSalaries.length > 0">
@@ -101,6 +101,10 @@
                   </ng-container>
                 </tbody>
               </table>
+            </div>
+
+            <div id="scroll-dv" class="scroll-bar-dv">
+              <div class="inner-scroller" id="inner-scroller"></div>
             </div>
             <!-- <div class="t-table t-list t-border col-md-12">
               <div class="hide-bar"></div>
