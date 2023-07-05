@@ -68,10 +68,11 @@
                         {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="{{data.ComponentName}}"></i>
                       </th>
-                      <th>Arrear</th>
-                      <th>July Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="Previous Month Gross"></i></th>
                       <th>Gross</th>
+                      <th>Arrear</th>
+                      <th>Gross Total</th>
+                      <th>Pre Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="Previous Month Gross"></i></th>
                     </tr>
                   </ng-container>
                 </thead>
@@ -89,6 +90,7 @@
                       <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{data.FinalAmount | number : "1.2-2"}}</td>
                       <td><i class="fa fa-inr pe-1"></i> {{item.Gross | number : "1.2-2"}}</td>
                       <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross | number : "1.2-2"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross + item.Gross | number : "1.2-2"}}</td>
                       <td><i class="fa fa-inr pe-1"></i> {{item.PreMonthGross | number : "1.2-2"}}</td>
                     </tr>
                   </ng-container>
