@@ -74,7 +74,7 @@ export class PayslipComponent implements OnInit {
           if (annulSalaryBreakup.length > 0) {
             for (let i = 0; i < annulSalaryBreakup.length; i++) {
               if (annulSalaryBreakup[i].IsActive && annulSalaryBreakup[i].IsPayrollExecutedForThisMonth) {
-                let date = new Date(annulSalaryBreakup[i].MonthFirstDate);
+                let date = new Date(annulSalaryBreakup[i].PresentMonthDate);
                 this.payslipschedule.push({
                   paySlipMonth: new Date(date.getFullYear(), date.getMonth(), 1), // result: Aug
                   paySlipYear: Number(date.getFullYear()),
