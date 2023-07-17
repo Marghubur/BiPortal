@@ -101,13 +101,20 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     this.employeeDetail.forEach(x => {
       let data = JSON.parse(x.CompleteSalaryDetail)
       let prsentMonth = data.find(x => x.MonthNumber == currentMonth);
-      let prevMonth = data.find(x => x.MonthNumber == currentMonth - 1);
+      let prevMonthNumber = currentMonth - 1;
+        if (prevMonthNumber == 0)
+            prevMonthNumber = 12;
+
+        let prevMonth = null;
+        if (prevMonthNumber != 3)
+          prevMonth = data.find(x => x.MonthNumber == prevMonthNumber);
+
       this.employeeSalaries.push({
         FullName: x.FirstName + " " + x.LastName,
         EmployeeId: x.EmployeeId,
         Salary: prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC"),
         Gross: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
-        ArrearGross: prevMonth.IsArrearMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+        ArrearGross: (prevMonth && prevMonth.IsArrearMonth) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
         PreMonthGross: prevMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0
       });
     });
@@ -167,13 +174,20 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       this.employeeDetail.forEach(x => {
         let data = JSON.parse(x.CompleteSalaryDetail)
         let prsentMonth = data.find(x => x.MonthNumber == item.Month+1);
-        let prevMonth = data.find(x => x.MonthNumber == item.Month);
+        let prevMonthNumber = item.Month;
+        if (item.Month == 0)
+            prevMonthNumber = 12;
+
+        let prevMonth = null;
+        if (prevMonthNumber != 3)
+          prevMonth = data.find(x => x.MonthNumber == prevMonthNumber);
+
         this.employeeSalaries.push({
           FullName: x.FirstName + " " + x.LastName,
           EmployeeId: x.EmployeeId,
           Salary: prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC"),
           Gross: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
-          ArrearGross: prevMonth.IsArrearMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+          ArrearGross: (prevMonth && prevMonth.IsArrearMonth) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
           PreMonthGross: prevMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0
         });
       });
