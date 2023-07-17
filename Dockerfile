@@ -4,7 +4,7 @@ FROM node:18.15.0 as node
 WORKDIR /app
 
 COPY package.json .
-RUN npm install
+RUN npm install --force
 
 COPY . .
 
