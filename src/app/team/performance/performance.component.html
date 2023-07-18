@@ -468,7 +468,7 @@
           </div>
           <div class="col-md-3 text-end" *ngIf="objectives != null && objectives.length > 0">
             <h6 class="text-end"><i class="fa fa-calendar-o pe-1"></i> {{objectives[0].AppraisalCycleFromDate | date: 'y'}} - {{objectives[0].AppraisalCycleToDate | date:'y'}}</h6>
-            <small>{{objectives[0].AppraisalCycleAppraisalCycleFromDate | date}} - {{objectives[0].AppraisalCycleToDate | date}}</small>
+            <small>{{objectives[0].AppraisalCycleFromDate | date}} - {{objectives[0].AppraisalCycleToDate | date}}</small>
           </div>
         </div>
         <div class="p border-bottom mt-4">Details</div>
@@ -605,7 +605,7 @@
         <form [formGroup]="performanceForm">
           <div class="row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">New Value</label>
+              <label class="form-label">New Value</label>
               <div class="input-group">
                 <input formControlName="CurrentValue" type="text" placeholder="Enter the latest value" class="form-control" aria-describedby="inputGroupPrepend"
                 [ngClass]="{'error-field': isSubmitted && n.CurrentValue.errors !== null && n.CurrentValue.errors.required}" DecimalNumber="6">
@@ -614,7 +614,7 @@
               <small>Current Value: {{selectedObjective.CurrentValue | number: '1.2-2'}}</small>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">New Status</label>
+              <label class="form-label">New Status</label>
               <select formControlName="Status" class="form-select" [ngClass]="{'error-field': isSubmitted && n.Status.errors !== null && n.Status.errors.required}">
                 <option value="null" selected disabled>Select Status</option>
                 <option value="1">Not Started</option>
@@ -626,12 +626,12 @@
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">Feedback</label>
+            <label class="form-label">Feedback</label>
             <textarea formControlName="Comments" cols="30" oninput="this.value = this.value.toUpperCase()" rows="5" class="form-control" placeholder="Feedback"
             [ngClass]="{'error-field': isSubmitted && n.Comments.errors !== null && n.Comments.errors.required}"></textarea>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label pe-2">Rating</label>
+            <label class="form-label pe-2">Rating</label>
             <ngb-rating [(rate)]="currentRate" [max]="5"></ngb-rating>
           </div>
           <ng-container *ngIf="selectedObjective.PerformanceDetail != null && selectedObjective.PerformanceDetail.length > 0">
@@ -709,12 +709,12 @@
         <form [formGroup]="meetingForm">
           <div class="row">
             <div class="col-md-6 mt-3" *ngIf="isPageReady">
-              <label for="" class="form-label">Select employee to have a 1:1</label>
+              <label class="form-label">Select employee to have a 1:1</label>
               <bot-autocomplete [data]="employeesList" [ngModelOptions]="{standalone: true}" [(ngModel)]="empId" (OnSelect)="onSelectEmp($event)">
               </bot-autocomplete>
             </div>
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">Meeting title</label>
+              <label class="form-label">Meeting title</label>
               <input type="text" oninput="this.value = this.value.toUpperCase()" formControlName="meetingTitle" placeholder="Enter meeting title"
               class="form-control" [ngClass]="{'error-field': isSubmitted && f.meetingTitle.errors !== null && f.meetingTitle.errors.required}">
             </div>
@@ -728,13 +728,13 @@
           </div>
           <div class="row">
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">Meeting platforms (optional)</label>
+              <label class="form-label">Meeting platforms (optional)</label>
               <select class="form-select" formControlName="meetingPlaforms">
                 <option value="0" selected disabled>Select Platforms</option>
               </select>
             </div>
             <div class="mt-3 col-md-6">
-              <label for="" class="form-label">Date</label>
+              <label class="form-label">Date</label>
               <form class="form-inline">
                 <div class="form-group w-100">
                   <div class="input-group w-100" [ngClass]="{'error-field': isSubmitted && f.meetingDate.errors !== null && f.meetingDate.errors.required}">
@@ -754,11 +754,11 @@
             <div class="col-md-6">
               <div class="row">
                 <div class="mt-3 col-md-6">
-                  <label for="" class="form-label">Start time</label>
+                  <label class="form-label">Start time</label>
                   <app-bh-timepicker formControlName="startTime" ></app-bh-timepicker>
                 </div>
                 <div class="mt-3 col-md-6">
-                  <label for="" class="form-label">End time</label>
+                  <label class="form-label">End time</label>
                   <app-bh-timepicker formControlName="endTime"></app-bh-timepicker>
                 </div>
                 <div class="col-md-12">
@@ -767,7 +767,7 @@
               </div>
             </div>
             <div class="mt-3 col-md-6">
-              <label for="" class="form-label">Frequency of this meeting</label>
+              <label class="form-label">Frequency of this meeting</label>
               <select class="form-select" formControlName="meetingFrequency" [ngClass]="{'error-field': isSubmitted && f.meetingFrequency.errors !== null && f.meetingFrequency.errors.required}">
                 <option value=null disabled selected>Select Frequency</option>
                 <option value="1">Only Once</option>

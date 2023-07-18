@@ -24,7 +24,7 @@
                   <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList" class="text-decoration-none pe-3"><i class="fa fa-plus pe-1"></i> Add Objective</a>
                   <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()" *ngIf="isViewInList"><i class="fa fa-plus pe-1"></i> Add Aprisal Cycle</button>
                   <a href="javascript:void(0)" class="text-decoration-none" (click)="listview()">
-                    <i class="fa fa-bars fa-lg"></i>
+                    <i class="fa fa-lg" [ngClass]="{'fa-bars': isViewInList, 'fa-th' : !isViewInList}"></i>
                   </a>
                 </div>
                 <ng-container *ngIf="!isViewInList">

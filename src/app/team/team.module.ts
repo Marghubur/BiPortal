@@ -13,6 +13,7 @@ import { AdminmodalModule } from '../adminmodal/adminmodal.module';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { PerformanceComponent } from './performance/performance.component';
 import { ServiceRequestComponent } from './service-request/service-request.component';
+import { ManageReviewComponent } from './manage-review/manage-review.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ServiceRequestComponent } from './service-request/service-request.compo
     AppraisalSettingComponent,
     ApprisalReviewComponent,
     PerformanceComponent,
-    ServiceRequestComponent
+    ServiceRequestComponent,
+    ManageReviewComponent
   ],
   imports: [
     CommonModule,

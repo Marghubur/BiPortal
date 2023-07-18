@@ -745,7 +745,7 @@ export class AppraisalSettingComponent implements OnInit {
     this.projectDetails = [];
     this.selectedProject = null;
     // ${this.userDetail.UserId}
-    this.http.get(`ps/projects/memberdetail/26`, true).then(res => {
+    this.http.get(`ps/projects/memberdetail/8`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
@@ -1151,7 +1151,7 @@ export class AppraisalSettingComponent implements OnInit {
     if (value > 0) {
       if (name == "ProposedHikePercentage") {
         let ctc = formArray.controls[i].get("CTC").value;
-        let hikeAmount = (ctc * value)/100;
+        let hikeAmount = (Math.round(ctc * value)/100).toFixed(2);
         formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
       } else {
         let ctc = formArray.controls[i].get("CTC").value;
@@ -1175,8 +1175,8 @@ export class AppraisalSettingComponent implements OnInit {
     let equalpercent = 100 / formArray.length;
     for (let i = 0; i < formArray.length; i++) {
       let ctc = formArray.controls[i].get("CTC").value;
-      let hikeAmount = (ctc * equalpercent)/100;
-      formArray.controls[i].get("ProposedHikePercentage").setValue(equalpercent);
+      let hikeAmount = (Math.round(ctc * equalpercent)/100).toFixed(2);
+      formArray.controls[i].get("ProposedHikePercentage").setValue(Math.round(equalpercent).toFixed(2));
       formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
     }
     this.isTotalAmountExceed();

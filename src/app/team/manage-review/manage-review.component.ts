@@ -1,93 +1,48 @@
 import { Component, OnInit } from '@angular/core';
-import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { ProjectWiki, ProjectBudget, ManageProject, ManageReview } from 'src/providers/constants';
-import { iNavigation } from 'src/providers/iNavigation';
-import { Filter, UserService } from 'src/providers/userService';
-import 'bootstrap';
-import { ResponseModel } from 'src/auth/jwtService';
-import { ProjectModal } from 'src/app/projects/manage-project/manage-project.component';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GetRoles } from 'src/providers/ApplicationStorage';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 declare var $: any;
 declare var bootstrap: any;
+import 'bootstrap';
+import { ItemStatus } from 'src/providers/constants';
 
 @Component({
-  selector: 'app-apprisal-review',
-  templateUrl: './apprisal-review.component.html',
-  styleUrls: ['./apprisal-review.component.scss']
+  selector: 'app-manage-review',
+  templateUrl: './manage-review.component.html',
+  styleUrls: ['./manage-review.component.scss']
 })
-export class ApprisalReviewComponent implements OnInit{
-  isLoaded: boolean = true;
-  projectDetail: Array<ProjectModal> = [];
-  isFileFound: boolean = false;
-  projectData: Filter = null;
+export class ManageReviewComponent implements OnInit {
   isPageReady: boolean = false;
-  userDetail: any = null;
-  selectedProject: any = null;
-  isProjectDetailReady: boolean = false;
-  designation: Array<any> = null;
-  projectDetails: Array<any> = [];
-  allProjectAppraisal: Array<any> = [];
-  currentProjectAppraisal: any = null;
   appraisalHikeForm: FormGroup;
   isLoading: boolean = false;
   isAmountExceed: boolean = false;
   roles: Array<any> = [];
+  selectedProject: any = null;
+  projectDetails: Array<any> = [];
+  allProjectAppraisal: Array<any> = [];
+  userDetail: any = null;
+  designation: Array<any> = null;
+  currentProjectAppraisal: any = null;
+  objectives: Array<any> = [];
+  isObjectivesReady: boolean = false;
+  userNameIcon: string = "";
+  selectedEmploye: any = null;
+  selectedTeam: any = null;
 
-  constructor(private nav: iNavigation,
+  constructor(private nav:iNavigation,
               private http: AjaxService,
-              private user: UserService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private user: UserService) {}
 
   ngOnInit(): void {
-    this.projectData = new Filter();
-    this.userDetail = this.user.getInstance();
-    this.designation = GetRoles();
-    this.loadData();
-  }
-
-  addUpdateWiki(project: any) {
-    this.nav.navigate(ProjectWiki, project);
-  }
-
-  loadProjectBudgetPage(project: any) {
-    this.nav.navigate(ProjectBudget, project);
-  }
-
-  loadData() {
-    this.isFileFound= false;
-    this.isLoaded = false;
-    this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then((res:ResponseModel) => {
-      if (res.ResponseBody && res.ResponseBody.length > 0) {
-        this.projectDetail = res.ResponseBody;
-        this.projectData.TotalRecords = this.projectDetail.length;
-        this.isFileFound = true;
-        this.isLoaded = true;
-        Toast("Record found");
-      } else {
-         this.isFileFound= false;
-        this.isLoaded = true;
-        this.projectData.TotalRecords = 0;
-      }
-    })
-  }
-
-  editProjectDetail(item: ProjectModal) {
-    this.nav.navigate(ManageProject, item);
-  }
-
-  GetFilterResult(e: any) {
-    if(e != null) {
-      this.projectData = e;
-      this.loadData();
-    }
-  }
-
-  showOffCanvas(item: any) {
-    if (item) {
-      this.isProjectDetailReady = false;
-      this.selectedProject = item;
+    this.selectedTeam = this.nav.getValue();
+    if (this.selectedTeam && this.selectedTeam.Team) {
+      this.userDetail = this.user.getInstance();
+      this.designation = GetRoles();
       this.getProjectsMembers();
     }
   }
@@ -98,6 +53,7 @@ export class ApprisalReviewComponent implements OnInit{
     this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
+        project = project.filter(x => x.Team == this.selectedTeam.Team);
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
         if (project.length > 0) {
           let result = project.reduce((a, b) => {
@@ -120,9 +76,6 @@ export class ApprisalReviewComponent implements OnInit{
           this.selectedProject = this.projectDetails[0];
           this.currentProjectAppraisal = this.allProjectAppraisal.find(x => x.ProjectId == this.selectedProject.ProjectId);
           if (this.currentProjectAppraisal && this.selectedProject.ProjectMembers.length > 0) {
-            var offcanvasRight = document.getElementById('riviewOffCanvas');
-            var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
-            bsOffcanvas.show();
             this.initAppraisalHike();
           } else if(this.selectedProject.ProjectMembers.length <= 0) {
             ErrorToast("Please add team members");
@@ -131,15 +84,15 @@ export class ApprisalReviewComponent implements OnInit{
             ErrorToast("Please add project appraisal budgest");
             return;
           }
-          this.isProjectDetailReady = true;
+          this.isPageReady = true;
           Toast("Project details found");
         } else {
           WarningToast("Please add project and their team members first");
-          this.isProjectDetailReady = true;
+          this.isPageReady = true;
         }
       }
     }).catch(e => {
-      this.isProjectDetailReady = true;
+      this.isPageReady = true;
     })
   }
 
@@ -152,7 +105,6 @@ export class ApprisalReviewComponent implements OnInit{
   buildProjectMemberHike(): FormArray {
     let data = this.selectedProject.ProjectMembers;
     let dataArray: FormArray = this.fb.array([]);
-
     if(data != null && data.length > 0) {
       let i = 0;
       while(i < data.length) {
@@ -162,6 +114,7 @@ export class ApprisalReviewComponent implements OnInit{
           DesignationName: new FormControl(data[i].DesignationName),
           AssignedOn: new FormControl(data[i].AssignedOn),
           CTC: new FormControl(data[i].CTC),
+          EmployeeId: new FormControl(data[i].EmployeeId),
           ProposedPromotion: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
           ProposedHikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
           ProposedHikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
@@ -273,9 +226,67 @@ export class ApprisalReviewComponent implements OnInit{
     console.log(value)
   }
 
-  manageReview(project: any) {
-    if (project) {
-      this.nav.navigate(ManageReview, project)
+  showOffCanvas(item: any) {
+    this.selectedEmploye = item.value;
+    if (this.selectedEmploye && this.selectedEmploye.EmployeeId > 0) {
+      var offcanvasRight = document.getElementById('riviewObjectiveOffCanvas');
+      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
+      this.loadReviewDetail()
+      bsOffcanvas.show();
     }
   }
-}
+
+  loadReviewDetail() {
+    this.isObjectivesReady = false;
+    let designationId = 0;
+    this.http.get(`eps/performance/getEmployeeObjective/${designationId}/${this.userDetail.CompanyId}/${this.selectedEmploye.EmployeeId}`, true).then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        this.objectives = res.ResponseBody;
+        this.getUserNameIcon(this.selectedEmploye.FullName);
+        console.log(this.objectives)
+        Toast("Employee performance objective data loaded successsfully");
+        this.isObjectivesReady = true;
+      } else {
+        WarningToast("No objective details found. Please contact to admin.");
+        this.isObjectivesReady = true;
+      }
+    }).catch(err => {
+      ErrorToast("Fail to get objective detail. Please contact to admin.");
+      this.isObjectivesReady = true;
+    })
+  }
+
+  getUserNameIcon(fullName: string) {
+    let names = fullName.split(" ");
+    let first = fullName[0];
+    let last = fullName[1];
+    this.userNameIcon = first+""+last;
+  }
+
+  rejectObjective() {
+    this.isLoading = true;
+    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Rejected}`, true).then(res => {
+      if (res.ResponseBody) {
+        Toast("Objective rejected");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      ErrorToast(e.error);
+      this.isLoading = false;
+    })
+  }
+
+  approveObjective() {
+    this.isLoading = true;
+    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Approved}`, true).then(res => {
+      if (res.ResponseBody) {
+        Toast("Objective approved successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      ErrorToast(e.error);
+      this.isLoading = false;
+    })
+  }
+
+ }
