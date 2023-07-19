@@ -34,10 +34,11 @@
                           <th class="align-middle" rowspan="2">Name</th>
                           <th class="align-middle" rowspan="2">Experience <br>(in month)</th>
                           <th class="align-middle" rowspan="2">Review</th>
-                          <th class="align-middle" rowspan="2">Salary</th>
+                          <th class="align-middle" rowspan="2">Previous<br>Salary</th>
                           <th class="align-middle" rowspan="2">Proposed Promotion</th>
                           <th class="align-middle text-center" colspan="2">Proposed Hike</th>
-                          <th class="align-middle text-center">View <br>Objectives</th>
+                          <th class="align-middle" rowspan="2">New<br>Salary</th>
+                          <th class="align-middle text-center" rowspan="2">View <br>Objectives</th>
                         </tr>
                         <tr>
                           <th>Percentage</th>
@@ -47,28 +48,29 @@
                       <tbody formArrayName="ProjectMemberHike">
                         <tr *ngFor="let item of hikeDetail.controls; let i = index" [formGroupName]="i">
                           <td>{{i+1}}</td>
-                          <td>{{item.get("FullName").value}}</td>
-                          <td>{{item.get("Experience").value}}</td>
+                          <td>{{item.get("fullName").value}}</td>
+                          <td>{{item.get("experience").value}}</td>
                           <td>--</td>
-                          <td><i class="fa fa-inr pe-1"></i> {{item.get("CTC").value}}</td>
+                          <td><i class="fa fa-inr pe-1"></i> {{item.get("cTC").value}}</td>
                           <td>
-                            <select class="form-select" formControlName="ProposedPromotion">
+                            <select class="form-select" formControlName="proposedPromotion">
                               <option value="0" >Same Designation</option>
                               <option [value]="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
                             </select>
                           </td>
                           <td>
                             <div class="input-group mb-3">
-                              <input type="text" [DecimalNumber]="5" readonly name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="ProposedHikePercentage">
+                              <input type="text" [DecimalNumber]="5" readonly name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="proposedHikePercentage">
                               <span class="input-group-text" id="basic-addon1">%</span>
                             </div>
                           </td>
                           <td>
                             <div class="input-group mb-3">
                               <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
-                              <input type="text" [DecimalNumber]="10" readonly name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="ProposedHikeAmount">
+                              <input type="text" [DecimalNumber]="10" readonly name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="proposedHikeAmount">
                             </div>
                           </td>
+                          <td><i class="fa fa-inr pe-1"></i> {{item.get("newCTC").value}}</td>
                           <td class="text-center">
                             <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-success pe-3" type="button">
                               <i class="fa fa-play" aria-hidden="true"></i>
@@ -82,10 +84,10 @@
             </div>
             <div class="text-end mt-3">
               <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading">Cancel</button>
-              <button class="btn btn-primary-c ms-2" (click)="startCycle()" [disabled]="isAmountExceed || isLoading">
+              <button class="btn btn-primary-c ms-2" (click)="applyHikeAndPromotion()" [disabled]="isAmountExceed || isLoading">
                 <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
                 <span class="ps-2">
-                  Start
+                  Apply Changes
                 </span>
               </button>
             </div>

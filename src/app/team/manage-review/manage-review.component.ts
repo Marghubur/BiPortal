@@ -109,16 +109,17 @@ export class ManageReviewComponent implements OnInit {
       let i = 0;
       while(i < data.length) {
         dataArray.push(this.fb.group({
-          FullName: new FormControl(data[i].FullName),
-          MemberType: new FormControl(data[i].MemberType),
-          DesignationName: new FormControl(data[i].DesignationName),
-          AssignedOn: new FormControl(data[i].AssignedOn),
-          CTC: new FormControl(data[i].CTC),
-          EmployeeId: new FormControl(data[i].EmployeeId),
-          ProposedPromotion: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
-          ProposedHikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
-          ProposedHikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
-          Experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0)
+          fullName: new FormControl(data[i].FullName),
+          memberType: new FormControl(data[i].MemberType),
+          designationName: new FormControl(data[i].DesignationName),
+          assignedOn: new FormControl(data[i].AssignedOn),
+          cTC: new FormControl(data[i].CTC),
+          employeeId: new FormControl(data[i].EmployeeId),
+          proposedPromotion: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
+          proposedHikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
+          proposedHikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
+          experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0),
+          newCTC: new FormControl(data[i].CTC)
         }));
         i++;
       }
@@ -141,24 +142,26 @@ export class ManageReviewComponent implements OnInit {
       elem.setAttribute("readonly", "");
       elem = document.getElementsByName("ProposedHikePercentage")[i];
       elem.removeAttribute("readonly");
-      formArray.controls[i].get("ProposedHikeAmount").setValue(0);
+      formArray.controls[i].get("proposedHikeAmount").setValue(0);
       let value = Number(e.target.value);
       if (value > 0) {
-        let ctc = formArray.controls[i].get("CTC").value;
+        let ctc = formArray.controls[i].get("cTC").value;
         let hikeAmount = (ctc * value)/100;
-        formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+        formArray.controls[i].get("proposedHikeAmount").setValue(hikeAmount);
+        formArray.controls[i].get("newCTC").setValue(ctc + Number(hikeAmount));
       }
     } else {
       let elem = document.getElementsByName("ProposedHikePercentage")[i];
       elem.setAttribute("readonly", "");
       elem = document.getElementsByName("ProposedHikeAmount")[i];
       elem.removeAttribute("readonly");
-      formArray.controls[i].get("ProposedHikePercentage").setValue(0);
+      formArray.controls[i].get("proposedHikePercentage").setValue(0);
       let value = Number(e.target.value);
       if (value > 0) {
         let ctc = formArray.controls[i].get("CTC").value;
         let hikePercentage = (value * 100)/ctc;
-        formArray.controls[i].get("ProposedHikePercentage").setValue(hikePercentage);
+        formArray.controls[i].get("proposedHikePercentage").setValue(hikePercentage);
+        formArray.controls[i].get("newCTC").setValue(ctc + value);
       }
     }
   }
@@ -169,13 +172,15 @@ export class ManageReviewComponent implements OnInit {
     let value = Number(e.target.value);
     if (value > 0) {
       if (name == "ProposedHikePercentage") {
-        let ctc = formArray.controls[i].get("CTC").value;
+        let ctc = formArray.controls[i].get("cTC").value;
         let hikeAmount = (Math.round(ctc * value)/100).toFixed(2);
-        formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+        formArray.controls[i].get("proposedHikeAmount").setValue(hikeAmount);
+        formArray.controls[i].get("newCTC").setValue(ctc + Number(hikeAmount));
       } else {
-        let ctc = formArray.controls[i].get("CTC").value;
+        let ctc = formArray.controls[i].get("cTC").value;
         let hikePercentage = (value * 100)/ctc;
-        formArray.controls[i].get("ProposedHikePercentage").setValue(hikePercentage);
+        formArray.controls[i].get("proposedHikePercentage").setValue(hikePercentage);
+        formArray.controls[i].get("newCTC").setValue(ctc + value);
       }
       this.isTotalAmountExceed();
     }
@@ -184,7 +189,7 @@ export class ManageReviewComponent implements OnInit {
   isTotalAmountExceed() {
     let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
     this.isAmountExceed = false;
-    let totalAmount = formArray.value.map(x => Number(x.ProposedHikeAmount)).reduce((a, b) => {return a + b;}, 0);
+    let totalAmount = formArray.value.map(x => Number(x.proposedHikeAmount)).reduce((a, b) => {return a + b;}, 0);
     if (totalAmount > this.currentProjectAppraisal.ProjectAppraisalBudget)
       this.isAmountExceed = true;
   }
@@ -195,13 +200,14 @@ export class ManageReviewComponent implements OnInit {
     for (let i = 0; i < formArray.length; i++) {
       let ctc = formArray.controls[i].get("CTC").value;
       let hikeAmount = (Math.round(ctc * equalpercent)/100).toFixed(2);
-      formArray.controls[i].get("ProposedHikePercentage").setValue(Math.round(equalpercent).toFixed(2));
-      formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+      formArray.controls[i].get("proposedHikePercentage").setValue(Math.round(equalpercent).toFixed(2));
+      formArray.controls[i].get("proposedHikeAmount").setValue(hikeAmount);
+      formArray.controls[i].get("newCTC").setValue(ctc + Number(hikeAmount));
     }
     this.isTotalAmountExceed();
   }
 
-  startCycle() {
+  applyHikeAndPromotion() {
     this.isLoading = true;
     if (this.appraisalHikeForm.invalid) {
       ErrorToast("Please fill all the manditory field");
@@ -214,16 +220,18 @@ export class ManageReviewComponent implements OnInit {
       return;
     }
     let value = this.appraisalHikeForm.get('ProjectMemberHike').value;
-    // this.http.put(`eps/apprisalcatagory//${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
-    //   if (res.ResponseBody) {
-    //     this.isLoading = false;
-    //     this.closeCanvasRight();
-    //     Toast("Appraisal cycle started successfully");
-    //   }
-    // }).catch(e => {
-    //   this.isLoading = false;
-    // })
-    console.log(value)
+    this.http.post("eps/promotion/addPromotionAndHike", value, true).then(res => {
+      if (res.ResponseBody) {
+        this.isLoading = false;
+        //this.closeCanvasRight();
+        Toast("Appraisal cycle started successfully");
+      } else {
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      ErrorToast(e.error);
+      this.isLoading = false;
+    })
   }
 
   showOffCanvas(item: any) {
@@ -258,8 +266,8 @@ export class ManageReviewComponent implements OnInit {
 
   getUserNameIcon(fullName: string) {
     let names = fullName.split(" ");
-    let first = fullName[0];
-    let last = fullName[1];
+    let first = names[0];
+    let last = names[1];
     this.userNameIcon = first+""+last;
   }
 
