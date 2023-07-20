@@ -236,7 +236,7 @@ export class ManageReviewComponent implements OnInit {
 
   showOffCanvas(item: any) {
     this.selectedEmploye = item.value;
-    if (this.selectedEmploye && this.selectedEmploye.EmployeeId > 0) {
+    if (this.selectedEmploye && this.selectedEmploye.employeeId > 0) {
       var offcanvasRight = document.getElementById('riviewObjectiveOffCanvas');
       var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
       this.loadReviewDetail()
@@ -247,10 +247,10 @@ export class ManageReviewComponent implements OnInit {
   loadReviewDetail() {
     this.isObjectivesReady = false;
     let designationId = 0;
-    this.http.get(`eps/performance/getEmployeeObjective/${designationId}/${this.userDetail.CompanyId}/${this.selectedEmploye.EmployeeId}`, true).then(res => {
+    this.http.get(`eps/performance/getEmployeeObjective/${designationId}/${this.userDetail.CompanyId}/${this.selectedEmploye.employeeId}`, true).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.objectives = res.ResponseBody;
-        this.getUserNameIcon(this.selectedEmploye.FullName);
+        this.getUserNameIcon(this.selectedEmploye.fullName);
         console.log(this.objectives)
         Toast("Employee performance objective data loaded successsfully");
         this.isObjectivesReady = true;
