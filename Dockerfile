@@ -4,6 +4,7 @@ FROM node:18.15.0 as node
 WORKDIR /app
 
 COPY package.json .
+RUN npm config set legacy-peer-deps true
 RUN npm install
 
 COPY . .
