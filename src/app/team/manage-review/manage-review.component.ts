@@ -92,6 +92,7 @@ export class ManageReviewComponent implements OnInit {
         }
       }
     }).catch(e => {
+      ErrorToast(e.error);
       this.isPageReady = true;
     })
   }
@@ -104,6 +105,7 @@ export class ManageReviewComponent implements OnInit {
 
   buildProjectMemberHike(): FormArray {
     let data = this.selectedProject.ProjectMembers;
+    console.log(data)
     let dataArray: FormArray = this.fb.array([]);
     if(data != null && data.length > 0) {
       let i = 0;
@@ -115,11 +117,18 @@ export class ManageReviewComponent implements OnInit {
           assignedOn: new FormControl(data[i].AssignedOn),
           cTC: new FormControl(data[i].CTC),
           employeeId: new FormControl(data[i].EmployeeId),
-          proposedPromotion: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
-          proposedHikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
-          proposedHikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
+          promotedDesignation: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
+          hikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
+          hikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
           experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0),
-          newCTC: new FormControl(data[i].CTC)
+          estimatedSalary: new FormControl(data[i].CTC),
+          comments: new FormControl(data[i].Review),
+          rating: new FormControl(data[i].Rating),
+          projectId: new FormControl(data[i].ProjectId),
+          companyId: new FormControl(data[i].CompanyId),
+          appraisalDetailId: new FormControl(data[i].appraisalDetailId),
+          appraisalReviewId: new FormControl(0),
+          appraisalCycleStartDate: new FormControl(data[i].appraisalCycleStartDate)
         }));
         i++;
       }
@@ -142,26 +151,26 @@ export class ManageReviewComponent implements OnInit {
       elem.setAttribute("readonly", "");
       elem = document.getElementsByName("ProposedHikePercentage")[i];
       elem.removeAttribute("readonly");
-      formArray.controls[i].get("proposedHikeAmount").setValue(0);
+      formArray.controls[i].get("hikeAmount").setValue(0);
       let value = Number(e.target.value);
       if (value > 0) {
         let ctc = formArray.controls[i].get("cTC").value;
         let hikeAmount = (ctc * value)/100;
-        formArray.controls[i].get("proposedHikeAmount").setValue(hikeAmount);
-        formArray.controls[i].get("newCTC").setValue(ctc + Number(hikeAmount));
+        formArray.controls[i].get("hikeAmount").setValue(hikeAmount);
+        formArray.controls[i].get("estimatedSalary").setValue(ctc + Number(hikeAmount));
       }
     } else {
       let elem = document.getElementsByName("ProposedHikePercentage")[i];
       elem.setAttribute("readonly", "");
       elem = document.getElementsByName("ProposedHikeAmount")[i];
       elem.removeAttribute("readonly");
-      formArray.controls[i].get("proposedHikePercentage").setValue(0);
+      formArray.controls[i].get("hikePercentage").setValue(0);
       let value = Number(e.target.value);
       if (value > 0) {
         let ctc = formArray.controls[i].get("CTC").value;
         let hikePercentage = (value * 100)/ctc;
-        formArray.controls[i].get("proposedHikePercentage").setValue(hikePercentage);
-        formArray.controls[i].get("newCTC").setValue(ctc + value);
+        formArray.controls[i].get("hikePercentage").setValue(hikePercentage);
+        formArray.controls[i].get("estimatedSalary").setValue(ctc + value);
       }
     }
   }
@@ -173,14 +182,14 @@ export class ManageReviewComponent implements OnInit {
     if (value > 0) {
       if (name == "ProposedHikePercentage") {
         let ctc = formArray.controls[i].get("cTC").value;
-        let hikeAmount = (Math.round(ctc * value)/100).toFixed(2);
-        formArray.controls[i].get("proposedHikeAmount").setValue(hikeAmount);
-        formArray.controls[i].get("newCTC").setValue(ctc + Number(hikeAmount));
+        let hikeAmount = ((ctc * value)/100).toFixed(2);
+        formArray.controls[i].get("hikeAmount").setValue(hikeAmount);
+        formArray.controls[i].get("estimatedSalary").setValue(ctc + Number(hikeAmount));
       } else {
         let ctc = formArray.controls[i].get("cTC").value;
-        let hikePercentage = (value * 100)/ctc;
-        formArray.controls[i].get("proposedHikePercentage").setValue(hikePercentage);
-        formArray.controls[i].get("newCTC").setValue(ctc + value);
+        let hikePercentage = ((value * 100)/ctc).toFixed(2);
+        formArray.controls[i].get("hikePercentage").setValue(hikePercentage);
+        formArray.controls[i].get("estimatedSalary").setValue(ctc + value);
       }
       this.isTotalAmountExceed();
     }
@@ -189,20 +198,20 @@ export class ManageReviewComponent implements OnInit {
   isTotalAmountExceed() {
     let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
     this.isAmountExceed = false;
-    let totalAmount = formArray.value.map(x => Number(x.proposedHikeAmount)).reduce((a, b) => {return a + b;}, 0);
+    let totalAmount = formArray.value.map(x => Number(x.hikeAmount)).reduce((a, b) => {return a + b;}, 0);
     if (totalAmount > this.currentProjectAppraisal.ProjectAppraisalBudget)
       this.isAmountExceed = true;
   }
 
   equalPercentage() {
     let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
-    let equalpercent = 100 / formArray.length;
+    let equalpercent = (100 / formArray.length).toFixed(2);
     for (let i = 0; i < formArray.length; i++) {
-      let ctc = formArray.controls[i].get("CTC").value;
-      let hikeAmount = (Math.round(ctc * equalpercent)/100).toFixed(2);
-      formArray.controls[i].get("proposedHikePercentage").setValue(Math.round(equalpercent).toFixed(2));
-      formArray.controls[i].get("proposedHikeAmount").setValue(hikeAmount);
-      formArray.controls[i].get("newCTC").setValue(ctc + Number(hikeAmount));
+      let ctc = formArray.controls[i].get("cTC").value;
+      let hikeAmount = ((ctc * Number(equalpercent))/100).toFixed(2);
+      formArray.controls[i].get("hikePercentage").setValue(equalpercent);
+      formArray.controls[i].get("hikeAmount").setValue(hikeAmount);
+      formArray.controls[i].get("estimatedSalary").setValue(ctc + Number(hikeAmount));
     }
     this.isTotalAmountExceed();
   }
@@ -259,7 +268,7 @@ export class ManageReviewComponent implements OnInit {
         this.isObjectivesReady = true;
       }
     }).catch(err => {
-      ErrorToast("Fail to get objective detail. Please contact to admin.");
+      ErrorToast(err.error);
       this.isObjectivesReady = true;
     })
   }
@@ -268,7 +277,7 @@ export class ManageReviewComponent implements OnInit {
     let names = fullName.split(" ");
     let first = names[0];
     let last = names[1];
-    this.userNameIcon = first+""+last;
+    this.userNameIcon = first[0]+""+last[0];
   }
 
   rejectObjective() {
