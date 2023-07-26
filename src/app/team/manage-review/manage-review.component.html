@@ -32,12 +32,12 @@
                         <tr>
                           <th class="align-middle" rowspan="2" width="5%">Status</th>
                           <th class="align-middle" rowspan="2">Name</th>
-                          <th class="align-middle" rowspan="2" width="5%">Experience <br>(in month)</th>
                           <th class="align-middle" rowspan="2">Review</th>
+                          <th class="align-middle" rowspan="2">Raating</th>
                           <th class="align-middle" rowspan="2" width="6%">Previous <br>Salary</th>
                           <th class="align-middle" rowspan="2" width="12%">Proposed Promotion</th>
                           <th class="align-middle text-center" width="20%" colspan="2">Proposed Hike</th>
-                          <th class="align-middle" rowspan="2" width="6%">Estimate <br>Salary</th>
+                          <th class="align-middle" rowspan="2" width="8%">Estimate <br>Salary</th>
                           <th class="align-middle text-center" rowspan="2" width="5%">Action</th>
                         </tr>
                         <tr>
@@ -48,29 +48,29 @@
                       <tbody formArrayName="ProjectMemberHike">
                         <tr *ngFor="let item of hikeDetail.controls; let i = index" [formGroupName]="i">
                           <td>{{i+1}}</td>
-                          <td>{{item.get("fullName").value}}</td>
-                          <td>{{item.get("experience").value}}</td>
-                          <td>--</td>
+                          <td>{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}})</td>
+                          <td><input type="text" class="form-control" formControlName="comments"></td>
+                          <td><ngb-rating formControlName="rating" [max]="5"></ngb-rating></td>
                           <td><i class="fa fa-inr pe-1"></i> {{item.get("cTC").value}}</td>
                           <td>
-                            <select class="form-select" formControlName="proposedPromotion">
+                            <select class="form-select" formControlName="promotedDesignation">
                               <option value="0" >Same Designation</option>
                               <option [value]="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
                             </select>
                           </td>
                           <td>
                             <div class="input-group mb-3">
-                              <input type="text" [DecimalNumber]="5" readonly name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="proposedHikePercentage">
+                              <input type="text" [DecimalNumber]="5" readonly name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="hikePercentage">
                               <span class="input-group-text" id="basic-addon1">%</span>
                             </div>
                           </td>
                           <td>
                             <div class="input-group mb-3">
                               <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
-                              <input type="text" [DecimalNumber]="10" readonly name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="proposedHikeAmount">
+                              <input type="text" [DecimalNumber]="10" readonly name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="hikeAmount">
                             </div>
                           </td>
-                          <td><i class="fa fa-inr pe-1"></i> {{item.get("newCTC").value}}</td>
+                          <td><i class="fa fa-inr pe-1"></i> {{item.get("estimatedSalary").value}}</td>
                           <td class="text-center">
                             <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-success pe-3" type="button">
                               <i class="fa fa-play" aria-hidden="true"></i>
@@ -139,7 +139,7 @@
             <div class="card shadow-sm px-2 py-3">
               <div class="row">
                 <div class="d-flex align-items-center col-md-6">
-                  <h6 class="fw-bold mb-0">Performance Review cycle {{objectives[0].AppraisalCycleFromDate | date}} - {{objectives[0].AppraisalCycleToDate | date}}</h6>
+                  <h6 class="fw-bold mb-0">Performance Review cycle {{objectives[0].AppraisalCycleStartDate | date}} - {{objectives[0].AppraisalCycleEndDate | date}}</h6>
                   <span class="badge bg-warning ms-2">{{objectives[0].PerformanceStatus == 2 ? 'Pending' : objectives[0].PerformanceStatus == 5 ? 'Rejected' : objectives[0].PerformanceStatus == 8 ? 'Submitted' : 'Approved'}}</span>
                 </div>
                 <div class="col-md-6">
@@ -148,8 +148,8 @@
                       {{userNameIcon | uppercase}}
                     </div>
                     <div class="ms-3 d-flex align-items-center">
-                      <h6 class="mb-0">{{this.selectedEmploye.FullName}}</h6>
-                      <small class="ps-2"> | Emp No.: {{selectedEmploye.EmployeeId}}</small>
+                      <h6 class="mb-0">{{selectedEmploye.fullName}}</h6>
+                      <small class="ps-2"> | Emp No.: {{selectedEmploye.employeeId}}</small>
                     </div>
                   </div>
                 </div>

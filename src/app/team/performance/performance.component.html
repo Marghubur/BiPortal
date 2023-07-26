@@ -42,9 +42,9 @@
                         <ng-container *ngIf="objectives.length > 0">
                           <div class="col-md-12 my-3"  >
                             <i class="fa fa-calendar pe-2"></i>
-                            <span class="fw-bold">{{objectives[0].AppraisalCycleFromDate | date:"yyyy"}}-{{objectives[0].AppraisalCycleToDate | date:"yyyy"}}</span>
-                            <span class="text-muted ps-2">{{objectives[0].AppraisalCycleFromDate | date}}</span> -
-                            <span class="text-muted">{{objectives[0].AppraisalCycleToDate | date}}</span>
+                            <span class="fw-bold">{{objectives[0].AppraisalCycleStartDate | date:"yyyy"}}-{{objectives[0].AppraisalCycleStartDate | date:"yyyy"}}</span>
+                            <span class="text-muted ps-2">{{objectives[0].AppraisalCycleStartDate | date}}</span> -
+                            <span class="text-muted">{{objectives[0].AppraisalCycleStartDate | date}}</span>
                             <i class="fa fa-repeat ps-4 pe-2"></i>
                             <span class="text-primary-c">Update Progress</span>
                           </div>
@@ -114,7 +114,7 @@
                                   </div>
                                 </div>
                               </td>
-                              <td class="align-middle">{{objectives[0].AppraisalCycleFromDate | date}}-{{objectives[0].AppraisalCycleToDate | date}}</td>
+                              <td class="align-middle">{{objectives[0].AppraisalCycleStartDate | date}}-{{objectives[0].AppraisalCycleStartDate | date}}</td>
                               <td class="align-middle">
                                 <div class="d-flex align-items-center justify-content-between">
                                   <h6>{{item.CurrentValue}} {{item.ProgressMeassureType == 1 ? '%' : ''}}</h6>
@@ -362,7 +362,7 @@
                         <div class="card shadow-sm px-2 py-3">
                           <div class="row">
                             <div class="d-flex align-items-center col-md-6">
-                              <h6 class="fw-bold mb-0">Performance Review cycle {{objectives[0].AppraisalCycleFromDate | date}} - {{objectives[0].AppraisalCycleToDate | date}}</h6>
+                              <h6 class="fw-bold mb-0">Performance Review cycle {{objectives[0].AppraisalCycleStartDate | date}} - {{objectives[0].AppraisalCycleStartDate | date}}</h6>
                               <span class="badge bg-warning ms-2">{{objectives[0].PerformanceStatus == 2 ? 'Pending' : objectives[0].PerformanceStatus == 5 ? 'Rejected' : objectives[0].PerformanceStatus == 8 ? 'Submitted' : 'Approved'}}</span>
                             </div>
                             <div class="col-md-6">
@@ -467,8 +467,8 @@
             </small>
           </div>
           <div class="col-md-3 text-end" *ngIf="objectives != null && objectives.length > 0">
-            <h6 class="text-end"><i class="fa fa-calendar-o pe-1"></i> {{objectives[0].AppraisalCycleFromDate | date: 'y'}} - {{objectives[0].AppraisalCycleToDate | date:'y'}}</h6>
-            <small>{{objectives[0].AppraisalCycleFromDate | date}} - {{objectives[0].AppraisalCycleToDate | date}}</small>
+            <h6 class="text-end"><i class="fa fa-calendar-o pe-1"></i> {{objectives[0].AppraisalCycleStartDate | date: 'y'}} - {{objectives[0].AppraisalCycleStartDate | date:'y'}}</h6>
+            <small>{{objectives[0].AppraisalCycleStartDate | date}} - {{objectives[0].AppraisalCycleStartDate | date}}</small>
           </div>
         </div>
         <div class="p border-bottom mt-4">Details</div>

@@ -112,6 +112,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         this.maxDate = {year: date.getFullYear()+1, month:  date.getMonth()+1, day:  date.getDate()};
         this.allObjective = res.ResponseBody;
         this.objectives = res.ResponseBody;
+        console.log(this.allObjective);
         this.calculateRecord();
         this.getUserNameIcon(null);
         Toast("Employee performance objective data loaded successsfully");
@@ -186,6 +187,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       Comments: new FormControl(null, [Validators.required]),
       TargetValue: new FormControl(this.selectedObjective != null ? this.selectedObjective.TargetValue : 0),
       Rating: new FormControl(this.selectedObjective.Rating, [Validators.required]),
+      AppraisalDetailId: new FormControl(this.selectedObjective.AppraisalDetailId),
       ProjectId: new FormControl(0)
     })
   }
@@ -654,6 +656,7 @@ class Objective {
   PerformanceDetail: Array<any> = [];
   Rating: number = 0;
   Comments: string = null;
+  AppraisalDetailId: number = 0;
 }
 
 class Meeting {
