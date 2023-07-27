@@ -80,7 +80,8 @@ export const AdminApprovalRequest = `${TeamBaseRoute}/request`;
 export const Appraisal = `${TeamBaseRoute}/appraisal`;
 export const ApprisalReview = `${TeamBaseRoute}/apprisalreview`;
 export const ServiceRequest = `${TeamBaseRoute}/servicerequest`;
-export const Performance = `${TeamBaseRoute}/performance`;
+export const Performance = `${TeamBaseRoute}/objectives`;
+export const ManageReview = `${TeamBaseRoute}/managereview`;
 
 // ********************** Team route ends  *******************
 

@@ -16,11 +16,11 @@
             <form [formGroup]="projectForm" autocomplete="off">
               <div class="row">
                 <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Organization Name</label>
+                  <label class="form-label">Organization Name</label>
                   <input type="text" class="form-control" readonly formControlName="OrganizationName" placeholder="Organization Name">
                 </div>
                 <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Company Name</label>
+                  <label class="form-label">Company Name</label>
                   <input type="text" class="form-control" readonly formControlName="CompanyName" placeholder="Company Name">
                 </div>
                 <div class="col-md-4 mt-3">
@@ -74,11 +74,11 @@
               </div>
               <div class="row">
                 <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Project Name</label>
+                  <label class="form-label">Project Name</label>
                   <textarea type="text" rows="2" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="100" formControlName="ProjectName" placeholder="Project Name" [ngClass]="{'error-field': submitted && f.ProjectName.errors !== null && f.ProjectName.errors.required}"></textarea>
                 </div>
                 <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Project Description</label>
+                  <label class="form-label">Project Description</label>
                   <textarea type="text" rows="2" maxlength="400" formControlName="ProjectDescription" class="form-control" placeholder="Project Description"></textarea>
                 </div>
                 <div class="col-md-4 mt-3">
@@ -88,7 +88,7 @@
               </div>
               <div class="row">
                 <div class="col-md-4 mt-3">
-                  <label for="" class="form-label">Project Manager</label>
+                  <label class="form-label">Project Manager</label>
                   <select class="form-select" formControlName="ProjectManagerId">
                     <option value=0 disabled>Select Project Manager</option>
                     <option [value]="item.value" *ngFor="let item of employees">{{item.text}}</option>
@@ -178,7 +178,7 @@
           </div>
         </div>
         <div class="mt-3">
-          <label for="" class="form-label">Team Members</label>
+          <label class="form-label">Team Members</label>
           <div class="mt-3 teammember-container">
             <table class="table">
               <thead>

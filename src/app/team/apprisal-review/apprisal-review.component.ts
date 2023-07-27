@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { AjaxService, tableConfig } from 'src/providers/ajax.service';
+import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { ProjectWiki, ProjectBudget, ManageProject } from 'src/providers/constants';
+import { ProjectWiki, ProjectBudget, ManageProject, ManageReview } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
-
 import 'bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { ProjectModal } from 'src/app/projects/manage-project/manage-project.component';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { GetRoles } from 'src/providers/ApplicationStorage';
 declare var $: any;
 declare var bootstrap: any;
 
@@ -32,6 +32,8 @@ export class ApprisalReviewComponent implements OnInit{
   currentProjectAppraisal: any = null;
   appraisalHikeForm: FormGroup;
   isLoading: boolean = false;
+  isAmountExceed: boolean = false;
+  roles: Array<any> = [];
 
   constructor(private nav: iNavigation,
               private http: AjaxService,
@@ -41,6 +43,7 @@ export class ApprisalReviewComponent implements OnInit{
   ngOnInit(): void {
     this.projectData = new Filter();
     this.userDetail = this.user.getInstance();
+    this.designation = GetRoles();
     this.loadData();
   }
 
@@ -58,7 +61,7 @@ export class ApprisalReviewComponent implements OnInit{
     this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then((res:ResponseModel) => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectDetail = res.ResponseBody;
-        this.projectData.TotalRecords = res.ResponseBody[0].Total;
+        this.projectData.TotalRecords = this.projectDetail.length;
         this.isFileFound = true;
         this.isLoaded = true;
         Toast("Record found");
@@ -91,10 +94,10 @@ export class ApprisalReviewComponent implements OnInit{
 
   getProjectsMembers() {
     this.selectedProject = null;
+    this.projectDetails = [];
     this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
-        this.designation = res.ResponseBody.Designation;
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
         if (project.length > 0) {
           let result = project.reduce((a, b) => {
@@ -117,7 +120,7 @@ export class ApprisalReviewComponent implements OnInit{
           this.selectedProject = this.projectDetails[0];
           this.currentProjectAppraisal = this.allProjectAppraisal.find(x => x.ProjectId == this.selectedProject.ProjectId);
           if (this.currentProjectAppraisal && this.selectedProject.ProjectMembers.length > 0) {
-            var offcanvasRight = document.getElementById('offcanvasRight');
+            var offcanvasRight = document.getElementById('riviewOffCanvas');
             var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
             bsOffcanvas.show();
             this.initAppraisalHike();
@@ -148,7 +151,6 @@ export class ApprisalReviewComponent implements OnInit{
 
   buildProjectMemberHike(): FormArray {
     let data = this.selectedProject.ProjectMembers;
-    console.log(data)
     let dataArray: FormArray = this.fb.array([]);
 
     if(data != null && data.length > 0) {
@@ -163,7 +165,7 @@ export class ApprisalReviewComponent implements OnInit{
           ProposedPromotion: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
           ProposedHikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
           ProposedHikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
-          Experience: new FormControl(data[i].Experience != null ? data[i].Experience : 0)
+          Experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0)
         }));
         i++;
       }
@@ -178,6 +180,102 @@ export class ApprisalReviewComponent implements OnInit{
     return this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
   }
 
-  
+  proposedHikeCheck(e: any, i: number) {
+    let name = e.target.attributes.name.value;
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    if (name == "ProposedHikePercentage") {
+      let elem = document.getElementsByName("ProposedHikeAmount")[i];
+      elem.setAttribute("readonly", "");
+      elem = document.getElementsByName("ProposedHikePercentage")[i];
+      elem.removeAttribute("readonly");
+      formArray.controls[i].get("ProposedHikeAmount").setValue(0);
+      let value = Number(e.target.value);
+      if (value > 0) {
+        let ctc = formArray.controls[i].get("CTC").value;
+        let hikeAmount = (ctc * value)/100;
+        formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+      }
+    } else {
+      let elem = document.getElementsByName("ProposedHikePercentage")[i];
+      elem.setAttribute("readonly", "");
+      elem = document.getElementsByName("ProposedHikeAmount")[i];
+      elem.removeAttribute("readonly");
+      formArray.controls[i].get("ProposedHikePercentage").setValue(0);
+      let value = Number(e.target.value);
+      if (value > 0) {
+        let ctc = formArray.controls[i].get("CTC").value;
+        let hikePercentage = (value * 100)/ctc;
+        formArray.controls[i].get("ProposedHikePercentage").setValue(hikePercentage);
+      }
+    }
+  }
 
+  proposedHikeAmountCheck(e: any, i: number) {
+    let name = e.target.attributes.name.value;
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    let value = Number(e.target.value);
+    if (value > 0) {
+      if (name == "ProposedHikePercentage") {
+        let ctc = formArray.controls[i].get("CTC").value;
+        let hikeAmount = (Math.round(ctc * value)/100).toFixed(2);
+        formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+      } else {
+        let ctc = formArray.controls[i].get("CTC").value;
+        let hikePercentage = (value * 100)/ctc;
+        formArray.controls[i].get("ProposedHikePercentage").setValue(hikePercentage);
+      }
+      this.isTotalAmountExceed();
+    }
+  }
+
+  isTotalAmountExceed() {
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    this.isAmountExceed = false;
+    let totalAmount = formArray.value.map(x => Number(x.ProposedHikeAmount)).reduce((a, b) => {return a + b;}, 0);
+    if (totalAmount > this.currentProjectAppraisal.ProjectAppraisalBudget)
+      this.isAmountExceed = true;
+  }
+
+  equalPercentage() {
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    let equalpercent = 100 / formArray.length;
+    for (let i = 0; i < formArray.length; i++) {
+      let ctc = formArray.controls[i].get("CTC").value;
+      let hikeAmount = (Math.round(ctc * equalpercent)/100).toFixed(2);
+      formArray.controls[i].get("ProposedHikePercentage").setValue(Math.round(equalpercent).toFixed(2));
+      formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
+    }
+    this.isTotalAmountExceed();
+  }
+
+  startCycle() {
+    this.isLoading = true;
+    if (this.appraisalHikeForm.invalid) {
+      ErrorToast("Please fill all the manditory field");
+      this.isLoading = false;
+      return;
+    }
+    if (this.isAmountExceed) {
+      ErrorToast("Hike amount is exceed from project appraisal budget");
+      this.isLoading = false;
+      return;
+    }
+    let value = this.appraisalHikeForm.get('ProjectMemberHike').value;
+    // this.http.put(`eps/apprisalcatagory//${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
+    //   if (res.ResponseBody) {
+    //     this.isLoading = false;
+    //     this.closeCanvasRight();
+    //     Toast("Appraisal cycle started successfully");
+    //   }
+    // }).catch(e => {
+    //   this.isLoading = false;
+    // })
+    console.log(value)
+  }
+
+  manageReview(project: any) {
+    if (project) {
+      this.nav.navigate(ManageReview, project)
+    }
+  }
 }
