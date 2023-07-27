@@ -242,6 +242,19 @@ export class AppraisalSettingComponent implements OnInit {
     this.toDate.day= date.getDate()
     this.toDate.month= date.getMonth() + 1;
     this.toDate.year= date.getFullYear();
+    this.selfAppraisalFromDate = null;
+    this.selfAppraisalToDate = null;
+    this.selectionPeriodFromDate = null;
+    this.selectionPeriodToDate = null;
+    this.feedbackFromDate = null;
+    this.feedbackToDate = null;
+    this.reviewFromDate = null;
+    this.reviewToDate = null;
+    this.appraisalCyclePeriod = null;
+    this.selfAppraisalCyclePeriod = null;
+    this.selectionCyclePeriod = null;
+    this.feedbackCyclePeriod = null;
+    this.reviewCyclePeriod = null;
     this.initForm();
     this.roleList.data.map(i => {
       i.selected = false;
@@ -394,6 +407,7 @@ export class AppraisalSettingComponent implements OnInit {
           this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].Total;
         else
           this.apprisalData.TotalRecords = 0;
+        this.currentAppraisalObjective = [];
         $('#manageApprisal').modal('hide');
         Toast("Apprisal cycle inserted successfully");
         this.isLoading = false;
@@ -426,7 +440,7 @@ export class AppraisalSettingComponent implements OnInit {
           this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].Total;
         else
           this.apprisalData.TotalRecords = 0;
-
+        this.currentAppraisalObjective = [];
         $('#manageApprisal').modal('hide');
         Toast("Apprisal cycle inserted successfully");
         this.isLoading = false;

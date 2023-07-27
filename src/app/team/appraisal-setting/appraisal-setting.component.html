@@ -72,20 +72,20 @@
                                   class="d-block w-100 px-3 text-decoration-none text-dark"
                                   [ngClass]="{ 'active-tab': i == 0 }">
                                   <div class="d-flex flex-row w-100 justify-content-between mt-4">
-                                    <div class="ms-2 col-md-8 me-auto">
+                                    <div class="ms-2 col-md-11 me-auto">
                                       <div class="fw-bold fs-6">
                                         {{ item.ObjectiveCatagoryType }}
                                       </div>
-                                      <p class="mb-0">{{item.TypeDescription}}</p>
+                                      <p class="mb-0 text-truncate">{{item.TypeDescription}}</p>
                                     </div>
-                                    <div class="col-md-3 d-flex flex-column align-items-end">
+                                    <div class="col-md-1 d-flex flex-column align-items-end">
                                       <a href="javascript:void(0)" (click)="editApprisalPopUp(item)"><i
                                           class="fa fa-pencil fa-lg text-white"></i></a>
                                       <a href="javascript:void(0)"><i class="fa fa-trash fa-lg text-white pt-3"></i></a>
                                     </div>
                                   </div>
                                   <p class="mb-0 text-dark ps-2 pb-2 pt-2">
-                                    {{item.AppraisalCycleStartDate | date}} - {{item.AppraisalCycleEndDate | date}}
+                                    <!-- {{item.AppraisalCycleStartDate | date}} - {{item.AppraisalCycleEndDate | date}} -->
                                   </p>
                                 </a>
                               </li>
