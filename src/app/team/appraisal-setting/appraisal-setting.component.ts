@@ -78,6 +78,7 @@ export class AppraisalSettingComponent implements OnInit {
   roleList: autoCompleteModal = null;
   selectedRoles: Array<any> = [];
   appraisalDetailAndCategory: Array<ApprisalCycle> = [];
+  isAppraisalCycleInSamePeriod: boolean = false;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -152,6 +153,18 @@ export class AppraisalSettingComponent implements OnInit {
     } else {
       this.appraisalForm.controls['IsRaterSelectedByManager'].disable();
       this.appraisalForm.controls['CanRaterViewAppraisal'].disable();
+    }
+    if (this.isAppraisalCycleInSamePeriod) {
+      this.appraisalForm.controls['IsRaterSelectedByManager'].disable();
+      this.appraisalForm.controls['CanRaterViewAppraisal'].disable();
+      this.appraisalForm.controls['IsRequiredRatersFeedback'].disable();
+      this.appraisalForm.controls['IsSelfAppraisal'].disable();
+    } else {
+      this.appraisalForm.controls['IsRaterSelectedByManager'].enable();
+      this.appraisalForm.controls['CanRaterViewAppraisal'].enable();
+      this.appraisalForm.controls['IsRequiredRatersFeedback'].enable();
+      this.appraisalForm.controls['IsSelfAppraisal'].enable();
+
     }
   }
 
@@ -242,14 +255,6 @@ export class AppraisalSettingComponent implements OnInit {
     this.toDate.day= date.getDate()
     this.toDate.month= date.getMonth() + 1;
     this.toDate.year= date.getFullYear();
-    this.selfAppraisalFromDate = null;
-    this.selfAppraisalToDate = null;
-    this.selectionPeriodFromDate = null;
-    this.selectionPeriodToDate = null;
-    this.feedbackFromDate = null;
-    this.feedbackToDate = null;
-    this.reviewFromDate = null;
-    this.reviewToDate = null;
     this.appraisalCyclePeriod = null;
     this.selfAppraisalCyclePeriod = null;
     this.selectionCyclePeriod = null;
@@ -260,6 +265,31 @@ export class AppraisalSettingComponent implements OnInit {
       i.selected = false;
     })
     $('#manageApprisal').modal('show');
+  }
+
+  viewAppraisalDetails(e: any) {
+    this.isAppraisalCycleInSamePeriod = false;
+    let value = e.target.value;
+    if (value) {
+      this.http.get(`eps/apprisalcatagory/getCategoryByCategoryId/${value}`, true).then(res => {
+        if (res.ResponseBody && res.ResponseBody.length > 0) {
+          this.appraisalDetailAndCategory = res.ResponseBody;
+          let data: ApprisalCycle = this.appraisalDetailAndCategory[0];
+          data.ObjectiveCatagoryId = 0;
+          data.ObjectiveCatagoryType = null;
+          data.TypeDescription = null;
+          data.RoleIds = [];
+          data.ObjectiveIds = [];
+          data.IsHikeApproval = false;
+          data.Status = null;
+          this.isAppraisalCycleInSamePeriod = true;
+          this.editApprisalPopUp(data);
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
   }
 
   viewObjectiveAppraisalPopup(item: ApprisalCycle) {
@@ -351,7 +381,7 @@ export class AppraisalSettingComponent implements OnInit {
       this.reviewToDate.month= date.getMonth() + 1;
       this.reviewToDate.year= date.getFullYear();
     }
-
+    this.selectedRoles = [];
     this.initForm();
     this.appraisalCyclePeriod = new Date(this.appraisalForm.get('AppraisalCycleStartDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('AppraisalCycleEndDate').value).toLocaleDateString();
     this.selfAppraisalCyclePeriod = new Date(this.appraisalForm.get('SelfAppraisalStartDate').value).toLocaleDateString() +" - "+ new Date(this.appraisalForm.get('SelfAppraisalEndDate').value).toLocaleDateString();
@@ -408,6 +438,7 @@ export class AppraisalSettingComponent implements OnInit {
         else
           this.apprisalData.TotalRecords = 0;
         this.currentAppraisalObjective = [];
+        this.isAppraisalCycleInSamePeriod = false;
         $('#manageApprisal').modal('hide');
         Toast("Apprisal cycle inserted successfully");
         this.isLoading = false;
@@ -416,6 +447,42 @@ export class AppraisalSettingComponent implements OnInit {
       ErrorToast(e.error);
       this.isLoading = false;
     })
+  }
+
+  addApprisalInSameCycle() {
+    this.isLoading = true;
+    this.isSubmitted = true;
+
+    if (this.appraisalForm.invalid) {
+      this.isLoading = false;
+      ErrorToast("Please correct all the mandaroty field marked red");
+      return;
+    }
+    if (this.selectedRoles.length <= 0) {
+      this.isLoading = false;
+      ErrorToast("Please select role first");
+      return;
+    }
+    let value = this.appraisalForm.value;
+    value.RoleIds = this.selectedRoles.map(x => x.RoleId);
+    console
+    // this.http.post("eps/apprisalcatagory/addAppraisalType", value, true).then(res => {
+    //   if (res.ResponseBody) {
+    //     this.apprisalCycleDetail = res.ResponseBody;
+    //     if (this.apprisalCycleDetail.length > 0)
+    //       this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].Total;
+    //     else
+    //       this.apprisalData.TotalRecords = 0;
+    //     this.currentAppraisalObjective = [];
+    //     this.isAppraisalCycleInSamePeriod = false;
+    //     $('#manageApprisal').modal('hide');
+    //     Toast("Apprisal cycle inserted successfully");
+    //     this.isLoading = false;
+    //   }
+    // }).catch(e => {
+    //   ErrorToast(e.error);
+    //   this.isLoading = false;
+    // })
   }
 
   updateApprisalCycle() {
