@@ -43,7 +43,8 @@
                         </div> -->
                       </div>
                     </div>
-                    <div class="th fe-5">
+                    <div class="th fe-1">Team</div>
+                    <div class="th fe-4">
                       <div class="cell-wrapper">
                         Project Description
                         <!-- <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
@@ -69,10 +70,10 @@
                 </div>
                 <div class="t-body">
                   <ng-container *ngIf="isFileFound">
-                    <div class="tr py-2" *ngFor="let project of projectDetail">
+                    <div class="tr py-2" *ngFor="let project of projectDetail; let i = index;">
                       <div class="td align-middle text-center fe-index">
                         <div class="cell-wrapper">
-                          {{project.ProjectId}}
+                          {{i+1}}
                         </div>
                       </div>
                       <div class="td align-middle fe-2">
@@ -80,9 +81,17 @@
                           {{project.ProjectName}}
                         </div>
                       </div>
-                      <div class="td align-middle fe-5">
-                        <div class="cell-wrapper">
-                          {{project.ProjectDescription}}
+                      <div class="td text-center fe-1 d-flex align-items-center justify-content-between">
+                        <div class="cell-wrapper text-truncate ps-0">
+                          {{project.Team}}
+                        </div>
+                        <a href="javascript:void(0)" (click)="showOffCanvas(project)" class="text-success pe-3" type="button">
+                          <i class="fa fa-play" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                      <div class="td align-middle fe-4 text-truncate">
+                        <div class="cell-wrapper text-truncate">
+                          {{project.ProjectDescription == null ? "NA" : project.ProjectDescription}}
                         </div>
                       </div>
                       <div class="td text-center fe-1">
@@ -96,7 +105,7 @@
                         </div>
                       </div>
                       <div class="td justify-content-center d-flex fe-1">
-                        <a href="javascript:void(0)" class="text-decoration-none" (click)="showOffCanvas(project)">
+                        <a href="javascript:void(0)" class="text-decoration-none" (click)="manageReview(project)">
                           <span class="badge bg-primary"><i class=" fa fa-retweet"></i></span>
                         </a>
                       </div>
@@ -128,7 +137,7 @@
   <div class="offcanvas-body">
     <ng-container *ngIf="isProjectDetailReady">
       <ng-container *ngIf="projectDetails.length > 0">
-        <div class="row align-items-center">
+        <div class="row align-items-center justify-content-between">
           <div class="col-md-6">
             <span class="fw-bold text-dark">Project Appraisal Budget: <i class="fa fa-inr pe-1"></i> {{currentProjectAppraisal.ProjectAppraisalBudget}}</span>
             <span class="ps-2">({{currentProjectAppraisal.FromDate | date}} - {{currentProjectAppraisal.ToDate | date}})</span>
@@ -155,7 +164,7 @@
                     <tr>
                       <th class="align-middle" rowspan="2">Status</th>
                       <th class="align-middle" rowspan="2">Name</th>
-                      <th class="align-middle" rowspan="2">Experience</th>
+                      <th class="align-middle" rowspan="2">Experience <br>(in month)</th>
                       <th class="align-middle" rowspan="2">Review</th>
                       <th class="align-middle" rowspan="2">Salary</th>
                       <th class="align-middle" rowspan="2">Proposed Promotion</th>
@@ -168,7 +177,7 @@
                   </thead>
                   <tbody formArrayName="ProjectMemberHike">
                     <tr *ngFor="let item of hikeDetail.controls; let i = index" [formGroupName]="i">
-                      <td>{{i}}</td>
+                      <td>{{i+1}}</td>
                       <td>{{item.get("FullName").value}}</td>
                       <td>{{item.get("Experience").value}}</td>
                       <td>--</td>
