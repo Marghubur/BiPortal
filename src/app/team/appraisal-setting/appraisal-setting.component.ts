@@ -427,7 +427,6 @@ export class AppraisalSettingComponent implements OnInit {
         this.isLoading = false;
       }
     }).catch(e => {
-      ErrorToast(e.error);
       this.isLoading = false;
     })
   }
