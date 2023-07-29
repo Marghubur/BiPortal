@@ -88,8 +88,8 @@ export class JwtService {
             break;
           case ServerError:
           case BadRequest:
-              if(error.HttpStatusMessage)
-                ErrorToast(error.HttpStatusMessage);
+              if(error.ResponseBody)
+                ErrorToast(error.ResponseBody);
               else
               ErrorToast("Unknown error occured. Please contact to admin.");
               break;
