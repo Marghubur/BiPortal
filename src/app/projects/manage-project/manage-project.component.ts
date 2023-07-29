@@ -88,7 +88,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         this.isReady = true;
       }
     }).catch(e => {
-      ErrorToast(e.ResponseBody);
+      ErrorToast(e.error);
       this.isReady = true;
     });
   }
