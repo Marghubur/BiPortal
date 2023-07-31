@@ -220,10 +220,10 @@
                                   {{item.ObjectiveCatagoryType}}
                                 </a>
                               </div>
-                              <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-success pe-3"
+                              <!-- <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-success pe-3"
                                 type="button">
                                 <i class="fa fa-play" aria-hidden="true"></i>
-                              </a>
+                              </a> -->
                             </div>
                             <div class="td align-middle text-truncate fe-4">
                               <div class="cell-wrapper text-truncate">
@@ -342,12 +342,27 @@
                             </div>
                           </div>
                         </ng-container>
+                        <ng-container *ngIf="objectiveDetails.length == 0 && !isPageReady">
+                          <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                            <p class="my-5 py-5">Record Not Found</p>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="objectiveDetails.length == 0 && isPageReady">
+                          <div class="data-loading-loader">
+                            <div class="py-5 my-5">
+                              <h6 class="fw-bold fs-3 text-center text-dark">Objectives are loading</h6>
+                              <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                                <div class="col-md-12 modal-container  text-center cog-wheel">
+                                  <img src="assets/images/cog.gif" alt="" />
+                                  <h6 class="modal-title title-message">
+                                    Please Wait ........
+                                  </h6>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
                       </div>
-                      <ng-container *ngIf="objectiveDetails.length == 0">
-                        <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                          <p class="my-5 py-5">Record Not Found</p>
-                        </div>
-                      </ng-container>
                     </div>
                   </div>
                   <div class="mt-3" *ngIf="isPageReady">
