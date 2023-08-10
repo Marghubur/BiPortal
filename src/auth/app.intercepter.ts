@@ -2,15 +2,23 @@ import { HttpHeaders, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor
 import { JwtService } from "./jwtService";
 import { Observable } from "rxjs/internal/Observable";
 import { Injectable } from "@angular/core";
+import { CommonService } from "src/providers/common-service/common.service";
+import { finalize } from "rxjs";
 
 @Injectable()
 export class AppHttpIntercepter implements HttpInterceptor {
 
-    constructor(private tokenHelper: JwtService) { }
+    constructor(private tokenHelper: JwtService,
+                private common: CommonService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        this.common.isLoading.next(true);
         request = this.addToken(request);
-        return next.handle(request);
+        return next.handle(request).pipe(
+          finalize(() => {
+            this.common.isLoading.next(false);
+          })
+        );
     }
 
     addToken(request: HttpRequest<any>): HttpRequest<any> {
