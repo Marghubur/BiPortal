@@ -6,12 +6,14 @@ import { SidemenuComponent } from '../sidemenu/sidemenu.component';
 import { ApplicationStorage } from '../../providers/ApplicationStorage';
 import { NgChartsModule } from 'ng2-charts';
 import { NgModule } from '@angular/core';
+import { LoaderComponent } from '../loader/loader.component';
 
 @NgModule({
   declarations: [
     LayoutComponent,
     NavbarComponent,
-    SidemenuComponent
+    SidemenuComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,7 @@ import { NgModule } from '@angular/core';
     ApplicationStorage
   ],
 })
-export class LayoutModule { 
+export class LayoutModule {
   constructor() {
     console.log("Layout module loaded");
   }
