@@ -28,6 +28,7 @@ export class NavbarComponent implements OnInit, DoCheck {
   TineMenu: boolean = false;
   isAdmin: boolean = true;
   root: any = null;
+  isLoading: boolean = false;
 
   @Output() authentication = new EventEmitter();
 
@@ -50,6 +51,9 @@ export class NavbarComponent implements OnInit, DoCheck {
     private user: UserService
   ) {
     this.root = document.body;
+    this.commonService.isLoading.subscribe(res => {
+      this.isLoading = res;
+    })
   }
 
   ngDoCheck(): void {
