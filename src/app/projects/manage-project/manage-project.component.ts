@@ -117,6 +117,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         i++;
       }
     }
+    this.initForm();
   }
 
   initForm() {
@@ -197,6 +198,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
           this.isLoading = false;
         }
       }).catch(e => {
+        ErrorToast(e.ResponseBody);
         this.isLoading = false;
       })
     } else {
@@ -270,6 +272,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         }
         this.isLoading = false;
       }).catch(e => {
+        ErrorToast(e.ResponseBody);
         this.isLoading = false;
       })
     }

@@ -20,20 +20,6 @@ const routes: Routes = [
   },
   {
     matcher: (url) => {
-      if(url[0].path.split(/\/(.*)/s)[0] == 'user') {
-        return {
-          consumed: url
-        };
-      }
-      return null;
-    },
-    path: '',
-    component: LayoutComponent,
-    loadChildren: () => import('../user/user.module')
-    .then(m => m.UserModule)
-  },
-  {
-    matcher: (url) => {
       if(url[0].path.split(/\/(.*)/s)[0] == TeamBaseRoute) {
         return {
           consumed: url

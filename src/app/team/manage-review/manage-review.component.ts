@@ -305,5 +305,4 @@ export class ManageReviewComponent implements OnInit {
       this.isLoading = false;
     })
   }
-
  }

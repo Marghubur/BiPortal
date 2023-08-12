@@ -112,7 +112,6 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         this.maxDate = {year: date.getFullYear()+1, month:  date.getMonth()+1, day:  date.getDate()};
         this.allObjective = res.ResponseBody;
         this.objectives = res.ResponseBody;
-        console.log(this.allObjective);
         this.calculateRecord();
         this.getUserNameIcon(null);
         Toast("Employee performance objective data loaded successsfully");
@@ -262,10 +261,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     this.meetingForm.controls["meetingDate"].setValue(date);
   }
 
-  onSelectEmp(e: any) {
-    let index = this.selectedEmployee.findIndex(x => x.value == e.value);
+  onSelectEmp(e: number) {
+    let index = this.selectedEmployee.findIndex(x => x.value == e);
     if(index == -1) {
-      let emp = this.employeesList.data.find(x => x.value == e.value);
+      let emp = this.employeesList.data.find(x => x.value == e);
       this.selectedEmployee.push(emp);
     } else {
       this.selectedEmployee.splice(index, 1);

@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import * as $ from 'jquery';
 import { ResponseModel } from "src/auth/jwtService";
 import { DatePipe } from "@angular/common";
+import { BehaviorSubject } from "rxjs";
 
 const AllowedKey = [8, 9, 46];
 @Injectable({
@@ -23,6 +24,7 @@ export class CommonService {
 
   DefaultTimeout: number = 8 * 1000;
   $ButtonId: any = "";
+  isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
   constructor() { }
 
   public GetDefaultFontSize() {
