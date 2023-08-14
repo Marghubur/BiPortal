@@ -26,6 +26,7 @@ export class SidemenuComponent implements OnInit {
   CatagoryPosition: number = 0;
   MenuName: string = '';
   isAdmin: boolean = false;
+  isLoading: boolean = false;
 
   @Output() authentication = new EventEmitter();
 
@@ -45,6 +46,9 @@ export class SidemenuComponent implements OnInit {
     private local: ApplicationStorage,
     private user: UserService
   ) {
+    this.commonService.isLoading.subscribe(res => {
+      this.isLoading = res;
+    })
   }
 
   ngOnInit() {
