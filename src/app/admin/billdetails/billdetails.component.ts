@@ -551,7 +551,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     if (empid > 0)
       this.employeeId = empid;
 
-    this.singleEmployee.SearchString = this.singleEmployee.SearchString + " and CompanyId =" + this.companyId;
+    this.singleEmployee.SearchString = this.singleEmployee.SearchString + " and c.CompanyId =" + this.companyId;
     this.http.post(`OnlineDocument/GetFilesAndFolderById/employee/${this.employeeId}`, this.singleEmployee)
     .then((response: ResponseModel) => {
       this.employeeDetails = [];

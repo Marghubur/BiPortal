@@ -30,9 +30,8 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
 
 
   constructor(private http: AjaxService,
-    private fb: FormBuilder,
-    private common: CommonService,
-    private nav: iNavigation
+              private fb: FormBuilder,
+              private nav: iNavigation
   ) { }
 
   ngOnDestroy() {
