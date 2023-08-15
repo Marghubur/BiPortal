@@ -75,9 +75,11 @@ export class LoginComponent implements OnInit {
         AccessToken: null,
         UserTypeId: this.userType == 'employee' ? UserType.Employee : UserType.Admin
       };
-      
+
       let userId: any = document.getElementById("EmailOrMobile");
       let password: any = document.getElementById("Password");
+      let companyCode: any = document.getElementById("CompanyCode");
+
       if (!userId.value) {
         this.isLoading = false;
         ErrorToast("Please enter email or mobile");
@@ -85,6 +87,12 @@ export class LoginComponent implements OnInit {
       }
 
       if (!password.value) {
+        this.isLoading = false;
+        ErrorToast("Please enter the password");
+        return;
+      }
+
+      if (!companyCode.value) {
         this.isLoading = false;
         ErrorToast("Please enter the password");
         return;
@@ -105,6 +113,7 @@ export class LoginComponent implements OnInit {
         }
 
         this.loginValue.Password = password.value;
+        this.loginValue.CompanyCode = companyCode.value;
         this.http.login('Login/Authenticate', this.loginValue).then((result: ResponseModel) => {
           if (result.ResponseBody) {
             let Data = result.ResponseBody;
