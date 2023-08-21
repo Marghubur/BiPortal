@@ -60,8 +60,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
               private fb: FormBuilder) { }
 
   ngDoCheck(): void {
-    if (this.meetingForm.controls.endTime.value && this.meetingForm.controls.startTime.value) {
-      this.meetingDuration = this.getMeetingDuration(this.meetingForm.controls.endTime.value, this.meetingForm.controls.startTime.value);
+    if (this.meetingForm.controls.EndTime.value && this.meetingForm.controls.StartTime.value) {
+      this.meetingDuration = this.getMeetingDuration(this.meetingForm.controls.EndTime.value, this.meetingForm.controls.StartTime.value);
     }
   }
 
@@ -223,6 +223,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     this.http.post("eps/performance/updateEmployeeObjective", performvalue, true).then(res => {
       if (res.ResponseBody) {
         let value = res.ResponseBody;
+        this.selectedObjective.EmployeePerformanceId = value.EmployeePerformanceId;
         this.selectedObjective.UpdatedOn = value.UpdatedOn;
         this.selectedObjective.CurrentValue = value.CurrentValue;
         this.selectedObjective.Status = value.Status;
@@ -258,7 +259,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.meetingForm.controls["meetingDate"].setValue(date);
+    this.meetingForm.controls["MeetingDate"].setValue(date);
   }
 
   onSelectEmp(e: number) {
@@ -273,15 +274,16 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
 
   initMeetingForm() {
     this.meetingForm = this.fb.group({
-      meetingId: new FormControl(this.selectedMeeting.meetingId),
-      startTime: new FormControl(this.selectedMeeting.startTime, [Validators.required]),
-      endTime: new FormControl(this.selectedMeeting.endTime, [Validators.required]),
-      meetingDate: new FormControl(this.selectedMeeting.meetingDate, [Validators.required]),
-      meetingTitle: new FormControl(this.selectedMeeting.meetingTitle, [Validators.required]),
-      meetingPlaforms: new FormControl(this.selectedMeeting.meetingPlaforms),
-      meetingFrequency: new FormControl(this.selectedMeeting.meetingFrequency),
-      talkingPoints: new FormControl(''),
-      employeesMeeting: new FormControl('')
+      MeetingId: new FormControl(this.selectedMeeting.MeetingId),
+      StartTime: new FormControl(this.selectedMeeting.StartTime, [Validators.required]),
+      EndTime: new FormControl(this.selectedMeeting.EndTime, [Validators.required]),
+      MeetingDate: new FormControl(this.selectedMeeting.MeetingDate, [Validators.required]),
+      MeetingTitle: new FormControl(this.selectedMeeting.MeetingTitle, [Validators.required]),
+      MeetingPlaforms: new FormControl(this.selectedMeeting.MeetingPlaforms),
+      MeetingFrequency: new FormControl(this.selectedMeeting.MeetingFrequency),
+      TalkingPoints: new FormControl(''),
+      EmployeesMeeting: new FormControl(this.selectedMeeting.EmployeesMeeting),
+      Status: new FormControl(this.selectedMeeting.Status)
     })
   }
 
@@ -318,10 +320,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       return;
     }
 
-    this.meetingForm.get('talkingPoints').setValue(data);
+    this.meetingForm.get('TalkingPoints').setValue(data);
     let value = this.meetingForm.value;
     if (this.selectedEmployee.length > 0)
-      value.employeesMeeting = this.selectedEmployee.map(x => x.value);
+      value.EmployeesMeeting = this.selectedEmployee.map(x => x.value);
 
     this.http.post("eps/meeting/manageMeeting", value, true).then(res => {
       if (res.ResponseBody) {
@@ -368,31 +370,38 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   bindMeetingData() {
     this.selectedEmployee = [];
     this.allMeetings.forEach(x => {
-      x.meetingDuration = this.getMeetingDuration(x.endTime, x.startTime);
-      x.employeesMeeting = JSON.parse(x.oneToOneEmpMeeting);
-      x.meetingWith = this.employeesList.data.find(i => i.value ==  x.employeesMeeting[0]).text;
-      if (x.employeesMeeting.length > 1)
-        x.extraMember = x.employeesMeeting.length - 1;
+      x.MeetingDuration = this.getMeetingDuration(x.EndTime, x.StartTime);
+      x.EmployeesMeeting = JSON.parse(x.OneToOneEmpMeeting);
+      let data = this.employeesList.data.find(i => i.value ==  x.EmployeesMeeting[0]);
+      if (data)
+        x.MeetingWith = data.text;
+      if (x.EmployeesMeeting.length > 1)
+        x.ExtraMember = x.EmployeesMeeting.length - 1;
       else
-        x.extraMember = 0;
+        x.ExtraMember = 0;
 
-      x.daysDiffer = this.daysDiffer(x.meetingDate)
+      x.DaysDiffer = this.daysDiffer(x.MeetingDate)
     });
-    this.upcomingMeetings = this.allMeetings.filter(x => x.status == 0);
-    this.pendingMeetings = this.allMeetings.filter(x => x.status == 2);
-    this.completedMeetings = this.allMeetings.filter(x => x.status == 1 || x.status == 3);
+    this.upcomingMeetings = this.allMeetings.filter(x => x.Status == 0);
+    this.pendingMeetings = this.allMeetings.filter(x => x.Status == 2);
+    this.completedMeetings = this.allMeetings.filter(x => x.Status == 1 || x.Status == 3);
     if (this.upcomingMeetings.length > 0 || this.pendingMeetings.length > 0) {
       if (this.upcomingMeetings.length > 0)
         this.selectedMeeting = this.upcomingMeetings[0];
       else
         this.selectedMeeting = this.pendingMeetings[0];
 
-      this.htmlText = JSON.parse(this.selectedMeeting.talkingPoints);
-      this.selectedMeeting.createBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.createdBy).text;
-      this.selectedMeeting.employeesMeeting.forEach(y => {
+      this.htmlText = JSON.parse(this.selectedMeeting.TalkingPoints);
+      let data = this.employeesList.data.find(x => x.value == this.selectedMeeting.CreatedBy);
+      if (data)
+        this.selectedMeeting.CreateBy = data.text;
+
+      this.selectedMeeting.EmployeesMeeting.forEach(y => {
         let emp: any = this.employeesList.data.find(x => x.value == y);
-        emp.userNameIcon = this.getUserNameIcon(emp.text)
-        this.selectedEmployee.push(emp);
+        if (emp) {
+          emp.userNameIcon = this.getUserNameIcon(emp.text)
+          this.selectedEmployee.push(emp);
+        }
       })
     } else {
       this.resetMeeting();
@@ -403,10 +412,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     if (this.completedMeetings.length > 0) {
       this.selectedEmployee = [];
       this.selectedMeeting = this.completedMeetings[0];
-      this.htmlText = JSON.parse(this.selectedMeeting.talkingPoints);
-      this.selectedMeeting.employeesMeeting = JSON.parse(this.selectedMeeting.oneToOneEmpMeeting);
-      this.selectedMeeting.createBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.createdBy).text;
-      this.selectedMeeting.employeesMeeting.forEach(y => {
+      this.htmlText = JSON.parse(this.selectedMeeting.TalkingPoints);
+      this.selectedMeeting.EmployeesMeeting = JSON.parse(this.selectedMeeting.OneToOneEmpMeeting);
+      this.selectedMeeting.CreateBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.CreatedBy).text;
+      this.selectedMeeting.EmployeesMeeting.forEach(y => {
         let emp: any = this.employeesList.data.find(x => x.value == y);
         if (emp) {
           emp.userNameIcon = this.getUserNameIcon(emp.text)
@@ -422,10 +431,10 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     if (item) {
       this.selectedEmployee = [];
       this.selectedMeeting = item;
-      this.htmlText = JSON.parse(this.selectedMeeting.talkingPoints);
-      this.selectedMeeting.employeesMeeting = JSON.parse(this.selectedMeeting.oneToOneEmpMeeting);
-      this.selectedMeeting.createBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.createdBy).text;
-      this.selectedMeeting.employeesMeeting.forEach(y => {
+      this.htmlText = JSON.parse(this.selectedMeeting.TalkingPoints);
+      this.selectedMeeting.EmployeesMeeting = JSON.parse(this.selectedMeeting.OneToOneEmpMeeting);
+      this.selectedMeeting.CreateBy = this.employeesList.data.find(x => x.value == this.selectedMeeting.CreatedBy).text;
+      this.selectedMeeting.EmployeesMeeting.forEach(y => {
         let emp: any = this.employeesList.data.find(x => x.value == y);
         if (emp) {
           emp.userNameIcon = this.getUserNameIcon(emp.text)
@@ -443,8 +452,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
 
   editMeetings() {
     this.initMeetingForm();
-    this.selectedMeeting.meetingDate = new Date(this.selectedMeeting.meetingDate);
-    this.model = { day: this.selectedMeeting.meetingDate.getDate(), month: this.selectedMeeting.meetingDate.getMonth() + 1, year: this.selectedMeeting.meetingDate.getFullYear()};
+    this.selectedMeeting.MeetingDate = new Date(this.selectedMeeting.MeetingDate);
+    this.model = { day: this.selectedMeeting.MeetingDate.getDate(), month: this.selectedMeeting.MeetingDate.getMonth() + 1, year: this.selectedMeeting.MeetingDate.getFullYear()};
     $("#manageMeeting").modal('show');
   }
 
@@ -483,6 +492,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     this.meetingDuration = null;
     this.model = null;
     this.htmlText = null;
+    this.isSubmitted = false;
   }
 
   meetingTab(index: number) {
@@ -508,7 +518,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   completeMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`eps/meeting/updateMeetingStatus/${this.selectedMeeting.meetingId}/1`, true).then(res => {
+      this.http.get(`eps/meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/1`, true).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -530,7 +540,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   cancelMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`eps/meeting/updateMeetingStatus/${this.selectedMeeting.meetingId}/3`, true).then(res => {
+      this.http.get(`eps/meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/3`, true).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -552,7 +562,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   deleteMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.delete(`eps/meeting/deleteMeeting/${this.selectedMeeting.meetingId}`, true).then(res => {
+      this.http.delete(`eps/meeting/deleteMeeting/${this.selectedMeeting.MeetingId}`,null, true).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -659,18 +669,18 @@ class Objective {
 }
 
 class Meeting {
-  meetingId: number = 0;
-  startTime: string = null;
-  endTime: string = null;
-  meetingDate: Date = null;
-  meetingTitle: string = null;
-  meetingPlaforms: number = 0;
-  meetingFrequency: number = null;
-  talkingPoints: string = null;
-  employeesMeeting: Array<number> = [];
-  oneToOneEmpMeeting: string = null;
-  meetingDuration: string = null;
-  createBy: string = null;
-  status: number = 0;
-  createdBy: number = 0;
+  MeetingId: number = 0;
+  StartTime: string = null;
+  EndTime: string = null;
+  MeetingDate: Date = null;
+  MeetingTitle: string = null;
+  MeetingPlaforms: number = 0;
+  MeetingFrequency: number = null;
+  TalkingPoints: string = null;
+  EmployeesMeeting: Array<number> = [];
+  OneToOneEmpMeeting: string = null;
+  MeetingDuration: string = null;
+  CreateBy: string = null;
+  Status: number = 0;
+  CreatedBy: number = 0;
 }

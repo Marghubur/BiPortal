@@ -1,281 +1,280 @@
 <div class="col-12 full-v main-container" [ngClass]="{'preload': !isLoaded}">
-    <div>
-      <form>
-        <div class="x_panel mh-auto">
-          <div class="x_header">
-            <div class="x_header_title">
-              <h2>{{projectDetail.ProjectName}}
-                <small>Project detail to update.</small>
-                <i class="fa text-dark edit-icon ps-2"></i>
-              </h2>
-            </div>
-          </div>
-          <div class="px-1">
-            <app-breadcrums></app-breadcrums>
-          </div>
-          <div [ngSwitch]="isLoaded">
-            <div *ngSwitchCase="false">
-              <div class="mt-5">
-                <app-pre-load-table></app-pre-load-table>
+  <div>
+    <form>
+      <div class="x_panel mh-auto">
+        <div class="x_header">
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="projectDetail.ProjectName" [subtitle]="'Project detail to update.'"></app-breadcrums>
               </div>
-            </div>
-            <div *ngSwitchDefault>
-              <!-- *ngIf="projectDetail.Title != null && projectDetail.Title != ''" -->
-                <ng-container *ngIf="projectDetail.SectionDescription != null">
-                    <div class="row col-12 mt-3 x_content full-height">
-                        <div class="col-sm-3 col-md-2 x_panel" (click)="deactivateTag()">
-                            <div class="x_header">
-                                <div class="x_header_title d-flex flex-row justify-content-between">
-                                    <h6>{{projectDetail.ProjectName}}</h6>
-                                </div>
-                            </div>
-                            <div id="side-menu-item">
-                                <ul class="list-unstyled">
-                                    <li >
-                                        <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
-                                            <span>{{projectDetail.Title}}</span>
-                                        </a>
-                                        <ul class="list-unstyled ms-3" *ngIf="projectDetail.SectionName != null || projectDetail.SectionName != ''">
-                                            <li>
-                                                <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
-                                                    <span>{{projectDetail.SectionName}}</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- <div class="col-md-10 col-sm-9 outline-none" id="main-container"
-                        (contextmenu)="manipulateSection($event)"
-                        (click)="disabeSection()"
-                        (focus)="deactivateTag()"
-                        (keyup)="tractPressEvent($event)" tabindex="0">
-                          <div class="col-md-12 px-4 dv-space"> -->
-                            <!-- <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" (keyup)="editProjectTitle($event)" [value]="projectDetail.Title"> -->
-                            <!-- <ng-container>
-                              <form [formGroup]="wikiForm">
-                                <div> -->
-                                  <!-- <div class="d-flex justify-content-around icon-section rounded"> -->
-                                    <!-- <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-dark" (click)="addsection()">
-                                      <i class="fa fa-plus text-dark" ></i>
-                                    </a> -->
-                                    <!-- <div ngbDropdown class="d-inline-block">
-                                      <a href="javascript:void(0)" id="dropdownBasic1" ngbDropdownToggle class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Font Size" class="fs-6 px-2">
-                                        <i class="fa fa-font" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                      </a>
-                                      <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                                        <button ngbDropdownItem>
-                                          <a class="dropdown-item fw-bold" href="javascript:void(0)"
-                                            (click)="fontSize($event, 'fs-3')">Font Size 1</a>
-                                        </button>
-                                        <button ngbDropdownItem>
-                                          <a class="dropdown-item fw-bold" href="javascript:void(0)"
-                                            (click)="fontSize($event, 'fs-4')">Font Size 2</a>
-                                        </button>
-                                        <button ngbDropdownItem>
-                                          <a class="dropdown-item fw-bold" href="javascript:void(0)"
-                                            (click)="fontSize($event, 'fs-5')">Font Size 3</a>
-                                        </button>
-                                        <button ngbDropdownItem>
-                                          <a class="dropdown-item fw-bold" href="javascript:void(0)"
-                                            (click)="fontSize($event, 'fs-6')">Font Size 4</a>
-                                        </button>
-                                      </div>
-                                    </div>
-                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Right" class="fs-6 px-2" (click)="textAlignment($event, 'right')">
-                                      <i class="fa fa-align-right" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Center" class="fs-6 px-2" (click)="textAlignment($event, 'center')">
-                                      <i class="fa fa-align-center" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Left" class="fs-6 px-2" (click)="textAlignment($event, 'left')">
-                                      <i class="fa fa-align-left" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Bold" class="fs-6 px-2" (click)="textFont($event, 'bold')">
-                                      <i class="fa fa-bold" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Italic" class="fs-6 px-2" (click)="textFont($event, 'italic')">
-                                      <i class="fa fa-italic" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Underline" class="fs-6 px-2" (click)="textFont($event, 'underline')">
-                                      <i class="fa fa-underline" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2" (click)="addLinkPopUp()">
-                                        <i class="fa fa-picture-o" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add paragraph" class="fs-6 px-2" (click)="addParagraph()">
-                                        <i class="fa fa-file-text" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add link" class="fs-6 px-2" (click)="addLinkPopUp()">
-                                        <i class="fa fa-anchor" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add list" class="fs-6 px-2" (click)="enableListItem()">
-                                        <i class="fa fa-link" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add chart" class="fs-6 px-2">
-                                        <i class="fa fa-line-chart" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="fs-6 px-2" *ngIf="isSectionEdited" (click)="editCurrentSection()">
-                                        <i class="fa fa-pencil" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" class="fs-6 px-2 text-muted"  (click)="saveProjectDetails($event)">
-                                      <i class="fa fa-paper-plane" data-bs-toggle="tooltip" data-bs-placement="top" title="Save" [ngClass]="{'text-dark': !isSectionEdited}"></i>
-                                    </a>
-                                  </div>
-
-                                    <ng-container >
-                                      <div class="col-md-12 mx-3">
-                                        <h5 >
-                                          <div class=""> -->
-                                            <!-- <div contenteditable="true" (keyup)="editSubSection($event)">
-                                              {{wikiForm.get('WikiSection').value}}
-                                            </div> -->
-                                            <!-- <div class="text-end"> -->
-                                              <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
-                                                <i class="fa fa-trash text-danger"></i>
-                                              </a> -->
-                                              <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection()">
-                                                <i class="fa fa-pencil ps-3 blur-icon"></i>
-                                              </a>
-                                            </div>
-                                          </div>
-                                        </h5>
-                                        <div class="content-dv overflow-none py-2 px-3" (click)="enablePosition($event)" (dblclick)="enableCurrentSection($event)" name="content-container"
-                                          (keypress.ctrl)="trackElement($event)" [innerHTML]="wikiForm.get('WikiSectionDetail').value">
-                                        </div>
-                                      </div>
-                                    </ng-container>
-                                </div>
-                              </form>
-                            </ng-container>
-                          </div>
-                        </div> -->
-                        <div class="col-md-10 col-sm-9">
-                          <app-editor [height]="55" [content]="htmlText"></app-editor>
-                          <button class="btn btn-primary-c ms-3 float-end" [disabled]="isloading" (click)="saveProjectDetails()">
-                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isloading, 'fa-file-o': !isloading}"></i>
-                            <span class="ps-2">{{ isloading ? 'Wait' : 'Save' }}</span>
-                          </button>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="!isWikiAdded">
-                  <div class="my-5 py-5 text-center">
-                    <h3 class="mt-5 pt-5">Please add project name and project title</h3>
-                    <button class="btn btn-primary-c my-4" (click)="addTitlePopUp()"><i class="fa fa-plus pe-2"></i> Add Project Title</button>
-                  </div>
-                </ng-container>
             </div>
           </div>
         </div>
-      </form>
-    </div>
+        <div [ngSwitch]="isLoaded">
+          <div *ngSwitchCase="false">
+            <div class="mt-5">
+              <app-pre-load-table></app-pre-load-table>
+            </div>
+          </div>
+          <div *ngSwitchDefault>
+            <!-- *ngIf="projectDetail.Title != null && projectDetail.Title != ''" -->
+              <ng-container *ngIf="projectDetail.SectionDescription != null && isWikiAdded">
+                <button class="float-end btn btn-primary-c" (click)="isEdit = true" *ngIf="!isEdit"><i class="fa fa-pencil pe-1"></i> Edit</button>
+                <div class="row col-12 mt-3 x_content full-height">
+                    <div class="col-sm-3 col-md-2 x_panel" (click)="deactivateTag()" *ngIf="!isEdit">
+                        <div class="x_header">
+                            <div class="x_header_title d-flex flex-row justify-content-between">
+                                <h6>{{projectDetail.ProjectName}}</h6>
+                            </div>
+                        </div>
+                        <div id="side-menu-item">
+                            <ul class="list-unstyled" *ngIf="topics.length > 0">
+                                <li *ngFor="let item of topics">
+                                    <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
+                                        <span>{{item}}</span>
+                                    </a>
+                                    <!-- <ul class="list-unstyled ms-3" *ngIf="topics != null">
+                                        <li >
+                                            <a href="javascript:void(0)" class=" py-1 text-decoration-none text-dark d-flex align-items-center justify-content-between">
+                                                <span>{{projectDetail.SectionName}}</span>
+                                            </a>
+                                        </li>
+                                    </ul> -->
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-10 col-sm-9 outline-none" id="main-container"
+                    (contextmenu)="manipulateSection($event)"
+                    (click)="disabeSection()"
+                    (focus)="deactivateTag()"
+                    (keyup)="tractPressEvent($event)" tabindex="0">
+                      <div class="col-md-12 px-4 dv-space"> -->
+                        <!-- <input type="text" placeholder="Enter Title" class="form-control border-0 fw-bold fs-3" (keyup)="editProjectTitle($event)" [value]="projectDetail.Title"> -->
+                        <!-- <ng-container>
+                          <form [formGroup]="wikiForm">
+                            <div> -->
+                              <!-- <div class="d-flex justify-content-around icon-section rounded"> -->
+                                <!-- <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Section" class="fs-6 px-2 text-dark" (click)="addsection()">
+                                  <i class="fa fa-plus text-dark" ></i>
+                                </a> -->
+                                <!-- <div ngbDropdown class="d-inline-block">
+                                  <a href="javascript:void(0)" id="dropdownBasic1" ngbDropdownToggle class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Font Size" class="fs-6 px-2">
+                                    <i class="fa fa-font" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                  </a>
+                                  <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                    <button ngbDropdownItem>
+                                      <a class="dropdown-item fw-bold" href="javascript:void(0)"
+                                        (click)="fontSize($event, 'fs-3')">Font Size 1</a>
+                                    </button>
+                                    <button ngbDropdownItem>
+                                      <a class="dropdown-item fw-bold" href="javascript:void(0)"
+                                        (click)="fontSize($event, 'fs-4')">Font Size 2</a>
+                                    </button>
+                                    <button ngbDropdownItem>
+                                      <a class="dropdown-item fw-bold" href="javascript:void(0)"
+                                        (click)="fontSize($event, 'fs-5')">Font Size 3</a>
+                                    </button>
+                                    <button ngbDropdownItem>
+                                      <a class="dropdown-item fw-bold" href="javascript:void(0)"
+                                        (click)="fontSize($event, 'fs-6')">Font Size 4</a>
+                                    </button>
+                                  </div>
+                                </div>
+                                <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Right" class="fs-6 px-2" (click)="textAlignment($event, 'right')">
+                                  <i class="fa fa-align-right" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Center" class="fs-6 px-2" (click)="textAlignment($event, 'center')">
+                                  <i class="fa fa-align-center" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Left" class="fs-6 px-2" (click)="textAlignment($event, 'left')">
+                                  <i class="fa fa-align-left" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Bold" class="fs-6 px-2" (click)="textFont($event, 'bold')">
+                                  <i class="fa fa-bold" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Italic" class="fs-6 px-2" (click)="textFont($event, 'italic')">
+                                  <i class="fa fa-italic" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Underline" class="fs-6 px-2" (click)="textFont($event, 'underline')">
+                                  <i class="fa fa-underline" aria-hidden="true" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add image" class="fs-6 px-2" (click)="addLinkPopUp()">
+                                    <i class="fa fa-picture-o" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add paragraph" class="fs-6 px-2" (click)="addParagraph()">
+                                    <i class="fa fa-file-text" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add link" class="fs-6 px-2" (click)="addLinkPopUp()">
+                                    <i class="fa fa-anchor" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add list" class="fs-6 px-2" (click)="enableListItem()">
+                                    <i class="fa fa-link" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Add chart" class="fs-6 px-2">
+                                    <i class="fa fa-line-chart" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSectionEdited, 'text-muted': isSectionEdited}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="fs-6 px-2" *ngIf="isSectionEdited" (click)="editCurrentSection()">
+                                    <i class="fa fa-pencil" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                                <a href="javascript:void(0)" class="fs-6 px-2 text-muted"  (click)="saveProjectDetails($event)">
+                                  <i class="fa fa-paper-plane" data-bs-toggle="tooltip" data-bs-placement="top" title="Save" [ngClass]="{'text-dark': !isSectionEdited}"></i>
+                                </a>
+                              </div>
+
+                                <ng-container >
+                                  <div class="col-md-12 mx-3">
+                                    <h5 >
+                                      <div class=""> -->
+                                        <!-- <div contenteditable="true" (keyup)="editSubSection($event)">
+                                          {{wikiForm.get('WikiSection').value}}
+                                        </div> -->
+                                        <!-- <div class="text-end"> -->
+                                          <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteSection(i)">
+                                            <i class="fa fa-trash text-danger"></i>
+                                          </a> -->
+                                          <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="enableSection()">
+                                            <i class="fa fa-pencil ps-3 blur-icon"></i>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </h5>
+                                    <div class="content-dv overflow-none py-2 px-3" (click)="enablePosition($event)" (dblclick)="enableCurrentSection($event)" name="content-container"
+                                      (keypress.ctrl)="trackElement($event)" [innerHTML]="wikiForm.get('WikiSectionDetail').value">
+                                    </div>
+                                  </div>
+                                </ng-container>
+                            </div>
+                          </form>
+                        </ng-container>
+                      </div>
+                    </div> -->
+                    <div class="col-md-10 col-sm-9" [ngClass]="{'col-md-10 col-sm-9': !isEdit, 'col-md-12 col-sm-12': isEdit}">
+                      <app-editor [isEdit]="isEdit" [height]="55" [content]="htmlText"></app-editor>
+                      <button class="btn btn-primary-c ms-3 float-end" [disabled]="isloading" (click)="saveProjectDetails()">
+                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isloading, 'fa-file-o': !isloading}"></i>
+                        <span class="ps-2">{{ isloading ? 'Wait' : 'Save' }}</span>
+                      </button>
+                    </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!isWikiAdded">
+                <div class="my-5 py-5 text-center">
+                  <h3 class="mt-5 pt-5">Please add project name and project title</h3>
+                  <button class="btn btn-primary-c my-4" (click)="addTitlePopUp()"><i class="fa fa-plus pe-2"></i> Add Project Title</button>
+                </div>
+              </ng-container>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
 
 <!-- Add Link Modal -->
 <div class="modal fade" id="addLinkModal" tabindex="-1" aria-labelledby="addLinkModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content px-4">
-      <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addLinkModalLabel">Add Link</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row col-md-12 p-0 mx-0">
-          <div class="col-md-12">
-            <div class="col-md-6">
-              <label for="">Alternative Text</label>
-              <input type="text" class="form-control" placeholder="Enter alt text">
-            </div>
+<div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-content px-4">
+    <div class="modal-header border-bottom-0">
+      <h5 class="modal-title" id="addLinkModalLabel">Add Link</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <div class="row col-md-12 p-0 mx-0">
+        <div class="col-md-12">
+          <div class="col-md-6">
+            <label for="">Alternative Text</label>
+            <input type="text" class="form-control" placeholder="Enter alt text">
+          </div>
 
-            <div class="d-flex justify-content-start ms-0 mt-2">
-              <div>
-                <label for="" class="form-label">Enter image URL or browse your local computer.</label>
-              </div>
-              <div class="form-check">
-                <input type="file" class="d-none" id="insert-image" accept=".jpg, .jpeg, .png" (change)="uploadImage($event)">
-                <a href="javascript:void(0)" (click)="fireBrowser()">Browser Local</a>
-              </div>
+          <div class="d-flex justify-content-start ms-0 mt-2">
+            <div>
+              <label for="" class="form-label">Enter image URL or browse your local computer.</label>
             </div>
-
-            <div class="col-md-12">
-              <input type="text" class="form-control" [(ngModel)]="anchorLink" placeholder="Enter your link">
+            <div class="form-check">
+              <input type="file" class="d-none" id="insert-image" accept=".jpg, .jpeg, .png" (change)="uploadImage($event)">
+              <a href="javascript:void(0)" (click)="fireBrowser()">Browser Local</a>
             </div>
           </div>
 
-          <div class="col-md-12 mt-3">
-            <div class="position-relative">
-              <div class="mb-2">
-                Image Preview Container
-              </div>
-              <div class="pic-container">
-                <img *ngIf="imageUrl != '' && imageUrl != null" [src]="imageUrl" width="100%" height="100%" alt="">
-              </div>
+          <div class="col-md-12">
+            <input type="text" class="form-control" [(ngModel)]="anchorLink" placeholder="Enter your link">
+          </div>
+        </div>
+
+        <div class="col-md-12 mt-3">
+          <div class="position-relative">
+            <div class="mb-2">
+              Image Preview Container
+            </div>
+            <div class="pic-container">
+              <img *ngIf="imageUrl != '' && imageUrl != null" [src]="imageUrl" width="100%" height="100%" alt="">
             </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
-        <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addImage()"><i class="fa fa-plus pe-2"></i>Add</a>
-      </div>
+    </div>
+    <div class="modal-footer border-top-0">
+      <a href="javascript:void(0)" class="text-decoration-none text-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</a>
+      <a href="javascript:void(0)" class="text-decoration-none ms-3" (click)="addImage()"><i class="fa fa-plus pe-2"></i>Add</a>
     </div>
   </div>
+</div>
 </div>
 <!-- End -->
 
 <!-- Right click event popover -->
 
 <div class="position-fixed c-po d-none" id="popoverTemplate" >
-  <nav class ="navbar">
-    <ul class ="nav navbar-nav">
-      <ng-container *ngIf="target != null">
-        <li class="nav-item">
-          <a href="javascript:void(0)" class="nav-link" (click)="enableListItem()">
-            <i class="fa fa-list-ol pe-3" aria-hidden="true"></i>Add numeric list
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:void(0)" class="nav-link" (click)="enableBulletItem($event)">
-            <i class="fa fa-list-ul pe-3" aria-hidden="true"></i>Add bulleted points
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:void(0)" class="nav-link" (click)="addParagraphAbove()">
-            <i class="fa fa-text-height pe-3" aria-hidden="true"></i>Insert paragraph above
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:void(0)" class="nav-link" (click)="addParagraphBelow()">
-            <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Insert paragraph below
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:void(0)" class="nav-link" (click)="addHorizontalLine()">
-            <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Add horizontal line
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:void(0)" (click)="closePopOver()" class="nav-link">
-            <i class="fa fa-external-link pe-3" aria-hidden="true"></i>Exit
-          </a>
-        </li>
-      </ng-container>
-      <!-- <ng-container *ngIf="target == null">
-        <li class="nav-item">
-          <a href="javascript:void(0)" (click)="addSubTitle()" class="nav-link">
-            <i class="fa fa-plus pe-3" aria-hidden="true"></i>Add Section
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="javascript:void(0)" (click)="closePopOver()" class="nav-link">
-            <i class="fa fa-external-link pe-3" aria-hidden="true"></i>Exit
-          </a>
-        </li>
-      </ng-container> -->
-    </ul>
-  </nav>
+<nav class ="navbar">
+  <ul class ="nav navbar-nav">
+    <ng-container *ngIf="target != null">
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link" (click)="enableListItem()">
+          <i class="fa fa-list-ol pe-3" aria-hidden="true"></i>Add numeric list
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link" (click)="enableBulletItem($event)">
+          <i class="fa fa-list-ul pe-3" aria-hidden="true"></i>Add bulleted points
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link" (click)="addParagraphAbove()">
+          <i class="fa fa-text-height pe-3" aria-hidden="true"></i>Insert paragraph above
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link" (click)="addParagraphBelow()">
+          <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Insert paragraph below
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" class="nav-link" (click)="addHorizontalLine()">
+          <i class="fa fa-text-width pe-3" aria-hidden="true"></i>Add horizontal line
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" (click)="closePopOver()" class="nav-link">
+          <i class="fa fa-external-link pe-3" aria-hidden="true"></i>Exit
+        </a>
+      </li>
+    </ng-container>
+    <!-- <ng-container *ngIf="target == null">
+      <li class="nav-item">
+        <a href="javascript:void(0)" (click)="addSubTitle()" class="nav-link">
+          <i class="fa fa-plus pe-3" aria-hidden="true"></i>Add Section
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="javascript:void(0)" (click)="closePopOver()" class="nav-link">
+          <i class="fa fa-external-link pe-3" aria-hidden="true"></i>Exit
+        </a>
+      </li>
+    </ng-container> -->
+  </ul>
+</nav>
 </div>
 
 <!-- End -->
