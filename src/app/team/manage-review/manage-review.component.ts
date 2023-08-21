@@ -282,7 +282,7 @@ export class ManageReviewComponent implements OnInit {
 
   rejectObjective() {
     this.isLoading = true;
-    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Rejected}`, true).then(res => {
+    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.employeeId}/${ItemStatus.Rejected}`, true).then(res => {
       if (res.ResponseBody) {
         Toast("Objective rejected");
         this.isLoading = false;
@@ -295,7 +295,7 @@ export class ManageReviewComponent implements OnInit {
 
   approveObjective() {
     this.isLoading = true;
-    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Approved}`, true).then(res => {
+    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.employeeId}/${ItemStatus.Approved}`, true).then(res => {
       if (res.ResponseBody) {
         Toast("Objective approved successfully");
         this.isLoading = false;

@@ -34,6 +34,8 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
+  @Input() isEdit: boolean = true;
+
   @Input()
   set height(value: number) {
     this.containerHeight = value;

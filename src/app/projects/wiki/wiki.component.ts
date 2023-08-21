@@ -32,6 +32,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   htmlText: any = null;
   isloading: boolean  = false;
   isWikiAdded: boolean = false;
+  isEdit: boolean = false;
+  topics: Array<string> = [];
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
@@ -108,6 +110,12 @@ export class WikiComponent implements OnInit, AfterViewChecked {
         if (data.DocumentationDetail != null && data.DocumentationDetail != '[]') {
           // this.projectDetail.SectionDescription = res.ResponseBody.DocumentationDetail;
           this.htmlText = res.ResponseBody.DocumentationDetail;
+          // this.topics = this.htmlText.split("<div>").filter(x => x.includes("##"));
+          // if (this.topics.length > 0) {
+          //   for (let i = 0; i < this.topics.length; i++) {
+          //     this.topics[i] = this.topics[i].replace("</div>", '');
+          //   }
+          // }
           this.isWikiAdded = true;
         }
         else
@@ -130,6 +138,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   addTitlePopUp() {
+    this.isWikiAdded = true;
+    this.isEdit = true;
     this.projectDetail.Title = '[Add Title]';
     this.titleValue = '';
     this.titleValue = '[Add Section Title]';
@@ -435,7 +445,38 @@ export class WikiComponent implements OnInit, AfterViewChecked {
 
   saveProjectDetails(e: any) {
     this.isloading = true;
+    this.isEdit = false;
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    data = this.removeHeaderTag(data);
+    // let headers = data.split("<div>").filter(x => x.includes("##"));
+    // if (headers.length > 0) {
+    //   for (let i = 0; i < headers.length; i++) {
+    //     let newValue = "";
+    //     let tagValue = 0;
+    //     if (headers[i].includes("##1"))
+    //       tagValue = 1;
+    //     else if (headers[i].includes("##2"))
+    //       tagValue = 2;
+    //     else if (headers[i].includes("##3"))
+    //       tagValue = 3;
+    //     else if (headers[i].includes("##4"))
+    //       tagValue = 4;
+    //     else if (headers[i].includes("##5"))
+    //       tagValue = 5;
+    //     else if (headers[i].includes("##6"))
+    //       tagValue = 6;
+
+    //     if (headers[i].includes("</div>")) {
+    //       newValue = headers[i].replace("</div>", "");
+    //       newValue = `<h${tagValue}>`+headers[i]+`</h${tagValue}>`+"</div>"
+    //     } else {
+    //       newValue = `<h${tagValue}>`+headers[i]+`</h${tagValue}>`
+    //     }
+    //    data =  data.replace(headers[i], newValue)
+    //   }
+    // }
+    this.splitText();
+    data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     this.projectDetail.SectionDescription= data;
     this.projectDetail.ProjectId = this.projectId;
     this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
@@ -447,6 +488,74 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       this.isloading = false;
       Error(e);
     })
+  }
+
+  removeHeaderTag(data: string) {
+    if (data.includes("<h1>"))
+      data = data.replaceAll("<h1>", "");
+
+    if (data.includes("</h1>"))
+      data = data.replaceAll("</h1>", "");
+
+    if (data.includes("<h2>"))
+      data = data.replaceAll("<h2>", "");
+
+    if (data.includes("</h2>"))
+      data = data.replaceAll("</h2>", "");
+
+    if (data.includes("<h3>"))
+      data = data.replaceAll("<h3>", "");
+
+    if (data.includes("</h3>"))
+      data = data.replaceAll("</h3>", "");
+
+    if (data.includes("<h4>"))
+      data = data.replaceAll("<h4>", "");
+
+    if (data.includes("</h4>"))
+      data = data.replaceAll("</h4>", "");
+
+    if (data.includes("<h5>"))
+      data = data.replaceAll("<h5>", "");
+
+    if (data.includes("</h5>"))
+      data = data.replaceAll("</h5>", "");
+
+    if (data.includes("<h6>"))
+      data = data.replaceAll("<h6>", "");
+
+    if (data.includes("</h6>"))
+      data = data.replaceAll("</h6>", "");
+
+    return data;
+  }
+
+  splitText() {
+    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerText;
+    let header = data.split("##");
+    if (header.length > 0) {
+      header = header.filter(x => x != "");
+      for (let i = 0; i < header.length; i++) {
+        let value =header[i].split("\n")[0]
+        let tagValue = 0;
+        if (value.includes("1"))
+          tagValue = 1;
+        else if (value.includes("2"))
+          tagValue = 2;
+        else if (value.includes("3"))
+          tagValue = 3;
+        else if (value.includes("4"))
+          tagValue = 4;
+        else if (value.includes("5"))
+          tagValue = 5;
+        else if (value.includes("6"))
+          tagValue = 6;
+
+        let newValue = `<h${tagValue}>`+value+`</h${tagValue}>`
+        data =  data.replace(value, newValue)
+      }
+      (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerText = data;
+    }
   }
 
   // saveProjectDetails(e: any) {
@@ -550,6 +659,10 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       };
       this.addImage();
     }
+  }
+
+  editorEdited(e: any) {
+    this.isEdit = e;
   }
 }
 

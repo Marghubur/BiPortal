@@ -731,7 +731,7 @@ export class AppraisalSettingComponent implements OnInit {
   addObjectivePopUp() {
     this.isSubmitted = false;
     this.currentObject = new Objective();
-    this.initForm();
+    this.initObjetiveForm();
     $('#addObjectiveModal').modal('show');
   }
 
