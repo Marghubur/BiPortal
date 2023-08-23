@@ -83,7 +83,7 @@
           <app-pagination [pagination]="mappedData" (onPageChange)="GetFilterResult($event)"></app-pagination>
         </div>
       </ng-container>
-      <ng-container *ngIf="isPageLoading">
+      <!-- <ng-container *ngIf="isPageLoading">
         <div class="py-5 my-5">
           <h6 class="fw-bold fs-3 text-center text-dark">Email template are loading</h6>
           <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -95,7 +95,7 @@
             </div>
           </div>
         </div>
-      </ng-container>
+      </ng-container> -->
     </div>
   <app-message-modal [Data]="modalData"></app-message-modal>
 </div>
