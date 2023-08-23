@@ -17,8 +17,8 @@
         </div>
       </div>
     </div>
-    <div [ngSwitch]="pageDataIsReady">
-      <div class="data-loading-loader" *ngSwitchCase="false">
+    <div *ngIf="pageDataIsReady">
+      <!-- <div class="data-loading-loader" *ngSwitchCase="false">
         <div class="py-5 my-5">
           <h6 class="fw-bold fs-3 text-center text-dark">Generate bill page is loading</h6>
           <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -30,8 +30,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div *ngSwitchDefault>
+      </div> -->
+      <div >
         <div class="x_content mt-4">
           <form [formGroup]="pdfForm" id="gpdfform" class="col-md-12 row">
             <div class="col-md-12 m-0 row">

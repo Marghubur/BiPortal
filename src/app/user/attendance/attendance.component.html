@@ -188,7 +188,7 @@
                   </table>
                 </div>
               </div>
-              <ng-container *ngIf="isLoading">
+              <!-- <ng-container *ngIf="isLoading">
                 <div class="py-5 my-5">
                   <h6 class="fw-bold fs-3 text-center text-dark">Attendance are loading</h6>
                   <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -200,7 +200,7 @@
                     </div>
                   </div>
                 </div>
-              </ng-container>
+              </ng-container> -->
             </ng-template>
           </ng-container>
           <ng-container ngbNavItem>
@@ -314,7 +314,7 @@
                   </div>
                 </ng-container>
               </ng-container>
-              <ng-container *ngIf="isLoading">
+              <!-- <ng-container *ngIf="isLoading">
                 <div class="py-5 my-5">
                   <h6 class="fw-bold fs-3 text-center text-dark">Shift details are loading</h6>
                   <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -326,7 +326,7 @@
                     </div>
                   </div>
                 </div>
-              </ng-container>
+              </ng-container> -->
             </ng-template>
           </ng-container>
 
@@ -430,7 +430,7 @@
                     <app-pagination [pagination]="request" (onPageChange)="GetFilterResult($event)"></app-pagination>
                   </div>
                 </ng-container>
-                <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
+                <!-- <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
                   <div class="py-5 my-5">
                     <h6 class="fw-bold fs-3 text-center text-dark">Missed attendance and status is loading</h6>
                     <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -442,7 +442,7 @@
                       </div>
                     </div>
                   </div>
-                </ng-container>
+                </ng-container> -->
               </div>
             </ng-template>
           </ng-container>

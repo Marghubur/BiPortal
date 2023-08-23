@@ -76,7 +76,7 @@
             </tbody>
           </table>
         </ng-container>
-        <ng-container *ngIf="!isFormReady && clientId > 0">
+        <!-- <ng-container *ngIf="!isFormReady && clientId > 0">
           <div class="py-5 my-5">
             <h6 class="fw-bold fs-3 text-center text-dark">Timesheet detail is loading</h6>
             <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -88,7 +88,7 @@
               </div>
             </div>
           </div>
-        </ng-container>
+        </ng-container> -->
         <ng-container *ngIf="!isFormReady && clientId == 0">
           <div class="x_panel d-flex flex-direction-column justify-content-center">
             <div class="x_content py-5">
@@ -99,7 +99,7 @@
           </div>
         </ng-container>
       </ng-container>
-      <ng-container *ngIf="!isEmployeesReady">
+      <!-- <ng-container *ngIf="!isEmployeesReady">
         <div class="py-5 my-5 x_panel">
           <h6 class="fw-bold fs-3 text-center text-dark">Timesheet Details are loading</h6>
           <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -111,7 +111,7 @@
             </div>
           </div>
         </div>
-      </ng-container>
+      </ng-container> -->
     </div>
   </form>
 </div>
