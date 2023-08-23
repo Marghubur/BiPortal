@@ -205,9 +205,9 @@
                                     <div class="list-group rounded-0">
                                       <button type="button" name="meetingevents" (click)="selectMeeting(item, $event)" *ngFor="let item of upcomingMeetings; let i=index;"
                                        [ngClass]="{'active': i == 0, 'border-top' : i >= 1}" class="py-3 list-group-item border-0 list-group-item-action" aria-current="true">
-                                        <h6 class="text-truncate">{{item.meetingTitle}}</h6>
-                                        <p class="mb-0 text-muted">with {{item.meetingWith}} <span *ngIf="item.extraMember > 0"> & {{item.extraMember}} more</span></p>
-                                        <p class="mb-0 text-muted">on {{item.meetingDate |date}} at {{item.startTime}}</p>
+                                        <h6 class="text-truncate">{{item.MeetingTitle}}</h6>
+                                        <p class="mb-0 text-muted">with {{item.MeetingWith}} <span *ngIf="item.ExtraMember > 0"> & {{item.ExtraMember}} more</span></p>
+                                        <p class="mb-0 text-muted">on {{item.MeetingDate |date}} at {{item.StartTime}}</p>
                                       </button>
                                     </div>
                                   </div>
@@ -220,9 +220,9 @@
                                     <div class="list-group">
                                       <button type="button" name="meetingevents" [ngClass]="{'active': (pendingMeetings== null || pendingMeetings.length == 0) && i== 0, 'border-top' : i >= 1}"
                                       (click)="selectMeeting(item, $event)" *ngFor="let item of pendingMeetings; let i=index;" class="py-3 rounded-0 list-group-item border-0 list-group-item-action" aria-current="true">
-                                        <h6 class="text-truncate">{{item.meetingTitle}}</h6>
-                                        <p class="mb-0 text-muted">with {{item.meetingWith}} <span *ngIf="item.extraMember > 0"> & {{item.extraMember}} more</span></p>
-                                        <p class="mb-0 text-danger">on {{item.meetingDate |date}}, Pending since {{(item.daysDiffer.min > 0 && item.daysDiffer.days == 0 && item.daysDiffer.hrs == 0) ? (item.daysDiffer.min | number : '1.0-0') + ' mins' : (item.daysDiffer.days == 0 && item.daysDiffer.hrs > 0) ? (item.daysDiffer.hrs | number : '1.0-0') + " hrs" : (item.daysDiffer.days | number : '1.0-0') + ' days'}}</p>
+                                        <h6 class="text-truncate">{{item.MeetingTitle}}</h6>
+                                        <p class="mb-0 text-muted">with {{item.MeetingWith}} <span *ngIf="item.ExtraMember > 0"> & {{item.ExtraMember}} more</span></p>
+                                        <p class="mb-0 text-danger">on {{item.MeetingDate |date}}, Pending since {{(item.DaysDiffer.min > 0 && item.DaysDiffer.days == 0 && item.DaysDiffer.hrs == 0) ? (item.DaysDiffer.min | number : '1.0-0') + ' mins' : (item.DaysDiffer.days == 0 && item.DaysDiffer.hrs > 0) ? (item.DaysDiffer.hrs | number : '1.0-0') + " hrs" : (item.DaysDiffer.days | number : '1.0-0') + ' days'}}</p>
                                       </button>
                                     </div>
                                   </div>
@@ -237,9 +237,9 @@
                                     <div class="list-group">
                                       <button type="button" name="meetingevents" (click)="selectMeeting(item, $event)" *ngFor="let item of completedMeetings; let i=index;"
                                       [ngClass]="{'active': i == 0, 'border-top' : i >= 1}" class="py-3 list-group-item rounded-0 border-0 list-group-item-action" aria-current="true">
-                                        <h6 class="text-truncate">{{item.meetingTitle}}</h6>
-                                        <p class="mb-0 text-muted">with {{item.meetingWith}} <span *ngIf="item.extraMember > 0"> & {{item.extraMember}} more</span></p>
-                                        <p class="mb-0 text-muted">on {{item.updatedOn |date}}, {{item.status == 1 ? 'completed' : 'cancelled'}}</p>
+                                        <h6 class="text-truncate">{{item.MeetingTitle}}</h6>
+                                        <p class="mb-0 text-muted">with {{item.MeetingWith}} <span *ngIf="item.ExtraMember > 0"> & {{item.ExtraMember}} more</span></p>
+                                        <p class="mb-0 text-muted">on {{item.UpdatedOn |date}}, {{item.Status == 1 ? 'completed' : 'cancelled'}}</p>
                                       </button>
                                     </div>
                                   </div>
@@ -251,9 +251,9 @@
                             <div class="x_panel">
                               <div class="row align-items-center"  >
                                 <div class="col-md-4">
-                                  <h6 class="text-truncate">{{selectedMeeting.meetingTitle}}</h6>
-                                  <p class="mb-0 text-muted">on {{selectedMeeting.meetingDate |date}} at {{selectedMeeting.startTime}} ({{selectedMeeting.meetingDuration}})</p>
-                                  <p class="mb-0 text-muted text-truncate">Meeting created by {{selectedMeeting.createBy}}</p>
+                                  <h6 class="text-truncate">{{selectedMeeting.MeetingTitle}}</h6>
+                                  <p class="mb-0 text-muted">on {{selectedMeeting.MeetingDate |date}} at {{selectedMeeting.StartTime}} ({{selectedMeeting.MeetingDuration}})</p>
+                                  <p class="mb-0 text-muted text-truncate">Meeting created by {{selectedMeeting.CreateBy}}</p>
                                 </div>
                                 <div class="col-md-4 border-start border-end">
                                   <h6>Meeting Participant</h6>
@@ -274,8 +274,8 @@
                                 </div>
                                 <div class="col-md-4">
                                   <div class="d-flex float-end justify-content-end align-items-center">
-                                    <button *ngIf="selectedMeeting.status == 2" (click)="completeMeetingPopUp()" class="btn btn-primary-c">Complete meeting</button>
-                                    <div class="col ms-4" *ngIf="selectedMeeting.status != 1 && selectedMeeting.status != 3">
+                                    <button *ngIf="selectedMeeting.Status == 2" (click)="completeMeetingPopUp()" class="btn btn-primary-c">Complete meeting</button>
+                                    <div class="col ms-4" *ngIf="selectedMeeting.Status != 1 && selectedMeeting.Status != 3">
                                       <div ngbDropdown class="d-inline-block" placement="bottom-end">
                                         <a href="javascript:void(0)"  id="dropdownBasic1" ngbDropdownToggle>
                                           <i class="fa fa-ellipsis-v fa-lg"></i>
@@ -287,8 +287,8 @@
                                         </div>
                                       </div>
                                     </div>
-                                    <span *ngIf="selectedMeeting.status == 1 || selectedMeeting.status == 3" class="badge rounded-pill text-bg-success fw-normal p-2 fs-6"
-                                     [ngClass]="{'text-bg-success': selectedMeeting.status == 1, 'text-bg-danger': selectedMeeting.status == 3}">{{selectedMeeting.status == 1 ? 'Completed' : 'Cancelled'}}</span>
+                                    <span *ngIf="selectedMeeting.Status == 1 || selectedMeeting.Status == 3" class="badge rounded-pill text-bg-success fw-normal p-2 fs-6"
+                                     [ngClass]="{'text-bg-success': selectedMeeting.Status == 1, 'text-bg-danger': selectedMeeting.Status == 3}">{{selectedMeeting.Status == 1 ? 'Completed' : 'Cancelled'}}</span>
                                   </div>
                                 </div>
                               </div>
@@ -715,8 +715,8 @@
             </div>
             <div class="col-md-6 mt-3">
               <label class="form-label">Meeting title</label>
-              <input type="text" oninput="this.value = this.value.toUpperCase()" formControlName="meetingTitle" placeholder="Enter meeting title"
-              class="form-control" [ngClass]="{'error-field': isSubmitted && f.meetingTitle.errors !== null && f.meetingTitle.errors.required}">
+              <input type="text" oninput="this.value = this.value.toUpperCase()" formControlName="MeetingTitle" placeholder="Enter meeting title"
+              class="form-control" [ngClass]="{'error-field': isSubmitted && f.MeetingTitle.errors !== null && f.MeetingTitle.errors.required}">
             </div>
           </div>
           <div class="d-flex flex-wrap mt-3 " *ngIf="selectedEmployee.length > 0">
@@ -729,7 +729,7 @@
           <div class="row">
             <div class="col-md-6 mt-3">
               <label class="form-label">Meeting platforms (optional)</label>
-              <select class="form-select" formControlName="meetingPlaforms">
+              <select class="form-select" formControlName="MeetingPlaforms">
                 <option value="0" selected disabled>Select Platforms</option>
               </select>
             </div>
@@ -737,7 +737,7 @@
               <label class="form-label">Date</label>
               <form class="form-inline">
                 <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': isSubmitted && f.meetingDate.errors !== null && f.meetingDate.errors.required}">
+                  <div class="input-group w-100" [ngClass]="{'error-field': isSubmitted && f.MeetingDate.errors !== null && f.MeetingDate.errors.required}">
                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
                       (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="minDate" [maxDate]="maxDate" #d="ngbDatepicker">
                     <div class="input-group-append">
@@ -755,11 +755,11 @@
               <div class="row">
                 <div class="mt-3 col-md-6">
                   <label class="form-label">Start time</label>
-                  <app-bh-timepicker formControlName="startTime" ></app-bh-timepicker>
+                  <app-bh-timepicker formControlName="StartTime" ></app-bh-timepicker>
                 </div>
                 <div class="mt-3 col-md-6">
                   <label class="form-label">End time</label>
-                  <app-bh-timepicker formControlName="endTime"></app-bh-timepicker>
+                  <app-bh-timepicker formControlName="EndTime"></app-bh-timepicker>
                 </div>
                 <div class="col-md-12">
                   Duration: {{meetingDuration}}
@@ -768,7 +768,7 @@
             </div>
             <div class="mt-3 col-md-6">
               <label class="form-label">Frequency of this meeting</label>
-              <select class="form-select" formControlName="meetingFrequency" [ngClass]="{'error-field': isSubmitted && f.meetingFrequency.errors !== null && f.meetingFrequency.errors.required}">
+              <select class="form-select" formControlName="MeetingFrequency" [ngClass]="{'error-field': isSubmitted && f.MeetingFrequency.errors !== null && f.MeetingFrequency.errors.required}">
                 <option value=null disabled selected>Select Frequency</option>
                 <option value="1">Only Once</option>
                 <option value="2">Weekly</option>
