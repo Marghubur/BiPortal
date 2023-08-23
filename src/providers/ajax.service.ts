@@ -43,10 +43,11 @@ export class AjaxService {
 
   login(Url: string, Param: any, isJavaRoute: boolean = false): Promise<ResponseModel> {
     let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+    this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
       this.http
         .post(url, Param, {
-          observe: "response"
+          observe: "response"          
         }).subscribe({
           next: (res: HttpResponse<any>) => {
             try {

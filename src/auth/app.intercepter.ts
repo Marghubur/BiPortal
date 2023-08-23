@@ -22,21 +22,30 @@ export class AppHttpIntercepter implements HttpInterceptor {
     }
 
     addToken(request: HttpRequest<any>): HttpRequest<any> {
-        switch (request.method.toLocaleLowerCase()) {
-            case "post":
-                return request.clone({
-                    headers: new HttpHeaders({
-                        "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`
-                    })
-                });
-            default:
-                return request.clone({
-                    headers: new HttpHeaders({
-                        "Content-Type": "application/json; charset=utf-8",
-                        "Accept": "application/json",
-                        "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`
-                    })
-                });
+        if(request.url.toLowerCase().endsWith("authenticate")) {
+            return request.clone({
+                headers: new HttpHeaders({
+                    "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`,
+                    "companyCode": this.tokenHelper.getCompanyCode()
+                })
+            });
+        } else {
+            switch (request.method.toLocaleLowerCase()) {
+                case "post":
+                    return request.clone({
+                        headers: new HttpHeaders({
+                            "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`
+                        })
+                    });
+                default:
+                    return request.clone({
+                        headers: new HttpHeaders({
+                            "Content-Type": "application/json; charset=utf-8",
+                            "Accept": "application/json",
+                            "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`
+                        })
+                    });
+            }
         }
     }
 }

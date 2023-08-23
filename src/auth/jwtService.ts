@@ -9,6 +9,8 @@ export class JwtService {
 
     constructor(private nav: iNavigation){ }
 
+    private companyCode: string = null;
+
     getJwtToken() {
         let Token = localStorage.getItem(AccessToken);
         return Token;
@@ -39,6 +41,14 @@ export class JwtService {
         localStorage.removeItem(AccessToken);
         localStorage.removeItem(AccessTokenExpiredOn);
         localStorage.removeItem(Master);
+    }
+
+    setCompanyCode(code: string) {
+        this.companyCode = code;
+    }
+
+    getCompanyCode() {
+        return this.companyCode;
     }
 
     IsValidResponse(response: ResponseModel) {
