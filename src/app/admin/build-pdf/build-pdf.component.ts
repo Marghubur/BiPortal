@@ -161,6 +161,8 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           this.buildTimeSheet();
       }
       this.isClientSelected = true;
+    }).catch(e => {
+      ErrorToast(e.HttpStatusMessage)
     });
   }
 
