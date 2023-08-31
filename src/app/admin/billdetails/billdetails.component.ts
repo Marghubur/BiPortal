@@ -402,7 +402,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   }
 
   getFileExtension(value: any) {
-    this.downLoadFileExtension = "." + value.target.value;
+    this.downLoadFileExtension = "." + value;
   }
 
   downloadFile(userFile: any) {

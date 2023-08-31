@@ -354,6 +354,7 @@ export class AttendanceComponent implements OnInit {
     }
 
     return {
+      WorkTypeId: 1,
       EmployeeUid: this.employeeId,
       AttendenceDetailId: this.currentAttendance.AttendenceDetailId,
       AttendanceId: this.AttendanceId,
