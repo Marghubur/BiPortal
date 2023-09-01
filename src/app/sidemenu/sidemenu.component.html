@@ -3,24 +3,28 @@
     <div class="accordion" id="accordionExample">
       <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
         <h2 class="accordion-header" [id]="'heading'+i">
-          <button class="accordion-button" [ngClass]="{ 'collapsed': catagory.IsActive }" type="button"
+          <button class="accordion-button" [ngClass]="{ 'collapsed active-menu': catagory.IsActive }" type="button"
             data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+i" aria-expanded="!catagory.IsActive"
             [attr.aria-controls]="'collapse'+i">
-            {{catagory.Name}} <span *ngIf="catagory.ParentDetail.Badge != null"
-              class="badge bg-secondary ms-3">NEW</span>
+              <img src="assets/fonts/{{catagory.Name}}.png" alt="NAN" class="catagory-icons">
+              {{catagory.Name}} 
+              <span *ngIf="catagory.ParentDetail.Badge != null"
+                class="badge bg-secondary ms-3">
+                NEW
+              </span>
           </button>
         </h2>
         <div [id]="'collapse'+i" class="accordion-collapse collapse" [ngClass]="{ 'show': catagory.IsActive }"
           [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
-          <div class="">
+          <div class="menu-item-group">
             <ng-container *ngFor="let item of catagory.Value">
               <a [routerLink]="['/' + item.Link]" class="nav-link a-font" (click)="cleanupEmpId(item.Link)"
                 routerLinkActive="active-link">
-                <div class="row align-items-center">
+                <div class="row menu-item-div align-items-center">
                   <div class="col-md-1">
                     <i class="{{item.Icon}}"></i>
                   </div>
-                  <div class="col-md-8">
+                  <div class="mene-item col-md-8">
                     {{item.Catagory}}
                   </div>
                 </div>

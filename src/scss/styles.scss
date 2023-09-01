@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~bootstrap/dist/css/bootstrap.min.css";
+@import url(./extra-large-screen.scss);
+@import url(./large-screen.scss);
+@import url(./small-screen.scss);
+@import url(./global-variables.scss);
 
 pre {
   height: 100%;
@@ -10,20 +14,8 @@ pre {
   border-left: 1px solid #d9d9d9;
 }
 
-:root {
-  --auto-play-frame-no: 0;
-  --home-img-height: 75vh;
-  --menu-filter-box-height: 8rem;
-  --btn-input-default-height: 34px;
-  --orange: #e6791e;
-  --light: #eee;
-  --bg-color: #f9eeee;
-  --scrollbarBG: #cfd8dc;
-  --thumbBG: #90a4ae;
-  --primary: #337ab7;
-  --primary-dark: #286090;
-  --clock-width: 180px;
-  --wing-height: 60px;
+.menu-item-div {
+  margin-left: 0.1rem !important;
 }
 
 /* You can add global styles to this file, and also import other style files */
@@ -242,139 +234,6 @@ textarea {
   background-color: #e9ecef !important;
   pointer-events: none !important;
   opacity: 1;
-}
-
-@media (min-width: 320px) {
-  /* smartphones, iPhone, portrait 480x320 phones */
-  #hamburger-item {
-    display: flex !important;
-  }
-
-  .mobile-mode-menu {
-    position: fixed;
-    z-index: 9;
-    right: 0px;
-  }
-
-  #tine-menu {
-    display: none !important;
-  }
-
-  .page-menu {
-    display: none;
-  }
-
-  .r-panel {
-    width: 100% !important;
-  }
-}
-
-@media (min-width: 481px) {
-  /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
-  #hamburger-item {
-    display: none !important;
-  }
-
-  .mobile-mode-menu {
-    position: inherit !important;
-  }
-
-  #anc-user {
-    display: block;
-  }
-
-  #tine-menu {
-    display: none !important;
-  }
-
-  .page-menu {
-    display: none;
-  }
-
-  .r-panel {
-    width: 100% !important;
-  }
-}
-
-@media (min-width: 641px) {
-  /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
-  .l-panel {
-    display: block !important;
-  }
-
-  #tine-menu {
-    display: block !important;
-  }
-
-  .page-menu {
-    display: none;
-  }
-
-  .r-panel {
-    width: 100% !important;
-  }
-}
-
-@media (min-width: 961px) {
-  /* tablet, landscape iPad, lo-res laptops ands desktops */
-
-  #tine-menu {
-    display: none !important;
-  }
-
-  .page-menu {
-    display: block;
-  }
-
-  .l-panel {
-    width: 16rem !important;
-    display: block;
-  }
-
-  .r-panel {
-    width: calc(100% - 16rem) !important;
-  }
-}
-
-@media (min-width: 1025px) {
-  /* big landscape tablets, laptops, and desktops */
-  #tine-menu {
-    display: none !important;
-  }
-
-  .page-menu {
-    display: block;
-  }
-
-  .l-panel {
-    width: 16rem !important;
-    display: block;
-  }
-
-  .r-panel {
-    width: calc(100% - 16rem) !important;
-  }
-}
-
-@media (min-width: 1281px) {
-  /* hi-res laptops and desktops */
-
-  #tine-menu {
-    display: none !important;
-  }
-
-  .page-menu {
-    display: block;
-  }
-
-  .l-panel {
-    width: 16rem !important;
-    display: block;
-  }
-
-  .r-panel {
-    width: calc(100% - 16rem) !important;
-  }
 }
 
 .file-container {

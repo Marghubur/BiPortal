@@ -1,0 +1,30 @@
+@import url(./global-variables.scss);
+
+@media (min-width: 320px) and (min-width: 960px) {
+    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+    a {
+      font-size: 0.8vw;
+    }
+
+    #hamburger-item {
+        display: flex !important;
+    }
+
+    .mobile-mode-menu {
+        position: fixed;
+        z-index: 9;
+        right: 0px;
+    }
+
+    #tine-menu {
+        display: none !important;
+    }
+
+    .page-menu {
+        display: none;
+    }
+
+    .r-panel {
+        width: 100% !important;
+    }
+  }

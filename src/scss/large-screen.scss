@@ -1,0 +1,33 @@
+@import url(./global-variables.scss);
+
+@media (min-width: 1025px) and (min-width: 1281px) {
+    /* big landscape tablets, laptops, and desktops */
+    a {
+      font-size: 0.66vw;
+    }
+  
+    .accordion-button {
+      font-size: .88vw !important;
+    }
+
+    .mene-item {
+        font-size: .76vw !important;
+    }
+
+    #tine-menu {
+        display: none !important;
+    }
+
+    .page-menu {
+        display: block;
+    }
+
+    .l-panel {
+    width: var(--left-panel-width-x) !important;
+        display: block;
+    }
+
+    .r-panel {
+        width: calc(100% - var(--left-panel-width-x)) !important;
+    }    
+  }

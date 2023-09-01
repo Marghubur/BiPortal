@@ -1,0 +1,21 @@
+@import url(./global-variables.scss);
+
+@media (min-width: 961px) and (min-width: 1024px) {
+    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+    #tine-menu {
+        display: none !important;
+    }
+
+    .page-menu {
+        display: block;
+    }
+
+    .l-panel {
+        width: var(--left-panel-width-l) !important;
+        display: block;
+    }
+
+    .r-panel {
+        width: calc(100% - var(--left-panel-width-l)) !important;
+    }
+  }

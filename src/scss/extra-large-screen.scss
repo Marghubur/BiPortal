@@ -1,0 +1,8 @@
+@import url(./global-variables.scss);
+
+@media (min-width: 1281px) {
+    /* big landscape tablets, laptops, and desktops */
+    a {
+      font-size: 0.66vw;
+    }
+  }
