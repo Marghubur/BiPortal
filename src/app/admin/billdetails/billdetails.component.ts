@@ -361,7 +361,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   viewPdfFile(userFile: any) {
     this.isPdfGenerating = true;
     this.regeneratebill(userFile);
-    $('#pdfviewingModal').modal('show');
+    // $('#pdfviewingModal').modal('show');
   }
 
   showFile(userFile: any) {
@@ -402,7 +402,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   }
 
   getFileExtension(value: any) {
-    this.downLoadFileExtension = "." + value.target.value;
+    this.downLoadFileExtension = "." + value;
   }
 
   downloadFile(userFile: any) {

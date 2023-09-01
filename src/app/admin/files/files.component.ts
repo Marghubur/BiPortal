@@ -334,7 +334,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   viewPdfFile(userFile: any) {
     this.isPdfGenerating = true;
     this.regeneratebill(userFile);
-    $('#pdfviewingModal').modal('show');
+    // $('#pdfviewingModal').modal('show');
   }
 
   showFile(userFile: any) {
@@ -368,9 +368,9 @@ export class FilesComponent implements OnInit, AfterViewChecked {
           this.showFile(userFile);
       }
 
-      $('#pdfviewingModal').modal('hide');
+      // $('#pdfviewingModal').modal('hide');
     }).catch(err => {
-      $('#pdfviewingModal').modal('hide');
+      // $('#pdfviewingModal').modal('hide');
     });
   }
 

@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <ng-container *ngIf="isLoading || !isEmployeesReady">
+      <!-- <ng-container *ngIf="isLoading || !isEmployeesReady">
         <div class="py-5 my-5 x_panel">
           <h6 class="fw-bold fs-3 text-center text-dark">Attendence Details are loading</h6>
           <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -45,7 +45,7 @@
             </div>
           </div>
         </div>
-      </ng-container>
+      </ng-container> -->
       <ng-container *ngIf="!isLoading && isEmployeesReady">
         <ng-container *ngIf="!isEmployeeSelected">
           <div class="my-5 py-5 d-flex align-items-center justify-content-center">
@@ -235,7 +235,7 @@
                         </table>
                       </div>
                     </div>
-                    <ng-container *ngIf="isLoading">
+                    <!-- <ng-container *ngIf="isLoading">
                       <div class="py-5 my-5">
                         <h6 class="fw-bold fs-3 text-center text-dark">Attendance are loading</h6>
                         <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -247,7 +247,7 @@
                           </div>
                         </div>
                       </div>
-                    </ng-container>
+                    </ng-container> -->
                   </ng-template>
                 </ng-container>
                 <ng-container ngbNavItem>
@@ -258,15 +258,15 @@
                         <div class="col-md-12">
                           <div class="row">
                             <div class="mt-3 col-md-4">
-                              <label for="" class="form-label">Shift Title</label>
+                              <label  class="form-label">Shift Title</label>
                               <input type="text" readonly value="{{shiftDetail.ShiftTitle}}" class="form-control">
                             </div>
                             <div class="mt-3 col-md-4">
-                              <label for="" class="form-label">Description</label>
+                              <label  class="form-label">Description</label>
                               <input type="text" readonly value="{{shiftDetail.Description}}" class="form-control">
                             </div>
                             <div class="mt-3 col-md-4">
-                              <label for="" class="form-label">Total Working Days</label>
+                              <label  class="form-label">Total Working Days</label>
                               <input type="text" readonly value="{{shiftDetail.TotalWorkingDays}}" class="form-control">
                             </div>
                           </div>
@@ -361,7 +361,7 @@
                         </div>
                       </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="!isPageReady">
+                    <!-- <ng-container *ngIf="!isPageReady">
                       <div class="py-5 my-5">
                         <h6 class="fw-bold fs-3 text-center text-dark">Shift details are loading</h6>
                         <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -373,7 +373,7 @@
                           </div>
                         </div>
                       </div>
-                    </ng-container>
+                    </ng-container> -->
                   </ng-template>
                 </ng-container>
 
@@ -479,7 +479,7 @@
                           <app-pagination [pagination]="request" (onPageChange)="GetFilterResult($event)"></app-pagination>
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
+                      <!-- <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
                         <div class="py-5 my-5">
                           <h6 class="fw-bold fs-3 text-center text-dark">Missed attendance and status is loading</h6>
                           <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -491,7 +491,7 @@
                             </div>
                           </div>
                         </div>
-                      </ng-container>
+                      </ng-container> -->
                     </div>
                   </ng-template>
                 </ng-container>
@@ -547,7 +547,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
           <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
         </div>
         <div class="col-md-12 mt-3">
-          <label for="" class="form-label">Reason</label>
+          <label  class="form-label">Reason</label>
           <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" maxlength="100"  [ngModelOptions]="{standalone: true}"
             [(ngModel)]="commentValue"></textarea>
           <div class="alert alert-danger" *ngIf="isComment">
@@ -565,7 +565,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
           </ng-container>
         </div>
         <div class="mt-3" *ngIf="isEmployeesReady">
-          <label for="" class="form-label">Notify</label>
+          <label  class="form-label">Notify</label>
           <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
             [ngModelOptions]="{standalone: true}">
           </bot-autocomplete>
@@ -612,7 +612,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
           <app-editor [height]="55" [content]="EmailBody" [cleanUp]="eventsSubject.asObservable()"></app-editor>
         </div>
         <div class="col-md-12 mt-3">
-          <label for="" class="form-label">Reason</label>
+          <label  class="form-label">Reason</label>
           <textarea class="comment-text-area form-control" rows="2" placeholder="Enter your comment" name="commentValue" maxlength="100" [ngModelOptions]="{standalone: true}"
             [(ngModel)]="commentValue"></textarea>
           <div class="alert alert-danger" *ngIf="isComment">
@@ -630,7 +630,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
           </ng-container>
         </div>
         <div class="mt-3" *ngIf="isEmployeesReady">
-          <label for="" class="form-label">Notify</label>
+          <label  class="form-label">Notify</label>
           <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
             [ngModelOptions]="{standalone: true}">
           </bot-autocomplete>

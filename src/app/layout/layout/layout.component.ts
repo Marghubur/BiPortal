@@ -4,8 +4,6 @@ import {
   Event,
   NavigationStart,
 } from "@angular/router";
-import { JwtService } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { Login } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
