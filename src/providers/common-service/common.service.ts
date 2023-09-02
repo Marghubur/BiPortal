@@ -25,6 +25,8 @@ export class CommonService {
   DefaultTimeout: number = 8 * 1000;
   $ButtonId: any = "";
   isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  isMinimize: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   constructor() { }
 
   public GetDefaultFontSize() {
