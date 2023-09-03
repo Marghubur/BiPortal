@@ -16,7 +16,7 @@ a {
 }
 
 .catagory-icons {
-  width: 2.5rem;
+  width: 1.8vw;
   margin-right: 1rem;
 }
 
@@ -36,20 +36,21 @@ a {
 }
 
 .menu-items {
-  overflow: auto !important;
+  // overflow: auto !important;
   height: calc(100vh - 4rem) !important;
   border-right: 1px solid #c5c5c5;
 }
 .menu-container {
   height: 88vh !important;
-  overflow: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 .menu-container::-webkit-scrollbar-thumb {
   background-color: transparent !important;
 }
 
 .menu-container:hover::-webkit-scrollbar-thumb {
-  background: #a79898 !important;
+  background: #cab5b5 !important;
 }
 .menu-top {
   height: 4rem;
@@ -91,9 +92,8 @@ a {
   font-weight: 500;
 }
 
-.nav-link{
+.nav-link-menu{
   margin: 0 !important;
-  padding: 0.7rem 1.8rem;
   color: #222 !important;
 }
 
@@ -129,9 +129,85 @@ a {
 }
 
 .active-menu {
-  font-weight: 700 !important; 
+  font-weight: 700 !important;
+}
+
+.active-small-menu {
+  background-color: #dedede !important;
 }
 
 .menu-item-group {
   background: #f5f5f5;
+}
+
+.sm-accordion-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--bs-accordion-btn-padding-y) var(--bs-accordion-btn-padding-x);
+  font-size: 1rem;
+  color: var(--primary-dark) !important;
+  text-align: left;
+  background: #fff !important;
+  border: 0;
+  border-radius: 0;
+  overflow-anchor: none;
+  transition: var(--bs-accordion-transition);
+  font-weight: 400 !important;
+}
+
+
+// Hover Dropdown
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  width: 15rem;
+  box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+  top: 1rem;
+  left: 5rem;
+  z-index: 99999 !important;
+  overflow-x: hidden;
+  background: #fff;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.caret {
+  width: 0;
+  height: 0;
+  display: inline-block;
+  border: 23px solid transparent;
+  position: fixed;
+  left: 2.4rem;
+  z-index: 9999 !important;
+}
+
+.caret.left{
+  border-right-color: #dedede !important;
+}
+
+.dropdown-content ul {
+  display: block;
+  color: #000000;
+  padding: 5px;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover {
+  color: #FFFFFF;
+  background-color: #dadada;
+}
+
+.dropdown-nav-link{
+  margin: 0 !important;
+  padding: 0.7rem;
+  color: #222 !important;
 }

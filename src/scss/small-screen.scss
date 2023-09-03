@@ -1,21 +1,64 @@
 @import url(./global-variables.scss);
 
-@media (min-width: 961px) and (min-width: 1024px) {
-    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+@media only screen
+and (min-width : 1024px) {
+    /* Laptop screen */
     #tine-menu {
         display: none !important;
     }
 
     .page-menu {
-        display: block;
+      display: block !important;
     }
 
     .l-panel {
         width: var(--left-panel-width-l) !important;
         display: block;
+        transition: all 0.2s linear !important;
     }
 
     .r-panel {
         width: calc(100% - var(--left-panel-width-l)) !important;
+        transition: all 0.2s linear !important;
+    }
+
+    .mini-l-panel {
+      width: 6% !important;
+      transition: all 0.2s linear !important;
+    }
+
+    .mini-r-panel {
+      width: calc(100% - 6%) !important;
+      transition: all 0.2s linear !important;
+    }
+    .menu-container {
+      padding-left: 0.9rem !important;
+      overflow-x: hidden !important;
+    }
+
+    .nav-link-menu{
+      padding: 0.7rem !important;
+      font-size: 0.8rem !important;
+    }
+    .custom-accordion-btn {
+      padding-left: 0.2rem !important;
+      padding-right: 1rem !important;
+      font-size: 0.85rem !important;
+    }
+   .title_menu {
+      margin-left: 0px !important;
+    }
+    .custom-text {
+      font-size: 0.8rem !important;
+    }
+    .dropdown-content {
+      left: 3.8rem !important;
+    }
+    .caret {
+      border: 18px solid transparent !important;
+      left: 1.6rem !important;
+    }
+    .sm-catagory-icons {
+      width: 2vw;
     }
   }
