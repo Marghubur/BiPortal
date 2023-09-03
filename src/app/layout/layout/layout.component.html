@@ -1,10 +1,10 @@
 <div class="vh-100 overflow-hidden">
   <app-navbar></app-navbar>
   <div class="d-flex container-scroller h-100">
-    <div class="l-panel">
+    <div class="" [ngClass]="{'l-panel': !isMinimize, 'mini-l-panel': isMinimize}" data-name="l-panel">
       <app-sidemenu></app-sidemenu>
     </div>
-    <div class="r-panel">
+    <div class="" [ngClass]="{'r-panel': !isMinimize, 'mini-r-panel': isMinimize}" data-name="r-panel">
       <div class="content-wrapper">
         <app-loader></app-loader>
         <router-outlet></router-outlet>

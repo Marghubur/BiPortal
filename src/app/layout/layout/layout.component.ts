@@ -18,6 +18,7 @@ export class LayoutComponent implements OnInit {
   enableAuth: boolean = false;
   pageName: string = "";
   activePage:number = 0;
+  isMinimize: boolean = false;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -29,6 +30,9 @@ export class LayoutComponent implements OnInit {
     private nav: iNavigation,
   ) {
     this.GetScreenHeight();
+    this.commonService.isMinimize.subscribe(res => {
+      this.isMinimize = res;
+    })
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationStart) {
         this.pageName = event.url.replace("/", "")

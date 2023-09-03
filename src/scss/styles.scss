@@ -1,10 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~bootstrap/dist/css/bootstrap.min.css";
-@import url(./extra-large-screen.scss);
-@import url(./large-screen.scss);
-@import url(./small-screen.scss);
 @import url(./global-variables.scss);
+@import url(./mobile.scss);
+@import url(./small-screen.scss);
+@import url(./large-screen.scss);
+
+.page-menu {
+  display: none;
+}
 
 pre {
   height: 100%;
@@ -301,19 +305,6 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 // ---------------------------- body ------------------------------------
-
-html,
-body {
-  height: 100%;
-  margin: 0;
-  font-size: 0.8vw !important;
-  font-weight: 400 !important;
-  line-height: 1.5;
-  color: #6d7680 !important;
-  overflow-x: hidden;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
 
 .img-container {
   width: 12rem;

@@ -1,91 +1,135 @@
-<div id="page-menu" class="position-relative page-menu mobile-mode-menu bg-white menu-items">
-  <div id="menu-items" class="menu-container position-relative overflow-auto">
-    <div class="accordion" id="accordionExample">
-      <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
-        <h2 class="accordion-header" [id]="'heading'+i">
-          <button class="accordion-button" [ngClass]="{ 'collapsed active-menu': catagory.IsActive }" type="button"
-            data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+i" aria-expanded="!catagory.IsActive"
-            [attr.aria-controls]="'collapse'+i">
-              <img src="assets/fonts/{{catagory.Name}}.png" alt="NAN" class="catagory-icons">
-              {{catagory.Name}} 
-              <span *ngIf="catagory.ParentDetail.Badge != null"
-                class="badge bg-secondary ms-3">
-                NEW
-              </span>
-          </button>
-        </h2>
-        <div [id]="'collapse'+i" class="accordion-collapse collapse" [ngClass]="{ 'show': catagory.IsActive }"
-          [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
-          <div class="menu-item-group">
-            <ng-container *ngFor="let item of catagory.Value">
-              <a [routerLink]="['/' + item.Link]" class="nav-link a-font" (click)="cleanupEmpId(item.Link)"
-                routerLinkActive="active-link">
-                <div class="row menu-item-div align-items-center">
-                  <div class="col-md-1">
-                    <i class="{{item.Icon}}"></i>
+<div id="page-menu" class="bg-white menu-items page-menu" [ngClass]="{'position-relative mobile-mode-menu ': !isMinimize}">
+  <ng-container *ngIf="!isMinimize">
+    <div id="menu-items" class="menu-container position-relative overflow-auto">
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
+          <h2 class="accordion-header" [id]="'heading'+i">
+            <button class="accordion-button custom-accordion-btn" (click)="activeTab(i)"  [ngClass]="{ 'collapsed active-menu': catagory.IsActive}" type="button"
+              data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+i" aria-expanded="!catagory.IsActive"
+              [attr.aria-controls]="'collapse'+i">
+                <img src="assets/fonts/{{catagory.Name}}.png" alt="NAN" class="catagory-icons">
+                {{catagory.Name}}
+                <span *ngIf="catagory.ParentDetail.Badge != null"
+                  class="badge bg-secondary ms-3">
+                  NEW
+                </span>
+            </button>
+          </h2>
+          <div [id]="'collapse'+i" class="accordion-collapse collapse" [ngClass]="{ 'show': catagory.IsActive }"
+            [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
+            <div class="menu-item-group">
+              <ng-container *ngFor="let item of catagory.Value">
+                <a [routerLink]="['/' + item.Link]" class="nav-link nav-link-menu a-font" (click)="cleanupEmpId(item.Link)"
+                  routerLinkActive="active-link">
+                  <div class="row menu-item-div align-items-center">
+                    <div class="col-md-1">
+                      <i class="{{item.Icon}}"></i>
+                    </div>
+                    <div class="mene-item col-md-8">
+                      {{item.Catagory}}
+                    </div>
                   </div>
-                  <div class="mene-item col-md-8">
-                    {{item.Catagory}}
-                  </div>
+                </a>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <hr> -->
+      <div class="title_menu mt-3">
+        <a [routerLink]="['/ems/administration/email']" class="text-dark custom-text" routerLinkActive="router-link-active">
+          <i class="fa fa-envelope-o me-3 pb-3"aria-hidden="true"></i>
+            Mail Box
+        </a>
+        <a [routerLink]="['/ems/administration/resetpassword']" class="text-dark custom-text" routerLinkActive="router-link-active">
+          <i class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>
+            Reset Password
+        </a>
+        <a (click)="navToMasterDataPasge()" *ngIf="isAdmin" class="text-dark custom-text" href="javascript:void(0)" routerLinkActive="router-link-active">
+          <i class="fa fa-upload me-3 pb-3" aria-hidden="true"></i>
+            Uploda Master Data
+          </a>
+      </div>
+      <div class="text-center w-75 ms-3 mt-3 pb-4 custom-text">
+        You're in a team-managed project Learn more
+      </div>
+    </div>
+    <div class="w-100 position-absolute bg-secondary" class="menu-footer btn-primary-c">
+      <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
+        <i class="fa fa-cog text-light custom-text" aria-hidden="true"></i>
+      </a>
+      <a href="javascript:void(0)">
+        <i class="fa fa-info-circle text-light custom-text" (click)="notification()" aria-hidden="true"></i>
+      </a>
+      <a href="javascript:void(0)" (click)="LogoutUser()">
+        <i class="fa fa-sign-out text-light custom-text" aria-hidden="true"></i>
+      </a>
+      <a href="javascript:void(0)" (click)="mimizeScreen()">
+        <i class="fa text-light fa-lg fa-angle-double-left" aria-hidden="true" ></i>
+      </a>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isMinimize">
+    <div class="d-flex small-menu align-items-center justify-content-between flex-column h-100">
+      <div class="">
+        <div class="py-3 dropdown col-md-12" *ngFor="let catagory of Menu;let i = index;" [ngClass]="{ 'active-small-menu': catagory.IsActive}">
+          <a href="javascript:void(0)" class="text-decoration-none text-center">
+            <img src="assets/fonts/{{catagory.Name}}.png" alt="NAN" class="sm-catagory-icons">
+          </a>
+          <div class="dropdown-content">
+            <span class="caret left"></span>
+            <a [routerLink]="['/' + item.Link]" class="dropdown-nav-link nav-link-menu a-font" (click)="cleanupEmpId(item.Link)"
+              routerLinkActive="active-link" *ngFor="let item of catagory.Value">
+              <div class="row menu-item-div align-items-center">
+                <div class="col-md-1">
+                  <i class="{{item.Icon}}"></i>
                 </div>
-              </a>
-            </ng-container>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- <hr> -->
-    <div class="title_menu ms-3 mt-3">
-      <a [routerLink]="['/ems/administration/email']" class="text-dark" routerLinkActive="router-link-active"><i class="fa fa-envelope-o me-3 pb-3"
-          aria-hidden="true"></i>Mail Box </a>
-      <a [routerLink]="['/ems/administration/resetpassword']" class="text-dark" routerLinkActive="router-link-active"><i
-          class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>Reset Password</a>
-      <a (click)="navToMasterDataPasge()" *ngIf="isAdmin" class="text-dark" href="javascript:void(0)" routerLinkActive="router-link-active"><i
-          class="fa fa-upload me-3 pb-3" aria-hidden="true"></i>Uploda Master Data</a>
-    </div>
-    <div class="text-center w-75 ms-3 mt-3 pb-4">
-      You're in a team-managed project Learn more
-    </div>
-  </div>
-  <div class="w-100 position-absolute bg-secondary" class="menu-footer btn-primary-c">
-    <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
-      <i class="fa fa-cog text-light" aria-hidden="true"></i>
-    </a>
-    <a href="javascript:void(0)">
-      <i class="fa fa-info-circle text-light" (click)="notification()" aria-hidden="true"></i>
-    </a>
-    <a href="javascript:void(0)" (click)="LogoutUser()">
-      <i class="fa fa-sign-out text-light" aria-hidden="true"></i>
-    </a>
-  </div>
-
-  <div id="tine-menu" class="small-menu-items">
-    <div id="accordionPanelsStayOpenExample">
-      <div>
-        <div id="panelsStayOpen-collapseOne" class=" mb-0 accordion-collapse collapse show"
-          aria-labelledby="panelsStayOpen-headingOne">
-          <div class="accordion-body-sm">
-            <a class="nav-link a-font icon-size" (click)="GoBlogsPage()"><i class="fa fa-server pb-2"></i></a>
-            <a *ngFor="let item of Menu" [routerLink]="['/' + item.Link]" class="nav-link a-font icon-size">
-              <i class="{{item.Icon}}"></i>
+                <div class="mene-item col-md-8">
+                  {{item.Catagory}}
+                </div>
+              </div>
             </a>
-            <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"
-              class="nav-link a-font icon-size"><i class="fa fa-code pb-2" aria-hidden="true"></i></a>
-            <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active" class="mt-2"
-              class="nav-link a-font icon-size"><i class="fa fa-retweet" aria-hidden="true"></i></a>
-            <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"
-              class="nav-link a-font icon-size"><i class="fa fa-cloud-upload" aria-hidden="true"></i></a>
-            <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
-                class="fa fa-stack-overflow pb-2" aria-hidden="true"></i> </a>
-            <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
-                class="fa fa-plus-square-o pb-2" aria-hidden="true"></i> </a>
-            <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
-                class="fa fa-cog" aria-hidden="true"></i> </a>
           </div>
         </div>
       </div>
+      <div class="p-3 text-center border-top">
+        <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
+          <i class="fa fa-cog text-dark me-3 fa-lg" aria-hidden="true"></i>
+        </a>
+        <a href="javascript:void(0)" (click)="mimizeScreen()" >
+          <i class="fa fa-angle-double-right me-3 py-3 fa-2x text-dark" aria-hidden="true" data-bs-toggle="tooltip"
+          data-bs-placement="right" title="Show more information"></i>
+        </a>
+      </div>
     </div>
+    <!-- <div id="tine-menu" class="small-menu-items">
+      <div id="accordionPanelsStayOpenExample">
+        <div>
+          <div id="panelsStayOpen-collapseOne" class=" mb-0 accordion-collapse collapse show"
+            aria-labelledby="panelsStayOpen-headingOne">
+            <div class="accordion-body-sm">
+              <a class="nav-link a-font icon-size" (click)="GoBlogsPage()"><i class="fa fa-server pb-2"></i></a>
+              <a *ngFor="let item of Menu" [routerLink]="['/' + item.Link]" class="nav-link a-font icon-size">
+                <i class="{{item.Icon}}"></i>
+              </a>
+              <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"
+                class="nav-link a-font icon-size"><i class="fa fa-code pb-2" aria-hidden="true"></i></a>
+              <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active" class="mt-2"
+                class="nav-link a-font icon-size"><i class="fa fa-retweet" aria-hidden="true"></i></a>
+              <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"
+                class="nav-link a-font icon-size"><i class="fa fa-cloud-upload" aria-hidden="true"></i></a>
+              <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
+                  class="fa fa-stack-overflow pb-2" aria-hidden="true"></i> </a>
+              <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
+                  class="fa fa-plus-square-o pb-2" aria-hidden="true"></i> </a>
+              <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
+                  class="fa fa-cog" aria-hidden="true"></i> </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </ng-container>
+  <div class="blur-sidemenu" *ngIf="isLoading">
   </div>
-    <div class="blur-sidemenu" *ngIf="isLoading">
-    </div>
 </div>

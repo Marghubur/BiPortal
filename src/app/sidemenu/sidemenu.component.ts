@@ -2,16 +2,18 @@ import { ApplicationStorage } from "../../providers/ApplicationStorage";
 import { AjaxService } from "../../providers/ajax.service";
 import { CommonService, ErrorToast, Toast, UserDetail } from "../../providers/common-service/common.service";
 import { AccessTokenExpiredOn, AdminMasterData, AdminNotification, Blogs, BuildPdf, Documents, Employees, Login, OrganizationSetting } from "../../providers/constants";
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, AfterViewChecked } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { UserService } from "src/providers/userService";
+declare var $: any;
+import 'bootstrap';
 
 @Component({
   selector: 'app-sidemenu',
   templateUrl: './sidemenu.component.html',
   styleUrls: ['./sidemenu.component.scss']
 })
-export class SidemenuComponent implements OnInit {
+export class SidemenuComponent implements OnInit, AfterViewChecked {
   public sidebarOpened = false;
   User: string;
   NotificationBadge: number = 0;
@@ -27,6 +29,7 @@ export class SidemenuComponent implements OnInit {
   MenuName: string = '';
   isAdmin: boolean = false;
   isLoading: boolean = false;
+  isMinimize: boolean = false;
 
   @Output() authentication = new EventEmitter();
 
@@ -42,13 +45,25 @@ export class SidemenuComponent implements OnInit {
   constructor(
     private nav: iNavigation,
     private commonService: CommonService,
-    private http: AjaxService,
     private local: ApplicationStorage,
     private user: UserService
   ) {
     this.commonService.isLoading.subscribe(res => {
       this.isLoading = res;
+    });
+    this.commonService.isMinimize.subscribe(res => {
+      this.isMinimize = res;
     })
+  }
+
+  ngAfterViewChecked(): void {
+    $('[data-bs-toggle="tooltip"]').tooltip({
+      trigger: 'hover'
+    });
+
+    $('[data-bs-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('dispose');
+    });
   }
 
   ngOnInit() {
@@ -138,6 +153,7 @@ export class SidemenuComponent implements OnInit {
   cleanupEmpId(link: string) {
     if (link == "accounts/declaration" || link == "accounts/salary" || link == "accounts/preferences")
       this.local.removeByKey("EmployeeId");
+
   }
 
   NavigatetoHome() {
@@ -189,6 +205,22 @@ export class SidemenuComponent implements OnInit {
     this.nav.logout();
     Toast("Log out successfully");
     this.nav.navigate("/", null);
+  }
+
+  mimizeScreen() {
+    this.isMinimize = !this.isMinimize;
+    this.commonService.isMinimize.next(this.isMinimize);
+  }
+
+  activeTab(i: number) {
+    let elem = document.getElementsByClassName("custom-accordion-btn");
+    if (elem) {
+      for (let j = 0; j < elem.length; j++) {
+        if (elem[j].classList.contains("active-menu"))
+          elem[j].classList.remove("active-menu");
+      }
+      elem[i].classList.add("active-menu");
+    }
   }
 }
 

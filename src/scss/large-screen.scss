@@ -1,14 +1,13 @@
-@import url(./global-variables.scss);
-
-@media (min-width: 1025px) and (min-width: 1281px) {
-    /* big landscape tablets, laptops, and desktops */
+@media only screen
+and (min-width : 1824px) {
+    /* large screen desktop */
     a {
       font-size: 0.66vw;
     }
-  
-    .accordion-button {
+
+    /*.accordion-button {
       font-size: .88vw !important;
-    }
+    } */
 
     .mene-item {
         font-size: .76vw !important;
@@ -19,15 +18,66 @@
     }
 
     .page-menu {
-        display: block;
+        display: block !important;
     }
 
     .l-panel {
-    width: var(--left-panel-width-x) !important;
-        display: block;
+      width: var(--left-panel-width-x) !important;
+      display: block;
+      transition: all 0.2s linear !important;
     }
 
     .r-panel {
-        width: calc(100% - var(--left-panel-width-x)) !important;
-    }    
+      width: calc(100% - var(--left-panel-width-x)) !important;
+      transition: all 0.2s linear !important;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-size: 0.8vw !important;
+      font-weight: 400 !important;
+      line-height: 1.5;
+      color: #6d7680 !important;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+    .mini-l-panel {
+      width: 4.5% !important;
+      transition: all 0.2s linear !important;
+    }
+
+    .mini-r-panel {
+      width: calc(100% - 4.5%) !important;
+      transition: all 0.2s linear !important;
+    }
+
+    .nav-link-menu{
+      padding: 0.7rem 1.8rem !important;
+    }
+    .title_menu {
+      margin-left: 1rem !important;
+    }
+    .nav-link-menu{
+      padding: 0.7rem !important;
+      font-size: 0.8rem !important;
+    }
+    .custom-accordion-btn {
+      font-size: 1.1rem !important;
+      padding-right: 1.25rem !important;
+    }
+    .custom-text {
+      font-size: 0.9rem !important;
+    }
+    .caret {
+      border: 23px solid transparent !important;
+      left: 3.2rem !important;
+    }
+    .dropdown-content {
+      left: 6rem !important;
+    }
+    .sm-catagory-icons {
+      width: 1.8vw;
+    }
   }
