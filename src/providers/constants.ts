@@ -9,6 +9,7 @@ export const Home = "home";
 export const GraphicsDb = "graphicsdb";
 export const FeedBack = "feedbacks";
 export const SamplePage = "samplepage";
+export const String = "string";
 
 export const UploadScript = "uploadscript";
 export const UserProfile = "userprofile";

@@ -188,7 +188,7 @@
                                         id="dropdownBasic1" ngbDropdownToggle>
                                         <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                       </button>
-                                      <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                      <div class="dropdown-menu p-0 m-0" ngbDropdownMenu aria-labelledby="dropdownBasic1">
                                         <button ngbDropdownItem *ngIf="item.IsOpen">
                                           <a class="dropdown-item" href="javascript:void(0)"
                                             (click)="applyWorkFromHome(item)">Apply WFH Request</a>
@@ -388,7 +388,7 @@
                             aria-expanded="false">
                             <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                           </button>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <ul class="dropdown-menu p-0 m-0" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Last 7
                                 days</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0)" (click)="selectOption(index)">Last 14
@@ -513,7 +513,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-content">
     <ng-container *ngIf="currentAttendance != null">
       <div class="modal-header border-bottom-0" >
-        <h5 class="modal-title" id="exampleModalLabel">Work From Home Request</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{attendanceRequestType == 1 ? "Work From Home" : "Work From Office"}} Request</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="col-md-12 px-4 d-block">
@@ -533,18 +533,29 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             </div>
           </div>
         </div>
-        <span class="px-3 py-2 day-wfh">1day WFH</span>
-        <p class="mb-0 text-dark ps-2 pt-3 fs-5">Session</p>
-        <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
-          <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio10" autocomplete="off" checked
-            value="1">
-          <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
-          <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio11" autocomplete="off"
-            value="2">
-          <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
-          <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio12" autocomplete="off"
-            value="3">
-          <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
+        <span class="px-3 py-2 day-wfh">1day {{attendanceRequestType == 1 ? "WFH" : "WFO"}} </span>
+        <div class="row">
+          <div class="col-md-6 pt-3">
+            <label class="form-label">Request Type</label>
+            <select class="form-select" [(ngModel)]="attendanceRequestType">
+              <option value="1">Work From Home</option>
+              <option value="2">Work From Office</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-0 text-dark ps-2 pt-3">Session</p>
+            <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio10" autocomplete="off" checked
+                value="1">
+              <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
+              <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio11" autocomplete="off"
+                value="2">
+              <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
+              <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio12" autocomplete="off"
+                value="3">
+              <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
+            </div>
+          </div>
         </div>
         <div class="col-md-12 mt-3">
           <label  class="form-label">Reason</label>

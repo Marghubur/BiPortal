@@ -320,7 +320,6 @@ export class ApplyLeaveComponent implements OnInit {
         this.bindData(res);
     }).catch(e => {
       this.isPageReady = true;
-      ErrorToast("No record found");
     })
   }
 

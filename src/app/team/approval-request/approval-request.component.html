@@ -91,11 +91,8 @@
                 <ng-container *ngFor="let item of attendanceDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
                     <div class="d-flex col-md-8">
-                      <a href="javascript:void(0)" class="me-3">
-                        <img class="grid-icon" [src]="item.PresentDayStatus == 2 ? 'assets/images/clock.png' : item.PresentDayStatus == 9 ? 'assets/images/approve.png' : 'assets/images/rejected.png'">
-                      </a>
-                      <a data-bs-toggle="collapse" [attr.href]="'#attendance'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#attendance'+i" class="me-3">
-                        <img class="grid-icon" src="assets/images/down-arrow.png">
+                      <a href="javascript:void(0)" class="me-2">
+                        <i class="fa fa-user-circle-o fa-lg"></i>
                       </a>
                       <p class="mb-0 fs-6">
                         <span class="fw-bold text-primary-dc">
@@ -103,38 +100,34 @@
                         </span>
                       </p>
                       <p class="ms-2 mb-0 fs-6">
-                        <span class="">Attendance Date >> </span>
+                        <span class="">Attendance Date: </span>
                         <span>{{item.AttendanceDay | date}}</span>
                       </p>
+                      <div class="ms-3 col-md-6">
+                        <span class="fw-bold pe-1">Manager:</span>
+                        {{item.ManagerName}} |
+                        <span class="mb-0"><i class="fa fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
+                      </div>                      
                     </div>
-                    <div class="col-4 d-flex flex-row-reverse">
-                      <a href="javascript:void(0)" class="ps-2">
-                        <i class="fa fa-user-circle-o fa-lg"></i>
-                      </a>
-                      <div class="bg-c px-3 pb-1 rounded text-white">
-                        <small class="fade-label">Session Type: </small>
-                        <span class="fade-font">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
+                    <div class="col-4 d-flex flex-row-reverse">                                            
+                      <div class="col-auto me-0 pe-0">
+                        <button *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)"
+                          class="btn btn-danger btn-sm"><i class="fa pe-1"
+                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
+                        <button *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)"
+                          class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
+                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
                       </div>
                     </div>
-                    <div class="collapse" [id]="'attendance'+i">
+                    <div class="collapse show" [id]="'attendance'+i">
                       <div class="card card-body border-0">
-                        <div class="row align-items-center justify-content-between">
+                        <div class="row align-items-center justify-content-start">
+                          <div class="bg-c px-3 ms-3 rounded text-white col-auto">
+                            <span class="fade-font">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
+                          </div>
                           <div class="col-md-6 text-truncate">
                             <span class="fw-bold">Message:</span>
                             {{item.UserComments == "" ? 'NA' : item.UserComments}}
-                          </div>
-                          <div class="col-md-4">
-                            <span class="fw-bold pe-1">Manager:</span>
-                            {{item.ManagerName}} |
-                            <span class="mb-0"><i class="fa fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
-                          </div>
-                          <div class="col-auto me-0 pe-0">
-                            <button *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)"
-                              class="btn btn-danger btn-sm"><i class="fa pe-1"
-                                [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
-                            <button *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)"
-                              class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
-                                [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
                           </div>
                         </div>
                       </div>

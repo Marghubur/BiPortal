@@ -4,6 +4,7 @@ import { iNavigation } from "src/providers/iNavigation";
 import { JwtService, ResponseModel } from './../../auth/jwtService'
 import { Dashboard, UserDashboard, UserType } from "src/providers/constants";
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { environment } from "src/environments/environment";
 declare var $: any;
 
 @Component({
@@ -24,6 +25,8 @@ export class LoginComponent implements OnInit {
   agreeWithTermsAndCondition: boolean = false;
   isRegistrationDone: boolean = false;
   isShowPassword: boolean = false;
+
+  isLocal: boolean = false;
 
   @Output() userAuthState = new EventEmitter();
 
@@ -53,6 +56,10 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if(environment.env = "local"){
+      this.isLocal = true;
+    }
+
     this.isRegistrationDone = false;
     localStorage.clear();
     sessionStorage.clear();

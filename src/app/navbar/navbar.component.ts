@@ -58,10 +58,14 @@ export class NavbarComponent implements OnInit, DoCheck {
 
   ngDoCheck(): void {
     let data = this.local.findRecord("UserDetail");
-    if (data.UserTypeId == 1)
-      this.isAdmin = true;
-    else
-      this.isAdmin = false;
+    if(data) {
+      if (data.UserTypeId == 1)
+        this.isAdmin = true;
+      else
+        this.isAdmin = false;
+    } else {
+      this.GoToLoginPage();
+    }
   }
 
   ngOnInit() {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CompanySetting } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -81,7 +81,8 @@ export class CompanySettingsComponent implements OnInit {
       LeaveAccrualRunCronDayOfMonth: new FormControl(this.companySetting.LeaveAccrualRunCronDayOfMonth),
       EveryMonthLastDayOfDeclaration: new FormControl(this.companySetting.EveryMonthLastDayOfDeclaration),
       AttendanceSubmissionLimit: new FormControl(this.companySetting.AttendanceSubmissionLimit),
-      IsJoiningBarrierDayPassed: new FormControl(this.companySetting.IsJoiningBarrierDayPassed)
+      IsJoiningBarrierDayPassed: new FormControl(this.companySetting.IsJoiningBarrierDayPassed),
+      IsRunLeaveAccrual: new FormControl(false)
     })
   }
 
@@ -102,7 +103,7 @@ export class CompanySettingsComponent implements OnInit {
     let value = this.companySettingForm.value;
     if (value.CompanyId > 0) {
       this.isLoading = true;
-      this.http.put(`company/UpdateSetting/${value.CompanyId}`, value).then((res:ResponseModel) => {
+      this.http.put(`company/UpdateSetting/${value.CompanyId}/${value.IsRunLeaveAccrual}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.companySetting = res.ResponseBody;
           this.initForm();

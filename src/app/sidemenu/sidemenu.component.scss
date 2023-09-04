@@ -90,6 +90,10 @@ a {
   background: #17181729 !important;
   color: #00158e !important;
   font-weight: 500;
+
+  .mene-item {
+    font-weight: 500 !important;
+  }
 }
 
 .nav-link-menu{
@@ -210,4 +214,8 @@ a {
   margin: 0 !important;
   padding: 0.7rem;
   color: #222 !important;
+}
+
+.mene-item {
+  font-weight: 400;
 }
