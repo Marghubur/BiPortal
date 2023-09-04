@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ErrorToast, Toast } from "src/providers/common-service/common.service";
-import { AccessToken, AccessTokenExpiredOn, BadRequest, Forbidden, Login, Master, NotFound, ServerError, Success, UnAuthorize } from "src/providers/constants";
+import { AccessToken, AccessTokenExpiredOn, BadRequest, Forbidden, Login, Master, NotFound, ServerError, String, Success, UnAuthorize } from "src/providers/constants";
 import { iNavigation } from "src/providers/iNavigation";
 
 @Injectable()
@@ -98,10 +98,17 @@ export class JwtService {
             break;
           case ServerError:
           case BadRequest:
-              if(error.ResponseBody)
+              if(typeof(error.ResponseBody) == String) {
                 ErrorToast(error.ResponseBody);
-              else
-              ErrorToast("Unknown error occured. Please contact to admin.");
+              } else {
+                if(error.ResponseBody.UserMessage != undefined && 
+                    error.ResponseBody.UserMessage != null && 
+                    error.ResponseBody.UserMessage != ""){
+                        ErrorToast(error.ResponseBody.UserMessage);        
+                    } else {
+                        ErrorToast("Unknown error occured. Please contact to admin.");
+                    }
+              }
               break;
           default:
               ErrorToast("Unknown error occured. Please contact to admin.");

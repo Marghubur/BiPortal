@@ -7,7 +7,7 @@
             <button class="accordion-button custom-accordion-btn" (click)="activeTab(i)"  [ngClass]="{ 'collapsed active-menu': catagory.IsActive}" type="button"
               data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+i" aria-expanded="!catagory.IsActive"
               [attr.aria-controls]="'collapse'+i">
-                <img src="assets/fonts/{{catagory.Name}}.png" alt="NAN" class="catagory-icons">
+                <img src="assets/fonts/{{catagory.ParentDetail.Icon}}.png" alt="NAN" class="catagory-icons">
                 {{catagory.Name}}
                 <span *ngIf="catagory.ParentDetail.Badge != null"
                   class="badge bg-secondary ms-3">
@@ -23,7 +23,7 @@
                   routerLinkActive="active-link">
                   <div class="row menu-item-div align-items-center">
                     <div class="col-md-1">
-                      <i class="{{item.Icon}}"></i>
+                      <i class="menu-item-icon {{item.Icon}}"></i>
                     </div>
                     <div class="mene-item col-md-8">
                       {{item.Catagory}}

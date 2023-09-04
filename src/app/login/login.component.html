@@ -45,38 +45,74 @@
                     </div>
                     <div class="login-box">
                       <div class="mt-1">
-                        <div class="row m-0 p-0">
-                          <label class="mb-1">
-                            <h6 class="mb-0 text-sm">Email or Mobile</h6>
-                          </label>
-                          <input class="mb-4" value="9000000000"  id="EmailOrMobile" placeholder="Email or Mobile Number"
-                            name="UserId">
-                        </div>
-                        <div class="row m-0 p-0">
-                          <label class="mb-1">
-                            <h6 class="mb-0 text-sm">Company Code</h6>
-                          </label>
-                          <input class="mb-4" value="BOT-01"  id="CompanyCode" placeholder="Enter company code" name="CompanyCode">
-                        </div>
-                        <div class="row m-0 p-0">
-                          <label class="mb-1">
-                            <h6 class="mb-0 text-sm">Password</h6>
-                          </label>
-                          <div class="position-relative p-0 m-0 form-group">
-                            <input type="password" value="welcome@$Bot_001" (keyup.enter)="UserLogin()" class="form-control" placeholder="Password" id="Password"
-                              name="Password">
-                            <ng-container *ngIf="isShowPassword">
-                              <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">
-                                <i class="fa fa-eye"></i>
-                              </a>
-                            </ng-container>
-                            <ng-container *ngIf="!isShowPassword">
-                              <a href="javascript:void(0)" class="view-c" (click)="showPassword()">
-                                <i class="fa fa-eye-slash" aria-hidden="true"></i>
-                              </a>
-                            </ng-container>
+                        <ng-container *ngIf="isLocal">
+                          <div class="row m-0 p-0">
+                            <label class="mb-1">
+                              <h6 class="mb-0 text-sm">Email or Mobile</h6>
+                            </label>
+                            <input class="mb-4" value="9000000000"  id="EmailOrMobile" placeholder="Email or Mobile Number"
+                              name="UserId">
                           </div>
-                        </div>
+                          <div class="row m-0 p-0">
+                            <label class="mb-1">
+                              <h6 class="mb-0 text-sm">Company Code</h6>
+                            </label>
+                            <input class="mb-4" value="BOT-01"  id="CompanyCode" placeholder="Enter company code" name="CompanyCode">
+                          </div>
+                          <div class="row m-0 p-0">
+                            <label class="mb-1">
+                              <h6 class="mb-0 text-sm">Password</h6>
+                            </label>
+                            <div class="position-relative p-0 m-0 form-group">
+                              <input type="password" value="welcome@$Bot_001" (keyup.enter)="UserLogin()" class="form-control" placeholder="Password" id="Password"
+                                name="Password">
+                              <ng-container *ngIf="isShowPassword">
+                                <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">
+                                  <i class="fa fa-eye"></i>
+                                </a>
+                              </ng-container>
+                              <ng-container *ngIf="!isShowPassword">
+                                <a href="javascript:void(0)" class="view-c" (click)="showPassword()">
+                                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                </a>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="!isLocal">
+                          <div class="row m-0 p-0">
+                            <label class="mb-1">
+                              <h6 class="mb-0 text-sm">Email or Mobile</h6>
+                            </label>
+                            <input class="mb-4" value=""  id="EmailOrMobile" placeholder="Email or Mobile Number"
+                              name="UserId">
+                          </div>
+                          <div class="row m-0 p-0">
+                            <label class="mb-1">
+                              <h6 class="mb-0 text-sm">Company Code</h6>
+                            </label>
+                            <input class="mb-4" value=""  id="CompanyCode" placeholder="Enter company code" name="CompanyCode">
+                          </div>
+                          <div class="row m-0 p-0">
+                            <label class="mb-1">
+                              <h6 class="mb-0 text-sm">Password</h6>
+                            </label>
+                            <div class="position-relative p-0 m-0 form-group">
+                              <input type="password" value="" (keyup.enter)="UserLogin()" class="form-control" placeholder="Password" id="Password"
+                                name="Password">
+                              <ng-container *ngIf="isShowPassword">
+                                <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">
+                                  <i class="fa fa-eye"></i>
+                                </a>
+                              </ng-container>
+                              <ng-container *ngIf="!isShowPassword">
+                                <a href="javascript:void(0)" class="view-c" (click)="showPassword()">
+                                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                </a>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </ng-container>
                         <div class="d-flex pt-3 mb-4 col-md-12 justify-content-between">
                           <div class="form-check d-flex">
                             <input class="form-check-input form-check-inputbox" checked type="checkbox" id="gridCheck">

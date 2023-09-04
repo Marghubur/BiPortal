@@ -318,7 +318,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
         this.bindData(res);
     }).catch(e => {
       this.isPageReady = true;
-      ErrorToast("No record found");
     })
   }
 
