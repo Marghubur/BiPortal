@@ -300,7 +300,7 @@ export class AttendanceComponent implements OnInit {
     this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
     this.commentValue = "";
-    this.attendanceRequestType = 1;
+    this.attendanceRequestType = 2;
     $('#commentModal').modal('show');
   }
 

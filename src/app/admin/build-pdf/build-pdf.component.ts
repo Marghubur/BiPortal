@@ -172,6 +172,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     let monthTimesheet = [];
 
     if(!timesheet || timesheet.length == 0) {
+      firstDate = new Date(firstDate.setDate(1));
       while(firstDate.getTime() <= lastDate.getTime()) {
         monthTimesheet.push({
           TimesheetId: 0,
@@ -180,8 +181,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
           PresentDate: firstDate,
           TimesheetStatus: ItemStatus.NotSubmitted
         });
-
-        firstDate = new Date(firstDate.setDate(1));
+        firstDate = new Date(firstDate.setDate(firstDate.getDate() + 1));
       }
     } else {
       let i = 0;
