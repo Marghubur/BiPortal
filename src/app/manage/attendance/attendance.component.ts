@@ -68,6 +68,7 @@ export class AttendanceComponent implements OnInit {
   activeMonth: number = 0;
   isMyAttendance: boolean = true;
   isAdmin: boolean = false;
+  attendanceRequestType: number = 2;
 
   constructor(private http: AjaxService,
     private nav: iNavigation,
@@ -299,6 +300,7 @@ export class AttendanceComponent implements OnInit {
     this.currentAttendance.AttendanceDay = this.today;
     this.commentValue = this.currentAttendance.UserComments;
     this.commentValue = "";
+    this.attendanceRequestType = 1;
     $('#commentModal').modal('show');
   }
 
@@ -354,7 +356,7 @@ export class AttendanceComponent implements OnInit {
     }
 
     return {
-      WorkTypeId: 1,
+      WorkTypeId: this.attendanceRequestType,
       EmployeeUid: this.employeeId,
       AttendenceDetailId: this.currentAttendance.AttendenceDetailId,
       AttendanceId: this.AttendanceId,
@@ -367,7 +369,7 @@ export class AttendanceComponent implements OnInit {
       SessionType: this.sessionvalue,
       LogOn: this.currentAttendance.LogOn,
       LogOff: this.currentAttendance.LogOff,
-      LunchBreanInMinutes: this.currentAttendance.LunchBreanInMinutes
+      LunchBreanInMinutes: this.currentAttendance.LunchBreanInMinutes,
     }
   }
 
