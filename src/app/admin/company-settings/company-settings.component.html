@@ -65,7 +65,7 @@
                           <input type="text" class="form-control border-0" readonly [value]="currentCompany.CompanyName">
                         </div>
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Is Primary</label>
+                          <label class="form-label">Is Primary</label>
                           <select class="form-select" formControlName="IsPrimary">
                             <option value="true">Yes</option>
                             <option value="false">No</option>
@@ -83,15 +83,15 @@
                       </div>
                       <div class="row">
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Probation Period In Days</label>
+                          <label class="form-label">Probation Period In Days</label>
                           <input maxlength="2" type="text" class="form-control" formControlName="ProbationPeriodInDays" placeholder="Enter probation period days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Notice Period In Days</label>
+                          <label class="form-label">Notice Period In Days</label>
                           <input maxlength="2" type="text" class="form-control" formControlName="NoticePeriodInDays" placeholder="Enter notice period in days" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Is Primary</label>
+                          <label class="form-label">Is Primary</label>
                           <select class="form-select" formControlName="IsPrimary">
                             <option value="true">Yes</option>
                             <option value="false">No</option>
@@ -109,7 +109,7 @@
                       </div>
                       <div class="row">
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Declaration Start Month</label>
+                          <label class="form-label">Declaration Start Month</label>
                           <select formControlName="DeclarationStartMonth" class="form-select" (change)="selectDeclartionStartMonth($event)">
                             <option value="1">Jan</option>
                             <option value="2">Feb</option>
@@ -127,7 +127,7 @@
                           <!-- <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
                         </div>
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Declaration End Month</label>
+                          <label class="form-label">Declaration End Month</label>
                           <select formControlName="DeclarationEndMonth" class="form-select" >
                             <option value="1">Jan</option>
                             <option value="2">Feb</option>
@@ -145,11 +145,11 @@
                           <!-- <input maxlength="2" type="text" class="form-control" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
                         </div>
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Financial Year</label>
+                          <label class="form-label">Financial Year</label>
                           <input maxlength="4" type="text" class="form-control" formControlName="FinancialYear" placeholder="Enter financial year" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Last Day of Declaration</label>
+                          <label class="form-label">Last Day of Declaration</label>
                           <input maxlength="4" type="text" class="form-control" formControlName="EveryMonthLastDayOfDeclaration" placeholder="Enter last day of declaration" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
                       </div>
@@ -163,8 +163,14 @@
                         </div>
                       </div>
                       <div class="row">
+                        <div class="form-check col-md-10 mt-3 ms-3">
+                          <input class="form-check-input" type="checkbox"id="runaccrual" formControlName="IsRunLeaveAccrual">
+                          <label class="form-check-label" for="runaccrual">
+                            Run Leave Accrual Cycle
+                          </label>
+                        </div>
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Leave Accrual Run Cron Day of Month</label>
+                          <label class="form-label">Leave Accrual Run Cron Day of Month</label>
                           <input maxlength="2" type="text" class="form-control" formControlName="LeaveAccrualRunCronDayOfMonth" placeholder="Leave Accrual Run Cron Day of Month" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
                       </div>
@@ -179,7 +185,7 @@
                       </div>
                       <div class="row">
                         <div class="col-md-4 mt-3">
-                          <label for="" class="form-label">Attendance Appling Back Days Limit</label>
+                          <label class="form-label">Attendance Appling Back Days Limit</label>
                           <input maxlength="2" type="number" class="form-control" formControlName="AttendanceSubmissionLimit" placeholder="Enter attendance limit to apply in back date." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                         </div>
                       </div>
