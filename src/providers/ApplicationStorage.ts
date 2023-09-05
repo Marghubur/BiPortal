@@ -79,6 +79,33 @@ export class ApplicationStorage {
     return ResultingData;
   }
 
+  getMenuStyle() {
+    let ResultingData = "";
+    let Data: any = localStorage.getItem(Master);
+    if (Data && Data != "") {
+      Data = JSON.parse(Data);
+      if (Data) {
+        ResultingData = Data["UserLayoutConfiguration"];
+      }
+    }
+    return ResultingData;
+  }
+
+  updateLayoutConfig(layoutConfig: any) {
+    if(layoutConfig) {
+      let Data: any = localStorage.getItem(Master);
+      if (Data && Data != "") {
+        Data = JSON.parse(Data);
+        if (Data) {
+          Data["UserLayoutConfiguration"]["IsMenuExpanded"] = layoutConfig;
+          localStorage.setItem(Master, JSON.stringify(Data));
+        }
+      }
+    } else {
+      ErrorToast("Fail to save data, Please login again.");
+    }
+  }
+
   getByKey(key: string): any {
     if (key === undefined || key === null || key === "")
       return null;
