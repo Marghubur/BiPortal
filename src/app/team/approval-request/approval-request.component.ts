@@ -603,6 +603,17 @@ export class ApprovalRequestComponent implements OnInit {
     this.attendanceRecord.TotalDays = 0;
     this.getAttendanceRequest();
   }
+
+  resetRequest() {
+    switch (this.active) {
+      case 1:
+        this.resetAttendanceRequest();
+        break;
+      case 3:
+        this.resetLeaveRequest();
+        break;
+    }
+  }
 }
 
 interface Attendance {
