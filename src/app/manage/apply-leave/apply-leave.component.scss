@@ -80,3 +80,16 @@ textarea {
 ngb-datepicker.dropdown-menu {
   transform: translate(50%) !important;
 }
+
+
+.pending-leave {
+  border-left: 7px solid yellowgreen !important;
+}
+
+.approved-leave {
+  border-left: 7px solid green !important;
+}
+
+.rejected-leave {
+  border-left: 7px solid red !important;
+}

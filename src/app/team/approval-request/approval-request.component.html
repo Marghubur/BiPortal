@@ -25,47 +25,30 @@
               </div>
             </div>
           </div>
-          <div class="col-auto" [ngClass]="{'d-none': active == 4}">
-            <div class="x_header_title d-flex align-items-center justify-content-end">
-              <div class="d-flex">
-                <select class="form-select" [(ngModel)]="itemStatus" (change)="filterRequest($event)">
-                  <option selected value="2">Pending</option>
-                  <option value="9">Approved</option>
-                  <option value="5">Rejected</option>
-                  <option value="4">All</option>
-                </select>
-                <button class="btn btn-sm ms-2 btn-danger" (click)="reloadPage()"><i class="fa fa-refresh"></i></button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
-    <div class="position-relative">
-      <a href="javascript:void(0)" (click)="pagereload()" class="page-reload-icon">
-        <i class="fa fa-refresh"></i>
-      </a>
-    </div>
+
     <div class="mt-3">
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
         <li [ngbNavItem]="1">
-          <a ngbNavLink (click)="changeTab()">Attendance</a>
+          <a ngbNavLink (click)="getAttendanceRequest()">Attendance</a>
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
-              <ng-container *ngIf="attendanceDetail.length > 0">
-                <div class="row py-3">
-                  <div class="col-md-6 fw-bold text-dark">Description</div>
+              <ng-container>
+                <div class="mt-3" *ngIf="attendanceData.TotalRecords > 0">
+                  <app-pagination [pagination]="attendanceData" (onPageChange)="GetAttendanceFilterResult($event)"></app-pagination>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="row col-md-10">
                     <div class="col-md-4 py-2">
                       <label class="form-label">Filter by name</label>
-                      <bot-autocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="attendanceRecord.EmployeeId" (OnSelect)="getAttendanceRequest()" (keydown.esc)="resetFilter()">
                       </bot-autocomplete>
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by requested on </label>
-                      <select  class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
+                      <select  class="form-select"  (change)="getAttendanceRequest()" [(ngModel)]="attendanceRecord.TotalDays">
                         <option value="0" disabled selected>Select days</option>
                         <option value="7">Last 7 days</option>
                         <option value="14">Last 14 days</option>
@@ -74,7 +57,7 @@
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by status</label>
-                      <select  class="form-select" (change)="filter($event, 'status')" [(ngModel)]="missAttendanceStatus">
+                      <select  class="form-select" (change)="getAttendanceRequest()" [(ngModel)]="attendanceRecord.PresentDayStatus">
                         <option value="0" disabled selected>Select status</option>
                         <option value="2">Pending</option>
                         <option value="9">Approved</option>
@@ -83,14 +66,14 @@
                     </div>
                   </div>
                   <div class="col-auto float-end">
-                    <button class="btn  btn-danger ms-2" (click)="resetFilter()" placement="top" ngbTooltip="Reset filter">
+                    <button class="btn  btn-danger ms-2" (click)="resetAttendanceRequest()" placement="top" ngbTooltip="Reset filter">
                       <i class="fa fa-repeat"></i>
                     </button>
                   </div>
                 </div>
                 <ng-container *ngFor="let item of attendanceDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
-                    <div class="d-flex col-md-8">
+                    <div class="d-flex col-md-10">
                       <a href="javascript:void(0)" class="me-2">
                         <i class="fa fa-user-circle-o fa-lg"></i>
                       </a>
@@ -107,9 +90,13 @@
                         <span class="fw-bold pe-1">Manager:</span>
                         {{item.ManagerName}} |
                         <span class="mb-0"><i class="fa fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
-                      </div>                      
+                        <span class="badge ms-3" [ngClass]="{'bg-danger': item.PresentDayStatus == 5, 'bg-success': item.PresentDayStatus == 9, 'bg-primary': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}">
+                          <i class="fa pe-1" [ngClass]="{'fa-ban': item.PresentDayStatus == 5, 'fa-check': item.PresentDayStatus == 9, 'fa-clock-o': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}"></i>
+                          {{item.PresentDayStatus == 5 ? "Rejectd" : item.PresentDayStatus == 9 ? "Approved" : "Pending"}}
+                        </span>
+                      </div>
                     </div>
-                    <div class="col-4 d-flex flex-row-reverse">                                            
+                    <div class="col-2 d-flex flex-row-reverse">
                       <div class="col-auto me-0 pe-0">
                         <button *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)"
                           class="btn btn-danger btn-sm"><i class="fa pe-1"
@@ -122,9 +109,7 @@
                     <div class="collapse show" [id]="'attendance'+i">
                       <div class="card card-body border-0">
                         <div class="row align-items-center justify-content-start">
-                          <div class="bg-c px-3 ms-3 rounded text-white col-auto">
-                            <span class="fade-font">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
-                          </div>
+                          <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
                           <div class="col-md-6 text-truncate">
                             <span class="fw-bold">Message:</span>
                             {{item.UserComments == "" ? 'NA' : item.UserComments}}
@@ -271,10 +256,10 @@
         </li>
 
         <li [ngbNavItem]="3">
-          <a ngbNavLink (click)="changeTab()">Leave</a>
+          <a ngbNavLink (click)="getLeaveRequest()">Leave</a>
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
-              <ng-container *ngIf="leaveDeatil.length > 0">
+              <ng-container >
                 <div class="row py-3">
                   <div class="col-md-6 fw-bold text-dark">Description</div>
                 </div>
@@ -282,12 +267,12 @@
                   <div class="row col-md-10">
                     <div class="col-md-4 py-2">
                       <label class="form-label">Filter by name</label>
-                      <bot-autocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="leaveRecord.EmployeeId" (OnSelect)="getLeaveRequest()" (keydown.esc)="resetLeaveRequest()">
                       </bot-autocomplete>
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by requested on </label>
-                      <select  class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
+                      <select  class="form-select">
                         <option value="0" disabled selected>Select days</option>
                         <option value="7">Last 7 days</option>
                         <option value="14">Last 14 days</option>
@@ -296,7 +281,7 @@
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by status</label>
-                      <select  class="form-select" (change)="filter($event, 'status')" [(ngModel)]="missAttendanceStatus">
+                      <select  class="form-select" (change)="getLeaveRequest()" [(ngModel)]="leaveRecord.RequestStatusId">
                         <option value="0" disabled selected>Select status</option>
                         <option value="2">Pending</option>
                         <option value="9">Approved</option>
@@ -305,19 +290,16 @@
                     </div>
                   </div>
                   <div class="col-auto float-end">
-                    <button class="btn  btn-danger ms-2" (click)="resetFilter()" placement="top" ngbTooltip="Reset filter">
+                    <button class="btn  btn-danger ms-2" (click)="resetLeaveRequest()" placement="top" ngbTooltip="Reset filter">
                       <i class="fa fa-repeat"></i>
                     </button>
                   </div>
                 </div>
-                <ng-container *ngFor="let item of leaveDeatil; let i=index;">
-                  <div class="row bg-white p-2 m-0 d-flex justify-content-between rounded leave-box">
-                    <div class="d-flex col-md-8">
-                      <a href="javascript:void(0)" class="me-3">
-                        <img class="grid-icon" [src]="item.RequestStatusId == 2 ? 'assets/images/clock.png' : item.RequestStatusId == 9 ? 'assets/images/approve.png' : 'assets/images/rejected.png'">
-                      </a>
-                      <a data-bs-toggle="collapse" [attr.href]="'#leave'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#leave'+i" class="me-3">
-                        <img class="grid-icon" src="assets/images/down-arrow.png">
+                <ng-container *ngFor="let item of leaveRequestDetail; let i=index;">
+                  <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
+                    <div class="d-flex col-md-10">
+                      <a href="javascript:void(0)" class="me-2">
+                        <i class="fa fa-user-circle-o fa-lg"></i>
                       </a>
                       <p class="mb-0 fs-6">
                         <span class="fw-bold text-primary-dc">
@@ -325,52 +307,53 @@
                         </span>
                       </p>
                       <p class="ms-2 mb-0 fs-6">
-                        <span class="">leave Date >> </span>
+                        <span class="">leave Date: </span>
                         <span>{{item.FromDate | date}}</span>
                         <span class="px-1">-</span>
                         <span>{{item.ToDate | date}}</span>
                         <span class="ps-1">({{item.NumOfDays}} {{item.NumOfDaysn > 0 ? 'days' : 'day'}})</span>
                       </p>
-                    </div>
-                    <div class="col-4 d-flex flex-row-reverse">
-                      <a href="javascript:void(0)" class="ps-2">
-                        <i class="fa fa-user-circle-o fa-lg"></i>
-                      </a>
-                      <div class="bg-c px-3 pb-1 rounded text-white">
-                        <small class="fade-label">Session Type: </small>
-                        <span class="fade-font">{{item.NumOfDays > 0 ? 'Full day' : 'Half day'}}</span>
+                      <div class="ms-3 col-md-6">
+                        <span class="fw-bold pe-1">Manager:</span>
+                        {{item.ManagerName}} |
+                        <span class="mb-0"><i class="fa fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
+                        <span class="badge ms-3" [ngClass]="{'bg-danger': item.PresentDayStatus == 5, 'bg-success': item.PresentDayStatus == 9, 'bg-primary': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}">
+                          <i class="fa pe-1" [ngClass]="{'fa-ban': item.PresentDayStatus == 5, 'fa-check': item.PresentDayStatus == 9, 'fa-clock-o': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}"></i>
+                          {{item.PresentDayStatus == 5 ? "Rejectd" : item.PresentDayStatus == 9 ? "Approved" : "Pending"}}
+                        </span>
                       </div>
                     </div>
-                    <div class="collapse" [id]="'leave'+i">
+                    <div class="col-2 d-flex flex-row-reverse">
+                      <div class="col-auto me-0 pe-0">
+                        <button *ngIf="item.PresentDayStatus != 5" (click)="openLeaveModal('Rejected', item)"
+                          class="btn btn-danger btn-sm"><i class="fa pe-1"
+                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
+                        <button *ngIf="item.PresentDayStatus != 9" (click)="openLeaveModal('Approved', item)"
+                          class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
+                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
+                      </div>
+                    </div>
+                    <div class="collapse show" [id]="'attendance'+i">
                       <div class="card card-body border-0">
-                        <div class="row align-items-center justify-content-between">
+                        <div class="row align-items-center justify-content-start">
+                          <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">{{item.NumOfDays > 0 ? 'Full day' : 'Half day'}}</span>
+                          <!-- <div class="bg-c px-3 ms-3 rounded text-white col-auto">
+                            <span class="fade-font">{{item.NumOfDays > 0 ? 'Full day' : 'Half day'}}</span>
+                          </div> -->
                           <div class="col-md-6 text-truncate">
                             <span class="fw-bold">Message:</span>
                             {{item.UserMessage == "" ? 'NA' : item.UserMessage}}
-                          </div>
-                          <!-- <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item)" class="">
-                            View Attachment
-                          </a> -->
-                          <div class="col-md-4">
-                            <span class="fw-bold pe-1">Manager:</span>
-                            {{item.ManagerName}} |
-                            <span class="mb-0"><i class="fa fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
-                          </div>
-                          <div class="col-auto me-0 pe-0">
-                            <button *ngIf="item.PresentDayStatus != 5" (click)="openLeaveModal('Rejected', item)"
-                              class="btn btn-danger btn-sm"><i class="fa pe-1"
-                                [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
-                            <button *ngIf="item.PresentDayStatus != 9" (click)="openLeaveModal('Approved', item)"
-                              class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
-                                [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </ng-container>
+                <div class="mt-3" *ngIf="leaveData.TotalRecords > 0">
+                  <app-pagination [pagination]="leaveData" (onPageChange)="GeLeaveFilterResult($event)"></app-pagination>
+                </div>
               </ng-container>
-              <ng-container *ngIf="leaveDeatil.length == 0">
+              <ng-container *ngIf="leaveRequestDetail.length == 0">
                 <div class="text-center fw-bold fs-4 py-5 my-5 text-dark">
                   No record found
                 </div>

@@ -74,7 +74,7 @@
       <div class="">
         <div class="py-3 dropdown col-md-12" *ngFor="let catagory of Menu;let i = index;" [ngClass]="{ 'active-small-menu': catagory.IsActive}">
           <a href="javascript:void(0)" class="text-decoration-none text-center">
-            <img src="assets/fonts/{{catagory.Name}}.png" alt="NAN" class="sm-catagory-icons">
+            <img src="assets/fonts/{{catagory.ParentDetail.Icon}}.png" alt="NAN" class="sm-catagory-icons">
           </a>
           <div class="dropdown-content">
             <span class="caret left"></span>
