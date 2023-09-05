@@ -165,7 +165,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestModal = 3; // attendance
     this.currentRequest = request;
     this.currentRequest.RequestStatusId = request.PresentDayStatus;
-    let attendance = this.attendance.find( x=> x.AttendanceId == request.AttendanceId);
+    let attendance = this.attendanceDetail.find( x=> x.AttendenceDetailId == request.AttendenceDetailId);
     this.currentRequest["EmployeeName"] = attendance.EmployeeName;
     this.currentRequest["Email"] = attendance.Email;
     this.currentRequest["Mobile"] = attendance.Mobile;
@@ -602,6 +602,17 @@ export class ApprovalRequestComponent implements OnInit {
     this.attendanceRecord.PresentDayStatus = 0;
     this.attendanceRecord.TotalDays = 0;
     this.getAttendanceRequest();
+  }
+
+  resetRequest() {
+    switch (this.active) {
+      case 1:
+        this.resetAttendanceRequest();
+        break;
+      case 3:
+        this.resetLeaveRequest();
+        break;
+    }
   }
 }
 

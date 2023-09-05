@@ -28,7 +28,11 @@
         </div>
       </div>
     </div>
-
+    <div class="position-relative">
+      <a href="javascript:void(0)" (click)="resetRequest()" class="page-reload-icon">
+        <i class="fa fa-refresh"></i>
+      </a>
+    </div>
     <div class="mt-3">
       <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
         <li [ngbNavItem]="1">
@@ -65,11 +69,11 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-auto float-end">
+                  <!-- <div class="col-auto float-end">
                     <button class="btn  btn-danger ms-2" (click)="resetAttendanceRequest()" placement="top" ngbTooltip="Reset filter">
                       <i class="fa fa-repeat"></i>
                     </button>
-                  </div>
+                  </div> -->
                 </div>
                 <ng-container *ngFor="let item of attendanceDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
@@ -289,11 +293,11 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-auto float-end">
+                  <!-- <div class="col-auto float-end">
                     <button class="btn  btn-danger ms-2" (click)="resetLeaveRequest()" placement="top" ngbTooltip="Reset filter">
                       <i class="fa fa-repeat"></i>
                     </button>
-                  </div>
+                  </div> -->
                 </div>
                 <ng-container *ngFor="let item of leaveRequestDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
