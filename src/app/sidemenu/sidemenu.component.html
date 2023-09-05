@@ -1,6 +1,13 @@
 <div id="page-menu" class="bg-white menu-items page-menu" [ngClass]="{'position-relative mobile-mode-menu ': !isMinimize}">
   <ng-container *ngIf="!isMinimize">
     <div id="menu-items" class="menu-container position-relative overflow-auto">
+      <div class="x_content d-flex justify-content-between">
+        <div class="fe-1">User detail</div>
+        <a href="javascript:void(0)" (click)="saveMenuStyle()">
+          <i class="fa fa-thumb-tack pinded-icon" [ngClass]="{'d-none': !isMenuExpanded}" aria-hidden="true"></i>
+          <i class="fa fa-thumb-tack" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
+        </a>
+      </div>
       <div class="accordion" id="accordionExample">
         <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
           <h2 class="accordion-header" [id]="'heading'+i">
@@ -36,7 +43,7 @@
         </div>
       </div>
       <!-- <hr> -->
-      <div class="title_menu mt-3">
+      <div class="title_menu mt-3 d-none">
         <a [routerLink]="['/ems/administration/email']" class="text-dark custom-text" routerLinkActive="router-link-active">
           <i class="fa fa-envelope-o me-3 pb-3"aria-hidden="true"></i>
             Mail Box
@@ -50,7 +57,7 @@
             Uploda Master Data
           </a>
       </div>
-      <div class="text-center w-75 ms-3 mt-3 pb-4 custom-text">
+      <div class="text-center w-75 ms-3 mt-3 pb-4 custom-text d-none">
         You're in a team-managed project Learn more
       </div>
     </div>
@@ -93,8 +100,12 @@
         </div>
       </div>
       <div class="p-3 text-center border-top">
-        <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
+        <!-- <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
           <i class="fa fa-cog text-dark me-3 fa-lg" aria-hidden="true"></i>
+        </a> -->
+        <a href="javascript:void(0)" (click)="saveMenuStyle()">
+          <i class="fa fa-thumb-tack me-3 fa-lg pinded-icon" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
+          <i class="fa fa-thumb-tack me-3 fa-lg" [ngClass]="{'d-none': !isMenuExpanded}" aria-hidden="true"></i>
         </a>
         <a href="javascript:void(0)" (click)="mimizeScreen()" >
           <i class="fa fa-angle-double-right me-3 py-3 fa-2x text-dark" aria-hidden="true" data-bs-toggle="tooltip"

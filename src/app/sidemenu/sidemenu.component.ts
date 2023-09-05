@@ -7,6 +7,7 @@ import { iNavigation } from "src/providers/iNavigation";
 import { UserService } from "src/providers/userService";
 declare var $: any;
 import 'bootstrap';
+import { ResponseModel } from "src/auth/jwtService";
 
 @Component({
   selector: 'app-sidemenu',
@@ -30,6 +31,7 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
   isAdmin: boolean = false;
   isLoading: boolean = false;
   isMinimize: boolean = false;
+  isMenuExpanded: boolean = true;
 
   @Output() authentication = new EventEmitter();
 
@@ -46,7 +48,8 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
     private nav: iNavigation,
     private commonService: CommonService,
     private local: ApplicationStorage,
-    private user: UserService
+    private user: UserService,
+    private http: AjaxService
   ) {
     this.commonService.isLoading.subscribe(res => {
       this.isLoading = res;
@@ -67,6 +70,13 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    let style: any = this.local.getMenuStyle();
+    if (style) {
+      this.isMenuExpanded = style.IsMenuExpanded;
+      this.commonService.isMinimize.next(!this.isMenuExpanded);
+    }
+
+    console.log(JSON.stringify(style));
     this.IsLoggedIn = false;
     this.isAdmin = true;
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
@@ -221,6 +231,18 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
       }
       elem[i].classList.add("active-menu");
     }
+  }
+
+  saveMenuStyle() {
+    this.isMenuExpanded = !this.isMenuExpanded;
+    this.http.post("Settings/LayoutConfigurationSetting", {
+      IsMenuExpanded: this.isMenuExpanded
+    }).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        Toast("User layout configuration save.");
+        this.local.updateLayoutConfig(this.isMenuExpanded);
+      }
+    });
   }
 }
 
