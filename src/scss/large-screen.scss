@@ -85,3 +85,15 @@ and (min-width : 1824px) {
       width: 1.5vw;
     }
   }
+
+
+@media only screen
+and (min-width : 100px) and (max-width : 1823px) {
+  .caret {
+    border: 23px solid transparent !important;
+    left: 3.2rem !important;
+  }
+  .dropdown-content {
+    left: 6rem !important;
+  }
+}

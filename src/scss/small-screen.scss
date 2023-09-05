@@ -52,13 +52,24 @@ and (min-width : 1024px) {
       font-size: 0.8rem !important;
     }
     .dropdown-content {
-      left: 3.8rem !important;
+      left: 6.5rem !important;
     }
     .caret {
-      border: 18px solid transparent !important;
-      left: 1.6rem !important;
+      border: 13px solid transparent !important;
+      left: 3.8rem !important;
     }
     .sm-catagory-icons {
       width: 2vw;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-size: 0.9vw !important;
+      font-weight: 400 !important;
+      line-height: 1.5;
+      color: #6d7680 !important;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
   }
