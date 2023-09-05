@@ -4,7 +4,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, ToLocateDate, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus, UserType } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -17,7 +17,6 @@ declare var $: any;
 export class ApprovalRequestComponent implements OnInit {
   active = 1;
   request: Array<ApprovalRequest> = [];
-  leave_request: Array<ApprovalRequest> = [];
   requestState: string = '';
   isLoading: boolean = false;
   currentRequest: any = null;
@@ -35,7 +34,6 @@ export class ApprovalRequestComponent implements OnInit {
   timesheetController: string = "TimesheetRequest";
   requestUrl: string = null;
   timesheetDetail: Array<any> = [];
-  leaveDeatil: Array<any> = [];
   currentTimesheet: Array<any> = [];
   filterText: string = "Assigned to me";
   filterId: number = 0;
@@ -56,6 +54,12 @@ export class ApprovalRequestComponent implements OnInit {
   missAttendanceStatus: number = 0;
   isAdmin: boolean = false;
   timesheetId: number = 0;
+
+  leaveRequestDetail: Array<any> = [];
+  attendanceData: Filter = new Filter();
+  attendanceRecord: Attendance;
+  leaveData: Filter = new Filter();
+  leaveRecord: Leave;
 
   constructor(
     private http: AjaxService,
@@ -85,7 +89,23 @@ export class ApprovalRequestComponent implements OnInit {
 
     this.loadAutoComplete();
     this.itemStatus = 2;
-    this.loadData();
+    this.attendanceRecord = {
+      EmployeeId: 0,
+      ForMonth : new Date().getMonth() + 1,
+      ForYear: new Date().getFullYear(),
+      PageIndex: 1,
+      ReportingManagerId : this.currentUser.UserId,
+      PresentDayStatus: 0,
+      TotalDays: 0
+    };
+    this.leaveRecord = {
+      EmployeeId: 0,
+      FromDate: new Date(),
+      ToDate: new Date(),
+      ReportingManagerId : this.currentUser.UserId,
+      RequestStatusId: 0,
+    }
+    this.getAttendanceRequest();
   }
 
   updatePage(index: number) {
@@ -98,10 +118,6 @@ export class ApprovalRequestComponent implements OnInit {
       this.filterText = "All request(s)";
       this.loadData();
     }
-  }
-
-  pagereload() {
-    this.loadData();
   }
 
   loadData() {
@@ -120,21 +136,6 @@ export class ApprovalRequestComponent implements OnInit {
   }
 
   buildPage(req: any) {
-    this.leave_request = [];
-    this.leaveDeatil = [];
-    if(req.ApprovalRequest) {
-      this.leave_request = req.ApprovalRequest;
-      this.filterLeave();
-    }
-
-    this.attendance = [];
-    this.attendanceDetail = [];
-    if (req.AttendaceTable) {
-      this.attendance = req.AttendaceTable;
-      if (this.active == 1)
-        this.filterAttendance();
-    }
-
     this.timesheet = [];
     this.timesheetDetail = [];
     if (req.TimesheetTable) {
@@ -185,83 +186,9 @@ export class ApprovalRequestComponent implements OnInit {
   changeTab() {
     this.itemStatus = ItemStatus.Pending;
     switch (this.active) {
-      case 1:
-        this.filterAttendance();
-        break;
       case 2:
         this.weekDistributed();
         break;
-      case 3:
-        this.filterLeave();
-        break;
-    }
-  }
-
-  filterRequest(e: any) {
-    this.itemStatus = Number(e.target.value);
-    this.requestUrl = `${this.attendanceController}/GetManagerRequestedData}`;
-    // switch (this.active) {
-    //   case 1:
-    //     this.filterAttendance();
-    //     break;
-    //   case 2:
-    //     this.weekDistributed();
-    //     break;
-    //   case 3:
-    //     this.filterLeave();
-    //     break;
-    // }
-    this.loadData();
-  }
-
-  filterAttendance() {
-    this.attendanceDetail = [];
-    if(this.attendance && this.attendance.length > 0) {
-      this.attendance.map(item => {
-        let detail:Array<any> = JSON.parse(item.AttendanceDetail);
-        if(detail && detail.length > 0) {
-          if (this.itemStatus > 0 && this.itemStatus != 4)
-            detail = detail.filter(x => x.PresentDayStatus === this.itemStatus);
-          else
-            detail = detail.filter(x => x.PresentDayStatus === ItemStatus.Approved || x.PresentDayStatus === ItemStatus.Pending || x.PresentDayStatus === ItemStatus.Rejected);
-          if(detail.length > 0) {
-            for (let i = 0; i < detail.length; i++) {
-              detail[i].AttendanceDay = new Date(detail[i].AttendanceDay);
-              if(detail[i].AttendanceDay.getDay() === 0 || detail[i].AttendanceDay.getDay() === 6) {
-                detail.splice(i, 1);
-              } else {
-                detail[i].AttendanceId = item.AttendanceId;
-              }
-              detail[i].EmployeeName = item.EmployeeName;
-              detail[i].Email = item.Email;
-              detail[i].Mobile = item.Mobile;
-              detail[i].ManagerName = item.ManagerName;
-              detail[i].ManagerEmail = item.ManagerEmail;
-              detail[i].ManagerMobile = item.ManagerMobile;
-            }
-            this.attendanceDetail.push(...detail);
-          }
-        }
-      });
-    }
-  }
-
-  filterLeave() {
-    this.leaveDeatil = [];
-    if (this.leave_request && this.leave_request.length > 0) {
-      let detail = [];
-      if (this.itemStatus > 0 && this.itemStatus <4)
-        detail = this.leave_request.filter(x => x.RequestStatusId === this.itemStatus);
-      else
-        detail = this.leave_request.filter(x => x.RequestStatusId === ItemStatus.Approved || x.RequestStatusId === ItemStatus.Pending || x.RequestStatusId === ItemStatus.Rejected);
-      if (detail && detail.length > 0)
-      this.leaveDeatil = detail;
-      this.leaveDeatil.forEach(x => {
-        if (typeof x.FromDate === 'string') {
-          x.FromDate = ToLocateDate(x.FromDate),
-          x.ToDate = ToLocateDate(x.ToDate);
-        }
-      });
     }
   }
 
@@ -582,8 +509,6 @@ export class ApprovalRequestComponent implements OnInit {
   loadAutoComplete() {
     this.employeeList.data = [];
     this.employeeList.placeholder = "Employee";
-    this.employeeList.data = GetEmployees();
-    this.applicationData = GetEmployees();
     this.employeeList.className = "";
   }
 
@@ -616,5 +541,84 @@ export class ApprovalRequestComponent implements OnInit {
     else
       this.loadAttendanceRequestDetail();
   }
+
+  getLeaveRequest() {
+    this.isPageLoading = true;
+    this.http.post("LeaveRequest/GetLeaveRequestNotification", this.leaveRecord, false).then(response => {
+      if(response.ResponseBody) {
+        this.leaveRequestDetail = response.ResponseBody;
+        this.leaveData.TotalRecords = this.leaveRequestDetail[0].Total;
+        this.isPageLoading = false;
+        Toast("Leave record found");
+      }
+    }).catch(e => {
+      this.leaveData.TotalRecords = 0;
+      this.isPageLoading = false;
+      ErrorToast("Fail to fetch data. Please contact to admin.");
+    });
+  }
+
+  GeLeaveFilterResult(e: Filter) {
+    if(e != null) {
+      this.attendanceRecord.PageIndex = e.ActivePageNumber;
+      this.getLeaveRequest();
+    }
+  }
+
+  resetLeaveRequest() {
+    this.leaveRecord.EmployeeId = 0;
+    this.leaveRecord.RequestStatusId = 0;
+    this.getLeaveRequest();
+  }
+
+  getAttendanceRequest() {
+    this.isPageLoading = true;
+    this.http.post("AttendanceRequest/GetAttendenceRequestData", this.attendanceRecord, false).then(response => {
+      if(response.ResponseBody) {
+        this.attendanceDetail = response.ResponseBody.FilteredAttendance;
+        this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
+        this.employeeList.data = response.ResponseBody.AutoCompleteEmployees;
+        this.applicationData = response.ResponseBody.AutoCompleteEmployees;
+        Toast("Attendance record found");
+        this.isPageLoading = false;
+      }
+    }).catch(e => {
+      this.attendanceData.TotalRecords = 0;
+      this.isPageLoading = false;
+      ErrorToast("Fail to fetch data. Please contact to admin.");
+    });
+  }
+
+  GetAttendanceFilterResult(e: Filter) {
+    if(e != null) {
+      this.attendanceRecord.PageIndex = e.ActivePageNumber;
+      this.getAttendanceRequest();
+    }
+  }
+
+  resetAttendanceRequest() {
+    this.attendanceRecord.PageIndex = 1;
+    this.attendanceRecord.EmployeeId = 0;
+    this.attendanceRecord.PresentDayStatus = 0;
+    this.attendanceRecord.TotalDays = 0;
+    this.getAttendanceRequest();
+  }
 }
 
+interface Attendance {
+  ReportingManagerId,
+  EmployeeId,
+  ForMonth,
+  ForYear,
+  PresentDayStatus,
+  PageIndex,
+  TotalDays
+}
+
+interface Leave {
+  ReportingManagerId,
+  EmployeeId,
+  FromDate,
+  ToDate,
+  RequestStatusId
+}
