@@ -203,11 +203,6 @@
                     FROM - TO DATES
                   </div>
                 </div>
-                <div class="th">
-                  <div class="cell-wrapper">
-                    NO. OF DAYS
-                  </div>
-                </div>
                 <div class="th fe-2">
                   <div class="cell-wrapper">
                     REQUEST DETAIL
@@ -232,7 +227,7 @@
             </div>
             <div class="t-body custom-height text-dark">
               <ng-container *ngIf="leaveData.length > 0">
-                <div class="tr py-2" *ngFor="let item of leaveData">
+                <div class="tr py-2" *ngFor="let item of leaveData" [ngClass]="{'pending-leave': item.LeaveStatus == 2, 'rejected-leave': item.LeaveStatus == 5, 'approved-leave': item.LeaveStatus == 9}">
                   <div class="td align-middle fe-2">
                     <div class="cell-wrapper">
                       <div class="d-flex flex-column justify-content-center">
@@ -252,11 +247,6 @@
                       <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item.FileIds)" *ngIf="item.FileIds != null && item.FileIds != '[]'" class="text-decoration-none ps-4">
                         Attached Document
                       </a>
-                    </div>
-                  </div>
-                  <div class="td align-middle">
-                    <div class="cell-wrapper">
-                      {{item.NumOfDays}}
                     </div>
                   </div>
                   <div class="td align-middle fe-2">
