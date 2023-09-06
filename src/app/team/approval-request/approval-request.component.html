@@ -106,7 +106,7 @@
                           class="">
                           <i class="fa pe-1"
                             [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}">
-                          </i> 
+                          </i>
                           Reject
                         </a>
                         <button *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)"
@@ -152,7 +152,7 @@
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
               <ng-container>
-                <div class="mt-3" *ngIf="attendanceData.TotalRecords > 0">
+                <div class="mt-3" *ngIf="attendanceDetail.length > 0">
                   <app-pagination [pagination]="attendanceData" (onPageChange)="GetAttendanceFilterResult($event)"></app-pagination>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
@@ -182,7 +182,7 @@
                     </div>
                   </div>
                 </div>
-                <ng-container *ngFor="let item of attendanceDetail; let i=index;">
+                <ng-container *ngFor="let item of timesheetDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
                     <div class="d-flex col-md-10">
                       <a href="javascript:void(0)" class="me-2">
@@ -190,7 +190,7 @@
                       </a>
                       <p class="mb-0 fs-6">
                         <span class="fw-bold text-primary-dc">
-                          <u>{{item.EmployeeName}}</u>
+                          <u>{{item[0].EmployeeName}}</u>
                         </span>
                       </p>
                       <p class="ms-2 mb-0 fs-6">
@@ -270,13 +270,6 @@
                 <ng-container *ngFor="let item of timesheetDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
                     <div class="d-flex col-md-8">
-                      <a data-bs-toggle="collapse"   [attr.href]="'#timesheet'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#timesheet'+i" class="arrow-down me-3">
-                        <!-- <img class="grid-icon" src="assets/images/down-arrow.png"> -->
-                        <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-                      </a>
-                      <a href="javascript:void(0)" class="me-3">
-                        <img class="grid-icon" [src]="item[0].TimesheetStatus == 2 ? 'assets/images/clock.png' : item[0].TimesheetStatus == 9 ? 'assets/images/approve.png' : 'assets/images/rejected.png'">
-                      </a>
                       <p class="mb-0 fs-6">
                         <span class="fw-bold text-primary-dc">
                           <u>{{item[0].EmployeeName}}</u>
@@ -298,7 +291,7 @@
                         <span class="fade-font">{{item[0].ClientName}}</span>
                       </div>
                     </div>
-                    <div class="hide-collapse bg dark" [id]="'timesheet'+i">
+                    <div class="hide-collapse show bg dark" [id]="'timesheet'+i">
                       <div class="card card-body border-0">
                         <div class="row align-items-center justify-content-between">
                           <div class="col-md-6 text-truncate">
