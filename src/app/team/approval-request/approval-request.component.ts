@@ -323,7 +323,7 @@ export class ApprovalRequestComponent implements OnInit {
       this.currentRequest.PresentDayStatus = this.attendanceRecord.PresentDayStatus;
       this.currentRequest.TotalDays = this.attendanceRecord.TotalDays;
 
-      this.http.put(`${endPoint}/${this.attendanceRecord.PresentDayStatus}`, this.currentRequest).then((response:ResponseModel) => {
+      this.http.put(`${endPoint}/${this.filterId}`, this.currentRequest).then((response:ResponseModel) => {
         if(response.ResponseBody) {
           this.attendanceDetail = response.ResponseBody.FilteredAttendance;
           if (this.attendanceDetail.length > 0)
