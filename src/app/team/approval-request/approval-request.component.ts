@@ -95,7 +95,7 @@ export class ApprovalRequestComponent implements OnInit {
       ForYear: new Date().getFullYear(),
       PageIndex: 1,
       ReportingManagerId : this.currentUser.UserId,
-      PresentDayStatus: 0,
+      PresentDayStatus: 2,
       TotalDays: 0
     };
     this.leaveRecord = {
@@ -103,7 +103,7 @@ export class ApprovalRequestComponent implements OnInit {
       FromDate: new Date(),
       ToDate: new Date(),
       ReportingManagerId : this.currentUser.UserId,
-      RequestStatusId: 0,
+      RequestStatusId: 2,
     }
     this.getAttendanceRequest();
   }
@@ -165,10 +165,9 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestModal = 3; // attendance
     this.currentRequest = request;
     this.currentRequest.RequestStatusId = request.PresentDayStatus;
-    let attendance = this.attendanceDetail.find( x=> x.AttendenceDetailId == request.AttendenceDetailId);
-    this.currentRequest["EmployeeName"] = attendance.EmployeeName;
-    this.currentRequest["Email"] = attendance.Email;
-    this.currentRequest["Mobile"] = attendance.Mobile;
+    this.currentRequest["EmployeeName"] = request.EmployeeName;
+    this.currentRequest["Email"] = request.Email;
+    this.currentRequest["Mobile"] = request.Mobile;
     $('#leaveModal').modal('show');
   }
 
@@ -185,11 +184,8 @@ export class ApprovalRequestComponent implements OnInit {
 
   changeTab() {
     this.itemStatus = ItemStatus.Pending;
-    switch (this.active) {
-      case 2:
+        this.loadData();
         this.weekDistributed();
-        break;
-    }
   }
 
   weekDistributed() {
@@ -254,15 +250,25 @@ export class ApprovalRequestComponent implements OnInit {
       EmployeeId: this.currentRequest.EmployeeId,
       LeaveRequestNotificationId : this.currentRequest.LeaveRequestNotificationId,
       RecordId: this.currentRequest.RecordId,
-      LeaveTypeId: this.currentRequest.LeaveTypeId
+      LeaveTypeId: this.currentRequest.LeaveTypeId,
+      RequestStatusId: this.leaveRecord.RequestStatusId
     }
 
     this.http.put(`${endPoint}/${this.filterId}`, currentResponse).then((response:ResponseModel) => {
       if (response.ResponseBody) {
-        this.buildPage(response.ResponseBody);
+        this.leaveRequestDetail = response.ResponseBody;
+        if (this.leaveRequestDetail.length > 0)
+          this.leaveData.TotalRecords = this.leaveRequestDetail[0].Total;
+        else
+          this.leaveData.TotalRecords = 0;
+
+        if (this.requestState == "Approved")
+          Toast("Leave approved successfully");
+        else
+          Toast("Attendance rejected successfully");
+
         $('#leaveModal').modal('hide');
         this.isLoading = false;
-        Toast("Submitted Successfully");
       }
     }).catch(e => {
       this.isLoading = false;
@@ -299,7 +305,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   submitActionForAttendance() {
     this.isLoading = true;
-    if (this.attendance) {
+    if (this.currentRequest) {
       let endPoint = "";
       switch(this.requestState) {
         case 'Approved':
@@ -312,11 +318,25 @@ export class ApprovalRequestComponent implements OnInit {
           endPoint = `${this.attendanceController}/ReAssigneAttendanceRequest`;
           break;
       }
+      this.currentRequest.PageIndex = this.attendanceRecord.PageIndex;
+      this.currentRequest.EmployeeId = this.attendanceRecord.EmployeeId;
+      this.currentRequest.PresentDayStatus = this.attendanceRecord.PresentDayStatus;
+      this.currentRequest.TotalDays = this.attendanceRecord.TotalDays;
 
-      this.http.put(`${endPoint}/${this.filterId}`,
-      this.currentRequest).then((response:ResponseModel) => {
+      this.http.put(`${endPoint}/${this.attendanceRecord.PresentDayStatus}`, this.currentRequest).then((response:ResponseModel) => {
         if(response.ResponseBody) {
-          this.buildPage(response.ResponseBody);
+          this.attendanceDetail = response.ResponseBody.FilteredAttendance;
+          if (this.attendanceDetail.length > 0)
+            this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
+          else
+            this.attendanceData.TotalRecords = 0;
+          this.employeeList.data = response.ResponseBody.AutoCompleteEmployees;
+          this.applicationData = response.ResponseBody.AutoCompleteEmployees;
+          if (this.requestState == "Approved")
+            Toast("Attendance approved successfully");
+          else
+            Toast("Attendance rejected successfully");
+
           this.isPageLoading = false;
         } else {
           ErrorToast("Fail to fetch data. Please contact to admin.");
@@ -520,39 +540,19 @@ export class ApprovalRequestComponent implements OnInit {
     this.loadAttendanceRequestDetail();
   }
 
-  collpaseShowHide(e: any) {
-    if (e) {
-      let elem = document.getElementById(e);
-      let classContain = elem.classList.contains('hide-collapse');
-      if (classContain) {
-        elem.classList.remove('hide-collapse');
-        elem.classList.add('show-collapse');
-      }
-      else {
-        elem.classList.add('hide-collapse');
-        elem.classList.remove('show-collapse');
-      }
-    }
-  }
-
-  reloadPage() {
-    if (this.active != 4)
-      this.loadData();
-    else
-      this.loadAttendanceRequestDetail();
-  }
-
   getLeaveRequest() {
     this.isPageLoading = true;
     this.http.post("LeaveRequest/GetLeaveRequestNotification", this.leaveRecord, false).then(response => {
       if(response.ResponseBody) {
         this.leaveRequestDetail = response.ResponseBody;
-        this.leaveData.TotalRecords = this.leaveRequestDetail[0].Total;
+        if (this.leaveRequestDetail.length > 0)
+          this.leaveData.TotalRecords = this.leaveRequestDetail[0].Total;
+        else
+          this.leaveData.TotalRecords = 0;
         this.isPageLoading = false;
         Toast("Leave record found");
       }
     }).catch(e => {
-      this.leaveData.TotalRecords = 0;
       this.isPageLoading = false;
       ErrorToast("Fail to fetch data. Please contact to admin.");
     });
@@ -567,7 +567,7 @@ export class ApprovalRequestComponent implements OnInit {
 
   resetLeaveRequest() {
     this.leaveRecord.EmployeeId = 0;
-    this.leaveRecord.RequestStatusId = 0;
+    this.leaveRecord.RequestStatusId = 2;
     this.getLeaveRequest();
   }
 
@@ -576,14 +576,17 @@ export class ApprovalRequestComponent implements OnInit {
     this.http.post("AttendanceRequest/GetAttendenceRequestData", this.attendanceRecord, false).then(response => {
       if(response.ResponseBody) {
         this.attendanceDetail = response.ResponseBody.FilteredAttendance;
-        this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
-        this.employeeList.data = response.ResponseBody.AutoCompleteEmployees;
-        this.applicationData = response.ResponseBody.AutoCompleteEmployees;
+        if (this.attendanceDetail.length > 0) {
+          this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
+          this.employeeList.data = response.ResponseBody.AutoCompleteEmployees;
+          this.applicationData = response.ResponseBody.AutoCompleteEmployees;
+        } else {
+          this.attendanceData.TotalRecords = 0;
+        }
         Toast("Attendance record found");
         this.isPageLoading = false;
       }
     }).catch(e => {
-      this.attendanceData.TotalRecords = 0;
       this.isPageLoading = false;
       ErrorToast("Fail to fetch data. Please contact to admin.");
     });
@@ -599,7 +602,7 @@ export class ApprovalRequestComponent implements OnInit {
   resetAttendanceRequest() {
     this.attendanceRecord.PageIndex = 1;
     this.attendanceRecord.EmployeeId = 0;
-    this.attendanceRecord.PresentDayStatus = 0;
+    this.attendanceRecord.PresentDayStatus = 2;
     this.attendanceRecord.TotalDays = 0;
     this.getAttendanceRequest();
   }

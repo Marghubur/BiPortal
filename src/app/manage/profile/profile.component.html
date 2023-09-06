@@ -728,8 +728,6 @@
                               <div class="col-md-3">Pin Code : </div>
                               <div class="col-md-9">{{personalDetailForm.get("PinCode").value}}</div>
                             </div>
-                          </div>
-                          <div class="col-md-6 pb-3">
                             <div class="row mt-3">
                               <div class="col-md-3" *ngIf="personalDetailForm.get('MaritalStatus').value != null && personalDetailForm.get('MaritalStatus').value != ''">Marital Status : </div>
                               <div class="col-md-9">{{personalDetailForm.get("MaritalStatus").value | titlecase}}</div>
@@ -737,6 +735,24 @@
                             <div class="row mt-3">
                               <div class="col-md-3" *ngIf="personalDetailForm.get('Category').value != null && personalDetailForm.get('Category').value != ''">Category : </div>
                               <div class="col-md-9">{{personalDetailForm.get("Category").value | titlecase}}</div>
+                            </div>
+                          </div>
+                          <div class="col-md-6 pb-3">
+                            <div class="row mt-3">
+                              <div class="col-md-3">Company Name : </div>
+                              <div class="col-md-9">{{userDetail.CompanyName}}</div>
+                            </div>
+                            <div class="row mt-3">
+                              <div class="col-md-3">Date of Joining : </div>
+                              <div class="col-md-9">{{userDetail.CreatedOn | date}}</div>
+                            </div>
+                            <div class="row mt-3">
+                              <div class="col-md-3">Manager Name : </div>
+                              <div class="col-md-9">{{userDetail.ManagerName}}</div>
+                            </div>
+                            <div class="row mt-3">
+                              <div class="col-md-3">Manager Email Id : </div>
+                              <div class="col-md-9">{{userDetail.EmailId}}</div>
                             </div>
                             <div class="row mt-3" *ngIf="personalDetailForm.get('DifferentlyAbled').value != null && personalDetailForm.get('DifferentlyAbled').value != ''">
                               <div class="col-md-3">Differently Abled : </div>
