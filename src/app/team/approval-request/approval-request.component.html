@@ -111,9 +111,13 @@
                     </div>
                     <div class="col-4 d-flex flex-row-reverse">                                            
                       <div class="col-auto me-0 pe-0">
-                        <button *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)"
-                          class="btn btn-danger btn-sm"><i class="fa pe-1"
-                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
+                        <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)"
+                          class="">
+                          <i class="fa pe-1"
+                            [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}">
+                          </i> 
+                          Reject
+                        </a>
                         <button *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)"
                           class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
                             [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
