@@ -545,12 +545,14 @@ export class ApprovalRequestComponent implements OnInit {
     this.http.post("LeaveRequest/GetLeaveRequestNotification", this.leaveRecord, false).then(response => {
       if(response.ResponseBody) {
         this.leaveRequestDetail = response.ResponseBody;
-        if (this.leaveRequestDetail.length > 0)
+        if (this.leaveRequestDetail && this.leaveRequestDetail.length > 0)
           this.leaveData.TotalRecords = this.leaveRequestDetail[0].Total;
         else
           this.leaveData.TotalRecords = 0;
         this.isPageLoading = false;
         Toast("Leave record found");
+      } else {
+        this.isPageLoading = false;
       }
     }).catch(e => {
       this.isPageLoading = false;
@@ -576,7 +578,7 @@ export class ApprovalRequestComponent implements OnInit {
     this.http.post("AttendanceRequest/GetAttendenceRequestData", this.attendanceRecord, false).then(response => {
       if(response.ResponseBody) {
         this.attendanceDetail = response.ResponseBody.FilteredAttendance;
-        if (this.attendanceDetail.length > 0) {
+        if (this.attendanceDetail && this.attendanceDetail.length > 0) {
           this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
           this.employeeList.data = response.ResponseBody.AutoCompleteEmployees;
           this.applicationData = response.ResponseBody.AutoCompleteEmployees;
@@ -584,6 +586,8 @@ export class ApprovalRequestComponent implements OnInit {
           this.attendanceData.TotalRecords = 0;
         }
         Toast("Attendance record found");
+        this.isPageLoading = false;
+      } else {
         this.isPageLoading = false;
       }
     }).catch(e => {
