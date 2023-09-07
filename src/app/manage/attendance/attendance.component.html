@@ -110,7 +110,9 @@
                                   <span class="badge bg-warning ms-2" *ngSwitchCase="3">W-OFF</span>
                                   <span class="badge bg-secondary ms-2" *ngSwitchCase="4">HLDY</span>
                                   <span class="badge bg-success ms-2" *ngSwitchCase="1">PRES</span>
-                                  <span class="badge bg-danger ms-2" *ngSwitchDefault>EMPTY</span>
+                                  <span class="badge bg-danger ms-2" *ngSwitchDefault>
+                                    {{item.IsOnLeave ? "Leave" : "EMPTY"}}
+                                  </span>
                                 </div>
                               </td>
                               <td class="align-middle">
@@ -127,12 +129,15 @@
                               <td class="align-middle"><i class="fa fa-circle pe-3 text-info"></i> {{item.LogOff}} hrs</td>
                               <td class="align-middle">{{item.LogOn}} hrs</td>
                               <td class="align-middle">
+
                                 <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
                                   <span class="" *ngSwitchCase="3">Week off</span>
                                   <span class="" *ngSwitchCase="2">Pending</span>
                                   <span class="" *ngSwitchCase="1">Not applied</span>
                                   <span class="" *ngSwitchCase="4">Holiday</span>
-                                  <span class="" *ngSwitchCase="0">-</span>
+                                  <span class="" *ngSwitchCase="0">
+                                    {{item.IsOnLeave ? "Leave" : "-"}}
+                                  </span>
                                   <span class="" *ngSwitchCase="5">00:00</span>
                                   <span class="" *ngSwitchCase="9">
                                     <i class="fa fa-check pe-2 text-success"></i> On Time
