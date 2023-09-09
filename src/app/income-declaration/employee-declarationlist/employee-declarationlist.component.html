@@ -64,10 +64,11 @@
                   <ng-container *ngIf="employeeSalaries.length > 0">
                     <tr>
                       <th>Full Name</th>
-                      <th class="text-truncate" *ngFor="let data of employeeSalaries[0].Salary" >
+                      <th class="text-truncate" *ngFor="let data of salaryComponents" >
                         {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="{{data.ComponentName}}"></i>
                       </th>
+                      <th>Others</th>
                       <th>Gross</th>
                       <th>Arrear</th>
                       <th>Gross Total</th>
@@ -98,11 +99,11 @@
                           </small>
                         </a>
                       </td>
-                      <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{data.FinalAmount | number : "1.0-0"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.Gross | number : "1.0-0"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross | number : "1.0-0"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.ArrearGross + item.Gross | number : "1.0-0"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.PreMonthGross | number : "1.0-0"}}</td>
+                      <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.Gross | number : "1.0-0") : "0"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.ArrearGross | number : "1.0-0") : "0"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.ArrearGross + item.Gross | number : "1.0-0") : "0"}}</td>
+                      <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.PreMonthGross | number : "1.0-0") : "0"}}</td>
                       <td></td>
                       <td></td>
                       <td></td>

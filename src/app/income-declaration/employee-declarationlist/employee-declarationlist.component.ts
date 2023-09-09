@@ -30,12 +30,24 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   basePath: string = '';
   scrollDiv: any = null;
   excelTable: any = null;
+  salaryComponents: Array<any> = [];
 
   constructor(private http: AjaxService,
               private nav: iNavigation) {}
 
   ngOnInit(): void {
     this.basePath = this.http.GetImageBasePath();
+    this.salaryComponents = [{"ComponentId": "BS","ComponentName": "BASIC SALARY"},
+    {"ComponentId": "CA", "ComponentName": "CONVEYANCE ALLOWANCE"},
+    {"ComponentId": "EPER-PF", "ComponentName": "EMPLOYER CONTRIBUTION TOWARDS PF"},
+    {"ComponentId": "HRA", "ComponentName": "HOUSE RENT ALLOWANCE"},
+    {"ComponentId": "MA", "ComponentName": "MEDICAL ALLOWANCE"},
+    {"ComponentId": "SHA", "ComponentName": "SHIFT ALLOWANCE"},
+    {"ComponentId": "LTA", "ComponentName": "TRAVEL REIMBURSSEMENT"},
+    {"ComponentId": "CRA", "ComponentName": "CAR RUNNING ALLOWANCE"},
+    {"ComponentId": "TIA", "ComponentName": "TELEPHONE AND INTERNET ALLOWANCE"},
+    {"ComponentId": "SPA", "ComponentName": "SPECIAL ALLOWANCE"}
+  ]
     this.LoadData();
   }
 
@@ -66,7 +78,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
         elem.scrollLeft = left;
       else
         elem.scrollLeft = left;
-      console.log('Excel: ' + left + ', Inner: ' + e.currentTarget.scrollLeft);
+      //console.log('Excel: ' + left + ', Inner: ' + e.currentTarget.scrollLeft);
     });
   }
 
@@ -102,20 +114,21 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       let data = JSON.parse(x.CompleteSalaryDetail)
       let prsentMonth = data.find(x => x.MonthNumber == currentMonth);
       let prevMonthNumber = currentMonth - 1;
-        if (prevMonthNumber == 0)
-            prevMonthNumber = 12;
+      if (prevMonthNumber == 0)
+          prevMonthNumber = 12;
 
-        let prevMonth = null;
-        if (prevMonthNumber != 3)
-          prevMonth = data.find(x => x.MonthNumber == prevMonthNumber);
-
+      let prevMonth = null;
+      if (prevMonthNumber != 3)
+        prevMonth = data.find(x => x.MonthNumber == prevMonthNumber);
+      let value = prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC");
       this.employeeSalaries.push({
         FullName: x.FirstName + " " + x.LastName,
         EmployeeId: x.EmployeeId,
-        Salary: prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC"),
+        Salary: this.buildSalaryDetail(value),
         Gross: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
         ArrearGross: (prevMonth && prevMonth.IsArrearMonth) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
-        PreMonthGross: prevMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0
+        PreMonthGross: (prevMonth && prevMonth.IsActive) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+        IsActive: prsentMonth.IsActive
       });
     });
     if (this.companySetting) {
@@ -146,6 +159,43 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       }
       this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == currentMonth);
     }
+  }
+
+  buildSalaryDetail (Salary: Array<any>) {
+    let salaryBreakup = [];
+    if (Salary.length > 0) {
+      this.salaryComponents.forEach(x => {
+        let value = Salary.find(i => i.ComponentId == x.ComponentId);
+        if (value) {
+          salaryBreakup.push({
+            ComponentId: value.ComponentId,
+            FinalAmount: value.FinalAmount,
+            IsIncludeInPayslip: value.IsIncludeInPayslip
+          });
+        } else {
+          salaryBreakup.push({
+            ComponentId: x.ComponentId,
+            FinalAmount: 0,
+            IsIncludeInPayslip: true
+          });
+        }
+      });
+      let otherAmount = 0;
+      let others = Salary.filter(x => {
+        return !this.salaryComponents.some(i => {
+          return x.ComponentId === i.ComponentId;
+        })
+      });
+      if (others && others.length > 0) {
+        otherAmount = others.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+      }
+      salaryBreakup.push({
+        ComponentId: "Others",
+        FinalAmount: otherAmount,
+        IsIncludeInPayslip: false
+      });
+    }
+    return salaryBreakup;
   }
 
   globalFilter() {
@@ -182,13 +232,15 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
         if (prevMonthNumber != 3)
           prevMonth = data.find(x => x.MonthNumber == prevMonthNumber);
 
+        let value = prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC");
         this.employeeSalaries.push({
           FullName: x.FirstName + " " + x.LastName,
           EmployeeId: x.EmployeeId,
-          Salary: prsentMonth.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC"),
+          Salary: this.buildSalaryDetail(value),
           Gross: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
           ArrearGross: (prevMonth && prevMonth.IsArrearMonth) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
-          PreMonthGross: prevMonth ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0
+          PreMonthGross: (prevMonth && prevMonth.IsActive) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+          IsActive: prsentMonth.IsActive
         });
       });
     }
@@ -199,7 +251,6 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     let empId = this.employeeSalaries.map(x => x.EmployeeId);
     this.http.post('Declaration/ExportEmployeeDeclaration', empId).then(res => {
       if (res.ResponseBody) {
-        console.log(res.ResponseBody);
         let fileLocation = `${this.basePath}${res.ResponseBody}`;
         this.downlodexcelFilePath = fileLocation;
         $('#downloadAllDeclarationExcel').click();
