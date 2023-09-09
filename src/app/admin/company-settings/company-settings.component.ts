@@ -21,6 +21,21 @@ export class CompanySettingsComponent implements OnInit {
   roles: Array<any> = [];
   menuIndex: number = 1;
   isReady: boolean = false;
+  payRollMonth: number = 0;
+  months: Array<any> = [
+    { "num": 0, "value": "January" },
+    { "num": 1, "value": "Febuary" },
+    { "num": 2, "value": "March" },
+    { "num": 3, "value": "April" },
+    { "num": 4, "value": "May" },
+    { "num": 5, "value": "June" },
+    { "num": 6, "value": "July" },
+    { "num": 7, "value": "August" },
+    { "num": 8, "value": "September" },
+    { "num": 9, "value": "October" },
+    { "num": 10, "value": "November" },
+    { "num": 11, "value": "December" }
+  ];
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
@@ -116,6 +131,18 @@ export class CompanySettingsComponent implements OnInit {
     }
     else
       ErrorToast("Please select company first.");
+  }
+
+  runPayroll() {
+    this.isLoading = true;
+    this.http.get(`Company/RunPayroll/${this.payRollMonth}`, false).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        Toast(res.ResponseBody);
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   activeTab(index: number) {
