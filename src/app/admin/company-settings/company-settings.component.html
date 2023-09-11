@@ -198,12 +198,20 @@
                           <h2>Payroll Barrier<small>Setup rules.</small></h2>
                         </div>
                       </div>
-                      <div class="row">
+                      <div class="row justify-content-between">
                         <div class="col-md-4 mt-3">
                           <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="StartJoiningBerierDay" formControlName="IsJoiningBarrierDayPassed">
                             <label class="form-check-label" for="StartJoiningBerierDay">Start Joining Barrier Day </label>
                           </div>
+                          <div class="mt-3">
+                            <select [(ngModel)]="payRollMonth" [ngModelOptions]="{standalone: true}" name="payRollMonth" class="form-control">
+                              <option *ngFor="let n of months" [ngValue]="n.num">{{n.value}}</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-auto mt-3">
+                          <button class="btn btn-primary-c" (click)="runPayroll()">Run Payroll</button>
                         </div>
                       </div>
                     </div>
