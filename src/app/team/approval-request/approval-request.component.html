@@ -106,7 +106,7 @@
                           class="">
                           <i class="fa pe-1"
                             [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}">
-                          </i> 
+                          </i>
                           Reject
                         </a>
                         <button *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)"
@@ -148,23 +148,23 @@
         </li>
 
         <li [ngbNavItem]="2">
-          <a ngbNavLink (click)="changeTab()">TimeSheet</a>
+          <a ngbNavLink (click)="getTimesheetRequest()">TimeSheet</a>
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
               <ng-container>
-                <div class="mt-3" *ngIf="attendanceData.TotalRecords > 0">
-                  <app-pagination [pagination]="attendanceData" (onPageChange)="GetAttendanceFilterResult($event)"></app-pagination>
+                <div class="mt-3">
+                  <app-pagination [pagination]="timesheetData" (onPageChange)="GetTimesheetFilterResult($event)"></app-pagination>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="row col-md-10">
                     <div class="col-md-4 py-2">
                       <label class="form-label">Filter by name</label>
-                      <bot-autocomplete [data]="employeeList" [(ngModel)]="attendanceRecord.EmployeeId" (OnSelect)="getAttendanceRequest()" (keydown.esc)="resetFilter()">
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="timesheetRecord.EmployeeId" (OnSelect)="getTimesheetRequest()" (keydown.esc)="resetFilter()">
                       </bot-autocomplete>
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by requested on </label>
-                      <select  class="form-select"  (change)="getAttendanceRequest()" [(ngModel)]="attendanceRecord.TotalDays">
+                      <select  class="form-select" >
                         <option value="0" disabled selected>Select days</option>
                         <option value="7">Last 7 days</option>
                         <option value="14">Last 14 days</option>
@@ -173,7 +173,7 @@
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by status</label>
-                      <select  class="form-select" (change)="getAttendanceRequest()" [(ngModel)]="attendanceRecord.PresentDayStatus">
+                      <select  class="form-select" (change)="getTimesheetRequest()" [(ngModel)]="timesheetRecord.TimesheetStatus">
                         <option value="0" disabled selected>Select status</option>
                         <option value="2">Pending</option>
                         <option value="9">Approved</option>
@@ -182,7 +182,7 @@
                     </div>
                   </div>
                 </div>
-                <ng-container *ngFor="let item of attendanceDetail; let i=index;">
+                <ng-container *ngFor="let item of timesheetDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
                     <div class="d-flex col-md-10">
                       <a href="javascript:void(0)" class="me-2">
@@ -190,133 +190,41 @@
                       </a>
                       <p class="mb-0 fs-6">
                         <span class="fw-bold text-primary-dc">
-                          <u>{{item.EmployeeName}}</u>
+                          <u>{{item.FirstName}} {{item.LastName}}</u>
                         </span>
                       </p>
                       <p class="ms-2 mb-0 fs-6">
-                        <span class="">Attendance Date: </span>
-                        <span>{{item.AttendanceDay | date}}</span>
+                        <span class="">Timesheet Date: </span>
+                        <span>{{item.TimesheetStartDate | date}}</span>
+                        <span> - {{item.TimesheetEndDate | date}}</span>
                       </p>
                       <div class="ms-3 col-md-6">
                         <span class="fw-bold pe-1">Manager:</span>
                         {{item.ManagerName}} |
                         <span class="mb-0"><i class="fa fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
-                        <span class="badge ms-3" [ngClass]="{'bg-danger': item.PresentDayStatus == 5, 'bg-success': item.PresentDayStatus == 9, 'bg-primary': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}">
-                          <i class="fa pe-1" [ngClass]="{'fa-ban': item.PresentDayStatus == 5, 'fa-check': item.PresentDayStatus == 9, 'fa-clock-o': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}"></i>
-                          {{item.PresentDayStatus == 5 ? "Rejectd" : item.PresentDayStatus == 9 ? "Approved" : "Pending"}}
+                        <span class="badge ms-3" [ngClass]="{'bg-danger': item.TimesheetStatus == 5, 'bg-success': item.TimesheetStatus == 9, 'bg-primary': (item.TimesheetStatus != 9 && item.TimesheetStatus !=5)}">
+                          <i class="fa pe-1" [ngClass]="{'fa-ban': item.TimesheetStatus == 5, 'fa-check': item.TimesheetStatus == 9, 'fa-clock-o': (item.TimesheetStatus != 9 && item.TimesheetStatus !=5)}"></i>
+                          {{item.TimesheetStatus == 5 ? "Rejectd" : item.TimesheetStatus == 9 ? "Approved" : "Pending"}}
                         </span>
                       </div>
                     </div>
                     <div class="col-2 d-flex flex-row-reverse">
                       <div class="col-auto me-0 pe-0">
-                        <button *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)"
+                        <button *ngIf="item.TimesheetStatus != 5" (click)="openTimesheetModal('Rejected', item)"
                           class="btn btn-danger btn-sm"><i class="fa pe-1"
                             [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
-                        <button *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)"
+                        <button *ngIf="item.TimesheetStatus != 9" (click)="openTimesheetModal('Approved', item)"
                           class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
                             [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
                       </div>
                     </div>
-                    <div class="collapse show" [id]="'attendance'+i">
+                    <div class="collapse show">
                       <div class="card card-body border-0">
                         <div class="row align-items-center justify-content-start">
-                          <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
+                          <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">Company: {{item.ClientName}}</span>
                           <div class="col-md-6 text-truncate">
                             <span class="fw-bold">Message:</span>
                             {{item.UserComments == "" ? 'NA' : item.UserComments}}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </ng-container>
-              </ng-container>
-              <ng-container *ngIf="timesheetDetail.length > 0">
-                <div class="row py-3">
-                  <div class="col-md-6 fw-bold text-dark">Description</div>
-                </div>
-                <div class="d-flex align-items-center justify-content-between">
-                  <div class="row col-md-10">
-                    <div class="col-md-4 py-2">
-                      <label class="form-label">Filter by name</label>
-                      <bot-autocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
-                      </bot-autocomplete>
-                    </div>
-                    <div class="col-md-2 py-2">
-                      <label class="form-label">Filter by requested on </label>
-                      <select  class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
-                        <option value="0" disabled selected>Select days</option>
-                        <option value="7">Last 7 days</option>
-                        <option value="14">Last 14 days</option>
-                        <option value="30">Last 30 days</option>
-                      </select>
-                    </div>
-                    <div class="col-md-2 py-2">
-                      <label class="form-label">Filter by status</label>
-                      <select  class="form-select" (change)="filter($event, 'status')" [(ngModel)]="missAttendanceStatus">
-                        <option value="0" disabled selected>Select status</option>
-                        <option value="2">Pending</option>
-                        <option value="9">Approved</option>
-                        <option value="5">Reject</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-auto float-end">
-                    <button class="btn  btn-danger ms-2" (click)="resetFilter()" placement="top" ngbTooltip="Reset filter">
-                      <i class="fa fa-repeat"></i>
-                    </button>
-                  </div>
-                </div>
-                <ng-container *ngFor="let item of timesheetDetail; let i=index;">
-                  <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
-                    <div class="d-flex col-md-8">
-                      <a data-bs-toggle="collapse"   [attr.href]="'#timesheet'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#timesheet'+i" class="arrow-down me-3">
-                        <!-- <img class="grid-icon" src="assets/images/down-arrow.png"> -->
-                        <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-                      </a>
-                      <a href="javascript:void(0)" class="me-3">
-                        <img class="grid-icon" [src]="item[0].TimesheetStatus == 2 ? 'assets/images/clock.png' : item[0].TimesheetStatus == 9 ? 'assets/images/approve.png' : 'assets/images/rejected.png'">
-                      </a>
-                      <p class="mb-0 fs-6">
-                        <span class="fw-bold text-primary-dc">
-                          <u>{{item[0].EmployeeName}}</u>
-                        </span>
-                      </p>
-                      <p class="ms-2 mb-0 fs-6">
-                        <span class="">Timesheet Date >> </span>
-                        <span>{{item[0].PresentDate | date}}</span>
-                        <span class="px-1">-</span>
-                        <span>{{item[item.length-1].PresentDate | date}}</span>
-                      </p>
-                    </div>
-                    <div class="col-4 d-flex flex-row-reverse">
-                      <a href="javascript:void(0)" class="ps-2">
-                        <i class="fa fa-user-circle-o fa-lg"></i>
-                      </a>
-                      <div class="bg-c px-3 pb-1 rounded text-white">
-                        <small class="fade-label">Company: </small>
-                        <span class="fade-font">{{item[0].ClientName}}</span>
-                      </div>
-                    </div>
-                    <div class="hide-collapse bg dark" [id]="'timesheet'+i">
-                      <div class="card card-body border-0">
-                        <div class="row align-items-center justify-content-between">
-                          <div class="col-md-6 text-truncate">
-                            <span class="fw-bold">Message:</span>
-                            {{item.UserComments == "" ? 'NA' : item.UserComments}}
-                          </div>
-                          <div class="col-md-4">
-                            <span class="fw-bold pe-1">Manager:</span>
-                            {{item[0].ManagerName}} |
-                            <span class="mb-0"><i class="fa fa-envelope pe-1"></i> {{item[0].ManagerEmail}} | <i class="fa fa-phone pe-1"></i> {{item[0].ManagerMobile}}</span>
-                          </div>
-                          <div class="col-auto me-0 pe-0">
-                            <button *ngIf="item.PresentDayStatus != 5" (click)="openTimesheetModal('Rejected', item)"
-                              class="btn btn-danger btn-sm"><i class="fa pe-1"
-                                [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
-                            <button *ngIf="item.PresentDayStatus != 9" (click)="openTimesheetModal('Approved', item)"
-                              class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
-                                [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
                           </div>
                         </div>
                       </div>
@@ -348,8 +256,8 @@
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
               <ng-container >
-                <div class="row py-3">
-                  <div class="col-md-6 fw-bold text-dark">Description</div>
+                <div class="mt-3" *ngIf="leaveData.TotalRecords > 0">
+                  <app-pagination [pagination]="leaveData" (onPageChange)="GeLeaveFilterResult($event)"></app-pagination>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="row col-md-10">
@@ -437,9 +345,6 @@
                     </div>
                   </div>
                 </ng-container>
-                <div class="mt-3" *ngIf="leaveData.TotalRecords > 0">
-                  <app-pagination [pagination]="leaveData" (onPageChange)="GeLeaveFilterResult($event)"></app-pagination>
-                </div>
               </ng-container>
               <ng-container *ngIf="leaveRequestDetail.length == 0">
                 <div class="text-center fw-bold fs-4 py-5 my-5 text-dark">
@@ -493,11 +398,6 @@
                         <option value="5">Reject</option>
                       </select>
                     </div>
-                  </div>
-                  <div class="col-auto float-end">
-                    <button class="btn  btn-danger ms-2" (click)="resetFilter()" placement="top" ngbTooltip="Reset filter">
-                      <i class="fa fa-repeat"></i>
-                    </button>
                   </div>
                 </div>
                 <table class="table table-hover mt-3" *ngIf="attendanceRquestPageIsReady">
@@ -590,7 +490,7 @@
                   </tbody>
                 </table>
                 <div class="mt-3">
-                  <app-pagination [pagination]="request" (onPageChange)="GetFilterResult($event)"></app-pagination>
+                  <app-pagination [pagination]="requestFilter" (onPageChange)="GetFilterResult($event)"></app-pagination>
                 </div>
               </ng-container>
               <!-- <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
@@ -683,9 +583,9 @@
 
 <!-- Timesheet Model -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="timesheetModal" tabindex="-1"
-  aria-labelledby="timesheetModalLabel" aria-hidden="true" *ngIf="currentTimesheet.length > 0">
+  aria-labelledby="timesheetModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" *ngIf="currentTimesheet!= null">
       <div class="modal-header border-bottom-0 pt-4">
         <ng-container [ngSwitch]="requestState">
           <h5 *ngSwitchCase="'Rejected'" class="modal-title ps-4" id="timesheetModalLabel">Rejection Request modal</h5>
@@ -705,11 +605,11 @@
         <div class="row py-3">
           <div class="col-md-6">
             <p class="mb-0 fw-bold fs-6">
-              Request by [{{currentTimesheet[0].EmployeeName}}]
+              Request by [{{currentTimesheet.FirstName}} {{currentTimesheet.LastName}}]
             </p>
             <p class="mb-0 fw-bold fs-6">
-              <span class="fw-bold text-primary-c me-2">From: {{currentTimesheet[0].PresentDate | date}}</span>
-              <span class="fw-bold text-primary-c me-2">To: {{currentTimesheet[currentTimesheet.length-1].PresentDate | date}}</span>
+              <span class="fw-bold text-primary-c me-2">From: {{currentTimesheet.TimesheetStartDate | date}}</span>
+              <span class="fw-bold text-primary-c me-2">To: {{currentTimesheet.TimesheetEndDate | date}}</span>
             </p>
             <!-- <input type="text" class="form-control" name="message" [(ngModel)]="editedMessage" value="{{singleLeave.Message}}"> -->
           </div>
@@ -717,12 +617,12 @@
             TimeSheet approval request
           </div>
           <div class="col-md-3">
-            {{currentTimesheet[0].EmployeeName}}
-            <p class="mb-0">{{currentTimesheet[0].Email}}</p>
-            <p class="mb-0">{{currentTimesheet[0].Mobile}}</p>
+            {{currentTimesheet.FirstName}} {{currentTimesheet.LastName}}
+            <p class="mb-0">{{currentTimesheet.Email}}</p>
+            <p class="mb-0">{{currentTimesheet.Mobile}}</p>
           </div>
           <div class="col-md-1">
-            <ng-container [ngSwitch]="currentTimesheet[0].TimesheetStatus">
+            <ng-container [ngSwitch]="currentTimesheet.TimesheetStatus">
               <p *ngSwitchCase="2">Pending</p>
               <p *ngSwitchCase="9">Approvval</p>
               <p *ngSwitchCase="5">Rejected</p>

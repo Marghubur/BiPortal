@@ -261,3 +261,25 @@ a {
     background: white;
   }
 }
+
+
+@media only screen
+and (min-width : 1024px) {
+  .image {
+    width: 55% !important;
+  }
+  
+  .card2 {
+    margin: 0px !important;
+    padding: 0pxx !important;
+  }
+
+  .divider-box {
+    margin: 25px 2rem !important;
+  }
+
+  .login-box {
+      padding: 1rem 2rem !important;
+  }
+  
+}

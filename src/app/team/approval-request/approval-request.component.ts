@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ApprovalRequest } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { ItemStatus, UserType } from 'src/providers/constants';
+import { UserType } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -16,7 +15,6 @@ declare var $: any;
 })
 export class ApprovalRequestComponent implements OnInit {
   active = 1;
-  request: Array<ApprovalRequest> = [];
   requestState: string = '';
   isLoading: boolean = false;
   currentRequest: any = null;
@@ -24,17 +22,14 @@ export class ApprovalRequestComponent implements OnInit {
   itemStatus: number = 0;
   currentUser: any = null;
   isPageLoading: boolean = false;
-  attendance: any = null;
-  timesheet: any = null;
   attendanceDetail: Array<any> = [];
-  currentAttendanceDetail: any = null;
   requestModal: number = 0;
   attendanceController: string = "AttendanceRequest";
   leaveController: string = "LeaveRequest";
   timesheetController: string = "TimesheetRequest";
   requestUrl: string = null;
   timesheetDetail: Array<any> = [];
-  currentTimesheet: Array<any> = [];
+  currentTimesheet: any = null;
   filterText: string = "Assigned to me";
   filterId: number = 0;
   attendanceRquestPageIsReady: boolean = false;
@@ -53,13 +48,13 @@ export class ApprovalRequestComponent implements OnInit {
   requestedOn: number = 0;
   missAttendanceStatus: number = 0;
   isAdmin: boolean = false;
-  timesheetId: number = 0;
-
   leaveRequestDetail: Array<any> = [];
   attendanceData: Filter = new Filter();
   attendanceRecord: Attendance;
   leaveData: Filter = new Filter();
   leaveRecord: Leave;
+  timesheetRecord: Timesheet;
+  timesheetData: Filter = new Filter();
 
   constructor(
     private http: AjaxService,
@@ -104,6 +99,14 @@ export class ApprovalRequestComponent implements OnInit {
       ToDate: new Date(),
       ReportingManagerId : this.currentUser.UserId,
       RequestStatusId: 2,
+      PageIndex: 1
+    }
+    this.timesheetRecord = {
+      EmployeeId: 0,
+      ReportingManagerId : this.currentUser.UserId,
+      ForYear: new Date().getFullYear(),
+      TimesheetStatus: 2,
+      PageIndex: 1
     }
     this.getAttendanceRequest();
   }
@@ -112,36 +115,9 @@ export class ApprovalRequestComponent implements OnInit {
     if(index == 1) {
       this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
       this.filterText = "Assigned to me";
-      this.loadData();
     } else {
       this.requestUrl = `${this.attendanceController}/GetAllRequestedData`;
       this.filterText = "All request(s)";
-      this.loadData();
-    }
-  }
-
-  loadData() {
-    this.isPageLoading = true;
-    this.http.get(`${this.requestUrl}/${this.currentUser.UserId}/${ItemStatus.Pending}`).then(response => {
-      if(response.ResponseBody) {
-        this.buildPage(response.ResponseBody);
-        this.isPageLoading = false;
-      } else {
-        ErrorToast("Fail to fetch data. Please contact to admin.");
-      }
-    }).catch(e => {
-      this.isPageLoading = false;
-      ErrorToast("Fail to fetch data. Please contact to admin.");
-    });
-  }
-
-  buildPage(req: any) {
-    this.timesheet = [];
-    this.timesheetDetail = [];
-    if (req.TimesheetTable) {
-      this.timesheet = req.TimesheetTable;
-      if (this.active == 2)
-        this.weekDistributed();
     }
   }
 
@@ -155,7 +131,6 @@ export class ApprovalRequestComponent implements OnInit {
 
   openTimesheetModal(state: string, request: any) {
     this.requestState = state;
-    this.timesheetId = request[0].TimesheetId;
     this.currentTimesheet = request;
     $('#timesheetModal').modal('show');
   }
@@ -179,43 +154,6 @@ export class ApprovalRequestComponent implements OnInit {
       case 3: // attendance
         this.submitActionForAttendance();
       break;
-    }
-  }
-
-  changeTab() {
-    this.itemStatus = ItemStatus.Pending;
-        this.loadData();
-        this.weekDistributed();
-  }
-
-  weekDistributed() {
-    this.timesheetDetail = [];
-    if(this.timesheet && this.timesheet.length > 0) {
-      let timesheetsData = [];
-      if (this.itemStatus == ItemStatus.Rejected || this.itemStatus == ItemStatus.Approved)
-        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == this.itemStatus);
-      else if (this.itemStatus == ItemStatus.Pending)
-        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus == ItemStatus.Pending);
-      else if (this.itemStatus == 4)
-        timesheetsData = this.timesheet.filter(x => x.TimesheetStatus === ItemStatus.Approved || x.TimesheetStatus === ItemStatus.Pending || x.TimesheetStatus === ItemStatus.Rejected);
-      if (timesheetsData.length > 0) {
-        timesheetsData.map(item => {
-        let detail:Array<any> = JSON.parse(item.TimesheetWeeklyJson);
-        for (let i = 0; i < detail.length; i++) {
-          detail[i].EmployeeName = item.FirstName + " "+ item.LastName;
-          detail[i].Email = item.Email;
-          detail[i].Mobile = item.Mobile;
-          detail[i].PresentDate = detail[i].PresentDate;
-          detail[i].TimesheetStatus = item.TimesheetStatus;
-          detail[i].TimesheetId = item.TimesheetId;
-          detail[i].ClientName = item.ClientName;
-          detail[i].ManagerName = item.ManagerName;
-          detail[i].ManagerEmail = item.ManagerEmail;
-          detail[i].ManagerMobile = item.ManagerMobile;
-        }
-        this.timesheetDetail.push(detail);
-        });
-      }
     }
   }
 
@@ -291,9 +229,14 @@ export class ApprovalRequestComponent implements OnInit {
         break;
     }
 
-    this.http.put(`${endPoint}/${this.currentTimesheet[0].TimesheetId}/${this.filterId}`, this.currentTimesheet).then((response:ResponseModel) => {
+    this.http.put(`${endPoint}/${this.currentTimesheet.TimesheetId}/${this.filterId}`, this.timesheetRecord).then((response:ResponseModel) => {
       if (response.ResponseBody) {
-        this.buildPage(response.ResponseBody);
+        this.timesheetDetail = response.ResponseBody;
+        if (this.timesheetDetail && this.timesheetDetail.length > 0) {
+          this.timesheetData.TotalRecords = this.timesheetDetail[0].Total;
+        } else {
+          this.timesheetData.TotalRecords = 0;
+        }
         $('#timesheetModal').modal('hide');
         Toast("Submitted Successfully");
         this.isLoading = false;
@@ -532,14 +475,6 @@ export class ApprovalRequestComponent implements OnInit {
     this.employeeList.className = "";
   }
 
-  resetFilter() {
-    this.employeeId =0;
-    this.missAttendanceStatus = 0;
-    this.requestedOn = 0;
-    this.requestFilter.SearchString = "";
-    this.loadAttendanceRequestDetail();
-  }
-
   getLeaveRequest() {
     this.isPageLoading = true;
     this.http.post("LeaveRequest/GetLeaveRequestNotification", this.leaveRecord, false).then(response => {
@@ -570,6 +505,8 @@ export class ApprovalRequestComponent implements OnInit {
   resetLeaveRequest() {
     this.leaveRecord.EmployeeId = 0;
     this.leaveRecord.RequestStatusId = 2;
+    this.leaveRecord.PageIndex = 1
+    this.leaveData = new Filter();
     this.getLeaveRequest();
   }
 
@@ -580,11 +517,11 @@ export class ApprovalRequestComponent implements OnInit {
         this.attendanceDetail = response.ResponseBody.FilteredAttendance;
         if (this.attendanceDetail && this.attendanceDetail.length > 0) {
           this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
-          this.employeeList.data = response.ResponseBody.AutoCompleteEmployees;
-          this.applicationData = response.ResponseBody.AutoCompleteEmployees;
         } else {
           this.attendanceData.TotalRecords = 0;
         }
+        this.employeeList.data = response.ResponseBody.AutoCompleteEmployees;
+        this.applicationData = response.ResponseBody.AutoCompleteEmployees;
         Toast("Attendance record found");
         this.isPageLoading = false;
       } else {
@@ -608,7 +545,44 @@ export class ApprovalRequestComponent implements OnInit {
     this.attendanceRecord.EmployeeId = 0;
     this.attendanceRecord.PresentDayStatus = 2;
     this.attendanceRecord.TotalDays = 0;
+    this.attendanceData = new Filter();
     this.getAttendanceRequest();
+  }
+
+  getTimesheetRequest() {
+    this.isPageLoading = true;
+    this.http.post("TimesheetRequest/GetTimesheetRequestData", this.timesheetRecord, false).then(response => {
+      if(response.ResponseBody) {
+        this.timesheetDetail = response.ResponseBody;
+        if (this.timesheetDetail && this.timesheetDetail.length > 0) {
+          this.timesheetData.TotalRecords = this.timesheetDetail[0].Total;
+        } else {
+          this.timesheetData.TotalRecords = 0;
+        }
+        Toast("Timesheet record found");
+        this.isPageLoading = false;
+      } else {
+        this.isPageLoading = false;
+      }
+    }).catch(e => {
+      this.isPageLoading = false;
+      ErrorToast("Fail to fetch data. Please contact to admin.");
+    });
+  }
+
+  GetTimesheetFilterResult(e: Filter) {
+    if(e != null) {
+      this.timesheetRecord.PageIndex = e.ActivePageNumber;
+      this.getTimesheetRequest();
+    }
+  }
+
+  resetTimesheetRequest() {
+    this.timesheetRecord.TimesheetStatus = 2;
+    this.timesheetRecord.EmployeeId = 0;
+    this.timesheetRecord.PageIndex = 1;
+    this.timesheetData = new Filter();
+    this.getTimesheetRequest();
   }
 
   resetRequest() {
@@ -616,10 +590,24 @@ export class ApprovalRequestComponent implements OnInit {
       case 1:
         this.resetAttendanceRequest();
         break;
+      case 2:
+        this.resetTimesheetRequest();
+        break;
       case 3:
         this.resetLeaveRequest();
         break;
+      case 4:
+        this.resetFilter();
+        break;
     }
+  }
+
+  resetFilter() {
+    this.employeeId =0;
+    this.missAttendanceStatus = 0;
+    this.requestedOn = 0;
+    this.requestFilter.SearchString = "";
+    this.loadAttendanceRequestDetail();
   }
 }
 
@@ -638,5 +626,14 @@ interface Leave {
   EmployeeId,
   FromDate,
   ToDate,
-  RequestStatusId
+  RequestStatusId,
+  PageIndex
+}
+
+interface Timesheet {
+  ReportingManagerId,
+  EmployeeId,
+  ForYear,
+  TimesheetStatus,
+  PageIndex
 }
