@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
+import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
+import { LeaveAttendanceDailywages } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -16,9 +19,7 @@ export class ProcessingPayrollComponent implements OnInit {
   isCollapsed: boolean = false;
   isLoading: boolean = false;
   submittedPayrollDate: Date = new Date();
-  appliedLeaveDetail: Array<any> = [];
-  lossPayDetail: Array<any> = [];
-  reverseLossPayDetail: Array<any> = [];
+  
   newJoineeDetail: Array<any> = [];
   exitEmpDetail: Array<any> = [];
   settlementDetail: Array<any> = [];
@@ -68,7 +69,8 @@ export class ProcessingPayrollComponent implements OnInit {
   runpayroll: string = "RunPayRoll";
   userName: string = null;
   allRunPayroll: RunPayroll = null
-  days: Array<number> = [];
+  employeeId: number = 0;
+  employeeData: autoCompleteModal= new autoCompleteModal();
 
   constructor(private http: AjaxService,
               private user: UserService,
@@ -77,6 +79,20 @@ export class ProcessingPayrollComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.employeeData.data = [];
+    this.employeeData.placeholder = "Employee";
+    this.employeeData.data.push({
+      value: 0,
+      text: "All"
+    });
+    this.employeeData.className="normal";
+    let data = GetEmployees();
+    data.forEach(x => {
+      this.employeeData.data.push({
+        value: x.value,
+        text: x.text
+      });
+    })
   }
 
   loadData() {
@@ -143,24 +159,18 @@ export class ProcessingPayrollComponent implements OnInit {
     this.isPageReady = true;
   }
 
-  leaveAttendanceWagesPopUp() {
-    this.activeIndex = 1;
-    this.isLoading = true;
-    this.http.get(`ef/runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true).then(res => {
-      if (res.ResponseBody) {
-        if (res.ResponseBody[0].length > 0)
-          this.appliedLeaveDetail = res.ResponseBody[0];
-
-        if (res.ResponseBody[1].length > 0)
-          this.lossPayDetail = res.ResponseBody[1];
-
-        $('#leaveAttendanceWages').modal('show');
-        Toast("Record found");
-        this.isLoading = false;
-      }
-    }).catch(e => {
-      this.isLoading = false;
-    })
+  navleaveAttendanceWages() {
+    let data = {
+      EndDate:30,
+      Month:8,
+      MonthName:"Sep",
+      StartDate:1,
+      Status:4,
+      Year:2023,
+      EmployeeId: this.employeeId
+    }
+      this.nav.navigate(LeaveAttendanceDailywages, data);
+    
   }
 
   GetFilterLeaveResult(e: Filter) {
@@ -212,13 +222,7 @@ export class ProcessingPayrollComponent implements OnInit {
     $('#leaveAttendanceWages').modal('hide');
   }
 
-  lopAdjustmentPopUp(item: any) {
-    this.selectedLOP = item;
-    for (let i = 1; i <= this.selectedPayrollCalendar.EndDate; i++) {
-      this.days.push(i);
-    }
-    $('#lopAdjustment').modal('show');
-  }
+  
 
   adjustMoreLOP(e: any) {
     let value = e.target.checked;
@@ -230,11 +234,7 @@ export class ProcessingPayrollComponent implements OnInit {
     }
   }
 
-  saveAjustmentLeave() {
-    this.selectedLOP.LOPAdjust = Number(this.selectedLOP.LOPAdjust);
-    this.selectedLOP.LeaveDeduct = Number(this.selectedLOP.LeaveDeduct);
-    $('#lopAdjustment').modal('hide');
-  }
+  
 
   // ------------------------------Employee Changes
   employeeChangesPopUp() {
@@ -499,36 +499,14 @@ export class ProcessingPayrollComponent implements OnInit {
     localStorage.setItem(this.runpayroll, JSON.stringify(this.allRunPayroll));
   }
 
-  submitActionForLeave(item: any, requestState) {
-    this.isLoading = true;
-    let endPoint = '';
+  
 
-    switch(requestState) {
-      case 'Approved':
-        endPoint = `ef/runpayroll/leaveApproval`;
-        break;
-      case 'Rejected':
-        endPoint = `ef/runpayroll/RejectLeaveRequest`;
-        break;
-    }
+  onEmloyeeChanged(e: any) {
 
-    let currentResponse = {
-      LeaveFromDay: item.FromDate,
-      LeaveToDay: item.ToDate,
-      EmployeeId: item.EmployeeId,
-      LeaveRequestNotificationId : item.LeaveRequestNotificationId,
-      RecordId: item.RecordId,
-      LeaveTypeId: item.LeaveTypeId
-    }
+  }
 
-    this.http.post(`${endPoint}`, currentResponse, true).then((response:ResponseModel) => {
-      if (response.ResponseBody) {
+  resetFilter() {
 
-        Toast("Submitted Successfully");
-      }
-    }).catch(e => {
-      this.isLoading = false;
-    })
   }
 
 }
