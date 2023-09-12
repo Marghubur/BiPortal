@@ -69,6 +69,7 @@ export const WorkFlow = `${ConfigBaseRoute}/workflow`;
 export const ConfigPerformance = `${ConfigBaseRoute}/configperformance`;
 export const ManageWorkFlow = `${ConfigBaseRoute}/workflow/manageworkflow`;
 export const ProcessingPayroll = `${ConfigBaseRoute}/processingpayroll`;
+export const LeaveAttendanceDailywages = `${ConfigBaseRoute}/processingpayroll/leaveattendancedailywages`;
 
 // ********************** Configuration route ends  *******************
 

@@ -1,5 +1,5 @@
-import { AfterViewChecked, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AfterViewChecked, Component, OnInit} from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -38,8 +38,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
               private sanitize: DomSanitizer,
-              private http: AjaxService,
-              private renderer: Renderer2
+              private http: AjaxService
               ) { }
 
   ngAfterViewChecked(): void {
@@ -447,7 +446,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.isloading = true;
     this.isEdit = false;
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
-    data = this.removeHeaderTag(data);
+    //data = this.removeHeaderTag(data);
     // let headers = data.split("<div>").filter(x => x.includes("##"));
     // if (headers.length > 0) {
     //   for (let i = 0; i < headers.length; i++) {
@@ -475,8 +474,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     //    data =  data.replace(headers[i], newValue)
     //   }
     // }
-    this.splitText();
-    data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    //this.splitText();
+    //data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     this.projectDetail.SectionDescription= data;
     this.projectDetail.ProjectId = this.projectId;
     this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {

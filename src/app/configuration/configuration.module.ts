@@ -16,6 +16,7 @@ import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { ProductsComponent } from './products/products.component';
 import { EmailConfigComponent } from './email-config/email-config.component';
 import { ProcessingPayrollComponent } from './processing-payroll/processing-payroll.component';
+import { LeaveAttendanceDailywagesComponent } from './leave-attendance-dailywages/leave-attendance-dailywages.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ProcessingPayrollComponent } from './processing-payroll/processing-payr
     ManageshiftComponent,
     ProductsComponent,
     EmailConfigComponent,
-    ProcessingPayrollComponent
+    ProcessingPayrollComponent,
+    LeaveAttendanceDailywagesComponent
   ],
   imports: [
     CommonModule,

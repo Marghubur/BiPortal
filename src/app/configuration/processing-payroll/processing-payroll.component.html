@@ -7,6 +7,10 @@
               <app-breadcrums [title]="'Processing Payroll'"></app-breadcrums>
             </div>
           </div>
+          <div class="col-3">
+            <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+            </bot-autocomplete>
+          </div>
         </div>
       </div>
       <div class="x_content">
@@ -16,7 +20,7 @@
               <a href="javascript:void(0)" class="text-decoration-none" (click)="selectPayrollMonth(item)">
                 <div class="card text-center pt-2 active-payroll" [ngClass]="{'active-payroll': selectedPayrollCalendar.Month == item.Month}" data-name="payroll-tab">
                   <h5 class="text-center text-dark px-1">{{item.MonthName}} {{item.Year}}</h5>
-                  <small class="text-muted px-1 pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
+                  <small class="text-muted  pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
                   <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 2, 'text-bg-warning': item.Status == 3, 'bg-c text-white': item.Status == 4, 'text-secondary': item.Status == 1 || item.Status == 5}">
                     <i class="fa fa-check-square-o" *ngIf="item.Status == 2"></i>
                     <i class="fa fa-exclamation-triangle" *ngIf="item.Status == 3"></i>
@@ -96,7 +100,7 @@
           <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
             <div class="row col-md-12">
               <div class="col-md-4 mt-3">
-                <a href="javascript:void(0)" class="text-decoration-none" (click)="leaveAttendanceWagesPopUp()">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="navleaveAttendanceWages()">
                   <div class="card ps-3">
                     <div class="row py-4 px-2">
                         <div class="col-md-1 d-flex align-items-center justify-content-center bg-c rounded-pill">
@@ -304,7 +308,7 @@
 </div>
 
 <!-- Leave, Attendance and Wages Modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveAttendanceWages" aria-labelledby="leaveAttendanceWagesLabel"
+<!-- <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveAttendanceWages" aria-labelledby="leaveAttendanceWagesLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen p-5">
     <div class="modal-content px-3">
@@ -450,9 +454,6 @@
                       </ng-container>
                     </div>
                 </div>
-                <!-- <div class="mt-3" *ngIf="isPageReady">
-                    <app-pagination [pagination]="leaveData" (onPageChange)="GetFilterLeaveResult($event)"></app-pagination>
-                </div> -->
             </ng-container>
             <ng-container *ngIf="activeIndex == 2">
                 <h5>Loss of Pay</h5>
@@ -565,9 +566,6 @@
                       </ng-container>
                     </div>
                 </div>
-                <!-- <div class="mt-3" *ngIf="isPageReady">
-                  <app-pagination [pagination]="lossPayData" (onPageChange)="GetFilterLosspayResult($event)"></app-pagination>
-                </div> -->
             </ng-container>
             <ng-container *ngIf="activeIndex == 3">
                 <h5>Loss of Pay Details</h5>
@@ -666,9 +664,6 @@
                       </ng-container>
                     </div>
                 </div>
-                <!-- <div class="mt-3" *ngIf="isPageReady">
-                    <app-pagination [pagination]="reverseLossPayData" (onPageChange)="GetFilterReversepayResult($event)"></app-pagination>
-                </div> -->
             </ng-container>
         </div>
       </div>
@@ -692,7 +687,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- Close Modal -->
 
 <!-- New Joinee & Exit Modal -->
@@ -3119,74 +3114,6 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="finalizePayroll()">Finalize Payroll</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End -->
-
-<!--LOP Adjustment Modal -->
-<div class="modal fade" id="lopAdjustment" tabindex="-1" aria-labelledby="lopAdjustmentLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content px-4">
-      <div class="modal-header border-bottom-0">
-        <h1 class="modal-title fs-5" id="lopAdjustmentLabel">LOP Adjustment</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" *ngIf="selectedLOP != null">
-        <div class="col-md-12 row">
-          <div class="col-md-6">
-            <label for="" class="form-label">Actual LOP</label>
-            <p class="mb-0">{{selectedLOP.ActualLOP}} days</p>
-          </div>
-          <div class="col-md-6">
-            <label for="" class="form-label">LOP Adjustment</label>
-            <select class="form-select" [(ngModel)]="selectedLOP.LOPAdjust">
-              <option value="0">No Adjustment</option>
-              <option [value]="item" *ngFor="let item of days">{{item}}</option>
-            </select>
-          </div>
-        </div>
-        <ng-container *ngIf="selectedLOP.LOPAdjust < selectedLOP.ActualLOP">
-          <div class="col-12">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" (click)="adjustMoreLOP($event)">
-              <label class="form-check-label">
-                Do you want to adjust more LOP
-              </label>
-            </div>
-            <div class="col-md-12 d-none" data-name="deducetedLeaveContainer">
-              <fieldset class="mt-3">
-                <legend>Deducted Leave</legend>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label class="form-label">Leave Type</label>
-                    <select class="form-select">
-                      <option value=""></option>
-                    </select>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="" class="form-label">Leaves to be deducted</label>
-                    <select class="form-select" [(ngModel)]="selectedLOP.LeaveDeduct">
-                      <option value="0">0</option>
-                      <ng-container *ngFor="let item of days; let i= index;">
-                        <option [value]="item" *ngIf="i < (selectedLOP.ActualLOP - selectedLOP.LOPAdjust)">{{item}}</option>
-                      </ng-container>
-                    </select>
-                  </div>
-                </div>
-              </fieldset>
-            </div>
-          </div>
-        </ng-container>
-        <div class="mt-3">
-          <label for="" class="form-label">Comment</label>
-          <textarea rows="3" placeholder="Comments" class="form-control" [(ngModel)]="selectedLOP.Comment"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="saveAjustmentLeave()">Save</button>
       </div>
     </div>
   </div>
