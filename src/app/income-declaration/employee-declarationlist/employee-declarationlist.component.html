@@ -63,7 +63,9 @@
                 <thead>
                   <ng-container *ngIf="employeeSalaries.length > 0">
                     <tr>
-                      <th>Full Name</th>
+                      <th width="10%">
+                        Full Name
+                      </th>
                       <th class="text-truncate" *ngFor="let data of salaryComponents" >
                         {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="{{data.ComponentName}}"></i>
@@ -92,12 +94,17 @@
                   <ng-container *ngIf="employeeSalaries.length > 0">
                     <tr *ngFor="let item of employeeSalaries">
                       <td>
-                        <a href="javascript:void(0)" class="text-decoration-none" (click)="viewDeclaration(item)">
-                          <span class="text-decoration-underline">{{item.FullName}}</span>
-                          <small class="text-muted  ps-2">
-                            [EmpId: {{item.EmployeeId}}]
-                          </small>
-                        </a>
+                        <div class="d-flex justify-content-between">                          
+                          <a href="javascript:void(0)" class="text-decoration-none" (click)="viewDeclaration(item)">
+                            <span class="text-muted  pe-1">
+                              [{{item.EmployeeId}}]
+                            </span>
+                            <span class="text-decoration-underline">{{item.FullName}}</span>
+                          </a>
+                          <a href="javascript:void(0)" class="text-decoration-none">
+                            <i class="fa fa-university" aria-hidden="true"></i>
+                          </a>
+                        </div>
                       </td>
                       <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
                       <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.Gross | number : "1.0-0") : "0"}}</td>
