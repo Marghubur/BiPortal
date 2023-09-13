@@ -158,13 +158,9 @@
                                         <input class="form-control" (keyup.enter)="filterRecords()" autofocus [(ngModel)]="attendance.EmployeeName"
                                           placeholder="Search by Name" id="namefilter" (keydown.esc)="resetFilter()">
                                     </div>
-                                    <div class="cell-wrapper col-md-2 mb-3">
+                                    <!-- <div class="cell-wrapper col-md-2 mb-3">
                                         <div class="t-filter" >
                                           <a href="javascript:void()" class="pe-2">For Month</a>
-                                          <!-- <i class="fa fa-sort-amount-asc"
-                                            [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                                          <i class="fa fa-sort-amount-desc"
-                                            [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i> -->
                                         </div>
                                         <select class="form-select" [(ngModel)]="attendance.ForMonth">
                                             <option value="0" disabled>Select Month</option>
@@ -181,21 +177,17 @@
                                             <option value="11">Nov</option>
                                             <option value="12">Dec</option>
                                         </select>
-                                    </div>
-                                    <div class="cell-wrapper col-md-2 mb-3">
+                                    </div> -->
+                                    <!-- <div class="cell-wrapper col-md-2 mb-3">
                                         <div class="t-filter" >
                                           <a href="javascript:void()" class="pe-2">For Year</a>
-                                          <!-- <i class="fa fa-sort-amount-asc"
-                                            [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                                          <i class="fa fa-sort-amount-desc"
-                                            [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i> -->
                                         </div>
                                         <select class="form-select" [(ngModel)]="attendance.ForYear">
                                             <option value="0" disabled>Select Year</option>
                                             <option value="2023">2023</option>
                                             <option value="2024">2024</option>
                                         </select>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-auto">
                                     <a href="javascript:void(0)" class="text-decoration-none px-2" (click)="filterRecords()">
@@ -238,7 +230,7 @@
                                             <td [ngClass]="{'bg-info': data.PresentDayStatus == 2, 'bg-warning': data.PresentDayStatus == 0, 'bg-success': data.PresentDayStatus == 9, 'bg-danger': data.PresentDayStatus == 5}">
                                                 <i class="fa fa-check text-white" *ngIf="data.PresentDayStatus == 9"></i>
                                                 <i class="fa fa-close text-white" *ngIf="data.PresentDayStatus == 5"></i>
-                                                <a href="javascript:void(0)" (click)="showAttendanceHandler()">
+                                                <a href="javascript:void(0)" (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
                                                     <i class="fa fa-ban text-dark" *ngIf="data.PresentDayStatus == 0"></i>
                                                 </a>
                                                 <i class="fa fa-clock-o text-danger" *ngIf="data.PresentDayStatus == 2"></i>
@@ -282,6 +274,38 @@
                                       <div class="inner-scroller" id="inner-scroller"></div>
                                     </div>
                                   </div>
+                                </div>
+                              </div>
+                              <div class="row mt-3">
+                                <div class="col-auto">
+                                    <span class="bg-success px-2 py-1">
+                                        <i class="fa fa-check text-white"></i>
+                                    </span>
+                                    <span> Approved</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bg-danger px-2 py-1">
+                                        <i class="fa fa-close text-white"></i>
+                                    </span>
+                                    <span> Rejected</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bg-warning px-2 py-1">
+                                        <i class="fa fa-close text-dark"></i>
+                                    </span>
+                                    <span> Blocked</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bg-info px-2 py-1">
+                                        <i class="fa fa-clock-o text-danger"></i>
+                                    </span>
+                                    <span> Submitted</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="bg-light px-2 py-1">
+                                        <i class="fa fa-gift text-success"></i>
+                                    </span>
+                                    <span> WeekOff/ Holiday</span>
                                 </div>
                               </div>
                         </div>
@@ -590,6 +614,53 @@
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary-c" (click)="saveAjustmentLeave()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End -->
+
+<!--Attendance Adjustment Modal -->
+<div class="modal fade" id="attendanceAdjustment" tabindex="-1" aria-labelledby="attendanceAdjustmentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content px-4">
+            <div class="modal-header border-bottom-0">
+                <h1 class="modal-title fs-5" id="attendanceAdjustmentLabel">Attendance Adjustment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row" *ngIf="selectedAttendance != null">
+                    <div class="col-md-6">
+                        <label  class="form-label">Name</label>
+                        <span>: {{selectedAttendance.EmployeeName}} </span>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date</label>
+                        <span>: {{selectedAttendance.AttendanceDay | date}} </span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Leave Type</label>
+                    <select class="form-select mb-3" (change)="validateLeaveStatus($event)">
+                        <option value="" disabled selected>Select leave type</option>
+                        <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveQuota">
+                            <div class="col-md-12">
+                            {{l.LeavePlanTypeName}} - Balance: {{l.AvailableLeaves | number: '1.2-2'}} days
+                            </div>
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="form-label">Leave to be deducted</label>
+                    <input type="text" class="form-control" readonly [value]="(selectedLeaveType!= null && selectedLeaveType.AvailableLeaves) > 0? 1 : 0">
+                </div>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
+                <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveAttedanceAjustment()">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                    {{ isLoading ? 'Wait' : 'Save' }}
+                </button>
             </div>
         </div>
     </div>
