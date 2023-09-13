@@ -26,6 +26,9 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
   attendanceDetail: Array<any> = [];
   attendanceData: Filter = new Filter();
   attendance: Attendance;
+  selectedAttendance: any = null;
+  leaveQuota: Array<any> = [];
+  selectedLeaveType: any = null;
 
   constructor(private nav:iNavigation,
               private http: AjaxService) {}
@@ -65,8 +68,8 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
       this.attendance = {
         EmployeeName: "", 
-        ForMonth: new Date().getMonth() + 1, 
-        ForYear: new Date().getFullYear()
+        ForMonth: this.selectedPayrollCalendar.Month+1, 
+        ForYear: this.selectedPayrollCalendar.Year
       }
 
       this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
@@ -155,6 +158,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
     this.isLoading = true;
     this.http.post("ef/runpayroll/getAttendancePage", this.attendanceData, true).then((res:ResponseModel) => {
       if (res.ResponseBody) {
+        this.attendanceDetail = [];
         this.attendanceDetail = res.ResponseBody;
         if (this.attendanceDetail.length > 0) {
 
@@ -228,17 +232,46 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   resetFilter() {
     this.attendanceData.reset();
-    this.attendanceData.SearchString = "";
+    this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
     this.attendance = {
-      EmployeeName : "",
-      ForMonth : 0,
-      ForYear : 0
+      EmployeeName: "", 
+      ForMonth: this.selectedPayrollCalendar.Month+1, 
+      ForYear: this.selectedPayrollCalendar.Year
     }
     this.getAttendanceDetail()
   }
 
-  showAttendanceHandler() {
-    alert('working');
+  showAttendanceHandler(item: any, id: number, name: string) {
+    if (id <= 0) {
+      ErrorToast("Invalid employee selected");
+      return;
+    }
+    if (item) {
+      this.selectedAttendance = null;
+      this.selectedAttendance = item;
+      this.selectedAttendance.EmployeeName = name;
+      this.isLoading = true;
+      this.http.get(`Leave/GetLeaveDetailByEmpId/${id}`).then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.leaveQuota = JSON.parse(res.ResponseBody.LeaveQuotaDetail);
+          $('#attendanceAdjustment').modal('show');
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
+  }
+
+  saveAttedanceAjustment() {
+
+  }
+
+  validateLeaveStatus(e: any) {
+    let value = e.target.value;
+    if (Number(value) > 0) {
+      this.selectedLeaveType = this.leaveQuota.find(x => x.LeavePlanTypeId == value);
+    }
   }
 }
 
