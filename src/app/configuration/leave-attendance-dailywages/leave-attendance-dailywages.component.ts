@@ -206,15 +206,6 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
         delimiter = "and";
     }
 
-    if (this.attendance.ForMonth > 0) {
-      this.daysInMonth = [];
-      let yrs = this.attendance.ForYear > 0 ? this.attendance.ForYear : this.selectedPayrollCalendar.Year;
-      let days = new Date(yrs, this.attendance.ForMonth, 0).getDate();
-      for (let i = 1; i <= days; i++) {
-        this.daysInMonth.push(i);
-      }
-    }
-
     this.getAttendanceDetail();
   }
 
