@@ -190,10 +190,10 @@
                                     </div> -->
                                 </div>
                                 <div class="col-auto">
-                                    <a href="javascript:void(0)" class="text-decoration-none" (click)="filterRecords()">
+                                    <a href="javascript:void(0)" class="text-decoration-none px-2" (click)="filterRecords()">
                                         <i class="fa fa-filter fa-lg"></i>
                                     </a>
-                                    <a href="javascript:void(0)" class="text-decoration-none ps-2 text-danger" (click)="resetFilter()">
+                                    <a href="javascript:void(0)" class="text-decoration-none px-2 text-danger" (click)="resetFilter()">
                                         <i class="fa fa-repeat fa-lg"></i>
                                     </a>
                                 </div>
@@ -204,7 +204,7 @@
                                     <ng-container >
                                       <tr >
                                         <th>Name</th>
-                                        <th class="text-truncate" *ngFor="let data of daysInMonth" >
+                                        <th class="text-truncate" *ngFor="let data of daysInMonth">
                                           {{data}}
                                         </th>
                                         <th>A</th>
@@ -226,13 +226,17 @@
                                         <td>
                                             {{item.EmployeeName}}
                                         </td>
-                                        <td *ngFor="let data of item.AttendanceStatus">
-                                            <i class="fa fa-check text-success" *ngIf="data == 9"></i>
-                                            <i class="fa fa-close text-danger" *ngIf="data == 5"></i>
-                                            <i class="fa fa-ban text-danger" *ngIf="data == 0"></i>
-                                            <i class="fa fa-clock-o text-danger" *ngIf="data == 2"></i>
-                                            <i class="fa fa-gift text-success" *ngIf="data == 3 || data == 4"></i>
-                                        </td>
+                                        <ng-container *ngFor="let data of item.AttendanceDetail">
+                                            <td [ngClass]="{'bg-info': data.PresentDayStatus == 2, 'bg-warning': data.PresentDayStatus == 0, 'bg-success': data.PresentDayStatus == 9, 'bg-danger': data.PresentDayStatus == 5}">
+                                                <i class="fa fa-check text-white" *ngIf="data.PresentDayStatus == 9"></i>
+                                                <i class="fa fa-close text-white" *ngIf="data.PresentDayStatus == 5"></i>
+                                                <a href="javascript:void(0)" (click)="showAttendanceHandler()">
+                                                    <i class="fa fa-ban text-dark" *ngIf="data.PresentDayStatus == 0"></i>
+                                                </a>
+                                                <i class="fa fa-clock-o text-danger" *ngIf="data.PresentDayStatus == 2"></i>
+                                                <i class="fa fa-gift text-success" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                                            </td>
+                                        </ng-container>
                                         <td></td>
                                         <td></td>
                                         <td></td>

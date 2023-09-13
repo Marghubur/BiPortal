@@ -62,11 +62,14 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
       for (let i = 1; i <= days; i++) {
         this.daysInMonth.push(i);
       }
+
       this.attendance = {
         EmployeeName: "", 
-        ForMonth: 0, 
-        ForYear: 0
+        ForMonth: new Date().getMonth() + 1, 
+        ForYear: new Date().getFullYear()
       }
+
+      this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
       this.loadData();
     } else {
       ErrorToast("Please select payroll month first");
@@ -154,24 +157,31 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
       if (res.ResponseBody) {
         this.attendanceDetail = res.ResponseBody;
         if (this.attendanceDetail.length > 0) {
+
           this.attendanceDetail.forEach(x => {
-            x.AttendanceStatus = [];
-            let totalDays = new Date(x.ForYear, x.ForMonth, 0).getDate();
-            let attendanceDetail = JSON.parse(x.AttendanceDetail);
-            if (totalDays == attendanceDetail.length)
-              x.AttendanceStatus = attendanceDetail.map(i => i.PresentDayStatus);
-            else {
-              let intDate = new Date(JSON.parse(x.AttendanceDetail)[0].AttendanceDay).getDate();
-              for (let i = 1; i <= intDate; i++) {
-                x.AttendanceStatus.push(0);
-              }
-              x.AttendanceStatus.push(...attendanceDetail.map(i => i.PresentDayStatus));
-            }
-          })
+            x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
+          });
+
+          // this.attendanceDetail.forEach(x => {
+          //   x.AttendanceStatus = [];
+          //   let totalDays = new Date(x.ForYear, x.ForMonth, 0).getDate();
+          //   let attendanceDetail = JSON.parse(x.AttendanceDetail);
+          //   if (totalDays == attendanceDetail.length)
+          //     x.AttendanceStatus = attendanceDetail.map(i => i.PresentDayStatus);
+          //   else {
+          //     let intDate = new Date(JSON.parse(x.AttendanceDetail)[0].AttendanceDay).getDate();
+          //     for (let i = 1; i <= intDate; i++) {
+          //       x.AttendanceStatus.push(0);
+          //     }
+          //     x.AttendanceStatus.push(...attendanceDetail.map(i => i.PresentDayStatus));
+          //   }
+          // })
+
           this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
         } else {
           this.attendanceData.TotalRecords = 0;
         }
+        
         console.log(this.attendanceDetail);
         this.isLoading = false;
         Toast("Attendance record found");
@@ -188,22 +198,29 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   filterRecords() {
     let delimiter = "";
+    let searchString = "";
     this.attendanceData.SearchString = ""
     this.attendanceData.reset();
 
     if(this.attendance.EmployeeName !== null && this.attendance.EmployeeName !== "") {
-      this.attendanceData.SearchString += ` 1=1 and EmployeeName like '%${this.attendance.EmployeeName.toUpperCase()}%'`;
-        delimiter = "and";
+      searchString += ` EmployeeName like '%${this.attendance.EmployeeName.toUpperCase()}%'`;
+      delimiter = "and";
     }
 
     if(this.attendance.ForMonth !== null && this.attendance.ForMonth > 0) {
-      this.attendanceData.SearchString += `1=1 And ForMonth = ${this.attendance.ForMonth}`;
-        delimiter = "and";
+      searchString += ` ${delimiter} ForMonth = ${this.attendance.ForMonth}`;
+      delimiter = "and";
     }
 
     if(this.attendance.ForYear !== null && this.attendance.ForYear> 0) {
-      this.attendanceData.SearchString += `1=1 And ForYear = ${this.attendance.ForYear}`;
-        delimiter = "and";
+      searchString += ` ${delimiter} ForYear = ${this.attendance.ForYear}`;
+      delimiter = "and";
+    }
+
+    if(searchString != "") {
+      this.attendanceData.SearchString = ` 1=1 and ${searchString}`;
+    } else {
+      this.attendanceData.SearchString = "1=1";
     }
 
     this.getAttendanceDetail();
@@ -218,6 +235,10 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
       ForYear : 0
     }
     this.getAttendanceDetail()
+  }
+
+  showAttendanceHandler() {
+    alert('working');
   }
 }
 
