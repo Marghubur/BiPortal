@@ -486,6 +486,7 @@ export class ProcessingPayrollComponent implements OnInit {
     this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month}`, false)
     .then((res:ResponseModel) => {
       if (res.ResponseBody) {
+        $('#confirmPayrollFinalize').modal('hide');
         Toast(res.ResponseBody);
         this.isLoading = false;
       }

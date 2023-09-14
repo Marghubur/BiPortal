@@ -325,11 +325,11 @@
                             <form class="form-inline">
                               <div class="form-group w-100">
                                 <div class="input-group w-100">
-                                  <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate" readonly [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
+                                  <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                     [(ngModel)]="joiningDatemodel" (dateSelect)="onJoiningDateSelection($event)" ngbDatepicker
                                     #joiningDate="ngbDatepicker">
                                   <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()" disabled
+                                    <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()"
                                       type="button"><i class="fa fa-calendar" aria-hidden="true"></i>
                                     </button>
                                   </div>
