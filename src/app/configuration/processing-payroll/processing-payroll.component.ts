@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
-import { LeaveAttendanceDailywages } from 'src/providers/constants';
+import { ItemStatus, LeaveAttendanceDailywages } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -161,16 +161,16 @@ export class ProcessingPayrollComponent implements OnInit {
 
   navleaveAttendanceWages() {
     let data = {
-      EndDate:30,
-      Month:8,
-      MonthName:"Sep",
-      StartDate:1,
-      Status:4,
-      Year:2023,
+      EndDate: this.selectedPayrollCalendar.EndDate,
+      Month: this.selectedPayrollCalendar.Month,
+      MonthName: this.selectedPayrollCalendar.MonthName,
+      StartDate: this.selectedPayrollCalendar.StartDate,
+      Status: this.selectedPayrollCalendar.Status,
+      Year: this.selectedPayrollCalendar.Year,
       EmployeeId: this.employeeId
     }
-      this.nav.navigate(LeaveAttendanceDailywages, data);
-    
+
+    this.nav.navigate(LeaveAttendanceDailywages, data);
   }
 
   GetFilterLeaveResult(e: Filter) {
@@ -482,7 +482,16 @@ export class ProcessingPayrollComponent implements OnInit {
   // ----------------------End
 
   finalizePayroll() {
-
+    this.isLoading = true;
+    this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month}`, false)
+    .then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        Toast(res.ResponseBody);
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    });
   }
 
   finalizePayrollPopUp() {
