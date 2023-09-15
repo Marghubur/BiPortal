@@ -155,42 +155,32 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
   }
 
   getAttendanceDetail() {
-    this.isLoading = true;
-    this.http.post("ef/runpayroll/getAttendancePage", this.attendanceData, true).then((res:ResponseModel) => {
-      if (res.ResponseBody) {
-        this.attendanceDetail = [];
-        this.attendanceDetail = res.ResponseBody;
-        if (this.attendanceDetail.length > 0) {
+    if (!this.attendanceDetail || this.attendanceDetail.length == 0) {
+      this.isLoading = true;
+      this.http.post("ef/runpayroll/getAttendancePage", this.attendanceData, true).then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.attendanceDetail = [];
+          this.attendanceDetail = res.ResponseBody;
+          if (this.attendanceDetail.length > 0) {
 
-          this.attendanceDetail.forEach(x => {
-            x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
-          });
+            this.attendanceDetail.forEach(x => {
+              x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
+            });
 
-          // this.attendanceDetail.forEach(x => {
-          //   x.AttendanceStatus = [];
-          //   let totalDays = new Date(x.ForYear, x.ForMonth, 0).getDate();
-          //   let attendanceDetail = JSON.parse(x.AttendanceDetail);
-          //   if (totalDays == attendanceDetail.length)
-          //     x.AttendanceStatus = attendanceDetail.map(i => i.PresentDayStatus);
-          //   else {
-          //     let intDate = new Date(JSON.parse(x.AttendanceDetail)[0].AttendanceDay).getDate();
-          //     for (let i = 1; i <= intDate; i++) {
-          //       x.AttendanceStatus.push(0);
-          //     }
-          //     x.AttendanceStatus.push(...attendanceDetail.map(i => i.PresentDayStatus));
-          //   }
-          // })
-
-          this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
-        } else {
-          this.attendanceData.TotalRecords = 0;
+            this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
+          } else {
+            this.attendanceData.TotalRecords = 0;
+          }
+          
+          console.log(this.attendanceDetail);
+          this.isLoading = false;
+          Toast("Attendance detail loaded");
         }
-        
-        console.log(this.attendanceDetail);
-        this.isLoading = false;
-        Toast("Attendance record found");
-      }
-    })
+      })
+    } else {
+      this.isLoading = false;
+      Toast("Attendance detail loaded");
+    }
   }
 
   GetFilterLosspayResult(e: Filter) {
