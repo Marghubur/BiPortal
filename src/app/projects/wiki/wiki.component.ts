@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -38,6 +38,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
               private sanitize: DomSanitizer,
+              private common: CommonService,
               private http: AjaxService
               ) { }
 
@@ -134,6 +135,11 @@ export class WikiComponent implements OnInit, AfterViewChecked {
       WikiSection: new FormControl(this.projectDetail.SectionName),
       WikiSectionDetail: new FormControl(this.sanitize.bypassSecurityTrustHtml(this.projectDetail.SectionDescription  as string))
     });
+  }
+
+  editWiki() {
+    this.isEdit = true;
+    this.common.isMinimize.next(true);
   }
 
   addTitlePopUp() {
@@ -447,46 +453,46 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.isEdit = false;
     let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     //data = this.removeHeaderTag(data);
-    // let headers = data.split("<div>").filter(x => x.includes("##"));
+    // let headers = data.split("#").filter(x => x.includes("#"));
     // if (headers.length > 0) {
     //   for (let i = 0; i < headers.length; i++) {
     //     let newValue = "";
     //     let tagValue = 0;
-    //     if (headers[i].includes("##1"))
+    //     if (headers[i].includes("#"))
     //       tagValue = 1;
-    //     else if (headers[i].includes("##2"))
+    //     else if (headers[i].includes("##"))
     //       tagValue = 2;
-    //     else if (headers[i].includes("##3"))
+    //     else if (headers[i].includes("###"))
     //       tagValue = 3;
-    //     else if (headers[i].includes("##4"))
+    //     else if (headers[i].includes("####"))
     //       tagValue = 4;
-    //     else if (headers[i].includes("##5"))
+    //     else if (headers[i].includes("#####"))
     //       tagValue = 5;
-    //     else if (headers[i].includes("##6"))
+    //     else if (headers[i].includes("######"))
     //       tagValue = 6;
 
     //     if (headers[i].includes("</div>")) {
-    //       newValue = headers[i].replace("</div>", "");
-    //       newValue = `<h${tagValue}>`+headers[i]+`</h${tagValue}>`+"</div>"
+    //       newValue = headers[i].replace("</div>", "").replaceAll("#", "");
+    //       newValue = `<h${tagValue}>`+newValue+`</h${tagValue}>`
     //     } else {
-    //       newValue = `<h${tagValue}>`+headers[i]+`</h${tagValue}>`
+    //       newValue = `<h${tagValue}>`+newValue+`</h${tagValue}>`
     //     }
     //    data =  data.replace(headers[i], newValue)
     //   }
     // }
-    //this.splitText();
-    //data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    // this.splitText();
+    // data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     this.projectDetail.SectionDescription= data;
     this.projectDetail.ProjectId = this.projectId;
-    this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
-      if (res.ResponseBody) {
-        this.isloading = false;
-        Toast("Project details inserted/ updated successfully");
-      }
-    }).catch(e => {
-      this.isloading = false;
-      Error(e);
-    })
+    // this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
+    //   if (res.ResponseBody) {
+    //     this.isloading = false;
+    //     Toast("Project details inserted/ updated successfully");
+    //   }
+    // }).catch(e => {
+    //   this.isloading = false;
+    //   Error(e);
+    // })
   }
 
   removeHeaderTag(data: string) {

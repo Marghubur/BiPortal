@@ -110,7 +110,8 @@
       </a>
     </div> -->
     <div class="col-auto">
-      <select class="form-select border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Format Block" (change)="execCommandWithArg('formatBlock', $event);" >
+      <select class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Format Block" (change)="execCommandWithArg('formatBlock', $event);" >
+          <option value="" selected>Default</option>
           <option value="H1">H1</option>
           <option value="H2">H2</option>
           <option value="H3">H3</option>
@@ -120,7 +121,7 @@
       </select>
     </div>
     <div class="col-auto mx-2">
-      <select class="form-select border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Font Name" (change)="execCommandWithArg('fontName', $event);">
+      <select class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Font Name" (change)="execCommandWithArg('fontName', $event);">
           <option value="Arial">Arial</option>
           <option value="Comic Sans MS">Comic Sans MS</option>
           <option value="Courier">Courier</option>
@@ -131,7 +132,8 @@
       </select>
     </div>
     <div class="col-auto mx-2">
-      <select class="form-select border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Font Size" (change)="execCommandWithArg('fontSize', $event);">
+      <select class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Font Size" (change)="execCommandWithArg('fontSize', $event);">
+        <option value="0" selected>Default</option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
