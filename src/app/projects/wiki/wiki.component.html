@@ -20,7 +20,7 @@
           <div *ngSwitchDefault>
             <!-- *ngIf="projectDetail.Title != null && projectDetail.Title != ''" -->
               <ng-container *ngIf="projectDetail.SectionDescription != null && isWikiAdded">
-                <button class="float-end btn btn-primary-c" (click)="isEdit = true" *ngIf="!isEdit"><i class="fa fa-pencil pe-1"></i> Edit</button>
+                <button class="float-end btn btn-primary-c" (click)="editWiki()" *ngIf="!isEdit"><i class="fa fa-pencil pe-1"></i> Edit</button>
                 <div class="row col-12 mt-3 x_content full-height">
                     <div class="col-sm-3 col-md-2 x_panel" (click)="deactivateTag()" *ngIf="!isEdit">
                         <div class="x_header">

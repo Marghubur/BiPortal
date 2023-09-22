@@ -105,7 +105,7 @@ export class ApprovalRequestComponent implements OnInit {
       EmployeeId: 0,
       ReportingManagerId : this.currentUser.UserId,
       ForYear: new Date().getFullYear(),
-      TimesheetStatus: 2,
+      TimesheetStatus: 8,
       PageIndex: 1
     }
     this.getAttendanceRequest();
