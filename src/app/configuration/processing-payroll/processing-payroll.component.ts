@@ -95,7 +95,23 @@ export class ProcessingPayrollComponent implements OnInit {
     })
   }
 
+  callApiLoadData() {
+    this.http.get(`ef/runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true)
+    .then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        Toast("Page data loaded successfully.");
+      }
+    });
+  }
+
   loadData() {
+    this.selectedPayrollCalendar = {
+      Year: (new Date).getFullYear(),
+      Month: (new Date).getMonth() + 1
+    }
+
+    this.callApiLoadData();
+
     let startMonth = 4;
     this.userDetail = this.user.getInstance();
     this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
@@ -481,9 +497,17 @@ export class ProcessingPayrollComponent implements OnInit {
 
   // ----------------------End
 
+  previewPayroll() {
+    this.runPayrollCalculation(0);
+  }
+
   finalizePayroll() {
+    this.runPayrollCalculation(0);
+  }
+
+  runPayrollCalculation(flagId: number) {
     this.isLoading = true;
-    this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month}`, false)
+    this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month}/${flagId}`, false)
     .then((res:ResponseModel) => {
       if (res.ResponseBody) {
         $('#confirmPayrollFinalize').modal('hide');
