@@ -13,19 +13,21 @@
           </div>
         </div>
       </div>
-      <div class="x_content">
+      <div class="x_content mt-0">
         <ng-container *ngIf="isPageReady">
           <div class="row mb-3">
-            <div class="col-md-1" *ngFor="let item of payrollCalendar; let i=index;">
+            <div class="col-auto mt-3" *ngFor="let item of payrollCalendar; let i=index;">
               <a href="javascript:void(0)" class="text-decoration-none" (click)="selectPayrollMonth(item)">
                 <div class="card text-center pt-2 active-payroll" [ngClass]="{'active-payroll': selectedPayrollCalendar.Month == item.Month}" data-name="payroll-tab">
                   <h5 class="text-center text-dark px-1">{{item.MonthName}} {{item.Year}}</h5>
-                  <small class="text-muted  pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
-                  <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 2, 'text-bg-warning': item.Status == 3, 'bg-c text-white': item.Status == 4, 'text-secondary': item.Status == 1 || item.Status == 5}">
-                    <i class="fa fa-check-square-o" *ngIf="item.Status == 2"></i>
-                    <i class="fa fa-exclamation-triangle" *ngIf="item.Status == 3"></i>
+                  <small class="text-muted px-1 pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
+                  <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 14, 'text-bg-warning': item.Status == 17, 'bg-c text-white': item.Status == 4, 'text-danger': item.Status == 18 || item.Status == 19, 'text-secondary': item.Status == 15}">
+                    <i class="fa fa-check-square-o" *ngIf="item.Status == 14"></i>
+                    <i class="fa fa-exclamation-triangle" *ngIf="item.Status == 17"></i>
                     <i class="fa fa-arrow-circle-right" *ngIf="item.Status == 4"></i>
-                    {{item.Status == 1 ? 'NO DATA' : item.Status == 2 ? 'COMPLETED' : item.Status == 3 ? 'PENDING' : item.Status == 4 ? 'CURRENT' : 'UPCOMING'}}
+                    <i class="fa fa-clock-o" *ngIf="item.Status == 16 || item.Status == 15"></i>
+                    <i class="fa fa-ban" *ngIf="item.Status == 18 || item.Status == 19"></i>
+                    {{item.Status == 15 ? 'PROCESSING' : item.Status == 14 ? 'COMPLETED' : item.Status == 16 ? 'PENDING' : item.Status == 4 ? 'CURRENT' : item.Status == 17 ? 'HOLD': item.Status == 18 ? 'CANCELED' : 'FAILED'}}
                   </small>
                 </div>
               </a>
@@ -41,7 +43,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <p class="mb-0 text-muted">TOTAL EMPLOYEES</p>
-                    <h5>2</h5>
+                    <h5>{{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}}</h5>
                   </div>
                   <div class="col-md-6">
                     <p class="mb-0 text-muted">CALENDAR DAYS</p>
@@ -51,7 +53,7 @@
                 <div>
                   <p class="mb-0 text-muted">PAYROLL PROCESSED</p>
                   <div class="d-flex align-items-center">
-                    <h5 class="mb-0">2/2</h5>
+                    <h5 class="mb-0">{{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}} / {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}}</h5>
                     <small class="text-muted ps-2">EMPLOYEES</small>
                   </div>
                 </div>
@@ -60,22 +62,22 @@
             <div class="col-md-6 my-3 d-flex align-items-center justify-content-between">
               <div class="col-auto">
                 <p class="mb-0 text-muted">TOTAL PAYROLL COST</p>
-                <h5>INR 101950</h5>
+                <h5>INR {{selectedPayrollDetail != null ? (selectedPayrollDetail.TotalPayableToEmployees + selectedPayrollDetail.TotalPFByEmployer +  selectedPayrollDetail.TotalProfessionalTax) : "0.00"}}</h5>
               </div>
               <span>=</span>
               <div class="col-auto">
                 <p class="mb-0 text-muted">EMPLOYEE DEPOSIT</p>
-                <h5>INR 87894</h5>
+                <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPayableToEmployees : "0.00"}}</h5>
               </div>
               <span>+</span>
               <div class="col-auto">
                 <p class="mb-0 text-muted">TOTAL DEDUCTIONS</p>
-                <h5>INR 10306</h5>
+                <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPFByEmployer : "0.00"}}</h5>
               </div>
               <span>+</span>
               <div class="col-auto">
                 <p class="mb-0 text-muted">Total CONTRIBUTIONS</p>
-                <h5>INR 3750</h5>
+                <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalProfessionalTax : "0.00"}}</h5>
               </div>
             </div>
           </div>
@@ -234,26 +236,26 @@
             <a href="javascript:void(0)" class="text-decoration-none float-end">Manage Payment</a>
           </p>
           <div class="row border-bottom pb-2">
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>BANK TRANSFER</small>
               <h5>INR 120533</h5>
             </div>
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>CHEQUES</small>
               <h5>INR 0</h5>
             </div>
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>CASH</small>
               <h5>INR 0</h5>
             </div>
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>TOTAL</small>
               <h5>INR 120533</h5>
             </div>
           </div>
           <p class="border-top pt-2">Income Tax TDS</p>
           <div class="row border-bottom pb-2">
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>TDS PAYABLE</small>
               <h5>INR 0</h5>
             </div>
@@ -266,15 +268,15 @@
             <a href="javascript:void(0)" class="text-decoration-none float-end">View Summary</a>
           </p>
           <div class="row border-bottom pb-2">
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>EMPLOYEE SHARE</small>
               <h5>INR 1800</h5>
             </div>
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>EMPLOYER SHARE</small>
               <h5>INR 1800</h5>
             </div>
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>OTHER CHARGES</small>
               <h5>INR 150</h5>
             </div>
@@ -283,15 +285,15 @@
             <a href="javascript:void(0)" class="text-decoration-none float-end">View Summary</a>
           </p>
           <div class="row border-bottom pb-2">
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>TAX PAYABLE</small>
               <h5>INR 0</h5>
             </div>
-            <div class="col-md-2">
+            <div class="col-auto">
               <small>NUMBER OF EMPLOYEES</small>
               <h5>0 Employees</h5>
             </div>
-            <div class="col-md-1">
+            <div class="col-auto">
               <small>STATES</small>
             </div>
           </div>

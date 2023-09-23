@@ -5,7 +5,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
-import { ItemStatus, LeaveAttendanceDailywages } from 'src/providers/constants';
+import { LeaveAttendanceDailywages } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -71,6 +71,8 @@ export class ProcessingPayrollComponent implements OnInit {
   allRunPayroll: RunPayroll = null
   employeeId: number = 0;
   employeeData: autoCompleteModal= new autoCompleteModal();
+  processingPayrollDetail: Array<any> = [];
+  selectedPayrollDetail: any = null;
 
   constructor(private http: AjaxService,
               private user: UserService,
@@ -96,23 +98,51 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   callApiLoadData() {
-    this.http.get(`ef/runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true)
+    this.http.get(`ef/runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Year}`, true)
     .then((response: ResponseModel) => {
       if(response.ResponseBody) {
+        if (response.ResponseBody.length > 0) {
+          this.processingPayrollDetail = response.ResponseBody;
+          this.processingPayrollDetail.forEach(i => {
+            let value = this.payrollCalendar.find( x=> x.Month == (i.ForMonth-1) && x.Year == i.ForYear);
+            if (value)
+              value.Status = i.PayrollStatus;
+          });
+          this.selectedPayrollDetail = this.processingPayrollDetail.find( x=> x.ForMonth == this.selectedPayrollCalendar.Month+1 && x.ForYear == this.selectedPayrollCalendar.Year);
+          console.log(this.selectedPayrollDetail)
+        }
         Toast("Page data loaded successfully.");
       }
     });
   }
 
   loadData() {
+    this.isPageReady = false;
     this.selectedPayrollCalendar = {
       Year: (new Date).getFullYear(),
       Month: (new Date).getMonth() + 1
     }
-
-    this.callApiLoadData();
-
+    let year = 2023;
     let startMonth = 4;
+    for (let i = 0; i < 12; i++) {
+      if (startMonth > 12) {
+        startMonth = 1;
+        year = year + 1;
+      }
+      this.payrollCalendar.push({
+        MonthName: new Date(2022, startMonth-1, 1).toLocaleString('default', { month: 'short' }),
+        Month: startMonth-1,
+        Year: year,
+        StartDate: new Date(2024, startMonth-1, 1).getDate(),
+        EndDate: new Date(2024, startMonth , 0).getDate(),
+        Status: 16
+      });
+      startMonth = startMonth +1;
+    }
+
+    this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == new Date().getMonth());
+    this.callApiLoadData();
+    this.selectedPayrollCalendar.Status = 4;
     this.userDetail = this.user.getInstance();
     this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
     let runPayroll = new RunPayroll();
@@ -154,24 +184,7 @@ export class ProcessingPayrollComponent implements OnInit {
     this.esiOverrideDetail.push(this.allRunPayroll.ESIOverRide);
     this.tdsOverrideDetail.push(this.allRunPayroll.TDSOverRide);
     this.lwfOverrideDetail.push(this.allRunPayroll.LWFOverRide);
-    let year = 2023;
-    for (let i = 0; i < 12; i++) {
-      if (startMonth > 12) {
-        startMonth = 1;
-        year = year + 1;
-      }
-      this.payrollCalendar.push({
-        MonthName: new Date(2022, startMonth-1, 1).toLocaleString('default', { month: 'short' }),
-        Month: startMonth-1,
-        Year: year,
-        StartDate: new Date(2024, startMonth-1, 1).getDate(),
-        EndDate: new Date(2024, startMonth , 0).getDate(),
-        Status: 1
-      });
-      startMonth = startMonth +1;
-    }
-    this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == new Date().getMonth());
-    this.selectedPayrollCalendar.Status = 4;
+    
     this.isPageReady = true;
   }
 
@@ -526,6 +539,8 @@ export class ProcessingPayrollComponent implements OnInit {
   selectPayrollMonth(item: any) {
     if (item) {
       this.selectedPayrollCalendar = item;
+      this.selectedPayrollDetail = this.processingPayrollDetail.find( x=> x.ForMonth == this.selectedPayrollCalendar.Month+1 && x.ForYear == this.selectedPayrollCalendar.Year);
+      console.log(this.selectedPayrollDetail)
     }
   }
 

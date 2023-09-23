@@ -32,13 +32,13 @@
       </div>
       <div *ngSwitchDefault>
         <ng-container>
-          <div class="x_content">
+          <div class="x_content mt-0">
             <div class="row mb-3">
-              <div class="col-md-1" *ngFor="let item of payrollCalendar; let i=index;">
+              <div class="col-auto mt-3" *ngFor="let item of payrollCalendar; let i=index;">
                 <a href="javascript:void(0)" class="text-decoration-none" (click)="selectPayrollMonth(item)">
                   <div class="card text-center pt-2 active-payroll" [ngClass]="{'active-payroll': selectedPayrollCalendar.Month == item.Month}" data-name="payroll-tab">
                     <h5 class="text-center text-dark px-1">{{item.MonthName}} {{item.Year}}</h5>
-                    <small class="text-muted pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
+                    <small class="text-muted px-1 pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
                     <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 2, 'text-bg-secondary': item.Status == 3, 'bg-c text-white': item.Status == 1}">
                       <i class="fa fa-check-square-o pe-1" *ngIf="item.Status == 2"></i>
                       <i class="fa fa-arrow-left pe-1" *ngIf="item.Status == 1"></i>
