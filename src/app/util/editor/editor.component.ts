@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ComponentRef, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -81,27 +81,53 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   execCommandWithArg (command, arg) {
     let value = arg.target.value;
-      this.richTextField.contentDocument.execCommand(command, false, value);
+    let text = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.getSelection().toString();
+    if (text && text != "" ) {
+      if (Number(value) == 0 && command === "fontSize") {
+        let tags = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.querySelectorAll<HTMLElement>('font');
+        for (let i = 0; i < tags.length; i++) {
+          if (tags[i].innerText === text) {
+            let parentNode = tags[i].parentNode;
+            tags[i].parentNode.removeChild(tags[i]);
+            parentNode.appendChild(document.createTextNode(text));
+            (parentNode as HTMLElement).style.fontSize = "18px";
+            
+          }
+        }
+      }else if (command === "formatBlock") {
+        let tags = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.querySelectorAll<HTMLElement>('div');
+        for (let i = 0; i < tags.length; i++) {
+          if (tags[i].innerText === text) {
+            tags[i].removeAttribute("fontsize")
+          }
+        }
+        this.richTextField.contentDocument.execCommand(command, false, value);
+      } else {
+        this.richTextField.contentDocument.execCommand(command, false, value);
+      }
+    }
   }
   toggleSource () {
-      if(this.showingSourceCode){
-          this.richTextField.contentDocument.getElementsByTagName('body')[0].innerHTML =
-          this.richTextField.contentDocument.getElementsByTagName('body')[0].textContent;
-          this.showingSourceCode = false;
-      }else{
-          this.richTextField.contentDocument.getElementsByTagName('body')[0].textContent =
-          this.richTextField.contentDocument.getElementsByTagName('body')[0].innerHTML;
-          this.showingSourceCode = true;
-      }
+    if(this.showingSourceCode){
+      this.richTextField.contentDocument.getElementsByTagName('body')[0].innerHTML =
+      this.richTextField.contentDocument.getElementsByTagName('body')[0].textContent;
+      this.showingSourceCode = false;
+    }else{
+      this.richTextField.contentDocument.getElementsByTagName('body')[0].textContent =
+      this.richTextField.contentDocument.getElementsByTagName('body')[0].innerHTML;
+      this.showingSourceCode = true;
+    }
   }
 
   enableEditor(e: any) {
-    if(!this.richTextField) {
-      this.richTextField = document.getElementById("richTextField");
+    if (this.isEdit) {
+      if(!this.richTextField) {
+        this.richTextField = document.getElementById("richTextField");
+      }
+  
+      e.target.classList.remove('iframe-wrapper-container');
+      this.toggleEdit();
     }
-
-    e.target.classList.remove('iframe-wrapper-container');
-    this.toggleEdit();
   }
 
   toggleEdit() {
@@ -116,7 +142,9 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
         this.richTextField.contentDocument.designMode = 'On';
         this.isInEditMode = true;
     }
-  }
+    var body = this.richTextField.contentWindow.document.querySelector('body');
+    body.style.fontSize = '18px';
+}
 
   toggleDarkLight() {
       var element = document.getElementById("richtextcontainer");
