@@ -38,7 +38,7 @@
                 <a href="javascript:void(0)" class="text-decoration-none" (click)="selectPayrollMonth(item)">
                   <div class="card text-center pt-2 active-payroll" [ngClass]="{'active-payroll': selectedPayrollCalendar.Month == item.Month}" data-name="payroll-tab">
                     <h5 class="text-center text-dark px-1">{{item.MonthName}} {{item.Year}}</h5>
-                    <small class="text-muted px-1 pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
+                    <small class="text-muted pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
                     <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 2, 'text-bg-secondary': item.Status == 3, 'bg-c text-white': item.Status == 1}">
                       <i class="fa fa-check-square-o pe-1" *ngIf="item.Status == 2"></i>
                       <i class="fa fa-arrow-left pe-1" *ngIf="item.Status == 1"></i>
@@ -66,17 +66,17 @@
                       <th width="10%">
                         Full Name
                       </th>
+                      <th>Gross</th>
+                      <th>Arrear</th>
+                      <th>Gross Total</th>
+                      <th>Pre Mnth Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="Previous Month Gross"></i>
+                      </th>
                       <th class="text-truncate" *ngFor="let data of salaryComponents" >
                         {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="{{data.ComponentName}}"></i>
                       </th>
                       <th>Others</th>
-                      <th>Gross</th>
-                      <th>Arrear</th>
-                      <th>Gross Total</th>
-                      <th>Pre Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="Previous Month Gross"></i>
-                      </th>
                       <th>A</th>
                       <th>B</th>
                       <th>C</th>
@@ -106,11 +106,11 @@
                           </a>
                         </div>
                       </td>
-                      <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
                       <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.Gross | number : "1.0-0") : "0"}}</td>
                       <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.ArrearGross | number : "1.0-0") : "0"}}</td>
                       <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.ArrearGross + item.Gross | number : "1.0-0") : "0"}}</td>
                       <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.PreMonthGross | number : "1.0-0") : "0"}}</td>
+                      <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
                       <td></td>
                       <td></td>
                       <td></td>
