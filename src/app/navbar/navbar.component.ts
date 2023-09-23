@@ -109,7 +109,7 @@ export class NavbarComponent implements OnInit, DoCheck {
   }
 
   navLogoPage() {
-    this.nav.navigate(CompanyLogo, null);
+    this.nav.navigateRoot(CompanyLogo, null);
   }
 
   ViewUserProfile() {
@@ -155,7 +155,7 @@ export class NavbarComponent implements OnInit, DoCheck {
   }
 
   navCompanySetting() {
-    this.nav.navigate(CompanySettings, null);
+    this.nav.navigateRoot(CompanySettings, null);
   }
 
   resetPassword() {
