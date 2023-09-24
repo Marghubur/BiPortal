@@ -110,7 +110,10 @@
                                             </div>
                                             <div class="td align-middle text-center fe-1">
                                                 <ng-container *ngIf="item.RequestStatusId != 9">
-                                                    <a href="javascript:void(0)"(click)="submitActionForLeave(item, 'Approved')"
+                                                    <a href="javascript:void(0)" class="text-decoration-none" (click)="leaveActionPopUp(item)">
+                                                        <i class="fa fa-ellipsis-h"  data-bs-toggle="tooltip" data-bs-placement="right" title="Action"></i>
+                                                    </a>
+                                                    <!-- <a href="javascript:void(0)"(click)="submitActionForLeave(item, 'Approved')"
                                                         data-bs-toggle="tooltip" data-bs-placement="right"
                                                         title="Approve Leave">
                                                         <i class="fa fa-check-square-o" aria-hidden="true"></i>
@@ -120,7 +123,11 @@
                                                         <i class="fa fa-close text-danger"
                                                             (click)="submitActionForLeave(item, 'Rejected')"
                                                             aria-hidden="true"></i>
-                                                    </a>
+                                                    </a> -->
+                                                </ng-container>
+                                                <ng-container *ngIf="item.RequestStatusId == 9">
+                                                    <i class="fa fa-check-square-o text-success" data-bs-toggle="tooltip" data-bs-placement="right"
+                                                    title="Leave Approved"></i>
                                                 </ng-container>
                                             </div>
                                         </div>
@@ -626,6 +633,58 @@
                 <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveAttedanceAjustment()">
                     <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Save' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End -->
+
+
+<!--Attendance Adjustment Modal -->
+<div class="modal fade" id="leaveActionModal" tabindex="-1" aria-labelledby="leaveActionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content px-4">
+            <div class="modal-header border-bottom-0">
+                <h1 class="modal-title fs-5" id="leaveActionModalLabel">Leave Action</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ng-container *ngIf="selectedLeave != null">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Total Days</th>
+                                <th>Leave Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{selectedLeave.FirstName}} {{selectedLeave.LastName}}</td>
+                                <td>{{selectedLeave.FromDate | date}} - {{selectedLeave.ToDate | date}}</td>
+                                <td>{{selectedLeave.NumOfDays}}</td>
+                                <td>{{selectedLeave.PlanName}}</td>
+                                <td>{{selectedLeave.RequestStatusId == 2 ? 'Pending' : selectedLeave.RequestStatusId == 5 ? 'Rejected' : 'Approved'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <input type="text" class="form-control" placeholder="Message" [(ngModel)]="selectedLeave.Reason">
+                    </div>
+                </ng-container>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
+                <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitActionForLeave('Approved')">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                    {{ isLoading ? 'Wait' : 'Save' }}
+                </button>
+                <button type="button" class="btn btn-danger" [disabled]="isLoading" (click)="submitActionForLeave('Rejected')">
+                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-close': !isLoading}"></i>
+                    {{ isLoading ? 'Wait' : 'Reject' }}
                 </button>
             </div>
         </div>
