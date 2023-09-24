@@ -29,6 +29,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
   selectedAttendance: any = null;
   leaveQuota: Array<any> = [];
   selectedLeaveType: any = null;
+  selectedLeave: any = null;
 
   constructor(private nav:iNavigation,
               private http: AjaxService) {}
@@ -91,6 +92,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
             this.appliedLeaveDetail = data;
           }
         }
+        console.log(this.appliedLeaveDetail)
 
         if (res.ResponseBody[1].length > 1) {
           this.lossPayDetail = res.ResponseBody[1];
@@ -108,7 +110,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
     })
   }
 
-  submitActionForLeave(item: any, requestState) {
+  submitActionForLeave(requestState: string) {
     this.isLoading = true;
     let endPoint = '';
 
@@ -122,17 +124,18 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
     }
 
     let currentResponse = {
-      LeaveFromDay: item.FromDate,
-      LeaveToDay: item.ToDate,
-      EmployeeId: item.EmployeeId,
-      LeaveRequestNotificationId : item.LeaveRequestNotificationId,
-      RecordId: item.RecordId,
-      LeaveTypeId: item.LeaveTypeId
+      LeaveFromDay: this.selectedLeave.FromDate,
+      LeaveToDay: this.selectedLeave.ToDate,
+      EmployeeId: this.selectedLeave.EmployeeId,
+      LeaveRequestNotificationId : this.selectedLeave.LeaveRequestNotificationId,
+      RecordId: this.selectedLeave.RecordId,
+      LeaveTypeId: this.selectedLeave.LeaveTypeId,
+      Reason: this.selectedLeave.Reason
     }
 
     this.http.post(`${endPoint}`, currentResponse, true).then((response:ResponseModel) => {
       if (response.ResponseBody) {
-
+        $('#leaveActionModal').modal('hide');
         Toast("Submitted Successfully");
       }
     }).catch(e => {
@@ -261,6 +264,14 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
     let value = e.target.value;
     if (Number(value) > 0) {
       this.selectedLeaveType = this.leaveQuota.find(x => x.LeavePlanTypeId == value);
+    }
+  }
+
+  leaveActionPopUp(item: any) {
+    if (item) {
+      this.selectedLeave = item;
+      this.selectedLeave.Reason = "";
+      $('#leaveActionModal').modal('show');
     }
   }
 }

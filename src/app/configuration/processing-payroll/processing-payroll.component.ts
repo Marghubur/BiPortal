@@ -191,7 +191,7 @@ export class ProcessingPayrollComponent implements OnInit {
   navleaveAttendanceWages() {
     let data = {
       EndDate: this.selectedPayrollCalendar.EndDate,
-      Month: this.selectedPayrollCalendar.Month,
+      Month: this.selectedPayrollCalendar.Month + 1,
       MonthName: this.selectedPayrollCalendar.MonthName,
       StartDate: this.selectedPayrollCalendar.StartDate,
       Status: this.selectedPayrollCalendar.Status,
