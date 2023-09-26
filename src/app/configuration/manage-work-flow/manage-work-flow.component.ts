@@ -71,6 +71,8 @@ export class ManageWorkFlowComponent implements OnInit {
       AutoExpireAfterDays: new FormControl(this.approvalChainDetail.AutoExpireAfterDays, [Validators.required]),
       IsSilentListner: new FormControl(this.approvalChainDetail.IsSilentListner),
       ListnerDetail: new FormControl(this.approvalChainDetail.ListnerDetail),
+      IsAutoExpiredEnabled: new FormControl(this.approvalChainDetail.IsAutoExpiredEnabled),
+      NoOfApprovalLevel: new FormControl(this.approvalChainDetail.NoOfApprovalLevel)
     });
     this.isReady = true;
   }
