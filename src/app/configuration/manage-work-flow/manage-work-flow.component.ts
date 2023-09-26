@@ -27,6 +27,8 @@ export class ManageWorkFlowComponent implements OnInit {
   isLoading: boolean = false;
   isPageReady: boolean = false;
   deleteAprrovalChain: any = null;
+  approvalLevel: Array<number> = [];
+  initApprovalLevel: Array<number> = [];
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -38,6 +40,8 @@ export class ManageWorkFlowComponent implements OnInit {
     this.employeesAutoComplete.placeholder = "Level";
     this.employeesAutoComplete.className = "normal";
     let approvalWorkFlowId = 0;
+    this.approvalLevel.push(0);
+    this.approvalLevel.push(1);
     if (this.navRecord )
       approvalWorkFlowId = this.navRecord.ApprovalWorkFlowId;
     this.loadRecord(approvalWorkFlowId);
@@ -146,9 +150,9 @@ export class ManageWorkFlowComponent implements OnInit {
       ApprovalWorkFlowId: new FormControl(record.ApprovalWorkFlowId),
       AssignieId: new FormControl(record.AssignieId),
       IsRequired: new FormControl(record.IsRequired),
-      IsForwardEnabled: new FormControl(record.IsForwardEnabled),
-      ForwardWhen: new FormControl(record.ForwardWhen),
-      ForwardAfterDays: new FormControl(record.ForwardAfterDays),
+      // IsForwardEnabled: new FormControl(record.IsForwardEnabled),
+      // ForwardWhen: new FormControl(record.ForwardWhen),
+      // ForwardAfterDays: new FormControl(record.ForwardAfterDays),
       ApprovalChainDetailId :new FormControl(record.ApprovalChainDetailId)
     });
   }
@@ -165,7 +169,15 @@ export class ManageWorkFlowComponent implements OnInit {
     this.isReady = false;
     this.isEnableAddNew = false;
     let groupArray = this.workFlowForm.get("ApprovalChainDetails") as FormArray;
-    groupArray.push(this.approvalChain(new ApprovalChainDetail()));
+    let value = groupArray.value;
+    let length = (value.length -1);
+    if (value[length].AssignieId > 0) {
+      groupArray.push(this.approvalChain(new ApprovalChainDetail()));
+      this.approvalLevel = [];
+      for (let i = 0; i <= length+2; i++) {
+        this.approvalLevel.push(i);
+      }
+    }
     this.isReady = true;
   }
 
@@ -215,6 +227,7 @@ deleteChainPopUp(item: any) {
         this.http.delete(`ApprovalChain/DeleteApprovalChain/${this.deleteAprrovalChain.ApprovalChainDetailId}`).then(res => {
           if (res.ResponseBody) {
             Toast("Approval chain deleted successsfully");
+            this.approvalLevel.pop();
             this.isEnableAddNew = true;
           }
         }).catch(e => {
@@ -275,12 +288,33 @@ deleteChainPopUp(item: any) {
   requiredApprovalTrue(e: any, index: number) {
     let value = e.target.checked;
     let formarray = this.workFlowForm.get("ApprovalChainDetails") as FormArray;
+    let length = formarray.value.filter(x => x.IsRequired == true).length;
     if (value) {
-      formarray.controls[index].get('ForwardWhen').setValue(9);
-      document.querySelectorAll('select[name="ForwardWhen"]')[index].setAttribute('disabled', '');
+      // formarray.controls[index].get('ForwardWhen').setValue(9);
+      // document.querySelectorAll('select[name="ForwardWhen"]')[index].setAttribute('disabled', '');
+      length = length + 1;
     } else {
-      if ( formarray.controls[index].get('IsForwardEnabled').value == true)
-        document.querySelectorAll('select[name="ForwardWhen"]')[index].removeAttribute('disabled');
+      // if ( formarray.controls[index].get('IsForwardEnabled').value == true)
+      //   document.querySelectorAll('select[name="ForwardWhen"]')[index].removeAttribute('disabled');
+      length = length -1;
+    }
+    if (this.initApprovalLevel.length > 0) {
+      if (length > (this.initApprovalLevel.length -1))
+        this.workFlowForm.get("NoOfApprovalLevel").setValue(length);
+      else
+        this.workFlowForm.get("NoOfApprovalLevel").setValue(this.initApprovalLevel.length -1);
+    } else {
+      this.workFlowForm.get("NoOfApprovalLevel").setValue(length);
+    }
+  }
+
+  selectApprovalLevel(e: any) {
+    let value = Number(e.target.value);
+    this.initApprovalLevel = [];
+    if (value > 0) {
+      for (let i = 0; i <= value; i++) {
+       this.initApprovalLevel.push(i);
+      }
     }
   }
 }
