@@ -378,6 +378,7 @@ export class DocumentUser {
     Status: number = null;
     IsAutoExpiredEnabled: boolean = false;
     AutoExpireAfterDays: number = 0;
+    NoOfApprovalLevel: number = 0;
     IsSilentListner: boolean = false;
     ListnerDetail: string = '[]';
     ApprovalChainDetails: Array<ApprovalChainDetail> = new Array<ApprovalChainDetail>();
