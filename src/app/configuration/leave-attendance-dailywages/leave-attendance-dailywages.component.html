@@ -21,7 +21,7 @@
                                 <div class="hide-bar"></div>
                                 <div class="t-head">
                                     <div class="tr">
-                                        <div class="th fe-index">
+                                        <div class="th fe-index pe-2">
                                             <div class="t-filter t-index">
                                                 <a href="javascript:void(0)" class="ps-3">#</a>
                                             </div>
@@ -35,14 +35,14 @@
                                         </div>
                                         <div class="th fe-2">
                                             <div class="cell-wrapper">
-                                                <div class="t-filter">
+                                                <div class="t-filter ">
                                                     <a href="javascript:void(0)" class="pe-2">Date</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="th fe-1">
                                             <div class="cell-wrapper">
-                                                <div class="t-filter">
+                                                <div class="t-filter text-center d-block">
                                                     <a href="javascript:void(0)" class="pe-2">Total Days</a>
                                                 </div>
                                             </div>
@@ -61,13 +61,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="th fe-1">
+                                        <!-- <div class="th fe-1">
                                             <div class="cell-wrapper">
                                                 <div class="t-filter">
                                                     <a href="javascript:void(0)" class="pe-2">Approver</a>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="th fe-1 text-center">
                                             <div class="t-filter d-block text-center">
                                                 <a href="javascript:void(0)">ACTIONS</a>
@@ -88,8 +88,10 @@
                                                 </div>
                                             </div>
                                             <div class="td align-middle fe-1">
-                                                <div class="cell-wrapper">
-                                                    {{item.NumOfDays}}
+                                                <div class="cell-wrapper text-center">
+                                                  <span class="badge text-bg-primary rounded-pill">
+                                                    {{item.NumOfDays}} {{item.NumOfDays > 1? "days" : "day"}}
+                                                  </span>
                                                 </div>
                                             </div>
                                             <div class="td align-middle fe-1">
@@ -98,16 +100,17 @@
                                                 </div>
                                             </div>
                                             <div class="td align-middle fe-1">
-                                                <div class="cell-wrapper">
-                                                    {{item.RequestStatusId == 2 ? 'Pending' : item.RequestStatusId == 5
-                                                    ? 'Rejected' : 'Approved'}}
+                                                <div class="cell-wrapper" [ngClass]="{'text-primary': item.RequestStatusId == 2, 'text-danger': item.RequestStatusId == 5, 'text-success': item.RequestStatusId == 9}">
+                                                  <i class="fa pe-1" [ngClass]="{'fa-clock-o': item.RequestStatusId == 2, 'fa-close': item.RequestStatusId == 5, 'fa-check-square-o': item.RequestStatusId == 9}"></i>
+                                                  {{item.RequestStatusId == 2 ? 'Pending' : item.RequestStatusId == 5
+                                                  ? 'Rejected' : 'Approved'}}
                                                 </div>
                                             </div>
-                                            <div class="td align-middle fe-1">
+                                            <!-- <div class="td align-middle fe-1">
                                                 <div class="cell-wrapper">
                                                     {{item.Approver}}
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="td align-middle text-center fe-1">
                                                 <ng-container *ngIf="item.RequestStatusId != 9">
                                                     <a href="javascript:void(0)" class="text-decoration-none" (click)="leaveActionPopUp(item)">

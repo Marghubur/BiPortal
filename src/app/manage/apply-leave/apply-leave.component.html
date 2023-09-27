@@ -32,7 +32,7 @@
                         <div class="d-flex">
                           <div class="me-4 pe-2">
                             <small class="blinking">DATE</small>
-                            <p class="mb-0 blinking">{{leaveData[0].LeaveFromDay | date}} - {{leaveData[0].LeaveToDay |
+                            <p class="mb-0 blinking">{{leaveData[0].FromDate | date}} - {{leaveData[0].ToDate |
                               date}}</p>
                           </div>
                           <div class="me-4">
@@ -43,11 +43,11 @@
                           </div>
                           <div class="me-4">
                             <small class="blinking">REQUESTED ON</small>
-                            <p class="mb-0 blinking">{{leaveData[0].RequestedOn | date}}</p>
+                            <p class="mb-0 blinking">{{leaveData[0].CreatedOn | date}}</p>
                           </div>
                           <div>
                             <small class="blinking">STATUS</small>
-                            <div [ngSwitch]="leaveData[0].LeaveStatus" class="blinking">
+                            <div [ngSwitch]="leaveData[0].RequestStatusId" class="blinking">
                               <div *ngSwitchCase=2>Pending</div>
                               <div *ngSwitchCase=9>Approved</div>
                               <div *ngSwitchCase=8>Submitted</div>
@@ -237,10 +237,10 @@
                             <p class="m-0">{{item.NumOfDays}} {{item.NumOfDays == 1? 'day':'days'}}</p>
                           </div>
                           <div class="text-center px-3">
-                            <p class="mb-0">{{item.LeaveFromDay | date}}</p>
+                            <p class="mb-0">{{item.FromDate | date}}</p>
                           </div>
                           <div class="text-center px-3">
-                            <p class="mb-0">{{item.LeaveToDay | date}}</p>
+                            <p class="mb-0">{{item.ToDate | date}}</p>
                           </div>
                         </div>
                       </div>
@@ -253,7 +253,7 @@
                     <div class="cell-wrapper">
                       <b>{{item.LeaveTypeName}}</b>
                       <div class="cell-wrapper">
-                        <span class="text-primary-c">{{item.RequestedOn | date}}</span>
+                        <span class="text-primary-c">{{item.CreatedOn | date}}</span>
                         <p class="mb-0">BY:
                           <span class="text-muted">
                             {{item.EmployeeName}}
@@ -264,12 +264,12 @@
                   </div>
                   <div class="td align-middle fe-2">
                     <div class="cell-wrapper">
-                      {{item.Reason}}
+                      {{item.UserMessage}}
                     </div>
                   </div>
                   <div class="td align-middle">
                     <div class="cell-wrapper">
-                      <div [ngSwitch]="item.LeaveStatus">
+                      <div [ngSwitch]="item.RequestStatusId">
                         <div *ngSwitchCase=2>Pending</div>
                         <div *ngSwitchCase=9>Approved</div>
                         <div *ngSwitchCase=8>Submitted</div>
@@ -279,7 +279,7 @@
                   </div>
                   <div class="td align-middle">
                     <div class="cell-wrapper">
-                      {{item.RequestedOn | date}}
+                      {{item.CreatedOn | date}}
                     </div>
                   </div>
                 </div>

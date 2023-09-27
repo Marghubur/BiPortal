@@ -325,16 +325,18 @@ export class ApplyLeaveComponent implements OnInit {
 
   bindData(res: any) {
     if(res.ResponseBody.LeaveTypeBriefs) {
-      if(!res.ResponseBody.EmployeeLeaveDetail) {
-        ErrorToast("Fail to get leave detail. Please contact to admin.");
-        return;
-      }
+      // if(!res.ResponseBody.EmployeeLeaveDetail) {
+      //   ErrorToast("Fail to get leave detail. Please contact to admin.");
+      //   return;
+      // }
 
-      let leaveDetail = res.ResponseBody.EmployeeLeaveDetail;
-      if(leaveDetail && leaveDetail.LeaveDetail) {
-        this.leaveData = (JSON.parse(leaveDetail.LeaveDetail)).map(obj => {return {...obj, RequestedOn: new Date(obj.RequestedOn)}});
-        this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
-      }
+      // let leaveDetail = res.ResponseBody.EmployeeLeaveDetail;
+      // if(leaveDetail && leaveDetail.LeaveDetail) {
+      //   this.leaveData = (JSON.parse(leaveDetail.LeaveDetail)).map(obj => {return {...obj, RequestedOn: new Date(obj.RequestedOn)}});
+      //   this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
+      // }
+
+      this.leaveData = res.ResponseBody.LeaveNotificationDetail;
 
       let plandetail = res.ResponseBody.LeaveTypeBriefs;
       if(plandetail) {
@@ -370,7 +372,7 @@ export class ApplyLeaveComponent implements OnInit {
 
 
     if(this.observer != null)
-    this.observer.unsubscribe();
+      this.observer.unsubscribe();
 
     this.observer = this.entireChart.changes.subscribe(t => {
       let canvasChars: Array<any> = t._results;
