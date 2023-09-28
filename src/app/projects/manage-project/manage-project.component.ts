@@ -239,7 +239,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         ProjectMemberDetailId : 0,
         ProjectId : 0,
         EmployeeId : emp.value,
-        DesignationId : 0,
+        DesignationId : emp.DesignationId,
         FullName : emp.text,
         Email : emp.email,
         MemberType: 13,

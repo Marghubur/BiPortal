@@ -149,10 +149,7 @@ export class ManageWorkFlowComponent implements OnInit {
     return this.fb.group({
       ApprovalWorkFlowId: new FormControl(record.ApprovalWorkFlowId),
       AssignieId: new FormControl(record.AssignieId),
-      IsRequired: new FormControl(record.IsRequired),
-      // IsForwardEnabled: new FormControl(record.IsForwardEnabled),
-      // ForwardWhen: new FormControl(record.ForwardWhen),
-      // ForwardAfterDays: new FormControl(record.ForwardAfterDays),
+      IsRequired: new FormControl(record.IsRequired ? 'true' : 'false'),
       ApprovalChainDetailId :new FormControl(record.ApprovalChainDetailId)
     });
   }
@@ -170,10 +167,17 @@ export class ManageWorkFlowComponent implements OnInit {
     this.isEnableAddNew = false;
     let groupArray = this.workFlowForm.get("ApprovalChainDetails") as FormArray;
     let value = groupArray.value;
-    let length = (value.length -1);
-    if (value[length].AssignieId > 0) {
-      groupArray.push(this.approvalChain(new ApprovalChainDetail()));
-      this.approvalLevel = [];
+    groupArray.push(this.approvalChain(new ApprovalChainDetail()));
+    if (value.length > 0) {
+      let length = (value.length -1);
+      if (value[length].AssignieId > 0) {
+        this.approvalLevel = [];
+        for (let i = 0; i <= length+2; i++) {
+          this.approvalLevel.push(i);
+        }
+      }
+    } else {
+      let length = 0
       for (let i = 0; i <= length+2; i++) {
         this.approvalLevel.push(i);
       }
@@ -198,7 +202,6 @@ export class ManageWorkFlowComponent implements OnInit {
           index: index,
           value: value
         });
-
       }
 
       this.isInProgress = true;
@@ -285,19 +288,15 @@ deleteChainPopUp(item: any) {
     })
   }
 
-  requiredApprovalTrue(e: any, index: number) {
-    let value = e.target.checked;
+  requiredApprovalTrue(e: any) {
+    let value = e.target.value;
     let formarray = this.workFlowForm.get("ApprovalChainDetails") as FormArray;
     let length = formarray.value.filter(x => x.IsRequired == true).length;
-    if (value) {
-      // formarray.controls[index].get('ForwardWhen').setValue(9);
-      // document.querySelectorAll('select[name="ForwardWhen"]')[index].setAttribute('disabled', '');
+    if (value == "true")
       length = length + 1;
-    } else {
-      // if ( formarray.controls[index].get('IsForwardEnabled').value == true)
-      //   document.querySelectorAll('select[name="ForwardWhen"]')[index].removeAttribute('disabled');
+    else
       length = length -1;
-    }
+
     if (this.initApprovalLevel.length > 0) {
       if (length > (this.initApprovalLevel.length -1))
         this.workFlowForm.get("NoOfApprovalLevel").setValue(length);
