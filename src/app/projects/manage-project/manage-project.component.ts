@@ -103,6 +103,9 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     } else {
       this.projectDetail = new ProjectModal();
     }
+    if (this.projectDetail.ProjectManagerId && this.projectDetail.ProjectManagerId > 0) {
+      this.projectDetail.ProjectManagerName = this.employees.find(x => x.value == this.projectDetail.ProjectManagerId).text;
+    }
     this.clients = res.Clients;
     let teamMembers = res.Members;
     this.projectMembers = [];
@@ -133,7 +136,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
       IsClientProject: new FormControl(this.projectDetail.IsClientProject ? 'true' : 'false'),
       ProjectStartedOn: new FormControl(this.projectDetail.ProjectStartedOn),
       ProjectEndedOn: new FormControl(this.projectDetail.ProjectEndedOn),
-      ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId)
+      ProjectManagerId: new FormControl(this.projectDetail.ProjectManagerId),
+      ProjectManagerName: new FormControl(this.projectDetail.ProjectManagerName)
     })
   }
 
@@ -242,7 +246,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         DesignationId : emp.DesignationId,
         FullName : emp.text,
         Email : emp.email,
-        MemberType: 13,
+        MemberType: 20,
         Grade: null,
         IsActive : true,
         Team: this.teamName
@@ -258,6 +262,13 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         key: this.teamName,
         value: this.teamMembers
       })
+      let manager = this.teamMembers.find(x => x.MemberType == 2);
+      if (manager) {
+        this.projectForm.get("ProjectManagerName").setValue(manager.FullName);
+        this.projectForm.get("ProjectManagerId").setValue(manager.EmployeeId);
+      }
+      else
+        this.projectForm.get("ProjectManagerId").setValue(0);
     }
     $('#teamMemberModal').modal('hide');
   }
@@ -295,6 +306,7 @@ export class ProjectModal {
   ProjectStartedOn: Date = null;
   ProjectEndedOn: Date = null;
   ProjectManagerId: number = 0;
+  ProjectManagerName: string = null;
 }
 
 interface PairData {
