@@ -35,7 +35,7 @@ export class ApplyLeaveComponent implements OnInit {
   fromdateModal: NgbDateStruct;
   employeeData: Filter = new Filter();
   isLeaveDetails: boolean = false;
-  leaveData: Array<LeaveDetails> = [];
+  leaveData: Array<any> = [];
   isLeaveDataFilter: boolean = false;
   leaveTypes: Array<any> = [];
   chartDataset: Array<any> = [];
@@ -268,15 +268,17 @@ export class ApplyLeaveComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let value  = new Date(e.year, e.month-1, e.day);
+    this.leaveForm.get('LeaveToDay').setValue(value);
+    this.leaveForm.get('LeaveFromDay').setValue(value);
+    this.leaveDetail.LeaveFromDay = value;
+    this.leaveDetail.LeaveToDay = value;
     let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24)) + 1;
     if (leaveDay > 0)
       this.leaveDays = leaveDay;
     else
       this.leaveDays = 0;
     this.maxDate = {year: e.year, month: e.month, day: e.day};
-    this.leaveDetail.LeaveFromDay = value;
-    this.leaveDetail.LeaveFromDay = value;
-    this.leaveForm.get('LeaveFromDay').setValue(value);
+    this.model = { day: value.getDate(), month: value.getMonth(), year: value.getFullYear()};
   }
 
   leaveRequestForm() {
@@ -325,19 +327,14 @@ export class ApplyLeaveComponent implements OnInit {
 
   bindData(res: any) {
     if(res.ResponseBody.LeaveTypeBriefs) {
-      // if(!res.ResponseBody.EmployeeLeaveDetail) {
-      //   ErrorToast("Fail to get leave detail. Please contact to admin.");
-      //   return;
-      // }
-
-      // let leaveDetail = res.ResponseBody.EmployeeLeaveDetail;
-      // if(leaveDetail && leaveDetail.LeaveDetail) {
-      //   this.leaveData = (JSON.parse(leaveDetail.LeaveDetail)).map(obj => {return {...obj, RequestedOn: new Date(obj.RequestedOn)}});
-      //   this.leaveData = this.leaveData.sort((a, b) => Number(b.RequestedOn) - Number(a.RequestedOn));
-      // }
-
       this.leaveData = res.ResponseBody.LeaveNotificationDetail;
-
+      if (this.leaveData && this.leaveData.length > 0) {
+        this.leaveData.forEach(x => {
+          x.FromDate = ToLocateDate(x.FromDate);
+          x.ToDate = ToLocateDate(x.ToDate);
+          x.CreatedOn = ToLocateDate(x.CreatedOn)
+        })
+      }
       let plandetail = res.ResponseBody.LeaveTypeBriefs;
       if(plandetail) {
         this.leaveTypes = plandetail;

@@ -6,6 +6,7 @@ import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStora
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -42,21 +43,27 @@ export class IncometaxComponent implements OnInit {
   lastIncomeTaxSlab: any = null;
 
   constructor(private nav: iNavigation,
-    private local: ApplicationStorage,
-    private http: AjaxService) { }
+              private local: ApplicationStorage,
+              private http: AjaxService,
+              private user: UserService) { }
 
   ngOnInit(): void {
     this.currentYear = new Date().getFullYear();
     let id = this.nav.getValue();
     let empid = this.local.getByKey("EmployeeId");
-    if(id > 0) {
+    if(id && id > 0)
       this.EmployeeId = id;
-      this.loadUserTaxModule();
-    } else if (empid) {
+    else if (empid && empid > 0)
       this.EmployeeId = empid;
-      this.loadUserTaxModule();
-    }else {
+    else {
+      this.userDetail = this.user.getInstance() as UserDetail;
+      this.EmployeeId = this.userDetail.UserId;
+    }
+
+    if (this.EmployeeId && this.EmployeeId <= 0) {
       ErrorToast("Not able to find employee declaration detail. Please contact to admin.");
+    } else {
+      this.loadUserTaxModule();
     }
   }
 
