@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -13,7 +13,7 @@ declare var $: any;
   templateUrl: './approval-request.component.html',
   styleUrls: ['./approval-request.component.scss']
 })
-export class ApprovalRequestComponent implements OnInit {
+export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   active = 1;
   requestState: string = '';
   isLoading: boolean = false;
@@ -55,12 +55,41 @@ export class ApprovalRequestComponent implements OnInit {
   leaveRecord: Leave;
   timesheetRecord: Timesheet;
   timesheetData: Filter = new Filter();
+  monthDays: Array<number> = [];
+  scrollDiv: any = null;
+  excelTable: any = null;
+  attendance: Attendance;
+  attendanceReviewData: Filter = new Filter();
 
   constructor(
     private http: AjaxService,
     private local : ApplicationStorage,
     private userService: UserService
     ) { }
+
+    ngAfterViewChecked(): void {
+      if(this.scrollDiv == null) {
+        this.scrollDiv = document.getElementById("scroll-dv");
+
+        if(this.scrollDiv != null) {
+          this.initHandler();
+        }
+      }
+    }
+
+    initHandler() {
+      this.scrollDiv.addEventListener('scroll', function(e) {
+        var elem = document.getElementById("excel-table");
+        var innerElem = document.getElementById("inner-scroller");
+        var left = ((elem.clientWidth) / (innerElem.clientWidth)) * e.currentTarget.scrollLeft;
+        if (e.currentTarget.scrollLeft > 0)
+          elem.scrollLeft = left;
+        else {
+          elem.scrollLeft = left;
+        }
+        // console.log('Excel: ' + left + ', Inner: ' + e.currentTarget.scrollLeft);
+      });
+    }
 
   ngOnInit(): void {
     this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
@@ -83,11 +112,17 @@ export class ApprovalRequestComponent implements OnInit {
       this.isAdmin = false;
 
     this.loadAutoComplete();
+    let date = new Date();
+    this.attendance = {
+      EmployeeName: "",
+      ForMonth: date.getMonth() + 1,
+      ForYear: date.getFullYear()
+    }
     this.itemStatus = 2;
     this.attendanceRecord = {
       EmployeeId: 0,
-      ForMonth : new Date().getMonth() + 1,
-      ForYear: new Date().getFullYear(),
+      ForMonth :date.getMonth() + 1,
+      ForYear:date.getFullYear(),
       PageIndex: 1,
       ReportingManagerId : this.currentUser.UserId,
       PresentDayStatus: 2,
@@ -95,8 +130,8 @@ export class ApprovalRequestComponent implements OnInit {
     };
     this.leaveRecord = {
       EmployeeId: 0,
-      FromDate: new Date(),
-      ToDate: new Date(),
+      FromDate: date,
+      ToDate: date,
       ReportingManagerId : this.currentUser.UserId,
       RequestStatusId: 2,
       PageIndex: 1
@@ -104,10 +139,15 @@ export class ApprovalRequestComponent implements OnInit {
     this.timesheetRecord = {
       EmployeeId: 0,
       ReportingManagerId : this.currentUser.UserId,
-      ForYear: new Date().getFullYear(),
+      ForYear: date.getFullYear(),
       TimesheetStatus: 8,
       PageIndex: 1
     }
+    let days = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+    for (let i = 1; i <= days; i++) {
+      this.monthDays.push(i);
+    }
+    this.attendanceReviewData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
     this.getAttendanceRequest();
   }
 
@@ -512,6 +552,8 @@ export class ApprovalRequestComponent implements OnInit {
 
   getAttendanceRequest() {
     this.isPageLoading = true;
+    this.attendanceDetail = []
+    this.attendanceData = new Filter();
     this.http.post("AttendanceRequest/GetAttendenceRequestData", this.attendanceRecord, false).then(response => {
       if(response.ResponseBody) {
         this.attendanceDetail = response.ResponseBody.FilteredAttendance;
@@ -599,6 +641,9 @@ export class ApprovalRequestComponent implements OnInit {
       case 4:
         this.resetFilter();
         break;
+      case 5:
+        this.resetAttedanceReviewFilter();
+        break;
     }
   }
 
@@ -609,16 +654,89 @@ export class ApprovalRequestComponent implements OnInit {
     this.requestFilter.SearchString = "";
     this.loadAttendanceRequestDetail();
   }
+
+  getReviewAttendanceDetail() {
+    this.isPageLoading = true;
+    this.http.post("ef/runpayroll/getAttendancePage", this.attendanceReviewData, true).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.attendanceDetail = [];
+        this.attendanceDetail = res.ResponseBody;
+        if (this.attendanceDetail.length > 0) {
+
+          this.attendanceDetail.forEach(x => {
+            x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
+          });
+
+          this.attendanceReviewData.TotalRecords = this.attendanceDetail[0].Total;
+        } else {
+          this.attendanceReviewData.TotalRecords = 0;
+        }
+
+        console.log(this.attendanceDetail);
+        this.isPageLoading = false;
+        Toast("Attendance detail loaded");
+      }
+    }).catch(e => {
+      this.isPageLoading = false;
+    })
+  }
+
+  filterAttedanceReviewRecords() {
+    let delimiter = "";
+    let searchString = "";
+    this.attendanceReviewData.SearchString = ""
+    this.attendanceReviewData.reset();
+    this.monthDays = [];
+    let days = new Date(this.attendance.ForYear,this.attendance.ForMonth, 0).getDate();
+    for (let i = 1; i <= days; i++) {
+      this.monthDays.push(i);
+    }
+    if(this.attendance.EmployeeName !== null && this.attendance.EmployeeName !== "") {
+      searchString += ` EmployeeName like '%${this.attendance.EmployeeName.toUpperCase()}%'`;
+      delimiter = "and";
+    }
+
+    if(this.attendance.ForMonth !== null && this.attendance.ForMonth > 0) {
+      searchString += ` ${delimiter} ForMonth = ${this.attendance.ForMonth}`;
+      delimiter = "and";
+    }
+
+    if(this.attendance.ForYear !== null && this.attendance.ForYear> 0) {
+      searchString += ` ${delimiter} ForYear = ${this.attendance.ForYear}`;
+      delimiter = "and";
+    }
+
+    if(searchString != "") {
+      this.attendanceReviewData.SearchString = ` 1=1 and ${searchString}`;
+    } else {
+      this.attendanceReviewData.SearchString = "1=1";
+    }
+
+    this.getReviewAttendanceDetail();
+  }
+
+  resetAttedanceReviewFilter() {
+    this.attendanceReviewData.reset();
+    this.attendanceReviewData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
+    let date = new Date();
+    this.attendance = {
+      EmployeeName: "",
+      ForMonth: date.getMonth() + 1,
+      ForYear: date.getFullYear()
+    }
+    this.getReviewAttendanceDetail()
+  }
 }
 
 interface Attendance {
-  ReportingManagerId,
-  EmployeeId,
+  ReportingManagerId?,
+  EmployeeId?,
   ForMonth,
   ForYear,
-  PresentDayStatus,
-  PageIndex,
-  TotalDays
+  PresentDayStatus?,
+  PageIndex?,
+  TotalDays?,
+  EmployeeName?: string
 }
 
 interface Leave {

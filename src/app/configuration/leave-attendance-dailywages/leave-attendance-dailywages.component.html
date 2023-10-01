@@ -203,14 +203,14 @@
                                             {{item.EmployeeName}}
                                         </td>
                                         <ng-container *ngFor="let data of item.AttendanceDetail">
-                                            <td [ngClass]="{'bg-info': data.PresentDayStatus == 2, 'bg-warning': data.PresentDayStatus == 0, 'bg-success': data.PresentDayStatus == 9, 'bg-danger': data.PresentDayStatus == 5}">
-                                                <i class="fa fa-check text-white" *ngIf="data.PresentDayStatus == 9"></i>
+                                            <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
+                                                <i class="fa fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
                                                 <i class="fa fa-close text-white" *ngIf="data.PresentDayStatus == 5"></i>
                                                 <a href="javascript:void(0)" (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
-                                                    <i class="fa fa-ban text-dark" *ngIf="data.PresentDayStatus == 0"></i>
+                                                    <i class="fa fa-exclamation-triangle text-warning" *ngIf="data.PresentDayStatus == 0"></i>
                                                 </a>
                                                 <i class="fa fa-clock-o text-danger" *ngIf="data.PresentDayStatus == 2"></i>
-                                                <i class="fa fa-gift text-success" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                                                <i class="fa fa-gift" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
                                             </td>
                                         </ng-container>
                                         <td></td>
@@ -254,32 +254,38 @@
                               </div>
                               <div class="row mt-3">
                                 <div class="col-auto">
-                                    <span class="bg-success px-2 py-1">
-                                        <i class="fa fa-check text-white"></i>
+                                    <span class="px-2 py-1">
+                                        <i class="fa fa-check text-success"></i>
                                     </span>
                                     <span> Approved</span>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="bg-danger px-2 py-1">
-                                        <i class="fa fa-close text-white"></i>
+                                    <span class="px-2 py-1">
+                                        <i class="fa fa-close text-danger"></i>
                                     </span>
                                     <span> Rejected</span>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="bg-warning px-2 py-1">
-                                        <i class="fa fa-close text-dark"></i>
+                                    <span class=" px-2 py-1">
+                                        <i class="fa fa-ban text-dark"></i>
                                     </span>
                                     <span> Blocked</span>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="bg-info px-2 py-1">
-                                        <i class="fa fa-clock-o text-danger"></i>
+                                    <span class="px-2 py-1">
+                                        <i class="fa fa-clock-o text-warning"></i>
                                     </span>
                                     <span> Submitted</span>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="bg-light px-2 py-1">
-                                        <i class="fa fa-gift text-success"></i>
+                                  <span class="px-2 py-1">
+                                      <i class="fa fa-exclamation-triangle text-warning"></i>
+                                  </span>
+                                  <span> Not Submitted</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="holiday-color px-2 py-1">
+                                        <i class="fa fa-gift"></i>
                                     </span>
                                     <span> WeekOff/ Holiday</span>
                                 </div>
