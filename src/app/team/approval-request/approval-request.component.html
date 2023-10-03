@@ -581,13 +581,18 @@
                           </td>
                           <ng-container *ngFor="let data of item.AttendanceDetail">
                               <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
+                                <ng-container *ngIf="!data.IsOnLeave">
                                   <i class="fa fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
                                   <i class="fa fa-close text-white" *ngIf="data.PresentDayStatus == 5"></i>
-                                  <a href="javascript:void(0)" >
+                                  <a href="javascript:void(0)" (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
                                       <i class="fa fa-exclamation-triangle text-warning" *ngIf="data.PresentDayStatus == 0"></i>
                                   </a>
                                   <i class="fa fa-clock-o text-danger" *ngIf="data.PresentDayStatus == 2"></i>
                                   <i class="fa fa-gift" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                                </ng-container>
+                                <ng-container *ngIf="data.IsOnLeave">
+                                  <i class="fa fa-flag-o"></i>
+                                </ng-container>
                               </td>
                           </ng-container>
                           <td></td>
@@ -665,6 +670,12 @@
                           <i class="fa fa-gift"></i>
                       </span>
                       <span> WeekOff/ Holiday</span>
+                  </div>
+                  <div class="col-auto">
+                    <span class=" px-2 py-1">
+                        <i class="fa fa-flag-o"></i>
+                    </span>
+                    <span> Leave</span>
                   </div>
                 </div>
             </div>

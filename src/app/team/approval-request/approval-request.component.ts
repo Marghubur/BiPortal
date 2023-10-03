@@ -143,7 +143,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       TimesheetStatus: 8,
       PageIndex: 1
     }
-    let days = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+    let days = new Date(this.attendance.ForYear, this.attendance.ForMonth, 0).getDate();
     for (let i = 1; i <= days; i++) {
       this.monthDays.push(i);
     }
