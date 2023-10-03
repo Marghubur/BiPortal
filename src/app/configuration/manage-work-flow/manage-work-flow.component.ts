@@ -61,7 +61,11 @@ export class ManageWorkFlowComponent implements OnInit {
             text: empRole[i].RoleName
           })
         }
-          this.initForm();
+        this.approvalLevel = [];
+        for (let i = 0; i <= this.approvalChainDetail.NoOfApprovalLevel; i++) {
+          this.approvalLevel.push(i)
+        }
+        this.initForm();
         this.isPageReady = true;
       }
     });

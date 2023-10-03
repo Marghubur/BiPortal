@@ -396,7 +396,7 @@ export class AttendanceComponent implements OnInit {
         Id:reportmanager.value,
         Email:reportmanager.email})
     }
-    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerText;
     if (data && data == "") {
       this.isLoading = false;
       return;
@@ -546,7 +546,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   requestPopUp(item?: any) {
-    this.EmailBody = "<div>I missed to fill my attendance on following days:</div><br>";
+    this.EmailBody = "<div>I missed to fill my attendance on above days:</div><br>";
     if (this.currentDays.length > 0) {
       let text = "";
       this.currentAttendance = this.currentDays[0];
@@ -555,14 +555,14 @@ export class AttendanceComponent implements OnInit {
         this.currentDays = [];
         this.currentDays.push(item)
       }
-      this.currentDays.map(item => {
-        text += `${new DatePipe('en-US').transform(item.AttendanceDay, 'd MMM yyyy')},  `
-      });
+      // this.currentDays.map(item => {
+      //   text += `${new DatePipe('en-US').transform(item.AttendanceDay, 'd MMM yyyy')},  `
+      // });
 
-      this.EmailBody += `  Date(s):`;
-      this.EmailBody += `  \n${text}`;
-      this.EmailBody += "<br><div>Requesting to please approved all the above mentioned attendance.</div><br><br>";
-      this.EmailBody += "<div>Regards</div>";
+      //this.EmailBody += `  Date(s):`;
+      //this.EmailBody += `  \n${text}`;
+      this.EmailBody += "<div>Requesting to please approved all the above mentioned attendance.</div>";
+      //this.EmailBody += "<div>Regards</div>";
       this.commentValue = "";
       $("#requestModal").modal('show');
     } else {

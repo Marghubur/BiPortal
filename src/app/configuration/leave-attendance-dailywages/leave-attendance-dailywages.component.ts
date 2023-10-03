@@ -1,7 +1,8 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -19,7 +20,6 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
   active = 1;
   reverseLossPayDetail: Array<any> = [];
   selectedLOP: any = null;
-  days: Array<number> = [];
   daysInMonth: Array<number> = [];
   scrollDiv: any = null;
   excelTable: any = null;
@@ -30,6 +30,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
   leaveQuota: Array<any> = [];
   selectedLeaveType: any = null;
   selectedLeave: any = null;
+  availLopAdjusmentDay: Array<number> = [];
 
   constructor(private nav:iNavigation,
               private http: AjaxService) {}
@@ -62,14 +63,14 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
     let data = this.nav.getValue();
     if (data) {
       this.selectedPayrollCalendar = data;
-      let days = new Date(this.selectedPayrollCalendar.Year, this.selectedPayrollCalendar.Month+1, 0).getDate();
+      let days = new Date(this.selectedPayrollCalendar.Year, this.selectedPayrollCalendar.Month, 0).getDate();
       for (let i = 1; i <= days; i++) {
         this.daysInMonth.push(i);
       }
 
       this.attendance = {
-        EmployeeName: "", 
-        ForMonth: this.selectedPayrollCalendar.Month+1, 
+        EmployeeName: "",
+        ForMonth: this.selectedPayrollCalendar.Month,
         ForYear: this.selectedPayrollCalendar.Year
       }
 
@@ -84,7 +85,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
     this.isLoading = true;
     this.http.get(`ef/runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true).then(res => {
       if (res.ResponseBody) {
-        if (res.ResponseBody[0].length > 1)
+        if (res.ResponseBody[0].length > 0)
           this.appliedLeaveDetail = res.ResponseBody[0];
         else if (res.ResponseBody[0].length == 1)  {
           let data = res.ResponseBody[0];
@@ -92,16 +93,14 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
             this.appliedLeaveDetail = data;
           }
         }
-        console.log(this.appliedLeaveDetail)
-
-        if (res.ResponseBody[1].length > 1) {
-          this.lossPayDetail = res.ResponseBody[1];
-        } else if (res.ResponseBody[1].length == 1)  {
-          let data = res.ResponseBody[1];
-          if (data && data.employeeId) {
-            this.lossPayDetail = data;
-          }
-        }
+        // if (res.ResponseBody[1].length > 1) {
+        //   this.lossPayDetail = res.ResponseBody[1];
+        // } else if (res.ResponseBody[1].length == 1)  {
+        //   let data = res.ResponseBody[1];
+        //   if (data && data.employeeId) {
+        //     this.lossPayDetail = data;
+        //   }
+        // }
         Toast("Record found");
         this.isLoading = false;
       }
@@ -116,10 +115,10 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
     switch(requestState) {
       case 'Approved':
-        endPoint = `ef/runpayroll/leaveApproval`;
+        endPoint = `LeaveRequest/ApproveLeaveRequest`;
         break;
       case 'Rejected':
-        endPoint = `ef/runpayroll/RejectLeaveRequest`;
+        endPoint = `LeaveRequest/RejectLeaveRequest`;
         break;
     }
 
@@ -132,8 +131,8 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
       LeaveTypeId: this.selectedLeave.LeaveTypeId,
       Reason: this.selectedLeave.Reason
     }
-
-    this.http.post(`${endPoint}`, currentResponse, true).then((response:ResponseModel) => {
+    let filterId = 0;
+    this.http.post(`${endPoint}/${filterId}`, currentResponse, false).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         $('#leaveActionModal').modal('hide');
         Toast("Submitted Successfully");
@@ -145,45 +144,51 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   lopAdjustmentPopUp(item: any) {
     this.selectedLOP = item;
-    for (let i = 1; i <= this.selectedPayrollCalendar.EndDate; i++) {
-      this.days.push(i);
-    }
-    $('#lopAdjustment').modal('show');
-  }
-
-  saveAjustmentLeave() {
-    this.selectedLOP.LOPAdjust = Number(this.selectedLOP.LOPAdjust);
-    this.selectedLOP.LeaveDeduct = Number(this.selectedLOP.LeaveDeduct);
-    $('#lopAdjustment').modal('hide');
+    this.http.get(`Leave/GetLeaveDetailByEmpId/${item.EmployeeId}`).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.leaveQuota = JSON.parse(res.ResponseBody.LeaveQuotaDetail);
+        $('#lopAdjustment').modal('show');
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   getAttendanceDetail() {
-    if (!this.attendanceDetail || this.attendanceDetail.length == 0) {
-      this.isLoading = true;
-      this.http.post("ef/runpayroll/getAttendancePage", this.attendanceData, true).then((res:ResponseModel) => {
-        if (res.ResponseBody) {
-          this.attendanceDetail = [];
-          this.attendanceDetail = res.ResponseBody;
-          if (this.attendanceDetail.length > 0) {
+    this.isLoading = true;
+    this.http.post("ef/runpayroll/getAttendancePage", this.attendanceData, true).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.attendanceDetail = [];
+        this.attendanceDetail = res.ResponseBody;
+        if (this.attendanceDetail.length > 0) {
+          this.attendanceDetail.forEach(x => {
+            x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
+            if (this.appliedLeaveDetail && this.appliedLeaveDetail.length > 0) {
+              x.AttendanceDetail.forEach(i => {
+                var item = this.appliedLeaveDetail.find(z => (new Date(z.FromDate).getTime() - new Date(i.AttendanceDay).getTime())/(1000 * 60 * 60 * 24) <=0 &&
+                  ((new Date(z.ToDate).getTime() - new Date(i.AttendanceDay).getTime()))/(1000 * 60 * 60 * 24)  >= 0 && z.EmployeeId == x.EmployeeId);
+                if (item)
+                  i.IsOnLeave = true;
+              });
+            }
+          });
 
-            this.attendanceDetail.forEach(x => {
-              x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
-            });
-
-            this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
-          } else {
-            this.attendanceData.TotalRecords = 0;
-          }
-          
-          console.log(this.attendanceDetail);
-          this.isLoading = false;
-          Toast("Attendance detail loaded");
+          this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
+        } else {
+          this.attendanceData.TotalRecords = 0;
         }
-      })
-    } else {
-      this.isLoading = false;
-      Toast("Attendance detail loaded");
-    }
+
+        console.log(this.attendanceDetail);
+        this.isLoading = false;
+        Toast("Attendance detail loaded");
+      }
+    })
+    // if (!this.attendanceDetail || this.attendanceDetail.length == 0) {
+    // } else {
+    //   this.isLoading = false;
+    //   Toast("Attendance detail loaded");
+    // }
   }
 
   GetFilterLosspayResult(e: Filter) {
@@ -227,8 +232,8 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
     this.attendanceData.reset();
     this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
     this.attendance = {
-      EmployeeName: "", 
-      ForMonth: this.selectedPayrollCalendar.Month+1, 
+      EmployeeName: "",
+      ForMonth: this.selectedPayrollCalendar.Month+1,
       ForYear: this.selectedPayrollCalendar.Year
     }
     this.getAttendanceDetail()
@@ -243,27 +248,88 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
       this.selectedAttendance = null;
       this.selectedAttendance = item;
       this.selectedAttendance.EmployeeName = name;
-      this.isLoading = true;
-      this.http.get(`Leave/GetLeaveDetailByEmpId/${id}`).then((res:ResponseModel) => {
-        if (res.ResponseBody) {
-          this.leaveQuota = JSON.parse(res.ResponseBody.LeaveQuotaDetail);
-          $('#attendanceAdjustment').modal('show');
-          this.isLoading = false;
-        }
-      }).catch(e => {
-        this.isLoading = false;
-      })
+      this.selectedAttendance.AttendanceId = id;
+      $('#attendanceAdjustment').modal('show');
     }
   }
 
   saveAttedanceAjustment() {
+    this.isLoading = true;
+    if (!this.selectedAttendance) {
+      this.isLoading = false;
+      ErrorToast("Please select attendance first");
+      return;
+    }
 
+    if (this.selectedAttendance.AttendanceId <= 0 || this.selectedAttendance.AttendanceDay == null) {
+      this.isLoading = false;
+      return;
+    }
+
+    this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then ((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
+        if (attendance) {
+          attendance.AttendanceDetail = [];
+          attendance.AttendanceDetail = res.ResponseBody;
+        }
+        $('#attendanceAdjustment').modal('hide');
+        Toast("Attendace apply successfully.");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    });
+  }
+
+  saveLOPAjustment() {
+    this.isLoading = true;
+    if (this.selectedLOP.EmployeeId <= 0) {
+      WarningToast("Employee is not selected properly.");
+      this.isLoading = false;
+      return;
+    }
+
+    if (this.selectedLeaveType!= null && this.selectedLeaveType.LeavePlanTypeId <=0) {
+      WarningToast("Please select Leave Type first.");
+      this.isLoading = false;
+      return;
+    }
+
+    if (this.selectedLeaveType!= null && this.selectedLeaveType.AvailableLeaves <=0) {
+      WarningToast("You don't have leave balance of selected leave");
+      this.isLoading = false;
+      return;
+    }
+
+    this.selectedLOP.LeaveTypeId= this.selectedLeaveType.LeavePlanTypeId;
+    this.selectedLOP.LeavePlanName= this.selectedLeaveType.LeavePlanTypeName
+    this.http.post('Leave/AdjustLOPAsLeave', this.selectedLOP).then ((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        $('#lopAdjustment').modal('hide');
+        Toast("Leave apply successfully.");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    });
   }
 
   validateLeaveStatus(e: any) {
     let value = e.target.value;
     if (Number(value) > 0) {
       this.selectedLeaveType = this.leaveQuota.find(x => x.LeavePlanTypeId == value);
+      this.availLopAdjusmentDay = [];
+      if (this.selectedLeaveType && this.selectedLeaveType.AvailableLeaves > 0) {
+        let day = 0;
+        if (this.selectedLOP.ActualLOP < this.selectedLeaveType.AvailableLeaves)
+          day = this.selectedLOP.ActualLOP;
+        else
+          day = this.selectedLeaveType.AvailableLeaves;
+        for (let i = 1; i <= day; i++) {
+          this.availLopAdjusmentDay.push(i);
+        }
+      }
     }
   }
 
@@ -273,6 +339,20 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
       this.selectedLeave.Reason = "";
       $('#leaveActionModal').modal('show');
     }
+  }
+
+  getLopAdjustment() {
+    this.isLoading = true;
+    this.http.get(`Attendance/GetLOPAdjustment/${this.selectedPayrollCalendar.Month}/${this.selectedPayrollCalendar.Year}`)
+    .then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.lossPayDetail = res.ResponseBody;
+        console.log(res.ResponseBody);
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 }
 

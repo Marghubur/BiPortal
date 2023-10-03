@@ -259,10 +259,10 @@ textarea {
 
 .close_view {
   text-decoration: none;
-  color: white;
   position: absolute;
-  margin-left: 8%;
-  margin-top: 25px;
+  margin-left: 1%;
+  margin-top: 13px;
+  color: black !important;
 }
 
 .elem-row {
@@ -892,4 +892,9 @@ a {
 }
 .offcanvas-size-sm {
   --bs-offcanvas-width: min(95vw, 250px) !important;
+}
+
+.holiday-color {
+  background-color: rgb(255 165 0 / 27%) !important;
+  columns: #222 !important;
 }

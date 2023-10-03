@@ -12,7 +12,7 @@
         <div class="x_content">
             <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
                 <li [ngbNavItem]="1">
-                    <button ngbNavLink>LEAVE APPLIED</button>
+                    <button ngbNavLink (click)="loadData()">LEAVE APPLIED</button>
                     <ng-template ngbNavContent>
                         <div class="alert alert-info">All leave (approved or pending) that fails under thid payroll
                             cycel month will be displayed here</div>
@@ -203,14 +203,19 @@
                                             {{item.EmployeeName}}
                                         </td>
                                         <ng-container *ngFor="let data of item.AttendanceDetail">
-                                            <td [ngClass]="{'bg-info': data.PresentDayStatus == 2, 'bg-warning': data.PresentDayStatus == 0, 'bg-success': data.PresentDayStatus == 9, 'bg-danger': data.PresentDayStatus == 5}">
-                                                <i class="fa fa-check text-white" *ngIf="data.PresentDayStatus == 9"></i>
+                                            <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
+                                              <ng-container *ngIf="!data.IsOnLeave">
+                                                <i class="fa fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
                                                 <i class="fa fa-close text-white" *ngIf="data.PresentDayStatus == 5"></i>
-                                                <a href="javascript:void(0)" (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
-                                                    <i class="fa fa-ban text-dark" *ngIf="data.PresentDayStatus == 0"></i>
+                                                <a href="javascript:void(0)" (click)="showAttendanceHandler(data, item.AttendanceId, item.EmployeeName)">
+                                                    <i class="fa fa-exclamation-triangle text-warning" *ngIf="data.PresentDayStatus == 0"></i>
                                                 </a>
-                                                <i class="fa fa-clock-o text-danger" *ngIf="data.PresentDayStatus == 2"></i>
-                                                <i class="fa fa-gift text-success" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                                                <i class="fa fa-clock-o text-danger" *ngIf="data.PresentDayStatus == 2 || data.PresentDayStatus == 12"></i>
+                                                <i class="fa fa-gift" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                                              </ng-container>
+                                              <ng-container *ngIf="data.IsOnLeave">
+                                                <i class="fa fa-flag-o"></i>
+                                              </ng-container>
                                             </td>
                                         </ng-container>
                                         <td></td>
@@ -254,41 +259,53 @@
                               </div>
                               <div class="row mt-3">
                                 <div class="col-auto">
-                                    <span class="bg-success px-2 py-1">
-                                        <i class="fa fa-check text-white"></i>
+                                    <span class="px-2 py-1">
+                                        <i class="fa fa-check text-success"></i>
                                     </span>
                                     <span> Approved</span>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="bg-danger px-2 py-1">
-                                        <i class="fa fa-close text-white"></i>
+                                    <span class="px-2 py-1">
+                                        <i class="fa fa-close text-danger"></i>
                                     </span>
                                     <span> Rejected</span>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="bg-warning px-2 py-1">
-                                        <i class="fa fa-close text-dark"></i>
+                                    <span class=" px-2 py-1">
+                                        <i class="fa fa-ban text-dark"></i>
                                     </span>
                                     <span> Blocked</span>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="bg-info px-2 py-1">
-                                        <i class="fa fa-clock-o text-danger"></i>
+                                    <span class="px-2 py-1">
+                                        <i class="fa fa-clock-o text-warning"></i>
                                     </span>
                                     <span> Submitted</span>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="bg-light px-2 py-1">
-                                        <i class="fa fa-gift text-success"></i>
+                                  <span class="px-2 py-1">
+                                      <i class="fa fa-exclamation-triangle text-warning"></i>
+                                  </span>
+                                  <span> Not Submitted</span>
+                                </div>
+                                <div class="col-auto">
+                                    <span class="holiday-color px-2 py-1">
+                                        <i class="fa fa-gift"></i>
                                     </span>
                                     <span> WeekOff/ Holiday</span>
+                                </div>
+                                <div class="col-auto">
+                                  <span class=" px-2 py-1">
+                                      <i class="fa fa-flag-o"></i>
+                                  </span>
+                                  <span> Leave</span>
                                 </div>
                               </div>
                         </div>
                     </ng-template>
                 </li>
                 <li [ngbNavItem]="3">
-                    <button ngbNavLink>LOP ADJUSTMENT</button>
+                    <button ngbNavLink (click)="getLopAdjustment()">LOP ADJUSTMENT</button>
                     <ng-template ngbNavContent>
                         <div class="alert alert-info">All employees 'LOP' summaries for this month will be displayed
                             below. Admin can override LOP days if required.</div>
@@ -317,28 +334,28 @@
                                         <div class="th fe-1">
                                             <div class="cell-wrapper">
                                                 <div class="t-filter">
-                                                    <a href="javascript:void(0)" class="pe-2">Employee</a>
+                                                    <a href="javascript:void(0)" class="">Employee</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="th fe-1">
                                             <div class="cell-wrapper">
                                                 <div class="t-filter">
-                                                    <a href="javascript:void(0)" class="pe-2">Actual LOP</a>
+                                                    <a href="javascript:void(0)" class="">Actual LOP</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="th fe-1">
                                             <div class="cell-wrapper">
                                                 <div class="t-filter">
-                                                    <a href="javascript:void(0)" class="pe-2">LOP Adjustment</a>
+                                                    <a href="javascript:void(0)" class="">LOP Adjustment</a>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="th fe-1">
                                             <div class="cell-wrapper">
                                                 <div class="t-filter">
-                                                    <a href="javascript:void(0)" class="pe-2">Final LOP</a>
+                                                    <a href="javascript:void(0)" class="">Final LOP</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -361,7 +378,7 @@
                                 <div class="t-body">
                                     <ng-container *ngIf="lossPayDetail.length > 0">
                                         <div class="tr py-2" *ngFor="let item of lossPayDetail; let i=index;">
-                                            <div class="td align-middle fe-index ps-2">{{i+1}}</div>
+                                            <div class="td align-middle fe-index text-center">{{i+1}}</div>
                                             <div class="td align-middle fe-1 text-truncate">
                                                 {{item.EmployeeName}}
                                             </div>
@@ -372,14 +389,12 @@
                                             </div>
                                             <div class="td align-middle fe-1">
                                                 <div class="cell-wrapper">
-                                                    {{item.LOPAdjust}} days <span *ngIf="item.LeaveDeduct > 0">+
-                                                        {{item.LeaveDeduct}} leave adjustment</span>
+                                                    {{item.LOPAdjusment}} days
                                                 </div>
                                             </div>
                                             <div class="td align-middle fe-1">
                                                 <div class="cell-wrapper">
-                                                    {{(item.LOPAdjust +item.LeaveDeduct) > 0 ? (item.LOPAdjust
-                                                    +item.LeaveDeduct) : item.ActualLOP}} days
+                                                  {{item.FinalLOP}} days
                                                 </div>
                                             </div>
                                             <div class="td align-middle text-truncate fe-1">
@@ -527,7 +542,7 @@
 </div>
 
 <!--LOP Adjustment Modal -->
-<div class="modal fade" id="lopAdjustment" tabindex="-1" aria-labelledby="lopAdjustmentLabel" aria-hidden="true">
+<div class="modal fade" id="lopAdjustment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="lopAdjustmentLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content px-4">
             <div class="modal-header border-bottom-0">
@@ -536,51 +551,44 @@
             </div>
             <div class="modal-body" *ngIf="selectedLOP != null">
                 <div class="col-md-12 row">
+                  <div class="col-md-6">
+                    <label class="form-label fw-semibold pe-1">Name: </label>
+                    <span>{{selectedLOP.EmployeeName}}</span>
+                  </div>
                     <div class="col-md-6">
-                        <label for="" class="form-label">Actual LOP</label>
-                        <p class="mb-0">{{selectedLOP.ActualLOP}} days</p>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="" class="form-label">LOP Adjustment</label>
-                        <select class="form-select" [(ngModel)]="selectedLOP.LOPAdjust">
-                            <option value="0">No Adjustment</option>
-                            <option [value]="item" *ngFor="let item of days">{{item}}</option>
-                        </select>
+                        <label class="form-label fw-semibold pe-1">Actual LOP: </label>
+                        <span>{{selectedLOP.ActualLOP}} days</span>
                     </div>
                 </div>
-                <ng-container *ngIf="selectedLOP.LOPAdjust < selectedLOP.ActualLOP">
-                    <div class="col-12">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" (click)="adjustMoreLOP($event)">
-                            <label class="form-check-label">
-                                Do you want to adjust more LOP
-                            </label>
-                        </div>
-                        <div class="col-md-12 d-none" data-name="deducetedLeaveContainer">
-                            <fieldset class="mt-3">
-                                <legend>Deducted Leave</legend>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Leave Type</label>
-                                        <select class="form-select">
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="" class="form-label">Leaves to be deducted</label>
-                                        <select class="form-select" [(ngModel)]="selectedLOP.LeaveDeduct">
-                                            <option value="0">0</option>
-                                            <ng-container *ngFor="let item of days; let i= index;">
-                                                <option [value]="item" *ngIf="i < (selectedLOP.ActualLOP - selectedLOP.LOPAdjust)">{{item}}
-                                                </option>
-                                            </ng-container>
-                                        </select>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
+                <div class="col-12">
+                    <div class="col-md-12">
+                        <fieldset class="mt-3">
+                            <legend>Deducted Leave</legend>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label class="form-label">Leave Type</label>
+                                <select class="form-select mb-3" (change)="validateLeaveStatus($event)">
+                                    <option value="" disabled selected>Select leave type</option>
+                                    <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveQuota">
+                                        <div class="col-md-12">
+                                        {{l.LeavePlanTypeName}} - Balance: {{l.AvailableLeaves | number: '1.2-2'}} days
+                                        </div>
+                                    </option>
+                                </select>
+                            </div>
+                              <div class="col-md-6">
+                                <label for="" class="form-label">LOP Adjustment</label>
+                                <select class="form-select" [(ngModel)]="selectedLOP.LOPAdjusment">
+                                    <option value="0">0</option>
+                                    <ng-container *ngFor="let item of availLopAdjusmentDay; let i= index;">
+                                      <option [value]="item">{{item}}</option>
+                                    </ng-container>
+                                </select>
+                              </div>
+                            </div>
+                        </fieldset>
                     </div>
-                </ng-container>
+                </div>
                 <div class="mt-3">
                     <label for="" class="form-label">Comment</label>
                     <textarea rows="3" placeholder="Comments" class="form-control"
@@ -588,8 +596,11 @@
                 </div>
             </div>
             <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary-c" (click)="saveAjustmentLeave()">Save</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveLOPAjustment()">
+                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                <span class="ps-1">{{ isLoading ? 'Wait' : 'Save' }}</span>
+              </button>
             </div>
         </div>
     </div>
@@ -597,7 +608,7 @@
 <!-- End -->
 
 <!--Attendance Adjustment Modal -->
-<div class="modal fade" id="attendanceAdjustment" tabindex="-1" aria-labelledby="attendanceAdjustmentLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="attendanceAdjustment" tabindex="-1" aria-labelledby="attendanceAdjustmentLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content px-4">
             <div class="modal-header border-bottom-0">
@@ -605,31 +616,24 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row" *ngIf="selectedAttendance != null">
-                    <div class="col-md-6">
-                        <label  class="form-label">Name</label>
-                        <span>: {{selectedAttendance.EmployeeName}} </span>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Date</label>
-                        <span>: {{selectedAttendance.AttendanceDay | date}} </span>
-                    </div>
+              <ng-container *ngIf="selectedAttendance != null">
+                  <div class="col-md-12">
+                      <label  class="form-label">Name</label>
+                      <span>: {{selectedAttendance.EmployeeName}} </span>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                      <label class="form-label">Date</label>
+                      <span>: {{selectedAttendance.AttendanceDay | date}} </span>
+                  </div>
+                  <div class="col-md-12 mt-2">
+                    <label  class="form-label">Submitted By</label>
+                    <span>: {{selectedAttendance.EmployeeName}} </span>
                 </div>
-                <div class="col-md-12">
-                    <label class="form-label">Leave Type</label>
-                    <select class="form-select mb-3" (change)="validateLeaveStatus($event)">
-                        <option value="" disabled selected>Select leave type</option>
-                        <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveQuota">
-                            <div class="col-md-12">
-                            {{l.LeavePlanTypeName}} - Balance: {{l.AvailableLeaves | number: '1.2-2'}} days
-                            </div>
-                        </option>
-                    </select>
+                  <div class="col-md-12 mt-2">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-control" placeholder="Message" rows="2" [(ngModel)]="selectedAttendance.UserComments"></textarea>
                 </div>
-                <div class="col-md-12 mt-2">
-                    <label class="form-label">Leave to be deducted</label>
-                    <input type="text" class="form-control" readonly [value]="(selectedLeaveType!= null && selectedLeaveType.AvailableLeaves) > 0? 1 : 0">
-                </div>
+              </ng-container>
             </div>
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
@@ -642,7 +646,6 @@
     </div>
 </div>
 <!-- End -->
-
 
 <!--Attendance Adjustment Modal -->
 <div class="modal fade" id="leaveActionModal" tabindex="-1" aria-labelledby="leaveActionModalLabel" aria-hidden="true">

@@ -38,12 +38,12 @@ and (min-width : 1024px) {
 
     .nav-link-menu{
       padding: 0.7rem !important;
-      font-size: 0.8rem !important;
+      font-size: 1rem !important;
     }
     .custom-accordion-btn {
       padding-left: 0.2rem !important;
       padding-right: 1rem !important;
-      font-size: 0.85rem !important;
+      font-size: 1.1rem !important;
     }
    .title_menu {
       margin-left: 0px !important;
@@ -79,5 +79,8 @@ and (min-width : 1024px) {
 
     .scroll-bar-dv .inner-scroller {
       width: 32rem !important;
+    }
+    .index-col {
+      width: 8% !important;
     }
   }
