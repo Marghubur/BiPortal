@@ -58,9 +58,10 @@ export class ServiceRequestComponent implements OnInit {
   }
 
   selectedEmployee(e: any) {
-    let index = this.managers.findIndex(x => x.value == e.value);
+    let index = this.managers.findIndex(x => x.value == e);
     if(index == -1) {
-      this.managers.push(e);
+      let value = this.employeesList.data.find(x => x.value == e);
+      this.managers.push(value);
     } else {
       this.managers.splice(index, 1);
     }

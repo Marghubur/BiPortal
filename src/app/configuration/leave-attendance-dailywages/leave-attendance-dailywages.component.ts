@@ -233,7 +233,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
     this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
     this.attendance = {
       EmployeeName: "",
-      ForMonth: this.selectedPayrollCalendar.Month+1,
+      ForMonth: this.selectedPayrollCalendar.Month,
       ForYear: this.selectedPayrollCalendar.Year
     }
     this.getAttendanceDetail()

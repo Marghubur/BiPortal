@@ -94,28 +94,28 @@
               </div>
               <div class="col-md-12 row justify-content-between align-items-center">
                 <div class="col-md-7 row mt-3">
-                  <div class="col-md-2">
+                  <div class="col-auto">
                     <i class="fa fa-circle text-secondary pe-2"></i>
                     WEEKENDS
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-auto">
                     <i class="fa fa-circle text-info pe-2"></i>
                     SUBMITTED
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-auto">
                     <i class="fa fa-circle text-success pe-2"></i>
                     APPROVED
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-auto">
                     <i class="fa fa-circle text-danger pe-2"></i>
                     REJECTED
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-auto">
                     <i class="fa fa-circle text-primary pe-2"></i>
                     LEAVE
                   </div>
                 </div>
-                <div class="col-md-3 float-end text-end mt-3">
+                <div class="col-auto float-end text-end mt-3">
                   <button type="button" class="btn btn-primary-c btn-sm me-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
                     <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Fill from previous Timesheet' }}
