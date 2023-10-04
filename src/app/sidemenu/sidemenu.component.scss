@@ -218,3 +218,11 @@ a {
 .pinded-icon {
   transform: rotate(45deg);
 }
+
+.nav-link-menu:hover {
+  .menu-item-icon,
+  .mene-item {
+    font-weight: 500 !important;
+  }
+  background-color: #c6c6c663 !important;
+}

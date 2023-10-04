@@ -90,3 +90,11 @@
 textarea {
   resize: none !important;
 }
+
+.nav-link {
+  color: var(--primary)!important;
+}
+
+.nav-tabs .nav-link.active {
+  color: #495057 !important;
+}

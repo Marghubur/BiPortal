@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
@@ -19,7 +18,7 @@ export class ProcessingPayrollComponent implements OnInit {
   isCollapsed: boolean = false;
   isLoading: boolean = false;
   submittedPayrollDate: Date = new Date();
-  
+
   newJoineeDetail: Array<any> = [];
   exitEmpDetail: Array<any> = [];
   settlementDetail: Array<any> = [];
@@ -76,7 +75,6 @@ export class ProcessingPayrollComponent implements OnInit {
 
   constructor(private http: AjaxService,
               private user: UserService,
-              private fb: FormBuilder,
               private nav: iNavigation) {}
 
   ngOnInit(): void {
@@ -184,7 +182,7 @@ export class ProcessingPayrollComponent implements OnInit {
     this.esiOverrideDetail.push(this.allRunPayroll.ESIOverRide);
     this.tdsOverrideDetail.push(this.allRunPayroll.TDSOverRide);
     this.lwfOverrideDetail.push(this.allRunPayroll.LWFOverRide);
-    
+
     this.isPageReady = true;
   }
 
@@ -251,7 +249,7 @@ export class ProcessingPayrollComponent implements OnInit {
     $('#leaveAttendanceWages').modal('hide');
   }
 
-  
+
 
   adjustMoreLOP(e: any) {
     let value = e.target.checked;
@@ -263,7 +261,7 @@ export class ProcessingPayrollComponent implements OnInit {
     }
   }
 
-  
+
 
   // ------------------------------Employee Changes
   employeeChangesPopUp() {
@@ -548,7 +546,7 @@ export class ProcessingPayrollComponent implements OnInit {
     localStorage.setItem(this.runpayroll, JSON.stringify(this.allRunPayroll));
   }
 
-  
+
 
   onEmloyeeChanged(e: any) {
 
