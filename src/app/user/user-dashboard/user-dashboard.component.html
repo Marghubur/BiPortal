@@ -17,8 +17,8 @@
       <i class="fa fa-bullhorn fa-2x text-dark pe-4 pt-1"></i>
       <div>
         <h4 class="text-dark pb-1">Declare your IT saving investments for this financial year</h4>
-        <h6 class="py-2">IT Declaration helps you reduce your taxable income, thereby decreasing your income tax. <a href="javascript:void(0)" class="text-decoration-none">View and Submit IT Declaration</a></h6>
-        <h6 class="pt-2"><a href="javascipt:void(0)" class="text-decoration-none">View More</a></h6>
+        <h6 class="py-2">IT Declaration helps you reduce your taxable income, thereby decreasing your income tax. <a href="javascript:void(0)" (click)="navDeclarationPage()" class="text-decoration-none">View and Submit IT Declaration</a></h6>
+        <h6 class="pt-2"><a href="javascipt:void(0)" class="text-decoration-none" (click)="navIncometaxPage()">View More</a></h6>
       </div>
     </div>
     <div class="row">
@@ -74,26 +74,26 @@
         </div>
       </div>
     </div>
-    <div class="card mt-3">
+    <div class="card mt-3" *ngIf="isPageReady">
       <h4 class="pt-3 ms-2 px-2 text-dark"><span class="border-2 border border-dark rounded me-1"><i class="fa fa-percent text-primary px-2"></i></span> Tax Summary</h4>
       <hr>
       <div class="row py-3">
         <div class="col-md-4">
           <h5 class="px-3">Total Annual Tax</h5>
-          <h4 class="text-dark px-3">&#8377; &nbsp;52832.00</h4>
+          <h4 class="text-dark px-3">&#8377; &nbsp;{{employeeTaxDetail.totalTaxAmount | number : '1.2-2'}}</h4>
         </div>
         <div class="col-md-6">
-          <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width: 15%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-            <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+          <div class="progress bg-info">
+            <!-- <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div> -->
+            <div class="progress-bar" role="progressbar"  [style.width]="employeeTaxDetail.percent + '%'" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
           </div>
           <div class="d-flex py-3">
-            <h5 >Paid: <span class="text-primary">&#8377; 4992.00</span></h5>
-            <h5 class="ms-auto">Remaining: <span class="text-info">&#8377;47840.00</span></h5>
+            <h5 >Paid: <span class="text-primary">&#8377; {{employeeTaxDetail.taxpaid | number : '1.2-2'}}</span></h5>
+            <h5 class="ms-auto">Remaining: <span class="text-info">&#8377;{{employeeTaxDetail.remainingTax | number : '1.2-2'}}</span></h5>
           </div>
         </div>
       </div>
-      <h6 class="ps-3 fs-6 pb-3 text-dark"><i class="fa text-secondary fa-exclamation-circle fa-lg pe-2"></i>The Remaining tax amount will be deducted as <span class="fw-bold">&#8377;47840.00</span> / month in the next 10 month(s).</h6>
+      <h6 class="ps-3 fs-6 pb-3 text-dark"><i class="fa text-secondary fa-exclamation-circle fa-lg pe-2"></i>The Remaining tax amount will be deducted as <span class="fw-bold">&#8377;{{employeeTaxDetail.remainingTax | number : '1.2-2'}}</span> / month in the next 10 month(s).</h6>
     </div>
   </div>
 </div>

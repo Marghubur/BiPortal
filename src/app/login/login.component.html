@@ -25,18 +25,6 @@
               <ng-container *ngIf="isUserMode">
                 <div class="col-lg-12">
                   <div class="card2 card border-0 px-4 py-5">
-                    <!-- <div class="d-flex justify-content-between">
-                      <div class="login-box-header btn-primary-dark">
-                       <div class="active role-box" (click)="enableEmployee()"
-                          [ngClass]="{'active': userType == 'employee'}">
-                          <label class="form-check-label">Employee</label>
-                        </div>
-                        <div class="role-box" (click)="enableSystem()" [ngClass]="{'active': userType == 'system'}">
-                          <label class="form-check-label">System User</label>
-                        </div>
-                        <div class="text-center fw-bold fs-4">Login</div>
-                      </div>
-                    </div> -->
                     <div class="col-12 text-center">
                       <h2 class="">
                         <p class="text-primary-c fw-700">BottomHalf</p> </h2>
@@ -50,21 +38,21 @@
                             <label class="mb-1">
                               <h6 class="mb-0 text-sm">Email or Mobile</h6>
                             </label>
-                            <input class="mb-4" value="info@bottomhalf.in"  id="EmailOrMobile" placeholder="Email or Mobile Number"
+                            <input class="mb-4" value="{{isLocal ? 'info@bottomhalf.in' : ''}}"  id="EmailOrMobile" placeholder="Email or Mobile Number"
                               name="UserId">
                           </div>
                           <div class="row m-0 p-0">
                             <label class="mb-1">
                               <h6 class="mb-0 text-sm">Company Code</h6>
                             </label>
-                            <input class="mb-4" value="BOT-01"  id="CompanyCode" placeholder="Enter company code" name="CompanyCode">
+                            <input class="mb-4" value="{{isLocal ? 'BOT-01' : ''}}"  id="CompanyCode" placeholder="Enter company code" name="CompanyCode">
                           </div>
                           <div class="row m-0 p-0">
                             <label class="mb-1">
                               <h6 class="mb-0 text-sm">Password</h6>
                             </label>
                             <div class="position-relative p-0 m-0 form-group">
-                              <input type="password" value="welcome@$Bot_001" (keyup.enter)="UserLogin()" class="form-control" placeholder="Password" id="Password"
+                              <input type="password" value="{{isLocal ? 'welcome@$Bot_001' : ''}}" (keyup.enter)="UserLogin()" class="form-control" placeholder="Password" id="Password"
                                 name="Password">
                               <ng-container *ngIf="isShowPassword">
                                 <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">

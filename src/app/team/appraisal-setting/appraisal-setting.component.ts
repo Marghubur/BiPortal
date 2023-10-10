@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage, GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { ConfigPerformance } from 'src/providers/constants';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ConfigPerformance, ManageAppraisalCategory } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
+import { ApprisalCycle } from '../manage-appraisal-category/manage-appraisal-category.component';
 declare var $: any;
 declare var bootstrap: any;
 
@@ -19,7 +18,6 @@ declare var bootstrap: any;
 })
 export class AppraisalSettingComponent implements OnInit {
   isPageReady: boolean = false;
-  appraisalForm: FormGroup;
   isLoading: boolean = false;
   isSubmitted: boolean = false;
   orderByCyclePeriodAsc: boolean = null;
@@ -28,19 +26,6 @@ export class AppraisalSettingComponent implements OnInit {
   apprisalData: Filter = new Filter();
   apprisalDetail: ApprisalCycle = new ApprisalCycle();
   apprisalCycleDetail: Array<ApprisalCycle> = [];
-  currentApprisalCycle: ApprisalCycle = new ApprisalCycle();
-	fromDate: NgbDateStruct | null;
-	toDate: NgbDateStruct | null;
-  selfAppraisalFromDate: NgbDateStruct;
-  selfAppraisalToDate: NgbDateStruct;
-  selectionPeriodFromDate: NgbDateStruct;
-  selectionPeriodToDate: NgbDateStruct;
-  feedbackFromDate: NgbDateStruct;
-  feedbackToDate: NgbDateStruct;
-  reviewFromDate: NgbDateStruct;
-  reviewToDate: NgbDateStruct;
-  projectDetails: Array<any> = [];
-  selectedProject: any = null;
   userDetail: any = null;
   isViewInList: boolean = true;
   isObjectiveFound: boolean = false;
@@ -56,19 +41,9 @@ export class AppraisalSettingComponent implements OnInit {
   currentObject: Objective = new Objective();
   htmlText: any = null;
   selectedObjective: Array<any> = [];
-  isProjectDetailReady: boolean = false;
   designation: Array<any> = [];
-  appraisalHikeForm: FormGroup;
-  allProjectAppraisal: Array<any> = [];
-  currentProjectAppraisal: any = null;
-  isAmountExceed: boolean = false;
-  roles: Array<any> = [];
-  roleList: autoCompleteModal = null;
-  selectedRoles: Array<any> = [];
   appraisalDetailAndCategory: Array<ApprisalCycle> = [];
-  isAppraisalCycleInSamePeriod: boolean = false;
-  minDate: any = null;
-  maxDate: any = null;
+  currentApprisalCycle:ApprisalCycle = new ApprisalCycle();
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -78,17 +53,6 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.roles = GetRoles();
-    this.roleList = new autoCompleteModal();
-    this.roleList.placeholder = "Select Role";
-    this.roleList.className = "";
-    this.roles.forEach(x => {
-      this.roleList.data.push({
-        text: x.RoleName,
-        value: x.RoleId,
-        selected: false
-      })
-    })
     this.designation = GetRoles();
     this.currentCompny = this.local.findRecord("Companies")[0];
     this.userDetail = this.user.getInstance();
@@ -98,43 +62,7 @@ export class AppraisalSettingComponent implements OnInit {
       return;
     }
     this.loadData();
-    this.initForm();
     this.initObjetiveForm();
-  }
-
-  initForm() {
-    this.appraisalForm = this.fb.group({
-      ObjectiveCatagoryType: new FormControl(this.currentApprisalCycle.ObjectiveCatagoryType, [Validators.required]),
-      TypeDescription: new FormControl(this.currentApprisalCycle.TypeDescription, [Validators.required]),
-      AppraisalCycleStartDate: new FormControl(this.currentApprisalCycle.AppraisalCycleStartDate),
-      AppraisalCycleEndDate: new FormControl(this.currentApprisalCycle.AppraisalCycleEndDate),
-      IsSelfAppraisal: new FormControl(this.currentApprisalCycle.IsSelfAppraisal),
-      SelfAppraisalStartDate: new FormControl(this.currentApprisalCycle.SelfAppraisalStartDate),
-      SelfAppraisalEndDate: new FormControl(this.currentApprisalCycle.SelfAppraisalEndDate),
-      IsRequiredRatersFeedback: new FormControl(this.currentApprisalCycle.IsRequiredRatersFeedback),
-      SelectionPeriodStartDate: new FormControl(this.currentApprisalCycle.SelectionPeriodStartDate),
-      SelectionPeriodEndDate: new FormControl(this.currentApprisalCycle.SelectionPeriodEndDate),
-      MultiraterFeedBackStartDate: new FormControl(this.currentApprisalCycle.MultiraterFeedBackStartDate),
-      MultiraterFeedBackEndDate: new FormControl(this.currentApprisalCycle.MultiraterFeedBackEndDate),
-      IsRaterSelectedByManager: new FormControl(this.currentApprisalCycle.IsRaterSelectedByManager),
-      CanRaterViewAppraisal: new FormControl(this.currentApprisalCycle.CanRaterViewAppraisal),
-      RoleIds: new FormControl(this.currentApprisalCycle.RoleIds),
-      DepartmentIds: new FormControl(this.currentApprisalCycle.DepartmentIds),
-      ReviewStartDate: new FormControl(this.currentApprisalCycle.ReviewStartDate, [Validators.required]),
-      ReviewEndDate: new FormControl(this.currentApprisalCycle.ReviewEndDate, [Validators.required]),
-      IsHikeApproval: new FormControl(this.currentApprisalCycle.IsHikeApproval),
-      AppraisalDetailId: new FormControl(this.currentApprisalCycle.AppraisalDetailId)
-    });
-    this.appraisalForm.controls['IsRaterSelectedByManager'].disable();
-    this.appraisalForm.controls['CanRaterViewAppraisal'].disable();
-    this.appraisalForm.controls['IsRaterSelectedByManager'].disable();
-    this.appraisalForm.controls['CanRaterViewAppraisal'].disable();
-    this.appraisalForm.controls['IsRequiredRatersFeedback'].disable();
-    this.appraisalForm.controls['IsSelfAppraisal'].disable();
-  }
-
-  get f() {
-    return this.appraisalForm.controls;
   }
 
   buildAppraisalCategory(response: any) {
@@ -194,7 +122,7 @@ export class AppraisalSettingComponent implements OnInit {
     if(this.apprisalDetail.TypeDescription !== null)
       this.apprisalData.TypeDescription = this.apprisalDetail.TypeDescription;
 
-      if(this.apprisalDetail.RolesId !== null)
+    if(this.apprisalDetail.RolesId !== null)
       this.apprisalData.RolesId = this.apprisalDetail.RolesId;
 
     this.loadData();
@@ -220,143 +148,16 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   addAprisalCyclePopUp() {
-    this.isSubmitted = false;
-    this.currentApprisalCycle = new ApprisalCycle();
-    this.selectedRoles = [];
-    this.initForm();
-    this.roleList.data.map(i => {
-      i.selected = false;
-    })
-    this.fromDate = null;
-    this.toDate = null;
-    this.selfAppraisalFromDate = null;
-    this.selfAppraisalToDate = null;
-    this.selectionPeriodFromDate = null;
-    this.selectionPeriodToDate = null;
-    this.feedbackFromDate = null;
-    this.feedbackToDate = null;
-    this.reviewFromDate = null;
-    this.reviewToDate = null;
-    this.isApprisalCycleSelected();
-    $('#manageApprisal').modal('show');
-  }
-
-  viewAppraisalDetails(e: any) {
-    this.isAppraisalCycleInSamePeriod = false;
-    let value = e.target.value;
-    if (value) {
-      this.http.get(`eps/apprisalcatagory/getCategoryByCategoryId/${value}`, true).then(res => {
-        if (res.ResponseBody && res.ResponseBody.length > 0) {
-          this.appraisalDetailAndCategory = res.ResponseBody;
-          let data: ApprisalCycle = this.appraisalDetailAndCategory[0];
-          data.ObjectiveCatagoryId = 0;
-          data.ObjectiveCatagoryType = null;
-          data.TypeDescription = null;
-          data.RoleIds = [];
-          data.ObjectiveIds = [];
-          data.IsHikeApproval = false;
-          data.Status = null;
-          this.isAppraisalCycleInSamePeriod = true;
-          this.editApprisalPopUp(data);
-          this.isLoading = false;
-        }
-      }).catch(e => {
-        this.isLoading = false;
-      })
-    }
+    this.nav.navigate(ManageAppraisalCategory, null);
   }
 
   viewObjectiveAppraisalPopup(item: ApprisalCycle) {
-    this.appraisalDetailAndCategory = [];
-    this.isLoading = true;
-    if (item) {
-      this.http.get(`eps/apprisalcatagory/getCategoryByCategoryId/${item.ObjectiveCatagoryId}`, true).then(res => {
-        if (res.ResponseBody && res.ResponseBody.length > 0) {
-          this.appraisalDetailAndCategory = res.ResponseBody;
-          this.isAppraisalCycleInSamePeriod = false;
-          $('#manageAppraisalCategory').modal('show');
-          this.isLoading = false;
-        }
-      }).catch(e => {
-        this.isLoading = false;
-      })
-    }
+    this.nav.navigate(ManageAppraisalCategory, item);
   }
 
+
   editApprisalPopUp(item: ApprisalCycle) {
-    $('#manageAppraisalCategory').modal('hide');
-    this.currentApprisalCycle = item;
-    this.selectedRoles = [];
-    let date;
-    if (this.currentApprisalCycle.AppraisalCycleStartDate) {
-      date = new Date(this.currentApprisalCycle.AppraisalCycleStartDate);
-      this.fromDate={day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()}
-    }
-    if (this.currentApprisalCycle.AppraisalCycleEndDate) {
-      date = new Date(this.currentApprisalCycle.AppraisalCycleEndDate);
-      this.toDate = {day: date.getDate(),month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    if (this.currentApprisalCycle.SelfAppraisalStartDate) {
-      date = new Date(this.currentApprisalCycle.SelfAppraisalStartDate);
-      this.selfAppraisalFromDate= {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    if (this.currentApprisalCycle.SelfAppraisalEndDate) {
-      date = new Date(this.currentApprisalCycle.SelfAppraisalEndDate);
-      this.selfAppraisalToDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    if (this.currentApprisalCycle.SelectionPeriodStartDate) {
-      date = new Date(this.currentApprisalCycle.SelectionPeriodStartDate);
-      this.selectionPeriodFromDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    if (this.currentApprisalCycle.SelectionPeriodEndDate) {
-      date = new Date(this.currentApprisalCycle.SelectionPeriodEndDate);
-      this.selectionPeriodToDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    if (this.currentApprisalCycle.MultiraterFeedBackStartDate) {
-      date = new Date(this.currentApprisalCycle.MultiraterFeedBackStartDate);
-      this.feedbackFromDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    if (this.currentApprisalCycle.MultiraterFeedBackEndDate) {
-      date = new Date(this.currentApprisalCycle.MultiraterFeedBackEndDate);
-      this.feedbackToDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    if (this.currentApprisalCycle.ReviewStartDate) {
-      date = new Date(this.currentApprisalCycle.ReviewStartDate);
-      this.reviewFromDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    if (this.currentApprisalCycle.ReviewEndDate) {
-      date = new Date(this.currentApprisalCycle.ReviewEndDate);
-      this.reviewToDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-    }
-
-    this.selectedRoles = [];
-    this.initForm();
-    this.isApprisalCycleSelected();
-    if (this.currentApprisalCycle.RoleIds && this.currentApprisalCycle.RoleIds.length > 0) {
-      this.currentApprisalCycle.RoleIds.forEach(x => {
-        let role = this.roles.find(i => i.RoleId == x);
-        this.selectedRoles.push({
-          RoleId : role.RoleId,
-          RoleName: role.RoleName
-        })
-
-      });
-      this.roleList.data.map(i => {
-        if (this.selectedRoles.find(a => a.RoleId == i.value))
-          i.selected = true;
-        else
-          i.selected = false;
-      })
-    }
-    $('#manageApprisal').modal('show');
+    this.nav.navigate(ManageAppraisalCategory, item);
   }
 
   GetFilterResult(e: Filter) {
@@ -366,279 +167,8 @@ export class AppraisalSettingComponent implements OnInit {
     }
   }
 
-  addApprisalCycle() {
-    this.isLoading = true;
-    this.isSubmitted = true;
-
-    if (this.appraisalForm.invalid) {
-      this.isLoading = false;
-      ErrorToast("Please correct all the mandaroty field marked red");
-      return;
-    }
-    if (this.selectedRoles.length <= 0) {
-      this.isLoading = false;
-      ErrorToast("Please select role first");
-      return;
-    }
-    let value = this.appraisalForm.value;
-    value.RoleIds = this.selectedRoles.map(x => x.RoleId);
-    this.http.post("eps/apprisalcatagory/addAppraisalType", value, true).then(res => {
-      if (res.ResponseBody) {
-        this.buildAppraisalCategory(res.ResponseBody);
-        this.currentAppraisalObjective = [];
-        this.isAppraisalCycleInSamePeriod = false;
-        $('#manageApprisal').modal('hide');
-        Toast("Apprisal cycle inserted successfully");
-        this.isLoading = false;
-      }
-    }).catch(e => {
-      ErrorToast(e.error);
-      this.isLoading = false;
-    })
-  }
-
-  addApprisalInSameCycle() {
-    this.isLoading = true;
-    this.isSubmitted = true;
-
-    if (this.appraisalForm.invalid) {
-      this.isLoading = false;
-      ErrorToast("Please correct all the mandaroty field marked red");
-      return;
-    }
-    if (this.selectedRoles.length <= 0) {
-      this.isLoading = false;
-      ErrorToast("Please select role first");
-      return;
-    }
-    let value = this.appraisalForm.value;
-    value.RoleIds = this.selectedRoles.map(x => x.RoleId);
-    // this.http.post("eps/apprisalcatagory/addAppraisalType", value, true).then(res => {
-    //   if (res.ResponseBody) {
-    //     this.apprisalCycleDetail = res.ResponseBody;
-    //     if (this.apprisalCycleDetail.length > 0)
-    //       this.apprisalData.TotalRecords = this.apprisalCycleDetail[0].Total;
-    //     else
-    //       this.apprisalData.TotalRecords = 0;
-    //     this.currentAppraisalObjective = [];
-    //     this.isAppraisalCycleInSamePeriod = false;
-    //     $('#manageApprisal').modal('hide');
-    //     Toast("Apprisal cycle inserted successfully");
-    //     this.isLoading = false;
-    //   }
-    // }).catch(e => {
-    //   ErrorToast(e.error);
-    //   this.isLoading = false;
-    // })
-  }
-
-  updateApprisalCycle() {
-    this.isLoading = true;
-    this.isSubmitted = true;
-    if (this.appraisalForm.invalid) {
-      this.isLoading = false;
-      ErrorToast("Please correct all the mandaroty field marked red");
-      return;
-    }
-    if (this.selectedRoles.length <= 0) {
-      this.isLoading = false;
-      ErrorToast("Please select role first");
-      return;
-    }
-    let value = this.appraisalForm.value;
-    value.RoleIds = this.selectedRoles.map(x => x.RoleId);
-    this.http.put(`eps/apprisalcatagory/updateAppraisalType/${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
-      if (res.ResponseBody) {
-        this.buildAppraisalCategory(res.ResponseBody);
-        this.currentAppraisalObjective = [];
-        $('#manageApprisal').modal('hide');
-        Toast("Apprisal cycle inserted successfully");
-        this.isLoading = false;
-      }
-    }).catch(e => {
-      this.isLoading = false;
-    })
-  }
-
-  onDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["AppraisalCycleStartDate"].setValue(date);
-    this.minDate = {year: date.getFullYear(), month: date.getMonth()+1, day: date.getDate()};
-    this.isApprisalCycleSelected();
-  }
-
-  onToDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["AppraisalCycleEndDate"].setValue(date);
-    this.maxDate = {year: date.getFullYear(), month: date.getMonth()+1, day: date.getDate()};
-    this.isApprisalCycleSelected();
-  }
-
-  isApprisalCycleSelected() {
-    if (this.appraisalForm.get('AppraisalCycleStartDate').value != null && this.appraisalForm.get('AppraisalCycleEndDate').value != null && !this.isAppraisalCycleInSamePeriod) {
-      this.appraisalForm.controls['IsRaterSelectedByManager'].enable();
-      this.appraisalForm.controls['CanRaterViewAppraisal'].enable();
-      this.appraisalForm.controls['IsRequiredRatersFeedback'].enable();
-      this.appraisalForm.controls['IsSelfAppraisal'].enable();
-      this.appraisalForm.controls['IsRaterSelectedByManager'].enable();
-      this.appraisalForm.controls['CanRaterViewAppraisal'].enable();
-    }
-  }
-
-  onSelfAppraislFromDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["SelfAppraisalStartDate"].setValue(date);
-  }
-
-  onSelfAppraislToDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["SelfAppraisalEndDate"].setValue(date);
-  }
-
-  onSelectionPeriodFromDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["SelectionPeriodStartDate"].setValue(date);
-  }
-
-  onSelectionPeriodToDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["SelectionPeriodEndDate"].setValue(date);
-  }
-
-  onFeedbackFromDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["MultiraterFeedBackStartDate"].setValue(date);
-  }
-
-  onFeedbackToDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["MultiraterFeedBackEndDate"].setValue(date);
-  }
-
-  onReviewFromDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["ReviewStartDate"].setValue(date);
-  }
-
-  onReviewToDateSelection(e: NgbDateStruct) {
-    let date = new Date(e.year, e.month - 1, e.day);
-    this.appraisalForm.controls["ReviewEndDate"].setValue(date);
-  }
-
   navigateToObjective(item: ApprisalCycle) {
     this.nav.navigate(ConfigPerformance, item)
-  }
-
-  showOffCanvas(item: any) {
-    if (item) {
-      this.isProjectDetailReady = false;
-      this.currentApprisalCycle = item;
-      this.getProjects();
-    }
-  }
-
-  hideOffCanvas() {
-    $('#offcanvasRight').offcanvas('hide');
-  }
-
-  startCycle() {
-    this.isLoading = true;
-    if (this.appraisalHikeForm.invalid) {
-      ErrorToast("Please fill all the manditory field");
-      this.isLoading = false;
-      return;
-    }
-    if (this.isAmountExceed) {
-      ErrorToast("Hike amount is exceed from project appraisal budget");
-      this.isLoading = false;
-      return;
-    }
-    let value = this.appraisalHikeForm.value;
-    // this.http.put(`eps/apprisalcatagory//${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
-    //   if (res.ResponseBody) {
-    //     this.isLoading = false;
-    //     this.closeCanvasRight();
-    //     Toast("Appraisal cycle started successfully");
-    //   }
-    // }).catch(e => {
-    //   this.isLoading = false;
-    // })
-    console.log(value)
-  }
-
-  getProjects() {
-    this.projectDetails = [];
-    this.selectedProject = null;
-    // ${this.userDetail.UserId}
-    this.http.get(`ps/projects/memberdetail/26`, true).then(res => {
-      if (res.ResponseBody) {
-        let project = res.ResponseBody.Project;
-        this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
-        if (project.length > 0) {
-          let result = project.reduce((a, b) => {
-            a[b.ProjectId] = a[b.ProjectId] || [];
-            a[b.ProjectId].push(b);
-            return a;
-          }, Object.create(null));
-
-          let keys = Object.keys(result);
-          let i = 0;
-          while(i < keys.length) {
-            this.projectDetails.push({
-              ProjectId:result[keys[0]][0].ProjectId,
-              ProjectName:result[keys[0]][0].ProjectName,
-              ProjectDescription:result[keys[0]][0].ProjectDescription,
-              ProjectMembers: result[keys[i]]
-            });
-            i++;
-          }
-          this.selectedProject = this.projectDetails[0];
-          this.currentProjectAppraisal = this.allProjectAppraisal.find(x => x.ProjectId == this.selectedProject.ProjectId);
-          if (this.currentProjectAppraisal && this.selectedProject.ProjectMembers.length > 0) {
-            var offcanvasRight = document.getElementById('offcanvasRight');
-            var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
-            bsOffcanvas.show();
-            this.initAppraisalHike();
-            this.isTotalAmountExceed();
-          } else if(this.selectedProject.ProjectMembers.length <= 0) {
-            ErrorToast("Please add team members");
-            return;
-          } else {
-            ErrorToast("Please add project appraisal budgest");
-            return;
-          }
-          this.isProjectDetailReady = true;
-          Toast("Project details found");
-        } else {
-          WarningToast("Please add project and their team members first");
-          this.isProjectDetailReady = true;
-        }
-      }
-    }).catch(e => {
-      ErrorToast(e.error);
-      this.isProjectDetailReady = true;
-    })
-  }
-
-  changeProject(item: any) {
-    if (item) {
-      this.selectedProject = this.projectDetails.find(x => x.ProjectId == item.ProjectId);
-      this.currentProjectAppraisal = this.allProjectAppraisal.find(x => x.ProjectId == this.selectedProject.ProjectId);
-      if (this.currentProjectAppraisal) {
-        this.initAppraisalHike();
-        this.isTotalAmountExceed();
-      }
-      else {
-        ErrorToast("Please add project appraisal budgest");
-        return;
-      }
-    }
-  }
-
-  closeCanvasRight() {
-    var offcanvasRight = document.getElementById('offcanvasRight');
-    var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
-    bsOffcanvas.hide();
   }
 
   selectedAppraisal(index: number, item: any) {
@@ -900,206 +430,6 @@ export class AppraisalSettingComponent implements OnInit {
       this.getObjectiveByObjtiveId();
     }
   }
-
-  initAppraisalHike() {
-    this.appraisalHikeForm = this.fb.group({
-      ProjectMemberHike: this.buildProjectMemberHike()
-    })
-  }
-
-  buildProjectMemberHike(): FormArray {
-    let data = this.selectedProject.ProjectMembers;
-    console.log(data)
-    let dataArray: FormArray = this.fb.array([]);
-
-    if(data != null && data.length > 0) {
-      let i = 0;
-      while(i < data.length) {
-        dataArray.push(this.fb.group({
-          FullName: new FormControl(data[i].FullName),
-          MemberType: new FormControl(data[i].MemberType),
-          DesignationName: new FormControl(data[i].DesignationName),
-          AssignedOn: new FormControl(data[i].AssignedOn),
-          CTC: new FormControl(data[i].CTC),
-          ProposedPromotion: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
-          ProposedHikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
-          ProposedHikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
-          Experience: new FormControl(data[i].Experience != null ? data[i].Experience : 0)
-        }));
-        i++;
-      }
-    } else {
-      ErrorToast("No recoed found");
-      return;
-    }
-    return dataArray;
-  }
-
-  get hikeDetail() {
-    return this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
-  }
-
-  proposedHikeCheck(e: any, i: number) {
-    let name = e.target.attributes.name.value;
-    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
-    if (name == "ProposedHikePercentage") {
-      let elem = document.getElementsByName("ProposedHikeAmount")[i];
-      elem.setAttribute("readonly", "");
-      elem = document.getElementsByName("ProposedHikePercentage")[i];
-      elem.removeAttribute("readonly");
-      formArray.controls[i].get("ProposedHikeAmount").setValue(0);
-      let value = Number(e.target.value);
-      if (value > 0) {
-        let ctc = formArray.controls[i].get("CTC").value;
-        let hikeAmount = (ctc * value)/100;
-        formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
-      }
-    } else {
-      let elem = document.getElementsByName("ProposedHikePercentage")[i];
-      elem.setAttribute("readonly", "");
-      elem = document.getElementsByName("ProposedHikeAmount")[i];
-      elem.removeAttribute("readonly");
-      formArray.controls[i].get("ProposedHikePercentage").setValue(0);
-      let value = Number(e.target.value);
-      if (value > 0) {
-        let ctc = formArray.controls[i].get("CTC").value;
-        let hikePercentage = (value * 100)/ctc;
-        formArray.controls[i].get("ProposedHikePercentage").setValue(hikePercentage);
-      }
-    }
-  }
-
-  proposedHikeAmountCheck(e: any, i: number) {
-    let name = e.target.attributes.name.value;
-    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
-    let value = Number(e.target.value);
-    if (value > 0) {
-      if (name == "ProposedHikePercentage") {
-        let ctc = formArray.controls[i].get("CTC").value;
-        let hikeAmount = (ctc * value)/100;
-        formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
-      } else {
-        let ctc = formArray.controls[i].get("CTC").value;
-        let hikePercentage = (value * 100)/ctc;
-        formArray.controls[i].get("ProposedHikePercentage").setValue(hikePercentage);
-      }
-      this.isTotalAmountExceed();
-    }
-  }
-
-  isTotalAmountExceed() {
-    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
-    this.isAmountExceed = false;
-    let totalAmount = formArray.value.map(x => Number(x.ProposedHikeAmount)).reduce((a, b) => {return a + b;}, 0);
-    if (totalAmount > this.currentProjectAppraisal.ProjectAppraisalBudget)
-      this.isAmountExceed = true;
-  }
-
-  equalPercentage() {
-    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
-    let equalpercent = 100 / formArray.length;
-    for (let i = 0; i < formArray.length; i++) {
-      let ctc = formArray.controls[i].get("CTC").value;
-      let hikeAmount = (ctc * equalpercent)/100;
-      formArray.controls[i].get("ProposedHikePercentage").setValue(equalpercent);
-      formArray.controls[i].get("ProposedHikeAmount").setValue(hikeAmount);
-    }
-    this.isTotalAmountExceed();
-  }
-
-  selectedroles(e: any) {
-    let index = this.selectedRoles.findIndex(x => x.RoleId == e.value);
-    if(index == -1) {
-      let role = this.roleList.data.find(x => x.value == e.value);
-      this.selectedRoles.push({
-        RoleId : role.value,
-        RoleName: role.text
-      });
-    } else {
-      this.selectedRoles.splice(index, 1);
-    }
-  }
-
-  selectSelfAppraisal(e: any) {
-    let value = e.target.checked;
-    if (value) {
-      this.appraisalForm.get("SelfAppraisalStartDate").setValidators([Validators.required]);
-      this.appraisalForm.get("SelfAppraisalStartDate").updateValueAndValidity();
-      this.appraisalForm.get("SelfAppraisalEndDate").setValidators([Validators.required]);
-      this.appraisalForm.get("SelfAppraisalEndDate").updateValueAndValidity();
-      this.appraisalForm.get("AppraisalCycleStartDate").setValidators([Validators.required]);
-      this.appraisalForm.get("AppraisalCycleStartDate").updateValueAndValidity();
-      this.appraisalForm.get("AppraisalCycleEndDate").setValidators([Validators.required]);
-      this.appraisalForm.get("AppraisalCycleEndDate").updateValueAndValidity();
-    } else {
-      this.appraisalForm.get("SelfAppraisalStartDate").removeValidators([Validators.required]);
-      this.appraisalForm.get("SelfAppraisalStartDate").updateValueAndValidity();
-      this.appraisalForm.get("SelfAppraisalEndDate").removeValidators([Validators.required]);
-      this.appraisalForm.get("SelfAppraisalEndDate").updateValueAndValidity();
-      this.appraisalForm.get("AppraisalCycleStartDate").removeValidators([Validators.required]);
-      this.appraisalForm.get("AppraisalCycleStartDate").updateValueAndValidity();
-      this.appraisalForm.get("AppraisalCycleEndDate").removeValidators([Validators.required]);
-      this.appraisalForm.get("AppraisalCycleEndDate").updateValueAndValidity();
-    }
-  }
-
-  selectMultiraterFeedback(e: any) {
-    let value = e.target.checked;
-    if (value) {
-      this.appraisalForm.get("SelectionPeriodStartDate").setValidators([Validators.required]);
-      this.appraisalForm.get("SelectionPeriodStartDate").updateValueAndValidity();
-      this.appraisalForm.get("SelectionPeriodEndDate").setValidators([Validators.required]);
-      this.appraisalForm.get("SelectionPeriodEndDate").updateValueAndValidity();
-      this.appraisalForm.get("MultiraterFeedBackStartDate").setValidators([Validators.required]);
-      this.appraisalForm.get("MultiraterFeedBackStartDate").updateValueAndValidity();
-      this.appraisalForm.get("MultiraterFeedBackEndDate").setValidators([Validators.required]);
-      this.appraisalForm.get("MultiraterFeedBackEndDate").updateValueAndValidity();
-      this.appraisalForm.controls['IsRaterSelectedByManager'].enable();
-      this.appraisalForm.controls['CanRaterViewAppraisal'].enable();
-    } else {
-      this.appraisalForm.get("SelectionPeriodStartDate").removeValidators([Validators.required]);
-      this.appraisalForm.get("SelectionPeriodStartDate").updateValueAndValidity();
-      this.appraisalForm.get("SelectionPeriodEndDate").removeValidators([Validators.required]);
-      this.appraisalForm.get("SelectionPeriodEndDate").updateValueAndValidity();
-      this.appraisalForm.get("MultiraterFeedBackStartDate").removeValidators([Validators.required]);
-      this.appraisalForm.get("MultiraterFeedBackStartDate").updateValueAndValidity();
-      this.appraisalForm.get("MultiraterFeedBackEndDate").removeValidators([Validators.required]);
-      this.appraisalForm.get("MultiraterFeedBackEndDate").updateValueAndValidity();
-      this.appraisalForm.controls['IsRaterSelectedByManager'].disable();
-      this.appraisalForm.controls['CanRaterViewAppraisal'].disable();
-    }
-  }
-}
-
-class ApprisalCycle {
-  ObjectiveCatagoryType: string = null;
-  TypeDescription: string = null;
-  AppraisalCycleStartDate: Date = null;
-  AppraisalCycleEndDate: Date = null;
-  Total: number = 0;
-  ObjectiveCatagoryId: number = 0;
-  Index: number = 0;
-  Status: String = null;
-  ObjectiveIds: Array<number> = [];
-  IsSelfAppraisal: boolean = false;
-  SelfAppraisalStartDate: Date = null;
-  SelfAppraisalEndDate: Date = null;
-  SelectionPeriodStartDate: Date = null;
-  SelectionPeriodEndDate: Date = null;
-  MultiraterFeedBackStartDate: Date = null;
-  MultiraterFeedBackEndDate: Date = null;
-  RoleIds: Array<number> = [];
-  DepartmentIds: number = 1;
-  ReviewStartDate: Date = null;
-  ReviewEndDate: Date = null;
-  IsHikeApproval: boolean = false;
-  IsRequiredRatersFeedback: boolean = false;
-  IsRaterSelectedByManager: boolean = false;
-  CanRaterViewAppraisal: boolean = false;
-  AppraisalDetailId: number = 0;
-  RatersRequired: boolean = false;
-  RolesId: string = null;
-  Tags: Array<string> = [];
 }
 
 class Objective {

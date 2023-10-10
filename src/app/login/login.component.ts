@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit {
   agreeWithTermsAndCondition: boolean = false;
   isRegistrationDone: boolean = false;
   isShowPassword: boolean = false;
-
   isLocal: boolean = false;
 
   @Output() userAuthState = new EventEmitter();
@@ -56,7 +55,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if(environment.env = "local"){
+    if(environment.env == "local"){
       this.isLocal = true;
     }
 
@@ -356,7 +355,7 @@ export class LoginComponent implements OnInit {
         Email: email,
         CompanyCode: companyCode
       }
-      this.http.login('Login/ForgotPassword', value, false).then(res => {
+      this.http.forgotPassword('Login/ForgotPassword', value, false).then(res => {
         if (res.ResponseBody) {
           Toast("Password send on your email id. Please check your email");
           $('#ForgotPasswordModal').modal('hide');

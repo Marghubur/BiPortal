@@ -24,6 +24,7 @@ export class ManageReviewComponent implements OnInit {
   selectedProject: any = null;
   projectDetails: Array<any> = [];
   allProjectAppraisal: Array<any> = [];
+  appraisalReviewDetail: Array<any> = [];
   userDetail: any = null;
   designation: Array<any> = null;
   currentProjectAppraisal: any = null;
@@ -55,6 +56,7 @@ export class ManageReviewComponent implements OnInit {
         let project = res.ResponseBody.Project;
         project = project.filter(x => x.Team == this.selectedTeam.Team);
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
+        this.appraisalReviewDetail = res.ResponseBody.ReviewDetail;
         if (project.length > 0) {
           let result = project.reduce((a, b) => {
             a[b.ProjectId] = a[b.ProjectId] || [];
@@ -75,13 +77,11 @@ export class ManageReviewComponent implements OnInit {
           }
           this.selectedProject = this.projectDetails[0];
           this.currentProjectAppraisal = this.allProjectAppraisal.find(x => x.ProjectId == this.selectedProject.ProjectId);
-          if (this.currentProjectAppraisal && this.selectedProject.ProjectMembers.length > 0) {
+          if (this.selectedProject.ProjectMembers.length > 0) {
             this.initAppraisalHike();
-          } else if(this.selectedProject.ProjectMembers.length <= 0) {
+          } else  {
+            this.isPageReady = true;
             ErrorToast("Please add team members");
-            return;
-          } else {
-            ErrorToast("Please add project appraisal budgest");
             return;
           }
           this.isPageReady = true;
@@ -110,6 +110,10 @@ export class ManageReviewComponent implements OnInit {
     if(data != null && data.length > 0) {
       let i = 0;
       while(i < data.length) {
+        let reviewDetail = null;
+        if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
+          reviewDetail = this.appraisalReviewDetail.find(x => x.ProjectId == data[i].ProjectId && x.CompanyId == data[i].CompanyId && x.EmployeeId == data[i].EmployeeId);
+
         dataArray.push(this.fb.group({
           fullName: new FormControl(data[i].FullName),
           memberType: new FormControl(data[i].MemberType),
@@ -117,17 +121,17 @@ export class ManageReviewComponent implements OnInit {
           assignedOn: new FormControl(data[i].AssignedOn),
           cTC: new FormControl(data[i].CTC),
           employeeId: new FormControl(data[i].EmployeeId),
-          promotedDesignation: new FormControl(data[i].ProposedPromotion != null ? data[i].ProposedPromotion : 0),
-          hikePercentage: new FormControl(data[i].ProposedHikePercentage != null ? data[i].ProposedHikePercentage : 0),
-          hikeAmount: new FormControl(data[i].ProposedHikeAmount != null ? data[i].ProposedHikeAmount : 0),
+          promotedDesignation: new FormControl(reviewDetail != null ? reviewDetail.PromotedDesignation : 0),
+          hikePercentage: new FormControl(reviewDetail == null ? 0 : reviewDetail.HikePercentage),
+          hikeAmount: new FormControl(reviewDetail == null ? 0 : reviewDetail.HikeAmount),
           experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0),
-          estimatedSalary: new FormControl(data[i].CTC),
-          comments: new FormControl(data[i].Review),
-          rating: new FormControl(data[i].Rating),
+          estimatedSalary: new FormControl(reviewDetail == null ? data[i].CTC : reviewDetail.EstimatedSalary),
+          comments: new FormControl(reviewDetail == null ? "" : reviewDetail.Comments),
+          rating: new FormControl(reviewDetail == null ? 0 : reviewDetail.Rating),
           projectId: new FormControl(data[i].ProjectId),
           companyId: new FormControl(data[i].CompanyId),
-          appraisalDetailId: new FormControl(data[i].appraisalDetailId),
-          appraisalReviewId: new FormControl(0),
+          appraisalDetailId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalDetailId),
+          appraisalReviewId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalReviewId),
           appraisalCycleStartDate: new FormControl(data[i].appraisalCycleStartDate)
         }));
         i++;
@@ -199,7 +203,7 @@ export class ManageReviewComponent implements OnInit {
     let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
     this.isAmountExceed = false;
     let totalAmount = formArray.value.map(x => Number(x.hikeAmount)).reduce((a, b) => {return a + b;}, 0);
-    if (totalAmount > this.currentProjectAppraisal.ProjectAppraisalBudget)
+    if (this.currentProjectAppraisal && totalAmount > this.currentProjectAppraisal.ProjectAppraisalBudget)
       this.isAmountExceed = true;
   }
 
@@ -231,8 +235,8 @@ export class ManageReviewComponent implements OnInit {
     let value = this.appraisalHikeForm.get('ProjectMemberHike').value;
     this.http.post("eps/promotion/addPromotionAndHike", value, true).then(res => {
       if (res.ResponseBody) {
+        this.appraisalReviewDetail = res.ResponseBody;
         this.isLoading = false;
-        //this.closeCanvasRight();
         Toast("Appraisal cycle started successfully");
       } else {
         this.isLoading = false;

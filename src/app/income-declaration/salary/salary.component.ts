@@ -117,15 +117,16 @@ export class SalaryComponent implements OnInit {
         this.salaryComponents = singleDetail.SalaryBreakupDetails;
         this.salaryComponents = this.salaryComponents.filter(x => x.IsIncludeInPayslip == true);
         let annual = 0;
-        let other = 0;
+        let pfAnnualy = 0;
         let salary = 0;
+        let other = 0;
         if (this.salaryComponents.find(x => x.ComponentId == "Gross")) {
           salary = ToFixed((this.salaryComponents.find(x => x.ComponentId == "Gross").FinalAmount), 2);
           annual = ToFixed((salary * 12), 2);
         }
 
         if (this.salaryComponents.find(x => x.ComponentId == "EPER-PF"))
-          other = ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2);
+          pfAnnualy = ToFixed((this.salaryComponents.find(x => x.ComponentId == "EPER-PF").FinalAmount * 12), 2);
 
         this.myAnnualSalary = {
           Annual: annual,
@@ -133,7 +134,7 @@ export class SalaryComponent implements OnInit {
           Other: other,
           Total: annual + other,
           Effective: this.salaryDetail.UpdatedOn,
-          PFperMonth: other/12,
+          PFperMonth: pfAnnualy/12,
           Perks: 0,
           SalaryMonth: salary
         }

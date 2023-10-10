@@ -42,9 +42,9 @@
                         <ng-container *ngIf="objectives.length > 0">
                           <div class="col-md-12 my-3"  >
                             <i class="fa fa-calendar pe-2"></i>
-                            <span class="fw-bold">{{objectives[0].AppraisalCycleStartDate | date:"yyyy"}}-{{objectives[0].AppraisalCycleStartDate | date:"yyyy"}}</span>
+                            <span class="fw-bold">{{objectives[0].AppraisalCycleStartDate | date:"yyyy"}}-{{objectives[0].AppraisalCycleEndDate | date:"yyyy"}}</span>
                             <span class="text-muted ps-2">{{objectives[0].AppraisalCycleStartDate | date}}</span> -
-                            <span class="text-muted">{{objectives[0].AppraisalCycleStartDate | date}}</span>
+                            <span class="text-muted">{{objectives[0].AppraisalCycleEndDate | date}}</span>
                             <i class="fa fa-repeat ps-4 pe-2"></i>
                             <span class="text-primary-c">Update Progress</span>
                           </div>
@@ -114,7 +114,7 @@
                                   </div>
                                 </div>
                               </td>
-                              <td class="align-middle">{{objectives[0].AppraisalCycleStartDate | date}}-{{objectives[0].AppraisalCycleStartDate | date}}</td>
+                              <td class="align-middle">{{objectives[0].AppraisalCycleStartDate | date}} - {{objectives[0].AppraisalCycleEndDate | date}}</td>
                               <td class="align-middle">
                                 <div class="d-flex align-items-center justify-content-between">
                                   <h6>{{item.CurrentValue}} {{item.ProgressMeassureType == 1 ? '%' : ''}}</h6>
@@ -467,8 +467,8 @@
             </small>
           </div>
           <div class="col-md-3 text-end" *ngIf="objectives != null && objectives.length > 0">
-            <h6 class="text-end"><i class="fa fa-calendar-o pe-1"></i> {{objectives[0].AppraisalCycleStartDate | date: 'y'}} - {{objectives[0].AppraisalCycleStartDate | date:'y'}}</h6>
-            <small>{{objectives[0].AppraisalCycleStartDate | date}} - {{objectives[0].AppraisalCycleStartDate | date}}</small>
+            <h6 class="text-end"><i class="fa fa-calendar-o pe-1"></i> {{objectives[0].AppraisalCycleStartDate | date: 'y'}} - {{objectives[0].AppraisalCycleEndDate | date:'y'}}</h6>
+            <small>{{objectives[0].AppraisalCycleStartDate | date}} - {{objectives[0].AppraisalCycleEndDate | date}}</small>
           </div>
         </div>
         <div class="p border-bottom mt-4">Details</div>
