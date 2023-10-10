@@ -44,14 +44,14 @@
       </div>
       <!-- <hr> -->
       <div class="title_menu mt-3">
-        <a [routerLink]="['/ems/administration/email']" class="text-dark custom-text" routerLinkActive="router-link-active">
+        <!-- <a [routerLink]="['/ems/administration/email']" class="text-dark custom-text" routerLinkActive="router-link-active">
           <i class="fa fa-envelope-o me-3 pb-3"aria-hidden="true"></i>
             Mail Box
         </a>
         <a [routerLink]="['/ems/administration/resetpassword']" class="text-dark custom-text" routerLinkActive="router-link-active">
           <i class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>
             Reset Password
-        </a>
+        </a> -->
         <a (click)="navToMasterDataPasge()" *ngIf="isAdmin" class="text-dark custom-text" href="javascript:void(0)" routerLinkActive="router-link-active">
           <i class="fa fa-upload me-3 pb-3" aria-hidden="true"></i>
             Uploda Master Data
@@ -83,8 +83,12 @@
           <a href="javascript:void(0)" class="text-decoration-none text-center">
             <img src="assets/fonts/{{catagory.ParentDetail.Icon}}.png" alt="NAN" class="sm-catagory-icons">
           </a>
-          <div class="dropdown-content">
-            <span class="caret left"></span>
+          <div class="dropdown-content dropdown-container">
+            <!-- <span class="caret left "></span> -->
+            <div class="d-inline caret-container">
+              <p class="caret-left"></p>
+              <p class="caret-left-bottom"></p>
+            </div>
             <a [routerLink]="['/' + item.Link]" class="dropdown-nav-link nav-link-menu a-font" (click)="cleanupEmpId(item.Link)"
               routerLinkActive="active-link" *ngFor="let item of catagory.Value">
               <div class="row menu-item-div align-items-center">

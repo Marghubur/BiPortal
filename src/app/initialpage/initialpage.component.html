@@ -178,59 +178,118 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 mt-3">
-        <div class="x_panel">
-          <div class="x_header">
-            <div class="x_header_title">
-              <h2>Company Setting<small>Company basic settings.</small></h2>
+      <div class="row">
+        <div class="col-md-6 mt-3">
+          <div class="x_panel">
+            <div class="x_header">
+              <div class="x_header_title">
+                <h2>Company Setting<small>Company basic settings.</small></h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mt-3">
+                <label for="" class="form-label">Declaration Start Month</label>
+                <select formControlName="DeclarationStartMonth" class="form-select" (change)="selectDeclartionStartMonth($event)">
+                  <option value="1">Jan</option>
+                  <option value="2">Feb</option>
+                  <option value="3">Mar</option>
+                  <option value="4">Apr</option>
+                  <option value="5">May</option>
+                  <option value="6">Jun</option>
+                  <option value="7">Jul</option>
+                  <option value="8">Aug</option>
+                  <option value="9">Sep</option>
+                  <option value="10">Oct</option>
+                  <option value="11">Nov</option>
+                  <option value="12">Dec</option>
+                </select>
+                <!-- <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
+              </div>
+              <div class="col-md-6 mt-3">
+                <label for="" class="form-label">Declaration End Month</label>
+                <select formControlName="DeclarationEndMonth" class="form-select" >
+                  <option value="1">Jan</option>
+                  <option value="2">Feb</option>
+                  <option value="3">Mar</option>
+                  <option value="4">Apr</option>
+                  <option value="5">May</option>
+                  <option value="6">Jun</option>
+                  <option value="7">Jul</option>
+                  <option value="8">Aug</option>
+                  <option value="9">Sep</option>
+                  <option value="10">Oct</option>
+                  <option value="11">Nov</option>
+                  <option value="12">Dec</option>
+                </select>
+                <!-- <input maxlength="2" type="text" class="form-control" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mt-3">
+                <label for="" class="form-label">Financial Year</label>
+                <input maxlength="4" type="text" class="form-control" formControlName="FinancialYear" placeholder="Enter financial year" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+              </div>
+              <div class="col-md-6 mt-3">
+                <label for="" class="form-label">Attendance Appling Back Days Limit</label>
+                <input maxlength="2" type="number" class="form-control" formControlName="AttendanceSubmissionLimit" placeholder="Enter attendance limit to apply in back date." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6 mt-3">
-              <label for="" class="form-label">Declaration Start Month</label>
-              <select formControlName="DeclarationStartMonth" class="form-select" (change)="selectDeclartionStartMonth($event)">
-                <option value="1">Jan</option>
-                <option value="2">Feb</option>
-                <option value="3">Mar</option>
-                <option value="4">Apr</option>
-                <option value="5">May</option>
-                <option value="6">Jun</option>
-                <option value="7">Jul</option>
-                <option value="8">Aug</option>
-                <option value="9">Sep</option>
-                <option value="10">Oct</option>
-                <option value="11">Nov</option>
-                <option value="12">Dec</option>
-              </select>
-              <!-- <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
+        </div>
+        <div class="col-md-6 mt-3">
+          <div class="x_panel">
+            <div class="x_header">
+              <div class="x_header_title">
+                <h2>Company Logo<small>Company primary logo</small></h2>
+              </div>
             </div>
-            <div class="col-md-6 mt-3">
-              <label for="" class="form-label">Declaration End Month</label>
-              <select formControlName="DeclarationEndMonth" class="form-select" >
-                <option value="1">Jan</option>
-                <option value="2">Feb</option>
-                <option value="3">Mar</option>
-                <option value="4">Apr</option>
-                <option value="5">May</option>
-                <option value="6">Jun</option>
-                <option value="7">Jul</option>
-                <option value="8">Aug</option>
-                <option value="9">Sep</option>
-                <option value="10">Oct</option>
-                <option value="11">Nov</option>
-                <option value="12">Dec</option>
-              </select>
-              <!-- <input maxlength="2" type="text" class="form-control" placeholder="Enter declaration end month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6 mt-3">
-              <label for="" class="form-label">Financial Year</label>
-              <input maxlength="4" type="text" class="form-control" formControlName="FinancialYear" placeholder="Enter financial year" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-            </div>
-            <div class="col-md-6 mt-3">
-              <label for="" class="form-label">Attendance Appling Back Days Limit</label>
-              <input maxlength="2" type="number" class="form-control" formControlName="AttendanceSubmissionLimit" placeholder="Enter attendance limit to apply in back date." onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+            <div class="row">
+              <div [ngClass]="{'col-md-6': FileDocumentList.length > 0, 'col-md-12': FileDocumentList.length == 0}">
+                <div class="">
+                  <input type="file" id="uploadCompanyPrimaryLogo" class="d-none" accept=".jpg, .jpeg, .png" (change)="logoFile($event)"/>
+                  <div class="page-card">
+                    <div class="card">
+                      <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                              aria-labelledby="home-tab">
+                              <div id="classmasterdata" class="col-md-12">
+                                <div name="ifilezone" class="ifilezone mb-4" (click)="fireBrowser()">
+                                  <div *ngIf="FileDocumentList.length == 0">
+                                    <span style="color: darkgray;margin-top: 9rem;display: block;">
+                                      Drop files here.
+                                    </span>
+                                  </div>
+                                  <div class="col-md-12 custom-bg justify-content-center" *ngIf="FileDocumentList.length > 0"
+                                    name="uploading">
+                                    <img [src]="companyLogo" class="img-fluid"/>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 custom-bg d-flex flex-column justify-content-center" *ngIf="FileDocumentList.length > 0" name="uploading">
+                <div class="d-flex">
+                  File:
+                  <div name="filename" class="ms-2" style="display: inline-block !important;">
+                    {{ FileDocumentList[0].FileName }}
+                  </div>
+                </div>
+                <div>
+                  File size: &nbsp;
+                  <div name="filesize" style="display: inline-block !important;">
+                    {{ FileDocumentList[0].FileSize | number: '1.2-2'}}
+                  </div>
+                  KB
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { PerformanceComponent } from './performance/performance.component';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ManageReviewComponent } from './manage-review/manage-review.component';
+import { ManageAppraisalCategoryComponent } from './manage-appraisal-category/manage-appraisal-category.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ManageReviewComponent } from './manage-review/manage-review.component';
     ApprisalReviewComponent,
     PerformanceComponent,
     ServiceRequestComponent,
-    ManageReviewComponent
+    ManageReviewComponent,
+    ManageAppraisalCategoryComponent
   ],
   imports: [
     CommonModule,

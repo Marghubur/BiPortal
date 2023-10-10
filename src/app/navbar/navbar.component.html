@@ -40,8 +40,7 @@
                 <option value="0">Font size</option>
                 <option [value]="i" *ngFor="let i of sizeOptions">{{i}}</option>
               </select>
-
-              <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+              <!-- <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-bell-o" aria-hidden="true"></i>
                 <span class="count badge-counter">{{NotificationBadge}}</span>
               </a>
@@ -53,12 +52,21 @@
                   <hr class="dropdown-divider">
                 </li>
                 <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
-              </ul>
+              </ul> -->
             </div>
           </li>
-
-          <li class="d-none d-sm-block">
-            <div class="btn-group">
+          <li class="d-none d-sm-block position-relative me-4">
+            <a href="javascript:void(0)" class="text-decoration-none" (click)="navNotificationPage()">
+              <i class="fa fa-bell-o" aria-hidden="true"></i>
+              <span class="count badge-counter">{{NotificationBadge}}</span>
+            </a>
+          </li>
+          <li class="d-none d-sm-block position-relative">
+            <a href="javascript:void(0)" class="text-decoration-none " (click)="navEmailPage()">
+              <i class="fa fa-envelope-o pe-1" aria-hidden="true"></i>
+              <span class="count badge-counter">{{NotificationBadge}}</span>
+            </a>
+            <!-- <div class="btn-group">
               <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                 <span class="count badge-counter">{{NotificationBadge}}</span>
@@ -72,7 +80,7 @@
                 </li>
                 <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
               </ul>
-            </div>
+            </div> -->
           </li>
 
           <li>

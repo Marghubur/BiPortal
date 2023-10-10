@@ -12,17 +12,17 @@
       </div>
       <div>
         <ng-container *ngIf="isPageReady">
-          <ng-container *ngIf="projectDetails.length > 0">
-            <div class="row align-items-center justify-content-between">
+          <ng-container *ngIf="projectDetails.length > 0 && selectedProject != null">
+            <div class="row align-items-center justify-content-between" *ngIf="currentProjectAppraisal != null">
               <div class="col-md-12">
                 <span class="fw-bold text-dark">Project Appraisal Budget: <i class="fa fa-inr pe-1"></i> {{currentProjectAppraisal.ProjectAppraisalBudget}}</span>
                 <span class="ps-2">({{currentProjectAppraisal.FromDate | date}} - {{currentProjectAppraisal.ToDate | date}})</span>
               </div>
             </div>
-            <div class="col-md-12 mt-3" *ngIf="selectedProject != null">
+            <div class="col-md-12 mt-3">
               <p class="card-text">{{selectedProject.ProjectDescription}}</p>
               <ng-container *ngIf="selectedProject.ProjectMembers.length > 0">
-                <div class="d-flex align-items-center justify-content-between pb-3">
+                <div class="d-flex align-items-center justify-content-between pb-3" *ngIf="currentProjectAppraisal != null">
                   <h6>Team Members:</h6>
                   <button class="btn btn-primary btn-sm" (click)="equalPercentage()" [disabled]="isAmountExceed || isLoading">Equal %</button>
                 </div>
@@ -30,11 +30,11 @@
                       <table class="table table-striped table-hover table-bordered">
                       <thead>
                         <tr>
-                          <th class="align-middle" rowspan="2" width="5%">Status</th>
+                          <th class="align-middle" rowspan="2">#</th>
                           <th class="align-middle" rowspan="2">Name</th>
                           <th class="align-middle" rowspan="2">Review</th>
-                          <th class="align-middle" rowspan="2">Raating</th>
-                          <th class="align-middle" rowspan="2" width="6%">Previous <br>Salary</th>
+                          <th class="align-middle" rowspan="2">Rating</th>
+                          <th class="align-middle" rowspan="2" width="8%">Pre <br>Salary</th>
                           <th class="align-middle" rowspan="2" width="12%">Proposed Promotion</th>
                           <th class="align-middle text-center" width="20%" colspan="2">Proposed Hike</th>
                           <th class="align-middle" rowspan="2" width="8%">Estimate <br>Salary</th>
@@ -47,31 +47,37 @@
                       </thead>
                       <tbody formArrayName="ProjectMemberHike">
                         <tr *ngFor="let item of hikeDetail.controls; let i = index" [formGroupName]="i">
-                          <td>{{i+1}}</td>
-                          <td>{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}})</td>
-                          <td><input type="text" class="form-control" formControlName="comments"></td>
-                          <td><ngb-rating formControlName="rating" [max]="5"></ngb-rating></td>
-                          <td><i class="fa fa-inr pe-1"></i> {{item.get("cTC").value}}</td>
-                          <td>
+                          <td class="align-middle">{{i+1}}</td>
+                          <td class="align-middle">{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}})</td>
+                          <td class="align-middle">
+                            <textarea rows="2" type="text" class="form-control" formControlName="comments"></textarea>
+                          </td>
+                          <td class="align-middle">
+                            <ngb-rating formControlName="rating" [max]="5"></ngb-rating>
+                          </td>
+                          <td class="align-middle">
+                            <i class="fa fa-inr pe-1"></i> {{item.get("cTC").value}}
+                          </td>
+                          <td class="align-middle">
                             <select class="form-select" formControlName="promotedDesignation">
                               <option value="0" >Same Designation</option>
                               <option [value]="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
                             </select>
                           </td>
-                          <td>
+                          <td class="align-middle">
                             <div class="input-group mb-3">
                               <input type="text" [DecimalNumber]="5" readonly name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="hikePercentage">
                               <span class="input-group-text" id="basic-addon1">%</span>
                             </div>
                           </td>
-                          <td>
+                          <td class="align-middle">
                             <div class="input-group mb-3">
                               <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
                               <input type="text" [DecimalNumber]="10" readonly name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="hikeAmount">
                             </div>
                           </td>
-                          <td><i class="fa fa-inr pe-1"></i> {{item.get("estimatedSalary").value}}</td>
-                          <td class="text-center">
+                          <td class="align-middle"><i class="fa fa-inr pe-1"></i> {{item.get("estimatedSalary").value}}</td>
+                          <td class="text-center align-middle">
                             <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-success pe-3" type="button">
                               <i class="fa fa-play" aria-hidden="true"></i>
                             </a>
@@ -83,8 +89,8 @@
               </ng-container>
             </div>
             <div class="text-end mt-3">
-              <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading">Cancel</button>
-              <button class="btn btn-primary-c ms-2" (click)="applyHikeAndPromotion()" [disabled]="isAmountExceed || isLoading">
+              <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading || appraisalReviewDetail.length > 0">Cancel</button>
+              <button class="btn btn-primary-c ms-2" (click)="applyHikeAndPromotion()" [disabled]="isAmountExceed || isLoading || appraisalReviewDetail.length > 0">
                 <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
                 <span class="ps-2">
                   Apply Changes
@@ -95,10 +101,10 @@
               Proposed hike amount is exceed from project appraisal budget.
             </div>
           </ng-container>
-          <ng-container *ngIf="projectDetails.length == 0">
+          <ng-container *ngIf="projectDetails.length == 0 || selectedProject == null ">
             <div class="fw-bold text-dark my-5 py-5">
-              <p class="my-5 py-5 text-center">
-                Team meber not found.
+              <p class="my-5 py-5 text-center fs-4">
+                Record not found.
               </p>
             </div>
           </ng-container>

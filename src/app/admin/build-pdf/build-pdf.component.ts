@@ -401,6 +401,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
       this.initForm();
       this.pageDataIsReady = true;
+    }).catch(e => {
+      ErrorToast("Please add employee first");
+      this.initForm();
+      this.pageDataIsReady = true;
     });
   }
 

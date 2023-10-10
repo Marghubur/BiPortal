@@ -69,6 +69,8 @@ export class CompanylogoComponent implements OnInit {
   }
 
   fireBrowser() {
+    this.FileDocumentList = [];
+    this.FileDocumentList = [];
     $('#uploadCompanyLogo').click();
   }
 

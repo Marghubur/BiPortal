@@ -29,23 +29,30 @@ export class AppHttpIntercepter implements HttpInterceptor {
                     "companyCode": this.tokenHelper.getCompanyCode()
                 })
             });
+        } else if(request.url.toLowerCase().endsWith("forgotpassword")) {
+          return request.clone({
+              headers: new HttpHeaders({
+                  "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`,
+                  "companyCode": this.tokenHelper.getCompanyCode()
+              })
+          });
         } else {
-            switch (request.method.toLocaleLowerCase()) {
-                case "post":
-                    return request.clone({
-                        headers: new HttpHeaders({
-                            "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`
-                        })
-                    });
-                default:
-                    return request.clone({
-                        headers: new HttpHeaders({
-                            "Content-Type": "application/json; charset=utf-8",
-                            "Accept": "application/json",
-                            "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`
-                        })
-                    });
-            }
+          switch (request.method.toLocaleLowerCase()) {
+            case "post":
+              return request.clone({
+                  headers: new HttpHeaders({
+                      "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`
+                  })
+              });
+            default:
+              return request.clone({
+                  headers: new HttpHeaders({
+                      "Content-Type": "application/json; charset=utf-8",
+                      "Accept": "application/json",
+                      "Authorization": `Bearer ${this.tokenHelper.getJwtToken()}`
+                  })
+              });
+          }
         }
     }
 }

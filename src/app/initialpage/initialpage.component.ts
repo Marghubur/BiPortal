@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Login } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+import { Files } from '../commonmodal/common-modals';
 declare var $:any;
 
 @Component({
@@ -14,11 +14,12 @@ declare var $:any;
   styleUrls: ['./initialpage.component.scss']
 })
 export class InitialpageComponent implements OnInit {
-  active = 1;
   submitted: boolean = false;
   isLoading: boolean = false;
   initialForm: FormGroup;
-  openingmodel: NgbDateStruct;
+  FileDocumentList: Array<Files> = [];
+  FilesCollection: Array<any> = [];
+  companyLogo: any = null;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -73,11 +74,28 @@ export class InitialpageComponent implements OnInit {
     this.isLoading = true;
     this.submitted = true;
     if (this.initialForm.invalid) {
+      ErrorToast("Please fill all the manditory fields.");
+      this.isLoading = false;
+      return;
+    }
+    if (this.FilesCollection.length <= 0) {
+      ErrorToast("Please add logo first.");
       this.isLoading = false;
       return;
     }
     let value = this.initialForm.value;
-    this.http.post("InitialRegistration/InitialOrgRegistration", value).then((res:ResponseModel) => {
+    let formData = new FormData();
+    formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
+    let files = {
+      FileId: 0,
+      Email: value.EmailId,
+      CompanyId: 0,
+      FileDescription: "Logo",
+      FileRole: "Company Primary Logo"
+    };
+    formData.append('FileDetail', JSON.stringify(files));
+    formData.append('RegistrationDetail', JSON.stringify(value));
+    this.http.post("InitialRegistration/InitialOrgRegistration", formData).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         Toast("Registration done successfully");
         $('#messageModal').modal('show');
@@ -103,6 +121,33 @@ export class InitialpageComponent implements OnInit {
         month = value - 1;
 
       this.initialForm.get('DeclarationEndMonth').setValue(month);
+    }
+  }
+
+  fireBrowser() {
+    this.FileDocumentList = [];
+    this.FileDocumentList = [];
+    $('#uploadCompanyPrimaryLogo').click();
+  }
+
+  logoFile(event: any) {
+    if (event.target.files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (event: any) => {
+        this.companyLogo = event.target.result;
+      };
+      let selectedfile = event.target.files;
+      let file = <File>selectedfile[0];
+      let item: Files = new Files();
+      item.FileName = file.name;
+      item.FileType = file.type;
+      item.FileSize = (Number(file.size)/1024);
+      item.FileExtension = file.type;
+      item.DocumentId = 0;
+      item.ParentFolder = '';
+      this.FileDocumentList.push(item);
+      this.FilesCollection.push(file);
     }
   }
 
