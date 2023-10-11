@@ -33,6 +33,8 @@ export class ManageReviewComponent implements OnInit {
   userNameIcon: string = "";
   selectedEmploye: any = null;
   selectedTeam: any = null;
+  promotionAndHikeForm: FormGroup;
+  selectedPromotionAndHike: any = null;
 
   constructor(private nav:iNavigation,
               private http: AjaxService,
@@ -181,22 +183,33 @@ export class ManageReviewComponent implements OnInit {
 
   proposedHikeAmountCheck(e: any, i: number) {
     let name = e.target.attributes.name.value;
-    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
     let value = Number(e.target.value);
     if (value > 0) {
       if (name == "ProposedHikePercentage") {
-        let ctc = formArray.controls[i].get("cTC").value;
-        let hikeAmount = ((ctc * value)/100).toFixed(2);
-        formArray.controls[i].get("hikeAmount").setValue(hikeAmount);
-        formArray.controls[i].get("estimatedSalary").setValue(ctc + Number(hikeAmount));
+        let hikeAmount = ((this.selectedPromotionAndHike.cTC * value)/100).toFixed(2);
+        this.selectedPromotionAndHike.hikeAmount = hikeAmount;
+        this.selectedPromotionAndHike.estimatedSalary = this.selectedPromotionAndHike.cTC + Number(hikeAmount);
       } else {
-        let ctc = formArray.controls[i].get("cTC").value;
-        let hikePercentage = ((value * 100)/ctc).toFixed(2);
-        formArray.controls[i].get("hikePercentage").setValue(hikePercentage);
-        formArray.controls[i].get("estimatedSalary").setValue(ctc + value);
+        let hikePercentage = ((value * 100)/this.selectedPromotionAndHike.cTC).toFixed(2);
+        this.selectedPromotionAndHike.hikePercentage = hikePercentage;
+        this.selectedPromotionAndHike.estimatedSalary = this.selectedPromotionAndHike.cTC + value;
       }
-      this.isTotalAmountExceed();
     }
+    // let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    // if (value > 0) {
+    //   if (name == "ProposedHikePercentage") {
+    //     let ctc = formArray.controls[i].get("cTC").value;
+    //     let hikeAmount = ((ctc * value)/100).toFixed(2);
+    //     formArray.controls[i].get("hikeAmount").setValue(hikeAmount);
+    //     formArray.controls[i].get("estimatedSalary").setValue(ctc + Number(hikeAmount));
+    //   } else {
+    //     let ctc = formArray.controls[i].get("cTC").value;
+    //     let hikePercentage = ((value * 100)/ctc).toFixed(2);
+    //     formArray.controls[i].get("hikePercentage").setValue(hikePercentage);
+    //     formArray.controls[i].get("estimatedSalary").setValue(ctc + value);
+    //   }
+    //   this.isTotalAmountExceed();
+    // }
   }
 
   isTotalAmountExceed() {
@@ -308,5 +321,20 @@ export class ManageReviewComponent implements OnInit {
       ErrorToast(e.error);
       this.isLoading = false;
     })
+  }
+
+  promotionHikePopUp(item: FormGroup) {
+    this.promotionAndHikeForm = item;
+    this.selectedPromotionAndHike = item.value;
+    console.log(this.selectedPromotionAndHike);
+    $("#promotionHikeModal").modal('show');
+  }
+
+  applyPromotionHikeChanges() {
+    if (this.promotionAndHikeForm.valid) {
+      let item = this.appraisalHikeForm.value;
+      // this.siteURLForm.get("Presentation").setValue(this.siteURL);
+
+    }
   }
  }

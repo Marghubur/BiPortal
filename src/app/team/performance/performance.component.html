@@ -478,7 +478,7 @@
               <div class="col-md-5">
                 <div class="d-flex align-items-center justify-content-between">
                   <small>OVERALL PROGRESS</small>
-                  <h6>{{selectedObjective.CurrentValue * 100 / selectedObjective.TargetValue}} {{selectedObjective.ProgressMeassureType == 1 ? '%' : ''}}</h6>
+                  <h6>{{selectedObjective.CurrentValue * 100 / selectedObjective.TargetValue | number: '1.2-2'}} {{selectedObjective.ProgressMeassureType == 1 ? '%' : ''}}</h6>
                 </div>
                 <p class="mb-0"><ngb-progressbar [showValue]="false" [type]="selectedObjective.Status == 2 ? 'success' : selectedObjective.Status == 1 ? 'secondary' : selectedObjective.Status == 3 ? 'warning' : selectedObjective.Status == 4 ? 'danger' : 'dark'" [value]="selectedObjective.CurrentValue * 100 / selectedObjective.TargetValue"></ngb-progressbar></p>
               </div>
