@@ -206,7 +206,8 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       ReviewEndDate: new FormControl(this.currentApprisalCycle.ReviewEndDate, [Validators.required]),
       IsHikeApproval: new FormControl(this.currentApprisalCycle.IsHikeApproval),
       AppraisalDetailId: new FormControl(this.currentApprisalCycle.AppraisalDetailId),
-      ApprovalWorkflowId: new FormControl(this.currentApprisalCycle.ApprovalWorkflowId)
+      ApprovalWorkflowId: new FormControl(this.currentApprisalCycle.ApprovalWorkflowId),
+      AppraisalName: new FormControl(this.currentApprisalCycle.AppraisalName, [Validators.required])
     });
     this.appraisalForm.controls['IsRaterSelectedByManager'].disable();
     this.appraisalForm.controls['CanRaterViewAppraisal'].disable();
@@ -227,8 +228,8 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     let value = e.target.value;
     if (value) {
       this.http.get(`eps/apprisalcatagory/getCategoryByCategoryId/${value}`, true).then(res => {
-        if (res.ResponseBody && res.ResponseBody.length > 0) {
-          this.appraisalDetailAndCategory = res.ResponseBody;
+        if (res.ResponseBody && res.ResponseBody.AppraisalCategory.length > 0) {
+          this.appraisalDetailAndCategory = res.ResponseBody.AppraisalCategory;
           let data: ApprisalCycle = this.appraisalDetailAndCategory[0];
           data.ObjectiveCatagoryId = 0;
           data.ObjectiveCatagoryType = null;
@@ -501,4 +502,5 @@ export class ApprisalCycle {
   RolesId: string = null;
   Tags: Array<string> = [];
   ApprovalWorkflowId: number = 0;
+  AppraisalName: string = null;
 }

@@ -44,6 +44,7 @@ export class AppraisalSettingComponent implements OnInit {
   designation: Array<any> = [];
   appraisalDetailAndCategory: Array<ApprisalCycle> = [];
   currentApprisalCycle:ApprisalCycle = new ApprisalCycle();
+  selectedAppraisalCycle:any = null;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -428,6 +429,35 @@ export class AppraisalSettingComponent implements OnInit {
       if (this.apprisalCycleDetail.length > 0)
       this.currentApprisalCycle = this.apprisalCycleDetail[0];
       this.getObjectiveByObjtiveId();
+    }
+  }
+
+  changeAppraisalStatusPopUp(item: any) {
+    this.selectedAppraisalCycle = item;
+    $("#confirmationModal").modal('show');
+  }
+
+  changeAppraisalStatus() {
+    if (this.selectedAppraisal) {
+      this.isLoading = true;
+      let value = {
+        AppraisalDetailId: this.selectedAppraisalCycle.AppraisalDetailId,
+        IsActiveCycle: !this.selectedAppraisalCycle.IsActiveCycle
+      }
+      this.http.post("eps/apprisalcatagory/manageAppraisalCategory", value, true).then((res:ResponseModel) => {
+        if (res.ResponseBody) {
+          this.buildAppraisalCategory(res.ResponseBody);
+          if (value.IsActiveCycle)
+            Toast("Appraisal cycle activated successfully");
+          else
+            Toast("Appraisal cycle stoped successfully");
+
+          $("#confirmationModal").modal('hide')
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
     }
   }
 }

@@ -172,11 +172,25 @@
                           </div>
                           <div class="th fe-2">
                             <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                              <input class="form-control form-control-sm" (keydown.esc)="resetFilter()" readonly
                                 (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ObjectiveCatagoryType"
                                 placeholder="Search by Apprisal Name">
                               <div class="t-filter" (click)="arrangeDetails(orderByObjectiveCatagoryTypeAsc, 'ObjectiveCatagoryType')">
                                 <a href="javascript:void()" class="pe-2">Appraisal Name</a>
+                                <i class="fa fa-sort-amount-asc"
+                                  [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || !orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
+                                <i class="fa fa-sort-amount-desc"
+                                  [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="th fe-2">
+                            <div class="cell-wrapper">
+                              <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                                (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ObjectiveCatagoryType"
+                                placeholder="Search by Apprisal Name">
+                              <div class="t-filter" (click)="arrangeDetails(orderByObjectiveCatagoryTypeAsc, 'ObjectiveCatagoryType')">
+                                <a href="javascript:void()" class="pe-2">Category Name</a>
                                 <i class="fa fa-sort-amount-asc"
                                   [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || !orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
                                 <i class="fa fa-sort-amount-desc"
@@ -257,12 +271,13 @@
                             <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
                             <div class="td align-middle d-flex justify-content-between fe-2">
                               <div class="text-truncate">
+                                {{item.AppraisalName}}
+                              </div>
+                            </div>
+                            <div class="td align-middle d-flex justify-content-between fe-2">
+                              <div class="text-truncate">
                                 {{item.ObjectiveCatagoryType}}
                               </div>
-                              <!-- <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-success pe-3"
-                                type="button">
-                                <i class="fa fa-play" aria-hidden="true"></i>
-                              </a> -->
                             </div>
                             <div class="td align-middle text-truncate fe-3">
                               <div class="cell-wrapper text-truncate">
@@ -293,12 +308,12 @@
                               <a href="javascript:void(0)" class="ms-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Apprisal">
                                 <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                               </a>
-                              <!-- <a href="javascript:void(0)" *ngIf="item.IsActiveCycle" class="ms-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Stop Apprisal">
+                              <a href="javascript:void(0)" *ngIf="item.IsActiveCycle" class="ms-3" (click)="changeAppraisalStatusPopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Stop Apprisal">
                                 <i class="fa fa-stop text-danger" aria-hidden="true"></i>
                               </a>
-                              <a href="javascript:void(0)" *ngIf="!item.IsActiveCycle" class="ms-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Start Apprisal">
+                              <a href="javascript:void(0)" *ngIf="!item.IsActiveCycle" class="ms-3" (click)="changeAppraisalStatusPopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Start Apprisal">
                                 <i class="fa fa-play text-success" aria-hidden="true"></i>
-                              </a> -->
+                              </a>
                             </div>
                           </div>
                         </ng-container>
@@ -461,24 +476,6 @@
             <label class="form-label">Description</label>
             <app-editor [height]="15" [content]="htmlText"></app-editor>
           </div>
-          <!-- <div class="col-md-3">
-            <label class="form-label">Who can see</label>
-            <div class="btn-group d-block" role="group" aria-label="Basic radio toggle button group">
-              <input type="radio" value="true" class="btn-check" formControlName="canManagerSee" name="canManagerSee" id="btnradio22" autocomplete="off"
-                [ngClass]="{'error-field': isSubmitted && f.canManagerSee.errors !== null && f.canManagerSee.errors.required}">
-              <label class="btn btn-outline-primary" for="btnradio22">Manager</label>
-
-              <input type="radio" value="false" class="btn-check" formControlName="canManagerSee" name="canManagerSee" id="btnradio23" autocomplete="off"
-                [ngClass]="{'error-field': isSubmitted && f.canManagerSee.errors !== null && f.canManagerSee.errors.required}">
-              <label class="btn btn-outline-primary" for="btnradio23">Everyone</label>
-            </div>
-          </div> -->
-          <!-- <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" formControlName="isIncludeReview" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-              Include in review
-            </label>
-          </div> -->
           <div class="mt-3">
             <label class="form-label d-block">Progress measured as</label>
             <div class="form-check form-check-inline">
@@ -486,11 +483,6 @@
                [ngClass]="{'error-field': isSubmitted && m.ProgressMeassureType.errors !== null && m.ProgressMeassureType.errors.required}">
               <label class="form-check-label" for="inlineRadio1">Percent Complete</label>
             </div>
-            <!-- <div class="form-check form-check-inline">
-              <input class="form-check-input" formControlName="progressMeassureType" type="radio" name="progressMeassureType" id="inlineRadio2" value="3" (click)="changeProgressMeassur($event)"
-               [ngClass]="{'error-field': isSubmitted && f.progressMeassureType.errors !== null && f.progressMeassureType.errors.required}">
-              <label class="form-check-label" for="inlineRadio2">Completed/ Not Completed</label>
-            </div> -->
             <div class="row">
               <ng-container *ngIf="objectForm.controls.ProgressMeassureType.value == '1'">
                 <div class="col-md-6 mt-3">
@@ -624,3 +616,28 @@
   </div>
 </div>
 <!-- Close Modal -->
+
+
+<!--Appraisal Status Confirmation Modal -->
+<div class="modal fade" id="confirmationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-3">
+      <div class="modal-header borde-bottom-0">
+        <h1 class="modal-title fs-5" id="confirmationModalLabel">Active/Decative appraisal</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fw-bold text-danger" *ngIf="selectedAppraisalCycle != null">
+        Are you want {{selectedAppraisalCycle.IsActiveCycle ? "de-active" : 'Active'}} {{selectedAppraisalCycle.AppraisalName}}
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary-c" (click)="changeAppraisalStatus()">
+          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <span class="ps-2">
+           save
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

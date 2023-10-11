@@ -123,7 +123,7 @@
                                 </div>
                               </td>
                               <ng-container *ngIf="(item.PresentDayStatus == 3 || item.PresentDayStatus == 4 || item.IsOnLeave)">
-                                <td colspan="6">
+                                <td colspan="6" class="align-middle">
                                   <div class="fw-bold text-success text-center">{{item.PresentDayStatus == 3 ? "Weekly-Off" : item.PresentDayStatus == 4 ? "Holiday" : "Leave"}} ({{item.AttendanceDay | date: 'EEEE'}})</div>
                                 </td>
                               </ng-container>

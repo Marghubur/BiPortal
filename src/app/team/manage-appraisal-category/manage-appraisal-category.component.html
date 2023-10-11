@@ -11,7 +11,13 @@
     </div>
     <div *ngIf="isPageReady" class="px-4 my-3">
       <form [formGroup]="appraisalForm" *ngIf="appraisalForm">
-        <div class="row align-items-center justify-content-end">
+        <div class="row align-items-center justify-content-between">
+          <div class="col-md-6">
+            <label class="form-label">Name of the Appraisal</label>
+            <input type="text" class="form-control" placeholder="Appraisal Name" formControlName="AppraisalName"
+            oninput="this.value = this.value.toUpperCase()" maxlength="40" [readOnly]="isAppraisalCycleInSamePeriod"
+            [ngClass]="{'error-field': isSubmitted && f.ObjectiveCatagoryType.errors !== null && f.ObjectiveCatagoryType.errors.required}">
+          </div>
           <div class="col-md-4 mb-3">
             <select class="form-select" (change)="viewAppraisalDetails($event)">
               <option value="" disabled selected>Select Appraisal Cycle</option>
@@ -19,15 +25,15 @@
             </select>
           </div>
         </div>
-        <div class="row">
+        <div class="row mt-3">
           <div class="col-md-6">
-            <label class="form-label">Name of the Apprisal</label>
-            <input type="text" class="form-control" placeholder="Apprisal Name" formControlName="ObjectiveCatagoryType"
+            <label class="form-label">Name of the Appraisal Category</label>
+            <input type="text" class="form-control" placeholder="Appraisal Category Name" formControlName="ObjectiveCatagoryType"
             oninput="this.value = this.value.toUpperCase()" maxlength="40"
             [ngClass]="{'error-field': isSubmitted && f.ObjectiveCatagoryType.errors !== null && f.ObjectiveCatagoryType.errors.required}">
           </div>
           <div class=" col-md-3">
-            <label class="form-label">Apprisal Cycle Start Date</label>
+            <label class="form-label">Appraisal Cycle Start Date</label>
             <form class="form-inline">
               <div class="form-group w-100">
                 <div class="input-group w-100" [ngClass]="{'error-field': isSubmitted && f.AppraisalCycleStartDate.errors !== null && f.AppraisalCycleStartDate.errors.required}">
@@ -43,7 +49,7 @@
             </form>
           </div>
           <div class=" col-md-3">
-            <label class="form-label">Apprisal Cycle End Date</label>
+            <label class="form-label">Appraisal Cycle End Date</label>
             <form class="form-inline">
               <div class="form-group w-100">
                 <div class="input-group w-100" [ngClass]="{'error-field': isSubmitted && f.AppraisalCycleEndDate.errors !== null && f.AppraisalCycleEndDate.errors.required}">
