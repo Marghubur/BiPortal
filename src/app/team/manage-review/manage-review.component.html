@@ -36,21 +36,19 @@
                             </a>
                             <p class="mb-0 fs-6">
                               <span class="fw-bold text-primary-dc">
-                                <u>{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}})</u>
+                                <a href="javascript:void(0)" (click)="promotionHikePopUp(item)">{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}})</a>
                               </span>
                             </p>
                             <p class="ms-2 mb-0 fs-6">
                               <span class="">Salary: </span>
-                              <span>{{item.get("cTC").value}}</span>
+                              <span><i class="fa fa-inr px-1"></i>{{item.get("cTC").value}}</span>
                             </p>
                           </div>
                           <div class="col-2 d-flex flex-row-reverse">
                             <div class="col-auto me-0 pe-0">
-                              <button (click)="showOffCanvas()"
-                                class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
-                                  [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i> 
-                                  Approve
-                              </button>
+                              <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-decoration-none">
+                                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-eye': !isLoading}"></i>
+                              </a>
                             </div>
                           </div>
                           <div class="collapse show">
@@ -58,7 +56,7 @@
                               <div class="row align-items-center justify-content-start">
                                 <div class="col-md-6 text-truncate">
                                   <span class="fw-bold">Estimated:</span>
-                                  {{item.get("estimatedSalary").value}}
+                                  <i class="fa fa-inr px-1"></i>{{item.get("estimatedSalary").value}}
                                 </div>
                               </div>
                             </div>
@@ -123,7 +121,7 @@
                             </a>
                           </td>
                         </tr>
-                      </tbody> 
+                      </tbody>
                     </table> -->
                   </form>
               </ng-container>
@@ -186,7 +184,7 @@
               <div class="row">
                 <div class="d-flex align-items-center col-md-6">
                   <h6 class="fw-bold mb-0">Performance Review cycle {{objectives[0].AppraisalCycleStartDate | date}} - {{objectives[0].AppraisalCycleEndDate | date}}</h6>
-                  <span class="badge bg-warning ms-2">{{objectives[0].PerformanceStatus == 2 ? 'Pending' : objectives[0].PerformanceStatus == 5 ? 'Rejected' : objectives[0].PerformanceStatus == 8 ? 'Submitted' : 'Approved'}}</span>
+                  <span class="badge ms-2" [ngClass]="{'text-bg-danger': objectives[0].PerformanceStatus == 5, 'text-bg-success': objectives[0].PerformanceStatus == 9, 'text-bg-primary': objectives[0].PerformanceStatus == 2, 'text-bg-info': objectives[0].PerformanceStatus == 8, 'text-bg-warning': objectives[0].PerformanceStatus == 0}">{{objectives[0].PerformanceStatus == 2 ? 'Pending' : objectives[0].PerformanceStatus == 5 ? 'Rejected' : objectives[0].PerformanceStatus == 8 ? 'Submitted' : objectives[0].PerformanceStatus == 9 ? 'Approved': 'Not Submitted'}}</span>
                 </div>
                 <div class="col-md-6">
                   <div class="d-flex align-items-center">
@@ -266,5 +264,70 @@
         </div>
       </div>
     </ng-container> -->
+  </div>
+</div>
+
+<!--Appraisal Hike Modal -->
+<div class="modal fade" id="promotionHikeModal" tabindex="-1" aria-labelledby="promotionHikeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="promotionHikeModalLabel">Promotion and Hike Detail</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedPromotionAndHike != null">
+        <div class="">
+          <label class="form-label col-md-4">Name:</label>
+          <label class="form-label ">{{selectedPromotionAndHike.fullName}}</label>
+        </div>
+        <div class="mt-3">
+          <label class="form-label col-md-4">Present Salary:</label>
+          <label class="form-label"><i class="fa fa-inr pe-1"></i>{{selectedPromotionAndHike.cTC}}</label>
+        </div>
+        <div class="mt-3 d-flex align-items-center col-md-12">
+          <label class="form-label col-md-4">Promoted Designation</label>
+          <div class="col-md-8">
+            <select class="form-select" [(ngModel)]="selectedPromotionAndHike.promotedDesignation">
+              <option value="0" >Same Designation</option>
+              <option [value]="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-3 d-flex align-items-center col-md-12">
+          <label class="form-label col-md-4">Proposed Hike Percentage</label>
+          <div class="col-md-8 input-group-c">
+            <input type="text" [DecimalNumber]="5"  name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)"  class="form-control" [(ngModel)]="selectedPromotionAndHike.hikePercentage">
+            <span class="input-group-text" id="basic-addon1">%</span>
+          </div>
+        </div>
+        <div class="mt-3 d-flex align-items-center col-md-12">
+          <label class="form-label col-md-4">Proposed Hike Amount</label>
+          <div class="col-md-8 input-group-c">
+            <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
+            <input type="text" [DecimalNumber]="10"  name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)"  class="form-control rounded-end-0" [(ngModel)]="selectedPromotionAndHike.hikeAmount">
+          </div>
+        </div>
+        <div class="mt-3">
+          <label class="form-label col-md-4">EstimatedSalary:</label>
+          <label class="form-label"><i class="fa fa-inr pe-1"></i>{{selectedPromotionAndHike.estimatedSalary}}</label>
+        </div>
+        <div class="d-flex align-items-center">
+          <label class="form-label col-md-4">Rating:</label>
+          <div class="col-md-8">
+            <ngb-rating [(ngModel)]="selectedPromotionAndHike.rating" [max]="5"></ngb-rating>
+          </div>
+        </div>
+        <div class="mt-3 d-flex align-items-center col-md-12">
+          <label class="form-label pe-2 col-md-4">Comment</label>
+          <div class="col-md-8">
+            <textarea rows="4" placeholder="Comments" type="text" class="form-control" [(ngModel)]="selectedPromotionAndHike.comments"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="applyPromotionHikeChanges()">Save</button>
+      </div>
+    </div>
   </div>
 </div>
