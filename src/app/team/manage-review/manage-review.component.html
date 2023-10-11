@@ -28,7 +28,7 @@
                 </div>
                   <form [formGroup]="appraisalHikeForm">
                     <div formArrayName="ProjectMemberHike">
-                      <ng-container *ngFor="let item of hikeDetail.controls; let i = index" [formGroupName]="i">
+                      <ng-container *ngFor="let item of hikeDetail.controls; let i = index;" [formGroupName]="i">
                         <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card">
                           <div class="d-flex col-md-10">
                             <a href="javascript:void(0)" class="me-2">
@@ -36,12 +36,28 @@
                             </a>
                             <p class="mb-0 fs-6">
                               <span class="fw-bold text-primary-dc">
-                                <a href="javascript:void(0)" (click)="promotionHikePopUp(item)">{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}})</a>
+                                <a href="javascript:void(0)" (click)="promotionHikePopUp(item)">{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}} months)</a>
                               </span>
                             </p>
+                            <span class="ps-2">|</span>
                             <p class="ms-2 mb-0 fs-6">
                               <span class="">Salary: </span>
                               <span><i class="fa fa-inr px-1"></i>{{item.get("cTC").value}}</span>
+                            </p>
+                            <span class="ps-2">|</span>
+                            <p class="ms-2 mb-0 fs-6">
+                              <span class="">Proposed Hike Percentage: </span>
+                              <span><i class="fa fa-inr px-1"></i>{{item.get("hikePercentage").value}}</span>
+                            </p>
+                            <span class="ps-2">|</span>
+                            <p class="ms-2 mb-0 fs-6">
+                              <span class="">Proposed Hike Amount: </span>
+                              <span><i class="fa fa-inr px-1"></i>{{item.get("hikeAmount").value}}</span>
+                            </p>
+                            <span class="ps-2">|</span>
+                            <p class="ms-2 mb-0 fs-6">
+                              <span class="">Estimated Salary: </span>
+                              <span><i class="fa fa-inr px-1"></i>{{item.get("estimatedSalary").value}}</span>
                             </p>
                           </div>
                           <div class="col-2 d-flex flex-row-reverse">
@@ -55,8 +71,12 @@
                             <div class="card card-body border-0">
                               <div class="row align-items-center justify-content-start">
                                 <div class="col-md-6 text-truncate">
-                                  <span class="fw-bold">Estimated:</span>
-                                  <i class="fa fa-inr px-1"></i>{{item.get("estimatedSalary").value}}
+                                  <span class="fw-bold">Comment: </span>
+                                  {{item.get("comments").value}}
+                                </div>
+                                <div class="col-auto">
+                                  <span class="">Rating: </span>
+                                  <span>{{item.get("rating").value}}/5</span>
                                 </div>
                               </div>
                             </div>
