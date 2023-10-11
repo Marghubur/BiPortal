@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -39,6 +39,7 @@ export class ManageReviewComponent implements OnInit {
   constructor(private nav:iNavigation,
               private http: AjaxService,
               private fb: FormBuilder,
+              changeDetectorRef: ChangeDetectorRef ,
               private user: UserService) {}
 
   ngOnInit(): void {
@@ -194,6 +195,9 @@ export class ManageReviewComponent implements OnInit {
         this.selectedPromotionAndHike.hikePercentage = hikePercentage;
         this.selectedPromotionAndHike.estimatedSalary = this.selectedPromotionAndHike.cTC + value;
       }
+    } else {
+      this.selectedPromotionAndHike.hikePercentage = 0;
+      this.selectedPromotionAndHike.hikeAmount = 0;
     }
     // let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
     // if (value > 0) {
@@ -331,10 +335,15 @@ export class ManageReviewComponent implements OnInit {
   }
 
   applyPromotionHikeChanges() {
-    if (this.promotionAndHikeForm.valid) {
-      let item = this.appraisalHikeForm.value;
-      // this.siteURLForm.get("Presentation").setValue(this.siteURL);
-
-    }
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    let value = formArray.value.find(x => x.employeeId == this.selectedPromotionAndHike.employeeId);
+    value.promotedDesignation = this.selectedPromotionAndHike.promotedDesignation;this.selectedPromotionAndHike.promotedDesignation;
+    value.hikePercentage = this.selectedPromotionAndHike.hikePercentage;
+    value.hikeAmount = this.selectedPromotionAndHike.hikeAmount;
+    value.estimatedSalary =this.selectedPromotionAndHike.estimatedSalary;
+    value.rating = this.selectedPromotionAndHike.rating;
+    value.comments = this.selectedPromotionAndHike.comments;
+    this.appraisalHikeForm.controls['ProjectMemberHike'].patchValue(formArray.value);
+    $("#promotionHikeModal").modal('hide');
   }
  }
