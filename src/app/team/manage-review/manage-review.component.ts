@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
@@ -20,7 +20,6 @@ export class ManageReviewComponent implements OnInit {
   appraisalHikeForm: FormGroup;
   isLoading: boolean = false;
   isAmountExceed: boolean = false;
-  roles: Array<any> = [];
   selectedProject: any = null;
   projectDetails: Array<any> = [];
   allProjectAppraisal: Array<any> = [];
@@ -35,11 +34,11 @@ export class ManageReviewComponent implements OnInit {
   selectedTeam: any = null;
   promotionAndHikeForm: FormGroup;
   selectedPromotionAndHike: any = null;
+  isSubmitted: boolean = false;
 
   constructor(private nav:iNavigation,
               private http: AjaxService,
               private fb: FormBuilder,
-              changeDetectorRef: ChangeDetectorRef ,
               private user: UserService) {}
 
   ngOnInit(): void {
@@ -60,6 +59,9 @@ export class ManageReviewComponent implements OnInit {
         project = project.filter(x => x.Team == this.selectedTeam.Team);
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
         this.appraisalReviewDetail = res.ResponseBody.ReviewDetail;
+        if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
+          this.isSubmitted = true;
+
         if (project.length > 0) {
           let result = project.reduce((a, b) => {
             a[b.ProjectId] = a[b.ProjectId] || [];
@@ -108,7 +110,6 @@ export class ManageReviewComponent implements OnInit {
 
   buildProjectMemberHike(): FormArray {
     let data = this.selectedProject.ProjectMembers;
-    console.log(data)
     let dataArray: FormArray = this.fb.array([]);
     if(data != null && data.length > 0) {
       let i = 0;
@@ -124,7 +125,7 @@ export class ManageReviewComponent implements OnInit {
           assignedOn: new FormControl(data[i].AssignedOn),
           cTC: new FormControl(data[i].CTC),
           employeeId: new FormControl(data[i].EmployeeId),
-          promotedDesignation: new FormControl(reviewDetail != null ? reviewDetail.PromotedDesignation : 0),
+          promotedDesignation: new FormControl({value: reviewDetail != null ? reviewDetail.PromotedDesignation : 0, disabled: true}),
           hikePercentage: new FormControl(reviewDetail == null ? 0 : reviewDetail.HikePercentage),
           hikeAmount: new FormControl(reviewDetail == null ? 0 : reviewDetail.HikeAmount),
           experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0),
@@ -239,6 +240,11 @@ export class ManageReviewComponent implements OnInit {
 
   applyHikeAndPromotion() {
     this.isLoading = true;
+    if (this.isSubmitted) {
+      ErrorToast("You already submmited your review");
+      this.isLoading = false;
+      return;
+    }
     if (this.appraisalHikeForm.invalid) {
       ErrorToast("Please fill all the manditory field");
       this.isLoading = false;
@@ -253,6 +259,8 @@ export class ManageReviewComponent implements OnInit {
     this.http.post("eps/promotion/addPromotionAndHike", value, true).then(res => {
       if (res.ResponseBody) {
         this.appraisalReviewDetail = res.ResponseBody;
+        if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
+          this.isSubmitted = true;
         this.isLoading = false;
         Toast("Appraisal cycle started successfully");
       } else {
@@ -330,7 +338,7 @@ export class ManageReviewComponent implements OnInit {
   promotionHikePopUp(item: FormGroup) {
     this.promotionAndHikeForm = item;
     this.selectedPromotionAndHike = item.value;
-    console.log(this.selectedPromotionAndHike);
+    this.promotionAndHikeForm.controls['promotedDesignation'].enable();
     $("#promotionHikeModal").modal('show');
   }
 
@@ -344,6 +352,11 @@ export class ManageReviewComponent implements OnInit {
     value.rating = this.selectedPromotionAndHike.rating;
     value.comments = this.selectedPromotionAndHike.comments;
     this.appraisalHikeForm.controls['ProjectMemberHike'].patchValue(formArray.value);
+    this.promotionAndHikeForm.controls['promotedDesignation'].disable();
     $("#promotionHikeModal").modal('hide');
+  }
+
+  closePromotionHikePopup() {
+    this.promotionAndHikeForm.controls['promotedDesignation'].disable();
   }
  }

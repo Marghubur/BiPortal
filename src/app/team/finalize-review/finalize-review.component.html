@@ -1,0 +1,191 @@
+<div class="col-12 full-v main-container">
+  <div class="x_panel mh-auto">
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Appraisal Finalizer Page'"></app-breadcrums>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <ng-container *ngIf="isPageReady">
+        <ng-container *ngIf="allAppraisalFinalizer.length > 0">
+          <div class="col-md-12 mt-3">
+            <div class="alert alert-success" role="alert" *ngIf="isSubmitted">
+              <i class="fa-solid fa-bell fa-lg pe-2 text-dark"></i>
+              <span>Review details are submiited successfully</span>
+            </div>
+            <ng-container *ngFor="let item of allAppraisalFinalizer">
+              <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card py-3 custom-border">
+                <div class="d-flex col-md-10 align-items-center">
+                  <p class="mb-0 fs-6">
+                    <span class="fw-bold text-primary-dc">
+                      Project Name: {{item.ProjectName}}
+                    </span>
+                  </p>
+                  <span class="px-3 fw-bold text-dark">|</span>
+                  <p class="ms-2 mb-0 fs-6">
+                    Manager: {{item.ManagerName}}
+                  </p>
+                  <span class="px-3 fw-bold text-dark">|</span>
+                  <p class="ms-2 mb-0 fs-6">
+                    <span class="">Reacted On: {{item.ReactedOn | date}}</span>
+                  </p>
+                </div>
+                <div class="col-auto">
+                  <a href="javascript:void(0)" (click)="getAppraisalFinalize(item.ProjectManagerId)">View Hike and Promotion</a>
+                </div>
+                <div class="d-flex col-md-12 mt-2 align-items-center">
+                  <p class="ms-2 mb-0 fs-6">
+                    Teams :
+                    <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let item of item.Team">{{item}}</span>
+                  </p>
+                  <span class="px-3 fw-bold text-dark">|</span>
+                  <p class="ms-2 mb-0 fs-6">
+                    Members :
+                    <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let item of item.MemberName">{{item}}</span>
+                  </p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div class="text-end mt-3">
+            <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading || isSubmitted">Cancel</button>
+            <button class="btn btn-primary-c ms-2"  [disabled]="isLoading || isSubmitted > 0">
+              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
+              <span class="ps-2">
+                Save
+              </span>
+            </button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="allAppraisalFinalizer.length == 0 ">
+          <div class="fw-bold text-dark my-5 py-5">
+            <p class="my-5 py-5 text-center fs-4">
+              Record not found.
+            </p>
+          </div>
+        </ng-container>
+      </ng-container>
+      <!-- <ng-container *ngIf="!isPageReady">
+        <div class="data-loading-loader">
+          <div class="py-5 my-5">
+            <h6 class="fw-bold fs-3 text-center text-dark">Project appraisal budget is loading</h6>
+            <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+              <div class="col-md-12 modal-container  text-center cog-wheel">
+                <img src="assets/images/cog.gif" alt="" />
+                <h6 class="modal-title title-message">
+                  Please Wait ........
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container> -->
+    </div>
+  </div>
+</div>
+
+
+<!-- <ng-container *ngIf="allAppraisalFinalizer.length > 0">
+
+  <div class="text-end mt-3">
+    <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading || isSubmitted">Cancel</button>
+    <button class="btn btn-primary-c ms-2"  [disabled]="isLoading || isSubmitted > 0">
+      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
+      <span class="ps-2">
+        Save
+      </span>
+    </button>
+  </div>
+</ng-container> -->
+
+
+<div class="modal fade" id="viewMemberModal" tabindex="-1" aria-labelledby="viewMemberModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="viewMemberModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12 mt-3">
+          <ng-container *ngFor="let item of allMemberAppraisalFinalizer">
+            <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card pb-4 pt-2 custom-border">
+              <div class="d-flex col-md-10 align-items-center">
+                <a href="javascript:void(0)" class="me-2">
+                  <i class="fa fa-user-circle-o fa-lg"></i>
+                </a>
+                <p class="mb-0 fs-6">
+                  <span class="fw-bold text-primary-dc">
+                    <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSubmitted}">{{item.FirstName}} {{item.LastName}} (Exp.: {{item.Experience}} months)</a>
+                  </span>
+                </p>
+                <span class="px-2">|</span>
+                <div class="col-auto d-flex align-items-center">
+                  <span class="pe-1">Rating: </span>
+                  <ngb-rating [readonly]="true" rate="{{item.Rating}}" [max]="5"></ngb-rating>
+                </div>
+              </div>
+              <div class="d-flex col-md-12 mt-2">
+                <p class="ms-2 mb-0 fs-6">
+                  <i class="fa-solid fa-sack-dollar fa-lg pe-2 text-danger"></i>
+                  <span class="">Salary: </span>
+                  <span><i class="fa fa-inr px-1"></i>{{item.CTC}}</span>
+                </p>
+                <span class="px-3 fw-bold text-dark">|</span>
+                <p class="ms-2 mb-0 fs-6">
+                  <span class="">Proposed Hike Percentage: </span>
+                  <span>{{item.HikePercentage}} <i class="fa-solid fa-percent px-1"></i></span>
+                </p>
+                <span class="px-3 fw-bold text-dark">|</span>
+                <p class="ms-2 mb-0 fs-6">
+                  <span class="">Proposed Hike Amount: </span>
+                  <span><i class="fa fa-inr px-1"></i>{{item.HikeAmount}}</span>
+                </p>
+                <span class="px-3 fw-bold text-dark">|</span>
+                <p class="ms-2 mb-0 fs-6">
+                  <i class="fa-solid fa-hand-holding-dollar fa-lg pe-2 text-danger"></i>
+                  <span class="">Estimated Salary: </span>
+                  <span><i class="fa fa-inr px-1"></i>{{item.EstimatedSalary}}</span>
+                </p>
+                <span class="px-3 fw-bold text-dark">|</span>
+                <div class="col-auto d-flex">
+                  <span class="">Promoted Designation: </span>
+                  <div>
+                    <select [(ngModel)]="item.PromotedDesignation" disabled class="form-control border-0 mt-0 pt-0 transparent-bg">
+                      <option value="0" >Same Designation</option>
+                      <option value="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center justify-content-between mt-2">
+                <div class="col-md-6 text-truncate ms-2">
+                  <span class="fw-bold">Comment: </span>
+                  {{item.Comments}}
+                </div>
+                <a href="javascript:void(0)"  class="fw-bold">
+                  <span class="pe-2">Objective's</span>
+                  <i class="fa" data-bs-toggle="tooltip" data-bs-placement="right" title="View objective" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-eye': !isLoading}"></i>
+                </a>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="allMemberAppraisalFinalizer.length == 0 ">
+            <div class="fw-bold text-dark my-5 py-5">
+              <p class="my-5 py-5 text-center fs-4">
+                Record not found.
+              </p>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
