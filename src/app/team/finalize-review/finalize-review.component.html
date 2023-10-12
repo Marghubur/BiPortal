@@ -38,13 +38,13 @@
                   <a href="javascript:void(0)" (click)="getAppraisalFinalize(item.ProjectManagerId)">View Hike and Promotion</a>
                 </div>
                 <div class="d-flex col-md-12 mt-2 align-items-center">
-                  <p class="ms-2 mb-0 fs-6">
-                    Teams :
+                  <p class="ms-2 mb-0 fs-6 d-flex flex-warap align-items-center">
+                    <span class="pe-2">Teams :</span>
                     <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let item of item.Team">{{item}}</span>
                   </p>
                   <span class="px-3 fw-bold text-dark">|</span>
-                  <p class="ms-2 mb-0 fs-6">
-                    Members :
+                  <p class="ms-2 mb-0 fs-6 d-flex flex-warap align-items-center">
+                    <span class="pe-2">Members :</span>
                     <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let item of item.MemberName">{{item}}</span>
                   </p>
                 </div>
@@ -69,45 +69,16 @@
           </div>
         </ng-container>
       </ng-container>
-      <!-- <ng-container *ngIf="!isPageReady">
-        <div class="data-loading-loader">
-          <div class="py-5 my-5">
-            <h6 class="fw-bold fs-3 text-center text-dark">Project appraisal budget is loading</h6>
-            <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-              <div class="col-md-12 modal-container  text-center cog-wheel">
-                <img src="assets/images/cog.gif" alt="" />
-                <h6 class="modal-title title-message">
-                  Please Wait ........
-                </h6>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container> -->
     </div>
   </div>
 </div>
 
 
-<!-- <ng-container *ngIf="allAppraisalFinalizer.length > 0">
-
-  <div class="text-end mt-3">
-    <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading || isSubmitted">Cancel</button>
-    <button class="btn btn-primary-c ms-2"  [disabled]="isLoading || isSubmitted > 0">
-      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
-      <span class="ps-2">
-        Save
-      </span>
-    </button>
-  </div>
-</ng-container> -->
-
-
 <div class="modal fade" id="viewMemberModal" tabindex="-1" aria-labelledby="viewMemberModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
+  <div class="modal-dialog modal-fullscreen p-5 modal-dialog-centered">
     <div class="modal-content px-4">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="viewMemberModalLabel">Modal title</h1>
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="viewMemberModalLabel">Promotion and Hike details</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -167,7 +138,7 @@
                   <span class="fw-bold">Comment: </span>
                   {{item.Comments}}
                 </div>
-                <a href="javascript:void(0)"  class="fw-bold">
+                <a href="javascript:void(0)"  class="fw-bold" (click)="showOffCanvas(item)">
                   <span class="pe-2">Objective's</span>
                   <i class="fa" data-bs-toggle="tooltip" data-bs-placement="right" title="View objective" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-eye': !isLoading}"></i>
                 </a>
@@ -183,9 +154,82 @@
           </ng-container>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
+  </div>
+</div>
+
+
+
+<div class="offcanvas offcanvas-end offcanvas-size-xxl"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="riviewObjectiveFinalizeOffCanvas" aria-labelledby="riviewObjectiveFinalizeOffCanvasLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Performance Reviews</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" [disabled]="isLoading"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ng-container *ngIf="isObjectivesReady">
+      <ng-container *ngIf="objectives.length > 0">
+        <div class="d-flex mt-3">
+          <div class="col-auto">
+            <i class="fa fa-circle text-primary-c"></i>
+          </div>
+          <div class="col-md-11 ms-3">
+            <div class="card shadow-sm px-2 py-3">
+              <div class="row">
+                <div class="d-flex align-items-center col-md-6">
+                  <h6 class="fw-bold mb-0">Performance Review cycle {{objectives[0].AppraisalCycleStartDate | date}} - {{objectives[0].AppraisalCycleEndDate | date}}</h6>
+                  <span class="badge ms-2" [ngClass]="{'text-bg-danger': objectives[0].PerformanceStatus == 5, 'text-bg-success': objectives[0].PerformanceStatus == 9, 'text-bg-primary': objectives[0].PerformanceStatus == 2, 'text-bg-info': objectives[0].PerformanceStatus == 8, 'text-bg-warning': objectives[0].PerformanceStatus == 0}">{{objectives[0].PerformanceStatus == 2 ? 'Pending' : objectives[0].PerformanceStatus == 5 ? 'Rejected' : objectives[0].PerformanceStatus == 8 ? 'Submitted' : objectives[0].PerformanceStatus == 9 ? 'Approved': 'Not Submitted'}}</span>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <div class="rounded-icon bg-c text-white">
+                      {{userNameIcon | uppercase}}
+                    </div>
+                    <div class="ms-3 d-flex align-items-center">
+                      <h6 class="mb-0">{{selectedEmploye.FirstName}} {{selectedEmploye.LastName}}</h6>
+                      <small class="ps-2"> | Emp No.: {{selectedEmploye.EmployeeId}}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p>{{objectives[0].UpdatedOn | date}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <ng-container *ngIf="objectives != null && objectives.length > 0">
+            <ng-container *ngFor="let item of objectives; let i=index;">
+              <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
+                <div class="d-flex col-md-12">
+                  <a data-bs-toggle="collapse" (click)="collpaseShowHide('feedback'+i)"  [attr.href]="'#feedback'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#feedback'+i" class="me-3">
+                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                  </a>
+                  <p class="mb-0 fs-6">
+                    <b>{{item.Objective}}:</b>
+                    <label class="d-block">{{item.Description}}</label>
+                  </p>
+                </div>
+                <h6 class="mt-1 mb-0 text-dark ms-3 ps-4"><small>PERFORMANCE RATING </small> {{item.Rating}} out of 5</h6>
+                <div class="bg dark ps-4" [id]="'feedback'+i">
+                  <div class="card card-body border-0">
+                    <small>Feedback:</small>
+                    <p class="mb-0">{{item.Comments != null ? item.Comments : "No Feedback"}}</p>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="objectives.length == 0">
+        <div class="fw-bold text-dark my-5 py-5">
+          <p class="my-5 py-5 text-center">
+            Objective not submitted.
+          </p>
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
 </div>

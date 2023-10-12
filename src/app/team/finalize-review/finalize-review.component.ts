@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
-import { Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
 declare var bootstrap: any;
 import 'bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
+import { iNavigation } from 'src/providers/iNavigation';
+import { ManageAppraisalCategory, ManageReview } from 'src/providers/constants';
 
 @Component({
   selector: 'app-finalize-review',
@@ -21,9 +23,14 @@ export class FinalizeReviewComponent implements OnInit {
   isSubmitted: boolean = false;
   allAppraisalFinalizer: Array<any> = [];
   allMemberAppraisalFinalizer: Array<any> = [];
+  isObjectivesReady: boolean = false;
+  selectedEmploye: any = null;
+  objectives: Array<any> = [];
+  userNameIcon: string = null;
 
   constructor(private http: AjaxService,
-              private user: UserService) {}
+              private user: UserService,
+              private nav: iNavigation) {}
 
   ngOnInit(): void {
     this.userDetail = this.user.getInstance();
@@ -46,15 +53,24 @@ export class FinalizeReviewComponent implements OnInit {
           let keys = Object.keys(result);
           let i = 0;
           while(i < keys.length) {
+            let teams = [];
+            let value = result[keys[i]].map(x => x.Team);
+            if (value && value.length > 0) {
+              value.forEach(x => {
+                if (teams.indexOf(x) == -1)
+                  teams.push(x);
+              });
+            }
             this.allAppraisalFinalizer.push({
-              MemberName: result[keys[0]].map(x => x.FullName),
-              ManagerName: result[keys[0]][0].ManagerName,
-              ProjectManagerId: result[keys[0]][0].ProjectManagerId,
-              ProjectDescription: result[keys[0]][0].ProjectDescription,
-              ProjectName: result[keys[0]][0].ProjectName,
-              ReactedOn: result[keys[0]][0].ReactedOn,
-              Status: result[keys[0]][0].Status,
-              Team: result[keys[0]].map(x => x.Team),
+              MemberName: result[keys[i]].map(x => x.FullName),
+              ManagerName: result[keys[i]][0].ManagerName,
+              ProjectManagerId: result[keys[i]][0].ProjectManagerId,
+              ProjectDescription: result[keys[i]][0].ProjectDescription,
+              ProjectName: result[keys[i]][0].ProjectName,
+              ReactedOn: result[keys[i]][0].ReactedOn,
+              Status: result[keys[i]][0].Status,
+              ProjectId: result[keys[i]][0].ProjectId,
+              Team: teams
             });
             i++;
           }
@@ -67,21 +83,52 @@ export class FinalizeReviewComponent implements OnInit {
     })
   }
 
-  getAppraisalFinalize(mangerId) {
+  getAppraisalFinalize(managerId: any) {
     this.isLoading = true;
-    this.http.get(`eps/promotion/getPromotionAndHike/${mangerId}`, true).then((res: ResponseModel) => {
+    this.http.get(`eps/promotion/getPromotionAndHike/${managerId}`, true).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.allMemberAppraisalFinalizer = res.ResponseBody;
-        if (this.allMemberAppraisalFinalizer.length > 0) {
-          let status = this.allMemberAppraisalFinalizer.filter(x => x.Status == 9);
-          $("#viewMemberModal").modal('show');
-        }
+        $("#viewMemberModal").modal('show');
         Toast("Finalizer record found");
         this.isLoading = false;
       }
     }).catch(e => {
       this.isLoading = false;
     })
+  }
+
+  showOffCanvas(item: any) {
+    this.selectedEmploye = item;
+    if (item && this.selectedEmploye.EmployeeId > 0) {
+      var offcanvasRight = document.getElementById('riviewObjectiveFinalizeOffCanvas');
+      var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
+      $("#viewMemberModal").modal('hide');
+      this.loadReviewDetail()
+      bsOffcanvas.show();
+    }
+  }
+
+  loadReviewDetail() {
+    this.isObjectivesReady = false;
+    let designationId = 0;
+    this.http.get(`eps/performance/getEmployeeObjective/${designationId}/${this.selectedEmploye.CompanyId}/${this.selectedEmploye.EmployeeId}`, true).then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        this.objectives = res.ResponseBody;
+        this.getUserNameIcon(this.selectedEmploye.FirstName, this.selectedEmploye.LastName);
+        Toast("Employee performance objective data loaded successsfully");
+        this.isObjectivesReady = true;
+      } else {
+        WarningToast("No objective details found. Please contact to admin.");
+        this.isObjectivesReady = true;
+      }
+    }).catch(err => {
+      ErrorToast(err.error);
+      this.isObjectivesReady = true;
+    })
+  }
+
+  getUserNameIcon(first: string, last: string) {
+    this.userNameIcon = first[0]+""+last[0];
   }
 
  }

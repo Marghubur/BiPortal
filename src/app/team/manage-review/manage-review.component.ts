@@ -31,7 +31,7 @@ export class ManageReviewComponent implements OnInit {
   isObjectivesReady: boolean = false;
   userNameIcon: string = "";
   selectedEmploye: any = null;
-  selectedTeam: any = null;
+  project: any = null;
   promotionAndHikeForm: FormGroup;
   selectedPromotionAndHike: any = null;
   isSubmitted: boolean = false;
@@ -42,21 +42,19 @@ export class ManageReviewComponent implements OnInit {
               private user: UserService) {}
 
   ngOnInit(): void {
-    this.selectedTeam = this.nav.getValue();
-    if (this.selectedTeam && this.selectedTeam.Team) {
-      this.userDetail = this.user.getInstance();
-      this.designation = GetRoles();
-      this.getProjectsMembers();
-    }
+    this.project = this.nav.getValue();
+    this.userDetail = this.user.getInstance();
+    this.designation = GetRoles();
+    this.getProjectsMembers();
   }
 
   getProjectsMembers() {
     this.selectedProject = null;
     this.projectDetails = [];
-    this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}`, true).then(res => {
+    this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}/${this.project.ProjectId}`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
-        project = project.filter(x => x.Team == this.selectedTeam.Team);
+        // project = project.filter(x => x.Team == this.selectedTeam.Team);
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
         this.appraisalReviewDetail = res.ResponseBody.ReviewDetail;
         if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
