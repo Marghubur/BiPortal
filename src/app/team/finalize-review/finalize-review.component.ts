@@ -61,8 +61,16 @@ export class FinalizeReviewComponent implements OnInit {
                   teams.push(x);
               });
             }
+            let members = [];
+            let member = result[keys[i]].map(x => x.FullName);
+            if (member && member.length > 0) {
+              member.forEach(x => {
+                if (members.indexOf(x) == -1)
+                  members.push(x);
+              });
+            }
             this.allAppraisalFinalizer.push({
-              MemberName: result[keys[i]].map(x => x.FullName),
+              MemberName:members ,
               ManagerName: result[keys[i]][0].ManagerName,
               ProjectManagerId: result[keys[i]][0].ProjectManagerId,
               ProjectDescription: result[keys[i]][0].ProjectDescription,

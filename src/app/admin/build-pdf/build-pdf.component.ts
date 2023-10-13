@@ -678,6 +678,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   }
 
   getTimeSheetData(): FormData {
+    if (this.allTimesheet.length == 0) {
+      ErrorToast("Timesheet detail not found. Please contact to admin");
+      return;
+    }
     let value = (<HTMLInputElement>document.getElementById('commentsection')).value;
     let formData = new FormData();
     let firstDate = new Date(this.allTimesheet[0].PresentDate);
@@ -757,7 +761,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
       let modalStatus = this.validateBillRequest(request);
       this.billAllDetails = request;
-      if(modalStatus == null) {
+      if(!modalStatus ) {
         let timesheetForm: FormData = this.getTimeSheetData();
         // let timesheetForm: FormData = new FormData();
         timesheetForm.append('BillRequestData', JSON.stringify(request));
