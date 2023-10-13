@@ -615,6 +615,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       if (errorCount === 0) {
         this.http.get(`eps/performance/submitEmployeeObjective/${this.employeeId}`, true).then(res => {
           if (res.ResponseBody) {
+            this.objectives = res.ResponseBody;
             Toast("Objective submitted successfully");
             this.isLoading = false;
           }

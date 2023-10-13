@@ -15,6 +15,7 @@ import { PerformanceComponent } from './performance/performance.component';
 import { ServiceRequestComponent } from './service-request/service-request.component';
 import { ManageReviewComponent } from './manage-review/manage-review.component';
 import { ManageAppraisalCategoryComponent } from './manage-appraisal-category/manage-appraisal-category.component';
+import { FinalizeReviewComponent } from './finalize-review/finalize-review.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ManageAppraisalCategoryComponent } from './manage-appraisal-category/ma
     PerformanceComponent,
     ServiceRequestComponent,
     ManageReviewComponent,
-    ManageAppraisalCategoryComponent
+    ManageAppraisalCategoryComponent,
+    FinalizeReviewComponent
   ],
   imports: [
     CommonModule,

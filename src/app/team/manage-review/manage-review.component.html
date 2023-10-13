@@ -22,6 +22,10 @@
             <div class="col-md-12 mt-3">
               <p class="card-text">{{selectedProject.ProjectDescription}}</p>
               <ng-container *ngIf="selectedProject.ProjectMembers.length > 0">
+                <div class="alert alert-success" role="alert" *ngIf="isSubmitted">
+                  <i class="fa-solid fa-bell fa-lg pe-2 text-dark"></i>
+                  <span>Review details are submiited successfully</span>
+                </div>
                 <div class="d-flex align-items-center justify-content-between pb-3" *ngIf="currentProjectAppraisal != null">
                   <h6>Team Members:</h6>
                   <button class="btn btn-primary btn-sm" (click)="equalPercentage()" [disabled]="isAmountExceed || isLoading">Equal %</button>
@@ -29,57 +33,72 @@
                   <form [formGroup]="appraisalHikeForm">
                     <div formArrayName="ProjectMemberHike">
                       <ng-container *ngFor="let item of hikeDetail.controls; let i = index;" [formGroupName]="i">
-                        <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card">
-                          <div class="d-flex col-md-10">
+                        <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card pb-4 pt-2 custom-border">
+                          <div class="d-flex col-md-10 align-items-center">
                             <a href="javascript:void(0)" class="me-2">
                               <i class="fa fa-user-circle-o fa-lg"></i>
                             </a>
                             <p class="mb-0 fs-6">
                               <span class="fw-bold text-primary-dc">
-                                <a href="javascript:void(0)" (click)="promotionHikePopUp(item)">{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}} months)</a>
+                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSubmitted}" (click)="promotionHikePopUp(item)">{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}} months)</a>
                               </span>
                             </p>
-                            <span class="ps-2">|</span>
+                            <span class="px-2">|</span>
+                            <div class="col-auto d-flex align-items-center">
+                              <span class="pe-1">Rating: </span>
+                              <ngb-rating [readonly]="true" rate="{{item.get('rating').value}}" [max]="5"></ngb-rating>
+                              <!-- <span>{{item.get("rating").value}}/5</span> -->
+                            </div>
+                          </div>
+                          <div class="col-2 d-flex flex-row-reverse">
+                            <div class="col-auto me-0 pe-0">
+                              <a href="javascript:void(0)" (click)="promotionHikePopUp(item)" class="text-decoration-none" [ngClass]="{'pe-none': isSubmitted}">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                              </a>
+                            </div>
+                          </div>
+                          <div class="d-flex col-md-12 mt-2">
                             <p class="ms-2 mb-0 fs-6">
+                              <i class="fa-solid fa-sack-dollar fa-lg pe-2 text-danger"></i>
                               <span class="">Salary: </span>
                               <span><i class="fa fa-inr px-1"></i>{{item.get("cTC").value}}</span>
                             </p>
-                            <span class="ps-2">|</span>
+                            <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
                               <span class="">Proposed Hike Percentage: </span>
-                              <span><i class="fa fa-inr px-1"></i>{{item.get("hikePercentage").value}}</span>
+                              <span>{{item.get("hikePercentage").value}} <i class="fa-solid fa-percent px-1"></i></span>
                             </p>
-                            <span class="ps-2">|</span>
+                            <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
                               <span class="">Proposed Hike Amount: </span>
                               <span><i class="fa fa-inr px-1"></i>{{item.get("hikeAmount").value}}</span>
                             </p>
-                            <span class="ps-2">|</span>
+                            <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
+                              <i class="fa-solid fa-hand-holding-dollar fa-lg pe-2 text-danger"></i>
                               <span class="">Estimated Salary: </span>
                               <span><i class="fa fa-inr px-1"></i>{{item.get("estimatedSalary").value}}</span>
                             </p>
-                          </div>
-                          <div class="col-2 d-flex flex-row-reverse">
-                            <div class="col-auto me-0 pe-0">
-                              <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-decoration-none">
-                                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-eye': !isLoading}"></i>
-                              </a>
-                            </div>
-                          </div>
-                          <div class="collapse show">
-                            <div class="card card-body border-0">
-                              <div class="row align-items-center justify-content-start">
-                                <div class="col-md-6 text-truncate">
-                                  <span class="fw-bold">Comment: </span>
-                                  {{item.get("comments").value}}
-                                </div>
-                                <div class="col-auto">
-                                  <span class="">Rating: </span>
-                                  <span>{{item.get("rating").value}}/5</span>
-                                </div>
+                            <span class="px-3 fw-bold text-dark">|</span>
+                            <div class="col-auto d-flex">
+                              <span class="">Promoted Designation: </span>
+                              <div>
+                                <select formControlName="promotedDesignation" class="form-control border-0 mt-0 pt-0 transparent-bg">
+                                  <option value="0" >Same Designation</option>
+                                  <option value="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
+                                </select>
                               </div>
                             </div>
+                          </div>
+                          <div class="d-flex align-items-center justify-content-between mt-2">
+                            <div class="col-md-6 text-truncate ms-2">
+                              <span class="fw-bold">Comment: </span>
+                              {{item.get("comments").value}}
+                            </div>
+                            <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="fw-bold">
+                              <span class="pe-2">Objective's</span>
+                              <i class="fa" data-bs-toggle="tooltip" data-bs-placement="right" title="View objective" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-eye': !isLoading}"></i>
+                            </a>
                           </div>
                         </div>
                       </ng-container>
@@ -147,11 +166,11 @@
               </ng-container>
             </div>
             <div class="text-end mt-3">
-              <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading || appraisalReviewDetail.length > 0">Cancel</button>
-              <button class="btn btn-primary-c ms-2" (click)="applyHikeAndPromotion()" [disabled]="isAmountExceed || isLoading || appraisalReviewDetail.length > 0">
+              <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading || isSubmitted">Cancel</button>
+              <button class="btn btn-primary-c ms-2" (click)="applyHikeAndPromotion()" [disabled]="isAmountExceed || isLoading || isSubmitted > 0">
                 <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
                 <span class="ps-2">
-                  Apply Changes
+                  Save
                 </span>
               </button>
             </div>
@@ -293,7 +312,7 @@
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h1 class="modal-title fs-5" id="promotionHikeModalLabel">Promotion and Hike Detail</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closePromotionHikePopup()" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="selectedPromotionAndHike != null">
         <div class="">
