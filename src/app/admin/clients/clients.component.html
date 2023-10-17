@@ -23,10 +23,10 @@
         <div class="col-md-2">
           <button class="btn btn-primary-c" (click)="globalFilter()"
             (keydown.esc)="resetFilter()">
-            <i class="fa fa-filter"></i>
+            <i class="fa-solid fa-filter"></i>
           </button>
           <button class="btn btn-danger ms-2" (click)="resetFilter()">
-            <i class="fa fa-repeat"></i>
+            <i class="fa-solid fa-arrow-rotate-right"></i>
           </button>
         </div>
       </div>
@@ -34,7 +34,7 @@
       <div class="col-md-2 inline-row d-r p-0 m-0">
         <div class="">
           <button class="btn btn-sp btn-lightorange" (click)="navtoRegisterClient()"
-            routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o ps-2" aria-hidden="true"></i>Add
+            routerLinkActive="router-link-active"> <i class="fa-regular fa-square-plus ps-2" aria-hidden="true"></i>Add
             Client</button>
         </div>
       </div>
@@ -74,9 +74,9 @@
                           placeholder="Search by Name">
                         <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
                           <a href="javascript:void()" class="pe-2">Organization Name</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
@@ -88,10 +88,10 @@
                           placeholder="Search by Contact no">
                         <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'PrimaryPhoneNo')">
                           <a href="javascript:void()" class="pe-2">Primary Contact No.#</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }"
                             aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }"
                             aria-hidden="true"></i>
                         </div>
@@ -103,9 +103,9 @@
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.Email" placeholder="Search by Email">
                         <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
                           <a href="javascript:void()" class="pe-2">Email</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
@@ -116,9 +116,9 @@
                           (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.City" placeholder="Search by City">
                         <div class="t-filter" (click)="arrangeDetails(orderByCityAsc, 'City')">
                           <a href="javascript:void()" class="pe-3">City</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByCityAsc == null || !orderByCityAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByCityAsc == null || orderByCityAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
@@ -130,10 +130,10 @@
                           placeholder="Search by First Address">
                         <div class="t-filter" (click)="arrangeDetails(orderByFirstAddressAsc, 'FirstAddress')">
                           <a href="javascript:void()" class="pe-3">First Address</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByFirstAddressAsc == null || !orderByFirstAddressAsc }"
                             aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByFirstAddressAsc == null || orderByFirstAddressAsc }"
                             aria-hidden="true"></i>
                         </div>
@@ -141,7 +141,7 @@
                     </div>
                     <div class="th fe-1 text-center">
                       <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
-                        <i class="fa fa-filter">
+                        <i class="fa-solid fa-filter">
                           <span>Filter</span>
                         </i>
                       </a>
@@ -163,7 +163,7 @@
                           <div class="float-end">
                             <a href="javascript:void(0)" (click)="viewClientFile(clients)">
                               <span class="ms-2 badge bg-success">
-                                <i class="fa fa-building-o zoom-2"></i>
+                                <i class="fa-regular fa-file-lines zoom-2"></i>
                               </span>
                             </a>
                           </div>
@@ -192,12 +192,12 @@
                       <div class="td align-middle fe-1">
                         <div class=" d-flex flex-row justify-content-evenly">
                           <a href="javascript:void(0)">
-                            <span class="badge bg-success"><i class="fa fa-pencil-square-o" aria-hidden="true"
+                            <span class="badge bg-success"><i class="fa-regular fa-pen-to-square" aria-hidden="true"
                                 (click)="EditCurrent(clients)"></i></span>
                           </a>
                           <a href="javascript:void(0)" (click)="AddEditDocuments(clients)">
                             <span class="badge bg-dark">
-                              <i class="fa fa-folder" aria-hidden="true"></i>
+                              <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
                             </span>
                           </a>
                           <!-- <a href="javascript:void(0)" (click)="CreatePopup()">

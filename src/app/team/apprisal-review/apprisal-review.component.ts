@@ -19,7 +19,7 @@ declare var bootstrap: any;
 })
 export class ApprisalReviewComponent implements OnInit{
   isLoaded: boolean = true;
-  projectDetail: Array<ProjectModal> = [];
+  projectDetail: Array<any> = [];
   isFileFound: boolean = false;
   projectData: Filter = null;
   isPageReady: boolean = false;
@@ -61,6 +61,11 @@ export class ApprisalReviewComponent implements OnInit{
     this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then((res:ResponseModel) => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectDetail = res.ResponseBody;
+        if (this.projectDetail && this.projectDetail.length > 0) {
+          this.projectDetail.forEach(x => {
+            x.Teams = x.Team.split(",")
+          })
+        }
         this.projectData.TotalRecords = this.projectDetail.length;
         this.isFileFound = true;
         this.isLoaded = true;

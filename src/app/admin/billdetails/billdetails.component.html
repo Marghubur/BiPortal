@@ -55,7 +55,7 @@
               </div>
               <div class="col-md-3">
                 <a href="javascript:void(0)" class="pe-0 a-btn text-dark fw-bold" (click)="advancedSearchPopUp()">
-                  <i class="fa fa-search">
+                  <i class="fa-solid fa-magnifying-glass">
                     <span>Advanced Search</span>
                   </i>
                 </a>
@@ -64,14 +64,14 @@
             <div class="d-flex flex-row align-items-center">
               <div class="text-end">
                 <a href="javascript:void(0)" class="a-btn text-danger fw-bold" (click)="refreshFilter()">
-                  <i class="fa fa-refresh">
+                  <i class="fa-solid fa-arrow-rotate-right">
                     <span>Reset</span>
                   </i>
                 </a>
               </div>
               <div class="text-end">
                 <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
-                  <i class="fa fa-filter">
+                  <i class="fa-solid fa-filter">
                     <span>Filter</span>
                   </i>
                 </a>
@@ -239,13 +239,13 @@
                           <a href="javascript:void(0)" class="bold-anc" (click)="EditCurrentDocument(user)">{{user.BillNo}}</a>
                           <div class="d-flex flex-row justify-content-around">
                             <a href="javascript:void(0)" (click)="viewPdfFile(user)">
-                              <span class="badge bg-success ms-1 me-1"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>
+                              <span class="badge bg-success ms-1 me-1"><i class="fa-regular fa-file-pdf"></i></span>
                             </a>
                             <a href="javascript:void(0)" (click)="downloadFile(user)">
-                              <span class="badge bg-primary ms-1 me-1"><i class="fa fa-download" aria-hidden="true"></i></span>
+                              <span class="badge bg-primary ms-1 me-1"><i class="fa-regular fa-circle-down"></i></span>
                             </a>
                             <a href="javascript:void(0)" (click)="getEmailTemplate(user)">
-                              <span class="badge bg-danger ms-1 me-1"><i class="fa fa-send" aria-hidden="true"></i></span>
+                              <span class="badge bg-danger ms-1 me-1"><i class="fa-solid fa-paper-plane"></i></span>
                             </a>
                           </div>
                         </div>
@@ -270,17 +270,17 @@
                     <div class="td align-middle f-small">
                       <div class="cell-wrapper text-center">
                         <a href="javascript:void(0)" class="h-font" (click)="UpdateCurrent(user)">
-                          <i class="fa fa-check fa-lg text-success" *ngIf="user.Status == '1'" data-bs-trigger="hover"
+                          <i class="fa-solid fa-circle-check fa-lg text-success" *ngIf="user.Status == '1'" data-bs-trigger="hover"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
-                          <i class="fa fa-times text-danger fa-lg" *ngIf="user.Status == '3'"
+                          <i class="fa-regular fa-circle-xmark text-danger fa-lg" *ngIf="user.Status == '3'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
-                          <i class="fa fa-clock-o text-dark" *ngIf="user.Status == '7'" data-bs-toggle="tooltip"
+                          <i class="fa-regular fa-clock text-dark" *ngIf="user.Status == '7'" data-bs-toggle="tooltip"
                             data-bs-placement="right" title="Raised"></i>
-                          <i class="fa fa-exclamation-triangle fa-lg text-warning" *ngIf="user.Status == '2'"
+                          <i class="fa-solid fa-triangle-exclamation fa-lg text-warning" *ngIf="user.Status == '2'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Pending"></i>
-                          <i class="fa fa-ban fa-lg text-danger" *ngIf="user.Status == '5'"
+                          <i class="fa-solid fa-ban fa-lg text-danger" *ngIf="user.Status == '5'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Rejected"></i>
-                          <i class="fa fa-lg fa-calendar-times-o text-primary" *ngIf="user.Status == '6'"
+                          <i class="fa-regular fa-lg fa-calendar-xmark text-primary" *ngIf="user.Status == '6'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Generated"></i>
                           <!-- <i class="fa" [ngClass]="{'fa-check fa-lg text-success': user.Status == 'Completed', 'fa-times text-danger fa-lg': user.Status == 'Canceled', 'fa-clock-o text-dark': user.Status == 'Raised', 'fa-exclamation-triangle fa-lg text-warning': user.Status == 'Pending', 'fa-ban fa-lg text-danger': user.Status == 'Rejected'}"></i> -->
                           <!-- {{user.Status}} -->
@@ -325,17 +325,17 @@
                       <div class="cell-wrapper text-center">
                         <a href="javascript:void(0)" class="h-font"
                           (click)="updateGSTStatus(user)">
-                          <i class="fa fa-check fa-lg text-success" *ngIf="user.GSTStatus == '1'"
+                          <i class="fa-solid fa-circle-check fa-lg text-success" *ngIf="user.GSTStatus == '1'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
-                          <i class="fa fa-times text-danger fa-lg" *ngIf="user.GSTStatus == '3'"
+                          <i class="fa-regular fa-circle-xmark text-danger fa-lg" *ngIf="user.GSTStatus == '3'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
-                          <i class="fa fa-clock-o text-dark" *ngIf="user.GSTStatus == '7'" data-bs-toggle="tooltip"
+                          <i class="fa-regular fa-clock text-dark" *ngIf="user.GSTStatus == '7'" data-bs-toggle="tooltip"
                             data-bs-placement="right" title="Raised"></i>
-                          <i class="fa fa-exclamation-triangle fa-lg text-warning" *ngIf="user.GSTStatus == '2'"
+                          <i class="fa-solid fa-triangle-exclamation fa-lg text-warning" *ngIf="user.GSTStatus == '2'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Pending"></i>
-                          <i class="fa fa-ban fa-lg text-danger" *ngIf="user.GSTStatus == '5'"
+                          <i class="fa-solid fa-ban fa-lg text-danger" *ngIf="user.GSTStatus == '5'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Rejected"></i>
-                          <i class="fa fa-lg fa-calendar-times-o text-primary" *ngIf="user.GSTStatus == '6'"
+                          <i class="fa-regular fa-lg fa-calendar-xmark text-primary" *ngIf="user.GSTStatus == '6'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Generated"></i>
                           <!-- {{user.GSTStatus}} -->
                         </a>
@@ -721,7 +721,7 @@
       <div class="modal-footer border-top-0  pe-5">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetFilter()">Close</button>
         <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="filterRecords()"><i
-            class="pe-2 fa" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-filter': !isLoading}"></i>
+            class="pe-2 " [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading, 'fa-solid fa-filter': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Filter Record' }}</button>
       </div>
     </div>

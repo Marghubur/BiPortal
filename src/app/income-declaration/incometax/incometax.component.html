@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="right-panel col-md-12 p-0 blur-this">
-      <div class="container-fluid pt-4">
+      <div class="container-fluid">
         <div class="col-md-12 bg-light mb-3 mt-3">
           <ul class="nav">
             <li class="nav-item">
@@ -174,25 +174,27 @@
                       </div>
                       <div class="t-body overflow-hidden">
                         <ng-container *ngFor="let item of salaryBreakup">
-                          <div class="tr text-dark py-3">
-                            <div class="td ps-2 fe-3">
-                              <div class="cell-wrapper">
-                                {{item.key}}
-                              </div>
-                            </div>
-                            <div class="td fe-1">
-                              <div class="cell-wrapper">
-                                <i class="fa fa-inr pe-1"></i> {{item.total | number: '1.0-0'}}
-                              </div>
-                            </div>
-                            <ng-container *ngIf="item.value">
-                              <div class="td fe-1" *ngFor="let elem of item.value">
+                          <ng-container *ngIf="item.isIncludeInPayslip">
+                            <div class="tr text-dark py-3">
+                              <div class="td ps-2 fe-3">
                                 <div class="cell-wrapper">
-                                  <i class="fa fa-inr pe-1"></i> {{elem.FinalAmount | number: '1.0-0'}}
+                                  {{item.key}}
                                 </div>
                               </div>
-                            </ng-container>
-                          </div>
+                              <div class="td fe-1">
+                                <div class="cell-wrapper">
+                                  <i class="fa fa-inr pe-1"></i> {{item.total | number: '1.0-0'}}
+                                </div>
+                              </div>
+                              <ng-container *ngIf="item.value">
+                                <div class="td fe-1" *ngFor="let elem of item.value">
+                                  <div class="cell-wrapper">
+                                    <i class="fa fa-inr pe-1"></i> {{elem.FinalAmount | number: '1.0-0'}}
+                                  </div>
+                                </div>
+                              </ng-container>
+                            </div>
+                          </ng-container>
                         </ng-container>
                       </div>
                     </div>

@@ -12,11 +12,11 @@
             <div class="col-4">
               <div class="x_header_title d-flex align-items-center justify-content-end">
                 <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-                  class="fa fa-paper-plane pe-1"></i> Configure</a>
-                  <ng-container *ngIf="isReady && employeeModal.EmployeeUid > 0">
+                  class="fa-solid fa-paper-plane pe-1"></i> Configure</a>
+                  <!-- <ng-container *ngIf="isReady && employeeModal.EmployeeUid > 0">
                     <a href="javascript:void(0)" [ngClass]="{'pe-none': !isCompaniesDetails, 'pe-none': employeeUid==0}" *ngIf="isReady" (click)="navToSalaryBreakup()" class="text-decoration-none fw-bold"><i
                       class="fa fa-money pe-1"></i> Breakup</a>
-                  </ng-container>
+                  </ng-container> -->
               </div>
             </div>
           </div>
@@ -28,7 +28,7 @@
                 <div class="blur-section__content">
                   {{'Please add company first'}}
                   <p class="mb-0 py-3">
-                    <button class="btn btn-primary-c fs-5 fw-bold" (click)="gotoCompany()"><i class="fa fa-cog pe-2"></i> Configure Company</button>
+                    <button class="btn btn-primary-c fs-5 fw-bold" (click)="gotoCompany()"><i class="fa-solid fa-gear pe-2"></i> Configure Company</button>
                   </p>
                 </div>
               </div>
@@ -92,7 +92,7 @@
                                   (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #d="ngbDatepicker">
                                 <div class="input-group-append">
                                   <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                      class="fa fa-calendar" aria-hidden="true"></i>
+                                      class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                                   </button>
                                 </div>
                               </div>
@@ -154,7 +154,7 @@
                   </div>
                   <ng-container *ngIf="isUpdate">
                     <a href="javascript:void(0)" (click)="addUpadteClientPopUp()" class="text-decoration-none ps-3">Add or
-                      Update Associate Clients <i class="fa fa-plus ps-2"></i></a>
+                      Update Associate Clients <i class="fa-solid fa-plus ps-2"></i></a>
                   </ng-container>
                   <div class="col-12 row m-0 mt-5">
                     <div class="x_panel x-panel-changed">
@@ -330,7 +330,7 @@
                                     #joiningDate="ngbDatepicker">
                                   <div class="input-group-append">
                                     <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()"
-                                      type="button"><i class="fa fa-calendar" aria-hidden="true"></i>
+                                      type="button"><i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                                     </button>
                                   </div>
                                 </div>
@@ -349,7 +349,7 @@
                       </div>
                       <div class="btn-group ms-2">
                         <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterEmployee()">
-                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
                           {{ isLoading ? 'Wait' : 'Register' }}
                         </button>
                       </div>
@@ -433,10 +433,10 @@
                             </div>
                             <div class="col-auto">
                               <a (click)="bindCurrentClientDetail(client)" >
-                                <i class="fa fa-edit"></i>
+                                <i class="fa-regular fa-pen-to-square"></i>
                               </a>
                               <a (click)="deleteCurrentClient(client)" >
-                                <i class="ps-2 fa fa-trash text-danger"></i>
+                                <i class="ps-2 fa-solid fa-trash-can text-danger"></i>
                               </a>
                             </div>
                           </div>
@@ -478,7 +478,7 @@
                           (dateSelect)="onAssignDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="assignMaxDate" #jd="ngbDatepicker">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" (click)="jd.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -511,7 +511,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-outline-success" (click)="addDetail()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span *ngIf="isUpdated" class="ps-2">
             Update changes
           </span>

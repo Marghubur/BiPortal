@@ -83,7 +83,9 @@
                       </div>
                       <div class="td text-center fe-1 d-flex align-items-center justify-content-between">
                         <div class="cell-wrapper text-truncate ps-0">
-                          {{project.Team}}
+                          <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let item of project.Teams">
+                            {{item}}
+                          </span>
                         </div>
                         <!-- <a href="javascript:void(0)" (click)="showOffCanvas(project)" class="text-success pe-3" type="button">
                           <i class="fa fa-play" aria-hidden="true"></i>
