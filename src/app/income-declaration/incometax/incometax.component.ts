@@ -141,7 +141,7 @@ export class IncometaxComponent implements OnInit {
           i = 0;
           let value = "";
           let selectedComponent = [];
-          let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName}) => { return { ComponentId, ComponentName } });
+          let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName, IsIncludeInPayslip}) => { return { ComponentId, ComponentName, IsIncludeInPayslip} });
           // props = props.filter(x => x.ComponentId != "ECI" && x.ComponentId != "EPER-PF" && x.ComponentId != "GRA");
           while(i < props.length) {
             value = props[i].ComponentId;
@@ -151,7 +151,8 @@ export class IncometaxComponent implements OnInit {
                 id: props[i].ComponentId,
                 key: props[i].ComponentName,
                 total: selectedComponent.reduce((acc, cur) => { return acc + cur.FinalAmount; }, 0),
-                value: selectedComponent
+                value: selectedComponent,
+                isIncludeInPayslip: props[i].IsIncludeInPayslip
               });
             }
             i++;

@@ -1647,62 +1647,30 @@
                                               <div class="col-md-8 position-relative">
                                                   <div [ngClass]="{'block-tag': !last}">
                                                   </div>
-                                                  <bot-autocomplete [data]="employeesAutoComplete" name="AssignieId" [(ngModel)]="item.AssignieId"
-                                                    [ngModelOptions]="{standalone: true}">
+                                                  <bot-autocomplete [data]="employeesAutoComplete" name="AssignieId" [(ngModel)]="item.AssignieId" [ngModelOptions]="{standalone: true}">
                                                   </bot-autocomplete>
-                                                  <div class="d-flex align-items-center mt-3" data-name="skip-section">
-                                                      <div class="form-check">
-                                                          <input class="form-check-input" [checked]="item.IsRequired" type="checkbox" disabled>
-                                                          <label class="form-check-label">
-                                                              Required approval
-                                                          </label>
+                                                  <fieldset class="mt-2">
+                                                    <div class="row ps-2">
+                                                      <div class="form-check col-auto">
+                                                        <input class="form-check-input" type="radio"[checked]="item.IsRequired" [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label">
+                                                          Required
+                                                        </label>
                                                       </div>
-                                                  </div>
-                                                  <div class="d-flex align-items-center mt-2" data-name="skip-section">
-                                                      <div class="form-check">
-                                                          <input class="form-check-input" [checked]="item.IsForwardEnabled" type="checkbox" disabled>
-                                                          <label class="form-check-label">
-                                                              Forward when
-                                                          </label>
+                                                      <div class="form-check col-auto">
+                                                        <input class="form-check-input" type="radio"[checked]="!item.IsRequired" [ngModelOptions]="{standalone: true}">
+                                                        <label class="form-check-label" >
+                                                          Optional
+                                                        </label>
                                                       </div>
-                                                      <div class="d-flex ms-2 align-items-center">
-                                                          <div class="col-md-10">
-                                                              <select name="ForwardWhen" class="form-control form-select" [(ngModel)]="item.ForwardWhen" disabled [ngModelOptions]="{standalone: true}">
-                                                                  <option value="0" disabled>Select Reason</option>
-                                                                  <option value="2">Pending</option>
-                                                                  <option value="9">Approved</option>
-                                                                  <option value="5">Rejected</option>
-                                                              </select>
-                                                          </div>
-                                                          <span class="px-2">after</span>
-                                                      </div>
-                                                      <div class="d-flex ms-2 align-items-center">
-                                                          <div class="col-md-6 ms-2">
-                                                              <input type="number" class="form-control form-control-sm" [value]="item.ForwardAfterDays" maxlength="3" readonly
-                                                                  placeholder="No# of days" name="SkipToNextLevelAfterDays">
-                                                          </div>
-                                                          <span class="ps-2">days</span>
-                                                      </div>
-                                                  </div>
+                                                    </div>
+                                                    <div class="mt-2" *ngIf="item.IsRequired == true" [ngModelOptions]="{standalone: true}">
+                                                      Request is required for approval.
+                                                    </div>
+                                                  </fieldset>
                                               </div>
                                           </div>
                                       </div>
-                                    </div>
-
-                                    <div class="d-flex align-items-center mt-3" data-name="skip-section">
-                                        <div class="form-check">
-                                            <input class="form-check-input" [checked]="selectedWorkFlowDetail.IsAutoExpiredEnabled == true" type="checkbox"  disabled>
-                                            <label class="form-check-label">
-                                                Enable to auto expire approval after
-                                            </label>
-                                        </div>
-                                        <div class="d-flex ms-2 align-items-center">
-                                            <div class="col-md-6">
-                                                <input type="number" class="form-control form-control-sm" [value]="selectedWorkFlowDetail.AutoExpireAfterDays"
-                                                    placeholder="No# of days" maxlength="3" name="AutoExpireAfterDays" readonly>
-                                            </div>
-                                            <span class="ps-2">days</span>
-                                        </div>
                                     </div>
                                 </div>
                               </ng-container>

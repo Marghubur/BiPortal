@@ -21,22 +21,22 @@
     </div>
     <div class="col-md-2 inline-row d-r p-0 m-0 text-start">
         <button class="btn btn-sp btn-lightorange" (click)="navtoAddEmp()"
-          routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o ms-1" aria-hidden="true"></i>
+          routerLinkActive="router-link-active"> <i class="fa-regular fa-square-plus ms-1" aria-hidden="true"></i>
           Add Employee
         </button>
     </div>
-    <div class="col-md-5 align-items-center row m-0 ms-auto p-0 text-end">
-      <div class="col-md-10">
+    <div class="col-md-5 align-items-center justify-content-end row m-0 ms-auto p-0 text-end">
+      <div class="col-md-9">
         <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
           (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
           [(ngModel)]="anyFilter">
       </div>
-      <div class="col-md-2">
+      <div class="col-auto">
         <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
-          <i class="fa fa-filter"></i>
+          <i class="fa-solid fa-filter"></i>
         </button>
-        <button class="btn  btn-danger ms-2" (click)="resetFilter()">
-          <i class="fa fa-repeat"></i>
+        <button class="btn btn-danger ms-1" (click)="resetFilter()">
+          <i class="fa-solid fa-arrow-rotate-right"></i>
         </button>
       </div>
     </div>
@@ -55,7 +55,7 @@
           </a> -->
           <a href="{{downlodexcelFilePath}}" class="d-none" id="downloadexistingfiled"></a>
           <a href="javascript:void(0)" class="text-success ms-3" (click)="exportData(2)" data-bs-toggle="tooltip" data-bs-placement="right" title="export as excel">
-            <i class="fa fa-file-excel-o fa-lg"></i>
+            <i class="fa-regular fa-file-excel fa-lg"></i>
           </a>
         </div>
       </div>
@@ -85,9 +85,9 @@
                         placeholder="Search by Name" id="namefilter">
                       <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
                         <a href="javascript:void()" class="pe-2">Full Name</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -99,22 +99,22 @@
                         placeholder="Search by MobileNumber">
                       <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
                         <a href="javascript:void()" class="pe-2">Mobile Number</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-2">
+                  <div class="th fe-3">
                     <div class="cell-wrapper">
                       <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
                         (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email">
                       <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
                         <a href="javascript:void()" class="pe-2">Email Id</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -141,11 +141,14 @@
                         <div class="float-end">
                           <a href="javascript:void(0)"  data-bs-toggle="tooltip" (click)="goToPerformancePage(user)"
                             data-bs-placement="right" title="View Employee Performance"><span class="badge bg-secondary me-3"><i
-                                class="fa fa-line-chart"></i></span></a>
+                                class="fa-solid fa-chart-column  user-edit-icon"></i></span></a>
                           <a href="javascript:void(0)" (click)="editProfile(user)" data-bs-toggle="tooltip"
-                            data-bs-placement="right" title="View Profile"><span class="badge bg-dark me-3"><i
-                                class="fa fa-user-circle-o user-edit-icon"></i></span></a>
-                          <a href="javascript:void(0)"><span class="badge bg-primary fa fa-building-o"
+                            data-bs-placement="right" title="View Profile">
+                            <span class="badge bg-dark me-3">
+                              <i class="fa-solid fa-user user-edit-icon"></i>
+                            </span>
+                          </a>
+                          <a href="javascript:void(0)"><span class="badge bg-primary fa-regular fa-building user-edit-icon"
                               data-bs-toggle="tooltip" data-bs-placement="right"
                               title="{{user.FirstName}} {{user.LastName}} is associated with {{user.ClientJson.length}} clients">
                               &nbsp;
@@ -156,7 +159,7 @@
                             data-bs-toggle="tooltip" data-bs-placement="right" title="View Attendance">
                             <span class="text-sm-left text-muted">Attendance</span>
                             <span class="ms-2 badge bg-success">
-                              <i class="fa fa-id-badge"></i>
+                              <i class="fa-regular fa-id-badge user-edit-icon"></i>
                             </span>
                           </a>
                         </div>
@@ -167,7 +170,7 @@
                         {{user.Mobile}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-2">
+                    <div class="td align-middle fe-3">
                       <div class="cell-wrapper">
                         {{user.Email}}
                       </div>
@@ -176,24 +179,24 @@
                       <div class="d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)" (click)="ViewFiles(user)" [ngClass]="{'pe-none': isLoading}" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="View Files">
-                          <span class="badge bg-primary"><i class="fa fa-file-o" aria-hidden="true"></i></span>
+                          <span class="badge bg-primary"><i class="fa-solid fa-file" aria-hidden="true"></i></span>
                         </a>
                         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="AddEditDocuments(user)" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="View Documents">
-                          <span class="badge bg-dark"><i class="fa fa-folder" aria-hidden="true"></i></span>
+                          <span class="badge bg-dark"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></span>
                         </a>
                         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="CreatePopup(user)" [ngClass]="{'pe-none': user.EmployeeUid == 1}">
                           <ng-container [ngSwitch]="user.IsActive">
                             <span *ngSwitchCase="true">
                               <span class="badge bg-danger" data-bs-toggle="tooltip"
                               data-bs-placement="right" title="Inactive employee">
-                                <i class="fa " [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash-o': !isLoading}" aria-hidden="true"></i>
+                                <i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading, 'fa-solid fa-trash-can': !isLoading}" aria-hidden="true"></i>
                               </span>
                             </span>
                             <span *ngSwitchDefault>
                               <span class="badge bg-success" data-bs-toggle="tooltip"
                               data-bs-placement="right" title="Active Employee">
-                                <i class="fa " [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-random': !isLoading}" aria-hidden="true" aria-hidden="true"></i>
+                                <i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading, 'fa-solid fa-shuffle': !isLoading}" aria-hidden="true" aria-hidden="true"></i>
                               </span>
                             </span>
                           </ng-container>
@@ -277,10 +280,10 @@
         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="ClosePopup()" class="text-decoration-none text-danger btn-white pe-3"
           data-dismiss="modal">Cancel</a>
         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeleteCurrent(singleEmployee)" *ngIf="singleEmployee?.IsActive == true"
-          class="text-decoration-none btn-white text-primary"><i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          class="text-decoration-none btn-white text-primary"><i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Remove' }}</a>
         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeactivatedEmployee(singleEmployee)"
-          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary"><i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary"><i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Activate' }}</a>
       </div>
     </div>

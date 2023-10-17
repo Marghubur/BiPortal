@@ -441,13 +441,13 @@ export class ApplyLeaveComponent implements OnInit {
       case 0:
         bgColor = ['red', '#379237'];
         break;
-      case 1:
-        bgColor = ['red', '#379273'];
-        break;
-       case 2:
-        bgColor = ['red', 'rgba(255, 159, 64, 0.2)'];
-        break;
-      default:
+        default:
+        case 1:
+          bgColor = ['red', 'rgba(255, 159, 64, 0.2)'];
+          break;
+        case 2:
+          bgColor = ['red', '#379273'];
+          break;
         bgColor = ['blue', 'rgba(153, 102, 255, 0.2)'];
         break;
     }
@@ -767,7 +767,7 @@ export class ApplyLeaveComponent implements OnInit {
   }
 
   bindDonutChartData() {
-    let bgColor = ['#379237', '#379273', 'rgba(255, 159, 64, 0.2)', 'rgba(153, 102, 255, 0.2)'];
+    let bgColor = ['#379237', 'rgba(255, 159, 64, 0.2)', '#379273', 'rgba(153, 102, 255, 0.2)'];
     let data = [];
     for (let i = 0; i <  this.chartDataset.length; i++) {
       let value = (this.chartDataset[i].ConsumedLeave/this.chartDataset[i].MaxLeaveLimit) *100;
