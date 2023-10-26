@@ -91,7 +91,7 @@
           <div id="leave-chart">
             <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="card">
                   <div class="card-body pb-0">
                     <div class="d-flex justify-content-between mb-0 pb-0">
@@ -102,7 +102,7 @@
                         <i class="fa-solid fa-circle-info fa-lg px-3" aria-hidden="true"></i>
                       </div>
                     </div>
-                    <div class="d-block col-md-10 py-4 mt-3">
+                    <div class="d-block col-md-12 pt-1 pb-2 leave-list-table">
                       <canvas baseChart [data]="chartData" type="doughnut" [options]="chartOptions">
                       </canvas>
                       <!-- <canvas id="consumeLeaveChart" width="100" height="100"></canvas> -->
@@ -110,18 +110,36 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-5">
                 <div class="card">
                   <div class="card-body pb-0">
-                    <div class="d-flex justify-content-between">
-                      <h6 class="pt-2 ps-2">
-                        Last Week
-                      </h6>
-                      <div>
-                        <i class="fa-solid fa-circle-info fa-lg p-3" (click)="loadData()" aria-hidden="true"></i>
-                      </div>
+                    <h6 class="pt-2 ps-2">
+                      Leave Balance Details
+                    </h6>
+                    <div class="table-responsive leave-list-table">
+                      <table class="table table-striped align-middle">
+                        <thead>
+                          <tr>
+                            <td>Leave</td>
+                            <td>Available</td>
+                            <td>Consumed</td>
+                            <td>Accrued So Far</td>
+                            <td>Carry Over</td>
+                            <td>Annual Quota</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of chartDataset">
+                            <td>{{item.PlanName}}</td>
+                            <td>{{item.AvailableLeaves}}</td>
+                            <td>{{item.ConsumedLeave}}</td>
+                            <td>{{item.AccrualedTillDate}}</td>
+                            <td>0</td>
+                            <td>{{item.MaxLeaveLimit}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -137,7 +155,7 @@
                       </div>
                     </div>
                     <div class="d-block mt-2">
-                      <canvas id="MonthlyStatusChart" width="300" height="115"></canvas>
+                      <canvas id="MonthlyStatusChart" width="300" height="246"></canvas>
                     </div>
                   </div>
                 </div>
@@ -232,7 +250,7 @@
                         <div class="d-flex align-items-center justify-content-start">
                           <div class="h-4 d-flex align-items-center justify-content-center flex-column px-4">
                             <i class="fa-solid fa-house fa-lg"></i>
-                            <p class="m-0">{{item.NumOfDays}} {{item.NumOfDays == 1? 'day':'days'}}</p>
+                            <p class="m-0 mt-2">{{item.NumOfDays}} {{item.NumOfDays == 1? 'day':'days'}}</p>
                           </div>
                           <div class="text-center px-3">
                             <p class="mb-0">{{item.FromDate | date}}</p>
