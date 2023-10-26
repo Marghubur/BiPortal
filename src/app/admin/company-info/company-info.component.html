@@ -21,9 +21,9 @@
           </div>
           <div class="text-end col-md-4">
             <button class="btn my-2 me-1 btn-outline-primary" *ngIf="ActivatedPage > 0 && ActivatedPage <3" (click)="activePage(ActivatedPage, 'next')">Next<i
-                class="fa fa-arrow-right ps-2"></i></button>
+                class="fa-solid fa-arrow-right ps-2"></i></button>
             <button class="btn my-2 me-1 btn-outline-success" *ngIf="ActivatedPage > 1 && ActivatedPage <=3" (click)="activePage(ActivatedPage, 'previous')"><i
-                class="fa fa-arrow-left pe-2"></i>Previous</button>
+                class="fa-solid fa-arrow-left pe-2"></i>Previous</button>
           </div>
         </div>
         <div class="progress-step col-md-6 mx-3 my-2">
@@ -48,7 +48,7 @@
                 <input type="file" class="d-none" id="uploasignature" accept=".jpg, .jpeg, .png"
                   formControlName="SignWithStamp">
                 <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowserFile()"><i
-                    class="fa fa-plus pe-2"></i>{{signURL == ''? "Add New": "Modify"}} Signature with stamp</a>
+                    class="fa-solid fa-plus pe-2"></i>{{signURL == ''? "Add New": "Modify"}} Signature with stamp</a>
               </div>
               <div class="col-md-6 border overflow-hidden sign-container" [ngClass]="{'d-none': signURL == ''}">
                 <img [attr.src]="signURL" alt="" class="img-fluid ">
@@ -59,7 +59,7 @@
                 <input type="file" class="d-none" id="uploasignwithoutstamp" accept=".jpg, .jpeg, .png"
                   formControlName="SignWithoutStamp">
                 <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowsersign()"><i
-                    class="fa fa-plus pe-2"></i>{{signURL == ''? "Add New": "Modify"}} Signature without stamp</a>
+                    class="fa-solid fa-plus pe-2"></i>{{signURL == ''? "Add New": "Modify"}} Signature without stamp</a>
               </div>
               <div class="col-md-6 border overflow-hidden sign-container" [ngClass]="{'d-none': signwithoutstamp == ''}">
                 <img [attr.src]="signwithoutstamp" alt="" class="img-fluid ">
@@ -90,7 +90,7 @@
                           (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -105,7 +105,7 @@
               </div>
             </div>
             <button class="btn btn-primary-c float-end mb-3" [disabled]="isLoading" (click)="updateDetail()">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
+              <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-gear': !isLoading}"></i>
               <span class="ps-2">{{ isLoading ? 'Processing' : 'Submit' }}</span>
             </button>
           </div>
@@ -115,7 +115,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <h6 class="mb-0">PRIMARY BANK ACCOUNT INFORMATION.</h6>
               <div>
-                <button class="btn my-2 me-1 btn-outline-primary" (click)="editBankAccount(BankDetails)"><i class="fa fa-pencil pe-2"></i> Edit Acoount</button>
+                <button class="btn my-2 me-1 btn-outline-primary" (click)="editBankAccount(BankDetails)"><i class="fa-solid fa-pencil pe-2"></i> Edit Acoount</button>
               </div>
             </div>
             <div class="row">
@@ -345,7 +345,7 @@
                         <div class="input-group w-100">
                           <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onOpeningDateSelect($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                  name="dp" [(ngModel)]="openingmodel" ngbDatepicker #od="ngbDatepicker">
-                          <button class="btn btn-outline-secondary calendar" (click)="od.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                          <button class="btn btn-outline-secondary calendar" (click)="od.toggle()" type="button"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
                         </div>
                       </div>
                     </form>
@@ -357,7 +357,7 @@
                         <div class="input-group w-100">
                           <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onClosingDateSelect($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                  name="dp" [(ngModel)]="closingDatemodel" ngbDatepicker #cd="ngbDatepicker">
-                          <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                          <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
                         </div>
                       </div>
                     </form>
@@ -376,13 +376,13 @@
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark pe-2"></i> Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addUpdateAccount()" *ngIf="primaryCompanyAccountInfo.BankAccountId > 0">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Processing' : 'Add' }}</span>
         </button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addUpdateAccount()" *ngIf="primaryCompanyAccountInfo.BankAccountId == 0">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Processing' : 'Update' }}</span>
         </button>
       </div>

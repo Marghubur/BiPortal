@@ -20,7 +20,7 @@
                         <div class="float-end">
                           <button class="float-end btn btn-outline-success" [disabled]="isLoading"
                             (click)="submitManageUserForm()"><i
-                              [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+                              [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                             {{ isLoading ? 'Wait' : 'Save' }}</button>
                         </div>
                         <div class="col-md-3">
@@ -33,7 +33,7 @@
                                 <!-- <button class="btn btn-outline-success form-control">Browse</button> -->
                                 <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
                                   formControlName="ProfileImgPath" />
-                                <a class="fa fa-camera text-light p-1 zoom-2 text-decoration-none"
+                                <a class="fa-solid fa-camera text-light p-1 zoom-2 text-decoration-none"
                                   (click)="fireBrowserFile()"></a>
                               </div>
                             </div>
@@ -108,10 +108,10 @@
                                       <div class="mt-4 float-end">
                                         <button *ngIf="uploading" type="button" class="btn btn-outline-primary me-2"
                                           [disabled]="isLargeFile" (click)="uploadResume()"><i
-                                            class="fa fa-upload pe-2"></i> Upload</button>
+                                            class="fa-solid fa-upload pe-2"></i> Upload</button>
                                         <button type="button" class="btn btn-outline-info" (click)="cleanFileHandler()"
                                           *ngIf="uploading">
-                                          <i class="fa fa-eraser pe-2"></i> Cancel
+                                          <i class="fa-solid fa-eraser pe-2"></i> Cancel
                                         </button>
                                       </div>
                                     </div>
@@ -146,10 +146,10 @@
                                           <div class="mt-4 float-end">
                                             <button *ngIf="uploading" type="button" class="btn btn-outline-primary me-2"
                                               [disabled]="isLargeFile" (click)="uploadResume()"><i
-                                                class="fa fa-upload pe-2"></i> Upload</button>
+                                                class="fa-solid fa-upload pe-2"></i> Upload</button>
                                             <button type="button" class="btn btn-outline-info"
                                               (click)="cleanFileHandler()" *ngIf="uploading">
-                                              <i class="fa fa-eraser pe-2"></i> Cancel
+                                              <i class="fa-solid fa-eraser pe-2"></i> Cancel
                                             </button>
                                           </div>
                                         </div>
@@ -163,7 +163,7 @@
                           <div
                             class="x_panel my-4 d-flex align-items-center justify-content-between custom-backgrnd-color">
                             <div class="d-flex align-items-center justify-content-center py-3">
-                              <i class="fa fa-folder text-warning f-zoom" aria-hidden="true"></i>
+                              <i class="fa-regular fa-folder-open text-warning f-zoom" aria-hidden="true"></i>
                               <div class="ps-3 pt-3">
                                 <h5>Don’t have a resume yet?</h5>
                                 <p>Create a job-winning resume with our simple resume builder</p>
@@ -179,7 +179,7 @@
                         <div class="x_header mt-4 border-0">
                           <div class="x_header_title">
                             <h2 cl class="fw-bold text-dark"ass="fw-bold">Resume Headline</h2>
-                            <i class="fa fa-pencil text-primary ps-3 fa-lg" (click)="editResumeHeadline()"></i>
+                            <i class="fa-solid fa-pencil text-primary ps-3 fa-lg" (click)="editResumeHeadline()"></i>
                           </div>
                         </div>
                         <div class="col-md-12">
@@ -202,7 +202,7 @@
                           <div class="x_header_title">
                             <h2 class="fw-bold text-dark">Employment</h2>
                             <button class="btn btn-outline-primary btn-sm me-2 float-end" [disabled]="isLoading"
-                              (click)=" addEmployment()"><i class="fa fa-plus-circle pe-1"></i> ADD Employment</button>
+                              (click)=" addEmployment()"><i class="fa-solid fa-plus-circle pe-1"></i> ADD Employment</button>
                           </div>
                         </div>
 
@@ -213,7 +213,7 @@
                                 <div class="col-md-2 fw-bold">Designation:</div>
                                 <div class="col-md-10 fw-bold">{{item.get('Designation').value}}
                                   <a href="javascript:void(0)" class="text-decoration-none float-end" (click)="editEmployment(item)">
-                                    <i class="fa fa-pencil fa-lg text-primary ps-3 pt-2"></i>
+                                    <i class="fa-solid fa-pencil fa-lg text-primary ps-3 pt-2"></i>
                                   </a>
                                 </div>
                               </div>
@@ -261,10 +261,10 @@
                           <div class="x_header_title">
                            <h2 class="fw-bold text-dark">Education</h2>
                             <!-- <button [disabled]="isLoading" class="btn btn-outline-success btn-sm float-end"
-                              (click)="submitEducationDetail()"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+                              (click)="submitEducationDetail()"><i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                               {{ isLoading ? 'Wait' : 'Save' }}</button> -->
                             <button [disabled]="isLoading" class="btn btn-outline-primary btn-sm me-2 float-end"
-                              (click)=" addEducation()"><i class="fa fa-plus-circle pe-1"></i> ADD EDUCATION</button>
+                              (click)=" addEducation()"><i class="fa-solid fa-plus-circle pe-1"></i> ADD EDUCATION</button>
                           </div>
                         </div>
                         <ng-container formArrayName="Educations" *ngIf="!isEducationData">
@@ -275,7 +275,7 @@
                                 <div class="col-md-2 fw-bold">Education:</div>
                                 <div class="col-md-10 fw-bold">{{item.get('Degree_Name').value}}
                                   <a href="javascript:void(0)" class="text-decoration-none float-end" (click)="editEducation(item)">
-                                    <i class="fa fa-pencil fa-lg text-primary ps-3 pt-2"></i>
+                                    <i class="fa-solid fa-pencil fa-lg text-primary ps-3 pt-2"></i>
                                   </a>
                                 </div>
                               </div>
@@ -323,7 +323,7 @@
                           <div class="x_header_title pt-3 align-items-center justify-content-between">
                             <h2 class="fw-bold text-dark">Key Skills
                             </h2>
-                            <button class="btn btn-outline-primary float-end" (click)="editItSkillDetail()"><i class="fa fa-plus-circle pe-2"></i>Add Skill</button>
+                            <button class="btn btn-outline-primary float-end" (click)="editItSkillDetail()"><i class="fa-solid fa-plus-circle pe-2"></i>Add Skill</button>
                           </div>
                         </div>
                         <table class="table table-striped table-striped">
@@ -348,7 +348,7 @@
                                   <td>{{skills.get("ExperienceInYear").value}} Years {{skills.get("ExperienceInMonth").value}} Months</td>
                                   <td>
                                     <a href="javascript:void(0)" class="text-decoration-none" (click)="editItSkillDetail()">
-                                      <i class="fa fa-pencil ps-4 pt-2 text-primary fa-lg"></i>
+                                      <i class="fa-solid fa-pencil ps-4 pt-2 text-primary fa-lg"></i>
                                     </a>
                                   </td>
                                 </tr>
@@ -381,7 +381,7 @@
                               </small>
                             </h2>
                             <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="addProject()">
-                              <i class="fa fa-plus-circle"></i> ADD
+                              <i class="fa-solid fa-plus-circle"></i> ADD
                               PROJECT</button>
                           </div>
                         </div>
@@ -395,10 +395,10 @@
                                   <b class="fw-bold">Project {{index + 1}}:</b>
                                   <div class="inline-block">
                                     <a href="javascript:void(0)" (click)="editProjectDetail(item)">
-                                      <i class="fa fa-pencil fa-lg pe-2"></i>
+                                      <i class="fa-solid fa-pencil fa-lg pe-2"></i>
                                     </a>
                                     <a href="javascript:void(0)" (click)="deleteProjectPopup(item)">
-                                      <i class="fa fa-trash fa-lg text-danger"></i>
+                                      <i class="fa-solid fa-trash-can fa-lg text-danger"></i>
                                     </a>
                                   </div>
                                 </div>
@@ -463,7 +463,7 @@
                             <h6>
                               <span class="fw-bold">Online Profile</span>
                               <button (click)="addOnlieProfiles()" class="mb-3 btn btn-outline-success float-end">
-                                <i class=" fa fa-plus-circle"></i> Add</button>
+                                <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</p>
                             <ng-container *ngIf="userModal.Accomplishments.OnlineProfile != null && userModal.Accomplishments.OnlineProfile != ''">
@@ -474,10 +474,10 @@
                                     <span class="fw-bold float-start">{{item.get("OnlineProfile").value}}</span>
                                     <div class="ms-3 float-end d-inline-block">
                                       <a href="javascript:void(0)" class="pe-3" (click)="editOnlineProfile(item)">
-                                        <i class="fa fa-pencil text-dark"></i>
+                                        <i class="fa-solid fa-pencil text-dark"></i>
                                       </a>
                                       <a href="javascript:void(0)" (click)="deleteOnlineProfilePopup(item)">
-                                        <i class="fa fa-trash text-dark"></i>
+                                        <i class="fa-solid fa-trash-can text-dark"></i>
                                       </a>
                                     </div>
                                   </div>
@@ -490,7 +490,7 @@
                             <h6>
                               <span class="fw-bold">Work Sample</span>
                               <button (click)="addWorkSamples()" class="mb-3 btn btn-outline-success float-end">
-                                <i class=" fa fa-plus-circle"></i> Add</button>
+                                <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to your Projects (e.g. Github links etc.).</p>
                             <ng-container *ngIf="userModal.Accomplishments.WorkSample != null && userModal.Accomplishments.WorkSample != ''">
@@ -500,10 +500,10 @@
                                     <span class="fw-bold float-start">{{item.get("WorkSample").value}}</span>
                                     <div class="ms-3 float-end d-inline-block">
                                       <a href="javascript:void(0)" class="pe-3" (click)="editWorkSample(item)">
-                                        <i class="fa fa-pencil text-white"></i>
+                                        <i class="fa-solid fa-pencil text-white"></i>
                                       </a>
                                       <a href="javascript:void(0)">
-                                        <i class="fa fa-trash text-white" (click)="deleteWorkSamplePopup(item)"></i>
+                                        <i class="fa-solid fa-trash-can text-white" (click)="deleteWorkSamplePopup(item)"></i>
                                       </a>
                                     </div>
                                   </div>
@@ -516,7 +516,7 @@
                             <h6>
                               <span class="fw-bold">White Paper / Research Publication / Journal Entry</span>
                               <button (click)="addResearchs()" class="mb-3 btn btn-outline-success float-end">
-                                <i class=" fa fa-plus-circle"></i> Add</button>
+                                <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add links to your Online publications.</p>
                             <ng-container *ngIf="userModal.Accomplishments.Research != null && userModal.Accomplishments.Research != ''">
@@ -526,10 +526,10 @@
                                     <span class="fw-bold float-start">{{item.get("Research").value}}</span>
                                     <div class="ms-3 float-end d-inline-block">
                                       <a href="javascript:void(0)" class="pe-3" (click)="editResaerch(item)">
-                                        <i class="fa fa-pencil text-white"></i>
+                                        <i class="fa-solid fa-pencil text-white"></i>
                                       </a>
                                       <a href="javascript:void(0)" (click)="deleteResearchPopup(item)">
-                                        <i class="fa fa-trash text-white"></i>
+                                        <i class="fa-solid fa-trash-can text-white"></i>
                                       </a>
                                     </div>
                                   </div>
@@ -542,7 +542,7 @@
                             <h6>
                               <span class="fw-bold">Presentation</span>
                               <button (click)="addPresentations()" class="mb-3 btn btn-outline-success float-end">
-                                <i class=" fa fa-plus-circle"></i> Add</button>
+                                <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</p>
                             <ng-container *ngIf="userModal.Accomplishments.Presentation != null && userModal.Accomplishments.Presentation != ''">
@@ -552,10 +552,10 @@
                                     <span class="fw-bold float-start">{{item.get("Presentation").value}}</span>
                                     <div class="ms-3 float-end d-inline-block">
                                       <a href="javascript:void(0)" class="pe-3" (click)="editPresentation(item)">
-                                        <i class="fa fa-pencil text-white"></i>
+                                        <i class="fa-solid fa-pencil text-white"></i>
                                       </a>
                                       <a href="javascript:void(0)" (click)="deletePresentationPopup(item)">
-                                        <i class="fa fa-trash text-white"></i>
+                                        <i class="fa-solid fa-trash-can text-white"></i>
                                       </a>
                                     </div>
                                   </div>
@@ -568,7 +568,7 @@
                             <h6>
                               <span class="fw-bold">Patent</span>
                               <button (click)="addPatents()" class="mb-3 btn btn-outline-success float-end">
-                                <i class=" fa fa-plus-circle"></i> Add</button>
+                                <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add details of Patents you have filed.</p>
                             <ng-container *ngIf="userModal.Accomplishments.Patent != null && userModal.Accomplishments.Patent != ''">
@@ -578,10 +578,10 @@
                                     <span class="fw-bold float-start">{{item.get("Patent").value}}</span>
                                     <div class="ms-3 float-end d-inline-block">
                                       <a href="javascript:void(0)" class="pe-3" (click)="editPatent(item)">
-                                        <i class="fa fa-pencil text-white"></i>
+                                        <i class="fa-solid fa-pencil text-white"></i>
                                       </a>
                                       <a href="javascript:void(0)" (click)="deletePatentPopup(item)">
-                                        <i class="fa fa-trash text-white"></i>
+                                        <i class="fa-solid fa-trash-can text-white"></i>
                                       </a>
                                     </div>
                                   </div>
@@ -594,7 +594,7 @@
                             <h6>
                               <span class="fw-bold">Certification</span>
                               <button (click)="addCertifications()" class="mb-3 btn btn-outline-success float-end">
-                                <i class=" fa fa-plus-circle"></i> Add</button>
+                                <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add details of Certifications you have achieved/completed</p>
                             <ng-container *ngIf="userModal.Accomplishments.Certification != null && userModal.Accomplishments.Certification != ''">
@@ -604,10 +604,10 @@
                                     <span class="fw-bold float-start">{{item.get("Certification").value}}</span>
                                     <div class="ms-3 float-end d-inline-block">
                                       <a href="javascript:void(0)" class="pe-3" (click)="editCertification(item)">
-                                        <i class="fa fa-pencil text-dark"></i>
+                                        <i class="fa-solid fa-pencil text-dark"></i>
                                       </a>
                                       <a href="javascript:void(0)" (click)="deleteCertificationPopup(item)">
-                                        <i class="fa fa-trash text-dark"></i>
+                                        <i class="fa-solid fa-trash-can text-dark"></i>
                                       </a>
                                     </div>
                                   </div>
@@ -632,7 +632,7 @@
                           <div class="x_header_title align-items-center justify-content-between">
                             <h2 class="fw-bold text-dark">Career Profile</h2>
                             <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="editCarrerProfile()">
-                              <i class="fa fa-plus-circle"></i> ADD Career Profile
+                              <i class="fa-solid fa-plus-circle"></i> ADD Career Profile
                             </button>
                           </div>
                         </div>
@@ -702,7 +702,7 @@
                           <div class="x_header_title align-items-center justify-content-between">
                             <h2 class="fw-bold text-dark">Personal Details</h2>
                             <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="editPersonalDetail()">
-                              <i class="fa fa-plus-circle"></i> ADD Personal Details
+                              <i class="fa-solid fa-plus-circle"></i> ADD Personal Details
                             </button>
                           </div>
                         </div>
@@ -786,16 +786,16 @@
                                       <td>{{item.get("Language").value}}</td>
                                       <td>{{item.get("ProficiencyLanguage").value}}</td>
                                       <td>
-                                        <span *ngIf="item.get('LanguageRead').value == true"><i class="fa fa-check-square-o text-success"></i></span>
-                                        <span *ngIf="item.get('LanguageRead').value == false"><i class="fa fa-close text-danger"></i></span>
+                                        <span *ngIf="item.get('LanguageRead').value == true"><i class="fa-regular fa-square-check text-success"></i></span>
+                                        <span *ngIf="item.get('LanguageRead').value == false"><i class="fa-solid fa-xmark text-danger"></i></span>
                                       </td>
                                       <td>
-                                        <span *ngIf="item.get('LanguageWrite').value == true"><i class="fa fa-check-square-o text-success"></i></span>
-                                        <span *ngIf="item.get('LanguageWrite').value == false"><i class="fa fa-close text-danger"></i></span>
+                                        <span *ngIf="item.get('LanguageWrite').value == true"><i class="fa-regular fa-square-check text-success"></i></span>
+                                        <span *ngIf="item.get('LanguageWrite').value == false"><i class="fa-solid fa-xmark text-danger"></i></span>
                                       </td>
                                       <td>
-                                        <span *ngIf="item.get('LanguageSpeak').value == true"><i class="fa fa-check-square-o text-success"></i></span>
-                                        <span *ngIf="item.get('LanguageSpeak').value == false"><i class="fa fa-close text-danger"></i></span>
+                                        <span *ngIf="item.get('LanguageSpeak').value == true"><i class="fa-regular fa-square-check text-success"></i></span>
+                                        <span *ngIf="item.get('LanguageSpeak').value == false"><i class="fa-solid fa-xmark text-danger"></i></span>
                                       </td>
                                     </tr>
                                   </ng-container>
@@ -891,10 +891,10 @@
                           <span class=" text-spannderline">{{skills.get("Language").value}}</span>
                           <div class="ms-3 d-inline">
                             <a href="javascript:void(0)" class="pe-3" (click)="editItSkill(skills)">
-                                  <i class="fa fa-pencil text-primary"></i>
+                                  <i class="fa-solid fa-pencil text-primary"></i>
                                 </a>
                             <a href="javascript:void(0)" (click)="deleteItSkill(skills)">
-                              <i class="fa fa-times text-dark"></i>
+                              <i class="fa-solid fa-xmark text-dark"></i>
                             </a>
                           </div>
                         </span>
@@ -932,7 +932,7 @@
                   <div class="input-group">
                     <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onkeyskillDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                            name="dp" [(ngModel)]="keySkilldate" ngbDatepicker #kd="ngbDatepicker">
-                    <button class="btn btn-outline-secondary calendar" (click)="kd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                    <button class="btn btn-outline-secondary calendar" (click)="kd.toggle()" type="button"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
                   </div>
                 </div>
               </form>
@@ -1103,7 +1103,7 @@
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3"
           (click)="closeDeleteModal()">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-danger" (click)="deleteEmployment()"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Delete' }}</button>
       </div>
     </div>
@@ -1306,7 +1306,7 @@
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-danger" (click)="deleteProject()"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Delete' }}</button>
       </div>
     </div>
@@ -1337,7 +1337,7 @@
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
         <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="updateOnlineProfile()"
-          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
     </div>
@@ -1365,7 +1365,7 @@
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-danger" (click)="deleteOnlineProfile()"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Delete' }}</button>
       </div>
     </div>
@@ -1397,7 +1397,7 @@
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
         <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="updateWorkSample()"
-          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
     </div>
@@ -1423,7 +1423,7 @@
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-danger" (click)="deleteWorkSample()"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Delete' }}</button>
       </div>
     </div>
@@ -1455,7 +1455,7 @@
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
         <button type="button" class="btn btn-primary-c" (click)="updateResearch()" *ngIf="isSiteURLUpdate"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
     </div>
@@ -1481,7 +1481,7 @@
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-danger" (click)="deleteResearch()"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Delete' }}</button>
       </div>
     </div>
@@ -1514,7 +1514,7 @@
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
         <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="updateCertification()"
-          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
     </div>
@@ -1540,7 +1540,7 @@
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
         <button type="button" [disabled]="isLoading" class="btn btn-danger" (click)="deleteCertification()"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Delete' }}</button>
       </div>
     </div>
@@ -1572,7 +1572,7 @@
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
         <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="updatePresentation()"
-          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
     </div>
@@ -1598,7 +1598,7 @@
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
         <button type="button" class="btn btn-danger" [disabled]="isLoading" (click)="deletePresentation()"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Delete' }}</button>
       </div>
     </div>
@@ -1629,7 +1629,7 @@
             [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-plus-circle': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add' }}</button>
         <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="updatePatent()"
-          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+          *ngIf="isSiteURLUpdate"><i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}</button>
       </div>
     </div>
@@ -1655,7 +1655,7 @@
       <div class="modal-footer">
         <a href="javascript:void(0)" class="text-decoration-none text-primary pe-3" (click)="closeModal()">Cancel</a>
         <button type="button" class="btn btn-danger" [disabled]="isLoading" (click)="deletePatent()"><i
-            [ngClass]="{'fa fa-spinner fa-pulse fa-fw': isLoading}"></i>
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Delete' }}</button>
       </div>
     </div>
@@ -1789,7 +1789,7 @@
                     (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker" required>
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                        class="fa fa-calendar" aria-hidden="true"></i>
+                        class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                     </button>
                   </div>
                 </div>
@@ -1961,7 +1961,7 @@
 <div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
   <div class="text-end">
     <a (click)="closePdfViewer()" class="close_view">
-      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark fa-2x" aria-hidden="true"></i>
     </a>
   </div>
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>

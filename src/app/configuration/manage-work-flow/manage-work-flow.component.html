@@ -33,7 +33,7 @@
                               <div *ngFor="let item of groupItem.controls; let i = index; let last = last;">
                                   <div class="d-flex mt-4" [formGroupName]="i">
                                       <div class="col-auto me-3">
-                                      LEVEL {{i + 1}} <i class=" fa fa-circle text-primary ps-3"></i>
+                                      LEVEL {{i + 1}} <i class=" fa-solid fa-circle text-primary ps-3"></i>
                                       </div>
                                       <div class="col-md-8 position-relative">
                                         <div [ngClass]="{'block-tag': !last}">
@@ -62,27 +62,27 @@
                                         </fieldset>
                                       </div>
                                       <a href="javascript:void(0)" class="text-decoration-none text-secondary" (click)="deleteChainPopUp(item)">
-                                          <i class="fa fa-trash ps-3 text-secondary fa-lg pt-2"></i>
+                                          <i class="fa-solid fa-trash-can ps-3 text-secondary fa-lg pt-2"></i>
                                       </a>
                                   </div>
                               </div>
 
                               <ng-container *ngIf="isEnableAddNew">
                                   <a href="javascript:void(0)" class="text-decoration-none mt-4" (click)="addNewLevel()">
-                                      <i class="fa fa-plus pe-2 py-3"></i>
+                                      <i class="fa-solid fa-plus pe-2 py-3"></i>
                                       Add New Level
                                   </a>
                               </ng-container>
                               <ng-container *ngIf="!isEnableAddNew">
                                   <a href="javascript:void(0)" class="text-decoration-none text-muted mt-4" (click)="addNewLevel()">
-                                      <i class="fa fa-bars  pe-2 py-3" aria-hidden="true"></i>
+                                      <i class="fa-solid fa-bars  pe-2 py-3" aria-hidden="true"></i>
                                       Please use above dropdown to select employee.
                                   </a>
                               </ng-container>
 
                               <ng-container *ngIf="isInProgress">
                                   <a href="javascript:void(0)" class="text-decoration-none text-muted mt-4">
-                                      <i class="fa fa-clock-o pe-2 py-3" aria-hidden="true"></i>
+                                      <i class="fa-regular fa-clock pe-2 py-3" aria-hidden="true"></i>
                                       Please wait adding ...
                                   </a>
                               </ng-container>
@@ -118,7 +118,7 @@
                   </ng-container>
                   <div class="mt-4 d-flex justify-content-end">
                       <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addApprovalWorkFlow()">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Work Flow' }}</span>
                       </button>
                   </div>
@@ -156,7 +156,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-danger" [disabled]="isLoading" (click)="removeCurrent()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-trash-can': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Delete' }}</span>
         </button>
       </div>

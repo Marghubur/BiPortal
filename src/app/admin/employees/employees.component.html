@@ -51,7 +51,7 @@
         </div>
         <div class="col-4 text-end">
           <!-- <a href="javascript:void(0)" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="export as pdf">
-            <i class="fa fa-file-pdf-o fa-lg"></i>
+            <i class="fa-regular fa-file-pdf fa-lg"></i>
           </a> -->
           <a href="{{downlodexcelFilePath}}" class="d-none" id="downloadexistingfiled"></a>
           <a href="javascript:void(0)" class="text-success ms-3" (click)="exportData(2)" data-bs-toggle="tooltip" data-bs-placement="right" title="export as excel">
@@ -132,7 +132,8 @@
                     </div>
                     <div class="td align-middle fe-5">
                       <div class="cell-wrapper">
-                        <a href="javascript:void(0)" (click)="EditCurrent(user)">{{user.FirstName}}
+                        <img [src]="user.ProfilePath" alt="profile" class="user-profile">
+                        <a href="javascript:void(0)" class="ps-2" (click)="EditCurrent(user)">{{user.FirstName}}
                           {{user.LastName}}
                           <small class="text-muted text-decoration-none ps-2">
                             [EmpId: {{user.EmployeeUid}}]
@@ -190,19 +191,19 @@
                             <span *ngSwitchCase="true">
                               <span class="badge bg-danger" data-bs-toggle="tooltip"
                               data-bs-placement="right" title="Inactive employee">
-                                <i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading, 'fa-solid fa-trash-can': !isLoading}" aria-hidden="true"></i>
+                                <i class="" [ngClass]="{'fa-solid fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-trash-can': !isLoading}" aria-hidden="true"></i>
                               </span>
                             </span>
                             <span *ngSwitchDefault>
                               <span class="badge bg-success" data-bs-toggle="tooltip"
                               data-bs-placement="right" title="Active Employee">
-                                <i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading, 'fa-solid fa-shuffle': !isLoading}" aria-hidden="true" aria-hidden="true"></i>
+                                <i class="" [ngClass]="{'fa-solid fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-shuffle': !isLoading}" aria-hidden="true" aria-hidden="true"></i>
                               </span>
                             </span>
                           </ng-container>
                         </a>
                         <!-- <a href="javascript:void(0)">
-                            <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
+                            <span class="badge bg-danger"><i class="fa-solid fa-trash-can-o" aria-hidden="true"
                                 *ngIf="isActiveEmployee == 0" (click)="CreatePopup(user)"></i></span>
                           </a> -->
                       </div>
@@ -280,10 +281,10 @@
         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="ClosePopup()" class="text-decoration-none text-danger btn-white pe-3"
           data-dismiss="modal">Cancel</a>
         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeleteCurrent(singleEmployee)" *ngIf="singleEmployee?.IsActive == true"
-          class="text-decoration-none btn-white text-primary"><i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading}"></i>
+          class="text-decoration-none btn-white text-primary"><i class="" [ngClass]="{'fa-solid fa-spin fa-solid fa-spinner': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Remove' }}</a>
         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeactivatedEmployee(singleEmployee)"
-          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary"><i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading}"></i>
+          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary"><i class="" [ngClass]="{'fa-solid fa-spin fa-solid fa-spinner': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Activate' }}</a>
       </div>
     </div>

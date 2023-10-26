@@ -23,7 +23,7 @@
           <button class="btn btn-outline-success ms-3" (click)="activePage(ActivatedPage+1)">{{ActivatedPage == 3 ?
             'Submit': 'Continue'}}</button> -->
           <a href="javascript:void(0)" (click)="navigateTo(payrollCompoent)" class="text-decoration-none fw-bold"><i
-              class="fa fa-plus pe-2"></i>Create New Component</a>
+              class="fa-solid fa-plus pe-2"></i>Create New Component</a>
         </div>
       </div>
       <ng-container *ngIf="ActivatedPage == 1">
@@ -36,7 +36,7 @@
                   <p class="mb-0 text-truncate text-center">{{item.MinAmount}} - {{item.MaxAmount}}</p>
                   <div ngbDropdown class="d-inline-block menu-btn">
                     <button type="button" [disabled]="item.SalaryGroupId == 1" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                      <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+                      <i class="fa-solid fa-ellipsis-vertical fa-lg" aria-hidden="true"></i>
                     </button>
                     <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
                       <button ngbDropdownItem>
@@ -62,7 +62,7 @@
           </ng-container>
           <div class="vhide col-md-12 me-2">
             <button class="btn btn-primary-c float-end mt-2" (click)="addSalaryGroupModal()"><i
-                class="fa fa-plus pe-2"></i> Add Salary Group</button>
+                class="fa-solid fa-plus pe-2"></i> Add Salary Group</button>
           </div>
         </div>
         <ng-container *ngIf="salaryStructureType.length > 0 && isSalaryGrpSelected">
@@ -78,7 +78,7 @@
             <div class="d-flex justify-content-between mx-1 mb-4">
               <div class="form-group d-flex fe-1">
                 <button class="btn btn-outline-primary col-4" (click)="addComponentModal()"><i
-                    class="fa fa-plus pe-2"></i>
+                    class="fa-solid fa-plus pe-2"></i>
                   Add
                   Component</button>
                 <div class="form-check d-flex flex-column justify-content-center">
@@ -95,7 +95,7 @@
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text bg-white border-end-0">
-                        <i class="fa fa-search p-1 text-muted"></i>
+                        <i class="fa-solid fa-magnifying-glass p-1 text-muted"></i>
                       </span>
                     </div>
                     <input type="text" class="form-control border-start-0" (keyup.esc)="clearFilter($event)"
@@ -147,10 +147,10 @@
                     <ng-container>
                       <div class="td ps-3">
                         <a class="text-decoration-none text-muted" href="javascript:void(0)"
-                          (click)="updateCalcModel(item)"><i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i>
+                          (click)="updateCalcModel(item)"><i class="fa-solid fa-ellipsis fa-lg" aria-hidden="true"></i>
                         </a>
                         <a class="text-decoration-none text-muted ms-4" href="javascript:void(0)"
-                          (click)="openComponentDeleteOrUpdateModel(item)"><i class="fa fa-trash fa-lg" aria-hidden="true"></i>
+                          (click)="openComponentDeleteOrUpdateModel(item)"><i class="fa-solid fa-trash-can fa-lg" aria-hidden="true"></i>
                         </a>
                       </div>
                     </ng-container>
@@ -173,7 +173,7 @@
             Structure</button>
           <div class="col-md-3 float-end">
             <div class="form-group has-search">
-              <span class="fa fa-search form-control-feedback"></span>
+              <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
               <input type="text" class="form-control" placeholder="Search">
             </div>
           </div>
@@ -218,7 +218,7 @@
               <div class="td ps-3">
                 <div ngbDropdown class="d-inline-block" placement="bottom-end">
                   <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                    <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+                    <i class="fa-solid fa-ellipsis-vertical fa-lg" aria-hidden="true"></i>
                   </button>
                   <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
                     <button ngbDropdownItem (click)="updateCalcModel()">
@@ -236,7 +236,7 @@
           <button class="btn btn-outline-primary" (click)="addDailyStrutModal()">Create Custom Daily Structure</button>
           <div class="col-md-3 float-end">
             <div class="form-group has-search">
-              <span class="fa fa-search form-control-feedback"></span>
+              <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
               <input type="text" class="form-control" placeholder="Search">
             </div>
           </div>
@@ -287,7 +287,7 @@
               <div class="td ps-3">
                 <div ngbDropdown class="d-inline-block" placement="bottom-end">
                   <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                    <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+                    <i class="fa-solid fa-ellipsis-vertical fa-lg" aria-hidden="true"></i>
                   </button>
                   <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
                     <button ngbDropdownItem (click)="updateCalcModel(item)">
@@ -329,7 +329,7 @@
       <div class="modal-body">
         <div class="col-md-3 float-end">
           <div class="form-group has-search">
-            <span class="fa fa-search form-control-feedback"></span>
+            <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
             <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Search"
               (keyup.Tab)="resetSalaryFilter($event)" [(ngModel)]="salaryCompFilterData" (keyup)="filterSalaryComponent($event)">
           </div>
@@ -391,7 +391,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeAddCompPopUp()">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="addComponents()"><i class="fa fa-plus pe-2"></i>
+        <button type="button" class="btn btn-primary-c" (click)="addComponents()"><i class="fa-solid fa-plus pe-2"></i>
           Add</button>
       </div>
     </div>
@@ -474,7 +474,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="updateValue()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{isLoading ? 'wait': 'Save Changes'}}</span>
         </button>
       </div>
@@ -515,12 +515,12 @@
                   <li class="list-group-item ps-0">
                     <input class="form-check-input me-1" type="checkbox" aria-label="..." formControlName="EPF">
                     Provident Fund (PF) is applicable for this salary structure. <i
-                      class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                      class="fa-solid fa-circle-exclamation text-secondary ps-2"></i>
                   </li>
                   <li class="list-group-item ps-0">
                     <input class="form-check-input" type="checkbox" formControlName="ESI">
                     Employee State Insurance (ESI) is applicable for this salary structure. <i
-                      class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                      class="fa-solid fa-circle-exclamation text-secondary ps-2"></i>
                   </li>
                   <li class="list-group-item pb-0 ps-0">
                     <input class="form-check-input me-1" type="checkbox" formControlName="IsPaidSeparately">
@@ -548,7 +548,7 @@
             <div class="col-md-5">
               <div class="d-flex justify-content-between mx-1 my-4">
                 <div class="form-group">
-                  <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2">
+                  <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa-solid fa-plus pe-2">
                     </i> Add Component</button>
 
                   <div class="ms-2 mt-2 form-check">
@@ -592,7 +592,7 @@
                       <ng-container>
                         <div class="td ps-3">
                           <a class="text-decoration-none text-dark" href="javascript:void(0)"
-                            (click)="updateCalcModel(item)"><i class="fa fa-ellipsis-h fa-lg"
+                            (click)="updateCalcModel(item)"><i class="fa-solid fa-ellipsis fa-lg"
                               aria-hidden="true"></i></a>
                         </div>
                       </ng-container>
@@ -606,8 +606,8 @@
                 </div>
               </div>
               <p class="mb-0">
-                <a href="javascript:void(0)" class="text-decoration-none"> <i class="fa fa-plus pe-2"></i>Add Hourly Pay
-                  calculation for OT</a><i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                <a href="javascript:void(0)" class="text-decoration-none"> <i class="fa-solid fa-plus pe-2"></i>Add Hourly Pay
+                  calculation for OT</a><i class="fa-solid fa-circle-exclamation text-secondary ps-2"></i>
               </p>
               <div class="alert alert-secondary py-2 mt-3 mb-0 col-md-12" role="alert">
                 No hourly pay calculation added for OT.
@@ -619,7 +619,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" (click)="addCustomSalaryStruct()">
-          <i class="fa pe-3" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i class="fa pe-3" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           {{isLoading ? 'wait': 'Add Salary Structure'}}
         </button>
       </div>
@@ -662,12 +662,12 @@
                 <li class="list-group-item ps-0">
                   <input class="form-check-input me-1" type="checkbox" aria-label="...">
                   Provident Fund (PF) is applicable for this salary structure. <i
-                    class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                    class="fa-solid fa-circle-exclamation text-secondary ps-2"></i>
                 </li>
                 <li class="list-group-item ps-0">
                   <input class="form-check-input" type="checkbox">
                   Employee State Insurance (ESI) is applicable for this salary structure. <i
-                    class="fa fa-exclamation-circle text-secondary ps-2"></i>
+                    class="fa-solid fa-circle-exclamation text-secondary ps-2"></i>
                 </li>
                 <li class="list-group-item pb-0 ps-0">
                   <input class="form-check-input me-1" type="checkbox" aria-label="...">
@@ -694,7 +694,7 @@
           <div class="col-md-5">
             <div class="d-flex justify-content-between mx-1 my-4">
               <div class="form-group">
-                <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa fa-plus pe-2"></i>
+                <button class="btn btn-outline-primary" (click)="addComponentModal()"><i class="fa-solid fa-plus pe-2"></i>
                   Add
                   Component</button>
                 <div class="form-check">
@@ -737,7 +737,7 @@
                     <div class="td ps-3">
                       <div ngbDropdown class="d-inline-block" placement="bottom-end">
                         <button type="button" class="btn btn-sm" id="dropdownBasic2" ngbDropdownToggle>
-                          <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+                          <i class="fa-solid fa-ellipsis-vertical fa-lg" aria-hidden="true"></i>
                         </button>
                         <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic2">
                           <button ngbDropdownItem (click)="updateCalcModel()">
@@ -751,8 +751,8 @@
               </div>
             </div>
             <p class="mb-0">
-              <a href="javascript:void(0)" class="text-decoration-none"> <i class="fa fa-plus pe-2"></i>Add Hourly Pay
-                calculation for OT</a><i class="fa fa-exclamation-circle text-secondary ps-2"></i>
+              <a href="javascript:void(0)" class="text-decoration-none"> <i class="fa-solid fa-plus pe-2"></i>Add Hourly Pay
+                calculation for OT</a><i class="fa-solid fa-circle-exclamation text-secondary ps-2"></i>
             </p>
             <div class="alert alert-secondary py-2 mt-3 mb-0 col-md-12" role="alert">
               No hourly pay calculation added for OT.
@@ -814,19 +814,19 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <ng-container *ngIf="isEditSalaryGroup && !isClone">
           <button type="button" class="btn btn-primary-c" (click)="updateSalaryGroup()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Update Salary Group' }}</span>
           </button>
         </ng-container>
         <ng-container *ngIf="!isEditSalaryGroup && !isClone">
           <button type="button" class="btn btn-primary-c" (click)="addSalaryGroup()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Create Salary Group' }}</span>
           </button>
         </ng-container>
         <ng-container *ngIf="isClone">
           <button type="button" class="btn btn-primary-c" (click)="cloneSalaryGroup()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Clone Salary Group' }}</span>
           </button>
         </ng-container>
@@ -892,7 +892,7 @@
       <div class="modal-footer border-top-0 me-3">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary-c" (click)="removeFromSalaryGroup()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-trash-can': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Removing' : 'Remove From Group' }}</span>
           </button>
       </div>

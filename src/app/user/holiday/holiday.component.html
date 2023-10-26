@@ -29,9 +29,9 @@
                         (keyup.enter)="filterRecords()" autofocus [(ngModel)]="holidayDetail.DescriptionNote">
                       <div class="t-filter" (click)="arrangeDetails(orderByDescriptionNoteAsc, 'DescriptionNote')">
                         <a href="javascript:void()" class="pe-2">Name</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByDescriptionNoteAsc == null || !orderByDescriptionNoteAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByDescriptionNoteAsc == null || orderByDescriptionNoteAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -42,9 +42,9 @@
                         placeholder="Search by Name">
                       <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
                         <a href="javascript:void()" class="pe-2">Start Date</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -55,9 +55,9 @@
                         placeholder="Search by Name">
                         <div class="t-filter" (click)="arrangeDetails(orderByEndDateAsc, 'EndDate')">
                           <a href="javascript:void()" class="pe-2">End Date</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByEndDateAsc == null || !orderByEndDateAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByEndDateAsc == null || orderByEndDateAsc }" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -89,9 +89,9 @@
                         (keyup.enter)="filterRecords()" autofocus [(ngModel)]="holidayDetail.Country">
                       <div class="t-filter" (click)="arrangeDetails(orderByCountryAsc, 'Country')">
                         <a href="javascript:void()" class="pe-2">Country</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByCountryAsc == null || !orderByCountryAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByCountryAsc == null || orderByCountryAsc }" aria-hidden="true"></i>
                       </div>
                     </div>

@@ -13,7 +13,7 @@
               <div class="x_header_title d-flex align-items-center justify-content-end">
                 <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
                 <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-                  class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+                  class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
               </div>
             </div>
           </div>
@@ -96,7 +96,7 @@
                             <div class="input-group w-100" [ngClass]="{'error-field': submitted && m['InCorporationDate'].errors !== null && m['InCorporationDate'].errors['required']}">
                               <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxdate"
                                      name="dp" [(ngModel)]="corporationDateModal" ngbDatepicker #cd="ngbDatepicker">
-                              <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                              <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
                             </div>
                           </div>
                         </form>
@@ -270,7 +270,7 @@
                       <div class="col-md-6 mt-4 d-flex flex-column justify-content-end">
                         <div class="d-flex flex-row justify-content-end">
                           <button class="btn-primary-c btn" [disabled]="isLoading" (click)="submitChanges()">
-                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
+                            <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-paper-plane': !isLoading}"></i>
                             <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Changes' }}</span>
                           </button>
                         </div>
@@ -295,9 +295,9 @@
                             placeholder="Search by AccountNumber">
                           <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'BankName')">
                             <a href="javascript:void()" class="pe-2">Bank Name</a>
-                            <i class="fa fa-sort-amount-asc"
+                            <i class="fa-solid fa-arrow-down-wide-short"
                               [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
+                            <i class="fa-solid fa-arrow-down-short-wide"
                               [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                           </div>
                         </div>
@@ -309,9 +309,9 @@
                             placeholder="Search by Account Number">
                           <div class="t-filter" (click)="arrangeDetails(orderByAccountAsc, 'AccountNo')">
                             <a href="javascript:void()" class="pe-2">Account No.</a>
-                            <i class="fa fa-sort-amount-asc"
+                            <i class="fa-solid fa-arrow-down-wide-short"
                               [ngClass]="{'d-none': orderByAccountAsc == null || !orderByAccountAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
+                            <i class="fa-solid fa-arrow-down-short-wide"
                               [ngClass]="{'d-none': orderByAccountAsc == null || orderByAccountAsc }" aria-hidden="true"></i>
                           </div>
                         </div>
@@ -322,9 +322,9 @@
                             (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.Branch" placeholder="Search by Branch Name" autocomplete="off">
                           <div class="t-filter" (click)="arrangeDetails(orderByBranchAsc, 'Branch')">
                             <a href="javascript:void()" class="pe-2">Branch Name</a>
-                            <i class="fa fa-sort-amount-asc"
+                            <i class="fa-solid fa-arrow-down-wide-short"
                               [ngClass]="{'d-none': orderByBranchAsc == null || !orderByBranchAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
+                            <i class="fa-solid fa-arrow-down-short-wide"
                               [ngClass]="{'d-none': orderByBranchAsc == null || orderByBranchAsc }" aria-hidden="true"></i>
                           </div>
                         </div>
@@ -335,16 +335,16 @@
                             (keydown.esc)="resetFilter()" [(ngModel)]="filterCompanyAccountInfo.IFSC" placeholder="Search by IFSC Code" autocomplete="off">
                           <div class="t-filter" (click)="arrangeDetails(orderByIFSCAsc, 'IFSC')">
                             <a href="javascript:void()" class="pe-2">IFSC</a>
-                            <i class="fa fa-sort-amount-asc"
+                            <i class="fa-solid fa-arrow-down-wide-short"
                               [ngClass]="{'d-none': orderByIFSCAsc == null || !orderByIFSCAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
+                            <i class="fa-solid fa-arrow-down-short-wide"
                               [ngClass]="{'d-none': orderByIFSCAsc == null || orderByIFSCAsc }" aria-hidden="true"></i>
                           </div>
                         </div>
                       </div>
                       <div class="th fe-2 align-items-center justify-content-center">
                         <div class="cell-wrapper ">
-                          <button class="btn btn-outline-success" [disabled]="CompanyAccountDetails.length == 10" (click)="addAccountPopUp()"><i class="fa fa-plus-square-o pe-2"></i>Add Account</button>
+                          <button class="btn btn-outline-success" [disabled]="CompanyAccountDetails.length == 10" (click)="addAccountPopUp()"><i class="fa-regular fa-square-plus pe-2"></i>Add Account</button>
                           <div class="text-center mt-3">ACTIONS</div>
                         </div>
                       </div>
@@ -382,10 +382,10 @@
                         <div class="td align-middle fe-2">
                           <div class="d-flex flex-row justify-content-center">
                             <a href="javascript:void(0)" (click)="editAccountPopUp(bank)">
-                              <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                              <span class="badge bg-primary"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
                             </a>
                             <a href="javascript:void(0)" class="ms-3" (click)="DeleteAccountPopUp(bank)">
-                              <span class="badge bg-danger"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                              <span class="badge bg-danger"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></span>
                             </a>
                           </div>
                         </div>
@@ -472,7 +472,7 @@
                         <div class="input-group w-100">
                           <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onOpeningDateSelect($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                  name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
-                          <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                          <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
                         </div>
                       </div>
                     </form>
@@ -484,7 +484,7 @@
                         <div class="input-group w-100">
                           <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onClosingDateSelect($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                  name="dp" [(ngModel)]="closingDatemodel" ngbDatepicker #cd="ngbDatepicker">
-                          <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+                          <button class="btn btn-outline-secondary calendar" (click)="cd.toggle()" type="button"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
                         </div>
                       </div>
                     </form>
@@ -503,13 +503,13 @@
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close pe-2"></i> Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark pe-2"></i> Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addUpdateAccount()" *ngIf="singleCompanyAccountInfo.BankAccountId > 0">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Processing' : 'Update' }}</span>
         </button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addUpdateAccount()" *ngIf="singleCompanyAccountInfo.BankAccountId == 0">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Processing' : 'Add' }}</span>
         </button>
       </div>

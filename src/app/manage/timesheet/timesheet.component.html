@@ -33,7 +33,7 @@
                   </div>
                   <div class="col-md-1">
                     <button class="btn  btn-primary-c" (click)="advanceFilterPopUp()">
-                      <i class="fa fa-filter"></i>
+                      <i class="fa-solid fa-filter"></i>
                     </button>
                   </div>
                 </div>
@@ -61,13 +61,13 @@
                     </a>
                   </td>
                   <td>
-                    <span *ngIf="item.TimesheetStatus == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
-                    <span *ngIf="item.TimesheetStatus == 8"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
-                    <span *ngIf="item.TimesheetStatus == 9"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
-                    <span *ngIf="item.TimesheetStatus == 6 "><i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
-                    <span *ngIf="item.TimesheetStatus == 5 "><i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
+                    <span *ngIf="item.TimesheetStatus == 2"><i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
+                    <span *ngIf="item.TimesheetStatus == 8"><i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
+                    <span *ngIf="item.TimesheetStatus == 9"><i class="fa-regular fa-square-check text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
+                    <span *ngIf="item.TimesheetStatus == 6 "><i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
+                    <span *ngIf="item.TimesheetStatus == 5 "><i class="fa-solid fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
                     <span class="text-danger"  *ngIf="item.TimesheetStatus == -1">
-                      <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                      <i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                       Readonly
                     </span>
                   </td>

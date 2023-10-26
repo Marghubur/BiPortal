@@ -8,7 +8,7 @@
       <div class="col-md-2 e-mail-side-menu">
         <div class="mb-5">
           <button class="btn btn-outline-success btn-lg w-100 btn-round" (click)="composeMailPopUp()">
-            <i class="fa fa-edit px-2"></i>
+            <i class="fa-solid fa-pencil px-2"></i>
             Compose
           </button>
         </div>
@@ -45,10 +45,10 @@
                     <div class="d-flex">
                       <input type="checkbox" (click)="selectAll($event)">
                       <div class="ps-4 pe-2">
-                        <i class="fa fa-refresh"></i>
+                        <i class="fa-solid fa-arrows-rotate"></i>
                       </div>
                       <div class="ps-2 pe-2">
-                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        <i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -59,8 +59,8 @@
                       </div>
                       <div class="px-3">
                         <div class="d-flex">
-                          <i class="fa fa-chevron-left pe-2" aria-hidden="true"></i>
-                          <i class="fa fa-chevron-right ps-2" aria-hidden="true"></i>
+                          <i class="fa-solid fa-chevron-left pe-2" aria-hidden="true"></i>
+                          <i class="fa-solid fa-chevron-right ps-2" aria-hidden="true"></i>
                         </div>
                       </div>
                     </div>
@@ -95,7 +95,7 @@
           <div class="col-12">
             <div class="col-12">
               <button class="btn btn-outline-dark border back-btn" (click)="showInbox()">
-                <i class="fa fa-arrow-left" aria-hidden="true">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true">
                   <span class="px-2">Back</span>
                 </i>
               </button>
@@ -133,10 +133,10 @@
         <h5 class="modal-title" id="composeMailModalLabel">New Message</h5>
         <div>
           <a href="javascript:void(0)" class="text-decoration-none" (click)="minimizeMailBox()">
-            <i class="fa fa-minus px-2 text-dark"></i>
+            <i class="fa-solid fa-minus px-2 text-dark"></i>
           </a>
           <a href="javascript:void(0)" class="text-decoration-none" (click)="maximizeMailbox()">
-            <i class="fa fa-window-maximize px-2 text-dark"></i>
+            <i class="fa-regular fa-window-maximize px-2 text-dark"></i>
           </a>
           <button type="button" class="btn-close" (click)="closeModalpopup()"></button>
         </div>
@@ -148,7 +148,7 @@
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
               <span class="badge bg-primary fs-6 m-2" *ngFor="let item of toEmail; let i = index">{{item}}
                 <a href="javascript:void(0)" class="text-decoration-none">
-                  <i class="fa fa-close text-light" (click)="removeToEmail(i, 'to-emails')"></i>
+                  <i class="fa-solid fa-xmark text-light" (click)="removeToEmail(i, 'to-emails')"></i>
                 </a>
               </span>
 
@@ -163,7 +163,7 @@
           <div class="email-address-box my-4 border-bottom d-flex align-items-center d-none" data-name="Cc-address">
             <label for="Cc-email-address" class="form-label fs-5 m-0 pe-1">Cc</label>
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
-              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of ccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-white" (click)="removeToEmail(i, 'cc-emails')"></i></a></span>
+              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of ccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa-solid fa-xmark text-white" (click)="removeToEmail(i, 'cc-emails')"></i></a></span>
               <input type="text" class="col border-0 ms-2 fs-5" formControlName="CC" (click)="emailAddress()" (blur)="addToList($event, 'cc-emails')" (keyup)="addEmailChip($event, 'cc-emails')">
               <div class="col-auto float-end" data-name="Add-Bcc-btn">
                 <a href="javascript:void(0)" class="text-decoration-none text-muted ps-2 fs-5" (click)="otherAddress($event, 'Bcc-address')">Bcc</a>
@@ -173,7 +173,7 @@
           <div class="email-address-box my-4 border-bottom d-flex align-items-center d-none" data-name="Bcc-address">
             <label for="Bcc-email-address" class="form-label fs-5 m-0 pe-1">Bcc</label>
             <div class="d-flex flex-row flex-wrap w-100 align-items-center">
-              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of bccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa fa-close text-white" (click)="removeToEmail(i, 'bcc-emails')"></i></a></span>
+              <span class="badge bg-primary fs-6 m-2" *ngFor="let item of bccEmail; let i = index">{{item}} <a href="javascript:void(0)" class="text-decoration-none"><i class="fa-solid fa-xmark text-white" (click)="removeToEmail(i, 'bcc-emails')"></i></a></span>
               <input type="text" class="col border-0 ms-2 fs-5" formControlName="BCC"  (click)="emailAddress()" (keyup)="addEmailChip($event, 'bcc-emails')" (blur)="addToList($event, 'bcc-emails')">
               <div class="col-auto float-end" data-name="Add-Cc-btn">
                 <a href="javascript:void(0)" class="text-decoration-none text-muted fs-5" (click)="otherAddress($event, 'Cc-address')">Cc</a>
@@ -191,10 +191,10 @@
       <div class="modal-footer border-top-0 justify-content-start">
         <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
         <input type="file" id="fileAttachment" multiple class="d-none" (change)="uploadProfilePicture($event)">
-        <button type="button" class="btn btn-outline-primary" [disabled]="isLoading" (click)="sendEmailRequest()"><i class="fa " [ngClass]="{'fa-send-o': !isLoading, 'fa-spin fa-spinner': isLoading}"></i><span class="ps-2">{{ isLoading ? 'Wait' : 'Send' }}</span></button>
+        <button type="button" class="btn btn-outline-primary" [disabled]="isLoading" (click)="sendEmailRequest()"><i class="" [ngClass]="{'fa-regular fa-paper-plane': !isLoading, 'fa-spin fa-solid fa-spinner': isLoading}"></i><span class="ps-2">{{ isLoading ? 'Wait' : 'Send' }}</span></button>
         <span *ngIf="FileDocumentList.length > 0" class="fw-bold ps-3 pe-2 text-dark">{{FileDocumentList.length}} file attached</span>
-        <a href="javascript:void(0)" class="text-decoration-none ps-2" (click)="fireBrowserFile()"><i class="fa fa-paperclip pe-2"></i>Attach</a>
-        <a href="javascript:void(0)" class="text-decoration-none ps-2"><i class="fa fa-html5 pe-2"></i>Template</a>
+        <a href="javascript:void(0)" class="text-decoration-none ps-2" (click)="fireBrowserFile()"><i class="fa-solid fa-paperclip pe-2"></i>Attach</a>
+        <a href="javascript:void(0)" class="text-decoration-none ps-2"><i class="fa-brands fa-html5 pe-2"></i>Template</a>
       </div>
     </div>
   </div>

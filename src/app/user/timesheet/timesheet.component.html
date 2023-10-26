@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-1">
                   <button class="btn  btn-primary-c" (click)="advanceFilterPopUp()">
-                    <i class="fa fa-filter"></i>
+                    <i class="fa-solid fa-filter"></i>
                   </button>
                 </div>
               </div>
@@ -52,13 +52,13 @@
                     </a>
                   </td>
                   <td>
-                    <span *ngIf="item.TimesheetStatus == 2"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
-                    <span *ngIf="item.TimesheetStatus == 8"><i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
-                    <span *ngIf="item.TimesheetStatus == 9"><i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
-                    <span *ngIf="item.TimesheetStatus == 6 "><i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
-                    <span *ngIf="item.TimesheetStatus == 5 "><i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
+                    <span *ngIf="item.TimesheetStatus == 2"><i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
+                    <span *ngIf="item.TimesheetStatus == 8"><i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
+                    <span *ngIf="item.TimesheetStatus == 9"><i class="fa-regular fa-square-check text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
+                    <span *ngIf="item.TimesheetStatus == 6 "><i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
+                    <span *ngIf="item.TimesheetStatus == 5 "><i class="fa-solid fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
                     <span class="text-danger"  *ngIf="item.TimesheetStatus == -1">
-                      <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                      <i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                       Readonly
                     </span>
                   </td>
@@ -178,23 +178,23 @@
                       <td [ngClass]="{'highlighted-column': item.get('TimesheetStatus').value == 11 || item.get('TimesheetStatus').value == -1}">
                         <ng-container [ngSwitch]="item.get('TimesheetStatus').value">
                           <span class="" *ngSwitchCase="2">
-                            <i class="fa fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            <i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Pending
                           </span>
                           <span class="" *ngSwitchCase="6">
-                            <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            <i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Not Submitted
                           </span>
                           <span class="" *ngSwitchCase="5">
-                            <i class="fa fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            <i class="fa-solid fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Rejected
                           </span>
                           <span class="" *ngSwitchCase="9">
-                            <i class="fa fa-check-square-o text-success pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            <i class="fa-regular fa-square-check text-success pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Approved
                           </span>
                           <span class="text-danger" *ngSwitchDefault>
-                            <i class="fa fa-close text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                            <i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                             Readonly
                           </span>
                         </ng-container>
@@ -221,7 +221,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isBlocked || isSubmitted" (click)="onSubmit()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-arrow-right-to-bracket': !isLoading}"></i>
           {{ isLoading ? 'Saving' : 'Submit' }}
         </button>
       </div>

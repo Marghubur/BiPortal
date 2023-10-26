@@ -30,16 +30,16 @@
                       Organization components like Basic, HRA, Special Allowance are system defined and can't be
                       edited or removed.</p>
                     <div class="col-md-12 my-4">
-                      <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa fa-plus pe-2"></i>
+                      <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa-solid fa-plus pe-2"></i>
                         ADD NEW COMPONENT</button>
-                      <button class="btn btn-success ms-2"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to
+                      <button class="btn btn-success ms-2"><i class="fa-solid fa-share pe-2" aria-hidden="true"></i>Move to
                         Add Hoc Component</button>
                       <a href="javascript:void(0)" class="text-decoration-none text-dark ms-3"
-                        (click)="excelSheetModal()"><i class="fa fa-plus pe-2" aria-hidden="true"></i>Add Excel
+                        (click)="excelSheetModal()"><i class="fa-solid fa-plus pe-2" aria-hidden="true"></i>Add Excel
                         Sheet</a>
                       <div class="col-md-3 float-end">
                         <div class="form-group has-search">
-                          <span class="fa fa-search form-control-feedback"></span>
+                          <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
                           <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
                             (keydown.esc)="reloadAllRecurring($event)" (keyup)="filterRecords($event)"
                             placeholder="Search Component">
@@ -104,9 +104,9 @@
                             </div>
                             <div class="td ps-3">
                               <a href="javascript:void(0)" class="text-decoration-none"
-                                (click)="editRecurring(item)"><i class="fa fa-pencil pe-lg-1"></i> Edit</a>
+                                (click)="editRecurring(item)"><i class="fa-solid fa-pencil pe-lg-1"></i> Edit</a>
                               <a href="javascript:void(0)" class="text-decoration-none ps-3 text-danger"><i
-                                  class="fa fa-trash-o pe-1"></i> Delete</a>
+                                  class="fa-solid fa-trash-can-o pe-1"></i> Delete</a>
                             </div>
                           </div>
                         </ng-container>
@@ -126,7 +126,7 @@
                   <div class="px-2 pt-3">
                     <div class="d-flex justify-content-between">
                       <h4>Ad Hoc Components Library</h4>
-                      <button class="btn btn-success"><i class="fa fa-share pe-2" aria-hidden="true"></i>Move to
+                      <button class="btn btn-success"><i class="fa-solid fa-share pe-2" aria-hidden="true"></i>Move to
                         Recurring Component</button>
                     </div>
                     <p class="mb-0 py-2">In this Section you can create all the ad hoc components that gets paid in
@@ -149,7 +149,7 @@
                           </ul>
                           <p class="mb-0 my-3">
                             <a href="javascript:void(0)" class="text-decoration-none" (click)="AdhocPopUp()"><i
-                                class="fa fa-plus pe-2"></i>Add Adhoc Allowance</a>
+                                class="fa-solid fa-plus pe-2"></i>Add Adhoc Allowance</a>
                           </p>
                         </div>
                         <div class="col-md-12 mt-5 py-5">
@@ -162,7 +162,7 @@
                           </ul>
                           <p class="mb-0 my-3">
                             <a href="javascript:void(0)" class="text-decoration-none" (click)="BonusPopUp()"><i
-                                class="fa fa-plus pe-2"></i>Add Bonuses</a>
+                                class="fa-solid fa-plus pe-2"></i>Add Bonuses</a>
                           </p>
                         </div>
                       </div>
@@ -177,7 +177,7 @@
                         </ul>
                         <p class="mb-0 my-3">
                           <a href="javascript:void(0)" class="text-decoration-none" (click)="DeductionPopUp()"><i
-                              class="fa fa-plus pe-2"></i>AddDeduction</a>
+                              class="fa-solid fa-plus pe-2"></i>AddDeduction</a>
                         </p>
                       </div>
                     </div>
@@ -310,13 +310,13 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <ng-container *ngIf="CurrentRecurringComponent.ComponentId != ''">
           <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Update Component' }}</span>
           </button>
         </ng-container>
         <ng-container *ngIf="CurrentRecurringComponent.ComponentId == ''">
           <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Create Component' }}</span>
           </button>
         </ng-container>
@@ -378,7 +378,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="addNewAdhocAllowance()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Create Adhoc Allowance' }}
         </button>
       </div>
@@ -426,7 +426,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="addNewDeduction()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Create Deduction' }}
         </button>
       </div>
@@ -470,7 +470,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="addNewBonus()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Create Bonus' }}
         </button>
       </div>
@@ -585,12 +585,12 @@
             </div>
             <div class="mt-4">
               <button type="button" class="btn btn-primary-c" (click)="uploadExcelSheet($event)" [disabled]="isDisable">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-upload': !isLoading}"></i>
+                <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
                 <span class="ps-2">{{ isLoading ? 'Uploading ...' : 'Upload selected excel data' }}</span>
               </button>
               <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
                 [disabled]="isDisable">
-                <i class="fa fa-eraser pe-2"></i> Cancel
+                <i class="fa-solid fa-eraser pe-2"></i> Cancel
               </button>
             </div>
           </div>
@@ -600,11 +600,11 @@
             <div class="x_header_title">
               <div>
                 <h5 class="d-inline">Uploaded Records</h5>
-                <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa fa-dot-circle-o me-2"></i> Upload
+                <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
                   correct format of excel sheet. <a href="javascript:void(0)">Click to download the sample.</a></p>
                 <span *ngIf="isAvailable" class="d-inline">
                   <a class="float-end" href="javascript:void(0)" (click)="expandTable()">
-                    <i class="fa fa-expand"></i>
+                    <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
                   </a>
                 </span>
               </div>

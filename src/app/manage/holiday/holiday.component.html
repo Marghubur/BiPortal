@@ -13,9 +13,9 @@
               <div class="x_header_title d-flex align-items-center justify-content-end">
                 <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
                 <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
-                  class="fa fa-paper-plane pe-1"></i> Email Link Config
+                  class="fa-solid fa-paper-plane pe-1"></i> Email Link Config
                 </a>
-                <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa fa-plus-square pe-2"></i>Add Holiday</button>
+                <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa-solid fa-plus-square pe-2"></i>Add Holiday</button>
               </div>
             </div>
           </div>
@@ -38,9 +38,9 @@
                         (keyup.enter)="filterRecords()" autofocus [(ngModel)]="holidayDetail.DescriptionNote">
                       <div class="t-filter" (click)="arrangeDetails(orderByDescriptionNoteAsc, 'DescriptionNote')">
                         <a href="javascript:void()" class="pe-2">Name</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByDescriptionNoteAsc == null || !orderByDescriptionNoteAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByDescriptionNoteAsc == null || orderByDescriptionNoteAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -51,9 +51,9 @@
                         placeholder="Search by Name">
                       <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
                         <a href="javascript:void()" class="pe-2">Start Date</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -64,9 +64,9 @@
                         placeholder="Search by Name">
                         <div class="t-filter" (click)="arrangeDetails(orderByEndDateAsc, 'EndDate')">
                           <a href="javascript:void()" class="pe-2">End Date</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByEndDateAsc == null || !orderByEndDateAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByEndDateAsc == null || orderByEndDateAsc }" aria-hidden="true"></i>
                         </div>
                     </div>
@@ -89,9 +89,9 @@
                       </select>
                       <div class="t-filter">
                         <a href="javascript:void()" class="pe-2" (click)="arrangeDetails(orderByFullDayAsc, 'IsHalfDay')">FullDay/HalfDay</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByFullDayAsc == null || !orderByFullDayAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByFullDayAsc == null || orderByFullDayAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -103,16 +103,16 @@
                         (keyup.enter)="filterRecords()" autofocus [(ngModel)]="holidayDetail.Country">
                       <div class="t-filter" (click)="arrangeDetails(orderByCountryAsc, 'Country')">
                         <a href="javascript:void()" class="pe-2">Country</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByCountryAsc == null || !orderByCountryAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByCountryAsc == null || orderByCountryAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-index text-center" *ngIf="isAdmin">
                     <div class="cell-wrapper">
-                      <button class="btn btn-danger" (click)="resetFilter()"><i class="fa fa-repeat"></i></button>
+                      <button class="btn btn-danger" (click)="resetFilter()"><i class="fa-solid fa-repeat"></i></button>
                       <div class="t-filter" (click)="arrangeDetails(orderByCountryAsc, 'Country')">
                         ACTION
                       </div>
@@ -161,10 +161,10 @@
                     <div class="td align-middle fe-index"  *ngIf="isAdmin">
                       <div class="d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)" (click)="editHoliday(holiday)">
-                          <i class="fa fa-edit text-primary" aria-hidden="true"></i>
+                          <i class="fa-solid fa-pencil text-primary" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0)" (click)="deleteHolidayPopUp(holiday)">
-                          <i class="fa fa-trash text-danger" aria-hidden="true"></i>
+                          <i class="fa-solid fa-trash-can text-danger" aria-hidden="true"></i>
                         </a>
                       </div>
                     </div>
@@ -235,7 +235,7 @@
                       (dateSelect)="onfromDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #fd="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="fd.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i>
+                          class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                       </button>
                     </div>
                   </div>
@@ -251,7 +251,7 @@
                       (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i>
+                          class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                       </button>
                     </div>
                   </div>
@@ -298,9 +298,9 @@
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageHoliday()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="selectedHoliday.CompanyCalendarId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="selectedHoliday.CompanyCalendarId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>
@@ -343,9 +343,9 @@
         <p class="text-danger fw-bold mb-0">* Note: If you delete then it will be permanently deleted.</p>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="deleteHoliday()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Delete' }}</span>
         </button>
       </div>

@@ -91,27 +91,27 @@ export class EmailComponent implements OnInit {
       Name: "Inbox",
       IsActive: true,
       BadgeValue: '10',
-      Icon: 'fa fa-inbox text-dark'
+      Icon: 'fa-solid fa-inbox text-dark'
     }, {
       Name: "Starred",
       IsActive: false,
       BadgeValue: '',
-      Icon: 'fa fa-star-o'
+      Icon: 'fa-regular fa-star-o'
     }, {
       Name: "Snoozed",
       IsActive: false,
       BadgeValue: '',
-      Icon: 'fa fa-clock-o'
+      Icon: 'fa-regular fa-clock'
     }, {
       Name: "Sent",
       IsActive: false,
       BadgeValue: '',
-      Icon: 'fa fa-paper-plane-o'
+      Icon: 'fa-solid fa-paper-plane-o'
     }, {
       Name: "Drafts",
       IsActive: false,
       BadgeValue: '',
-      Icon: 'fa fa-file-o'
+      Icon: 'fa-regular fa-file'
     }]
   }
 

@@ -184,6 +184,33 @@ export class MasterDataComponent implements OnInit {
     this.isLoading = false;
   }
 
+  uploadEmployeeExcelSheet() {
+    this.isLoading = true;
+    if (this.file) {
+      let formData = new FormData();
+      formData.append("payrolldata", this.file);
+      this.http.post("Employee/UploadEmployeeExcel", formData)
+      .then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          let data = response.ResponseBody;
+          if (data.length > 0) {
+            this.cleanFileHandler();
+            Toast("Data Uploaded successfull");
+            this.isLoading = false;
+          }
+        } else {
+          ErrorToast("Unable to upload the data");
+        }
+      }).catch(e => {
+        ErrorToast(e.HttpStatusMessage)
+        this.isLoading = false;
+      });
+    } else {
+      this.isLoading = false;
+      WarningToast("Please upload atleast one record");
+    }
+  }
+
   uploadExcelSheet() {
     this.isLoading = true;
     if (this.file) {

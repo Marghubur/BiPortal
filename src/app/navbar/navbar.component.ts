@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit, DoCheck {
   isAdmin: boolean = true;
   root: any = null;
   isLoading: boolean = false;
-
+  logo: string = "";
   @Output() authentication = new EventEmitter();
 
   toggleOffcanvas() {
@@ -58,11 +58,16 @@ export class NavbarComponent implements OnInit, DoCheck {
 
   ngDoCheck(): void {
     let data = this.local.findRecord("UserDetail");
+    let company = this.local.findRecord("Companies");
     if(data) {
       if (data.UserTypeId == 1)
         this.isAdmin = true;
       else
         this.isAdmin = false;
+
+        if (company) {
+          this.logo = `${this.http.GetImageBasePath()}${company[0].LogoPath}`;
+        }
     } else {
       this.GoToLoginPage();
     }

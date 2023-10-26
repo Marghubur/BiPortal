@@ -41,7 +41,7 @@
                     (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary calendar" [disabled]="isAppraisalCycleInSamePeriod" (click)="d.toggle()" type="button"><i
-                        class="fa fa-calendar" aria-hidden="true"></i>
+                        class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                     </button>
                   </div>
                 </div>
@@ -57,7 +57,7 @@
                     (dateSelect)="onToDateSelection($event)" ngbDatepicker #td="ngbDatepicker">
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary calendar" [disabled]="isAppraisalCycleInSamePeriod" (click)="td.toggle()" type="button"><i
-                        class="fa fa-calendar" aria-hidden="true"></i>
+                        class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                     </button>
                   </div>
                 </div>
@@ -88,7 +88,7 @@
                           (dateSelect)="onSelfAppraislFromDateSelection($event)" ngbDatepicker #sfd="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" [disabled]="appraisalForm.controls.AppraisalCycleStartDate.value == null || appraisalForm.controls.AppraisalCycleEndDate.value == null || appraisalForm.controls.IsSelfAppraisal.value == false || isAppraisalCycleInSamePeriod" (click)="sfd.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -104,7 +104,7 @@
                           (dateSelect)="onSelfAppraislToDateSelection($event)" ngbDatepicker #std="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" [disabled]="appraisalForm.controls.AppraisalCycleStartDate.value == null || appraisalForm.controls.AppraisalCycleEndDate.value == null || appraisalForm.controls.IsSelfAppraisal.value == false || isAppraisalCycleInSamePeriod" (click)="std.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -149,7 +149,7 @@
                           (dateSelect)="onReviewFromDateSelection($event)" ngbDatepicker #rfd="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" [disabled]="appraisalForm.controls.AppraisalCycleStartDate.value == null || appraisalForm.controls.AppraisalCycleEndDate.value == null || isAppraisalCycleInSamePeriod" (click)="rfd.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -165,7 +165,7 @@
                           (dateSelect)="onReviewToDateSelection($event)" ngbDatepicker #rtd="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" [disabled]="appraisalForm.controls.AppraisalCycleStartDate.value == null || appraisalForm.controls.AppraisalCycleEndDate.value == null || isAppraisalCycleInSamePeriod" (click)="rtd.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -195,7 +195,7 @@
                           (dateSelect)="onSelectionPeriodFromDateSelection($event)" ngbDatepicker #slfd="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" [disabled]="appraisalForm.controls.AppraisalCycleStartDate.value == null || appraisalForm.controls.AppraisalCycleEndDate.value == null || appraisalForm.controls.IsRequiredRatersFeedback.value == false || isAppraisalCycleInSamePeriod" (click)="slfd.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -211,7 +211,7 @@
                           (dateSelect)="onSelectionPeriodToDateSelection($event)" ngbDatepicker #sltd="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" [disabled]="appraisalForm.controls.AppraisalCycleStartDate.value == null || appraisalForm.controls.AppraisalCycleEndDate.value == null || appraisalForm.controls.IsRequiredRatersFeedback.value == false || isAppraisalCycleInSamePeriod" (click)="sltd.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -229,7 +229,7 @@
                           (dateSelect)="onFeedbackFromDateSelection($event)" ngbDatepicker #fedfd="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" [disabled]="appraisalForm.controls.AppraisalCycleStartDate.value == null || appraisalForm.controls.AppraisalCycleEndDate.value == null || appraisalForm.controls.IsRequiredRatersFeedback.value == false || isAppraisalCycleInSamePeriod" (click)="fedfd.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -245,7 +245,7 @@
                           (dateSelect)="onFeedbackToDateSelection($event)" ngbDatepicker #fedtd="ngbDatepicker" [minDate]="minDate" [maxDate]="maxDate">
                         <div class="input-group-append">
                           <button class="btn btn-outline-secondary calendar" [disabled]="appraisalForm.controls.AppraisalCycleStartDate.value == null || appraisalForm.controls.AppraisalCycleEndDate.value == null || appraisalForm.controls.IsRequiredRatersFeedback.value == false || isAppraisalCycleInSamePeriod" (click)="fedtd.toggle()" type="button"><i
-                              class="fa fa-calendar" aria-hidden="true"></i>
+                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>
                       </div>
@@ -298,7 +298,7 @@
             <div class="mt-3 p-2 bg-light" *ngIf="selectedWorkflow != null">
               <span>Workflow Description: {{selectedWorkflow.TitleDescription | titlecase}}</span>
               <a href="javascript:void(0)" class="text-end text-decoration-none float-end" (click)="viewWorkflowChain()">
-                <i class="fa" [ngClass]="{'fa-eye': isWorkFlownChainShow, 'fa-eye-slash': !isWorkFlownChainShow}"></i>
+                <i  [ngClass]="{'fa-eye': isWorkFlownChainShow, 'fa-regular fa-eye-slash': !isWorkFlownChainShow}"></i>
               </a>
               <div class="row m-3" *ngIf="selectedWorkFlowDetail != null && isWorkFlownChainShow">
                 <div class="card px-4 pt-4 mt-3 pb-3 ">
@@ -320,7 +320,7 @@
                           <div *ngFor="let item of selectedWorkFlowDetail.ApprovalChainDetails; let i = index; let last = last;">
                               <div class="d-flex mt-4">
                                   <div class="col-auto me-3">
-                                  LEVEL {{i + 1}} <i class=" fa fa-circle text-primary ps-3"></i>
+                                  LEVEL {{i + 1}} <i class=" fa-solid fa-circle text-primary ps-3"></i>
                                   </div>
                                   <div class="col-md-8 position-relative">
                                       <div [ngClass]="{'block-tag': !last}">
@@ -388,11 +388,11 @@
       <div class="text-end mt-3">
         <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
         <button *ngIf="currentApprisalCycle != null && currentApprisalCycle.ObjectiveCatagoryId == 0" class="btn btn-primary-c" (click)="addApprisalCycle()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">Add</span>
         </button>
         <button *ngIf="currentApprisalCycle != null && currentApprisalCycle.ObjectiveCatagoryId > 0" class="btn btn-primary-c" (click)="updateApprisalCycle()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">Update</span>
         </button>
       </div>

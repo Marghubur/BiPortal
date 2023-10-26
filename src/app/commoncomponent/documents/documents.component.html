@@ -13,21 +13,21 @@
             <div class="d-inline ps-1 pe-1">
               <a href="javascript:void(0)" data-bs-toggle="modal" (click)="addFiles()">
                 <span class="badge bg-primary">
-                  <i class="fa fa-plus" aria-hidden="true"></i>
+                  <i class="fa-solid fa-plus" aria-hidden="true"></i>
                 </span>
               </a>
             </div>
             <div class="d-inline ps-1 pe-1">
               <a href="javascript:void(0)" (click)="CreateFolderPopup()">
                 <span class="badge bg-success">
-                  <i class="fa fa-folder-o" aria-hidden="true"></i>
+                  <i class="fa-regular fa-folder-open-o" aria-hidden="true"></i>
                 </span>
               </a>
             </div>
             <div class="d-inline ps-1 pe-1">
               <a href="javascript:void(0)" (click)="RefreshDocuments()">
                 <span class="badge bg-dark">
-                  <i class="fa fa-refresh"></i>
+                  <i class="fa-solid fa-arrows-rotate"></i>
                 </span>
               </a>
             </div>
@@ -47,7 +47,7 @@
               <div class="col-12 row m-0 mt-3 mb-3 p-4 border border-warning rounded position-relative">
                 <div class="col-md-3">
                   <a href="javascript:void(0)" class="ps-2">
-                    <i class="fa fa-folder text-warning f-zoom" aria-hidden="true"></i>
+                    <i class="fa-regular fa-folder-open text-warning f-zoom" aria-hidden="true"></i>
                   </a>
                   <label class="d-block ps-2">
                     {{getFolderName(folders.FilePath)}}
@@ -63,13 +63,13 @@
                 </div>
                 <div class="folder-action">
                   <!-- <a href="javascript:void(0)" class="ac-dv" (click)="addSubFolder(folders.FolderPath)">
-                    <i class="fa fa-folder text-warning" aria-hidden="true"></i>
+                    <i class="fa-regular fa-folder-open text-warning" aria-hidden="true"></i>
                   </a>
                   <a href="javascript:void(0)" class="ac-dv" (click)="addFiles(folders.FolderPath)">
-                    <i class="fa fa-plus-square text-success" aria-hidden="true"></i>
+                    <i class="fa-solid fa-plus-square text-success" aria-hidden="true"></i>
                   </a> -->
                   <a href="javascript:void(0)" class="ac-dv">
-                    <i class="fa fa-trash text-danger" aria-hidden="true"></i>
+                    <i class="fa-solid fa-trash-can text-danger" aria-hidden="true"></i>
                   </a>
                 </div>
               </div>
@@ -78,17 +78,17 @@
               <div class="file-type mt-2 mb-2">
                 <a href="javascript:void(0)" class="sh-icon" data-bs-toggle="modal"
                   (click)="selectItemForDelete(folders.FileId)">
-                  <i class="fa fa-trash text-danger"></i>
+                  <i class="fa-solid fa-trash-can text-danger"></i>
                 </a>
                 <!-- <div class="file-link col-md-12">
                   <h6 class="float-end">
                     <div class="mt-2 file-action">
                       <a href="javascript:void(0)" class="d-block">
-                        <i class="fa fa-download mt-1 text-success"></i>
+                        <i class="fa-solid fa-download mt-1 text-success"></i>
                       </a>
                       <a href="javascript:void(0)" class="pt-2" data-bs-toggle="modal"
                         (click)="selectItemForDelete(folders.FileId)" data-bs-target="#staticBackdrop">
-                        <i class="fa fa-trash text-danger"></i>
+                        <i class="fa-solid fa-trash-can text-danger"></i>
                       </a>
                     </div>
                   </h6>
@@ -141,9 +141,9 @@
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" (click)="CloseFolderPopup()"
-          class="text-decoration-none text-danger btn-white pe-3" data-dismiss="modal"><i class="fa fa-close pe-1"></i>Cancel</a>
+          class="text-decoration-none text-danger btn-white pe-3" data-dismiss="modal"><i class="fa-solid fa-xmark pe-1"></i>Cancel</a>
         <a href="javascript:void(0)" (click)="CreateNewfolder()" class="text-decoration-none btn-white text-primary">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-send': !isLoading}"></i>
+          <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
           <span class="pe-1">{{ isLoading ? 'Waiting...' : 'Create' }}</span>
         </a>
       </div>
@@ -194,9 +194,9 @@
       </div>
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-decoration-none text-danger btn-white pe-3"
-          data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</a>
+          data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</a>
         <a href="javascript:void(0)" (click)="deleteFile()" class="text-decoration-none btn-white text-primary">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-trash-o': !isLoading}"></i>
+          <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-trash-can-o': !isLoading}"></i>
           {{ isLoading ? 'Waiting...' : 'Delete' }}
         </a>
       </div>
@@ -282,12 +282,12 @@
                     </div>
                     <div class="mt-4">
                       <button class="btn btn-primary-c" [disabled]="isLoading || btnDisable ||isLargeFile" (click)="SubmitFiles()">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-upload': !isLoading}"></i>
+                        <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
                         {{ isLoading ? 'Waiting...' : 'Upload selected File' }}
                       </button>
                       <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
                         [disabled]="btnDisable">
-                        <i class="fa fa-eraser pe-2"></i> Cancel
+                        <i class="fa-solid fa-eraser pe-2"></i> Cancel
                       </button>
                     </div>
                   </div>
@@ -339,7 +339,7 @@
 <div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
   <div class="text-end">
     <a (click)="closePdfViewer()" class="close_view">
-      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark fa-2x" aria-hidden="true"></i>
     </a>
   </div>
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>

@@ -9,7 +9,7 @@
               <i class="fa text-dark edit-icon ps-2"></i>
             </h2>
             <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-              class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+              class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
           </div>
         </div>
         <div class="px-1">
@@ -138,7 +138,7 @@
                     <div class="col-md-12 mt-4 d-flex flex-column justify-content-end">
                       <div class="d-flex flex-row justify-content-end">
                         <button class="btn-primary-c btn" [disabled]="isLoading" (click)="submitChanges()">
-                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
+                          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-paper-plane': !isLoading}"></i>
                           <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Changes' }}</span>
                         </button>
                       </div>

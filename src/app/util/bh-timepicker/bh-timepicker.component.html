@@ -3,7 +3,7 @@
     <input name="timing" (blur)="CloseComponent()" class="rounded-end form-control no-cursor border-0" (keydown)="$event.preventDefault()"
       placeholder="HH:MM" [value]="SelectedTime" (input)="onChange($event.target.value)" />
     <a href="javascript:void(0)" (click)="GetClock()" class="rounded-end a-btn">
-      <i class="fa fa-clock-o"></i>
+      <i class="fa-regular fa-clock"></i>
     </a>
   </div>
   <div name="bh-clock" class="bh-clock-component" tabindex="-1" (mousedown)="DisableClick()">

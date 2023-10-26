@@ -23,10 +23,10 @@
         <div class="col-md-2">
           <button class="btn btn-sm btn-primary-c filter-btn-grp" (click)="globalFilter()"
             (keydown.esc)="resetFilter()">
-            <i class="fa fa-filter"></i>
+            <i class="fa-solid fa-filter"></i>
           </button>
           <button class="btn btn-sm btn-danger filter-btn-grp ms-2" (click)="resetFilter()">
-            <i class="fa fa-repeat"></i>
+            <i class="fa-solid fa-repeat"></i>
           </button>
         </div>
       </div>
@@ -34,7 +34,7 @@
       <div class="col-md-2 inline-row d-r p-0 m-0">
         <div class="pt-1">
           <button class="btn btn-sp btn-sm btn-lightorange" [routerLink]="['/' + manageEmployeeRouteName]"
-            routerLinkActive="router-link-active"> <i class="fa fa-plus-square-o ms-1" aria-hidden="true"></i>
+            routerLinkActive="router-link-active"> <i class="fa-regular fa-square-plus ms-1" aria-hidden="true"></i>
             Add Employee
           </button>
         </div>
@@ -77,7 +77,7 @@
                 </div>
               </th>
               <th width="12%" class="text-center">
-                <button (click)="filterRecords()" class="btn btn-primary-c btn-sm"><i class="fa fa-search pr-2"></i>
+                <button (click)="filterRecords()" class="btn btn-primary-c btn-sm"><i class="fa-solid fa-magnifying-glass pr-2"></i>
                   Search
                 </button>
                 <div class="col-title">
@@ -92,11 +92,11 @@
               <td>
                 <a (click)="ViewFiles(user)">{{user.FirstName}} {{user.LastName}}</a>
                 <div class="float-end">
-                  <a><span class="badge bg-primary fa fa-building-o"> &nbsp; 5</span></a>
+                  <a><span class="badge bg-primary fa-regular fa-building"> &nbsp; 5</span></a>
                   <a class="ms-3" (click)="goToAttendancePage(user)">
                     <span class="text-sm-left text-muted">Attendance</span>
                     <span class="ms-2 badge bg-success">
-                      <i class="fa fa-id-badge"></i>
+                      <i class="fa-regular fa-id-badge"></i>
                     </span>
                   </a>
                   <span class="badge bg-danger ms-3">3</span>
@@ -107,19 +107,19 @@
               <td>
                 <div class="d-flex flex-row justify-content-evenly">
                   <a href="javascript:void(0)">
-                    <span class="badge bg-primary"><i class="fa fa-pencil-square-o" aria-hidden="true"
+                    <span class="badge bg-primary"><i class="fa-regular fa-pen-to-square" aria-hidden="true"
                         (click)="EditCurrent(user)"></i></span>
                   </a>
                   <a href="javascript:void(0)">
-                    <span class="badge bg-dark"><i class="fa fa-file-o" aria-hidden="true"
+                    <span class="badge bg-dark"><i class="fa-regular fa-file" aria-hidden="true"
                         (click)="ViewFiles(user)"></i></span>
                   </a>
                   <a href="javascript:void(0)">
-                    <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
+                    <span class="badge bg-danger"><i class="fa-solid fa-trash-can-o" aria-hidden="true"
                         *ngIf="isActiveEmployee != 0" (click)="CreatePopup(user)"></i></span>
                   </a>
                   <a href="javascript:void(0)">
-                    <span class="badge bg-danger"><i class="fa fa-trash-o" aria-hidden="true"
+                    <span class="badge bg-danger"><i class="fa-solid fa-trash-can-o" aria-hidden="true"
                         *ngIf="isActiveEmployee == 0" (click)="CreatePopup(user)"></i></span>
                   </a>
                 </div>
@@ -166,7 +166,7 @@
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateDocument()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+          <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>

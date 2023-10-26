@@ -12,9 +12,9 @@
             <div class="col-4">
               <div class="x_header_title d-flex align-items-center justify-content-end">
                 <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
-                  class="fa fa-paper-plane pe-1"></i> Email Link Config
+                  class="fa-solid fa-paper-plane pe-1"></i> Email Link Config
               </a>
-              <button class="btn btn-primary-c" (click)="addShiftPopUp()"><i class="fa fa-plus pe-2"></i>Add Shift</button>
+              <button class="btn btn-primary-c" (click)="addShiftPopUp()"><i class="fa-solid fa-plus pe-2"></i>Add Shift</button>
               </div>
             </div>
           </div>
@@ -36,9 +36,9 @@
                        oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByShiftTitleAsc, 'ShiftTitle')">
                         <a href="javascript:void(0)" class="pe-2">Shift Title</a>
-                           <i class="fa fa-sort-amount-asc"
+                           <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByShiftTitleAsc == null || !orderByShiftTitleAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByShiftTitleAsc == null || orderByShiftTitleAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -49,9 +49,9 @@
                        oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByTotalWorkingDaysAsc, 'TotalWorkingDays')">
                         <a href="javascript:void(0)" class="pe-2">Working Days(in week)</a>
-                           <i class="fa fa-sort-amount-asc"
+                           <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || !orderByTotalWorkingDaysAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || orderByTotalWorkingDaysAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -62,9 +62,9 @@
                        oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
                         <a href="javascript:void(0)" class="pe-2">Start Date</a>
-                           <i class="fa fa-sort-amount-asc"
+                           <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -75,9 +75,9 @@
                        oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByOfficeTimeAsc, 'OfficeTime')">
                         <a href="javascript:void(0)" class="pe-2">Office Time</a>
-                           <i class="fa fa-sort-amount-asc"
+                           <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByOfficeTimeAsc == null || !orderByOfficeTimeAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByOfficeTimeAsc == null || orderByOfficeTimeAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -88,9 +88,9 @@
                         oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByDurationAsc, 'Duration')">
                         <a href="javascript:void(0)" class="pe-2">Duration (in min)</a>
-                           <i class="fa fa-sort-amount-asc"
+                           <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByDurationAsc == null || !orderByDurationAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByDurationAsc == null || orderByDurationAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -100,9 +100,9 @@
                       <input class="form-control form-control-sm" autofocus placeholder="Search by Status" readonly>
                       <div class="t-filter" (click)="arrangeDetails(orderByStatusAsc, 'Status')">
                         <a href="javascript:void(0)" class="pe-2">Status</a>
-                           <i class="fa fa-sort-amount-asc"
+                           <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByStatusAsc == null || !orderByStatusAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByStatusAsc == null || orderByStatusAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -113,9 +113,9 @@
                       (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByLunchDurationAsc, 'LunchDuration')">
                         <a href="javascript:void(0)" class="pe-2">Lunch Dur (in min)</a>
-                           <i class="fa fa-sort-amount-asc"
+                           <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByLunchDurationAsc == null || !orderByLunchDurationAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByLunchDurationAsc == null || orderByLunchDurationAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -175,7 +175,7 @@
                     <div class="td align-middle fe-index">
                       <div class="d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)" class="text-decoration-none" (click)="editShiftPopUp(item)">
-                          <i class="fa fa-pencil pe-2"></i>
+                          <i class="fa-solid fa-pencil pe-2"></i>
                         </a>
                       </div>
                     </div>
@@ -298,7 +298,7 @@
                       (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i>
+                          class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                       </button>
                     </div>
                   </div>
@@ -314,7 +314,7 @@
                       (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #td="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="td.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i>
+                          class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                       </button>
                     </div>
                   </div>
@@ -329,8 +329,8 @@
                   (click)="toggleDays(day.id, $event)">
                 <a href="javascript:void(0)" [ngClass]="{'ms-0': index == 0, 'blur-text': !day.isEnabled}">
                   {{day.day}}
-                  <i class="fa fa-toggle-on ps-2 text-success" [ngClass]="{'d-none': !day.isEnabled}" name="selection-on"></i>
-                  <i class="fa fa-toggle-off ps-2 text-muted" [ngClass]="{'d-none': day.isEnabled}" name="selection-off" aria-hidden="true"></i>
+                  <i class="fa-solid fa-toggle-on ps-2 text-success" [ngClass]="{'d-none': !day.isEnabled}" name="selection-on"></i>
+                  <i class="fa-solid fa-toggle-off ps-2 text-muted" [ngClass]="{'d-none': day.isEnabled}" name="selection-off" aria-hidden="true"></i>
                 </a>
               </div>
             </div>
@@ -340,7 +340,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateUpdateRequest()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>

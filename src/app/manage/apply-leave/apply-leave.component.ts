@@ -1,9 +1,9 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { Subscription } from 'rxjs';
-import { LeaveDetails, LeaveModal } from 'src/app/adminmodal/admin-modals';
+import { LeaveModal } from 'src/app/adminmodal/admin-modals';
 import { Files } from 'src/app/commonmodal/common-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -49,6 +49,7 @@ export class ApplyLeaveComponent implements OnInit {
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
   viewer: any = null;
+  monthlyLeaveData: any = null;
   datePickerJson = {};
   json = {
     disable: [],
@@ -87,7 +88,6 @@ export class ApplyLeaveComponent implements OnInit {
               private user: UserService,
               private config: NgbDatepickerConfig,
               private fb: FormBuilder,
-              private elementRef: ElementRef,
               private calendar: NgbCalendar
               ) {
     config.minDate = {year: new Date().getFullYear(), month: 1, day: 1};
@@ -350,6 +350,8 @@ export class ApplyLeaveComponent implements OnInit {
         this.findHoliday(companyHoliday);
         this.findDisabledDate();
       }
+      this.monthlyLeaveData = null;
+      this.monthlyLeaveData = res.ResponseBody.MonthlyLeaveData;
       this.isPageReady = true;
       this.DestroyGraphInstances();
       this.bindChartData();
@@ -363,7 +365,6 @@ export class ApplyLeaveComponent implements OnInit {
       this.LeaveChart(i, this.leaveTypes[i]);
       i++;
     }
-    this.LeaveReportChart();
     this.MonthlyStatusChart();
     this.leaveRequestForm();
 
@@ -543,51 +544,6 @@ export class ApplyLeaveComponent implements OnInit {
     });
   }
 
-  LeaveReportChart() {
-    let elem: any = document.getElementById('weeklyPatternChart');
-    const ctx = elem.getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [{
-                label: '# of Pattern',
-                barThickness: 20,
-                data: [12, 19, 3, 5, 2, 3, 10],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          responsive: true,
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
-          }
-      }
-    });
-
-    this.graphInstances.push(myChart);
-  }
 
   LoadDoughnutchart() {
     let label = [];
@@ -630,11 +586,11 @@ export class ApplyLeaveComponent implements OnInit {
     let myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: Object.keys(this.monthlyLeaveData),
             datasets: [{
                 label: '# of Pattern',
                 barThickness: 20,
-                data: [12, 19, 3, 5, 2, 3, 10, 12, 19, 3, 5, 2, 3, 10],
+                data: Object.values(this.monthlyLeaveData),
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

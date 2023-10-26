@@ -221,7 +221,7 @@
             </div>
             <div class="btn-group ms-2">
               <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generate()">
-                <i class="" [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+                <i class="" [ngClass]="{'fa-solid fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
                 {{ isLoading ? 'Processing' : 'Submit' }}
               </button>
             </div>
