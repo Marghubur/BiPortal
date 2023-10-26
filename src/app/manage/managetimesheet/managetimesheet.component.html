@@ -33,15 +33,15 @@
             <div class="col-auto mt-3 row" *ngIf="!isAdmin">
               <div class="col-auto">
                 <button type="button" class="btn btn-warning" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9" (click)="saveTimesheet()">
-                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
                 <button type="button" class="btn btn-success ms-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9" (click)="submitTimesheet()">
-                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Submit' }}
                 </button>
                 <button type="button" class="btn btn-danger ms-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                  <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Cancel' }}
                 </button>
               </div>
@@ -50,7 +50,7 @@
                   <button type="button" [disabled]="weeklyTimesheetDetail.TimesheetStatus == 8 || isLoading || weeklyTimesheetDetail.TimesheetStatus == 9" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
                     <a href="javascript:void(0)" class="text-decoration-none" >
                       More Actions
-                      <i class="fa fa-caret-down ps-2" data-name="dropdown-icon"></i>
+                      <i class="fa-solid fa-caret-down ps-2" data-name="dropdown-icon"></i>
                     </a>
                   </button>
                   <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -95,33 +95,33 @@
               <div class="col-md-12 row justify-content-between align-items-center">
                 <div class="col-md-7 row mt-3">
                   <div class="col-auto">
-                    <i class="fa fa-circle text-secondary pe-2"></i>
+                    <i class="fa-solid fa-circle text-secondary pe-2"></i>
                     WEEKENDS
                   </div>
                   <div class="col-auto">
-                    <i class="fa fa-circle text-info pe-2"></i>
+                    <i class="fa-solid fa-circle text-info pe-2"></i>
                     SUBMITTED
                   </div>
                   <div class="col-auto">
-                    <i class="fa fa-circle text-success pe-2"></i>
+                    <i class="fa-solid fa-circle text-success pe-2"></i>
                     APPROVED
                   </div>
                   <div class="col-auto">
-                    <i class="fa fa-circle text-danger pe-2"></i>
+                    <i class="fa-solid fa-circle text-danger pe-2"></i>
                     REJECTED
                   </div>
                   <div class="col-auto">
-                    <i class="fa fa-circle text-primary pe-2"></i>
+                    <i class="fa-solid fa-circle text-primary pe-2"></i>
                     LEAVE
                   </div>
                 </div>
                 <div class="col-auto float-end text-end mt-3">
                   <button type="button" class="btn btn-primary-c btn-sm me-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Fill from previous Timesheet' }}
                   </button>
                   <button type="button" (click)="clearTimesheet()" class="btn btn-primary-c btn-sm" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading}"></i>
+                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Clear Timesheet' }}
                   </button>
                 </div>
@@ -149,7 +149,7 @@
                         <td class="text-primary" [ngClass]="{'table-active': item.get('IsWeekEnd').value == false}">
                           <div class="d-flex justify-content-center align-items-center">
                             {{item.get("PresentDate").value | date: 'ccc'}}
-                            <i *ngIf="weeklyTimesheetDetail.TimesheetStatus != 2 || (item.get('IsWeekEnd').value == false && weeklyTimesheetDetail.TimesheetStatus == 2)" class="fa fa-circle ps-2" [ngClass]="{'text-secondary': item.get('IsWeekEnd').value == false, 'text-info': weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true && item.get('IsWeekEnd').value == true, 'text-danger':  weeklyTimesheetDetail.TimesheetStatus == 5  && item.get('IsWeekEnd').value == true, 'text-success':  weeklyTimesheetDetail.TimesheetStatus == 9  && item.get('IsWeekEnd').value == true}"></i>
+                            <i *ngIf="weeklyTimesheetDetail.TimesheetStatus != 2 || (item.get('IsWeekEnd').value == false && weeklyTimesheetDetail.TimesheetStatus == 2)" class="fa-solid fa-circle ps-2" [ngClass]="{'text-secondary': item.get('IsWeekEnd').value == false, 'text-info': weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true && item.get('IsWeekEnd').value == true, 'text-danger':  weeklyTimesheetDetail.TimesheetStatus == 5  && item.get('IsWeekEnd').value == true, 'text-success':  weeklyTimesheetDetail.TimesheetStatus == 9  && item.get('IsWeekEnd').value == true}"></i>
                           </div>
                         </td>
                       </ng-container>

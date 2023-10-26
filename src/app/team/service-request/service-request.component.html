@@ -38,9 +38,9 @@
                                 placeholder="Search by Name" id="namefilter">
                               <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ColumnName')">
                                 <a href="javascript:void()" class="pe-2">Request Type</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                   [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                                <i class="fa fa-sort-amount-desc"
+                                <i class="fa-solid fa-arrow-down-short-wide"
                                   [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
@@ -52,9 +52,9 @@
                                 placeholder="Search by Title" readonly>
                               <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
                                 <a href="javascript:void()" class="pe-2">Title</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                   [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                                <i class="fa fa-sort-amount-desc"
+                                <i class="fa-solid fa-arrow-down-short-wide"
                                   [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
@@ -65,16 +65,16 @@
                                 (keydown.esc)="resetFilter()" placeholder="Search by Description" readonly>
                               <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
                                 <a href="javascript:void()" class="pe-2">Description</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                   [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                                <i class="fa fa-sort-amount-desc"
+                                <i class="fa-solid fa-arrow-down-short-wide"
                                   [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
                           </div>
                           <div class="th fe-1 text-center">
                             <div class="cell-wrapper">
-                              <button class="btn btn-primary-c" (click)="addService()"><i class="fa fa-plus pe-1"></i> Add Service</button>
+                              <button class="btn btn-primary-c" (click)="addService()"><i class="fa-solid fa-plus pe-1"></i> Add Service</button>
                               <div class="t-filter align-items-center justify-content-center">
                                 ACTION
                               </div>
@@ -108,7 +108,7 @@
                                 <div class="td align-middle fe-1">
                                   <div class="d-flex flex-row justify-content-evenly">
                                     <a href="javascript:void(0)" (click)="EditCurrent(service)">
-                                      <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                                      <span class="badge bg-primary"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
                                     </a>
                                   </div>
                                 </div>
@@ -187,7 +187,7 @@
                                                 (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="maxDate" [maxDate]="{year: 2050, month:1, day: 1}" #d="ngbDatepicker">
                                               <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                                    class="fa fa-calendar" aria-hidden="true"></i>
+                                                    class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                                                 </button>
                                               </div>
                                             </div>
@@ -203,7 +203,7 @@
                                                 (dateSelect)="toDateSelection($event)" ngbDatepicker [minDate]="maxDate" [maxDate]="{year: 2050, month:1, day: 1}" #td="ngbDatepicker">
                                               <div class="input-group-append">
                                                 <button class="btn btn-outline-secondary calendar" (click)="td.toggle()" type="button"><i
-                                                    class="fa fa-calendar" aria-hidden="true"></i>
+                                                    class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                                                 </button>
                                               </div>
                                             </div>
@@ -264,7 +264,7 @@
         <div class="modal-footer border-top-0">
             <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
             <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateUpdateRequest()">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-check': !isLoading}"></i>
+                <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-check': !isLoading}"></i>
                 {{ isLoading ? 'Processing' : 'Submit' }}
             </button>
         </div>

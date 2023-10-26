@@ -12,7 +12,7 @@
               <div class="col-4">
                 <div class="x_header_title d-flex align-items-center justify-content-end">
                   <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
-                  <button class="btn btn-primary-c float-end" (click)="addProject()"><i class="fa fa-plus pe-2"></i>Add Project</button>
+                  <button class="btn btn-primary-c float-end" (click)="addProject()"><i class="fa-solid fa-plus pe-2"></i>Add Project</button>
                 </div>
               </div>
             </div>
@@ -42,9 +42,9 @@
                             placeholder="Search by Name" id="namefilter"> -->
                           <!-- <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
                             <a href="javascript:void()" class="pe-2">Full Name</a>
-                            <i class="fa fa-sort-amount-asc"
+                            <i class="fa-solid fa-arrow-down-wide-short"
                               [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
+                            <i class="fa-solid fa-arrow-down-short-wide"
                               [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                           </div> -->
                         </div>
@@ -57,9 +57,9 @@
                             placeholder="Search by MobileNumber"> -->
                           <!-- <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
                             <a href="javascript:void()" class="pe-2">Mobile Number</a>
-                            <i class="fa fa-sort-amount-asc"
+                            <i class="fa-solid fa-arrow-down-wide-short"
                               [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
+                            <i class="fa-solid fa-arrow-down-short-wide"
                               [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
                           </div> -->
                         </div>
@@ -71,9 +71,9 @@
                             (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email"> -->
                           <!-- <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
                             <a href="javascript:void()" class="pe-2">Email Id</a>
-                            <i class="fa fa-sort-amount-asc"
+                            <i class="fa-solid fa-arrow-down-wide-short"
                               [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                            <i class="fa fa-sort-amount-desc"
+                            <i class="fa-solid fa-arrow-down-short-wide"
                               [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
                           </div> -->
                         </div>
@@ -107,12 +107,12 @@
                         <div class="td justify-content-center d-flex fe-1">
                           <div class="d-flex flex-row pe-2 justify-content-evenly">
                             <a href="javascript:void(0)" (click)="loadProjectBudgetPage(project)">
-                              <span class="badge bg-success"><i class="fa fa-money" aria-hidden="true"></i></span>
+                              <span class="badge bg-success"><i class="fa-regular fa-money-bill-1" aria-hidden="true"></i></span>
                             </a>
                           </div>
                           <div class="d-flex flex-row justify-content-evenly">
                             <a href="javascript:void(0)" (click)="addUpdateWiki(project)">
-                              <span class="badge bg-primary"><i class="fa fa-wikipedia-w" aria-hidden="true"></i></span>
+                              <span class="badge bg-primary"><i class="fa-brands fa-wikipedia-w" aria-hidden="true"></i></span>
                             </a>
                           </div>
                         </div>

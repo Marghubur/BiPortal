@@ -15,10 +15,10 @@
           </div>
           <div class="col-md-3">
             <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
-              <i class="fa fa-filter"></i>
+              <i class="fa-solid fa-filter"></i>
             </button>
             <button class="btn  btn-danger ms-2" (click)="resetFilter()">
-              <i class="fa fa-repeat"></i>
+              <i class="fa-solid fa-repeat"></i>
             </button>
           </div>
         </div>
@@ -40,10 +40,10 @@
                     <h5 class="text-center text-dark px-1">{{item.MonthName}} {{item.Year}}</h5>
                     <small class="text-muted px-1 pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
                     <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 2, 'text-bg-secondary': item.Status == 3, 'bg-c text-white': item.Status == 1}">
-                      <i class="fa fa-check-square-o pe-1" *ngIf="item.Status == 2"></i>
-                      <i class="fa fa-arrow-left pe-1" *ngIf="item.Status == 1"></i>
+                      <i class="fa-regular fa-square-check pe-1" *ngIf="item.Status == 2"></i>
+                      <i class="fa-solid fa-arrow-left pe-1" *ngIf="item.Status == 1"></i>
                       {{item.Status == 1 ? 'PREVIOUS' : item.Status == 2 ? 'CURRENT' : 'UPCOMING'}}
-                      <i class="fa fa-arrow-right ps-1" *ngIf="item.Status == 3"></i>
+                      <i class="fa-solid fa-arrow-right ps-1" *ngIf="item.Status == 3"></i>
                     </small>
                   </div>
                 </a>
@@ -53,7 +53,7 @@
               <div class="col-auto">
                 <a href="{{downlodexcelFilePath}}" class="d-none" id="downloadAllDeclarationExcel"></a>
                 <a href="javascript:void(0)" (click)="downloadDeclaration()" [ngClass]="{'pe-none': isLoading}">
-                  <i class="fa fa-download fa-lg"></i>
+                  <i class="fa-solid fa-download fa-lg"></i>
                   <span class="ps-2 fs-6">Download</span>
                 </a>
               </div>
@@ -69,11 +69,11 @@
                       <th>Gross</th>
                       <th>Arrear</th>
                       <th>Gross Total</th>
-                      <th>Pre Mnth Gross<i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
+                      <th>Pre Mnth Gross<i class="fa-solid fa-circle-exclamation ps-2" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="Previous Month Gross"></i>
                       </th>
                       <th class="text-truncate" *ngFor="let data of salaryComponents" >
-                        {{data.ComponentId}} <i class="fa fa-exclamation-circle ps-2" data-bs-toggle="tooltip"
+                        {{data.ComponentId}} <i class="fa-solid fa-circle-exclamation ps-2" data-bs-toggle="tooltip"
                         data-bs-placement="right" title="{{data.ComponentName}}"></i>
                       </th>
                       <th>Others</th>
@@ -94,7 +94,7 @@
                   <ng-container *ngIf="employeeSalaries.length > 0">
                     <tr *ngFor="let item of employeeSalaries">
                       <td>
-                        <div class="d-flex justify-content-between">                          
+                        <div class="d-flex justify-content-between">
                           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewDeclaration(item)">
                             <span class="text-muted  pe-1">
                               [{{item.EmployeeId}}]
@@ -102,15 +102,15 @@
                             <span class="text-decoration-underline">{{item.FullName}}</span>
                           </a>
                           <a href="javascript:void(0)" class="text-decoration-none">
-                            <i class="fa fa-university" aria-hidden="true"></i>
+                            <i class="fa-solid fa-building-columns" aria-hidden="true"></i>
                           </a>
                         </div>
                       </td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.Gross | number : "1.0-0") : "0"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.ArrearGross | number : "1.0-0") : "0"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.ArrearGross + item.Gross | number : "1.0-0") : "0"}}</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (item.PreMonthGross | number : "1.0-0") : "0"}}</td>
-                      <td *ngFor="let data of item.Salary"><i class="fa fa-inr pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
+                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.Gross | number : "1.0-0") : "0"}}</td>
+                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearGross | number : "1.0-0") : "0"}}</td>
+                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearGross + item.Gross | number : "1.0-0") : "0"}}</td>
+                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.PreMonthGross | number : "1.0-0") : "0"}}</td>
+                      <td *ngFor="let data of item.Salary"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
                       <td></td>
                       <td></td>
                       <td></td>
@@ -146,9 +146,9 @@
                         (keyup.enter)="filterRecords()" autofocus                         placeholder="Search by Name" id="namefilter">
                       <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
                         <a href="javascript:void()" class="pe-2">Full Name</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                       </div>
                     </div>

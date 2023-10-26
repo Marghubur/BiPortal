@@ -4,7 +4,7 @@
         <div class="x_header_title d-flex align-items-center justify-content-between">
           <h2>Offer Letter <small>Offer letter template</small></h2>
           <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-            class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+            class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
         </div>
       </div>
       <div>
@@ -27,11 +27,11 @@
           </form>
           <div class="text-end pe-4">
             <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="generateOfferLetterPopUp()">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+              <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
               <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate Offer Letter' }}</span>
             </button>
             <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveofferletter()">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+              <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
               <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
             </button>
           </div>
@@ -102,7 +102,7 @@
                       (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i>
+                          class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                       </button>
                     </div>
                   </div>
@@ -115,7 +115,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="generateOfferLetter()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate' }}</span>
         </button>
       </div>

@@ -10,7 +10,7 @@
         <div class="col-4">
           <div class="x_header_title d-flex align-items-center justify-content-end">
             <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
-            <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa fa-plus pe-2"></i> Add Template</button>
+            <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa-solid fa-plus pe-2"></i> Add Template</button>
           </div>
         </div>
       </div>
@@ -29,9 +29,9 @@
                     (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                   <div class="t-filter"  (click)="arrangeDetails(orderByTempNameAsc, 'TemplateName')">
                     <a href="javascript:void(0)">Template Name</a>
-                    <i class="fa fa-sort-amount-asc"
+                    <i class="fa-solid fa-arrow-down-wide-short"
                       [ngClass]="{'d-none': orderByTempNameAsc == null || !orderByTempNameAsc }" aria-hidden="true"></i>
-                    <i class="fa fa-sort-amount-desc"
+                    <i class="fa-solid fa-arrow-down-short-wide"
                       [ngClass]="{'d-none': orderByTempNameAsc == null || orderByTempNameAsc }" aria-hidden="true"></i>
                   </div>
                 </div>
@@ -42,9 +42,9 @@
                     (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                   <div class="t-filter"  (click)="arrangeDetails(orderBySubjectTitleAsc, 'SubjectLine')">
                     <a href="javascript:void(0)">Subject Title</a>
-                    <i class="fa fa-sort-amount-asc"
+                    <i class="fa-solid fa-arrow-down-wide-short"
                       [ngClass]="{'d-none': orderBySubjectTitleAsc == null || !orderBySubjectTitleAsc }" aria-hidden="true"></i>
-                    <i class="fa fa-sort-amount-desc"
+                    <i class="fa-solid fa-arrow-down-short-wide"
                       [ngClass]="{'d-none': orderBySubjectTitleAsc == null || orderBySubjectTitleAsc }" aria-hidden="true"></i>
                   </div>
                 </div>
@@ -55,9 +55,9 @@
                     (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                   <div class="t-filter"  (click)="arrangeDetails(orderBySignatureDetailAsc, 'SignatureDetail')">
                     <a href="javascript:void(0)">Signature Detail</a>
-                    <i class="fa fa-sort-amount-asc"
+                    <i class="fa-solid fa-arrow-down-wide-short"
                       [ngClass]="{'d-none': orderBySignatureDetailAsc == null || !orderBySignatureDetailAsc }" aria-hidden="true"></i>
-                    <i class="fa fa-sort-amount-desc"
+                    <i class="fa-solid fa-arrow-down-short-wide"
                       [ngClass]="{'d-none': orderBySignatureDetailAsc == null || orderBySignatureDetailAsc }" aria-hidden="true"></i>
                   </div>
                 </div>
@@ -68,9 +68,9 @@
                     (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                   <div class="t-filter"  (click)="arrangeDetails(orderByContactNoAsc, 'ContactNo')">
                     <a href="javascript:void(0)">Contact No</a>
-                    <i class="fa fa-sort-amount-asc"
+                    <i class="fa-solid fa-arrow-down-wide-short"
                       [ngClass]="{'d-none': orderByContactNoAsc == null || !orderByContactNoAsc }" aria-hidden="true"></i>
-                    <i class="fa fa-sort-amount-desc"
+                    <i class="fa-solid fa-arrow-down-short-wide"
                       [ngClass]="{'d-none': orderByContactNoAsc == null || orderByContactNoAsc }" aria-hidden="true"></i>
                   </div>
                 </div>
@@ -99,10 +99,10 @@
                 <div class="td align-middle fe-1">
                   <div class="d-flex flex-row justify-content-center">
                     <a href="javascript:void(0)" class="px-2" (click)="addeditTemplate(template)">
-                      <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                      <span class="badge bg-primary"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
                     </a>
                     <a href="javascript:void(0)" class="px-2" (click)="getMessageModal(template.EmailTemplateId)">
-                      <span class="badge bg-dark"><i class="fa fa-eye" aria-hidden="true"></i></span>
+                      <span class="badge bg-dark"><i class="fa-regular fa-eye" aria-hidden="true"></i></span>
                     </a>
                   </div>
                 </div>

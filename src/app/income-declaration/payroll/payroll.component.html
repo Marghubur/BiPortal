@@ -15,7 +15,7 @@
           <h4 class="fw-bold text-dark my-3 px-2 py-3">
             <span>PAYROLL CYCLE SETTING</span>
             <button class="float-end btn btn-outline-success" (click)="saveSettingModelOpen()"><i
-                class="fa fa-cog pe-2"></i>Save</button>
+                class="fa-solid fa-gear pe-2"></i>Save</button>
           </h4>
           <ng-container *ngIf="isReady">
             <form [formGroup]="payrollForm">
@@ -184,7 +184,7 @@
       <div class="modal-footer border-top-0 px-4">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading || !agreeAction" (click)="savePayRollSetting()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-gear': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Yes, Change cycle' }}</span>
         </button>
       </div>

@@ -27,7 +27,7 @@
                           <a href="javascript:void(0)" class="text-decoration-none text-primary-c fw-bold" [ngClass]="{'pe-none': Companys.length == 0}"
                             (click)="openModalToAddNewCompany()">
                             <u class="mt-2">
-                              <i class="fa fa-plus pe-2"></i>
+                              <i class="fa-solid fa-plus pe-2"></i>
                               Add
                             </u>
                           </a>
@@ -43,7 +43,7 @@
                                 </h5>
                                 <p>User below button to add one.</p>
                                 <button class="btn btn-success mt-4" (click)="gtoOrganization()">
-                                  <i class="fa fa-plus pe-2"></i> ADD COMPANY
+                                  <i class="fa-solid fa-plus pe-2"></i> ADD COMPANY
                                 </button>
                               </div>
                             </li>
@@ -92,7 +92,7 @@
                             [(activeId)]="groupActiveId" class="nav-tabs">
                             <li [ngbNavItem]="1">
                               <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('PR')">
-                                Payroll <i class="fa fa-inr px-2" aria-hidden="true"></i>
+                                Payroll <i class="fa-solid fa-indian-rupee-sign px-2" aria-hidden="true"></i>
                               </a>
                               <ng-template ngbNavContent>
                                 <ng-container *ngIf="Companys.length > 0">
@@ -134,7 +134,7 @@
                                               </div>
                                               <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                                 <a href=" javascript:void(0)">
-                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                  <i class="fa-solid fa-pencil text-primary-dc" aria-hidden="true"></i>
                                                 </a>
                                               </div>
                                             </div>
@@ -166,7 +166,7 @@
                                               </div>
                                               <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                                 <a href=" javascript:void(0)">
-                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                  <i class="fa-solid fa-pencil text-primary-dc" aria-hidden="true"></i>
                                                 </a>
                                               </div>
                                             </div>
@@ -198,7 +198,7 @@
                                               </div>
                                               <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                                 <a href=" javascript:void(0)">
-                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                  <i class="fa-solid fa-pencil text-primary-dc" aria-hidden="true"></i>
                                                 </a>
                                               </div>
                                             </div>
@@ -230,7 +230,7 @@
                                               </div>
                                               <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                                 <a href=" javascript:void(0)">
-                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                  <i class="fa-solid fa-pencil text-primary-dc" aria-hidden="true"></i>
                                                 </a>
                                               </div>
                                             </div>
@@ -263,7 +263,7 @@
                                               </div>
                                               <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                                 <a href=" javascript:void(0)">
-                                                  <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                  <i class="fa-solid fa-pencil text-primary-dc" aria-hidden="true"></i>
                                                 </a>
                                               </div>
                                             </div>
@@ -284,7 +284,7 @@
                             </li>
                             <li [ngbNavItem]="2">
                               <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('CS')">Company Settings <i
-                                  class="fa fa-cog px-2"></i></a>
+                                  class="fa-solid fa-gear px-2"></i></a>
                               <ng-template ngbNavContent>
                                 <div *ngIf="menuItem.CS">
                                   <div class="x_body">
@@ -322,7 +322,7 @@
                                             </div>
                                             <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                               <a href=" javascript:void(0)">
-                                                <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                <i class="fa-solid fa-pencil text-primary-dc" aria-hidden="true"></i>
                                               </a>
                                             </div>
                                           </div>
@@ -353,7 +353,7 @@
                                             </div>
                                             <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                               <a href=" javascript:void(0)">
-                                                <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                <i class="fa-solid fa-pencil text-primary-dc" aria-hidden="true"></i>
                                               </a>
                                             </div>
                                           </div>
@@ -384,7 +384,7 @@
                                             </div>
                                             <div class="fe-1 d-flex flex-column justify-content-center text-end">
                                               <a href=" javascript:void(0)">
-                                                <i class="fa fa-pencil text-primary-dc" aria-hidden="true"></i>
+                                                <i class="fa-solid fa-pencil text-primary-dc" aria-hidden="true"></i>
                                               </a>
                                             </div>
                                           </div>
@@ -397,7 +397,7 @@
                             </li>
                             <li [ngbNavItem]="3">
                               <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('')">
-                                PTax Setting <i class="fa fa-money px-2" aria-hidden="true"></i>
+                                PTax Setting <i class="fa-regular fa-money-bill-1 px-2" aria-hidden="true"></i>
                               </a>
                               <ng-template ngbNavContent>
                                 <ng-container *ngIf="isPageReady">
@@ -405,7 +405,7 @@
                                     <div class="x_header">
                                       <div class="x_header_title d-flex justify-content-between">
                                         <h2>PTax<small>add or update professional tax deatils</small></h2>
-                                        <button class="btn btn-primary-c ms-auto" *ngIf="!isEditable && isPageReady" (click)="editPtax()"><i class="fa fa-pencil pe-2"></i> Edit PTax</button>
+                                        <button class="btn btn-primary-c ms-auto" *ngIf="!isEditable && isPageReady" (click)="editPtax()"><i class="fa-solid fa-pencil pe-2"></i> Edit PTax</button>
                                       </div>
                                     </div>
                                     <form [formGroup]="ptaxForm" *ngIf="ptaxForm">
@@ -429,19 +429,19 @@
                                               </td>
                                               <td>
                                                 <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'error-field': submitted && ptaxForm.controls['PtaxSlabs'].controls[i].controls.MinIncome.errors !== null && ptaxForm.controls['PtaxSlabs'].controls[i].controls.MinIncome.errors.required}">
-                                                  <i class="fa fa-inr ps-3"></i>
+                                                  <i class="fa-solid fa-indian-rupee-sign ps-3"></i>
                                                   <input type="number" [readonly]="!isEditable" placeholder="Minimum income per month" class="form-control border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="MinIncome" OnlyNumber="9">
                                                 </div>
                                                 </td>
                                               <td>
                                                 <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'error-field': submitted && ptaxForm.controls['PtaxSlabs'].controls[i].controls.MaxIncome.errors !== null && ptaxForm.controls['PtaxSlabs'].controls[i].controls.MaxIncome.errors.required}">
-                                                  <i class="fa fa-inr ps-3"></i>
+                                                  <i class="fa-solid fa-indian-rupee-sign ps-3"></i>
                                                   <input type="number" [readonly]="!isEditable" placeholder="Maximum income per month" class="form-control border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" OnlyNumber="9" formControlName="MaxIncome" (blur)="checkToAmount($event, i)">
                                                 </div>
                                               </td>
                                               <td>
                                                 <div [ngClass]="{'border-0': !isEditable}" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'error-field': submitted && ptaxForm.controls['PtaxSlabs'].controls[i].controls.TaxAmount.errors !== null && ptaxForm.controls['PtaxSlabs'].controls[i].controls.TaxAmount.errors.required}">
-                                                  <i class="fa fa-inr ps-3"></i>
+                                                  <i class="fa-solid fa-indian-rupee-sign ps-3"></i>
                                                   <input type="number" [readonly]="!isEditable" placeholder="Tax Rate/Tax Amount (p.m.)" class="form-control border-0" formControlName="TaxAmount" onkeypress="return event.charCode >=48 && event.charCode <=57" OnlyNumber="9">
                                                 </div>
                                               </td>
@@ -454,10 +454,10 @@
                                               </td>
                                               <td class="align-middle">
                                                 <a href="javascript:void(0)" class="text-decoration-none pe-2" [ngClass]="{'pe-none': !isEditable}" (click)="removePTaxSlab(i, item)">
-                                                  <i class="fa fa-trash-o fa-lg text-danger" [ngClass]="{'text-muted-c': !isEditable}"></i>
+                                                  <i class="fa-solid fa-trash-can-o fa-lg text-danger" [ngClass]="{'text-muted-c': !isEditable}"></i>
                                                 </a>
                                                 <a *ngIf="ptaxSalab.controls.length == i+1" [ngClass]="{'pe-none': !isEditable}" href="javascript:void(0)" class="text-decoration-none" (click)="addPTaxSlab()">
-                                                  <i class="fa fa-plus-square-o fa-lg text-success" [ngClass]="{'text-muted-c': !isEditable}"></i>
+                                                  <i class="fa-regular fa-square-plus fa-lg text-success" [ngClass]="{'text-muted-c': !isEditable}"></i>
                                                 </a>
                                               </td>
                                             </tr>
@@ -465,9 +465,9 @@
                                         </tbody>
                                       </table>
                                       <div class="text-end" *ngIf="isEditable">
-                                        <button class="btn btn-danger me-2" (click)="closePTaxSetting()"><i class="fa fa-close pe-2"></i>Cancel</button>
+                                        <button class="btn btn-danger me-2" (click)="closePTaxSetting()"><i class="fa-solid fa-xmark pe-2"></i>Cancel</button>
                                         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="savePtaxSlab()">
-                                          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-send-o': !isLoading}"></i>
+                                          <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
                                           {{ isLoading ? 'Wait' : 'Save' }}
                                         </button>
                                       </div>
@@ -588,7 +588,7 @@
                         <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
                           name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
                         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                            class="fa fa-calendar"></i></button>
+                            class="fa-regular fa-calendar-days fa-lg"></i></button>
                       </div>
                     </div>
                   </form>
@@ -600,13 +600,13 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <ng-container *ngIf="currentCompnay.CompanyId != null && currentCompnay.CompanyId > 0">
               <button type="button" class="btn btn-primary-c" (click)="updateCompany()">
-                <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
                 {{ isLoading ? 'Wait' : 'Update Company Group' }}
               </button>
             </ng-container>
             <ng-container *ngIf="currentCompnay.CompanyId <= 0">
               <button type="button" class="btn btn-primary-c" (click)="addNewCompany()">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
                 <span class="ps-2">{{ isLoading ? 'Wait' : 'Create Company Group' }}</span>
               </button>
             </ng-container>

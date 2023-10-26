@@ -91,13 +91,13 @@
                                         <td>{{ file.PaidOn | date: 'MMM d, y' }} {{ file.PaidOn | date: 'h:mm a' }}</td>
                                         <td class="text-center anc-action">
                                             <a (click)="ViewFile(file.FileUid)">
-                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                <i class="fa-regular fa-eye" aria-hidden="true"></i>
                                             </a>
                                             <a (click)="EditFile(file.FileUid)">
-                                                <i class="fa fa-pencil ml-2 mr-2" aria-hidden="true"></i>
+                                                <i class="fa-solid fa-pencil ml-2 mr-2" aria-hidden="true"></i>
                                             </a>
                                             <a (click)="DeleteFile(file.FileUid)">
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                                <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                     </tr>

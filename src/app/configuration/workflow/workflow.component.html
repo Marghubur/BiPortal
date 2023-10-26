@@ -32,9 +32,9 @@
                           (keydown.esc)="resetFilter()" placeholder="Search by Title">
                         <div class="t-filter" (click)="arrangeDetails(orderByTitleAsc, 'Title')">
                           <a href="javascript:void(0)" class="pe-2">Title</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByTitleAsc == null || !orderByTitleAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByTitleAsc == null || orderByTitleAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
@@ -45,9 +45,9 @@
                           (keydown.esc)="resetFilter()" placeholder="Search by Title Description">
                         <div class="t-filter" (click)="arrangeDetails(orderByTitleDescAsc, 'TitleDescription')">
                           <a href="javascript:void0()" class="pe-2">Description</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByTitleDescAsc == null || !orderByTitleDescAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByTitleDescAsc == null || orderByTitleDescAsc }" aria-hidden="true"></i>
                         </div>
                       </div>
@@ -86,7 +86,7 @@
                             <div class="d-flex flex-row justify-content-evenly">
                                 <a href="javascript:void(0)" (click)="EditCurrent(item)" data-bs-toggle="tooltip"
                                 data-bs-placement="right" title="Edit current record">
-                                    <span class="badge bg-dark"><i class="fa fa-edit" aria-hidden="true"></i></span>
+                                    <span class="badge bg-dark"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
                                 </a>
                             </div>
                         </div>

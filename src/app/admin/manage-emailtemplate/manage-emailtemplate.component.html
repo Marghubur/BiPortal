@@ -9,8 +9,8 @@
         </div>
         <div class="col-4 text-end">
           <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-            class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
-          <button class="btn btn-primary-c float-end"><i class="fa fa-plus pe-2"></i> Add Template</button>
+            class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
+          <button class="btn btn-primary-c float-end"><i class="fa-solid fa-plus pe-2"></i> Add Template</button>
         </div>
       </div>
     </div>
@@ -70,9 +70,9 @@
           </div>
         </div>
         <div class="text-end mt-3 col-md-12">
-          <button class="btn btn-outline-danger" (click)="resetEmailTemp()"><i class="fa fa-trash pe-2"></i> Reset</button>
+          <button class="btn btn-outline-danger" (click)="resetEmailTemp()"><i class="fa-solid fa-trash-can pe-2"></i> Reset</button>
           <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveEmailTemplate()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+            <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
             {{ isLoading ? 'Wait' : 'Save' }}
           </button>
         </div>

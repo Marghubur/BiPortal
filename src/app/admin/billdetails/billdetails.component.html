@@ -91,9 +91,9 @@
                     (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.BillNo" placeholder="Bill No#">
                   <div class="t-filter" (click)="arrangeDetails(orderByBillNoAsc, 'BillNo')">
                     <a href="javascript:void()" class="pe-2">Bill No.#</a>
-                    <i class="fa fa-sort-amount-asc"
+                    <i class="fa-solid fa-arrow-down-wide-short"
                       [ngClass]="{'d-none': orderByBillNoAsc == null || !orderByBillNoAsc }" aria-hidden="true"></i>
-                    <i class="fa fa-sort-amount-desc"
+                    <i class="fa-solid fa-arrow-down-short-wide"
                       [ngClass]="{'d-none': orderByBillNoAsc == null || orderByBillNoAsc }" aria-hidden="true"></i>
                   </div>
                 </div>
@@ -104,9 +104,9 @@
                     (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.ClientName" placeholder="By Client Name">
                   <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
                     <a href="javascript:void()" class="pe-2">Client Name</a>
-                    <i class="fa fa-sort-amount-asc" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }"
+                    <i class="fa-solid fa-arrow-down-wide-short" [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }"
                       aria-hidden="true"></i>
-                    <i class="fa fa-sort-amount-desc" [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }"
+                    <i class="fa-solid fa-arrow-down-short-wide" [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }"
                       aria-hidden="true"></i>
                   </div>
                 </div>
@@ -154,9 +154,9 @@
                   </select> -->
                   <div class="t-filter" (click)="arrangeDetails(orderByMonthAsc, 'BillForMonth')">
                     <a href="javascript:void()" class="pe-2">Month</a>
-                    <i class="fa fa-sort-amount-asc"
+                    <i class="fa-solid fa-arrow-down-wide-short"
                       [ngClass]="{'d-none': orderByMonthAsc == null || !orderByMonthAsc }" aria-hidden="true"></i>
-                    <i class="fa fa-sort-amount-desc"
+                    <i class="fa-solid fa-arrow-down-short-wide"
                       [ngClass]="{'d-none': orderByMonthAsc == null || orderByMonthAsc }" aria-hidden="true"></i>
                   </div>
                 </div>
@@ -170,9 +170,9 @@
                   </select>
                   <div class="t-filter" (click)="arrangeDetails(orderByYearAsc, 'BillYear')">
                     <a href="javascript:void()" class="pe-2">Year</a>
-                    <i class="fa fa-sort-amount-asc"
+                    <i class="fa-solid fa-arrow-down-wide-short"
                       [ngClass]="{'d-none': orderByYearAsc == null || !orderByYearAsc }" aria-hidden="true"></i>
-                    <i class="fa fa-sort-amount-desc"
+                    <i class="fa-solid fa-arrow-down-short-wide"
                       [ngClass]="{'d-none': orderByYearAsc == null || orderByYearAsc }" aria-hidden="true"></i>
                   </div>
                 </div>
@@ -431,7 +431,7 @@
                         (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                       <div class="input-group-append">
                         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                            class="fa fa-calendar" aria-hidden="true"></i>
+                            class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                         </button>
                       </div>
                     </div>
@@ -460,7 +460,7 @@
               <div class="form-group mt-4">
                 <input type="file" id="uploadocument" class="d-none" multiple (change)="GetDocumentFile($event)" />
                 <a href="javascript:void(0)" class="text-muted d-inline-block mt-4 mb-2 pe-none">
-                  <i class="fa fa-upload zoom-2"></i>
+                  <i class="fa-solid fa-upload zoom-2"></i>
                 </a>
                 <span class="ps-2">click to upload documents</span>
                 <span class="ps-3">This function is under construction.....</span>
@@ -473,7 +473,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <i class="pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -515,7 +515,7 @@
                         (dateSelect)="onDateSelection($event)" ngbDatepicker #billd="ngbDatepicker">
                       <div class="input-group-append">
                         <button class="btn btn-outline-secondary calendar" (click)="billd.toggle()" type="button"><i
-                            class="fa fa-calendar" aria-hidden="true"></i>
+                            class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                         </button>
                       </div>
                     </div>
@@ -536,7 +536,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateRecord()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -635,8 +635,10 @@
                       <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="fromDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
                         name="from" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
                       <div class="input-group-append">
-                        <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="from.toggle()"
-                          type="button"></button>
+                        <button class="btn btn-outline-dark adv-srch-calenderbtn" (click)="from.toggle()"
+                          type="button">
+                          <i class="fa-regular fa-calendar-days fa-lg"></i>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -652,8 +654,10 @@
                         (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker
                         #to="ngbDatepicker">
                       <div class="input-group-append">
-                        <button class="btn btn-outline-dark fa fa-calendar adv-srch-calenderbtn" (click)="to.toggle()"
-                          [disabled]="isReadonly" type="button"></button>
+                        <button class="btn btn-outline-dark adv-srch-calenderbtn" (click)="to.toggle()"
+                          [disabled]="isReadonly" type="button">
+                          <i class="fa-regular fa-calendar-days fa-lg"></i>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -721,7 +725,7 @@
       <div class="modal-footer border-top-0  pe-5">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetFilter()">Close</button>
         <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="filterRecords()"><i
-            class="pe-2 " [ngClass]="{'fa-solid fa-spin fa-spinner': isLoading, 'fa-solid fa-filter': !isLoading}"></i>
+            class="pe-2 " [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-filter': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Filter Record' }}</button>
       </div>
     </div>
@@ -783,7 +787,7 @@
         <button type="button" class="btn btn-danger" (click)="closeWindow()">Close</button>
         <a href="{{downlodFilePath}}" class="d-none" id="downloadexistingfile"></a>
         <a class="btn btn-primary-c" [attr.disabled]="isLoading" (click)="downloadPdfDocx()" download>
-          <i class="fa fa-download text-light pe-2"></i> Download
+          <i class="fa-solid fa-download text-light pe-2"></i> Download
         </a>
       </div>
     </div>
@@ -798,7 +802,7 @@
         <div class="position-relative w-75 text-end" *ngIf="isBillGenerated">
           <input type="text" class="border-0 me-4 w-75 text-end"  [(ngModel)]="emailTemplate.EmailSubject"
                       placeholder="Enter your subject">
-          <i class="edit fa fa-pencil position-absolute"></i>
+          <i class="edit fa-regular fa-pen-to-square position-absolute"></i>
         </div>
       </div>
       <div class="modal-body  ">
@@ -813,7 +817,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
                         <a href="javascript:void(0)" (click)="getFileExtension('pdf')" class="text-primary-c fw-b">
-                          <i class="fa fa-download text-primary-c pe-2"></i>
+                          <i class="fa-solid fa-download text-primary-c pe-2"></i>
                           PDF
                         </a>
                     </div>
@@ -824,7 +828,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
                       <a href="javascript:void(0)" (click)="getFileExtension('docx')" class="text-primary-c fw-b">
-                        <i class="fa fa-download text-primary-c pe-2"></i>
+                        <i class="fa-solid fa-download text-primary-c pe-2"></i>
                         DOCX
                       </a>
                     </div>
@@ -845,7 +849,7 @@
                     <div class="input-group">
                       <input type="email" class="form-control" placeholder="Email Id" name="add-email" aria-label="Email Id" aria-describedby="add-email">
                       <button class="btn btn-primary-c" type="button" (click)="addEmailId()" id="add-email">
-                        <i class="fa fa-plus pe-2"></i>Add
+                        <i class="fa-solid fa-plus pe-2"></i>Add
                       </button>
                     </div>
                   </div>
@@ -856,7 +860,7 @@
                     <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
                       {{email}}
                       <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
-                        <i class="fa fa-close ps-2 text-dark"></i>
+                        <i class="fa-solid fa-xmark ps-2 text-dark"></i>
                       </a>
                     </span>
                   </ng-container>
@@ -875,7 +879,7 @@
                   <div class="position-relative">
                     <input type="text" class="border-0 w-75"  [(ngModel)]="emailTemplate.EmailTitle"
                       placeholder="Enter your title">
-                    <i class="edit fa fa-pencil position-absolute"></i>
+                    <i class="edit fa-solid fa-pencil position-absolute"></i>
                   </div>
                 </div>
                 <div class="border py-3 px-2">
@@ -901,7 +905,7 @@
           </div>
           <div>
             <a href="javascript:void(0)" class="text-primary-c fw-bold" (click)="sendEmail()">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}" aria-hidden="true"></i>
+              <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-paper-plane': !isLoading}" aria-hidden="true"></i>
               <span class="ps-2">
                 <ng-container *ngIf="isLoading">Sending...</ng-container>
                 <ng-container *ngIf="!isLoading"><u>Send Email</u></ng-container>
@@ -918,7 +922,7 @@
 <div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
   <div class="text-end">
     <a (click)="closePdfViewer()" class="close_view">
-      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark fa-2x" aria-hidden="true"></i>
     </a>
   </div>
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>

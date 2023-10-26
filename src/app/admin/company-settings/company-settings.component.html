@@ -9,7 +9,7 @@
         </div>
         <div class="col-4">
           <div class="x_header_title d-flex align-items-center justify-content-end">
-            <!-- <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa fa-plus pe-2"></i> Add Template</button> -->
+            <!-- <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa-solid fa-plus pe-2"></i> Add Template</button> -->
           </div>
         </div>
       </div>
@@ -31,22 +31,22 @@
               </div>
               <ul class="list-group list-group">
                 <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(1)">
-                  <li class="list-group-item border-0 active-tab" data-name="activetab"><i class="fa fa-cog pe-2"></i> Basic</li>
+                  <li class="list-group-item border-0 active-tab" data-name="activetab"><i class="fa-solid fa-gear pe-2"></i> Basic</li>
                 </a>
                 <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(2)">
-                  <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-building-o pe-2"></i> Company</li>
+                  <li class="list-group-item border-0" data-name="activetab"><i class="fa-regular fa-building pe-2"></i> Company</li>
                 </a>
                 <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(3)">
-                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-handshake-o pe-2"></i> Declaration</li>
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa-regular fa-handshake pe-2"></i> Declaration</li>
                   </a>
                   <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(4)">
-                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-cogs pe-2"></i> Cron</li>
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa-solid fa-gears pe-2"></i> Cron</li>
                   </a>
                   <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(5)">
-                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-address-book-o pe-2"></i> Attendance</li>
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa-regular fa-address-book pe-2"></i> Attendance</li>
                   </a>
                   <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(6)">
-                    <li class="list-group-item border-0" data-name="activetab"><i class="fa fa-wrench pe-2"></i> Payroll Barrier</li>
+                    <li class="list-group-item border-0" data-name="activetab"><i class="fa-solid fa-wrench pe-2"></i> Payroll Barrier</li>
                   </a>
                 </ul>
               </div>
@@ -226,7 +226,7 @@
             </div>
             <div class="text-end mt-3">
               <button type="button" class="btn btn-primary-c" (click)="saveSetting()" [disabled]="isLoading">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-cog': !isLoading}"></i>
+                <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-gear': !isLoading}"></i>
                 <span class="ps-2">{{ isLoading ? 'Wait' : 'Save setting' }}</span>
               </button>
             </div>

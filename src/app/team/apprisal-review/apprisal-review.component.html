@@ -36,9 +36,9 @@
                           placeholder="Search by Name" id="namefilter"> -->
                         <!-- <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
                           <a href="javascript:void()" class="pe-2">Full Name</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                         </div> -->
                       </div>
@@ -52,9 +52,9 @@
                           placeholder="Search by MobileNumber"> -->
                         <!-- <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
                           <a href="javascript:void()" class="pe-2">Mobile Number</a>
-                          <i class="fa fa-sort-amount-asc"
+                          <i class="fa-solid fa-arrow-down-wide-short"
                             [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                          <i class="fa fa-sort-amount-desc"
+                          <i class="fa-solid fa-arrow-down-short-wide"
                             [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
                         </div> -->
                       </div>
@@ -108,7 +108,7 @@
                       </div>
                       <div class="td justify-content-center d-flex fe-1">
                         <a href="javascript:void(0)" class="text-decoration-none" (click)="manageReview(project)">
-                          <span class="badge bg-primary"><i class=" fa fa-retweet"></i></span>
+                          <span class="badge bg-primary"><i class=" fa-solid fa-retweet"></i></span>
                         </a>
                       </div>
                     </div>
@@ -141,12 +141,12 @@
       <ng-container *ngIf="projectDetails.length > 0">
         <div class="row align-items-center justify-content-between">
           <div class="col-md-6">
-            <span class="fw-bold text-dark">Project Appraisal Budget: <i class="fa fa-inr pe-1"></i> {{currentProjectAppraisal.ProjectAppraisalBudget}}</span>
+            <span class="fw-bold text-dark">Project Appraisal Budget: <i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{currentProjectAppraisal.ProjectAppraisalBudget}}</span>
             <span class="ps-2">({{currentProjectAppraisal.FromDate | date}} - {{currentProjectAppraisal.ToDate | date}})</span>
           </div>
           <div class="col-md-2 text-end">
             <button class="btn btn-primary-c ms-2" (click)="startCycle()" [disabled]="isAmountExceed || isLoading">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
+              <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
               <span class="ps-2">
                 Start All
               </span>
@@ -183,7 +183,7 @@
                       <td>{{item.get("FullName").value}}</td>
                       <td>{{item.get("Experience").value}}</td>
                       <td>--</td>
-                      <td><i class="fa fa-inr pe-1"></i> {{item.get("CTC").value}}</td>
+                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.get("CTC").value}}</td>
                       <td>
                         <select class="form-select" formControlName="ProposedPromotion">
                           <option value="0" >Same Designation</option>
@@ -198,7 +198,7 @@
                       </td>
                       <td>
                         <div class="input-group mb-3">
-                          <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
+                          <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-indian-rupee-sign"></i></span>
                           <input type="text" [DecimalNumber]="10" readonly name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="ProposedHikeAmount">
                         </div>
                       </td>
@@ -211,7 +211,7 @@
         <div class="text-end mt-3">
           <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading">Cancel</button>
           <button class="btn btn-primary-c ms-2" (click)="startCycle()" [disabled]="isAmountExceed || isLoading">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
             <span class="ps-2">
               Start
             </span>

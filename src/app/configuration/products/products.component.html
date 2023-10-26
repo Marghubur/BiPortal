@@ -12,9 +12,9 @@
             <div class="col-4">
               <div class="x_header_title d-flex align-items-center justify-content-end">
                 <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
-                  class="fa fa-paper-plane pe-1"></i> Email Link Config
+                  class="fa-solid fa-paper-plane pe-1"></i> Email Link Config
                 </a>
-                <button class="btn btn-primary-c" (click)="addProductPopUp()"><i class="fa fa-plus pe-2"></i>Add Product</button>
+                <button class="btn btn-primary-c" (click)="addProductPopUp()"><i class="fa-solid fa-plus pe-2"></i>Add Product</button>
               </div>
             </div>
           </div>
@@ -23,7 +23,7 @@
           <div class="x_content mt-4">
             <div class="text-end pb-2">
               <a href="javascript:void(0)" (click)="addCatagoryPopUp()" class="text-decoration-none pe-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Add Category">
-                <i class="fa fa-plus text-primary fa-lg"></i>
+                <i class="fa-solid fa-plus text-primary fa-lg"></i>
                 <span class="ps-2">Add Category</span>
               </a>
             </div>
@@ -42,9 +42,9 @@
                       (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter"  (click)="arrangeDetails(orderByTitleNameAsc, 'TitleName')">
                         <a href="javascript:void(0)">Product Name</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByTitleNameAsc == null || !orderByTitleNameAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByTitleNameAsc == null || orderByTitleNameAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -59,9 +59,9 @@
                       </select>
                       <div class="t-filter"   (click)="arrangeDetails(orderByStockStatusAsc, 'StockStatus')">
                         <a href="javascript:void(0)" class="pe-2">Status</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByStockStatusAsc == null || !orderByStockStatusAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByStockStatusAsc == null || orderByStockStatusAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -72,9 +72,9 @@
                       (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter"  (click)="arrangeDetails(orderByQuantityAsc, 'Quantity')">
                         <a href="javascript:void(0)" class="pe-2">Quantity</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByQuantityAsc == null || !orderByQuantityAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByQuantityAsc == null || orderByQuantityAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -85,9 +85,9 @@
                       (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter"  (click)="arrangeDetails(orderByModalNumAsc, 'ModalNum')">
                         <a href="javascript:void(0)" class="pe-2">Model</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByModalNumAsc == null || !orderByModalNumAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByModalNumAsc == null || orderByModalNumAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -98,9 +98,9 @@
                       (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter"  (click)="arrangeDetails(orderByBrandAsc, 'Brand')">
                         <a href="javascript:void(0)" class="pe-2">Brand</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByBrandAsc == null || !orderByBrandAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByBrandAsc == null || orderByBrandAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -111,9 +111,9 @@
                         oninput="this.value = this.value.toUpperCase()" [(ngModel)]="productDetail.PurchasePrice" (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()">
                       <div class="t-filter"  (click)="arrangeDetails(orderByPurchasePriceAsc, 'PurchasePrice')">
                         <a href="javascript:void(0)" class="pe-2">Purchase Price</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByPurchasePriceAsc == null || !orderByPurchasePriceAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByPurchasePriceAsc == null || orderByPurchasePriceAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -123,9 +123,9 @@
                       <input class="form-control form-control-sm" autofocus placeholder="Search by Order Date" readonly>
                       <div class="t-filter"  (click)="arrangeDetails(orderByOrderDateAsc, 'OrderDate')">
                         <a href="javascript:void(0)" class="pe-2">Order Date</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByOrderDateAsc == null || !orderByOrderDateAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByOrderDateAsc == null || orderByOrderDateAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -187,7 +187,7 @@
                     <div class="td align-middle fe-index">
                       <div class="d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)" class="text-decoration-none" (click)="editProductPopUp(item)">
-                          <i class="fa fa-pencil pe-2"></i>
+                          <i class="fa-solid fa-pencil pe-2"></i>
                         </a>
                       </div>
                     </div>
@@ -297,7 +297,7 @@
             <div class="mt-3">
               <input type="file" id="uploaProductImg" class="d-none" multiple accept=".png, .jpg" multiple (change)="uploadAttachment($event)"/>
               <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowserFile()">
-                <i class="fa fa-paperclip pe-2"></i>
+                <i class="fa-solid fa-paperclip pe-2"></i>
                 <span>Add Attachment</span>
               </a>
               <span class="fw-bold text-primary ps-2" *ngIf="fileList.length > 0">{{fileList.length}} file selected</span>
@@ -311,7 +311,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageProduct()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="currentProduct.ProductId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="currentProduct.ProductId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>
@@ -343,8 +343,8 @@
                 <td class="counterCell">{{i+1}}</td>
                 <td>{{item.FileName}}.{{item.FileExtension}}</td>
                 <td>
-                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa fa-eye px-2 text-dark"></i></a>
-                  <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteRentFile(item)"><i class="fa fa-trash px-2 text-danger"></i></a> -->
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa-regular fa-eye px-2 text-dark"></i></a>
+                  <!-- <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteRentFile(item)"><i class="fa-solid fa-trash-can px-2 text-danger"></i></a> -->
                 </td>
               </tr>
             </tbody>
@@ -362,7 +362,7 @@
 <div class="d-none file-container" id="productfile-container" (click)="closePdfViewer()">
   <div class="text-end">
     <a (click)="closePdfViewer()" class="close_view">
-      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark fa-2x" aria-hidden="true"></i>
     </a>
   </div>
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
@@ -413,9 +413,9 @@
                        (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByGroupIdAsc, 'GroupId')">
                         <a href="javascript:void(0)">Group Id</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByGroupIdAsc == null || !orderByGroupIdAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByGroupIdAsc == null || orderByGroupIdAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -426,9 +426,9 @@
                        (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryCodeAsc, 'CatagoryCode')">
                         <a href="javascript:void(0)" class="pe-2">Category Code</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByCatagoryCodeAsc == null || !orderByCatagoryCodeAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByCatagoryCodeAsc == null || orderByCatagoryCodeAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -439,9 +439,9 @@
                        (keyup.enter)="filterCatagoryRecords()" oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter"  (click)="arrangeCatagoryDetails(orderByCatagoryDescriptionAsc, 'CatagoryDescription')">
                         <a href="javascript:void(0)" class="pe-2">Category Description</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByCatagoryDescriptionAsc == null || !orderByCatagoryDescriptionAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByCatagoryDescriptionAsc == null || orderByCatagoryDescriptionAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -449,7 +449,7 @@
                   <div class="th fe-index text-center">
                     <div class="cell-wrapper">
                       <a href="javascript:void(0)" (click)="resetCatagoryFilter()" class="text-decoration-none" data-bs-toggle="tooltip" data-bs-placement="top" title="Reset filter">
-                        <i class="fa fa-refresh text-danger"></i>
+                        <i class="fa-solid fa-arrows-rotate text-danger"></i>
                       </a>
                       <div class="t-filter">
                         <a href="javascript:void(0)" class="pe-2">Action</a>
@@ -484,7 +484,7 @@
                     <div class="td align-middle fe-index">
                       <div class="d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)" class="text-decoration-none" (click)="editCatagory(item)">
-                          <i class="fa fa-pencil pe-2"></i>
+                          <i class="fa-solid fa-pencil pe-2"></i>
                         </a>
                       </div>
                     </div>
@@ -517,7 +517,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageCatagory()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="currentCatagory.CatagoryId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="currentCatagory.CatagoryId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>
@@ -532,7 +532,7 @@
 <div class="d-none file-container" id="viewfile-container" (click)="closePdfViewer()">
   <div class="text-end">
     <a (click)="closePdfViewer()" class="close_view">
-      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark fa-2x" aria-hidden="true"></i>
     </a>
   </div>
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>

@@ -298,7 +298,7 @@
   </div>
   <div class="text-end mt-3">
     <button class="btn btn-success" [disabled]="isLoading" (click)="registerAccount()">
-      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-send': !isLoading}"></i>
+      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
       <span class="ps-2">{{ isLoading ? 'Wait' : 'Register' }}</span>
     </button>
   </div>

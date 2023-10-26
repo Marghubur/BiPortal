@@ -15,7 +15,7 @@
           <ng-container *ngIf="projectDetails.length > 0 && selectedProject != null">
             <div class="row align-items-center justify-content-between" *ngIf="currentProjectAppraisal != null">
               <div class="col-md-12">
-                <span class="fw-bold text-dark">Project Appraisal Budget: <i class="fa fa-inr pe-1"></i> {{currentProjectAppraisal.ProjectAppraisalBudget}}</span>
+                <span class="fw-bold text-dark">Project Appraisal Budget: <i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{currentProjectAppraisal.ProjectAppraisalBudget}}</span>
                 <span class="ps-2">({{currentProjectAppraisal.FromDate | date}} - {{currentProjectAppraisal.ToDate | date}})</span>
               </div>
             </div>
@@ -36,7 +36,7 @@
                         <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card pb-4 pt-2 custom-border">
                           <div class="d-flex col-md-10 align-items-center">
                             <a href="javascript:void(0)" class="me-2">
-                              <i class="fa fa-user-circle-o fa-lg"></i>
+                              <i class="fa-regular fa-circle-user fa-lg"></i>
                             </a>
                             <p class="mb-0 fs-6">
                               <span class="fw-bold text-primary-dc">
@@ -61,7 +61,7 @@
                             <p class="ms-2 mb-0 fs-6">
                               <i class="fa-solid fa-sack-dollar fa-lg pe-2 text-danger"></i>
                               <span class="">Salary: </span>
-                              <span><i class="fa fa-inr px-1"></i>{{item.get("cTC").value}}</span>
+                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("cTC").value}}</span>
                             </p>
                             <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
@@ -71,13 +71,13 @@
                             <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
                               <span class="">Proposed Hike Amount: </span>
-                              <span><i class="fa fa-inr px-1"></i>{{item.get("hikeAmount").value}}</span>
+                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("hikeAmount").value}}</span>
                             </p>
                             <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
                               <i class="fa-solid fa-hand-holding-dollar fa-lg pe-2 text-danger"></i>
                               <span class="">Estimated Salary: </span>
-                              <span><i class="fa fa-inr px-1"></i>{{item.get("estimatedSalary").value}}</span>
+                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("estimatedSalary").value}}</span>
                             </p>
                             <span class="px-3 fw-bold text-dark">|</span>
                             <div class="col-auto d-flex">
@@ -97,7 +97,7 @@
                             </div>
                             <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="fw-bold">
                               <span class="pe-2">Objective's</span>
-                              <i class="fa" data-bs-toggle="tooltip" data-bs-placement="right" title="View objective" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-eye': !isLoading}"></i>
+                              <i  data-bs-toggle="tooltip" data-bs-placement="right" title="View objective" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-eye': !isLoading}"></i>
                             </a>
                           </div>
                         </div>
@@ -133,7 +133,7 @@
                             <ngb-rating formControlName="rating" [max]="5"></ngb-rating>
                           </td>
                           <td class="align-middle">
-                            <i class="fa fa-inr pe-1"></i> {{item.get("cTC").value}}
+                            <i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.get("cTC").value}}
                           </td>
                           <td class="align-middle">
                             <select class="form-select" formControlName="promotedDesignation">
@@ -149,11 +149,11 @@
                           </td>
                           <td class="align-middle">
                             <div class="input-group mb-3">
-                              <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
+                              <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-indian-rupee-sign"></i></span>
                               <input type="text" [DecimalNumber]="10" readonly name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)" (click)="proposedHikeCheck($event, i)" class="form-control" formControlName="hikeAmount">
                             </div>
                           </td>
-                          <td class="align-middle"><i class="fa fa-inr pe-1"></i> {{item.get("estimatedSalary").value}}</td>
+                          <td class="align-middle"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.get("estimatedSalary").value}}</td>
                           <td class="text-center align-middle">
                             <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="text-success pe-3" type="button">
                               <i class="fa fa-play" aria-hidden="true"></i>
@@ -168,7 +168,7 @@
             <div class="text-end mt-3">
               <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading || isSubmitted">Cancel</button>
               <button class="btn btn-primary-c ms-2" (click)="applyHikeAndPromotion()" [disabled]="isAmountExceed || isLoading || isSubmitted > 0">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
+                <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
                 <span class="ps-2">
                   Save
                 </span>
@@ -216,7 +216,7 @@
       <ng-container *ngIf="objectives.length > 0">
         <div class="d-flex mt-3">
           <div class="col-auto">
-            <i class="fa fa-circle text-primary-c"></i>
+            <i class="fa-solid fa-circle text-primary-c"></i>
           </div>
           <div class="col-md-11 ms-3">
             <div class="card shadow-sm px-2 py-3">
@@ -247,7 +247,7 @@
               <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
                 <div class="d-flex col-md-12">
                   <a data-bs-toggle="collapse" (click)="collpaseShowHide('feedback'+i)"  [attr.href]="'#feedback'+i" role="button" aria-expanded="false" [attr.aria-controls]="'#feedback'+i" class="me-3">
-                    <i class="fa fa-quote-left" aria-hidden="true"></i>
+                    <i class="fa-solid fa-quote-left" aria-hidden="true"></i>
                   </a>
                   <p class="mb-0 fs-6">
                     <b>{{item.Objective}}:</b>
@@ -267,13 +267,13 @@
         </div>
         <div class="text-end">
           <button class="btn btn-danger" (click)="rejectObjective()" [disabled]="isLoading || objectives[0].PerformanceStatus != 8">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-close': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-xmark': !isLoading}"></i>
             <span class="ps-2">
               Reject
             </span>
           </button>
           <button class="btn btn-primary-c ms-2" (click)="approveObjective()" [disabled]="isLoading || objectives[0].PerformanceStatus != 8">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
             <span class="ps-2">
               Approve
             </span>
@@ -321,7 +321,7 @@
         </div>
         <div class="mt-3">
           <label class="form-label col-md-4">Present Salary:</label>
-          <label class="form-label"><i class="fa fa-inr pe-1"></i>{{selectedPromotionAndHike.cTC}}</label>
+          <label class="form-label"><i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{selectedPromotionAndHike.cTC}}</label>
         </div>
         <div class="mt-3 d-flex align-items-center col-md-12">
           <label class="form-label col-md-4">Promoted Designation</label>
@@ -342,13 +342,13 @@
         <div class="mt-3 d-flex align-items-center col-md-12">
           <label class="form-label col-md-4">Proposed Hike Amount</label>
           <div class="col-md-8 input-group-c">
-            <span class="input-group-text" id="basic-addon1"><i class="fa fa-inr"></i></span>
+            <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-indian-rupee-sign"></i></span>
             <input type="text" [DecimalNumber]="10"  name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)"  class="form-control rounded-end-0" [(ngModel)]="selectedPromotionAndHike.hikeAmount">
           </div>
         </div>
         <div class="mt-3">
           <label class="form-label col-md-4">EstimatedSalary:</label>
-          <label class="form-label"><i class="fa fa-inr pe-1"></i>{{selectedPromotionAndHike.estimatedSalary}}</label>
+          <label class="form-label"><i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{selectedPromotionAndHike.estimatedSalary}}</label>
         </div>
         <div class="d-flex align-items-center">
           <label class="form-label col-md-4">Rating:</label>

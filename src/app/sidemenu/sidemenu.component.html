@@ -4,8 +4,8 @@
       <div class="x_content d-flex justify-content-between">
         <div class="fe-1">User detail</div>
         <a href="javascript:void(0)" (click)="saveMenuStyle()">
-          <i class="fa fa-thumb-tack pinded-icon" [ngClass]="{'d-none': !isMenuExpanded}" aria-hidden="true"></i>
-          <i class="fa fa-thumb-tack" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
+          <i class="fa-solid fa-thumb-tack pinded-icon" [ngClass]="{'d-none': !isMenuExpanded}" aria-hidden="true"></i>
+          <i class="fa-solid fa-thumb-tack" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
         </a>
       </div>
       <div class="accordion" id="accordionExample">
@@ -45,15 +45,15 @@
       <!-- <hr> -->
       <div class="title_menu mt-3">
         <!-- <a [routerLink]="['/ems/administration/email']" class="text-dark custom-text" routerLinkActive="router-link-active">
-          <i class="fa fa-envelope-o me-3 pb-3"aria-hidden="true"></i>
+          <i class="fa-regular fa-envelope me-3 pb-3"aria-hidden="true"></i>
             Mail Box
         </a>
         <a [routerLink]="['/ems/administration/resetpassword']" class="text-dark custom-text" routerLinkActive="router-link-active">
-          <i class="fa fa-cog me-3 pb-3" aria-hidden="true"></i>
+          <i class="fa-solid fa-gear me-3 pb-3" aria-hidden="true"></i>
             Reset Password
         </a> -->
         <a (click)="navToMasterDataPasge()" *ngIf="isAdmin" class="text-dark custom-text" href="javascript:void(0)" routerLinkActive="router-link-active">
-          <i class="fa fa-upload me-3 pb-3" aria-hidden="true"></i>
+          <i class="fa-solid fa-download me-3 pb-3" aria-hidden="true"></i>
             Uploda Master Data
           </a>
       </div>
@@ -63,16 +63,16 @@
     </div>
     <div class="w-100 position-absolute bg-secondary" class="menu-footer btn-primary-c">
       <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
-        <i class="fa fa-cog text-light custom-text" aria-hidden="true"></i>
+        <i class="fa-solid fa-gear text-light custom-text" aria-hidden="true"></i>
       </a>
       <a href="javascript:void(0)">
-        <i class="fa fa-info-circle text-light custom-text" (click)="notification()" aria-hidden="true"></i>
+        <i class="fa-solid fa-circle-info text-light custom-text" (click)="notification()" aria-hidden="true"></i>
       </a>
       <a href="javascript:void(0)" (click)="LogoutUser()">
-        <i class="fa fa-sign-out text-light custom-text" aria-hidden="true"></i>
+        <i class="fa-solid fa-arrow-right-from-bracket text-light custom-text" aria-hidden="true"></i>
       </a>
       <a href="javascript:void(0)" (click)="mimizeScreen()">
-        <i class="fa text-light fa-lg fa-angle-double-left" aria-hidden="true" ></i>
+        <i class="fa-solid text-light fa-lg fa-angles-left" aria-hidden="true" ></i>
       </a>
     </div>
   </ng-container>
@@ -105,14 +105,14 @@
       </div>
       <div class="p-3 text-center border-top">
         <!-- <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
-          <i class="fa fa-cog text-dark me-3 fa-lg" aria-hidden="true"></i>
+          <i class="fa-solid fa-gear text-dark me-3 fa-lg" aria-hidden="true"></i>
         </a> -->
         <a href="javascript:void(0)" (click)="saveMenuStyle()">
-          <i class="fa fa-thumb-tack me-3 fa-lg pinded-icon" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
-          <i class="fa fa-thumb-tack me-3 fa-lg" [ngClass]="{'d-none': !isMenuExpanded}" aria-hidden="true"></i>
+          <i class="fa-solid fa-thumb-tack me-3 fa-lg pinded-icon" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
+          <i class="fa-solid fa-thumb-tack me-3 fa-lg" [ngClass]="{'d-none': !isMenuExpanded}" aria-hidden="true"></i>
         </a>
         <a href="javascript:void(0)" (click)="mimizeScreen()" >
-          <i class="fa fa-angle-double-right me-3 py-3 fa-2x text-dark" aria-hidden="true" data-bs-toggle="tooltip"
+          <i class="fa-solid fa-angles-right me-3 py-3 text-dark fa-lg " aria-hidden="true" data-bs-toggle="tooltip"
           data-bs-placement="right" title="Show more information"></i>
         </a>
       </div>
@@ -130,15 +130,15 @@
               <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"
                 class="nav-link a-font icon-size"><i class="fa fa-code pb-2" aria-hidden="true"></i></a>
               <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active" class="mt-2"
-                class="nav-link a-font icon-size"><i class="fa fa-retweet" aria-hidden="true"></i></a>
+                class="nav-link a-font icon-size"><i class="fa-solid fa-retweet" aria-hidden="true"></i></a>
               <a [routerLink]="['/{{item.Link}}']" routerLinkActive="router-link-active"
                 class="nav-link a-font icon-size"><i class="fa fa-cloud-upload" aria-hidden="true"></i></a>
               <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
                   class="fa fa-stack-overflow pb-2" aria-hidden="true"></i> </a>
               <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
-                  class="fa fa-plus-square-o pb-2" aria-hidden="true"></i> </a>
+                  class="fa-regular fa-square-plus pb-2" aria-hidden="true"></i> </a>
               <a [routerLink]="['/{{}}']" routerLinkActive="router-link-active" class="nav-link a-font icon-size"><i
-                  class="fa fa-cog" aria-hidden="true"></i> </a>
+                  class="fa-solid fa-gear" aria-hidden="true"></i> </a>
             </div>
           </div>
         </div>

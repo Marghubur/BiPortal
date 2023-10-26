@@ -101,7 +101,7 @@
                                             </div>
                                             <div class="td align-middle fe-1">
                                                 <div class="cell-wrapper" [ngClass]="{'text-primary': item.RequestStatusId == 2, 'text-danger': item.RequestStatusId == 5, 'text-success': item.RequestStatusId == 9}">
-                                                  <i class="fa pe-1" [ngClass]="{'fa-clock-o': item.RequestStatusId == 2, 'fa-close': item.RequestStatusId == 5, 'fa-check-square-o': item.RequestStatusId == 9}"></i>
+                                                  <i class="fa pe-1" [ngClass]="{'fa-clock-o': item.RequestStatusId == 2, 'fa-solid fa-xmark': item.RequestStatusId == 5, 'fa-check-square-o': item.RequestStatusId == 9}"></i>
                                                   {{item.RequestStatusId == 2 ? 'Pending' : item.RequestStatusId == 5
                                                   ? 'Rejected' : 'Approved'}}
                                                 </div>
@@ -114,22 +114,22 @@
                                             <div class="td align-middle text-center fe-1">
                                                 <ng-container *ngIf="item.RequestStatusId != 9">
                                                     <a href="javascript:void(0)" class="text-decoration-none" (click)="leaveActionPopUp(item)">
-                                                        <i class="fa fa-ellipsis-h"  data-bs-toggle="tooltip" data-bs-placement="right" title="Action"></i>
+                                                        <i class="fa-solid fa-ellipsis"  data-bs-toggle="tooltip" data-bs-placement="right" title="Action"></i>
                                                     </a>
                                                     <!-- <a href="javascript:void(0)"(click)="submitActionForLeave(item, 'Approved')"
                                                         data-bs-toggle="tooltip" data-bs-placement="right"
                                                         title="Approve Leave">
-                                                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                                        <i class="fa-regular fa-square-check" aria-hidden="true"></i>
                                                     </a>
                                                     <a href="javascript:void(0)" class="ms-3" data-bs-toggle="tooltip"
                                                         data-bs-placement="right" title="Reject Leave">
-                                                        <i class="fa fa-close text-danger"
+                                                        <i class="fa-solid fa-xmark text-danger"
                                                             (click)="submitActionForLeave(item, 'Rejected')"
                                                             aria-hidden="true"></i>
                                                     </a> -->
                                                 </ng-container>
                                                 <ng-container *ngIf="item.RequestStatusId == 9">
-                                                    <i class="fa fa-check-square-o text-success" data-bs-toggle="tooltip" data-bs-placement="right"
+                                                    <i class="fa-regular fa-square-check text-success" data-bs-toggle="tooltip" data-bs-placement="right"
                                                     title="Leave Approved"></i>
                                                 </ng-container>
                                             </div>
@@ -167,10 +167,10 @@
                                 </div>
                                 <div class="col-auto">
                                     <a href="javascript:void(0)" class="text-decoration-none px-2" (click)="filterRecords()">
-                                        <i class="fa fa-filter fa-lg"></i>
+                                        <i class="fa-solid fa-filter fa-lg"></i>
                                     </a>
                                     <a href="javascript:void(0)" class="text-decoration-none px-2 text-danger" (click)="resetFilter()">
-                                        <i class="fa fa-repeat fa-lg"></i>
+                                        <i class="fa-solid fa-repeat fa-lg"></i>
                                     </a>
                                 </div>
                             </div>
@@ -205,16 +205,16 @@
                                         <ng-container *ngFor="let data of item.AttendanceDetail">
                                             <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
                                               <ng-container *ngIf="!data.IsOnLeave">
-                                                <i class="fa fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
-                                                <i class="fa fa-close text-white" *ngIf="data.PresentDayStatus == 5"></i>
+                                                <i class="fa-solid fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
+                                                <i class="fa-solid fa-xmark text-white" *ngIf="data.PresentDayStatus == 5"></i>
                                                 <a href="javascript:void(0)" (click)="showAttendanceHandler(data, item.AttendanceId, item.EmployeeName)">
-                                                    <i class="fa fa-exclamation-triangle text-warning" *ngIf="data.PresentDayStatus == 0"></i>
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning" *ngIf="data.PresentDayStatus == 0"></i>
                                                 </a>
-                                                <i class="fa fa-clock-o text-danger" *ngIf="data.PresentDayStatus == 2 || data.PresentDayStatus == 12"></i>
-                                                <i class="fa fa-gift" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                                                <i class="fa-regular fa-clock text-danger" *ngIf="data.PresentDayStatus == 2 || data.PresentDayStatus == 12"></i>
+                                                <i class="fa-solid fa-gift" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
                                               </ng-container>
                                               <ng-container *ngIf="data.IsOnLeave">
-                                                <i class="fa fa-flag-o"></i>
+                                                <i class="fa-regular fa-flag"></i>
                                               </ng-container>
                                             </td>
                                         </ng-container>
@@ -260,43 +260,43 @@
                               <div class="row mt-3">
                                 <div class="col-auto">
                                     <span class="px-2 py-1">
-                                        <i class="fa fa-check text-success"></i>
+                                        <i class="fa-solid fa-check text-success"></i>
                                     </span>
                                     <span> Approved</span>
                                 </div>
                                 <div class="col-auto">
                                     <span class="px-2 py-1">
-                                        <i class="fa fa-close text-danger"></i>
+                                        <i class="fa-solid fa-xmark text-danger"></i>
                                     </span>
                                     <span> Rejected</span>
                                 </div>
                                 <div class="col-auto">
                                     <span class=" px-2 py-1">
-                                        <i class="fa fa-ban text-dark"></i>
+                                        <i class="fa-solid fa-ban text-dark"></i>
                                     </span>
                                     <span> Blocked</span>
                                 </div>
                                 <div class="col-auto">
                                     <span class="px-2 py-1">
-                                        <i class="fa fa-clock-o text-warning"></i>
+                                        <i class="fa-regular fa-clock text-warning"></i>
                                     </span>
                                     <span> Submitted</span>
                                 </div>
                                 <div class="col-auto">
                                   <span class="px-2 py-1">
-                                      <i class="fa fa-exclamation-triangle text-warning"></i>
+                                      <i class="fa-solid fa-triangle-exclamation text-warning"></i>
                                   </span>
                                   <span> Not Submitted</span>
                                 </div>
                                 <div class="col-auto">
                                     <span class="holiday-color px-2 py-1">
-                                        <i class="fa fa-gift"></i>
+                                        <i class="fa-solid fa-gift"></i>
                                     </span>
                                     <span> WeekOff/ Holiday</span>
                                 </div>
                                 <div class="col-auto">
                                   <span class=" px-2 py-1">
-                                      <i class="fa fa-flag-o"></i>
+                                      <i class="fa-regular fa-flag"></i>
                                   </span>
                                   <span> Leave</span>
                                 </div>
@@ -311,11 +311,11 @@
                             below. Admin can override LOP days if required.</div>
                         <div class="x_content">
                             <div class="d-flex mb-3 align-items-center justify-content-between">
-                                <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa fa-plus pe-1"></i>
+                                <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa-solid fa-plus pe-1"></i>
                                     Add Employee</button>
                                 <div class="col-md-3 float-end">
                                     <div class="form-group has-search">
-                                        <span class="fa fa-search form-control-feedback"></span>
+                                        <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
                                         <input type="text" class="form-control"
                                             oninput="this.value = this.value.toUpperCase()"
                                             placeholder="Search Component">
@@ -359,13 +359,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="th fe-1">
-                                            <div class="cell-wrapper">
-                                                <div class="t-filter">
-                                                    <a href="javascript:void(0)" class="pe-2">Comment</a>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="th fe-index">
                                             <div class="cell-wrapper">
                                                 <div class="t-filter">
@@ -397,16 +390,11 @@
                                                   {{item.FinalLOP}} days
                                                 </div>
                                             </div>
-                                            <div class="td align-middle text-truncate fe-1">
-                                                <div class="cell-wrapper text-truncate">
-                                                    {{item.Comment}}
-                                                </div>
-                                            </div>
                                             <div class="td align-middle fe-index">
                                                 <div class="cell-wrapper text-center">
                                                     <a href="javascript:void(0)" class="text-decoration-none"
                                                         (click)="lopAdjustmentPopUp(item)">
-                                                        <i class="fa fa-pencil-square-o"></i>
+                                                        <i class="fa-regular fa-pen-to-square"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -490,7 +478,7 @@
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveLOPAjustment()">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                 <span class="ps-1">{{ isLoading ? 'Wait' : 'Save' }}</span>
               </button>
             </div>
@@ -530,7 +518,7 @@
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
                 <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveAttedanceAjustment()">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-user-circle-o': !isLoading}"></i>
+                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
             </div>
@@ -577,11 +565,11 @@
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
                 <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitActionForLeave('Approved')">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
                 <button type="button" class="btn btn-danger" [disabled]="isLoading" (click)="submitActionForLeave('Rejected')">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-close': !isLoading}"></i>
+                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-xmark': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Reject' }}
                 </button>
             </div>

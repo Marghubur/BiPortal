@@ -78,10 +78,10 @@
                   </div>
                   <div class="ms-auto me-3">
                     <a href="javascript:void(0)">
-                      <i class="fa fa-refresh text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
+                      <i class="fa-solid fa-arrows-rotate text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
                     </a>
                     <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
-                      <i class="fa" [ngClass]="{'fa-angle-down': isSalaryDetail, 'fa-angle-up': !isSalaryDetail}"
+                      <i  [ngClass]="{'fa-solid fa-angle-down': isSalaryDetail, 'fa-solid fa-angle-up': !isSalaryDetail}"
                         aria-hidden="true"></i>
                     </button>
                   </div>
@@ -108,7 +108,7 @@
                     <div class="card-header py-2">
                       BONUS:<span class="fw-bold tex-dark"> INR {{myAnnualSalary.Bonus}} </span>
                       <a href="javascript:void(0)" (click)="addBonusPopUp()" class="text-decoration-none float-end">
-                        <i class="fa fa-plus pe-1"></i>
+                        <i class="fa-solid fa-plus pe-1"></i>
                         Add Bonus
                       </a>
                     </div>
@@ -265,7 +265,7 @@
                           Switch to {{item.RegimeName}} (Section 115BAC)
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa fa-spin fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -277,7 +277,7 @@
                           Continue with {{item.RegimeName}}
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa fa-spin fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -362,7 +362,7 @@
                           Switch to {{item.RegimeName}} (Section 115BAC)
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa fa-spin fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -374,7 +374,7 @@
                           Continue with {{item.RegimeName}}
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa fa-spin fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fafa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -423,7 +423,7 @@
         </div>
         <div class="d-flex align-items-center ps-4 py-4">
           <span class="text-dark">{{myAnnualSalary.Effective | date}}</span>
-          <i class="fa fa-circle text-info px-4" aria-hidden="true"></i>
+          <i class="fa-solid fa-circle text-info px-4" aria-hidden="true"></i>
           <div class="col-md-8 custom-bg rounded p-3">
             <span class="text-dark">Orignal salary structure</span>
             <a href="javascript:void(0)" class="text-decoration-none float-end" (click)="salaryBreakupPopup()">SALARY
@@ -471,7 +471,7 @@
                       (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                          class="fa fa-calendar" aria-hidden="true"></i>
+                          class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                       </button>
                     </div>
                   </div>
@@ -496,7 +496,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button [disabled]="isLoading" class="btn btn-primary-c" (click)="addBonus()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           <span class="ps-2">Add</span>
         </button>
       </div>

@@ -14,7 +14,7 @@
         <div class="col-12 p-2 my-4 row">
           <ng-container *ngIf="IsReady">
             <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING <button [disabled]="isLoading"
-                class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i class="fa" [ngClass]="{'fa-cog': !isLoading, 'fa-spin fa-spinner': isLoading}"></i>
+                class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i [ngClass]="{'fa-solid fa-gear': !isLoading, 'fa-spin fa-solid fa-spinner': isLoading}"></i>
                <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span></button></p>
             <label>These setting will be used for the different calculatin like, Salary, GST etc.</label>
             <div class="mx-4 my-4 row" [formGroup]="PFandESIForm">
@@ -112,7 +112,7 @@
                       <ul class="list-border-0 li-spacing list-group">
                         <li class="list-group-item">
                           Maximum monthly gross salary eligible for ESI
-                          <i class="mx-4 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" title="Maximum monthly gross salary eligible for ESI"></i>
+                          <i class="mx-4 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Maximum monthly gross salary eligible for ESI"></i>
                           <div class="col-md-2 d-inline-block">
                             <input OnlyNumber="9" class="form-control" formControlName="MaximumGrossForESI" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                           </div>
@@ -135,49 +135,49 @@
                           <input class="form-check-input me-1" formControlName="IsAllowOverridingEsi" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Allow overriding of ESI at salary structure level.
-                          <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Allow overriding of ESI at salary structure level."></i>
+                          <i class="fa-solid fa-circle-info ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Allow overriding of ESI at salary structure level."></i>
                         </li>
                         <li class="list-group-item">
                           <input class="form-check-input me-1" formControlName="IsEsiEmployerContributionOutside" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Pay Employer Contribution of ESI outside the Gross Salary of an Employee
-                          <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Pay Employer Contribution of ESI outside the Gross Salary of an Employee"></i>
+                          <i class="fa-solid fa-circle-info ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Pay Employer Contribution of ESI outside the Gross Salary of an Employee"></i>
                         </li>
                         <li class="list-group-item">
                           <input class="form-check-input me-1" formControlName="IsHideEsiEmployer" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Hide ESI Employer in Payslip (and exlude from gross earnings calculation in Payslip)
-                          <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Hide ESI Employer in Payslip (and exlude from gross earnings calculation in Payslip)"></i>
+                          <i class="fa-solid fa-circle-info ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Hide ESI Employer in Payslip (and exlude from gross earnings calculation in Payslip)"></i>
                         </li>
                         <li class="list-group-item">
                           <input class="form-check-input me-1" formControlName="IsEsiExcludeEmployerShare" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Exclude employer's share from gross in ESI calculation
-                          <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Exclude employer's share from gross in ESI calculation"></i>
+                          <i class="fa-solid fa-circle-info ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Exclude employer's share from gross in ESI calculation"></i>
                         </li>
                         <li class="list-group-item">
                           <input class="form-check-input me-1" formControlName="IsEsiExcludeEmployeeGratuity" type="checkbox" data-name="esi-setting"
                             value="" aria-label="...">
                           Exclude Employee Gratuity contribution from gross in ESI calculation
-                          <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Exclude Employee Gratuity contribution from gross in ESI calculation"></i>
+                          <i class="fa-solid fa-circle-info ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Exclude Employee Gratuity contribution from gross in ESI calculation"></i>
                         </li>
                         <li class="list-group-item">
                           <input class="form-check-input me-1" formControlName="IsRestrictEsi" type="checkbox" value="" data-name="esi-setting"
                             aria-label="...">
                           Restrict ESI Gross to Statutory Gross during the contribution period
-                          <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict ESI Gross to Statutory Gross during the contribution period"></i>
+                          <i class="fa-solid fa-circle-info ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Restrict ESI Gross to Statutory Gross during the contribution period"></i>
                         </li>
                         <li class="list-group-item">
                           <input class="form-check-input me-1" formControlName="IsIncludeBonusEsiEligibility" data-name="esi-setting"
                             type="checkbox" value="" aria-label="...">
                           Include Bonuses and One-Time payments in gross for ESI eligibility calculation
-                          <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Include Bonuses and One-Time payments in gross for ESI eligibility calculation"></i>
+                          <i class="fa-solid fa-circle-info ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Include Bonuses and One-Time payments in gross for ESI eligibility calculation"></i>
                         </li>
                         <li class="list-group-item">
                           <input class="form-check-input me-1" formControlName="IsIncludeBonusEsiContribution" data-name="esi-setting"
                             type="checkbox" value="" aria-label="...">
                           Include Bonuses and One-Time payments in gross for ESI Contribution calculation
-                          <i class="fa fa-info-circle ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Include Bonuses and One-Time payments in gross for ESI Contribution calculation"></i>
+                          <i class="fa-solid fa-circle-info ms-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Include Bonuses and One-Time payments in gross for ESI Contribution calculation"></i>
                         </li>
                       </ul>
                     </div>

@@ -27,9 +27,9 @@
                   <option [value]="item.AgeGroupId" *ngFor="let item of allAgeGroup">{{item.StartAgeGroup}} to {{item.EndAgeGroup == 110 ? 'Above' : item.EndAgeGroup}}</option>
                 </select>
               </div>
-              <button class="btn btn-primary-c ms-3" (click)="taxRegimePopUp()"><i class="fa fa-plus circle pe-2"></i> Add/Update Regime</button>
-              <button class="btn btn-primary-c ms-3" (click)="ageGroupPopUp()"><i class="fa fa-plus circle pe-2"></i> Add/Update Age Group</button>
-              <button class="btn btn-primary-c ms-auto" *ngIf="!isEditable && isPageReady" (click)="editSlab()"><i class="fa fa-pencil pe-2"></i> Edit Regime</button>
+              <button class="btn btn-primary-c ms-3" (click)="taxRegimePopUp()"><i class="fa-solid fa-plus circle pe-2"></i> Add/Update Regime</button>
+              <button class="btn btn-primary-c ms-3" (click)="ageGroupPopUp()"><i class="fa-solid fa-plus circle pe-2"></i> Add/Update Age Group</button>
+              <button class="btn btn-primary-c ms-auto" *ngIf="!isEditable && isPageReady" (click)="editSlab()"><i class="fa-solid fa-pencil pe-2"></i> Edit Regime</button>
             </div>
             <div>
               <ng-container *ngIf="isPageReady">
@@ -44,19 +44,19 @@
                     <div class="row mx-1 mt-3 align-items-center" *ngFor="let item of oldSlab.controls; let i = index" [formGroupName]="i">
                       <div class="col-md-4 mx-0 ps-0 d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                          <i class="fa fa-inr px-1" aria-hidden="true"></i>
+                          <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
                           <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="From" formControlName="MinTaxSlab" (keyup)="calcTaxAmount()">
                         </div>
                         <label for="" class="form-label px-5">to</label>
                         <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                          <i class="fa fa-inr px-1" aria-hidden="true"></i>
+                          <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
                           <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="To" formControlName="MaxTaxSlab" (keyup)="calcTaxAmount()" (blur)="checkToAmount($event, i)">
                         </div>
                       </div>
                       <div class="col-md-4 d-flex align-items-center">
                         <div class="d-flex align-items-center form-control p-0 m-0 w-25" [ngClass]="{'border-0': !isEditable}">
                           <input type="number" [readonly]="!isEditable" class="form-control border-0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Rate" formControlName="TaxRatePercentage" (keyup)="calcTaxAmount()">
-                          <i class="fa fa-percent px-2"></i>
+                          <i class="fa-solid fa-percent px-2"></i>
                         </div>
                         <label for="" class="form-label ps-3">above &#x20B9; {{item.get("MinTaxSlab").value}}</label>
                       </div>
@@ -65,18 +65,18 @@
                       </div>
                       <div class="col-md-1">
                         <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': !isEditable}">
-                          <i class="fa fa-trash-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeOldTaxSlab(i)"></i>
+                          <i class="fa-solid fa-trash-can-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeOldTaxSlab(i)"></i>
                         </a>
                         <a href="javascript:void(0)" class="text-decoration-none" *ngIf="i+1 == oldSlab.controls.length" [ngClass]="{'pe-none': !isEditable}">
-                          <i class="fa fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addOldTaxSlab()"></i>
+                          <i class="fa-solid fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addOldTaxSlab()"></i>
                         </a>
                       </div>
                     </div>
                   </ng-container>
                   <div class="mt-5 text-end" *ngIf="isEditable">
-                    <button class="btn btn-danger me-2" (click)="cancelEditRegime()"><i class="fa fa-close pe-2"></i> Cancel</button>
+                    <button class="btn btn-danger me-2" (click)="cancelEditRegime()"><i class="fa-solid fa-xmark pe-2"></i> Cancel</button>
                     <button class="btn btn-success" (click)="saveRegime()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
                     </button>
                   </div>
@@ -98,7 +98,7 @@
         <ng-template ngbNavContent>
           <div class="m-3 px-2" *ngIf="isRecordFound">
             <div class="text-end">
-              <button class="btn btn-primary-c" *ngIf="!isEditable"  (click)="editSlab()"><i class="fa fa-pencil pe-2"></i> Edit Surcharge</button>
+              <button class="btn btn-primary-c" *ngIf="!isEditable"  (click)="editSlab()"><i class="fa-solid fa-pencil pe-2"></i> Edit Surcharge</button>
             </div>
             <div>
               <ng-container>
@@ -112,35 +112,35 @@
                     <div class="row mx-1 mt-3 align-items-center" *ngFor="let item of surchargeSlab.controls; let i = index" [formGroupName]="i">
                       <div class="col-md-6 mx-0 ps-0 d-flex align-items-center justify-content-between">
                         <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                          <i class="fa fa-inr px-1" aria-hidden="true"></i>
+                          <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
                           <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="From" formControlName="MinSurcahrgeSlab">
                         </div>
                         <label for="" class="form-label px-5">to</label>
                         <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                          <i class="fa fa-inr px-1" aria-hidden="true"></i>
+                          <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
                           <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="To" formControlName="MaxSurchargeSlab" (blur)="checkSurchargeToAmount($event, i)">
                         </div>
                       </div>
                       <div class="col-md-5 d-flex align-items-center">
                         <div class="d-flex align-items-center form-control p-0 m-0 w-25" [ngClass]="{'border-0': !isEditable}">
                           <input type="number" [readonly]="!isEditable" class="form-control border-0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Rate" formControlName="SurchargeRatePercentage">
-                          <i class="fa fa-percent px-2"></i>
+                          <i class="fa-solid fa-percent px-2"></i>
                         </div>
                       </div>
                       <div class="col-md-1">
                         <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': !isEditable}">
-                          <i class="fa fa-trash-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeSurchargeSlab(i)"></i>
+                          <i class="fa-solid fa-trash-can-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeSurchargeSlab(i)"></i>
                         </a>
                         <a href="javascript:void(0)" class="text-decoration-none" *ngIf="i+1 == surchargeSlab.controls.length" [ngClass]="{'pe-none': !isEditable}">
-                          <i class="fa fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addSurchargeSlab()"></i>
+                          <i class="fa-solid fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addSurchargeSlab()"></i>
                         </a>
                       </div>
                     </div>
                   </ng-container>
                   <div class="mt-5 text-end" *ngIf="isEditable">
-                    <button class="btn btn-danger me-2" (click)="cancelEditSurcharge()"><i class="fa fa-close pe-2"></i> Cancel</button>
+                    <button class="btn btn-danger me-2" (click)="cancelEditSurcharge()"><i class="fa-solid fa-xmark pe-2"></i> Cancel</button>
                     <button class="btn btn-success" (click)="saveSurcharge()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
                     </button>
                   </div>
@@ -194,7 +194,7 @@
                   <td>{{item.EndAgeGroup == 110 ? 'Above' : item.EndAgeGroup}}</td>
                   <td>
                     <a href="javascript:void(0)" class="text-decoration-none" (click)="editAgeGroup(item)">
-                      <i class="fa fa-pencil-square-o"></i>
+                      <i class="fa-regular fa-pen-to-square"></i>
                     </a>
                   </td>
                 </tr>
@@ -226,7 +226,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-success" (click)="saveAgeGroup()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Add/Update' }}</span>
         </button>
       </div>
@@ -261,7 +261,7 @@
                   <td>{{item.Description}}</td>
                   <td>
                     <a href="javascript:void(0)" class="text-decoration-none" (click)="editRegimeDesc(item)">
-                      <i class="fa fa-pencil-square-o"></i>
+                      <i class="fa-regular fa-pen-to-square"></i>
                     </a>
                   </td>
                 </tr>
@@ -285,7 +285,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-success" (click)="saveTaxRegimeDesc()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Add/ Update Tax Regime' }}</span>
         </button>
       </div>

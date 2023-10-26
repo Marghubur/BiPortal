@@ -106,7 +106,7 @@
                   <form [formGroup]="leaveDetailForm">
                     <div class="mt-3">
                       <h6 class="fw-bold text-dark">What is the annual quota of Casual days for an employee? <i
-                          class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                          class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
                           title="The maximum number of leave days an employee is allocated within a calender year."></i>
                       </h6>
@@ -123,7 +123,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveDetailForm.controls.IsLeaveDaysLimit.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveDetailForm.controls.IsLeaveDaysLimit.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check mt-2 d-flex align-items-center border py-2" [ngClass]="{'border-success': leaveDetailForm.controls.IsLeaveDaysLimit.value == 'false'}" (click)="quotaLimit($event)">
@@ -131,11 +131,11 @@
                           <input class="form-check-input" value="false" type="radio" name="IsLeaveDaysLimit"
                             formControlName="IsLeaveDaysLimit">
                           <label class="form-check-label ms-2">
-                            Unlimited <i class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Tooltip on top"></i>
+                            Unlimited <i class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Tooltip on top"></i>
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveDetailForm.controls.IsLeaveDaysLimit.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveDetailForm.controls.IsLeaveDaysLimit.value == 'true'}"></i>
                         </div>
                       </div>
                     </div>
@@ -150,7 +150,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveDetailForm.controls.CanApplyExtraLeave.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveDetailForm.controls.CanApplyExtraLeave.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex align-items-center border py-2 mt-3" [ngClass]="{'border-success': leaveDetailForm.controls.CanApplyExtraLeave.value == 'true'}" (click)="beyondAnnualQuota($event)">
@@ -166,7 +166,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveDetailForm.controls.CanApplyExtraLeave.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveDetailForm.controls.CanApplyExtraLeave.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
@@ -182,13 +182,13 @@
                             [readonly]="leaveDetailForm.controls.LeaveNotAllocatedIfJoinAfter.value <=0" OnlyNumber="2">
                         </div>
                         <span class="fw-bold text-dark">th of the month.
-                          <i class="fw-normal fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                          <i class="fw-normal fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                             data-bs-placement="right" title="In case this option is not selected the entire quota for the month will be allocated to employees, irrespective of their date of joining"></i></span>
                       </div>
                     </div>
                     <div class="text-end my-3">
                       <button class="btn btn-primary-c" (click)="submitLeaveQuota()">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                       </button>
                     </div>
@@ -208,7 +208,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': managementLeave.controls.CanManagerAwardCausalLeave.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': managementLeave.controls.CanManagerAwardCausalLeave.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="form-check mt-3 d-flex align-items-center border py-2" [ngClass]="{'border-success': managementLeave.controls.CanManagerAwardCausalLeave.value == 'true'}">
@@ -220,13 +220,13 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': managementLeave.controls.CanManagerAwardCausalLeave.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': managementLeave.controls.CanManagerAwardCausalLeave.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
                     <div class="text-end my-3">
                       <button class="btn btn-primary-c" (click)="submitManagementLeave()">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                       </button>
                     </div>
@@ -248,7 +248,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.CanApplyEntireLeave.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.CanApplyEntireLeave.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check mt-3 d-flex align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.CanApplyEntireLeave.value == 'false'}">
@@ -260,7 +260,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.CanApplyEntireLeave.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.CanApplyEntireLeave.value == 'true'}"></i>
                         </div>
                       </div>
                       <ng-container>
@@ -316,13 +316,13 @@
                             formControlName="IsLeavesProratedForJoinigMonth" (click)="empJoinMiddle(false)">
                           <label class="form-check-label ms-2">
                             Leave accrual are prorate based on joining date (recommended). <i
-                              class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                              class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                               data-bs-placement="right"
                               title="If an employee is joining in between a leave calender year, the leave will be prorated and allocated accordingly. Example: If annual quoata is 12 and employee is joining on 16th June, the prorated leave allocation will be 6.5 for the remaining year. If the employee joins on 1st July, he will get 6 leave."></i>
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsLeavesProratedForJoinigMonth.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsLeavesProratedForJoinigMonth.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check mt-3 d-flex align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.IsLeavesProratedForJoinigMonth.value == 'false'}">
@@ -336,7 +336,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsLeavesProratedForJoinigMonth.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsLeavesProratedForJoinigMonth.value == 'true'}"></i>
                         </div>
                       </div>
 
@@ -370,11 +370,11 @@
                                 <div class="col-md-2">
                                   <a href="javascript:void(0)" class="text-decoration-none text-secondary" data-name="add-remove-setion"
                                     (click)="addFormBetweenJoiningDate(i)">
-                                    <i class="fa fa-plus-circle fa-lg"></i>
+                                    <i class="fa-solid fa-plus-circle fa-lg"></i>
                                   </a>
                                   <a href="javascript:void(0)" class="text-decoration-none text-secondary"
                                     (click)="removeFormBetweenJoiningDate(i)">
-                                    <i class="fa fa-minus-circle fa-lg ms-2"></i>
+                                    <i class="fa-solid fa-minus-circle fa-lg ms-2"></i>
                                   </a>
                                 </div>
                               </div>
@@ -393,13 +393,13 @@
                             formControlName="IsLeavesProratedOnNotice" (click)="toggleCurrent(3, $event)">
                           <label class="form-check-label ms-2">
                             Leave are prorated based on actual exit date of employee (recommended). <i
-                              class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                              class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                               data-bs-placement="right"
                               title="If an employee is existing in between a leave calender year, the leave will be prorated will be prorated and allocated accordingly. Example: If annual quota is 12 and employee is existing on 15th June, the prorated leave allocation will be 5.5 for that year. If the employee exits on 1st July, he will get 6 leaves."></i>
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsLeavesProratedOnNotice.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsLeavesProratedOnNotice.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check mt-3 d-flex align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.IsNotAllowProratedOnNotice.value == 'true'}">
@@ -411,14 +411,14 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsNotAllowProratedOnNotice.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsNotAllowProratedOnNotice.value == 'false'}"></i>
                         </div>
                       </div>
                       <div [ngClass]="{'d-none': leaveAccrualForm.controls.IsNotAllowProratedOnNotice.value == 'false'}" id="EmpExitMiddle">
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" name="" formControlName="">
                           <label class="form-check-label">This rule is applied from this days
-                            <i class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="If an employee is existing in between a leave calender year, the leave will be prorated will be prorated and allocated accordingly. Example: If annual quota is 12 and employee is existing on 15th June, the prorated leave allocation will be 5.5 for that year. If the employee exits on 1st July, he will get 6 leaves."></i></label>
+                            <i class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip" data-bs-placement="right" title="If an employee is existing in between a leave calender year, the leave will be prorated will be prorated and allocated accordingly. Example: If annual quota is 12 and employee is existing on 15th June, the prorated leave allocation will be 5.5 for that year. If the employee exits on 1st July, he will get 6 leaves."></i></label>
                         </div>
                         <ng-container formArrayName="ExitMonthLeaveDistribution">
                           <div class="my-4" [formGroupName]="i"
@@ -450,11 +450,11 @@
                                 <div class="col-md-2">
                                   <a href="javascript:void(0)" class="text-decoration-none text-secondary" data-name="add-empMiddle-setion"
                                     (click)="addFormBetweenExitDate(i)">
-                                    <i class="fa fa-plus-circle fa-lg"></i>
+                                    <i class="fa-solid fa-plus-circle fa-lg"></i>
                                   </a>
                                   <a href="javascript:void(0)" class="text-decoration-none text-secondary"
                                     (click)="removeFormBetweenExitDate(i)">
-                                    <i class="fa fa-minus-circle fa-lg ms-2"></i>
+                                    <i class="fa-solid fa-minus-circle fa-lg ms-2"></i>
                                   </a>
                                 </div>
                               </div>
@@ -471,13 +471,13 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsNoLeaveOnNoticePeriod.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsNoLeaveOnNoticePeriod.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Does Leave accrual vary based on probation period or experience? <i
-                          class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                          class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
                           title="Most organizations choose No to this option and have a flat accrual rate. You can however choose to give different treatment based on probation of experience. You can allocate more leave quota for your experienced employees by giving higher accrual amount. THe accrual rate here overides the annual quota given in previous step."></i>
                       </h6>
@@ -490,7 +490,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="form-check mt-3 d-flex align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'true'}">
@@ -502,7 +502,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
@@ -510,7 +510,7 @@
                       [ngClass]="{'d-none': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'false'}"
                       name="AccrualLevelVary">
                       <h6 class="fw-bold text-dark">From when does the accrual start? <i
-                          class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                          class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
                           title="Most organizations choose No to this option and have a flat accrual rate. You can however choose to give different treatment based on probation of experience. You can allocate more leave quota for your experienced employees by giving higher accrual amount. THe accrual rate here overides the annual quota given in previous step."></i>
                       </h6>
@@ -530,7 +530,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrualStartsAfterJoining.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrualStartsAfterJoining.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check mt-3 d-flex align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.IsAccrualStartsAfterProbationEnds.value == 'true'}">
@@ -550,14 +550,14 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrualStartsAfterProbationEnds.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrualStartsAfterProbationEnds.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Is leave accrual impacted by employee's attendance/number of days
                         worked
-                        every month? <i class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                        every month? <i class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
                           title="Most organizations choose No to this option and have a flat accrual rate. You can however choose to give different treatment based on probation of experience. You can allocate more leave quota for your experienced employees by giving higher accrual amount. THe accrual rate here overides the annual quota given in previous step."></i>
                       </h6>
@@ -570,7 +570,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsImpactedOnWorkDaysEveryMonth.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsImpactedOnWorkDaysEveryMonth.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.IsImpactedOnWorkDaysEveryMonth.value == 'false'}">
@@ -582,7 +582,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsImpactedOnWorkDaysEveryMonth.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsImpactedOnWorkDaysEveryMonth.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="my-4" [ngClass]="{'d-none': leaveAccrualForm.controls.IsImpactedOnWorkDaysEveryMonth.value == 'true'}">
@@ -622,7 +622,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.CanApplyForFutureDate.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.CanApplyForFutureDate.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.CanApplyForFutureDate.value == 'false'}">
@@ -635,7 +635,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.CanApplyForFutureDate.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.CanApplyForFutureDate.value == 'true'}"></i>
                         </div>
                       </div>
                     </div>
@@ -661,7 +661,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsExtraLeaveBeyondAccruedBalance.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsExtraLeaveBeyondAccruedBalance.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.IsNoExtraLeaveBeyondAccruedBalance.value == 'true'}">
@@ -675,7 +675,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsNoExtraLeaveBeyondAccruedBalance.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsNoExtraLeaveBeyondAccruedBalance.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.IsAccrueIfHavingLeaveBalance.value == true}">
@@ -699,7 +699,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrueIfHavingLeaveBalance.value == false}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrueIfHavingLeaveBalance.value == false}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.IsAccrueIfOnOtherLeave.value == true}">
@@ -722,7 +722,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrueIfOnOtherLeave.value == false}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrueIfOnOtherLeave.value == false}"></i>
                         </div>
                       </div>
                     </div>
@@ -730,7 +730,7 @@
                       <h6 class="fw-bold text-dark">When applying for a leave, if leave balance is in decimals, do you
                         want
                         to round-off the balance for thr purpose of leave application? <i
-                          class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                          class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
                           title="Rounding off the leave balance will not have effect on annual quota, if a leave balance of 0.5 is rounded to 1, employee is granted a negative balance of -0.4 which is adjust in his immediate accrual period."></i>
                       </h6>
@@ -744,7 +744,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.RoundOffLeaveBalance.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.RoundOffLeaveBalance.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.ToNearestHalfDay.value == 'true'}">
@@ -752,13 +752,13 @@
                           <input class="form-check-input" value="true" type="radio" name="ToNearestHalfDay"
                             (click)="toggleCurrent(9, $event)" formControlName="ToNearestHalfDay">
                           <label class="form-check-label ms-2">
-                            Round-off to nearest half day. <i class="fa fa-exclamation-circle text-secondary ps-2"
+                            Round-off to nearest half day. <i class="fa-solid fa-circle-exclamation text-secondary ps-2"
                               data-bs-toggle="tooltip" data-bs-placement="right"
                               title="A balance of 0.2 will be rounded to 1. A balance of 0.3 will be rounded to 0.5. A balance of 0.7 will be rounded to 0.5 and a balance of 0.8 will be rounded to 1 day."></i>
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToNearestHalfDay.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToNearestHalfDay.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.ToNearestFullDay.value == 'true'}">
@@ -766,13 +766,13 @@
                           <input class="form-check-input" value="true" type="radio" name="ToNearestFullDay"
                             (click)="toggleCurrent(9, $event)" formControlName="ToNearestFullDay">
                           <label class="form-check-label ms-2">
-                            Round-off to nearest full day. <i class="fa fa-exclamation-circle text-secondary ps-2"
+                            Round-off to nearest full day. <i class="fa-solid fa-circle-exclamation text-secondary ps-2"
                               data-bs-toggle="tooltip" data-bs-placement="right"
                               title="A balance less than 0.5 will be rounded to 0 and a balance of 0.5 or more will be rounded to 1."></i>
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToNearestFullDay.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToNearestFullDay.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.ToNextAvailableHalfDay.value == 'true'}">
@@ -780,13 +780,13 @@
                           <input class="form-check-input" value="true" type="radio" name="ToNextAvailableHalfDay"
                             (click)="toggleCurrent(9, $event)" formControlName="ToNextAvailableHalfDay">
                           <label class="form-check-label ms-2">
-                            Round-off to next available half day. <i class="fa fa-exclamation-circle text-secondary ps-2"
+                            Round-off to next available half day. <i class="fa-solid fa-circle-exclamation text-secondary ps-2"
                               data-bs-toggle="tooltip" data-bs-placement="right"
                               title="Balance of 0.1 to 0.5 will be rounded to 0.6 or more will be rounded to 1 day."></i>
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToNextAvailableHalfDay.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToNextAvailableHalfDay.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.ToNextAvailableFullDay.value == 'true'}">
@@ -794,13 +794,13 @@
                           <input class="form-check-input" value="true" type="radio" name="ToNextAvailableFullDay"
                             (click)="toggleCurrent(9, $event)" formControlName="ToNextAvailableFullDay">
                           <label class="form-check-label ms-2">
-                            Round-off to next available full day. <i class="fa fa-exclamation-circle text-secondary ps-2"
+                            Round-off to next available full day. <i class="fa-solid fa-circle-exclamation text-secondary ps-2"
                               data-bs-toggle="tooltip" data-bs-placement="right"
                               title="A balance of 0.1 or more will be rounded to 1."></i>
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToNextAvailableFullDay.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToNextAvailableFullDay.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.ToPreviousHalfDay.value == 'true'}">
@@ -809,13 +809,13 @@
                             (click)="toggleCurrent(9, $event)" formControlName="ToPreviousHalfDay">
                           <label class="form-check-label ms-2">
                             Round-off to previous available half day. <i
-                              class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                              class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                               data-bs-placement="right"
                               title="Balance of 2.1 tp 2.4 will be rounded to 2. Balance 2.6 to 2.9 will be rounded to 2.5. Balance of 2.5 remain 2.5."></i>
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToPreviousHalfDay.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.ToPreviousHalfDay.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
@@ -831,7 +831,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.DoesLeaveExpireAfterSomeTime.value == 'true'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.DoesLeaveExpireAfterSomeTime.value == 'true'}"></i>
                           </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveAccrualForm.controls.DoesLeaveExpireAfterSomeTime.value == 'true'}">
@@ -853,13 +853,13 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.DoesLeaveExpireAfterSomeTime.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.DoesLeaveExpireAfterSomeTime.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
                     <div class="text-end">
                       <button class="btn btn-primary-c" (click)="submitLeaveAccrual()">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                       </button>
                     </div>
@@ -870,7 +870,7 @@
                   <form [formGroup]="applyForLeaveForm">
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Allow applying for half-day? <i
-                          class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                          class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
                           title="If you choose Yes, leave request can be for half days. Either first half or second half of an employee shift."></i>
                       </h6>
@@ -883,7 +883,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.IsAllowForHalfDay.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.IsAllowForHalfDay.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': applyForLeaveForm.controls.IsAllowForHalfDay.value == 'false'}">
@@ -895,7 +895,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.IsAllowForHalfDay.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.IsAllowForHalfDay.value == 'true'}"></i>
                         </div>
                       </div>
                     </div>
@@ -911,7 +911,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.EmployeeCanSeeAndApplyCurrentPlanLeave.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.EmployeeCanSeeAndApplyCurrentPlanLeave.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': applyForLeaveForm.controls.EmployeeCanSeeAndApplyCurrentPlanLeave.value == 'false'}">
@@ -925,7 +925,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.EmployeeCanSeeAndApplyCurrentPlanLeave.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.EmployeeCanSeeAndApplyCurrentPlanLeave.value == 'true'}"></i>
                         </div>
                       </div>
                     </div>
@@ -965,11 +965,11 @@
                             <div class="col-md-2">
                               <a href="javascript:void(0)" class="text-decoration-none text-secondary"
                                 (click)="addRuleForLeaveInNotice()">
-                                <i class="fa fa-plus-circle fa-lg"></i>
+                                <i class="fa-solid fa-plus-circle fa-lg"></i>
                               </a>
                               <a href="javascript:void(0)" class="text-decoration-none text-secondary"
                                 (click)="removeRuleForLeaveInNotice(i)">
-                                <i class="fa fa-minus-circle fa-lg ms-2"></i>
+                                <i class="fa-solid fa-minus-circle fa-lg ms-2"></i>
                               </a>
                             </div>
                           </div>
@@ -992,7 +992,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.ApplyPriorBeforeLeaveDate.value <= 0}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.ApplyPriorBeforeLeaveDate.value <= 0}"></i>
                         </div>
                       </div>
                     </div>
@@ -1015,7 +1015,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.BackDateLeaveApplyNotBeyondDays.value <= 0}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.BackDateLeaveApplyNotBeyondDays.value <= 0}"></i>
                         </div>
                       </div>
                     </div>
@@ -1030,7 +1030,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.CurrentLeaveRequiredComments.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.CurrentLeaveRequiredComments.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': applyForLeaveForm.controls.CurrentLeaveRequiredComments.value == 'false'}">
@@ -1043,7 +1043,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.CurrentLeaveRequiredComments.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.CurrentLeaveRequiredComments.value == 'true'}"></i>
                         </div>
                       </div>
                     </div>
@@ -1071,7 +1071,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.ProofRequiredIfDaysExceeds.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.ProofRequiredIfDaysExceeds.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': applyForLeaveForm.controls.ProofRequiredIfDaysExceeds.value == 'false'}">
@@ -1083,14 +1083,14 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.ProofRequiredIfDaysExceeds.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': applyForLeaveForm.controls.ProofRequiredIfDaysExceeds.value == 'true'}"></i>
                         </div>
                       </div>
                     </div>
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitApplyForLeave()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
@@ -1116,7 +1116,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanApplyAfterProbation.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanApplyAfterProbation.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'true'}">
@@ -1135,7 +1135,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="my-4"  [ngClass]="{'d-none': leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'false'}">
@@ -1159,7 +1159,7 @@
                             </div>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsAvailRestrictedLeavesInProbation.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsAvailRestrictedLeavesInProbation.value == 'false'}"></i>
                           </div>
                         </div>
                       </div>
@@ -1178,7 +1178,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsLeaveInNoticeExtendsNoticePeriod.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsLeaveInNoticeExtendsNoticePeriod.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.IsLeaveInNoticeExtendsNoticePeriod.value == 'true'}">
@@ -1203,13 +1203,13 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsLeaveInNoticeExtendsNoticePeriod.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsLeaveInNoticeExtendsNoticePeriod.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Can Manager override leave restriction and apply leave? <i
-                          class="fa fa-exclamation-circle text-secondary ps-2" data-bs-toggle="tooltip"
+                          class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
                           title="Do you want manager (Reporting Manager / HR Manager) yto apply leave for an employee incase there is no leave balance or employee is unable to apply leave because of any other leave restriction."></i>
                       </h6>
@@ -1222,7 +1222,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanManageOverrideLeaveRestriction.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanManageOverrideLeaveRestriction.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.CanManageOverrideLeaveRestriction.value == 'true'}">
@@ -1234,7 +1234,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanManageOverrideLeaveRestriction.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.CanManageOverrideLeaveRestriction.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
@@ -1256,7 +1256,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.GapBetweenTwoConsicutiveLeaveDates.value <= 0}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.GapBetweenTwoConsicutiveLeaveDates.value <= 0}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.LimitOfMaximumLeavesInCalendarYear.value > 0}">
@@ -1273,7 +1273,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.LimitOfMaximumLeavesInCalendarYear.value <= 0}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.LimitOfMaximumLeavesInCalendarYear.value <= 0}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.LimitOfMaximumLeavesInCalendarMonth.value > 0}">
@@ -1290,7 +1290,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.LimitOfMaximumLeavesInCalendarMonth.value <= 0}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.LimitOfMaximumLeavesInCalendarMonth.value <= 0}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.MinLeaveToApplyDependsOnAvailable.value > 0 || leaveRestrictionForm.controls.AvailableLeaves.value > 0}">
@@ -1312,7 +1312,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.MinLeaveToApplyDependsOnAvailable.value <= 0 || leaveRestrictionForm.controls.AvailableLeaves.value <= 0}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.MinLeaveToApplyDependsOnAvailable.value <= 0 || leaveRestrictionForm.controls.AvailableLeaves.value <= 0}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.RestrictFromDayOfEveryMonth.value > 0}">
@@ -1329,7 +1329,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.RestrictFromDayOfEveryMonth.value <= 0}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.RestrictFromDayOfEveryMonth.value <= 0}"></i>
                         </div>
                       </div>
                     </div>
@@ -1352,7 +1352,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsCurrentPlanDepnedsOnOtherPlan.value == false}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsCurrentPlanDepnedsOnOtherPlan.value == false}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveRestrictionForm.controls.IsCheckOtherPlanTypeBalance.value == true}">
@@ -1370,14 +1370,14 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsCheckOtherPlanTypeBalance.value == false}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveRestrictionForm.controls.IsCheckOtherPlanTypeBalance.value == false}"></i>
                         </div>
                       </div>
                     </div>
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitLeaveRestriction()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
@@ -1396,7 +1396,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'true'}">
@@ -1424,7 +1424,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdJoiningHolidayIsConsiderAsLeave.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="my-4 ms-3"
@@ -1438,7 +1438,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfLeaveLieBetweenTwoHolidays.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfLeaveLieBetweenTwoHolidays.value == 'false'}"></i>
                           </div>
                         </div>
                         <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsRightBeforLeave.value == 'true'}">
@@ -1450,7 +1450,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightBeforLeave.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightBeforLeave.value == 'false'}"></i>
                           </div>
                         </div>
                         <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsRightAfterLeave.value == 'true'}">
@@ -1462,7 +1462,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightAfterLeave.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightAfterLeave.value == 'false'}"></i>
                           </div>
                         </div>
                         <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfHolidayIsRightBeforeAfterOrInBetween.value == 'true'}">
@@ -1474,7 +1474,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfHolidayIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
                           </div>
                         </div>
                       </div>
@@ -1491,7 +1491,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'true'}">
@@ -1519,7 +1519,7 @@
                             </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.AdjoiningWeekOffIsConsiderAsLeave.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="my-4 ms-3"
@@ -1534,7 +1534,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfLeaveLieBetweenWeekOff.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfLeaveLieBetweenWeekOff.value == 'false'}"></i>
                           </div>
                         </div>
                         <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == 'true'}">
@@ -1546,7 +1546,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforLeave.value == 'false'}"></i>
                           </div>
                         </div>
                         <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightAfterLeave.value == 'true'}">
@@ -1558,7 +1558,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightAfterLeave.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightAfterLeave.value == 'false'}"></i>
                           </div>
                         </div>
                         <div class="form-check d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'true'}">
@@ -1570,7 +1570,7 @@
                             </label>
                           </div>
                           <div class="px-4">
-                            <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
+                            <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': holidayWeekendOffForm.controls.IfWeekOffIsRightBeforeAfterOrInBetween.value == 'false'}"></i>
                           </div>
                         </div>
                       </div>
@@ -1578,7 +1578,7 @@
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitHolidayNWeekOffLeave()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
@@ -1597,7 +1597,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'true'}">
@@ -1609,7 +1609,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="col-md-12 mt-3 p-3 card" data-name="ApprovalChainContainer" [ngClass]="{'d-none': leaveApprovalForm.controls.IsLeaveRequiredApproval.value == 'false'}">
@@ -1620,7 +1620,7 @@
                         <div class="mt-3 p-2 bg-light" *ngIf="selectedWorkflow != null">
                           <span>Workflow Description: {{selectedWorkflow.TitleDescription | titlecase}}</span>
                           <a href="javascript:void(0)" class="text-end text-decoration-none float-end" (click)="viewWorkflowChain()">
-                            <i class="fa" [ngClass]="{'fa-eye': isWorkFlownChainShow, 'fa-eye-slash': !isWorkFlownChainShow}"></i>
+                            <i  [ngClass]="{'fa-regular fa-eye': isWorkFlownChainShow, 'fa-regular fa-eye-slash': !isWorkFlownChainShow}"></i>
                           </a>
                           <div class="row m-3" *ngIf="selectedWorkFlowDetail != null && isWorkFlownChainShow">
                             <div class="card px-4 pt-4 mt-3 pb-3 ">
@@ -1642,7 +1642,7 @@
                                       <div *ngFor="let item of selectedWorkFlowDetail.ApprovalChainDetails; let i = index; let last = last;">
                                           <div class="d-flex mt-4">
                                               <div class="col-auto me-3">
-                                              LEVEL {{i + 1}} <i class=" fa fa-circle text-primary ps-3"></i>
+                                              LEVEL {{i + 1}} <i class=" fa-solid fa-circle text-primary ps-3"></i>
                                               </div>
                                               <div class="col-md-8 position-relative">
                                                   <div [ngClass]="{'block-tag': !last}">
@@ -1688,7 +1688,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsRequiredAllLevelApproval.value == false}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsRequiredAllLevelApproval.value == false}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': leaveApprovalForm.controls.IsPauseForApprovalNotification.value == true}">
@@ -1701,7 +1701,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsPauseForApprovalNotification.value == false}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsPauseForApprovalNotification.value == false}"></i>
                         </div>
                       </div>
                     </div>
@@ -1717,14 +1717,14 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsReportingManageIsDefaultForAction.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveApprovalForm.controls.IsReportingManageIsDefaultForAction.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitLeaveApproval()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
@@ -1746,7 +1746,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.IsLeaveBalanceExpiredOnEndOfYear.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.IsLeaveBalanceExpiredOnEndOfYear.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': yearEndProcessForm.controls.AllConvertedToPaid.value == 'true'}">
@@ -1758,7 +1758,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.AllConvertedToPaid.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.AllConvertedToPaid.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': yearEndProcessForm.controls.AllLeavesCarryForwardToNextYear.value == 'true'}">
@@ -1771,7 +1771,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.AllLeavesCarryForwardToNextYear.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.AllLeavesCarryForwardToNextYear.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': yearEndProcessForm.controls.PayFirstNCarryForwordRemaning.value == 'true'}">
@@ -1783,7 +1783,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.PayFirstNCarryForwordRemaning.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.PayFirstNCarryForwordRemaning.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': yearEndProcessForm.controls.CarryForwordFirstNPayRemaning.value == 'true'}">
@@ -1795,7 +1795,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.CarryForwordFirstNPayRemaning.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.CarryForwordFirstNPayRemaning.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="my-4"
@@ -1878,8 +1878,8 @@
                                   </div>
                                 </div>
                               </div>
-                              <i class="fa fa-plus px-3 fa-lg" (click)="createPercentagePayNCarryForward()"></i>
-                              <i class="fa fa-trash fa-lg" (click)="removePercentagePayNCarryForward(i)"></i>
+                              <i class="fa-solid fa-plus px-3 fa-lg" (click)="createPercentagePayNCarryForward()"></i>
+                              <i class="fa-solid fa-trash-can fa-lg" (click)="removePercentagePayNCarryForward(i)"></i>
                             </div>
                           </ng-container>
                         </div>
@@ -1908,8 +1908,8 @@
                                 </div>
                                 <label for="" class="form-label ps-3">remaining days</label>
                               </div>
-                              <i class="fa fa-plus-circle fa-lg" (click)="createFixedPayNCarryForward()"></i>
-                              <i class="fa fa-trash ps-2 fa-lg" (click)="removeFixedPayNCarryForward(i)"></i>
+                              <i class="fa-solid fa-plus-circle fa-lg" (click)="createFixedPayNCarryForward()"></i>
+                              <i class="fa-solid fa-trash-can ps-2 fa-lg" (click)="removeFixedPayNCarryForward(i)"></i>
                             </div>
                           </ng-container>
                         </div>
@@ -1930,7 +1930,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.DoestCarryForwardExpired.value == 'true'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.DoestCarryForwardExpired.value == 'true'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': yearEndProcessForm.controls.DoestCarryForwardExpired.value == 'true'}">
@@ -1952,7 +1952,7 @@
                           </div>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.DoestCarryForwardExpired.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.DoestCarryForwardExpired.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': yearEndProcessForm.controls.DoesExpiryLeaveRemainUnchange.value == true}">
@@ -1966,7 +1966,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.DoesExpiryLeaveRemainUnchange.value == false}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.DoesExpiryLeaveRemainUnchange.value == false}"></i>
                         </div>
                       </div>
                     </div>
@@ -1985,7 +1985,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.DeductFromSalaryOnYearChange.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.DeductFromSalaryOnYearChange.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': yearEndProcessForm.controls.ResetBalanceToZero.value == 'true'}">
@@ -1997,7 +1997,7 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.ResetBalanceToZero.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.ResetBalanceToZero.value == 'false'}"></i>
                         </div>
                       </div>
                       <div class="d-flex mt-3 align-items-center border py-2" [ngClass]="{'border-success': yearEndProcessForm.controls.CarryForwardToNextYear.value == 'true'}">
@@ -2009,14 +2009,14 @@
                           </label>
                         </div>
                         <div class="px-4">
-                          <i name="success-icon" class="fa fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.CarryForwardToNextYear.value == 'false'}"></i>
+                          <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': yearEndProcessForm.controls.CarryForwardToNextYear.value == 'false'}"></i>
                         </div>
                       </div>
                     </div>
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitYearEndProcessing()">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>

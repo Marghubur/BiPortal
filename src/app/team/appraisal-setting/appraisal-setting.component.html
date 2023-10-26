@@ -21,17 +21,17 @@
               </div>
               <div *ngSwitchDefault>
                 <div class="text-end pe-2 my-2">
-                  <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList" class="text-decoration-none pe-3"><i class="fa fa-plus pe-1"></i> Add Objective</a>
-                  <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()" *ngIf="isViewInList"><i class="fa fa-plus pe-1"></i> Add Aprisal Cycle</button>
+                  <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList" class="text-decoration-none pe-3"><i class="fa-solid fa-plus pe-1"></i> Add Objective</a>
+                  <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()" *ngIf="isViewInList"><i class="fa-solid fa-plus pe-1"></i> Add Aprisal Cycle</button>
                   <a href="javascript:void(0)" class="text-decoration-none" (click)="listview()">
-                    <i class="fa fa-lg" [ngClass]="{'fa-bars': isViewInList, 'fa-th' : !isViewInList}"></i>
+                    <i class="fa-solid fa-lg" [ngClass]="{'fa-bars': isViewInList, 'fa-grip' : !isViewInList}"></i>
                   </a>
                 </div>
                 <ng-container *ngIf="!isViewInList">
                   <div class="row mt-3">
                     <div class="col-md-3">
                       <div class="d-flex align-items-center border">
-                        <i class="fa fa-search pe-2 ps-3"></i>
+                        <i class="fa-solid fa-magnifying-glass pe-2 ps-3"></i>
                         <input type="text" placeholder="Search" class="form-control border-0" (keydown.esc)="resetFilter()"
                         (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ObjectiveCatagoryType"/>
                       </div>
@@ -40,7 +40,7 @@
                         <button class="btn btn-primary-c float-end" (click)="addAprisalCyclePopUp()">
                           <i class="fa px-2" [ngClass]="{
                               'fa-plus': !isLoading,
-                              'fa-spin fa-spinner': isLoading
+                              'fa-spin fa-solid fa-spinner': isLoading
                             }"></i>
                           {{ isLoading ? "Wait" : "Add Aprisal Cycle" }}
                         </button>
@@ -56,7 +56,7 @@
                                 </p>
                                 <button class="btn btn-success mt-4" (click)="addAprisalCyclePopUp()">
                                   <i class="fa pe-2" [ngClass]="{
-                                      'fa-spin fa-spinner': isLoading,
+                                      'fa-spin fa-solid fa-spinner': isLoading,
                                       'fa-plus': !isLoading
                                     }"></i>
                                     {{ isLoading ? "Wait" : "Add Aprisal Cycle" }}
@@ -80,8 +80,8 @@
                                     </div>
                                     <div class="col-md-1 d-flex flex-column align-items-end">
                                       <a href="javascript:void(0)" (click)="editApprisalPopUp(item)"><i
-                                          class="fa fa-pencil fa-lg text-white"></i></a>
-                                      <a href="javascript:void(0)"><i class="fa fa-trash fa-lg text-white pt-3"></i></a>
+                                          class="fa-solid fa-pencil fa-lg text-white"></i></a>
+                                      <a href="javascript:void(0)"><i class="fa-solid fa-trash-can fa-lg text-white pt-3"></i></a>
                                     </div>
                                   </div>
                                   <p class="mb-0 text-dark ps-2 pb-2 pt-2">
@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
                                   <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
-                                  <i class=" ps-2 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
+                                  <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
                                 </div>
                                 <div class="td fe-1">
                                   <div class="cell-wrapper">
@@ -177,9 +177,9 @@
                                 placeholder="Search by Apprisal Name">
                               <div class="t-filter" (click)="arrangeDetails(orderByObjectiveCatagoryTypeAsc, 'ObjectiveCatagoryType')">
                                 <a href="javascript:void()" class="pe-2">Appraisal Name</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                   [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || !orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
-                                <i class="fa fa-sort-amount-desc"
+                                <i class="fa-solid fa-arrow-down-short-wide"
                                   [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
@@ -191,9 +191,9 @@
                                 placeholder="Search by Apprisal Name">
                               <div class="t-filter" (click)="arrangeDetails(orderByObjectiveCatagoryTypeAsc, 'ObjectiveCatagoryType')">
                                 <a href="javascript:void()" class="pe-2">Category Name</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                   [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || !orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
-                                <i class="fa fa-sort-amount-desc"
+                                <i class="fa-solid fa-arrow-down-short-wide"
                                   [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
@@ -205,9 +205,9 @@
                                 placeholder="Search by Apprisal Cycle Period">
                               <div class="t-filter" (click)="arrangeDetails(orderByTypeDescriptionAsc, 'TypeDescription')">
                                 <a href="javascript:void()" class="pe-2">Description</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                 [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc"
+                              <i class="fa-solid fa-arrow-down-short-wide"
                                 [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
@@ -221,9 +221,9 @@
                               </select>
                               <div class="t-filter" >
                                 <a href="javascript:void()" class="pe-2">Status</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                 [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }" aria-hidden="true"></i>
-                                <i class="fa fa-sort-amount-desc"
+                                <i class="fa-solid fa-arrow-down-short-wide"
                                 [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
@@ -235,9 +235,9 @@
                                 placeholder="Search by Apprisal Cycle Period">
                               <div class="t-filter" (click)="arrangeDetails(orderByTypeDescriptionAsc, 'TypeDescription')">
                                 <a href="javascript:void()" class="pe-2">Cycle Period</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                 [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }" aria-hidden="true"></i>
-                              <i class="fa fa-sort-amount-desc"
+                              <i class="fa-solid fa-arrow-down-short-wide"
                                 [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
@@ -255,7 +255,7 @@
                           </div>
                           <div class="th fe-1 text-center">
                             <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
-                              <i class="fa fa-filter">
+                              <i class="fa-solid fa-filter">
                                 <span>Filter</span>
                               </i>
                             </a>
@@ -303,16 +303,16 @@
                             </div>
                             <div class="td align-middle text-center fe-1">
                               <a href="javascript:void(0)" (click)="viewObjectiveAppraisalPopup(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Apprisal">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                <i class="fa-solid fa-pencil" aria-hidden="true"></i>
                               </a>
                               <a href="javascript:void(0)" class="ms-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Apprisal">
-                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
                               </a>
                               <a href="javascript:void(0)" *ngIf="item.IsActiveCycle" class="ms-3" (click)="changeAppraisalStatusPopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Stop Apprisal">
-                                <i class="fa fa-stop text-danger" aria-hidden="true"></i>
+                                <i class="fa-solid fa-stop text-danger" aria-hidden="true"></i>
                               </a>
                               <a href="javascript:void(0)" *ngIf="!item.IsActiveCycle" class="ms-3" (click)="changeAppraisalStatusPopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Start Apprisal">
-                                <i class="fa fa-play text-success" aria-hidden="true"></i>
+                                <i class="fa-solid fa-play text-success" aria-hidden="true"></i>
                               </a>
                             </div>
                           </div>
@@ -346,7 +346,7 @@
                 <ng-container>
                   <div class="x_content">
                     <div class="text-end mb-3">
-                      <button class="btn btn-primary-c" (click)="addObjectivePopUp()"><i class="fa fa-plus pe-1"></i> Add Objective</button>
+                      <button class="btn btn-primary-c" (click)="addObjectivePopUp()"><i class="fa-solid fa-plus pe-1"></i> Add Objective</button>
                     </div>
                     <div class="t-table t-list t-border col-md-12">
                       <div class="hide-bar"></div>
@@ -364,9 +364,9 @@
                                 placeholder="Search by Objective">
                               <div class="t-filter" (click)="arrangeObjectiveDetails(orderByObjectiveAsc, 'Objective')">
                                 <a href="javascript:void()" class="pe-2">Objectives</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                   [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }" aria-hidden="true"></i>
-                                <i class="fa fa-sort-amount-desc"
+                                <i class="fa-solid fa-arrow-down-short-wide"
                                   [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
@@ -377,16 +377,16 @@
                                 (keydown.esc)="resetFilterObjective()" [(ngModel)]="objectDetail.TargetValue" placeholder="Search by Target Value">
                               <div class="t-filter" (click)="arrangeObjectiveDetails(orderBTargetValueAsc, 'TargetValue')">
                                 <a href="javascript:void()" class="pe-3">Target Value</a>
-                                <i class="fa fa-sort-amount-asc"
+                                <i class="fa-solid fa-arrow-down-wide-short"
                                   [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }" aria-hidden="true"></i>
-                                <i class="fa fa-sort-amount-desc"
+                                <i class="fa-solid fa-arrow-down-short-wide"
                                   [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }" aria-hidden="true"></i>
                               </div>
                             </div>
                           </div>
                           <div class="th fe-1 text-center">
                             <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecordsObjective()">
-                              <i class="fa fa-filter">
+                              <i class="fa-solid fa-filter">
                                 <span>Filter</span>
                               </i>
                             </a>
@@ -402,7 +402,7 @@
                             <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
                             <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
                               <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
-                              <i class=" ps-2 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
+                              <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
                             </div>
                             <div class="td align-middle fe-1">
                               <div class="cell-wrapper">
@@ -411,10 +411,10 @@
                             </div>
                             <div class="td align-middle text-center fe-1">
                               <a href="javascript:void(0)" (click)="editObjectivePopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Objective">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
                               </a>
                               <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Objective">
-                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
                               </a>
                             </div>
                           </div>
@@ -501,7 +501,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="addObjective()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
            {{currentObject.ObjectiveId == 0 ? 'Add' : 'Update'}} Objective
           </span>
@@ -540,9 +540,9 @@
                         placeholder="Search by Objective">
                       <div class="t-filter" (click)="arrangeObjectiveDetails(orderByObjectiveAsc, 'Objective')">
                         <a href="javascript:void()" class="pe-2">Objectives</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
@@ -553,16 +553,16 @@
                         (keydown.esc)="resetFilterObjective()" [(ngModel)]="objectDetail.TargetValue" placeholder="Search by Target Value">
                       <div class="t-filter" (click)="arrangeObjectiveDetails(orderBTargetValueAsc, 'TargetValue')">
                         <a href="javascript:void()" class="pe-3">Target Value</a>
-                        <i class="fa fa-sort-amount-asc"
+                        <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }" aria-hidden="true"></i>
-                        <i class="fa fa-sort-amount-desc"
+                        <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-index text-center">
                     <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecordsObjective()">
-                      <i class="fa fa-filter">
+                      <i class="fa-solid fa-filter">
                         <span>Filter</span>
                       </i>
                     </a>
@@ -578,7 +578,7 @@
                     <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
                     <div class="td align-middle fe-3 text-truncate d-flex align-items-center">
                       <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
-                      <i class=" ps-2 fa fa-info-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
+                      <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
@@ -606,7 +606,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="addAppraisalObjective()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
            {{currentObject.ObjectiveId == 0 ? 'Add' : 'Update'}} Objective
           </span>
@@ -632,7 +632,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="changeAppraisalStatus()">
-          <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-floppy-o': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           <span class="ps-2">
            save
           </span>

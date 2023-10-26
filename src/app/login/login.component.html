@@ -56,12 +56,12 @@
                                 name="Password">
                               <ng-container *ngIf="isShowPassword">
                                 <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">
-                                  <i class="fa fa-eye"></i>
+                                  <i class="fa-regular fa-eye"></i>
                                 </a>
                               </ng-container>
                               <ng-container *ngIf="!isShowPassword">
                                 <a href="javascript:void(0)" class="view-c" (click)="showPassword()">
-                                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                  <i class="fa-regular fa-eye-slash" aria-hidden="true"></i>
                                 </a>
                               </ng-container>
                             </div>
@@ -90,12 +90,12 @@
                                 name="Password">
                               <ng-container *ngIf="isShowPassword">
                                 <a href="javascript:void(0)" class="view-c" (click)="hidePassword()">
-                                  <i class="fa fa-eye"></i>
+                                  <i class="fa-regular fa-eye"></i>
                                 </a>
                               </ng-container>
                               <ng-container *ngIf="!isShowPassword">
                                 <a href="javascript:void(0)" class="view-c" (click)="showPassword()">
-                                  <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                                  <i class="fa-regular fa-eye-slash" aria-hidden="true"></i>
                                 </a>
                               </ng-container>
                             </div>
@@ -113,7 +113,7 @@
                         <div class="mb-3">
                           <button type="button" (click)="UserLogin()" [disabled]="isLoading"
                             class="btn btn-primary-dark text-center">
-                            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-sign-in': !isLoading}"></i>
+                            <i class="fa-solid"  [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-right-to-bracket': !isLoading}"></i>
                             {{ isLoading ? 'Signing' : 'Sign In' }}</button>
                         </div>
                       </div>
@@ -186,7 +186,7 @@
                   <div class="row mb-3 px-3">
                     <button type="button" (click)="userRegistration()" [disabled]="isLoading || !agreeWithTermsAndCondition"
                       class="btn btn-primary-dark text-center">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
                       {{ isLoading ? 'Wait' : 'Register' }}</button>
                   </div>
                   <div class="row mb-4 px-3">
@@ -214,9 +214,9 @@
   <div class="btn-primary-dark footer-top pt-4 pb-2 footer-section">
     <div class="d-flex justify-content-between px-3">
       <small class="ms-4 ms-sm-5 mb-2">Copyright &copy; 2019. All rights reserved.</small>
-      <div class="social-contact ms-4 ms-sm-auto"> <span class="fa fa-facebook me-4 text-sm"></span> <span
-          class="fa fa-google-plus me-4 text-sm"></span> <span class="fa fa-linkedin me-4 text-sm"></span> <span
-          class="fa fa-twitter me-4 me-sm-5 text-sm"></span> </div>
+      <div class="social-contact ms-4 ms-sm-auto"> <span class="fa-brands fa-facebook-f me-4 text-sm"></span> <span
+          class="fa-brands fa-google-plus-g me-4 text-sm"></span> <span class="fa-brands fa-linkedin-in me-4 text-sm"></span> <span
+          class="fa-brands fa-x-twitter me-4 me-sm-5 text-sm"></span> </div>
     </div>
   </div>
 </div>
@@ -246,7 +246,7 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button type="button" (click)="sendForgotPassword()" [disabled]="isLoading"
                       class="btn btn-primary-dark text-center">
-                      <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, ' fa-paper-plane': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
                       {{ isLoading ? 'Sending' : 'Send' }}</button>
       </div>
     </div>

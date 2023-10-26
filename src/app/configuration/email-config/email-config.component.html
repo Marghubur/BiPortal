@@ -11,8 +11,8 @@
             <div class="x_header_title d-flex align-items-center justify-content-end">
               <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
               <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-                class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
-              <button class="btn btn-primary-c float-end" (click)="emailConfigPopUp()"><i class="fa fa-plus pe-2"></i> Add Template Mapping</button>
+                class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
+              <button class="btn btn-primary-c float-end" (click)="emailConfigPopUp()"><i class="fa-solid fa-plus pe-2"></i> Add Template Mapping</button>
             </div>
           </div>
         </div>
@@ -62,10 +62,10 @@
                   <div class="td align-middle fe-1">
                     <div class="d-flex flex-row justify-content-center">
                       <a href="javascript:void(0)" class="px-2" (click)="editEmailTempConfig(template)">
-                        <span class="badge bg-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+                        <span class="badge bg-primary"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
                       </a>
                       <a href="javascript:void(0)" class="px-2" (click)="getMessageModal(template.TemplateId)">
-                        <span class="badge bg-dark"><i class="fa fa-eye" aria-hidden="true"></i></span>
+                        <span class="badge bg-dark"><i class="fa-regular fa-eye" aria-hidden="true"></i></span>
                       </a>
                     </div>
                   </div>
@@ -130,7 +130,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 <button class="btn btn-success" [disabled]="isLoading" (click)="addMapping()">
-                    <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                    <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
                     <span class="ps-2">{{ isLoading ? 'Wait' : 'Mapped' }}</span>
                 </button>
             </div>

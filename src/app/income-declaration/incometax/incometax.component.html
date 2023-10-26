@@ -57,7 +57,7 @@
             <div class="custom-bg mt-3">
               <div class="d-flex justify-content-between">
                 <p class="fs-4 pt-3 ps-3">
-                  Income Tax Computation <i class="fa fa-download ps-3"></i>
+                  Income Tax Computation <i class="fa-solid fa-download ps-3"></i>
                 </p>
                 <div class="pt-3 pe-3" *ngIf="allDeclarationSalaryDetails != null">
                   <select class="form-select" disabled>
@@ -72,7 +72,7 @@
               </p>
               <div class="card mb-3">
                 <div class="py-3 ps-3">
-                  <p class="fs-5 text-dark"><i class="fa fa-bullhorn pe-3" aria-hidden="true"></i>Important!</p>
+                  <p class="fs-5 text-dark"><i class="fa-solid fa-bullhorn pe-3" aria-hidden="true"></i>Important!</p>
                   <ul class="ps-5">
                     <li>
                       Current Income tax calculation is considering <span class="fw-bold">DECLARED</span> amounts of
@@ -183,13 +183,13 @@
                               </div>
                               <div class="td fe-1">
                                 <div class="cell-wrapper">
-                                  <i class="fa fa-inr pe-1"></i> {{item.total | number: '1.0-0'}}
+                                  <i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.total | number: '1.0-0'}}
                                 </div>
                               </div>
                               <ng-container *ngIf="item.value">
                                 <div class="td fe-1" *ngFor="let elem of item.value">
                                   <div class="cell-wrapper">
-                                    <i class="fa fa-inr pe-1"></i> {{elem.FinalAmount | number: '1.0-0'}}
+                                    <i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{elem.FinalAmount | number: '1.0-0'}}
                                   </div>
                                 </div>
                               </ng-container>

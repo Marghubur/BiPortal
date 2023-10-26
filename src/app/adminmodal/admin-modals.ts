@@ -541,6 +541,10 @@ export class DocumentUser {
     FirstName?: string = '';
     ClientJson?: any = null;
     IsActive?: boolean = null;
+    FilePath?: string = null;
+    FileName?: string = null;
+    FileExtension?: string = null;
+    ProfilePath?: string = null;
   }
 
   export class clientModal {

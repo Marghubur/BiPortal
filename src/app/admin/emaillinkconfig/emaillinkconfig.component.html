@@ -12,7 +12,7 @@
             <div class="x_header_title d-flex align-items-center justify-content-end">
               <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
               <button class="btn btn-primary-c" [disabled]="isLoading || isAutoTrigger || isPageLoading" (click)="sendEmail()">
-                <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}"></i>
+                <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-paper-plane': !isLoading}"></i>
                 {{ isLoading ? 'Sending ...' : 'Send Manually' }}
               </button>
             </div>
@@ -51,7 +51,7 @@
               </select>
             </div>
             <div class="col-md-3 mt-3">
-              <label for="" class="form-label">Is Triggered Automatically <i class="ps-2 fa fa-exclamation-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Automaticaally means when any change occur then email is send to defined email"></i></label>
+              <label for="" class="form-label">Is Triggered Automatically <i class="ps-2 fa-solid fa-circle-exclamation" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Automaticaally means when any change occur then email is send to defined email"></i></label>
               <select class="form-select" (change)="triggerStatus($event)" formControlName="IsTriggeredAutomatically" [ngClass]="{'error-field': submitted && f.IsTriggeredAutomatically.errors !== null && f.IsTriggeredAutomatically.errors.required}">
                 <option value="true">Yes</option>
                 <option value="false">No</option>
@@ -69,7 +69,7 @@
                 <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
                   {{employee.Email}}
                   <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
-                    <i class="fa fa-close ps-2 text-dark"></i>
+                    <i class="fa-solid fa-xmark ps-2 text-dark"></i>
                   </a>
                 </span>
               </ng-container>
@@ -124,7 +124,7 @@
         </form>
         <div class="text-end">
           <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="saveTemplate()">
-            <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-file-o': !isLoading}"></i>
+            <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
             {{ isLoading ? 'Wait' : 'Save' }}
           </button>
         </div>

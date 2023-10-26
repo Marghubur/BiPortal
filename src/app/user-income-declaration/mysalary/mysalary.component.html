@@ -79,10 +79,10 @@
                       </div>
                       <div class="ms-auto me-3">
                         <a href="javascript:void(0)">
-                          <i class="fa fa-refresh text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
+                          <i class="fa-solid fa-arrows-rotate text-light" aria-hidden="true" (click)="salaryStructureHistory()"></i>
                         </a>
                         <button type="btn" class="btn btn-outline-light btn-sm ms-3" (click)="viewSalary()">
-                          <i class="fa" [ngClass]="{'fa-angle-down': isSalaryDetail, 'fa-angle-up': !isSalaryDetail}"
+                          <i  [ngClass]="{'fa-solid fa-angle-down': isSalaryDetail, 'fa-solid fa-angle-up': !isSalaryDetail}"
                             aria-hidden="true"></i>
                         </button>
                       </div>
@@ -257,7 +257,7 @@
                           Switch to {{item.RegimeName}} (Section 115BAC)
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa fa-spin fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -269,7 +269,7 @@
                           Continue with {{item.RegimeName}}
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa fa-spin fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -354,7 +354,7 @@
                           Switch to {{item.RegimeName}} (Section 115BAC)
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa fa-spin fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -366,7 +366,7 @@
                           Continue with {{item.RegimeName}}
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa fa-spin fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -415,7 +415,7 @@
         </div>
         <div class="d-flex align-items-center ps-4 py-4">
           <span class="text-dark">{{myAnnualSalary.Effective | date}}</span>
-          <i class="fa fa-circle text-info px-4" aria-hidden="true"></i>
+          <i class="fa-solid fa-circle text-info px-4" aria-hidden="true"></i>
           <div class="col-md-8 custom-bg rounded p-3">
             <span class="text-dark">Orignal salary structure</span>
             <a href="javascript:void(0)" class="text-decoration-none float-end" (click)="salaryBreakupPopup()">SALARY

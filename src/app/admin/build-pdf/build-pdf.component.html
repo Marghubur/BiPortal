@@ -11,7 +11,7 @@
           <div class="x_header_title d-flex align-items-center justify-content-end">
             <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
             <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-              class="fa fa-paper-plane pe-1"></i> Email Link Config</a>
+              class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
             <button class="btn btn-outline-success text-end" (click)="getNewForm()">New Bill</button>
           </div>
         </div>
@@ -119,10 +119,10 @@
                               <div class="cell-wrapper edit-cellwrapper">
                                 {{item.PresentDate | date}}
                                 <ng-container *ngIf="item.TimesheetStatus == 8 || item.TimesheetStatus == 9">
-                                  <i class="ps-2 text-success fa fa-check"></i>
+                                  <i class="ps-2 text-success fa-solid fa-check"></i>
                                 </ng-container>
                                 <ng-container *ngIf="item.TimesheetStatus != 8 && item.TimesheetStatus != 9">
-                                  <i class="ps-2 text-danger fa fa-close"></i>
+                                  <i class="ps-2 text-danger fa-solid fa-xmark"></i>
                                 </ng-container>
                               </div>
                             </div>
@@ -211,7 +211,7 @@
                                     readonly (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                                   <div class="input-group-append">
                                     <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
-                                      type="button"><i class="fa fa-calendar" aria-hidden="true"></i>
+                                      type="button"><i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                                     </button>
                                   </div>
                                 </div>
@@ -374,7 +374,7 @@
                     </div>
                     <div class="btn-group ms-2">
                       <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generate()">
-                        <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-plus-square-o': !isLoading}"></i>
+                        <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
                         {{ isLoading ? 'Processing' : 'Generate' }}
                       </button>
                     </div>
@@ -399,7 +399,7 @@
         <div class="position-relative col-md-7 text-end pe-4" *ngIf="isBillGenerated">
           <input type="text" class="border-0 me-4 w-100 text-end" maxlength="80"  [(ngModel)]="emailTemplate.EmailSubject" oninput="this.value = this.value.toUpperCase()"
                       placeholder="Enter your subject">
-          <i class="edit fa fa-pencil position-absolute"></i>
+          <i class="edit fa-solid fa-pencil position-absolute"></i>
         </div>
       </div>
       <div class="modal-body  ">
@@ -414,7 +414,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
                         <a href="javascript:void(0)" (click)="getFileExtension('pdf')" class="text-primary-c fw-b">
-                          <i class="fa fa-download text-primary-c pe-2"></i>
+                          <i class="fa-solid fa-download text-primary-c pe-2"></i>
                           PDF
                         </a>
                     </div>
@@ -425,7 +425,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
                       <a href="javascript:void(0)" (click)="getFileExtension('docx')" class="text-primary-c fw-b">
-                        <i class="fa fa-download text-primary-c pe-2"></i>
+                        <i class="fa-solid fa-download text-primary-c pe-2"></i>
                         DOCX
                       </a>
                     </div>
@@ -446,7 +446,7 @@
                     <div class="input-group">
                       <input type="email" class="form-control" placeholder="Email Id" name="add-email" aria-label="Email Id" aria-describedby="add-email">
                       <button class="btn btn-primary-c" type="button" (click)="addEmailId()" id="add-email">
-                        <i class="fa fa-plus pe-2"></i>Add
+                        <i class="fa-solid fa-plus pe-2"></i>Add
                       </button>
                     </div>
                   </div>
@@ -457,7 +457,7 @@
                     <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
                       {{email}}
                       <a href="javascript:void(0)" (click)="removeEmail(i)" class="text-decoration-none">
-                        <i class="fa fa-close ps-2 text-dark"></i>
+                        <i class="fa-solid fa-xmark ps-2 text-dark"></i>
                       </a>
                     </span>
                   </ng-container>
@@ -476,18 +476,16 @@
                   <div class="position-relative">
                     <input type="text" class="border-0 w-75"  [(ngModel)]="emailTemplate.EmailTitle" oninput="this.value = this.value.toUpperCase()"
                       placeholder="Enter your title">
-                    <i class="edit fa fa-pencil position-absolute"></i>
+                    <i class="edit fa-solid fa-pencil position-absolute"></i>
                   </div>
                 </div>
                 <div class="border py-3 px-2">
-
                   <div class="col-12">
                     <ng-container *ngIf="bodyContent != null">
                       <div class="no-focus-line" id="billtemplatebody" [innerHTML]="bodyContent" contenteditable>
                       </div>
                     </ng-container>
                   </div>
-
                 </div>
               </div>
             </ng-container>
@@ -502,7 +500,7 @@
           </div>
           <div>
             <a href="javascript:void(0)" class="text-primary-c fw-bold" (click)="sendEmail()">
-              <i class="fa" [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-paper-plane': !isLoading}" aria-hidden="true"></i>
+              <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-paper-plane': !isLoading}" aria-hidden="true"></i>
               <span class="ps-2">
                 <ng-container *ngIf="isLoading">Sending...</ng-container>
                 <ng-container *ngIf="!isLoading"><u>Send Email</u></ng-container>
@@ -519,7 +517,7 @@
 <div class="d-none file-container" id="file-container" (click)="closePdfViewer()">
   <div class="text-end">
     <a (click)="closePdfViewer()" class="close_view">
-      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark fa-2x" aria-hidden="true"></i>
     </a>
   </div>
   <iframe src="" width="800px" height="600px" style="border: none;"></iframe>
@@ -537,8 +535,8 @@
       <div class="modal-body px-5 mt-0 pt-0">
         <div class="col-md-12 px-3" *ngIf="allTimesheet.length > 0">
           <div class="py-3">
-            <a href="javascript:void(0)" class="pe-3" (click)="selectUnselect('select')"><i class="fa fa-check pe-1 text-success"></i> Select All</a>
-            <a href="javascript:void(0)" (click)="selectUnselect('deselect')"><i class="fa fa-close pe-1 text-danger"></i> Deselect All</a>
+            <a href="javascript:void(0)" class="pe-3" (click)="selectUnselect('select')"><i class="fa-solid fa-check pe-1 text-success"></i> Select All</a>
+            <a href="javascript:void(0)" (click)="selectUnselect('deselect')"><i class="fa-solid fa-xmark pe-1 text-danger"></i> Deselect All</a>
           </div>
           <div class="t-table border-cell t-list t-border col-md-12">
             <div class="t-head overflow-hidden">
@@ -567,10 +565,10 @@
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
                         <ng-container *ngIf="item.TimesheetStatus == 8 || item.TimesheetStatus == 9">
-                          <i class="ps-2 text-success fa fa-check"></i>
+                          <i class="ps-2 text-success fa-solid fa-check"></i>
                         </ng-container>
                         <ng-container *ngIf="item.TimesheetStatus != 8 && item.TimesheetStatus != 9">
-                          <i class="ps-2 text-danger fa fa-close"></i>
+                          <i class="ps-2 text-danger fa-solid fa-xmark"></i>
                         </ng-container>
                       </div>
                     </div>
@@ -594,7 +592,7 @@
         </div>
       </div>
       <div class="modal-footer border-top-0 pe-5 pb-3">
-        <a href="javascript:void(0)" class="text-decoration-none text-success" (click)="updateActualDays()" data-bs-dismiss="modal"><i class="fa fa-check pe-2"></i> Save</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-success" (click)="updateActualDays()" data-bs-dismiss="modal"><i class="fa-solid fa-check pe-2"></i> Save</a>
       </div>
     </div>
   </div>
