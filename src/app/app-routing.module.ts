@@ -5,7 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent},
+  { path: '/bot', component: LoginComponent},
   { path: Login, component: LoginComponent },
   { path: Initialpage, component: InitialpageComponent }
 ];
