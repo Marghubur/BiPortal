@@ -102,43 +102,10 @@
                         <i class="fa-solid fa-circle-info fa-lg px-3" aria-hidden="true"></i>
                       </div>
                     </div>
-                    <div class="d-block col-md-12 pt-1 pb-2 leave-list-table">
+                    <div class="d-block col-md-12 pt-1 pb-2 consume-leave-box">
                       <canvas baseChart [data]="chartData" type="doughnut" [options]="chartOptions">
                       </canvas>
                       <!-- <canvas id="consumeLeaveChart" width="100" height="100"></canvas> -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-5">
-                <div class="card">
-                  <div class="card-body pb-0">
-                    <h6 class="pt-2 ps-2">
-                      Leave Balance Details
-                    </h6>
-                    <div class="table-responsive leave-list-table">
-                      <table class="table table-striped align-middle">
-                        <thead>
-                          <tr>
-                            <td>Leave</td>
-                            <td>Available</td>
-                            <td>Consumed</td>
-                            <td>Accrued So Far</td>
-                            <td>Carry Over</td>
-                            <td>Annual Quota</td>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of chartDataset">
-                            <td>{{item.PlanName}}</td>
-                            <td>{{item.AvailableLeaves}}</td>
-                            <td>{{item.ConsumedLeave}}</td>
-                            <td>{{item.AccrualedTillDate}}</td>
-                            <td>0</td>
-                            <td>{{item.MaxLeaveLimit}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
                     </div>
                   </div>
                 </div>

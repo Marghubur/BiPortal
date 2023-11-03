@@ -424,6 +424,10 @@ fieldset {
   overflow-y: scroll;
 }
 
+.t-head {
+  overflow-x: hidden !important;
+}
+
 .t-border .td,
 .th {
   border-left: 1px solid #d9d9d9;

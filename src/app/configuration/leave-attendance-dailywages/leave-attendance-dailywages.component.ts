@@ -3,7 +3,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -30,9 +30,11 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
   selectedLeaveType: any = null;
   selectedLeave: any = null;
   availLopAdjusmentDay: Array<number> = [];
+  currentUser: any = null;
 
   constructor(private nav:iNavigation,
-              private http: AjaxService) {}
+              private http: AjaxService,
+              private userService: UserService) {}
 
   ngAfterViewChecked(): void {
     if(this.scrollDiv == null) {
@@ -60,6 +62,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   ngOnInit(): void {
     let data = this.nav.getValue();
+    this.currentUser = this.userService.getInstance();
     if (data) {
       this.selectedPayrollCalendar = data;
       let days = new Date(this.selectedPayrollCalendar.Year, this.selectedPayrollCalendar.Month, 0).getDate();

@@ -293,7 +293,7 @@
                 </div>
                 <ng-container *ngFor="let item of leaveRequestDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
-                    <div class="d-flex col-md-10">
+                    <div class="d-flex col-auto">
                       <a href="javascript:void(0)" class="me-2">
                         <i class="fa-regular fa-circle-user fa-lg"></i>
                       </a>
@@ -309,27 +309,56 @@
                         <span>{{item.ToDate | date}}</span>
                         <span class="ps-1">({{item.NumOfDays}} {{item.NumOfDaysn > 0 ? 'days' : 'day'}})</span>
                       </p>
-                      <div class="ms-3 col-md-6">
+                      <div class="ms-3 col-auto">
                         <span class="fw-bold pe-1">Manager:</span>
                         {{item.ManagerName}} |
                         <span class="mb-0"><i class="fa-solid fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa-solid fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
-                        <span class="badge ms-3" [ngClass]="{'bg-danger': item.RequestStatusId == 5, 'bg-success': item.RequestStatusId == 9, 'bg-primary': (item.RequestStatusId != 9 && item.RequestStatusId !=5)}">
-                          <i class="fa pe-1" [ngClass]="{'fa-ban': item.RequestStatusId == 5, 'fa-check': item.RequestStatusId == 9, 'fa-clock-o': (item.RequestStatusId != 9 && item.RequestStatusId !=5)}"></i>
+                        <span class="badge  ms-3" [ngClass]="{'bg-danger': item.RequestStatusId == 5, 'bg-success': item.RequestStatusId == 9, 'bg-primary': (item.RequestStatusId != 9 && item.RequestStatusId !=5)}">
+                          <i class="pe-1" [ngClass]="{'fa-ban': item.RequestStatusId == 5, 'fa-check': item.RequestStatusId == 9, 'fa-regular fa-clock': (item.RequestStatusId != 9 && item.RequestStatusId !=5), 'fa-solid': (item.RequestStatusId == 9 || item.RequestStatusId ==5)}"></i>
                           {{item.RequestStatusId == 5 ? "Rejectd" : item.RequestStatusId == 9 ? "Approved" : "Pending"}}
                         </span>
+                        <span class="badge bg-c ms-3" *ngIf="item.ReporterDetail.length == 1">
+                          <i class="fa-solid fa-at"></i>
+                          <span class="ps-1">{{item.ReporterDetail[0].Name}}</span>
+                        </span>
+                        <a href="javascript:void(0)" class="text-decoration-none" triggers="mouseenter:mouseleave" placement="end"  [ngbPopover]="popContent" [popoverTitle]="popTitle" *ngIf="item.ReporterDetail.length > 1">
+                          <span class="badge bg-c ms-3">
+                            <i class="fa-solid fa-at"></i>
+                            <span class="ps-1">{{item.ReporterDetail.length}}</span>
+                          </span>
+                        </a>
+                        <ng-template #popContent>
+                          <table class="table mb-0">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let approver of item.ReporterDetail; let i=index;">
+                                <td>{{i+1}}</td>
+                                <td>{{approver.Name}}</td>
+                                <td>{{approver.Status == 5 ? 'Rejected' : 'Approved'}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </ng-template>
+                        <ng-template #popTitle>Status</ng-template>
                       </div>
                     </div>
-                    <div class="col-2 d-flex flex-row-reverse">
+                    <div class="col-auto d-flex flex-row-reverse">
                       <div class="col-auto me-0 pe-0">
-                        <button *ngIf="item.RequestStatusId != 5" (click)="openLeaveModal('Rejected', item)"
+                        <button *ngIf="item.RequestStatusId != 5" [disabled]="item.IsDatePassed" (click)="openLeaveModal('Rejected', item)"
                           class="btn btn-danger btn-sm"><i class="fa pe-1"
                             [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
-                        <button *ngIf="item.RequestStatusId != 9" (click)="openLeaveModal('Approved', item)"
+                        <button *ngIf="item.RequestStatusId != 9" [disabled]="item.IsDatePassed" (click)="openLeaveModal('Approved', item)"
                           class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
                             [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
                       </div>
                     </div>
-                    <div class="collapse show" [id]="'attendance'+i">
+                    <div class="collapse col-md-12 show" [id]="'attendance'+i">
                       <div class="card card-body border-0">
                         <div class="row align-items-center justify-content-start">
                           <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">{{item.NumOfDays > 0 ? 'Full day' : 'Half day'}}</span>
@@ -432,7 +461,7 @@
                             <p>{{attr.AttendanceDate | date}}</p>
                             <div class="d-flex align-items-center flex-column">
                               <i class="fa-solid fa-house fa-lg"></i>
-                              <p>1 Day</p>
+                              <p class="mt-2">1 Day</p>
                             </div>
                           </div>
                         </td>
@@ -931,6 +960,46 @@
         </ng-container>
       </div>
     </div>
+  </div>
+</div>
+<!-- End -->
+
+<!--Attendance Adjustment Modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="attendanceAdjustmentModal" tabindex="-1" aria-labelledby="attendanceAdjustmentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content px-4">
+          <div class="modal-header border-bottom-0">
+              <h1 class="modal-title fs-5" id="attendanceAdjustmentModalLabel">Attendance Adjustment</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ng-container *ngIf="selectedAttendance != null">
+                <div class="col-md-12">
+                    <label  class="form-label">Name</label>
+                    <span>: {{selectedAttendance.EmployeeName}} </span>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <label class="form-label">Date</label>
+                    <span>: {{selectedAttendance.AttendanceDay | date}} </span>
+                </div>
+                <div class="col-md-12 mt-2">
+                  <label  class="form-label">Submitted By</label>
+                  <span>: {{currentUser.FirstName}} {{currentUser.LastName}}</span>
+              </div>
+                <div class="col-md-12 mt-2">
+                  <label class="form-label">Message</label>
+                  <textarea class="form-control" placeholder="Message" rows="2" [(ngModel)]="selectedAttendance.UserComments"></textarea>
+              </div>
+            </ng-container>
+          </div>
+          <div class="modal-footer border-top-0">
+              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
+              <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveAttedanceAjustment()">
+                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+                  {{ isLoading ? 'Wait' : 'Save' }}
+              </button>
+          </div>
+      </div>
   </div>
 </div>
 <!-- End -->

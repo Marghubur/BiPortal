@@ -68,8 +68,9 @@ export class ApplyLeaveComponent implements OnInit {
     ]
   };
 
-  chartOptions: ChartOptions = {
+  chartOptions: ChartOptions<'doughnut'> = {
     responsive: true,
+    cutout: '24',
     plugins: {
       title: {
         display: true,
@@ -77,7 +78,7 @@ export class ApplyLeaveComponent implements OnInit {
       },
       legend: {
         display: false
-      },
+      }
     },
   };
 
@@ -147,6 +148,7 @@ export class ApplyLeaveComponent implements OnInit {
     this.leaveDetail.LeaveToDay = new Date();
     this.leaveForm.get('LeaveFromDay').setValue(this.leaveDetail.LeaveFromDay);
     this.leaveForm.get('LeaveToDay').setValue(this.leaveDetail.LeaveToDay);
+    this.weekendDisabledDate();
     $('#leaveModal').modal('show');
   }
 
@@ -278,7 +280,7 @@ export class ApplyLeaveComponent implements OnInit {
     else
       this.leaveDays = 0;
     this.maxDate = {year: e.year, month: e.month, day: e.day};
-    this.model = { day: value.getDate(), month: value.getMonth(), year: value.getFullYear()};
+    this.model = { day: value.getDate(), month: value.getMonth()+1, year: value.getFullYear()};
   }
 
   leaveRequestForm() {
@@ -342,8 +344,9 @@ export class ApplyLeaveComponent implements OnInit {
         this.leaveTypes = [];
       }
 
-      if (res.ResponseBody.ShiftDetail)
+      if (res.ResponseBody.ShiftDetail) {
         this.findWeekend(res.ResponseBody.ShiftDetail);
+      }
 
       let companyHoliday = res.ResponseBody.CompanyHoliday;
       if (companyHoliday && companyHoliday.length > 0) {
@@ -365,8 +368,8 @@ export class ApplyLeaveComponent implements OnInit {
       this.LeaveChart(i, this.leaveTypes[i]);
       i++;
     }
-    this.MonthlyStatusChart();
     this.leaveRequestForm();
+    this.MonthlyStatusChart();
 
 
     if(this.observer != null)
@@ -435,6 +438,18 @@ export class ApplyLeaveComponent implements OnInit {
     }
   }
 
+  weekendDisabledDate() {
+    if (this.json.disable.length > 0) {
+      this.isDisabled = (
+        date: NgbDateStruct
+      ) => {
+        return this.json.disable.find((x) => {
+          this.isDisabled = (date: NgbDate) => { return this.calendar.getWeekday(date) >= 6 };;
+        });
+      }
+    }
+  }
+
   buildChartData(context: any, index: any) {
     let item = this.chartDataset[index];
     let bgColor = []
@@ -468,7 +483,7 @@ export class ApplyLeaveComponent implements OnInit {
       },
       options: {
         maintainAspectRatio: false,
-        cutout: 50
+        cutout: 60
       }
     });
 
@@ -545,6 +560,7 @@ export class ApplyLeaveComponent implements OnInit {
   }
 
 
+
   LoadDoughnutchart() {
     let label = [];
     let consumeChart = null;
@@ -573,7 +589,7 @@ export class ApplyLeaveComponent implements OnInit {
       options: {
         maintainAspectRatio: false,
         responsive: true,
-        cutout: 40,
+        cutout: 80,
       }
     });
     consumeChart.update();
@@ -736,15 +752,17 @@ export class ApplyLeaveComponent implements OnInit {
           data: data,
           backgroundColor: bgColor,
           borderWidth: 0,
-          hoverOffset: 4,
+          hoverOffset: 2,
           hoverBackgroundColor: bgColor,
-        }
-      ]
+        },
+      ],
+
     };
 
     this.chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
+      cutout: 60
       // plugins: {
       //   title: {
       //     display: true,

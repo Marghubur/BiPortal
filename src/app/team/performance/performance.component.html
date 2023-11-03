@@ -38,7 +38,7 @@
                       </div>
                     </div>
                     <div class="row bg-light mt-4 align-items-center justify-content-between">
-                      <div class="col-md-5" >
+                      <div class="col-md-8 col-lg-5 col-xl-5 col-sm-8" >
                         <ng-container *ngIf="objectives.length > 0">
                           <div class="col-md-12 my-3"  >
                             <i class="fa-regular fa-calendar-days fa-lg pe-2"></i>
@@ -58,7 +58,7 @@
                           </div>
                         </ng-container>
                       </div>
-                      <div class="col-md-6 justify-content-end row align-items-center">
+                      <div class="col-auto justify-content-end row align-items-center">
                         <div class="col-auto border-end pe-4">
                           <i class="fa-solid fa-circle text-success pe-2"></i>
                           <span>ON TRACK</span>
@@ -132,7 +132,7 @@
                               <td class="align-middle text-center" >
                                 <a *ngIf="item.PerformanceStatus == 2 || item.PerformanceStatus == 0" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit performance" href="javascript:void(0)" (click)="editPerformance(item)"><i class="fa-solid fa-pencil"></i></a>
                                 <a *ngIf="item.PerformanceStatus == 5" href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="right" title="Re-submit performance" (click)="editPerformance(item)"><i class="fa-regular fa-pen-to-square"></i></a>
-                                <i  [ngClass]="{'fa-regular fa-square-check': item.PerformanceStatus == 9, 'fa-regular fa-clock text-warning': item.PerformanceStatus == 8}"></i>
+                                <i class="fa-regular  fa-lg"  [ngClass]="{'fa-square-check text-success': item.PerformanceStatus == 9, 'fa-clock text-warning': item.PerformanceStatus == 8}"></i>
                               </td>
                             </tr>
                           </ng-container>
@@ -411,7 +411,7 @@
                       </ng-container>
                     </div>
                     <div class="text-end">
-                      <button class="btn btn-primary-c" (click)="submitObjective()" [disabled]="isLoading || (objectives[0].PerformanceStatus == 8 && objectives[0].PerformanceStatus == 9)">
+                      <button class="btn btn-primary-c" (click)="submitObjective()" [disabled]="isLoading || (objectives[0].PerformanceStatus == 8 || objectives[0].PerformanceStatus == 9)">
                         <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
                         <span class="ps-2">
                           Submit Objective
