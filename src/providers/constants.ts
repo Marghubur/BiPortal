@@ -1,4 +1,5 @@
 export const Login = "login";
+export const BaseSubUrlPath = "bot";
 export const Initialpage = "initialpage";
 export const Users = "users";
 export const Sales = "sales";
@@ -46,7 +47,7 @@ export const Article = "api/blogs/article/:articleid";
 
 // ********************** Manage route pages  *******************
 
-export const ManageBaseRoute = "ems/manage"
+export const ManageBaseRoute = `${BaseSubUrlPath}/ems/manage`;
 export const Profile = `${ManageBaseRoute}/profile`;
 export const AdminLeave = `${ManageBaseRoute}/leave`;
 export const Holiday = `${ManageBaseRoute}/planholidays`;
@@ -59,7 +60,7 @@ export const AdminManageTimesheet = `${ManageBaseRoute}/managetimesheet`;
 
 // ********************** Configuration route pages  *******************
 
-export const ConfigBaseRoute = "ems/config"
+export const ConfigBaseRoute = `${BaseSubUrlPath}/ems/config`;
 export const Annexure = `${ConfigBaseRoute}/annexure`;
 export const OfferLetter = `${ConfigBaseRoute}/offerletter`;
 export const EmailConfiguration = `${ConfigBaseRoute}/emailconfiguration`;
@@ -76,7 +77,7 @@ export const LeaveAttendanceDailywages = `${ConfigBaseRoute}/processingpayroll/l
 
 // ********************** Team route pages  *******************
 
-export const TeamBaseRoute = "ems/team"
+export const TeamBaseRoute = `${BaseSubUrlPath}/ems/team`;
 export const AdminNotification = `${TeamBaseRoute}/notification`;
 export const AdminApprovalRequest = `${TeamBaseRoute}/request`;
 export const Appraisal = `${TeamBaseRoute}/appraisal`;
@@ -92,7 +93,7 @@ export const FinalizeReview = `${TeamBaseRoute}/finalizereview`;
 
 // ********************** Project route pages  *******************
 
-export const ProjectBaseRoute = "ems/project"
+export const ProjectBaseRoute = `${BaseSubUrlPath}/ems/project`;
 export const ProjectWiki = `${ProjectBaseRoute}/projectlist/wiki`;
 export const ProjectBudget = `${ProjectBaseRoute}/projectlist/budget`;
 export const ProjectList = `${ProjectBaseRoute}/projectlist`;
@@ -103,7 +104,7 @@ export const ManageProject = `${ProjectBaseRoute}/projectlist/manage-project`;
 
 // ********************** Income Declaration route pages  *******************
 
-export const AccountsBaseRoute = "ems/accounts"
+export const AccountsBaseRoute = `${BaseSubUrlPath}/ems/accounts`;
 export const AdminSummary = `${AccountsBaseRoute}/summary`;
 export const AdminDeclaration = `${AccountsBaseRoute}/declaration`;
 export const EmployeeDeclarationList = `${AccountsBaseRoute}/employeedeclarationlist`;
@@ -126,7 +127,7 @@ export const TaxRegime = `${AccountsBaseRoute}/taxregime`;
 
 // ********************** Leave Management route pages  *******************
 
-export const LeaveBaseRoute = "ems/leave"
+export const LeaveBaseRoute = `${BaseSubUrlPath}/ems/leave`;
 export const Leave = `${LeaveBaseRoute}/leavesetting`
 export const ManageLeavePlan = `${LeaveBaseRoute}/leavesetting/manageleaveplan`;
 export const ManageYearEnding = `${LeaveBaseRoute}/leavesetting/manageyearending`;
@@ -136,7 +137,7 @@ export const ManageYearEnding = `${LeaveBaseRoute}/leavesetting/manageyearending
 
 // ********************** Project route pages  *******************
 
-export const CommonBaseRoute = "ems/common"
+export const CommonBaseRoute = `${BaseSubUrlPath}/ems/common`;
 export const Documents = `${CommonBaseRoute}/documents`;
 export const DocumentsPage = `${CommonBaseRoute}/documentspage/:path`;
 
@@ -145,41 +146,42 @@ export const DocumentsPage = `${CommonBaseRoute}/documentspage/:path`;
 
 // ********************** Admin route pages  *******************
 
-export const Employees = "ems/administration/employees";
-export const Dashboard = "ems/administration/dashboard";
-export const BuildPdf = "ems/administration/generatebill";
-export const ManageEmployee = 'ems/administration/employees/manageemployee';
-export const Clients = 'ems/administration/clients';
-export const RegisterClient = 'ems/administration/clients/registerclient';
-export const Files = 'ems/administration/files';
-export const Resume = 'ems/administration/resumes';
-export const SideMenu = 'ems/administration/sidemenu';
-export const BillDetail = 'ems/administration/billdetail';
-export const Recent = 'ems/administration/recent';
-export const Roles = 'ems/settings/roles';
-export const Companies = 'ems/administration/Companies';
-export const CreateResume = 'ems/administration/CreateResume';
-export const Recruiter = 'ems/administration/Recruiter';
-export const AdminTaxcalculation = 'ems/administration/taxcalculation';
-export const AdminResetPassword = 'ems/administration/resetpassword';
-export const PayrollSettings = 'ems/settings/payrollsettings';
-export const CompanyInfo = 'ems/settings/payrollsettings/company-info';
-export const CompanySettings = 'ems/settings/payrollsettings/company-settings';
-export const Expenses = 'ems/administration/expenses';
-export const SalaryBreakup = 'ems/administration/employees/alarybreakup';
-export const EmailService = 'ems/administration/email';
-export const OrganizationSetting = 'ems/administration/organization-setting';
-export const EmailSetting = 'ems/settings/emailsetting';
-export const EmailLinkConfig = 'ems/settings/emaillinkconfig';
-export const Company = 'ems/settings/companysettings';
-export const EmailTemplate = 'ems/administration/emailtemplate';
-export const ManageEmailTemplate = 'ems/administration/emailtemplate/manageemailtemplate';
-export const CompanyLogo = 'ems/administration/companylogo';
-export const AdminMasterData = 'ems/administration/masterdata';
+export const AdminBaseRoute = `${BaseSubUrlPath}/ems/admin`;
+export const Employees = `${BaseSubUrlPath}/ems/administration/employees`
+export const Dashboard = `${BaseSubUrlPath}/ems/administration/dashboard`
+export const BuildPdf = `${BaseSubUrlPath}/ems/administration/generatebill`
+export const ManageEmployee = `${BaseSubUrlPath}/ems/administration/employees/manageemployee`
+export const Clients = `${BaseSubUrlPath}/ems/administration/clients`
+export const RegisterClient = `${BaseSubUrlPath}/ems/administration/clients/registerclient`
+export const Files = `${BaseSubUrlPath}/ems/administration/files`
+export const Resume = `${BaseSubUrlPath}/ems/administration/resumes`
+export const SideMenu = `${BaseSubUrlPath}/ems/administration/sidemenu`
+export const BillDetail = `${BaseSubUrlPath}/ems/administration/billdetail`
+export const Recent = `${BaseSubUrlPath}/ems/administration/recent`
+export const Roles = `${BaseSubUrlPath}/ems/settings/roles`
+export const Companies = `${BaseSubUrlPath}/ems/administration/Companies`
+export const CreateResume = `${BaseSubUrlPath}/ems/administration/CreateResume`
+export const Recruiter = `${BaseSubUrlPath}/ems/administration/Recruiter`
+export const AdminTaxcalculation = `${BaseSubUrlPath}/ems/administration/taxcalculation`
+export const AdminResetPassword = `${BaseSubUrlPath}/ems/administration/resetpassword`
+export const PayrollSettings = `${BaseSubUrlPath}/ems/settings/payrollsettings`
+export const CompanyInfo = `${BaseSubUrlPath}/ems/settings/payrollsettings/company-info`
+export const CompanySettings = `${BaseSubUrlPath}/ems/settings/payrollsettings/company-settings`
+export const Expenses = `${BaseSubUrlPath}/ems/administration/expenses`
+export const SalaryBreakup = `${BaseSubUrlPath}/ems/administration/employees/alarybreakup`
+export const EmailService = `${BaseSubUrlPath}/ems/administration/email`
+export const OrganizationSetting = `${BaseSubUrlPath}/ems/administration/organization-setting`
+export const EmailSetting = `${BaseSubUrlPath}/ems/settings/emailsetting`
+export const EmailLinkConfig = `${BaseSubUrlPath}/ems/settings/emaillinkconfig`
+export const Company = `${BaseSubUrlPath}/ems/settings/companysettings`
+export const EmailTemplate = `${BaseSubUrlPath}/ems/administration/emailtemplate`
+export const ManageEmailTemplate = `${BaseSubUrlPath}/ems/administration/emailtemplate/manageemailtemplate`
+export const CompanyLogo = `${BaseSubUrlPath}/ems/administration/companylogo`
+export const AdminMasterData = `${BaseSubUrlPath}/ems/administration/masterdata`
 
 // ********************** Admin route pages  *******************
 
-export const UserDashboard = "ems/home/dashboard";
+export const UserDashboard = `${BaseSubUrlPath}/ems/home/dashboard`;
 export const UserAttendance = "user/manage/attendance";
 export const UserProfilePage = "user/manage/profile";
 export const UserTimesheet = "user/manage/timesheet";
@@ -274,19 +276,4 @@ export enum ItemStatus
   Saved = 13,
   AutoPromoted = 14,
   FinalLevel = 15
-}
-
-class FileRoleType
-{
-    PrimaryLogo = "Company Primary Logo";
-    CompanyLogo = "Company Logo";
-    OtherFile = "Other File";
-}
-
-export enum CommonFlags
-{
-  FullDay = 1,
-  FirstHalf = 2,
-  SecondHalf = 3,
-  HalfDay = 4
 }
