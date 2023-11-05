@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
-import { AccountsBaseRoute, CommonBaseRoute, ConfigBaseRoute, LeaveBaseRoute, ManageBaseRoute, ProjectBaseRoute, TeamBaseRoute } from 'src/providers/constants';
+import { AccountsBaseRoute, AdminBaseRoute, CommonBaseRoute, ConfigBaseRoute, LeaveBaseRoute, ManageBaseRoute, ProjectBaseRoute, TeamBaseRoute } from 'src/providers/constants';
 
 const routes: Routes = [
   {
     matcher: (url) => {
-      if(url[0].path.split(/\/(.*)/s)[0] == 'ems/admin') {
+      if(url[0].path.split(/\/(.*)/s)[0] == AdminBaseRoute) {
         return {
           consumed: url
         };
@@ -14,7 +14,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../admin/admin.module')
     .then(m => m.AdminModule)
   },
@@ -28,7 +27,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../team/team.module')
     .then(m => m.TeamModule)
   },
@@ -42,7 +40,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../projects/projects.module')
     .then(m => m.ProjectsModule)
   },
@@ -56,7 +53,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../configuration/configuration.module')
     .then(m => m.ConfigurationModule)
   },
@@ -70,7 +66,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../manage/manage.module')
     .then(m => m.ManageModule)
   },
@@ -84,7 +79,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../income-declaration/income-declaration.module')
     .then(m => m.IncomeDeclarationModule)
   },
@@ -98,7 +92,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../user/user.module')
     .then(m => m.UserModule)
   },
@@ -112,7 +105,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../leave-management/leave-management.module')
     .then(m => m.LeaveManagementModule)
   },
@@ -126,7 +118,6 @@ const routes: Routes = [
       return null;
     },
     path: '',
-    component: LayoutComponent,
     loadChildren: () => import('../commoncomponent/commoncomponent.module')
     .then(m => m.CommoncomponentModule)
   },

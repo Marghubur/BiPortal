@@ -43,6 +43,8 @@ import { EmaillinkconfigComponent } from './emaillinkconfig/emaillinkconfig.comp
 import { AdminmodalModule } from './../adminmodal/adminmodal.module'
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { MasterDataComponent } from './master-data/master-data.component';
+import { NgChartsModule } from 'ng2-charts';
+import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 
 @NgModule({
   declarations: [
@@ -88,6 +90,8 @@ import { MasterDataComponent } from './master-data/master-data.component';
     UtilModule,
     AdminmodalModule,
     CommonmodalModule,
+    NgChartsModule,
+    NgbModule,
   ],
   providers: [
     CommonService,
