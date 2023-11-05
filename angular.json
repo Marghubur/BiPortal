@@ -45,8 +45,7 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true,
-            "baseHref": "/bot"
+            "namedChunks": true
           },
           "configurations": {
             "production": {

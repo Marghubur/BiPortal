@@ -1,13 +1,30 @@
 import { RouterModule, Routes } from '@angular/router';
 import { Initialpage, Login } from 'src/providers/constants';
-import { InitialpageComponent } from './initialpage/initialpage.component';
-import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
+import { LoginComponent } from './home/login/login.component';
+import { LayoutComponent } from './layout/layout/layout.component';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent},
-  { path: Login, component: LoginComponent },
-  { path: Initialpage, component: InitialpageComponent }
+  {
+    path: '',
+    component: LoginComponent,
+    loadChildren: () => import('./home/home.module')
+    .then(m => m.HomeModule)
+  },
+  {
+    matcher: (url) => {
+      if(url[0].path.split(/\/(.*)/s)[0] == 'bot') {
+        return {
+          consumed: url
+        };
+      }
+      return null;
+    },
+    path: '',
+    component: LayoutComponent,
+    loadChildren: () => import('./layout/layout.module')
+    .then(m => m.LayoutModule)
+  },
 ];
 
 @NgModule({

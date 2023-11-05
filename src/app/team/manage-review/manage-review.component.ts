@@ -9,6 +9,7 @@ declare var $: any;
 declare var bootstrap: any;
 import 'bootstrap';
 import { ItemStatus } from 'src/providers/constants';
+import { ResponseModel } from 'src/auth/jwtService';
 
 @Component({
   selector: 'app-manage-review',
@@ -334,10 +335,15 @@ export class ManageReviewComponent implements OnInit {
   }
 
   promotionHikePopUp(item: FormGroup) {
-    this.promotionAndHikeForm = item;
-    this.selectedPromotionAndHike = item.value;
-    this.promotionAndHikeForm.controls['promotedDesignation'].enable();
-    $("#promotionHikeModal").modal('show');
+    if(!this.isSubmitted) {
+      this.promotionAndHikeForm = item;
+      this.selectedPromotionAndHike = item.value;
+      this.promotionAndHikeForm.controls['promotedDesignation'].enable();
+      $("#promotionHikeModal").modal('show');
+    } else {
+      this.selectedPromotionAndHike = item.value;
+      $("#reopenAppraisalModal").modal('show');
+    }
   }
 
   applyPromotionHikeChanges() {
@@ -356,5 +362,16 @@ export class ManageReviewComponent implements OnInit {
 
   closePromotionHikePopup() {
     this.promotionAndHikeForm.controls['promotedDesignation'].disable();
+  }
+
+  reOpenCurrentAppraidal() {
+    this.http.put(`eps/promotion/reOpenAppraisalObjective/${this.userDetail.UserId}`, [1, 2], true)
+    .then((response: ResponseModel) => {
+      if (response) {
+        Toast("Current appraisal object re-opened successfully");
+      } else {
+        ErrorToast("Fail to re-opened appraisal object");
+      }
+    });
   }
  }

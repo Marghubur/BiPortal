@@ -26,7 +26,7 @@
             [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
             <div class="menu-item-group">
               <ng-container *ngFor="let item of catagory.Value">
-                <a [routerLink]="['/' + item.Link]" class="nav-link nav-link-menu a-font" (click)="cleanupEmpId(item.Link)"
+                <a [routerLink]="['/bot/' + item.Link]" class="nav-link nav-link-menu a-font" (click)="cleanupEmpId(item.Link)"
                   routerLinkActive="active-link">
                   <div class="row menu-item-div align-items-center">
                     <div class="col-md-1">
