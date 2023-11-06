@@ -16,8 +16,10 @@ body {
 }
 
 .logo {
-  width: 25rem;
-  margin-top: 20px;
+  // width: 25rem;
+  // margin-top: 20px;
+  width: 10rem;
+  margin-top: 0px;
 }
 
 .image {
@@ -268,7 +270,7 @@ and (min-width : 1024px) {
   .image {
     width: 55% !important;
   }
-  
+
   .card2 {
     margin: 0px !important;
     padding: 0pxx !important;
@@ -281,5 +283,5 @@ and (min-width : 1024px) {
   .login-box {
       padding: 1rem 2rem !important;
   }
-  
+
 }

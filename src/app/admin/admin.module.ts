@@ -33,9 +33,6 @@ import { EmailComponent } from './email/email.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { CompanyComponent } from './company/company.component';
-import { CommoncomponentModule } from '../commoncomponent/commoncomponent.module';
-import { IncomeDeclarationModule } from '../income-declaration/income-declaration.module';
-import { LeaveManagementModule} from '../leave-management/leave-management.module';
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
 import { CompanylogoComponent } from './companylogo/companylogo.component';
@@ -44,7 +41,6 @@ import { AdminmodalModule } from './../adminmodal/adminmodal.module'
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { MasterDataComponent } from './master-data/master-data.component';
 import { NgChartsModule } from 'ng2-charts';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 
 @NgModule({
   declarations: [

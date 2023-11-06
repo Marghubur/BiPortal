@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { UserType } from 'src/providers/constants';
+import { ItemStatus, UserType } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -60,12 +60,11 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   excelTable: any = null;
   attendance: Attendance;
   attendanceReviewData: Filter = new Filter();
+  selectedAttendance: any = null;
 
-  constructor(
-    private http: AjaxService,
-    private local : ApplicationStorage,
-    private userService: UserService
-    ) { }
+  constructor(private http: AjaxService,
+              private local : ApplicationStorage,
+              private userService: UserService) { }
 
     ngAfterViewChecked(): void {
       if(this.scrollDiv == null) {
@@ -520,6 +519,24 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.http.post("LeaveRequest/GetLeaveRequestNotification", this.leaveRecord, false).then(response => {
       if(response.ResponseBody) {
         this.leaveRequestDetail = response.ResponseBody;
+        if (this.leaveRequestDetail && this.leaveRequestDetail.length > 0) {
+          let today = new Date().toDateString();
+          this.leaveRequestDetail.forEach(x => {
+            if (new Date(x.FromDate).toDateString() < today)
+              x.IsDatePassed = true;
+            else
+              x.IsDatePassed = false;
+
+            if (x.ReporterDetail) {
+              let data = JSON.parse(x.ReporterDetail);
+              let approverDetail = data.filter(i => i.Status == ItemStatus.Approved || i.Status == ItemStatus.Rejected);
+              if (approverDetail && approverDetail.length > 0)
+                x.ReporterDetail = approverDetail;
+              else
+                x.ReporterDetail = [];
+            }
+          })
+        }
         if (this.leaveRequestDetail && this.leaveRequestDetail.length > 0)
           this.leaveData.TotalRecords = this.leaveRequestDetail[0].Total;
         else
@@ -725,6 +742,49 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       ForYear: date.getFullYear()
     }
     this.getReviewAttendanceDetail()
+  }
+
+  showAttendanceHandler(item: any, id: number, name: string) {
+    if (id <= 0) {
+      ErrorToast("Invalid employee selected");
+      return;
+    }
+    if (item) {
+      this.selectedAttendance = null;
+      this.selectedAttendance = item;
+      this.selectedAttendance.EmployeeName = name;
+      this.selectedAttendance.AttendanceId = id;
+      $('#attendanceAdjustmentModal').modal('show');
+    }
+  }
+
+  saveAttedanceAjustment() {
+    this.isLoading = true;
+    if (!this.selectedAttendance) {
+      this.isLoading = false;
+      ErrorToast("Please select attendance first");
+      return;
+    }
+
+    if (this.selectedAttendance.AttendanceId <= 0 || this.selectedAttendance.AttendanceDay == null) {
+      this.isLoading = false;
+      return;
+    }
+
+    this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then ((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
+        if (attendance) {
+          attendance.AttendanceDetail = [];
+          attendance.AttendanceDetail = res.ResponseBody;
+        }
+        $('#attendanceAdjustment').modal('hide');
+        Toast("Attendace apply successfully.");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    });
   }
 }
 

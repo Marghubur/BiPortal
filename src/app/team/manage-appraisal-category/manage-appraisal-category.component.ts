@@ -7,6 +7,7 @@ import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Appraisal } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
+declare var $: any;
 
 @Component({
   selector: 'app-manage-appraisal-category',
@@ -43,6 +44,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   appraisalDetailAndCategory: Array<any> = [];
   isWorkFlownChainShow: boolean = false;
   selectedWorkFlowDetail: any = null;
+  node: string = "";
 
   constructor(private http: AjaxService,
               private nav:iNavigation,
@@ -68,6 +70,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     })
     this.isSubmitted = false;
     let data = this.nav.getValue();
+    this.getWorkFlowTree();
     if (data) {
       this.loadData(data.ObjectiveCatagoryId);
     } else {
@@ -470,6 +473,81 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     }
   }
 
+  viewApprovalChainFlow() {
+    $("#worflowChainModal").modal("show");
+  }
+
+  getInnerNode(nodes: Array<any>, rootTree: Array<any>) {
+    var parentNode = "";
+    var subRootNode = "";
+    var i = 0;
+    while(i < nodes.length) {
+      var childs = rootTree.filter(x => x.ParentNode == nodes[i].node);
+      if(childs.length > 0) {
+        subRootNode += this.getInnerNode(rootTree.filter(x => x.ParentNode == nodes[i].node), rootTree);
+      } else {
+        subRootNode += `<li>
+                      <a href="javascript:void(0);">
+                          <div class="member-view-box">
+                              <div class="member-image">
+                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                  <div class="member-details">
+                                      <h3>{{Node-value}}</h3>
+                                  </div>
+                              </div>
+                          </div>
+                      </a>
+                    </li>`;
+
+        subRootNode = subRootNode.replace("{{Node-value}}", nodes[i].node);
+        i++;
+        continue;
+      }
+
+      i++;
+
+      parentNode += `<li>
+                    <a href="javascript:void(0);">
+                        <div class="member-view-box">
+                            <div class="member-image">
+                                <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                <div class="member-details">
+                                    <h3>{{Node-value}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <ul>
+                      ${subRootNode}
+                    </ul>
+                  </li>`;
+
+      this.node += parentNode;
+    }
+    return subRootNode;
+  }
+
+  getWorkFlowTree () {
+    var tree = [
+      { "node": "1", "ParentNode": null , "value": "0"},
+      { "node": "2", "ParentNode": "1" , "value": "1"},
+      { "node": "3", "ParentNode": "2" , "value": "2"},
+      { "node": "4", "ParentNode": "2" , "value": "2"},
+      { "node": "5", "ParentNode": "1" , "value": "1"},
+      { "node": "6", "ParentNode": "5" , "value": "5"},
+      { "node": "7", "ParentNode": "5" , "value": "5"},
+      { "node": "8", "ParentNode": "7" , "value": "7"},
+      { "node": "9", "ParentNode": "7" , "value": "7"},
+    ];
+
+    var rootIterator = tree.filter(x => x.ParentNode == null);
+    var i = 0;
+    let rootTree = '';
+    while(i < rootIterator.length) {
+      rootTree = this.getInnerNode(rootIterator, tree);
+      i++;
+    }
+  }
 }
 
 export class ApprisalCycle {

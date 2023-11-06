@@ -7,11 +7,7 @@ import { AppHttpIntercepter } from './../auth/app.intercepter';
 import { JwtService } from './../auth/jwtService';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastComponent } from './toast/toast.component'
-import { LayoutModule } from "./layout/layout.module"
 import { UserService } from 'src/providers/userService';
-import { NgChartsModule } from 'ng2-charts';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';

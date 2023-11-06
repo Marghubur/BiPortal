@@ -7,7 +7,7 @@ import { AppraisalSettingComponent } from './appraisal-setting/appraisal-setting
 import { NotificationComponent } from './notification/notification.component';
 import { ApprisalReviewComponent } from './apprisal-review/apprisal-review.component';
 import { UtilModule } from '../util/util.module';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminmodalModule } from '../adminmodal/adminmodal.module';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
@@ -37,7 +37,8 @@ import { FinalizeReviewComponent } from './finalize-review/finalize-review.compo
     ReactiveFormsModule,
     FormsModule,
     AdminmodalModule,
-    CommonmodalModule
+    CommonmodalModule,
+    NgbPopoverModule
   ]
 })
 export class TeamModule { }

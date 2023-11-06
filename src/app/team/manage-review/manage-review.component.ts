@@ -55,11 +55,19 @@ export class ManageReviewComponent implements OnInit {
     this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}/${this.project.ProjectId}`, true).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
+        if (project.findIndex(x => x.ProjectId == this.project.ProjectId) < 0) {
+          this.projectDetails = [];
+          return;
+        }
         // project = project.filter(x => x.Team == this.selectedTeam.Team);
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
         this.appraisalReviewDetail = res.ResponseBody.ReviewDetail;
-        if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
-          this.isSubmitted = true;
+        if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
+          if (this.appraisalReviewDetail.findIndex(x => x.Status == 2) >= 0)
+            this.isSubmitted = false;
+          else
+            this.isSubmitted = true;
+        }
 
         if (project.length > 0) {
           let result = project.reduce((a, b) => {
@@ -135,7 +143,8 @@ export class ManageReviewComponent implements OnInit {
           companyId: new FormControl(data[i].CompanyId),
           appraisalDetailId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalDetailId),
           appraisalReviewId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalReviewId),
-          appraisalCycleStartDate: new FormControl(data[i].appraisalCycleStartDate)
+          appraisalCycleStartDate: new FormControl(data[i].appraisalCycleStartDate),
+          status: new FormControl(reviewDetail != null ? reviewDetail.Status : 0)
         }));
         i++;
       }
@@ -365,13 +374,43 @@ export class ManageReviewComponent implements OnInit {
   }
 
   reOpenCurrentAppraidal() {
-    this.http.put(`eps/promotion/reOpenAppraisalObjective/${this.userDetail.UserId}`, [1, 2], true)
-    .then((response: ResponseModel) => {
-      if (response) {
-        Toast("Current appraisal object re-opened successfully");
-      } else {
-        ErrorToast("Fail to re-opened appraisal object");
-      }
-    });
+    if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
+      this.isLoading =true;
+      let value = this.appraisalReviewDetail.map(x => x.AppraisalReviewId)
+      this.http.put(`eps/promotion/reOpenAppraisalObjective/${this.userDetail.UserId}`, value, true)
+      .then((response: ResponseModel) => {
+        if (response) {
+          this.isSubmitted = false;
+          this.isLoading = false;
+          Toast("Current appraisal object re-opened successfully");
+        } else {
+          this.isLoading = false;
+          ErrorToast("Fail to re-opened appraisal object");
+        }
+      }).catch((e: any) => {
+        this.isLoading = false;
+      });
+    }
+  }
+
+  editEmployeeObjective(item: any) {
+    let value = item.value;
+    if (value) {
+      console.log(value)
+      // this.isLoading =true;
+      // this.http.put(`eps/promotion/reOpenAppraisalObjective/${this.userDetail.UserId}`, value, true)
+      // .then((response: ResponseModel) => {
+      //   if (response) {
+      //     this.isSubmitted = false;
+      //     this.isLoading = false;
+      //     Toast("Current appraisal object re-opened successfully");
+      //   } else {
+      //     this.isLoading = false;
+      //     ErrorToast("Fail to re-opened appraisal object");
+      //   }
+      // }).catch((e: any) => {
+      //   this.isLoading = false;
+      // });
+    }
   }
  }
