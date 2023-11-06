@@ -290,8 +290,7 @@
             [ngClass]="{'error-field': isSubmitted && f.TypeDescription.errors !== null && f.TypeDescription.errors.required}"></textarea>
           </div>
           <div class="mt-3 col-md-6">
-            <label for="" class="form-label">Approval chain flow</label>
-            <button class=""></button>
+            <a href="javascript:void(0)" class="text-primary-dc" (click)="viewApprovalChainFlow()">Approval chain flow</a>
             <!-- <select class="form-select" (change)="changeWorkflow($event)" formControlName="ApprovalWorkflowId">
               <option value=0 disabled selected>Select Approval Workflow</option>
               <option [value]="item.ApprovalWorkFlowId" *ngFor="let item of approvalWorkFlows">{{item.Title | titlecase}}</option>
@@ -368,6 +367,420 @@
           <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">Update</span>
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Workflow Modal -->
+<div class="modal fade" id="worflowChainModal" tabindex="-1" aria-labelledby="worflowChainModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+    <div class="modal-content px-3">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="worflowChainModalLabel">Approval chain flow</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="body genealogy-body genealogy-scroll">
+          <div class="genealogy-tree">
+              <ul>
+                  <li>
+                      <a href="javascript:void(0);">
+                          <div class="member-view-box">
+                              <div class="member-image">
+                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                  <div class="member-details">
+                                      <h3>John Doe</h3>
+                                  </div>
+                              </div>
+                          </div>
+                      </a>
+                      <ul class="active">
+                          <li id="1">
+                              <a href="javascript:void(0);">
+                                  <div class="member-view-box">
+                                      <div class="member-image">
+                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                          <div class="member-details">
+                                              <h3>Member 1</h3>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </a>
+                              <ul>
+                                  <li id="3">
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>Member 1-1</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                  </li>
+                                  <li id="4">
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>Member 1-2</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>Member 1-3</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                      <ul>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>Member 1-3-1</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>Member 1-3-2</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>Member 1-3-3</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                      </ul>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>Member 1-4</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>Member 1-5</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>Member 1-6</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>Member 1-7</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                      <ul>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>Member 1-7-1</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>Member 1-7-2</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                              <ul>
+                                                  <li>
+                                                      <a href="javascript:void(0);">
+                                                          <div class="member-view-box">
+                                                              <div class="member-image">
+                                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                                  <div class="member-details">
+                                                                      <h3>Member 1-7-2-1</h3>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </a>
+                                                  </li>
+                                                  <li>
+                                                      <a href="javascript:void(0);">
+                                                          <div class="member-view-box">
+                                                              <div class="member-image">
+                                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                                  <div class="member-details">
+                                                                      <h3>Member 1-7-2-2</h3>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </a>
+                                                  </li>
+                                                  <li>
+                                                      <a href="javascript:void(0);">
+                                                          <div class="member-view-box">
+                                                              <div class="member-image">
+                                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                                  <div class="member-details">
+                                                                      <h3>Member 1-7-2-3</h3>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </a>
+                                                  </li>
+                                              </ul>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>Member 1-7-3</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                      </ul>
+                                  </li>
+                              </ul>
+                          </li>
+                          <li>
+                              <a href="javascript:void(0);">
+                                  <div class="member-view-box">
+                                      <div class="member-image">
+                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                          <div class="member-details">
+                                              <h3>Member 2</h3>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </a>
+                              <ul>
+                                  <li>
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>John Doe</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                    <ul>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                      </ul>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>John Doe</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                      <ul>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                      </ul>
+                                  </li>
+                                  <li>
+                                      <a href="javascript:void(0);">
+                                          <div class="member-view-box">
+                                              <div class="member-image">
+                                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                  <div class="member-details">
+                                                      <h3>John Doe</h3>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                    <ul>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                          <li>
+                                              <a href="javascript:void(0);">
+                                                  <div class="member-view-box">
+                                                      <div class="member-image">
+                                                          <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
+                                                          <div class="member-details">
+                                                              <h3>John Doe</h3>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </a>
+                                          </li>
+                                      </ul>
+                                  </li>
+                              </ul>
+                          </li>
+                      </ul>
+                  </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
