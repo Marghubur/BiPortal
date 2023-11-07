@@ -4,7 +4,6 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
 @Component({
@@ -31,12 +30,12 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
   addedNewMember() {
     if(this.memberDesignation != -1) {
       this.isLoaded = false;
-      this.orgTree.push({ 
-        "Node": this.orgTree.length + 1, 
-        "ParentNode": this.memberDesignation, 
-        "Name": this.memberName.toLocaleUpperCase(), 
-        "CompanyId": this.company.CompanyId, 
-        "IsActive": 1 
+      this.orgTree.push({
+        "Node": this.orgTree.length + 1,
+        "ParentNode": this.memberDesignation,
+        "Name": this.memberName.toLocaleUpperCase(),
+        "CompanyId": this.company.CompanyId,
+        "IsActive": 1
       });
       this.getWorkFlowTree();
       this.isLoaded = true;
@@ -48,16 +47,26 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
   }
 
   bindEventToNodes() {
-    this.elementRef.nativeElement
-      .querySelector('div[id="tree-node"]')
-      .querySelectorAll('a').forEach(item => {
+    let value = this.elementRef.nativeElement.querySelector('div[id="tree-node"]');
+    value.querySelectorAll('i[data-name="edit-tree"]').forEach(item => {
         item.addEventListener("click", this.bindEvent.bind(this));
       });
-  }
+    value.querySelectorAll('i[data-name="add-tree"]').forEach(item => {
+      item.addEventListener("click", this.bindAddEvent.bind(this));
+    });
+}
 
   bindEvent(e: any) {
-    var tag = e.currentTarget.querySelector('.popover-container');
-    tag.classList.toggle('show-popover');
+    let index = Number(e.currentTarget.getAttribute("data-index"));
+    let value = this.orgTree.find(x => x.Node == index);
+    if (value) {
+      this.memberName = value.Name;
+      this.memberDesignation = value.ParentNode;
+    }
+  }
+
+  bindAddEvent(e: any) {
+    let index = Number(e.currentTarget.getAttribute("data-index"));
   }
 
   ngOnInit(): void {
@@ -77,9 +86,13 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       } else {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border">
-                        <i class="fa-solid fa-plus position-absolute add-icon"></i>
-                        <div class="member-view-box">                            
-                            <div class="p-box">${nodes[i].Name}</div>                            
+                        <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                        <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
+                        <div class="member-view-box">
+                          <div class="member-image">
+                            <img src="assets/images/faces/face.jpg" alt="Member">
+                            <div class="p-box">${nodes[i].Name}</div>
+                          </div>
                         </div>
                       </a>
                     </li>`;
@@ -89,9 +102,13 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
       parentNode += `<li>
                     <a href="javascript:void(0);" class="position-relative border">
-                      <i class="fa-solid fa-plus position-absolute add-icon"></i>
-                      <div class="member-view-box">                            
-                          <div class="p-box">${nodes[i].Name}</div>                            
+                      <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                      <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
+                      <div class="member-view-box">
+                        <div class="member-image">
+                          <img src="assets/images/faces/face.jpg" alt="Member">
+                          <div class="p-box">${nodes[i].Name}</div>
+                          </div>
                       </div>
                     </a>
                     <ul>
@@ -105,7 +122,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     return parentNode;
   }
 
-  getWorkFlowTree() {   
+  getWorkFlowTree() {
     var rootIterator = this.orgTree.filter(x => x.ParentNode == 0);
     var i = 0;
     let rootTree = '';
@@ -143,12 +160,12 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       if (respone) {
         this.orgTree = respone.ResponseBody;
         if (this.orgTree.length == 0) {
-          this.orgTree = [{ 
-            "Node": 1, 
-            "ParentNode": 0, 
-            "Name": "CEO", 
-            "CompanyId": this.company.CompanyId, 
-            "IsActive": 1 
+          this.orgTree = [{
+            "Node": 1,
+            "ParentNode": 0,
+            "Name": "CEO",
+            "CompanyId": this.company.CompanyId,
+            "IsActive": 1
           }];
         }
         this.getWorkFlowTree();
@@ -158,6 +175,11 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         ErrorToast("Fail to add");
       }
     })
+  }
+
+  resetTree() {
+    this.memberName = "";
+    this.memberDesignation = 0;
   }
 
   ngOnDestroy(): void {
