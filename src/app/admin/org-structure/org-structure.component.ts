@@ -28,7 +28,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
   ) { }
 
   addedNewMember() {
-    if(this.memberDesignation != -1) {
+    if (this.memberDesignation != -1) {
       this.isLoaded = false;
       this.orgTree.push({
         "Node": this.orgTree.length + 1,
@@ -49,12 +49,31 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
   bindEventToNodes() {
     let value = this.elementRef.nativeElement.querySelector('div[id="tree-node"]');
     value.querySelectorAll('i[data-name="edit-tree"]').forEach(item => {
-        item.addEventListener("click", this.bindEvent.bind(this));
-      });
+      item.addEventListener("click", this.bindEvent.bind(this));
+    });
+
     value.querySelectorAll('i[data-name="add-tree"]').forEach(item => {
       item.addEventListener("click", this.bindAddEvent.bind(this));
     });
-}
+
+    value.querySelectorAll('button').forEach(item => {
+      item.addEventListener("click", this.bindNewName.bind(this));
+    });
+  }
+
+  bindNewName(e: any) {
+    var name = e.currentTarget.closest('div').querySelector('input').value;
+    let pIndex = Number(e.currentTarget.getAttribute("title"));
+    let index = Number(e.currentTarget.getAttribute("index"));
+    this.isLoaded = false;
+    this.memberDesignation = pIndex;
+    this.orgTree = this.orgTree.filter(x => x.Node != index);
+    if (this.orgTree.length > 0) {
+      this.memberName = name;
+      this.addedNewMember();
+      this.isLoaded = true;
+    }
+  }
 
   bindEvent(e: any) {
     let index = Number(e.currentTarget.getAttribute("data-index"));
@@ -67,11 +86,31 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
   bindAddEvent(e: any) {
     let index = Number(e.currentTarget.getAttribute("data-index"));
+    if (index != -1) {
+      this.memberDesignation = index;
+      this.addedNewMember();
+    }
   }
 
   ngOnInit(): void {
-    this.company =  this.local.findRecord("Companies")[0];
+    this.company = this.local.findRecord("Companies")[0];
     this.loadTree();
+  }
+
+  getUserNameOrAddNew(name: string, pIndex: number, index: number) {
+    var html = '';
+    if (name == null || name == "") {
+      html = `<div class="form-group text-start mt-3 d-flex simple-br-r border">
+                  <input type="text" class="form-control form-control-mini border-0" name="memberName">
+                  <button name="btn-add" title="${pIndex}" index="${index}" class="px-2 border-0 btn-add">
+                    <i class="fa-solid fa-plus"></i>
+                  </button>
+              </div>`;
+    } else {
+      html = `<div class="p-box">${name}</div>`;
+    }
+
+    return html;
   }
 
   getInnerNode(nodes: Array<any>, rootTree: Array<any>) {
@@ -90,9 +129,9 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                         <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
                         <div class="member-view-box">
                           <div class="member-image">
-                            <img src="assets/images/faces/face.jpg" alt="Member">
-                            <div class="p-box">${nodes[i].Name}</div>
+                            <img src="assets/images/faces/face.jpg" alt="Member">                            
                           </div>
+                          ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
                         </div>
                       </a>
                     </li>`;
@@ -106,9 +145,9 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                       <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
                       <div class="member-view-box">
                         <div class="member-image">
-                          <img src="assets/images/faces/face.jpg" alt="Member">
-                          <div class="p-box">${nodes[i].Name}</div>
-                          </div>
+                          <img src="assets/images/faces/face.jpg" alt="Member">                          
+                        </div>
+                        <div class="p-box">${nodes[i].Name}</div>
                       </div>
                     </a>
                     <ul>
@@ -145,36 +184,36 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
   saveTree() {
     this.http.post("ef/filter/addOrganizationHierarchy", this.orgTree, true)
-    .then((respone: ResponseModel) => {
-      if (respone) {
-        Toast(respone.ResponseBody);
-      } else {
-        ErrorToast("Fail to add");
-      }
-    })
+      .then((respone: ResponseModel) => {
+        if (respone) {
+          Toast(respone.ResponseBody);
+        } else {
+          ErrorToast("Fail to add");
+        }
+      })
   }
 
   loadTree() {
     this.http.get(`ef/filter/getOrganizationHierarchy/${this.company.CompanyId}`, true)
-    .then((respone: ResponseModel) => {
-      if (respone) {
-        this.orgTree = respone.ResponseBody;
-        if (this.orgTree.length == 0) {
-          this.orgTree = [{
-            "Node": 1,
-            "ParentNode": 0,
-            "Name": "CEO",
-            "CompanyId": this.company.CompanyId,
-            "IsActive": 1
-          }];
+      .then((respone: ResponseModel) => {
+        if (respone) {
+          this.orgTree = respone.ResponseBody;
+          if (this.orgTree.length == 0) {
+            this.orgTree = [{
+              "Node": 1,
+              "ParentNode": 0,
+              "Name": "CEO",
+              "CompanyId": this.company.CompanyId,
+              "IsActive": 1
+            }];
+          }
+          this.getWorkFlowTree();
+          Toast("Tree structure loaded successfully.");
+          this.isLoaded = true;
+        } else {
+          ErrorToast("Fail to add");
         }
-        this.getWorkFlowTree();
-        Toast("Tree structure loaded successfully.");
-        this.isLoaded = true;
-      } else {
-        ErrorToast("Fail to add");
-      }
-    })
+      })
   }
 
   resetTree() {
