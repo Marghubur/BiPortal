@@ -25,7 +25,9 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <h5>Uploaded Employee Records</h5>
                   <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
-                    correct format of excel sheet. <a href="javascript:void(0)">Click to download the sample.</a></p>
+                    correct format of excel sheet.
+                    <a href="javascript:void(0)" (click)="generateFile()">Click to download the sample.</a>
+                  </p>
                 </div>
 
                 <div class="col-md-12 row x_content fade show">
@@ -229,20 +231,6 @@
                 </div>
               </div>
             </div>
-          </ng-template>
-        </li>
-        <li [ngbNavItem]="3">
-          <a ngbNavLink>Three</a>
-          <ng-template ngbNavContent>
-            <p>
-              Sed commodo, leo at suscipit dictum, quam est porttitor sapien, eget sodales nibh elit id diam. Nulla facilisi.
-              Donec egestas ligula vitae odio interdum aliquet. Duis lectus turpis, luctus eget tincidunt eu, congue et odio.
-              Duis pharetra et nisl at faucibus. Quisque luctus pulvinar arcu, et molestie lectus ultrices et. Sed diam urna,
-              egestas ut ipsum vel, volutpat volutpat neque. Praesent fringilla tortor arcu. Vivamus faucibus nisl enim, nec
-              tristique ipsum euismod facilisis. Morbi ut bibendum est, eu tincidunt odio. Orci varius natoque penatibus et
-              magnis dis parturient montes, nascetur ridiculus mus. Mauris aliquet odio ac lorem aliquet ultricies in eget
-              neque. Phasellus nec tortor vel tellus pulvinar feugiat.
-            </p>
           </ng-template>
         </li>
       </ul>

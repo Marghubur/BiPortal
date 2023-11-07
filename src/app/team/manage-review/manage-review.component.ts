@@ -397,20 +397,19 @@ export class ManageReviewComponent implements OnInit {
     let value = item.value;
     if (value) {
       console.log(value)
-      // this.isLoading =true;
-      // this.http.put(`eps/promotion/reOpenAppraisalObjective/${this.userDetail.UserId}`, value, true)
-      // .then((response: ResponseModel) => {
-      //   if (response) {
-      //     this.isSubmitted = false;
-      //     this.isLoading = false;
-      //     Toast("Current appraisal object re-opened successfully");
-      //   } else {
-      //     this.isLoading = false;
-      //     ErrorToast("Fail to re-opened appraisal object");
-      //   }
-      // }).catch((e: any) => {
-      //   this.isLoading = false;
-      // });
+      this.isLoading =true;
+      this.http.get(`eps/promotion/reOpenEmployeeObjective/${value.employeeId}/${value.appraisalDetailId}`, true)
+      .then((response: ResponseModel) => {
+        if (response) {
+          this.isLoading = false;
+          Toast("Selected employee appraisal object re-opened successfully");
+        } else {
+          this.isLoading = false;
+          ErrorToast("Fail to re-opened appraisal object");
+        }
+      }).catch((e: any) => {
+        this.isLoading = false;
+      });
     }
   }
  }

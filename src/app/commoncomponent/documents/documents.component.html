@@ -20,7 +20,7 @@
             <div class="d-inline ps-1 pe-1">
               <a href="javascript:void(0)" (click)="CreateFolderPopup()">
                 <span class="badge bg-success">
-                  <i class="fa-regular fa-folder-open-o" aria-hidden="true"></i>
+                  <i class="fa-regular fa-folder-open"></i>
                 </span>
               </a>
             </div>
@@ -47,7 +47,7 @@
               <div class="col-12 row m-0 mt-3 mb-3 p-4 border border-warning rounded position-relative">
                 <div class="col-md-3">
                   <a href="javascript:void(0)" class="ps-2">
-                    <i class="fa-regular fa-folder-open text-warning f-zoom" aria-hidden="true"></i>
+                    <i class="fa-regular fa-folder-open text-warning f-zoom"></i>
                   </a>
                   <label class="d-block ps-2">
                     {{getFolderName(folders.FilePath)}}
@@ -63,13 +63,13 @@
                 </div>
                 <div class="folder-action">
                   <!-- <a href="javascript:void(0)" class="ac-dv" (click)="addSubFolder(folders.FolderPath)">
-                    <i class="fa-regular fa-folder-open text-warning" aria-hidden="true"></i>
+                    <i class="fa-regular fa-folder-open text-warning"></i>
                   </a>
                   <a href="javascript:void(0)" class="ac-dv" (click)="addFiles(folders.FolderPath)">
-                    <i class="fa-solid fa-plus-square text-success" aria-hidden="true"></i>
+                    <i class="fa-solid fa-plus-square text-success"></i>
                   </a> -->
                   <a href="javascript:void(0)" class="ac-dv">
-                    <i class="fa-solid fa-trash-can text-danger" aria-hidden="true"></i>
+                    <i class="fa-solid fa-trash-can text-danger"></i>
                   </a>
                 </div>
               </div>
@@ -109,19 +109,6 @@
           <h3>There are no file and folder. Please select at least one file or folder.</h3>
         </div>
       </ng-container>
-      <!-- <ng-container *ngIf="!isPageReady">
-        <div class="py-5 my-5">
-          <h6 class="fw-bold fs-3 text-center text-dark">Files and Folders are loading</h6>
-          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </div>
-      </ng-container> -->
     </div>
   </div>
 </div>
