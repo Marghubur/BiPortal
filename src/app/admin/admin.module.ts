@@ -41,6 +41,7 @@ import { AdminmodalModule } from './../adminmodal/adminmodal.module'
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { MasterDataComponent } from './master-data/master-data.component';
 import { NgChartsModule } from 'ng2-charts';
+import { OrgStructureComponent } from './org-structure/org-structure.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { NgChartsModule } from 'ng2-charts';
     CompanylogoComponent,
     EmaillinkconfigComponent,
     MasterDataComponent,
+    OrgStructureComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { GetRoles } from 'src/providers/ApplicationStorage';
@@ -12,9 +13,10 @@ declare var $: any;
 @Component({
   selector: 'app-manage-appraisal-category',
   templateUrl: './manage-appraisal-category.component.html',
-  styleUrls: ['./manage-appraisal-category.component.scss']
+  styleUrls: ['./manage-appraisal-category.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class ManageAppraisalCategoryComponent implements OnInit {
+export class ManageAppraisalCategoryComponent implements OnInit, OnDestroy {
   appraisalForm: FormGroup;
   isPageReady: boolean = false;
   currentApprisalCycle: ApprisalCycle = new ApprisalCycle();
@@ -44,10 +46,11 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   appraisalDetailAndCategory: Array<any> = [];
   isWorkFlownChainShow: boolean = false;
   selectedWorkFlowDetail: any = null;
-  node: string = "";
+  node: any = null;
 
   constructor(private http: AjaxService,
               private nav:iNavigation,
+              private sanitize: DomSanitizer,
               private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -482,38 +485,29 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     var subRootNode = "";
     var i = 0;
     while(i < nodes.length) {
+      subRootNode = "";
       var childs = rootTree.filter(x => x.ParentNode == nodes[i].node);
       if(childs.length > 0) {
         subRootNode += this.getInnerNode(rootTree.filter(x => x.ParentNode == nodes[i].node), rootTree);
       } else {
-        subRootNode += `<li>
+        parentNode += `<li>
                       <a href="javascript:void(0);">
                           <div class="member-view-box">
                               <div class="member-image">
-                                  <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
-                                  <div class="member-details">
-                                      <h3>{{Node-value}}</h3>
-                                  </div>
+                                <div class="p-box">${nodes[i].value}</div>
                               </div>
                           </div>
                       </a>
                     </li>`;
-
-        subRootNode = subRootNode.replace("{{Node-value}}", nodes[i].node);
         i++;
         continue;
       }
-
-      i++;
 
       parentNode += `<li>
                     <a href="javascript:void(0);">
                         <div class="member-view-box">
                             <div class="member-image">
-                                <img src="https://image.flaticon.com/icons/svg/145/145867.svg" alt="Member">
-                                <div class="member-details">
-                                    <h3>{{Node-value}}</h3>
-                                </div>
+                                <div class="p-box">${nodes[i].value}</div>
                             </div>
                         </div>
                     </a>
@@ -522,22 +516,28 @@ export class ManageAppraisalCategoryComponent implements OnInit {
                     </ul>
                   </li>`;
 
-      this.node += parentNode;
+      i++;
     }
-    return subRootNode;
+
+    return parentNode;
   }
 
   getWorkFlowTree () {
     var tree = [
-      { "node": "1", "ParentNode": null , "value": "0"},
-      { "node": "2", "ParentNode": "1" , "value": "1"},
-      { "node": "3", "ParentNode": "2" , "value": "2"},
-      { "node": "4", "ParentNode": "2" , "value": "2"},
-      { "node": "5", "ParentNode": "1" , "value": "1"},
-      { "node": "6", "ParentNode": "5" , "value": "5"},
-      { "node": "7", "ParentNode": "5" , "value": "5"},
-      { "node": "8", "ParentNode": "7" , "value": "7"},
-      { "node": "9", "ParentNode": "7" , "value": "7"},
+      { "node": "1", "ParentNode": null , "value": "CEO"},
+      { "node": "2", "ParentNode": "1" , "value": "CFO"},
+      { "node": "3", "ParentNode": "1" , "value": "COO"},
+      { "node": "4", "ParentNode": "1" , "value": "CTO"},
+      { "node": "5", "ParentNode": "2" , "value": "Tax"},
+      { "node": "6", "ParentNode": "2" , "value": "Legal"},
+      { "node": "7", "ParentNode": "3" , "value": "Operation's"},
+      { "node": "8", "ParentNode": "4" , "value": "Delivery Manager"},
+      { "node": "9", "ParentNode": "8" , "value": "Project Manager"},
+      { "node": "10", "ParentNode": "9" , "value": "Reporting Manager"},
+      { "node": "11", "ParentNode": "10" , "value": "Development"},
+      { "node": "12", "ParentNode": "10" , "value": "QA"},
+      { "node": "13", "ParentNode": "4" , "value": "RND"},
+      { "node": "14", "ParentNode": "9" , "value": "Analysis"}
     ];
 
     var rootIterator = tree.filter(x => x.ParentNode == null);
@@ -547,6 +547,22 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       rootTree = this.getInnerNode(rootIterator, tree);
       i++;
     }
+
+    this.node = this.sanitize.bypassSecurityTrustHtml(`<ul id="d-ul">${rootTree}</ul>`);
+
+    setTimeout(() => {
+      document.getElementById("d-ul").querySelectorAll('a').forEach(item => {
+        item.addEventListener("click", () => {
+          alert("working");
+        });
+      });
+    }, 1000);
+  }
+
+  ngOnDestroy(): void {
+    document.getElementById("d-ul").querySelectorAll('a').forEach(item => {
+      item.removeEventListener("click", () => { });
+    });
   }
 }
 

@@ -167,6 +167,7 @@ export const AdminResetPassword = `${BaseSubUrlPath}/ems/administration/resetpas
 export const PayrollSettings = `${BaseSubUrlPath}/ems/settings/payrollsettings`
 export const CompanyInfo = `${BaseSubUrlPath}/ems/settings/payrollsettings/company-info`
 export const CompanySettings = `${BaseSubUrlPath}/ems/settings/payrollsettings/company-settings`
+export const OrganizationStruct = `${BaseSubUrlPath}/ems/organization/org-structure`
 export const Expenses = `${BaseSubUrlPath}/ems/administration/expenses`
 export const SalaryBreakup = `${BaseSubUrlPath}/ems/administration/employees/alarybreakup`
 export const EmailService = `${BaseSubUrlPath}/ems/administration/email`

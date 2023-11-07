@@ -1,0 +1,80 @@
+<div class="col-12 full-v main-container" [ngClass]="{'preload': !isLoaded}">
+    <div>
+        <form>
+            <div class="x_panel mh-auto">
+                <div class="x_header">
+                    <div class="d-flex justify-content-between">
+                        <div class="col-8">
+                            <div class="px-1">
+                                <app-breadcrums [title]="'Company Detail'"
+                                    [subtitle]="'Compnay details like: Company name, Bank account etc.'"></app-breadcrums>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="x_header_title d-flex align-items-center justify-content-end">
+                                <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+                                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4"><i
+                                        class="fa-solid fa-paper-plane pe-1"></i> Organization structure</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="x_panel">
+                    <div class="body genealogy-body genealogy-scroll d-flex">
+                        <div class="col-md-10">
+                            <div class="genealogy-tree" id="tree-node">
+                                <ng-container *ngIf="isLoaded">
+                                    <div [innerHTML]="node"></div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="col-md-2 border-start">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control" name="memberName" [(ngModel)]="memberName">
+                                </div>
+                                <div class="form-group">
+                                    <label>Designation</label>
+                                    <select class="form-control" name="memberDesignation" [(ngModel)]="memberDesignation">
+                                        <option value=0>Select Parent Node</option>
+                                        <option [value]=item.Node *ngFor="let item of orgTree">{{item.Name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary-c" (click)="addedNewMember()">Add</button>
+                            <button class="btn btn-primary-c" (click)="saveTree()">Save Hierarchy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--Workflow Modal -->
+<div class="modal fade" id="worflowChainModal" tabindex="-1" aria-labelledby="worflowChainModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content px-3">
+        <div class="modal-header border-bottom-0">
+          <h1 class="modal-title fs-5" id="worflowChainModalLabel">Approval chain flow</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="body genealogy-body genealogy-scroll d-flex">
+            <div class="col-md-8">
+              
+            </div>
+            <div class="col-md-4">
+              tree view
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
