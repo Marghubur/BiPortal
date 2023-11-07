@@ -1,11 +1,8 @@
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService, tableConfig } from 'src/providers/ajax.service';
+import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
-// import { read, utils } from 'xlsx';
 declare var $: any;
 import { Component, OnInit } from '@angular/core';
-import readXlsxFile from 'read-excel-file';
 
 @Component({
   selector: 'app-master-data',
@@ -265,6 +262,30 @@ export class MasterDataComponent implements OnInit {
   //     WarningToast("Please upload atleast one record");
   //   }
   // }
+
+  generateFile() {
+    this.http.get("GenerateExcel/ExportExcel").then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        var binaryData = atob(res.ResponseBody);
+
+        const blob = new Blob([new Uint8Array(binaryData.length).map((_, index) => binaryData.charCodeAt(index))], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a link element to trigger the download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'EmployeeList.xlsx'; // Set the desired file name
+        a.click();
+
+        // Revoke the object URL to free up resources
+        window.URL.revokeObjectURL(url);
+      }
+    })
+  }
 
 }
 

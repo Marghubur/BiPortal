@@ -39,7 +39,7 @@ textarea {
 .genealogy-body {
     white-space: nowrap;
     overflow-y: hidden;
-    padding: 50px;
+    //padding: 50px;
     min-height: 500px;
     padding-top: 10px;
     text-align: center;
@@ -151,6 +151,30 @@ textarea {
 }
 
 .add-icon {
-    right: .2px;
-    top: 2px;
+  left: .2px;
+  top: 2px;
+  z-index: 9999 !important;
+}
+
+.p-box {
+  font-size: 0.9rem !important;
+  padding-top: 10px;
+}
+
+.member-image{
+  width: 60px;
+  position: relative;
+}
+.member-image img{
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color :#000;
+  z-index: 1;
+}
+
+.edit-icon {
+  right: .2px;
+  top: 2px;
+  z-index: 9999 !important;
 }

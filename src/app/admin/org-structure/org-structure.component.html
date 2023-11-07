@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="x_panel">
-                    <div class="body genealogy-body genealogy-scroll d-flex">
+                    <div class="body genealogy-body genealogy-scroll row">
                         <div class="col-md-10">
                             <div class="genealogy-tree" id="tree-node">
                                 <ng-container *ngIf="isLoaded">
@@ -29,22 +29,28 @@
                             </div>
                         </div>
                         <div class="col-md-2 border-start">
+                            <div class="col-md-12 text-end">
+                              <a href="javascript:void(0)" class="text-decoration-none" (click)="resetTree()">
+                                <i class="fa-solid fa-arrows-rotate text-danger"></i>
+                              </a>
+                            </div>
                             <div class="col-12">
-                                <div class="form-group">
-                                    <label>Name</label>
+                                <div class="form-group text-start">
+                                    <label class="form-label">Name</label>
                                     <input type="text" class="form-control" name="memberName" [(ngModel)]="memberName">
                                 </div>
-                                <div class="form-group">
-                                    <label>Designation</label>
+                                <div class="form-group mt-2 text-start">
+                                    <label class="form-label">Designation</label>
                                     <select class="form-control" name="memberDesignation" [(ngModel)]="memberDesignation">
                                         <option value=0>Select Parent Node</option>
                                         <option [value]=item.Node *ngFor="let item of orgTree">{{item.Name}}</option>
                                     </select>
                                 </div>
                             </div>
-
-                            <button class="btn btn-primary-c" (click)="addedNewMember()">Add</button>
-                            <button class="btn btn-primary-c" (click)="saveTree()">Save Hierarchy</button>
+                            <div class="col-md-12 mt-3">
+                              <button class="btn btn-primary-c" (click)="addedNewMember()"> <i class="fa-solid fa-plus pe-1"></i>Add</button>
+                              <button class="btn btn-primary-c ms-2" (click)="saveTree()"><i class="fa-regular fa-floppy-disk pe-1"></i> Save Hierarchy</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -64,7 +70,7 @@
         <div class="modal-body">
           <div class="body genealogy-body genealogy-scroll d-flex">
             <div class="col-md-8">
-              
+
             </div>
             <div class="col-md-4">
               tree view
