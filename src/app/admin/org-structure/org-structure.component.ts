@@ -117,7 +117,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                   </button>
               </div>`;
     } else {
-      html = `<div class="p-box">${name}</div>`;
+      html = `<div class="p-box text-truncate">${name}</div>`;
     }
 
     return html;
@@ -133,48 +133,54 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       if (childs.length > 0) {
         subRootNode += this.getInnerNode(rootTree.filter(x => x.ParentNode == nodes[i].Node), rootTree);
       } else {
+        let addIcon = `<i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-bs-toggle="tooltip" data-bs-title="Add" data-index=${nodes[i].Node}></i>`;
         if (nodes[i].ParentNode ==1) {
           parentNode += `<li>
                         <a href="javascript:void(0);" class="position-relative border">
-                          <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                          {{addIcon}}
                           <div class="member-view-box">
                             <div class="member-image">
                               <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
                               <img src="assets/images/faces/face.jpg" alt="Member">
                             </div>
                             ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
-                            <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-index=${nodes[i].Node}></i>
                           </div>
+                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].Node}></i>
                         </a>
                       </li>`;
         } else {
           parentNode += `<li>
                         <a href="javascript:void(0);" class="position-relative border">
-                          <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                          {{addIcon}}
                           <div class="member-view-box">
                           <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
                             ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
-                            <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-index=${nodes[i].Node}></i>
                           </div>
+                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].Node}></i>
                         </a>
                       </li>`;
         }
+        if (nodes[i].Name)
+        parentNode = parentNode.replace("{{addIcon}}", addIcon);
+        else
+        parentNode = parentNode.replace("{{addIcon}}", "");
+
         i++;
         continue;
       }
-      
+
       if (nodes[i].ParentNode == 0 || nodes[i].ParentNode == 1) {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border">
-                        <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                        <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].Node}></i>
                         <div class="member-view-box">
                           <div class="member-image">
                             <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
-                            <img src="assets/images/faces/face.jpg" alt="Member">                          
+                            <img src="assets/images/faces/face.jpg" alt="Member">
                           </div>
-                          <div class="p-box">${nodes[i].Name}</div>
-                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-index=${nodes[i].Node}></i>
+                          <div class="p-box text-truncate">${nodes[i].Name}</div>
                         </div>
+                        <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].Node}></i>
                       </a>
                       <ul>
                         ${subRootNode}
@@ -183,12 +189,12 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       } else {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border">
-                        <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                        <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].Node}></i>
                         <div class="member-view-box">
                         <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
-                          <div class="p-box">${nodes[i].Name}</div>
-                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-index=${nodes[i].Node}></i>
+                          <div class="p-box text-truncate">${nodes[i].Name}</div>
                         </div>
+                        <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].Node}></i>
                       </a>
                       <ul>
                         ${subRootNode}
