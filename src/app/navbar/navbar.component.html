@@ -10,9 +10,9 @@
           alt="logo"></a>
     </div>
 
-    <div class="fe-2" *ngIf="isAdmin">
+    <div class="fe-2 d-flex" *ngIf="isAdmin">
       <div class="d-flex justify-content-start">
-        <div class="px-4 d-flex justify-content-start icon-action ms-3">
+        <div class="mx-3 d-flex justify-content-start icon-action ms-3">
           <a href="javascript:void(0)" (click)="navLogoPage()" [ngClass]="{'pe-none': isLoading}">
             <div class="d-flex text-center flex-column">
               <!-- <img src="../../assets/ext/image.png" alt="" > -->
@@ -21,7 +21,7 @@
             </div>
           </a>
         </div>
-        <div class="d-flex col-auto justify-content-start icon-action">
+        <div class="mx-3 d-flex col-auto justify-content-start icon-action">
           <a href="javascript:void(0)" (click)="navCompanySetting()" [ngClass]="{'pe-none': isLoading}">
             <div class="d-flex text-center flex-column col-md-12">
               <i class="fa-solid fa-gear fa-lg py-3"></i>
@@ -29,7 +29,7 @@
             </div>
           </a>
         </div>
-        <div class="d-flex col-auto justify-content-start icon-action mx-3">
+        <div class="mx-3 d-flex col-auto justify-content-start icon-action">
           <a href="javascript:void(0)" (click)="navOrgStructure()" [ngClass]="{'pe-none': isLoading}">
             <div class="d-flex text-center flex-column col-md-12">
               <i class="fa-solid fa-sitemap fa-lg py-3"></i>

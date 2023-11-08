@@ -59,6 +59,10 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     value.querySelectorAll('button').forEach(item => {
       item.addEventListener("click", this.bindNewName.bind(this));
     });
+
+    value.querySelectorAll('i[data-name="delete-tree"]').forEach(item => {
+      item.addEventListener("click", this.bindDeleteEvent.bind(this));
+    });
   }
 
   bindNewName(e: any) {
@@ -92,6 +96,12 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     }
   }
 
+  bindDeleteEvent(e: any) {
+    let value = Number(e.currentTarget.getAttribute("data-index"));
+    this.orgTree = this.orgTree.filter(x => x.Node != value);
+    this.getWorkFlowTree();
+  }
+
   ngOnInit(): void {
     this.company = this.local.findRecord("Companies")[0];
     this.loadTree();
@@ -123,37 +133,68 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       if (childs.length > 0) {
         subRootNode += this.getInnerNode(rootTree.filter(x => x.ParentNode == nodes[i].Node), rootTree);
       } else {
-        parentNode += `<li>
-                      <a href="javascript:void(0);" class="position-relative border">
-                        <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
-                        <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
-                        <div class="member-view-box">
-                          <div class="member-image">
-                            <img src="assets/images/faces/face.jpg" alt="Member">                            
+        if (nodes[i].ParentNode ==1) {
+          parentNode += `<li>
+                        <a href="javascript:void(0);" class="position-relative border">
+                          <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                          <div class="member-view-box">
+                            <div class="member-image">
+                              <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
+                              <img src="assets/images/faces/face.jpg" alt="Member">
+                            </div>
+                            ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
+                            <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-index=${nodes[i].Node}></i>
                           </div>
-                          ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
-                        </div>
-                      </a>
-                    </li>`;
+                        </a>
+                      </li>`;
+        } else {
+          parentNode += `<li>
+                        <a href="javascript:void(0);" class="position-relative border">
+                          <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                          <div class="member-view-box">
+                          <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
+                            ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
+                            <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-index=${nodes[i].Node}></i>
+                          </div>
+                        </a>
+                      </li>`;
+        }
         i++;
         continue;
       }
-
-      parentNode += `<li>
-                    <a href="javascript:void(0);" class="position-relative border">
-                      <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
-                      <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
-                      <div class="member-view-box">
-                        <div class="member-image">
-                          <img src="assets/images/faces/face.jpg" alt="Member">                          
+      
+      if (nodes[i].ParentNode == 0 || nodes[i].ParentNode == 1) {
+        parentNode += `<li>
+                      <a href="javascript:void(0);" class="position-relative border">
+                        <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                        <div class="member-view-box">
+                          <div class="member-image">
+                            <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
+                            <img src="assets/images/faces/face.jpg" alt="Member">                          
+                          </div>
+                          <div class="p-box">${nodes[i].Name}</div>
+                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-index=${nodes[i].Node}></i>
                         </div>
-                        <div class="p-box">${nodes[i].Name}</div>
-                      </div>
-                    </a>
-                    <ul>
-                      ${subRootNode}
-                    </ul>
-                  </li>`;
+                      </a>
+                      <ul>
+                        ${subRootNode}
+                      </ul>
+                    </li>`;
+      } else {
+        parentNode += `<li>
+                      <a href="javascript:void(0);" class="position-relative border">
+                        <i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                        <div class="member-view-box">
+                        <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
+                          <div class="p-box">${nodes[i].Name}</div>
+                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-index=${nodes[i].Node}></i>
+                        </div>
+                      </a>
+                      <ul>
+                        ${subRootNode}
+                      </ul>
+                    </li>`;
+      }
 
       i++;
     }
