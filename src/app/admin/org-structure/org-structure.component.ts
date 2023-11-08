@@ -48,8 +48,8 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
   bindEventToNodes() {
     let value = this.elementRef.nativeElement.querySelector('div[id="tree-node"]');
-    value.querySelectorAll('i[data-name="edit-tree"]').forEach(item => {
-      item.addEventListener("click", this.bindEvent.bind(this));
+    value.querySelectorAll('div[data-name="edit-tree"]').forEach(item => {
+      item.addEventListener("dblclick", this.bindEvent.bind(this));
     });
 
     value.querySelectorAll('i[data-name="add-tree"]').forEach(item => {
@@ -63,28 +63,58 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     value.querySelectorAll('i[data-name="delete-tree"]').forEach(item => {
       item.addEventListener("click", this.bindDeleteEvent.bind(this));
     });
+
+    value.querySelectorAll('i[data-name="cancel-tree"]').forEach(item => {
+      item.addEventListener("click", this.bindCanvelEvent.bind(this));
+    });
   }
 
   bindNewName(e: any) {
     var name = e.currentTarget.closest('div').querySelector('input').value;
     let pIndex = Number(e.currentTarget.getAttribute("title"));
     let index = Number(e.currentTarget.getAttribute("index"));
+    let item = this.orgTree.find(x => x.Node == index);
     this.isLoaded = false;
-    this.memberDesignation = pIndex;
-    this.orgTree = this.orgTree.filter(x => x.Node != index);
-    if (this.orgTree.length > 0) {
-      this.memberName = name;
-      this.addedNewMember();
+    if (item.Name == "") {
+      this.memberDesignation = pIndex;
+      this.orgTree = this.orgTree.filter(x => x.Node != index);
+      if (this.orgTree.length > 0) {
+        this.memberName = name;
+        this.addedNewMember();
+        this.isLoaded = true;
+      }
+    } else {
+      item.Name = name.toLocaleUpperCase();
+      this.getWorkFlowTree();
       this.isLoaded = true;
+      this.memberName = "";
+      this.memberDesignation = 0;
     }
+  }
+
+  bindCanvelEvent(e: any) {
+    this.isLoaded = false;
+    this.getWorkFlowTree();
+    this.isLoaded = true;
   }
 
   bindEvent(e: any) {
     let index = Number(e.currentTarget.getAttribute("data-index"));
     let value = this.orgTree.find(x => x.Node == index);
     if (value) {
-      this.memberName = value.Name;
-      this.memberDesignation = value.ParentNode;
+      e.currentTarget.querySelector(".p-box").classList.add("d-none");
+      e.currentTarget.querySelector(".form-group").classList.remove("d-none");
+      e.currentTarget.querySelector(".form-control").value = value.Name;
+      let elem = document.querySelectorAll(`i[data-index='${index}']`);
+      if (elem && elem.length > 0) {
+        elem.forEach(x => {
+          if(!x.classList.contains("fa-xmark"))
+            x.classList.add("d-none");
+        });
+      }
+    //   this.memberName = value.Name;
+    //   this.memberDesignation = value.ParentNode;
+
     }
   }
 
@@ -117,7 +147,14 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                   </button>
               </div>`;
     } else {
-      html = `<div class="p-box text-truncate">${name}</div>`;
+      html = `<div class="p-box text-truncate">${name}</div>
+              <div class="form-group text-start mt-3 d-flex simple-br-r border d-none">
+                <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${name}>
+                <button name="btn-add" title="${pIndex}" index="${index}" class="px-2 border-0 btn-add">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+                <i class="fa-solid fa-xmark position-absolute cancel-icon" data-name="cancel-tree" data-bs-toggle="tooltip" data-bs-title="Cancel" data-index=${index}></i>
+              </div>`;
     }
 
     return html;
@@ -138,12 +175,13 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
           parentNode += `<li>
                         <a href="javascript:void(0);" class="position-relative border">
                           {{addIcon}}
-                          <div class="member-view-box">
+                          <div class="member-view-box mb-1">
                             <div class="member-image">
-                              <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
                               <img src="assets/images/faces/face.jpg" alt="Member">
                             </div>
-                            ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
+                            <div data-name="edit-tree" data-index=${nodes[i].Node}>
+                              ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
+                            </div>
                           </div>
                           <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].Node}></i>
                         </a>
@@ -152,8 +190,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
           parentNode += `<li>
                         <a href="javascript:void(0);" class="position-relative border">
                           {{addIcon}}
-                          <div class="member-view-box">
-                          <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
+                          <div class="member-view-box mb-1" data-name="edit-tree" data-index=${nodes[i].Node}>
                             ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
                           </div>
                           <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].Node}></i>
@@ -173,12 +210,11 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border">
                         <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].Node}></i>
-                        <div class="member-view-box">
+                        <div class="member-view-box mb-1">
                           <div class="member-image">
-                            <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
                             <img src="assets/images/faces/face.jpg" alt="Member">
                           </div>
-                          <div class="p-box text-truncate">${nodes[i].Name}</div>
+                          <div class="p-box text-truncate" data-name="edit-tree" data-index=${nodes[i].Node}>${nodes[i].Name}</div>
                         </div>
                         <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].Node}></i>
                       </a>
@@ -190,9 +226,9 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border">
                         <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].Node}></i>
-                        <div class="member-view-box">
-                        <i class="fa-solid fa-pencil position-absolute edit-icon" data-name="edit-tree" data-index=${nodes[i].Node}></i>
-                          <div class="p-box text-truncate">${nodes[i].Name}</div>
+                        <div class="member-view-box mb-1">
+                        <i class="fa-solid fa-pencil position-absolute edit-icon"></i>
+                          <div class="p-box text-truncate" data-name="edit-tree" data-index=${nodes[i].Node}>${nodes[i].Name}</div>
                         </div>
                         <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].Node}></i>
                       </a>
