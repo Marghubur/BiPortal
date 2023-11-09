@@ -299,7 +299,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   // }
 
   trackElement(e: any) {
-    alert(e);
+    // alert(e);
   }
 
 

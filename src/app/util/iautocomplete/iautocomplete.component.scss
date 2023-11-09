@@ -505,3 +505,20 @@ input:focus {
   border-bottom: 1px solid #d9d9d9;
   padding: 0.4rem 0.75rem;
 }
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  position: relative;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  right: 4px;
+  top: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

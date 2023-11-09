@@ -18,7 +18,7 @@
                 <label class="form-label pe-3 mt-1">Developer</label>
                 <div class="col-md-9">
                   <bot-autocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
-                    (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                    (OnSelect)="onEmloyeeChanged($event)" (OnServerFilter)="serverFilter($event)" (keydown.esc)="resetFilter()">
                   </bot-autocomplete>
                 </div>
               </div>

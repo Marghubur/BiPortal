@@ -5,13 +5,14 @@
       name="iautofill-textfield" (click)="ShowAutofillDropdown()" (focus)="ShowAutofillDropdown()"
       [placeholder]="placeholder" [attr.value]="InitValue" [attr.data]="InitData"  title="bt-autocomplete"/>
     <div class="iautofill-suggestion-dv d-none" name="suggestionBox-dv" title="bt-autocomplete">
-      <div class="">
+      <div class="d-flex">
         <div class="selected-item-chip" *ngIf="IsMultiSelect">
           selected Items
         </div>
         <input type="text" (keyup)="onKeyUp($event)" (keydown)="onKeyPress($event)" (keydown.shift.tab)="NoAction()" title="bt-autocomplete"
           (keydown.control.space)="LoadFromApi($event)" class="biginput border-0 nb simple-field form-control" 
           [ngClass]="ClassName" name="autocomplete" placeholder="type here ..." />
+        <div class="spinner" *ngIf="isStartFilter"></div>
       </div>
       <div *ngIf="!isShowEmptyRow" class="autocomplete-suggestions w-100" name="iautofill-div"
         style="position: relative; max-height: 300px; z-index: 9999;" title="bt-autocomplete">

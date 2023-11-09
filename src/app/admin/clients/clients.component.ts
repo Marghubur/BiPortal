@@ -295,11 +295,6 @@ export class ClientsComponent implements OnInit {
     this.anyFilter = "";
   }
 
-  // DeleteCurrent(e: any) {
-  //   alert(e.ClientId);
-  //   this.ClosePopup();
-  // }
-
   CreatePopup(e: any) {
     $('#deleteClient').modal('show');
   }

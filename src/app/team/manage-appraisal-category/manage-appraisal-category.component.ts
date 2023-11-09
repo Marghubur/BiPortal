@@ -553,7 +553,7 @@ export class ManageAppraisalCategoryComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       document.getElementById("d-ul").querySelectorAll('a').forEach(item => {
         item.addEventListener("click", () => {
-          alert("working");
+          // alert("working");
         });
       });
     }, 1000);

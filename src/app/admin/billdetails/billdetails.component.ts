@@ -101,6 +101,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       text: 'All result'
     }];
   }
+  
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({
       trigger: 'hover'
@@ -204,6 +205,10 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   onEmloyeeChanged(_: any) {
     this.local.setByKey("EmployeeId", this.employeeId);
     this.filterRecords();
+  }
+
+  serverFilter(name: string) {
+    alert(name);
   }
 
   onDateSelection(e: NgbDate) {
