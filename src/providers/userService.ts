@@ -18,21 +18,21 @@ export class UserService {
 }
 
 export class Filter {
-  EmployeeId: number = 0;
-  ClientId: number = 0;
+  EmployeeId?: number = 0;
+  ClientId?: number = 0;
   SearchString: string = "1=1";
   PageIndex: number = 1;
-  StartIndex: number = 0;
-  EndIndex: number = 0;
+  StartIndex?: number = 0;
+  EndIndex?: number = 0;
   PageSize: number = 10;
-  SortBy: string = "";
+  SortBy?: string = "";
   CompanyId: number = 0;
-  TotalRecords: number = 0;
-  ShowPageNo: number = 5;
-  ActivePageNumber: number = 1;
-  isReUseSame: boolean = false;
+  TotalRecords?: number = 0;
+  ShowPageNo?: number = 5;
+  ActivePageNumber?: number = 1;
+  isReUseSame?: boolean = false;
   isActive?: boolean = true;
-  SortDirection: string = null;
+  SortDirection?: string = null;
 
   update(total: any) {
     if(!isNaN(Number(total))) {

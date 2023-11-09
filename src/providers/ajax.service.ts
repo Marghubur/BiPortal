@@ -7,6 +7,8 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { environment } from "src/environments/environment";
+import { Filter } from "./userService";
+import { pairData } from "src/app/util/iautocomplete/iautocomplete.component";
 
 @Injectable()
 export class AjaxService {
@@ -39,6 +41,16 @@ export class AjaxService {
       return environment.baseSpringUrl;
     else
       return environment.baseDotNetUrl;
+  }
+
+  async getFilterEmployee(filter: Filter) {
+    let result: Array<pairData> = [];
+    let response: ResponseModel = await this.post(`ef/filter/employeeFilterByName`, filter, true);
+    if (response.ResponseBody && response.ResponseBody instanceof Array) {
+      result = response.ResponseBody;
+    }
+
+    return result;
   }
 
   login(Url: string, Param: any, isJavaRoute: boolean = false): Promise<ResponseModel> {

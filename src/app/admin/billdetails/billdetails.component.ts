@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { AddNumbers, ErrorToast, MonthName, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
@@ -207,27 +207,23 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.filterRecords();
   }
 
-  serverFilter(query: string) {
+  async serverFilter(query: string) {
     if(query == null) {
       query = "";
     }
 
-    this.http.post(`ef/filter/employeeFilterByName`, {
-      SearchString: query,
-      PageIndex: 1,
-      PageSize: 10,
-      CompanyId: 1
-    }, true).then((response: ResponseModel) => {
-      if (response.ResponseBody && response.ResponseBody instanceof Array) {
-        this.autoCompleteModal = {
-          data: response.ResponseBody,
-          placeholder: "Select Employee",
-          className: "normal"
-        };
+    let filter: Filter = new Filter();
+    filter.SearchString = query;
+    filter.PageIndex = 1;
+    filter.PageSize = 100;
+    filter.CompanyId = 1;
 
-        Toast("Record filtered successfully")
-      }
-    });
+    let result: Array<pairData> = await this.http.getFilterEmployee(filter);
+    this.autoCompleteModal = {
+        data: result,
+        placeholder: "Select Employee",
+        className: "normal"
+    };
   }
 
   onDateSelection(e: NgbDate) {
