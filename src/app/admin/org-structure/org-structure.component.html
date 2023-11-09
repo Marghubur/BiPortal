@@ -6,13 +6,12 @@
                     <div class="d-flex justify-content-between">
                         <div class="col-8">
                             <div class="px-1">
-                                <app-breadcrums [title]="'Company Detail'"
-                                    [subtitle]="'Compnay details like: Company name, Bank account etc.'"></app-breadcrums>
+                                <app-breadcrums [title]="'Organization Hierarchy Detail'"
+                                    [subtitle]="'Hierarchy Detail like CEO, CFO, Manager etc.'"></app-breadcrums>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="x_header_title d-flex align-items-center justify-content-end">
-                                <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
                                 <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4"><i
                                         class="fa-solid fa-paper-plane pe-1"></i> Organization structure</a>
                             </div>
@@ -60,26 +59,42 @@
 </div>
 
 <!--Workflow Modal -->
-<div class="modal fade" id="worflowChainModal" tabindex="-1" aria-labelledby="worflowChainModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+<div class="modal fade" id="delteHierarchyModal" tabindex="-1" aria-labelledby="delteHierarchyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content px-3">
         <div class="modal-header border-bottom-0">
-          <h1 class="modal-title fs-5" id="worflowChainModalLabel">Approval chain flow</h1>
+          <h1 class="modal-title fs-5" id="delteHierarchyModalLabel">Delete Hierarchy Node</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <div class="body genealogy-body genealogy-scroll d-flex">
-            <div class="col-md-8">
-
-            </div>
-            <div class="col-md-4">
-              tree view
-            </div>
-          </div>
+        <div class="modal-body" *ngIf="selectHierarchyNode != null">
+           <span class="fw-bold text-danger">Are you want to delete {{selectHierarchyNode.Name}} from Hierarchy.</span>
+            <ng-container *ngIf="selectedChildNodes.length > 0">
+              <div class="">
+                <div class="form-check col-auto mt-3">
+                  <input class="form-check-input" type="radio" [value]="true" [(ngModel)]="isDeleteAllNodes" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    Cascade Delete (Parent with child nodes)
+                  </label>
+                </div>
+                <div class="form-check col-auto mt-3">
+                  <input class="form-check-input" type="radio" [value]="false" [(ngModel)]="isDeleteAllNodes" name="flexRadioDefault" id="flexRadioDefault2">
+                  <label class="form-check-label" for="flexRadioDefault2">
+                    Nodes are shifted to
+                  </label>
+                </div>
+              </div>
+              <div class="form-group mt-2 text-start" *ngIf="!isDeleteAllNodes">
+                <label class="form-label">Designation</label>
+                <select class="form-control" name="memberDesignation" [(ngModel)]="memberDesignation">
+                    <option value=0 disabled>Select Parent Node</option>
+                    <option [value]=item.Node *ngFor="let item of remainingDesignation">{{item.Name}}</option>
+                </select>
+              </div>
+            </ng-container>
         </div>
         <div class="modal-footer border-top-0">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark pe-1"></i>Close</button>
+          <button type="button" class="btn btn-danger" (click)="delteHerarchyNode()"><i class="fa-regular fa-trash-can pe-1"></i> Delete</button>
         </div>
       </div>
     </div>
