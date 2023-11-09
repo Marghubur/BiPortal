@@ -19,6 +19,10 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
   memberDesignation: number = 0;
   orgTree: Array<any> = [];
   company: any = null;
+  selectHierarchyNode: any = null;
+  selectedChildNodes: Array<any> = [];
+  isDeleteAllNodes: boolean = true;
+  remainingDesignation: Array<any> = [];
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -64,8 +68,12 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       item.addEventListener("click", this.bindDeleteEvent.bind(this));
     });
 
-    value.querySelectorAll('i[data-name="cancel-tree"]').forEach(item => {
-      item.addEventListener("click", this.bindCanvelEvent.bind(this));
+    // value.querySelectorAll('i[data-name="cancel-tree"]').forEach(item => {
+    //   item.addEventListener("click", this.bindCanvelEvent.bind(this));
+    // });
+
+    value.querySelectorAll('input').forEach(item => {
+      item.addEventListener("blur", this.bindCanvelEvent.bind(this));
     });
   }
 
@@ -105,6 +113,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       e.currentTarget.querySelector(".p-box").classList.add("d-none");
       e.currentTarget.querySelector(".form-group").classList.remove("d-none");
       e.currentTarget.querySelector(".form-control").value = value.Name;
+      e.currentTarget.querySelector(".form-control").focus();
       let elem = document.querySelectorAll(`i[data-index='${index}']`);
       if (elem && elem.length > 0) {
         elem.forEach(x => {
@@ -128,8 +137,50 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
   bindDeleteEvent(e: any) {
     let value = Number(e.currentTarget.getAttribute("data-index"));
-    this.orgTree = this.orgTree.filter(x => x.Node != value);
+    let data = this.orgTree.find(x => x.Node == value);
+    this.selectHierarchyNode = null;
+    this.isDeleteAllNodes = true;
+    if (data && data.Name != "") {
+      this.selectHierarchyNode = data;
+      this.selectedChildNodes = this.orgTree.filter(x => x.ParentNode == this.selectHierarchyNode.Node);
+      this.remainingDesignation = this.orgTree.filter(x => x.Node != value);
+      $("#delteHierarchyModal").modal('show');
+    } else {
+      this.orgTree = this.orgTree.filter(x => x.Node != value);
+    }
     this.getWorkFlowTree();
+  }
+
+  delteHerarchyNode() {
+    if (this.selectedChildNodes.length > 0) {
+      if (this.isDeleteAllNodes) {
+        this.deleteInnerNode(this.selectHierarchyNode.Node);
+      } else {
+        if (this.memberDesignation > 0)
+          this.orgTree.filter(x => x.ParentNode == this.selectHierarchyNode.Node).map(x => x.ParentNode = this.memberDesignation);
+        else {
+          ErrorToast("Please select parent node");
+          return;
+        }
+      }
+    }
+
+    this.orgTree = this.orgTree.filter(x => x.Node != this.selectHierarchyNode.Node);
+    $("#delteHierarchyModal").modal('hide');
+    this.getWorkFlowTree();
+  }
+
+  deleteInnerNode(node: number) {
+    if (node > 0) {
+      let child = this.orgTree.filter(x => x.ParentNode == node);
+      if (child && child.length > 0) {
+        child.forEach(x => {
+          this.deleteInnerNode(x.Node);
+        })
+      } else {
+        this.orgTree = this.orgTree.filter(x => x.Node != node);
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -141,7 +192,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     var html = '';
     if (name == null || name == "") {
       html = `<div class="form-group text-start mt-3 d-flex simple-br-r border">
-                  <input type="text" class="form-control form-control-mini border-0" name="memberName">
+                  <input type="text" class="form-control form-control-mini border-0" name="memberName" autofocus>
                   <button name="btn-add" title="${pIndex}" index="${index}" class="px-2 border-0 btn-add">
                     <i class="fa-solid fa-plus"></i>
                   </button>
@@ -149,11 +200,10 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     } else {
       html = `<div class="p-box text-truncate">${name}</div>
               <div class="form-group text-start mt-3 d-flex simple-br-r border d-none">
-                <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${name}>
+                <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${name} autofocus>
                 <button name="btn-add" title="${pIndex}" index="${index}" class="px-2 border-0 btn-add">
                   <i class="fa-solid fa-plus"></i>
                 </button>
-                <i class="fa-solid fa-xmark position-absolute cancel-icon" data-name="cancel-tree" data-bs-toggle="tooltip" data-bs-title="Cancel" data-index=${index}></i>
               </div>`;
     }
 
@@ -212,9 +262,18 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                         <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].Node}></i>
                         <div class="member-view-box mb-1">
                           <div class="member-image">
+                            <i class="fa-solid fa-pencil position-absolute edit-icon"></i>
                             <img src="assets/images/faces/face.jpg" alt="Member">
                           </div>
-                          <div class="p-box text-truncate" data-name="edit-tree" data-index=${nodes[i].Node}>${nodes[i].Name}</div>
+                          <div data-name="edit-tree" data-index=${nodes[i].Node}>
+                            <div class="p-box text-truncate">${nodes[i].Name}</div>
+                            <div class="form-group text-start mt-3 d-flex simple-br-r border d-none">
+                              <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${nodes[i].Name} autofocus>
+                              <button name="btn-add" title="${nodes[i].ParentNode}" index="${nodes[i].Node}" class="px-2 border-0 btn-add">
+                                <i class="fa-solid fa-plus"></i>
+                              </button>
+                            </div>
+                          </div>
                         </div>
                         <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].Node}></i>
                       </a>
@@ -226,9 +285,14 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border">
                         <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].Node}></i>
-                        <div class="member-view-box mb-1">
-                        <i class="fa-solid fa-pencil position-absolute edit-icon"></i>
-                          <div class="p-box text-truncate" data-name="edit-tree" data-index=${nodes[i].Node}>${nodes[i].Name}</div>
+                        <div class="member-view-box mb-1" data-name="edit-tree" data-index=${nodes[i].Node}>
+                          <div class="p-box text-truncate" >${nodes[i].Name}</div>
+                          <div class="form-group text-start mt-3 d-flex simple-br-r border d-none">
+                            <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${nodes[i].Name} autofocus>
+                            <button name="btn-add" title="${nodes[i].ParentNode}" index="${nodes[i].Node}" class="px-2 border-0 btn-add">
+                              <i class="fa-solid fa-plus"></i>
+                            </button>
+                          </div>
                         </div>
                         <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].Node}></i>
                       </a>
