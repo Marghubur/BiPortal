@@ -31,11 +31,24 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     private local: ApplicationStorage
   ) { }
 
+  getNextNodeIndex() {
+    var index = 0;
+    if (this.orgTree.length > 0) {
+      var list = this.orgTree.sort((a,b) => a.Node > b.Node ? 1 : -1)
+      index = list[list.length - 1].Node;
+    }
+
+    return index + 1
+  }
+
   addedNewMember() {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    event.stopPropagation();
     if (this.memberDesignation != -1) {
       this.isLoaded = false;
       this.orgTree.push({
-        "Node": this.orgTree.length + 1,
+        "Node": this.getNextNodeIndex(),
         "ParentNode": this.memberDesignation,
         "Name": this.memberName.toLocaleUpperCase(),
         "CompanyId": this.company.CompanyId,

@@ -20,14 +20,17 @@
                 </div>
                 <div class="x_panel">
                     <div class="body genealogy-body genealogy-scroll row">
-                        <div class="col-md-10">
+                        <div class="col-md-12 overflow-auto">
+                          <div class="position-absolute">
+                            <button class="btn btn-primary-c ms-2" (click)="saveTree()"><i class="fa-regular fa-floppy-disk pe-1"></i> Save Hierarchy</button>
+                          </div>
                             <div class="genealogy-tree" id="tree-node">
                                 <ng-container *ngIf="isLoaded">
                                     <div [innerHTML]="node"></div>
                                 </ng-container>
                             </div>
                         </div>
-                        <div class="col-md-2 border-start">
+                        <div class="d-none col-md-2 border-start">
                             <div class="col-md-12 text-end">
                               <a href="javascript:void(0)" class="text-decoration-none" (click)="resetTree()">
                                 <i class="fa-solid fa-arrows-rotate text-danger"></i>
