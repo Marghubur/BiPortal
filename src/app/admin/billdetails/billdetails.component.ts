@@ -207,8 +207,27 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     this.filterRecords();
   }
 
-  serverFilter(name: string) {
-    alert(name);
+  serverFilter(query: string) {
+    if(query == null) {
+      query = "";
+    }
+
+    this.http.post(`ef/filter/employeeFilterByName`, {
+      SearchString: query,
+      PageIndex: 1,
+      PageSize: 10,
+      CompanyId: 1
+    }, true).then((response: ResponseModel) => {
+      if (response.ResponseBody && response.ResponseBody instanceof Array) {
+        this.autoCompleteModal = {
+          data: response.ResponseBody,
+          placeholder: "Select Employee",
+          className: "normal"
+        };
+
+        Toast("Record filtered successfully")
+      }
+    });
   }
 
   onDateSelection(e: NgbDate) {

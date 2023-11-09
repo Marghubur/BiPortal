@@ -144,10 +144,8 @@ export class IautocompleteComponent implements OnInit, OnDestroy, ControlValueAc
   }
 
   LoadFromApi(e: any) {
-    if(e.target.value.length > 2) {
-      this.isStartFilter = true;
-      this.OnServerFilter.emit(e.target.value);
-    }
+    this.isStartFilter = true;
+    this.OnServerFilter.emit(e.target.value);
   }
 
   BindDefaultValue() {
