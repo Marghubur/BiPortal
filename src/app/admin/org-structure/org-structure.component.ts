@@ -72,7 +72,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     //   item.addEventListener("click", this.bindCanvelEvent.bind(this));
     // });
 
-    value.querySelectorAll('input').forEach(item => {
+    value.querySelectorAll('.form-group').forEach(item => {
       item.addEventListener("blur", this.bindCanvelEvent.bind(this));
     });
   }
