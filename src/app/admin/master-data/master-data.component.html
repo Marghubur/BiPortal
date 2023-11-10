@@ -112,7 +112,7 @@
                     </div>
                     <div class="mt-4">
                       <button type="button" class="btn btn-primary-c" (click)="uploadEmployeeExcelSheet()" [disabled]="isDisable || isLoading">
-                        <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
+                        <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, ' fa-upload': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
                       </button>
                       <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
@@ -219,7 +219,7 @@
                     </div>
                     <div class="mt-4">
                       <button type="button" class="btn btn-primary-c" (click)="uploadExcelSheet()" [disabled]="isDisable || isLoading">
-                        <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
+                        <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-upload': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
                       </button>
                       <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
@@ -338,7 +338,7 @@
             </div>
             <div class="mt-4">
               <button type="button" class="btn btn-primary-c" (click)="uploadExcel()" [disabled]="isDisable">
-                <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
+                <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-upload': !isLoading}"></i>
                 <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
               </button>
               <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"

@@ -88,6 +88,36 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     value.querySelectorAll('.form-group').forEach(item => {
       item.addEventListener("blur", this.bindCanvelEvent.bind(this));
     });
+
+    value.querySelectorAll('.form-group').forEach(item => {
+      item.addEventListener("keypress", this.onEnterBineNewName.bind(this));
+    });
+  }
+
+  onEnterBineNewName(e: any) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      var name = e.currentTarget.closest('div').querySelector('input').value;
+      let pIndex = Number(e.currentTarget.getElementsByTagName("button")[0].getAttribute("title"));
+      let index = Number(e.currentTarget.getElementsByTagName("button")[0].getAttribute("index"));
+      let item = this.orgTree.find(x => x.Node == index);
+      this.isLoaded = false;
+      if (item.Name == "") {
+        this.memberDesignation = pIndex;
+        this.orgTree = this.orgTree.filter(x => x.Node != index);
+        if (this.orgTree.length > 0) {
+          this.memberName = name;
+          this.addedNewMember();
+          this.isLoaded = true;
+        }
+      } else {
+        item.Name = name.toLocaleUpperCase();
+        this.getWorkFlowTree();
+        this.isLoaded = true;
+        this.memberName = "";
+        this.memberDesignation = 0;
+      }
+    }
   }
 
   bindNewName(e: any) {
@@ -350,6 +380,8 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         } else {
           ErrorToast("Fail to add");
         }
+      }).catch(e => {
+        ErrorToast(e.error)
       })
   }
 
@@ -373,6 +405,8 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
         } else {
           ErrorToast("Fail to add");
         }
+      }).catch(e => {
+        ErrorToast(e.error);
       })
   }
 
