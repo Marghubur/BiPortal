@@ -16,7 +16,7 @@ declare var $: any;
   styleUrls: ['./manage-appraisal-category.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ManageAppraisalCategoryComponent implements OnInit, OnDestroy {
+export class ManageAppraisalCategoryComponent implements OnInit {
   appraisalForm: FormGroup;
   isPageReady: boolean = false;
   currentApprisalCycle: ApprisalCycle = new ApprisalCycle();
@@ -73,7 +73,6 @@ export class ManageAppraisalCategoryComponent implements OnInit, OnDestroy {
     })
     this.isSubmitted = false;
     let data = this.nav.getValue();
-    this.getWorkFlowTree();
     if (data) {
       this.loadData(data.ObjectiveCatagoryId);
     } else {
@@ -478,91 +477,6 @@ export class ManageAppraisalCategoryComponent implements OnInit, OnDestroy {
 
   viewApprovalChainFlow() {
     $("#worflowChainModal").modal("show");
-  }
-
-  getInnerNode(nodes: Array<any>, rootTree: Array<any>) {
-    var parentNode = "";
-    var subRootNode = "";
-    var i = 0;
-    while(i < nodes.length) {
-      subRootNode = "";
-      var childs = rootTree.filter(x => x.ParentNode == nodes[i].node);
-      if(childs.length > 0) {
-        subRootNode += this.getInnerNode(rootTree.filter(x => x.ParentNode == nodes[i].node), rootTree);
-      } else {
-        parentNode += `<li>
-                      <a href="javascript:void(0);">
-                          <div class="member-view-box">
-                              <div class="member-image">
-                                <div class="p-box">${nodes[i].value}</div>
-                              </div>
-                          </div>
-                      </a>
-                    </li>`;
-        i++;
-        continue;
-      }
-
-      parentNode += `<li>
-                    <a href="javascript:void(0);">
-                        <div class="member-view-box">
-                            <div class="member-image">
-                                <div class="p-box">${nodes[i].value}</div>
-                            </div>
-                        </div>
-                    </a>
-                    <ul>
-                      ${subRootNode}
-                    </ul>
-                  </li>`;
-
-      i++;
-    }
-
-    return parentNode;
-  }
-
-  getWorkFlowTree () {
-    var tree = [
-      { "node": "1", "ParentNode": null , "value": "CEO"},
-      { "node": "2", "ParentNode": "1" , "value": "CFO"},
-      { "node": "3", "ParentNode": "1" , "value": "COO"},
-      { "node": "4", "ParentNode": "1" , "value": "CTO"},
-      { "node": "5", "ParentNode": "2" , "value": "Tax"},
-      { "node": "6", "ParentNode": "2" , "value": "Legal"},
-      { "node": "7", "ParentNode": "3" , "value": "Operation's"},
-      { "node": "8", "ParentNode": "4" , "value": "Delivery Manager"},
-      { "node": "9", "ParentNode": "8" , "value": "Project Manager"},
-      { "node": "10", "ParentNode": "9" , "value": "Reporting Manager"},
-      { "node": "11", "ParentNode": "10" , "value": "Development"},
-      { "node": "12", "ParentNode": "10" , "value": "QA"},
-      { "node": "13", "ParentNode": "4" , "value": "RND"},
-      { "node": "14", "ParentNode": "9" , "value": "Analysis"}
-    ];
-
-    var rootIterator = tree.filter(x => x.ParentNode == null);
-    var i = 0;
-    let rootTree = '';
-    while(i < rootIterator.length) {
-      rootTree = this.getInnerNode(rootIterator, tree);
-      i++;
-    }
-
-    this.node = this.sanitize.bypassSecurityTrustHtml(`<ul id="d-ul">${rootTree}</ul>`);
-
-    setTimeout(() => {
-      document.getElementById("d-ul").querySelectorAll('a').forEach(item => {
-        item.addEventListener("click", () => {
-          // alert("working");
-        });
-      });
-    }, 1000);
-  }
-
-  ngOnDestroy(): void {
-    document.getElementById("d-ul").querySelectorAll('a').forEach(item => {
-      item.removeEventListener("click", () => { });
-    });
   }
 }
 

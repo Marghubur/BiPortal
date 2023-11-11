@@ -46,7 +46,7 @@
                                   <label class="form-label">Designation</label>
                                   <select class="form-control" name="memberDesignation" [(ngModel)]="memberDesignation">
                                       <option value=0>Select Parent Node</option>
-                                      <option [value]=item.Node *ngFor="let item of orgTree">{{item.Name}}</option>
+                                      <option [value]=item.RoleId *ngFor="let item of orgTree">{{item.RoleName}}</option>
                                   </select>
                               </div>
                           </div>
@@ -79,7 +79,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" *ngIf="selectHierarchyNode != null">
-           <span class="fw-bold text-danger">Are you want to delete {{selectHierarchyNode.Name}} from Hierarchy.</span>
+           <span class="fw-bold text-danger">Are you want to delete {{selectHierarchyNode.RoleName}} from Hierarchy.</span>
             <ng-container *ngIf="selectedChildNodes.length > 0">
               <div class="">
                 <div class="form-check col-auto mt-3">
@@ -99,7 +99,7 @@
                 <label class="form-label">Designation</label>
                 <select class="form-control" name="memberDesignation" [(ngModel)]="memberDesignation">
                     <option value=0 disabled>Select Parent Node</option>
-                    <option [value]=item.Node *ngFor="let item of remainingDesignation">{{item.Name}}</option>
+                    <option [value]=item.RoleId *ngFor="let item of remainingDesignation">{{item.RoleName}}</option>
                 </select>
               </div>
             </ng-container>

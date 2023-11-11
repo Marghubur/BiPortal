@@ -34,8 +34,8 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
   getNextNodeIndex() {
     var index = 0;
     if (this.orgTree.length > 0) {
-      var list = this.orgTree.sort((a,b) => a.Node > b.Node ? 1 : -1)
-      index = list[list.length - 1].Node;
+      var list = this.orgTree.sort((a,b) => a.RoleId > b.RoleId ? 1 : -1)
+      index = list[list.length - 1].RoleName;
     }
 
     return index + 1
@@ -48,9 +48,9 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     if (this.memberDesignation != -1) {
       this.isLoaded = false;
       this.orgTree.push({
-        "Node": this.getNextNodeIndex(),
+        "RoleId": this.getNextNodeIndex(),
         "ParentNode": this.memberDesignation,
-        "Name": this.memberName.toLocaleUpperCase(),
+        "RoleName": this.memberName.toLocaleUpperCase(),
         "CompanyId": this.company.CompanyId,
         "IsActive": 1
       });
@@ -100,18 +100,18 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       var name = e.currentTarget.closest('div').querySelector('input').value;
       let pIndex = Number(e.currentTarget.getElementsByTagName("button")[0].getAttribute("title"));
       let index = Number(e.currentTarget.getElementsByTagName("button")[0].getAttribute("index"));
-      let item = this.orgTree.find(x => x.Node == index);
+      let item = this.orgTree.find(x => x.RoleId == index);
       this.isLoaded = false;
-      if (item.Name == "") {
+      if (item.RoleName == "") {
         this.memberDesignation = pIndex;
-        this.orgTree = this.orgTree.filter(x => x.Node != index);
+        this.orgTree = this.orgTree.filter(x => x.RoleId != index);
         if (this.orgTree.length > 0) {
           this.memberName = name;
           this.addedNewMember();
           this.isLoaded = true;
         }
       } else {
-        item.Name = name.toLocaleUpperCase();
+        item.RoleName = name.toLocaleUpperCase();
         this.getWorkFlowTree();
         this.isLoaded = true;
         this.memberName = "";
@@ -124,18 +124,18 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     var name = e.currentTarget.closest('div').querySelector('input').value;
     let pIndex = Number(e.currentTarget.getAttribute("title"));
     let index = Number(e.currentTarget.getAttribute("index"));
-    let item = this.orgTree.find(x => x.Node == index);
+    let item = this.orgTree.find(x => x.RoleId == index);
     this.isLoaded = false;
-    if (item.Name == "") {
+    if (item.RoleName == "") {
       this.memberDesignation = pIndex;
-      this.orgTree = this.orgTree.filter(x => x.Node != index);
+      this.orgTree = this.orgTree.filter(x => x.RoleId != index);
       if (this.orgTree.length > 0) {
         this.memberName = name;
         this.addedNewMember();
         this.isLoaded = true;
       }
     } else {
-      item.Name = name.toLocaleUpperCase();
+      item.RoleName = name.toLocaleUpperCase();
       this.getWorkFlowTree();
       this.isLoaded = true;
       this.memberName = "";
@@ -151,11 +151,11 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
   bindEvent(e: any) {
     let index = Number(e.currentTarget.getAttribute("data-index"));
-    let value = this.orgTree.find(x => x.Node == index);
+    let value = this.orgTree.find(x => x.RoleId == index);
     if (value) {
       e.currentTarget.querySelector(".p-box").classList.add("d-none");
       e.currentTarget.querySelector(".form-group").classList.remove("d-none");
-      e.currentTarget.querySelector(".form-control").value = value.Name;
+      e.currentTarget.querySelector(".form-control").value = value.RoleName;
       e.currentTarget.querySelector(".form-control").focus();
       let elem = document.querySelectorAll(`i[data-index='${index}']`);
       if (elem && elem.length > 0) {
@@ -180,16 +180,16 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
 
   bindDeleteEvent(e: any) {
     let value = Number(e.currentTarget.getAttribute("data-index"));
-    let data = this.orgTree.find(x => x.Node == value);
+    let data = this.orgTree.find(x => x.RoleId == value);
     this.selectHierarchyNode = null;
     this.isDeleteAllNodes = true;
-    if (data && data.Name != "") {
+    if (data && data.RoleName != "") {
       this.selectHierarchyNode = data;
-      this.selectedChildNodes = this.orgTree.filter(x => x.ParentNode == this.selectHierarchyNode.Node);
-      this.remainingDesignation = this.orgTree.filter(x => x.Node != value);
+      this.selectedChildNodes = this.orgTree.filter(x => x.ParentNode == this.selectHierarchyNode.RoleId);
+      this.remainingDesignation = this.orgTree.filter(x => x.RoleId != value);
       $("#delteHierarchyModal").modal('show');
     } else {
-      this.orgTree = this.orgTree.filter(x => x.Node != value);
+      this.orgTree = this.orgTree.filter(x => x.RoleId != value);
     }
     this.getWorkFlowTree();
   }
@@ -197,10 +197,10 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
   delteHerarchyNode() {
     if (this.selectedChildNodes.length > 0) {
       if (this.isDeleteAllNodes) {
-        this.deleteInnerNode(this.selectHierarchyNode.Node);
+        this.deleteInnerNode(this.selectHierarchyNode.RoleId);
       } else {
         if (this.memberDesignation > 0)
-          this.orgTree.filter(x => x.ParentNode == this.selectHierarchyNode.Node).map(x => x.ParentNode = this.memberDesignation);
+          this.orgTree.filter(x => x.ParentNode == this.selectHierarchyNode.RoleId).map(x => x.ParentNode = this.memberDesignation);
         else {
           ErrorToast("Please select parent node");
           return;
@@ -208,7 +208,7 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.orgTree = this.orgTree.filter(x => x.Node != this.selectHierarchyNode.Node);
+    this.orgTree = this.orgTree.filter(x => x.RoleId != this.selectHierarchyNode.RoleId);
     $("#delteHierarchyModal").modal('hide');
     this.getWorkFlowTree();
   }
@@ -218,10 +218,10 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       let child = this.orgTree.filter(x => x.ParentNode == node);
       if (child && child.length > 0) {
         child.forEach(x => {
-          this.deleteInnerNode(x.Node);
+          this.deleteInnerNode(x.RoleId);
         })
       } else {
-        this.orgTree = this.orgTree.filter(x => x.Node != node);
+        this.orgTree = this.orgTree.filter(x => x.RoleId != node);
       }
     }
   }
@@ -259,11 +259,11 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
     var i = 0;
     while (i < nodes.length) {
       subRootNode = "";
-      var childs = rootTree.filter(x => x.ParentNode == nodes[i].Node);
+      var childs = rootTree.filter(x => x.ParentNode == nodes[i].RoleId);
       if (childs.length > 0) {
-        subRootNode += this.getInnerNode(rootTree.filter(x => x.ParentNode == nodes[i].Node), rootTree);
+        subRootNode += this.getInnerNode(rootTree.filter(x => x.ParentNode == nodes[i].RoleId), rootTree);
       } else {
-        let addIcon = `<i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-bs-toggle="tooltip" data-bs-title="Add" data-index=${nodes[i].Node}></i>`;
+        let addIcon = `<i class="fa-solid fa-plus position-absolute add-icon" data-name="add-tree" data-bs-toggle="tooltip" data-bs-title="Add" data-index=${nodes[i].RoleId}></i>`;
         if (nodes[i].ParentNode ==1) {
           parentNode += `<li>
                         <a href="javascript:void(0);" class="position-relative border">
@@ -272,25 +272,25 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
                             <div class="member-image">
                               <img src="assets/images/faces/face.jpg" alt="Member">
                             </div>
-                            <div data-name="edit-tree" data-index=${nodes[i].Node}>
-                              ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
+                            <div data-name="edit-tree" data-index=${nodes[i].RoleId}>
+                              ${this.getUserNameOrAddNew(nodes[i].RoleName, nodes[i].ParentNode, nodes[i].RoleId)}
                             </div>
                           </div>
-                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].Node}></i>
+                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].RoleId}></i>
                         </a>
                       </li>`;
         } else {
           parentNode += `<li>
                         <a href="javascript:void(0);" class="position-relative border">
                           {{addIcon}}
-                          <div class="member-view-box mb-1" data-name="edit-tree" data-index=${nodes[i].Node}>
-                            ${this.getUserNameOrAddNew(nodes[i].Name, nodes[i].ParentNode, nodes[i].Node)}
+                          <div class="member-view-box mb-1" data-name="edit-tree" data-index=${nodes[i].RoleId}>
+                            ${this.getUserNameOrAddNew(nodes[i].RoleName, nodes[i].ParentNode, nodes[i].RoleId)}
                           </div>
-                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].Node}></i>
+                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].RoleId}></i>
                         </a>
                       </li>`;
         }
-        if (nodes[i].Name)
+        if (nodes[i].RoleName)
         parentNode = parentNode.replace("{{addIcon}}", addIcon);
         else
         parentNode = parentNode.replace("{{addIcon}}", "");
@@ -302,23 +302,23 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       if (nodes[i].ParentNode == 0 || nodes[i].ParentNode == 1) {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border">
-                        <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].Node}></i>
+                        <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].RoleId}></i>
                         <div class="member-view-box mb-1">
                           <div class="member-image">
                             <i class="fa-solid fa-pencil position-absolute edit-icon"></i>
                             <img src="assets/images/faces/face.jpg" alt="Member">
                           </div>
-                          <div data-name="edit-tree" data-index=${nodes[i].Node}>
-                            <div class="p-box text-truncate">${nodes[i].Name}</div>
+                          <div data-name="edit-tree" data-index=${nodes[i].RoleId}>
+                            <div class="p-box text-truncate">${nodes[i].RoleName}</div>
                             <div class="form-group text-start mt-3 d-flex simple-br-r border d-none">
-                              <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${nodes[i].Name} autofocus>
-                              <button name="btn-add" title="${nodes[i].ParentNode}" index="${nodes[i].Node}" class="px-2 border-0 btn-add">
+                              <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${nodes[i].RoleName} autofocus>
+                              <button name="btn-add" title="${nodes[i].ParentNode}" index="${nodes[i].RoleId}" class="px-2 border-0 btn-add">
                                 <i class="fa-solid fa-plus"></i>
                               </button>
                             </div>
                           </div>
                         </div>
-                        <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].Node}></i>
+                        <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].RoleId}></i>
                       </a>
                       <ul>
                         ${subRootNode}
@@ -327,17 +327,17 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
       } else {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border">
-                        <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].Node}></i>
-                        <div class="member-view-box mb-1" data-name="edit-tree" data-index=${nodes[i].Node}>
-                          <div class="p-box text-truncate" >${nodes[i].Name}</div>
+                        <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].RoleId}></i>
+                        <div class="member-view-box mb-1" data-name="edit-tree" data-index=${nodes[i].RoleId}>
+                          <div class="p-box text-truncate" >${nodes[i].RoleName}</div>
                           <div class="form-group text-start mt-3 d-flex simple-br-r border d-none">
-                            <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${nodes[i].Name} autofocus>
-                            <button name="btn-add" title="${nodes[i].ParentNode}" index="${nodes[i].Node}" class="px-2 border-0 btn-add">
+                            <input type="text" class="form-control form-control-mini border-0" name="memberName" value=${nodes[i].RoleName} autofocus>
+                            <button name="btn-add" title="${nodes[i].ParentNode}" index="${nodes[i].RoleId}" class="px-2 border-0 btn-add">
                               <i class="fa-solid fa-plus"></i>
                             </button>
                           </div>
                         </div>
-                        <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].Node}></i>
+                        <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].RoleId}></i>
                       </a>
                       <ul>
                         ${subRootNode}
@@ -392,9 +392,9 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
           this.orgTree = respone.ResponseBody;
           if (this.orgTree.length == 0) {
             this.orgTree = [{
-              "Node": 1,
+              "RoleId": 1,
               "ParentNode": 0,
-              "Name": "CEO",
+              "RoleName": "CEO",
               "CompanyId": this.company.CompanyId,
               "IsActive": 1
             }];
