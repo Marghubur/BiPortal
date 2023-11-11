@@ -343,7 +343,7 @@ export class IautocompleteComponent implements OnInit, OnDestroy, ControlValueAc
     while (index < Data.length) {
       if (
         Data[index].text !== null &&
-        Data[index].text.toLocaleLowerCase().indexOf(a) === 0
+        Data[index].text.toLocaleLowerCase().indexOf(a.toLocaleLowerCase()) === 0
       ) {
         this.BindingData.push(Data[index]);
       }

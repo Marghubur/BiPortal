@@ -163,7 +163,7 @@ textarea {
 .p-box {
   font-size: 0.9rem !important;
   padding-top: 10px;
-  max-width: 7rem !important;
+  max-width: 12rem !important;
 }
 
 .member-image{
@@ -209,4 +209,11 @@ textarea {
 
 #delteHierarchyModal {
   z-index: 10000 !important;
+}
+
+::-webkit-scrollbar{
+  height: 7px;
+}
+.save-btn {
+  z-index: 99999 !important;
 }

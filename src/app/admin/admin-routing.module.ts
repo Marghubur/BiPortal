@@ -6,8 +6,6 @@ import { AdminResetPassword,
   Companies,
   CreateResume,
   Dashboard,
-  Documents,
-  DocumentsPage,
   Employees,
   Files,
   ManageEmployee,
@@ -103,12 +101,6 @@ const routes: Routes = [
   { path: CompanyLogo, component: CompanylogoComponent},
   { path: AdminMasterData, component: MasterDataComponent },
   { path: OrganizationStruct, component: OrgStructureComponent }
-  // { path: ConfigBaseRoute, loadChildren: () => import('../configuration/configuration.module').then(m => m.ConfigurationModule)},
-  // { path: ManageBaseRoute, loadChildren: () => import('../manage/manage.module').then(m => m.ManageModule)},
-  // { path: ProjectBaseRoute, loadChildren: () => import('../projects/projects.module').then(m => m.ProjectsModule)},
-  // { path: AccountsBaseRoute, loadChildren: () => import('../income-declaration/income-declaration.module').then(m => m.IncomeDeclarationModule)},
-  // { path: LeaveBaseRoute, loadChildren: () => import('../leave-management/leave-management.module').then(m => m.LeaveManagementModule)},
-  // { path: CommonBaseRoute, loadChildren: () => import('../commoncomponent/commoncomponent.module').then(m => m.CommoncomponentModule)}
 ];
 
 @NgModule({

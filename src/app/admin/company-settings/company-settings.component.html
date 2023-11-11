@@ -22,7 +22,8 @@
               <div class="fw-bold py-4 px-3">
                 <div class="d-flex justify-content-start">
                   <div class="pe-3">
-                    <img src="assets/images/control_setting.png" class="img-control">
+                    <!-- <img src="assets/images/control_setting.png" class="img-control"> -->
+                    <i class="fa-solid fa-sliders fa-3x"></i>
                   </div>
                   <div>
                     Use below setting to configure company level options.
@@ -31,21 +32,18 @@
               </div>
               <ul class="list-group list-group">
                 <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(1)">
-                  <li class="list-group-item border-0 active-tab" data-name="activetab"><i class="fa-solid fa-gear pe-2"></i> Basic</li>
+                  <li class="list-group-item border-0 active-tab" data-name="activetab"><i class="fa-regular fa-building pe-2"></i> Company</li>
                 </a>
                 <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(2)">
-                  <li class="list-group-item border-0" data-name="activetab"><i class="fa-regular fa-building pe-2"></i> Company</li>
-                </a>
-                <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(3)">
                     <li class="list-group-item border-0" data-name="activetab"><i class="fa-regular fa-handshake pe-2"></i> Declaration</li>
                   </a>
-                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(4)">
+                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(3)">
                     <li class="list-group-item border-0" data-name="activetab"><i class="fa-solid fa-gears pe-2"></i> Cron</li>
                   </a>
-                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(5)">
+                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(4)">
                     <li class="list-group-item border-0" data-name="activetab"><i class="fa-regular fa-address-book pe-2"></i> Attendance</li>
                   </a>
-                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(6)">
+                  <a href="javascript:void(0)" class="text-decoration-none text-dark" (click)="activeTab(5)">
                     <li class="list-group-item border-0" data-name="activetab"><i class="fa-solid fa-wrench pe-2"></i> Payroll Barrier</li>
                   </a>
                 </ul>
@@ -56,7 +54,7 @@
                     <div class="x_panel">
                       <div class="x_header">
                         <div class="x_header_title">
-                          <h2>Company Basic Setting<small>Company basic setting.</small></h2>
+                          <h2>Company Setting<small>Probation and notice period setting.</small></h2>
                         </div>
                       </div>
                       <div class="row">
@@ -70,15 +68,6 @@
                             <option value="true">Yes</option>
                             <option value="false">No</option>
                           </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-12" *ngIf="menuIndex == 2">
-                    <div class="x_panel">
-                      <div class="x_header">
-                        <div class="x_header_title">
-                          <h2>Company Setting<small>Probation and notice period setting.</small></h2>
                         </div>
                       </div>
                       <div class="row">
@@ -100,7 +89,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12" *ngIf="menuIndex == 3">
+                  <div class="col-md-12" *ngIf="menuIndex == 2">
                     <div class="x_panel">
                       <div class="x_header">
                         <div class="x_header_title">
@@ -155,7 +144,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12" *ngIf="menuIndex == 4">
+                  <div class="col-md-12" *ngIf="menuIndex == 3">
                     <div class="x_panel">
                       <div class="x_header">
                         <div class="x_header_title">
@@ -176,7 +165,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12" *ngIf="menuIndex == 5">
+                  <div class="col-md-12" *ngIf="menuIndex == 4">
                     <div class="x_panel">
                       <div class="x_header">
                         <div class="x_header_title">
@@ -191,7 +180,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-12" *ngIf="menuIndex == 6">
+                  <div class="col-md-12" *ngIf="menuIndex == 5">
                     <div class="x_panel">
                       <div class="x_header">
                         <div class="x_header_title">

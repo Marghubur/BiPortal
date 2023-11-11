@@ -1,19 +1,35 @@
 <div class="col-12 row p-0 m-0">
-  <div class="col-md-2">
+  <div class="col-md-4">
     Showing {{_pagination.StartIndex}} to {{_pagination.EndIndex}} of {{_pagination.TotalRecords}} record(s)
   </div>
-  <div class="col-md-10 overflow-scroll mostly-customized-scrollbar text-end pe-1">
+  <div class="col-md-8 overflow-scroll mostly-customized-scrollbar text-end pe-1">
     <ng-container *ngIf="isPaginationUpdated">
       <nav aria-label="page navigation" class="d-inline-block">
         <ul class="pagination m-0">
-          <li class="page-item pre-btn" (click)="onPreviousPage(activePage - 1)"><a class="page-link"
+          <ng-container *ngIf="pageCount <= 10">
+            <li class="page-item pre-btn" (click)="onPreviousPage(activePage - 1)"><a class="page-link"
               href="javascript:void(0);">«
               Previous</a></li>
-          <li class="page-item" [ngClass]="{'active': activePage === item}" *ngFor="let item of pages"
-            (click)="onNextPage(item)"><a class="page-link" href="javascript:void(0);">{{item}}</a></li>
-          <li class="page-item next-btn" (click)="onNextPage(activePage + 1)"><a class="page-link"
-              href="javascript:void(0);">Next
-              »</a></li>
+            <li class="page-item" [ngClass]="{'active': activePage === item}" *ngFor="let item of pages"
+              (click)="onNextPage(item)"><a class="page-link" href="javascript:void(0);">{{item}}</a></li>
+          </ng-container>
+          <ng-container *ngIf="pageCount > 10">
+            <li class="page-item pre-btn" (click)="onPageChanges(activePage - 1)"><a class="page-link"
+              href="javascript:void(0);">«
+              Previous</a></li>
+            <li class="page-item" [ngClass]="{'active': activePage === item}" *ngFor="let item of newpages"
+              (click)="onPageChanges(item)"><a class="page-link" href="javascript:void(0);">{{item}}</a></li>
+            <span *ngIf="totalPages > 7 && activePage < totalPages - 3">...</span>
+            <li *ngIf="totalPages > 7 && activePage < totalPages - 2" class="page-item" (click)="onPageChanges(totalPages - 1)"><a class="page-link"
+              href="javascript:void(0);">{{ totalPages - 1 }}</a>
+            </li>
+            <li  *ngIf="totalPages > 7 && activePage < totalPages" class="page-item" (click)="onPageChanges(totalPages)"><a class="page-link"
+              href="javascript:void(0);">{{ totalPages}}</a>
+            </li>
+            <li class="page-item" (click)="onPageChanges(totalPages)"><a class="page-link" [ngClass]="{'pe-none': 'activePage == totalPages'}"
+              href="javascript:void(0);">
+              Last</a></li>
+          </ng-container>
         </ul>
       </nav>
     </ng-container>

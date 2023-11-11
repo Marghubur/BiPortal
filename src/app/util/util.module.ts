@@ -49,7 +49,7 @@ import { NgModule } from '@angular/core';
     BhTimepickerComponent
   ]
 })
-export class UtilModule { 
+export class UtilModule {
   constructor() {
     console.log("Util module loaded");
   }
