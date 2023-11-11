@@ -214,3 +214,6 @@ textarea {
 ::-webkit-scrollbar{
   height: 7px;
 }
+.save-btn {
+  z-index: 99999 !important;
+}

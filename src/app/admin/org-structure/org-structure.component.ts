@@ -416,8 +416,30 @@ export class OrgStructureComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    document.getElementById("d-ul").querySelectorAll('a').forEach(item => {
-      item.removeEventListener("click", () => { });
+    let value = this.elementRef.nativeElement.querySelector('div[id="tree-node"]');
+    value.querySelectorAll('div[data-name="edit-tree"]').forEach(item => {
+      item.removeEventListener("dblclick", this.bindEvent.bind(this));
+    });
+
+    value.querySelectorAll('i[data-name="add-tree"]').forEach(item => {
+      item.removeEventListener("click", this.bindAddEvent.bind(this));
+    });
+
+    value.querySelectorAll('button').forEach(item => {
+      item.removeEventListener("click", this.bindNewName.bind(this));
+    });
+
+    value.querySelectorAll('i[data-name="delete-tree"]').forEach(item => {
+      item.removeEventListener("click", this.bindDeleteEvent.bind(this));
+    });
+
+    value.querySelectorAll('.form-group').forEach(item => {
+      item.removeEventListener("blur", this.bindCanvelEvent.bind(this));
+    });
+
+    value.querySelectorAll('.form-group').forEach(item => {
+      item.removeEventListener("keypress", this.onEnterBineNewName.bind(this));
     });
   }
+
 }

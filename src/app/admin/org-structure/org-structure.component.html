@@ -21,8 +21,8 @@
                 <div class="x_panel">
                     <div class="body genealogy-body genealogy-scroll row">
                         <div class="col-md-12 overflow-auto">
-                          <div class="position-absolute">
-                            <button class="btn btn-primary-c ms-2 z-index-1" (click)="saveTree()"><i class="fa-regular fa-floppy-disk pe-1"></i> Save Hierarchy</button>
+                          <div class="position-absolute save-btn">
+                            <button class="btn btn-primary-c ms-2 " (click)="saveTree()"><i class="fa-regular fa-floppy-disk pe-1"></i> Save Hierarchy</button>
                           </div>
                             <div class="genealogy-tree" id="tree-node">
                                 <ng-container *ngIf="isLoaded">

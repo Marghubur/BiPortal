@@ -122,4 +122,37 @@ export class PaginationComponent implements OnInit {
 
     this.isPaginationUpdated = true;
   }
+
+
+  // New Pagination
+  get totalPages(): number {
+    return Math.ceil(this._pagination.TotalRecords / this._pagination.PageSize);
+  }
+
+  get newpages(): number[] {
+    const pageCount = Math.min(7, this.totalPages); // Adjust as needed
+    const pages: number[] = [];
+    let start = Math.max(1, this.activePage - Math.floor(pageCount / 2));
+    let end = Math.min(this.totalPages, start + pageCount - 1);
+
+    if (end - start + 1 < pageCount) {
+      start = Math.max(1, end - pageCount + 1);
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+
+  onPageChanges(page: number): void {
+    this._pagination.ActivePageNumber = page;
+    if (page >= 1 && page <= this.lastPage) {
+        this.activePage = page;
+        this._pagination.PageIndex = this.activePage;
+        this.calculatePagination(this.activePage);
+        this.onPageChange.emit(this._pagination);
+    }
+  }
 }
