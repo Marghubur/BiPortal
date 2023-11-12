@@ -69,15 +69,10 @@
       <div *ngSwitchDefault>
         <ng-container>
           <div class="x_content">
-            <div class="t-table t-list t-border col-md-12">
+            <div class="t-table t-list col-md-12">
               <div class="hide-bar"></div>
               <div class="t-head">
                 <div class="tr">
-                  <div class="th fe-index">
-                    <div class="t-index">
-                      <a href="javascript:void()" class="ps-3">#</a>
-                    </div>
-                  </div>
                   <div class="th fe-5">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
@@ -125,18 +120,13 @@
               <div class="t-body">
                 <ng-container *ngIf="isFileFound">
                   <div class="tr py-2" *ngFor="let user of employeeDetail; let i = index;">
-                    <div class="td align-middle text-center fe-index">
-                      <div class="cell-wrapper">
-                        {{employeeData.StartIndex + i}}
-                      </div>
-                    </div>
                     <div class="td align-middle fe-5">
                       <div class="cell-wrapper">
-                        <img [src]="user.ProfilePath" alt="profile" class="user-profile">
+                        <img [src]="user.ProfilePath" alt="profile" class="ps-2 user-profile">
                         <a href="javascript:void(0)" class="ps-2" (click)="EditCurrent(user)">{{user.FirstName}}
                           {{user.LastName}}
                           <small class="text-muted text-decoration-none ps-2">
-                            [EmpId: {{user.EmployeeUid}}]
+                            [Id: {{user.EmployeeUid}}]
                           </small>
                         </a>
                         <div class="float-end">

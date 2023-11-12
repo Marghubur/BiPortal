@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
 }
+
 .title {
   font-size: 15px;
   font-weight: 700;
@@ -17,7 +18,7 @@ a {
 
 .accordion-header button {
   font-weight: 400;
-  color: var(--primary-dark) !important;
+  color: darkgrey;
 }
 
 .side-panel {
@@ -35,11 +36,13 @@ a {
   height: calc(100vh - 4rem) !important;
   border-right: 1px solid #c5c5c5;
 }
+
 .menu-container {
   height: 88vh !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
 }
+
 .menu-container::-webkit-scrollbar-thumb {
   background-color: transparent !important;
 }
@@ -47,6 +50,7 @@ a {
 .menu-container:hover::-webkit-scrollbar-thumb {
   background: #cab5b5 !important;
 }
+
 .menu-top {
   height: 4rem;
 }
@@ -91,7 +95,7 @@ a {
   }
 }
 
-.nav-link-menu{
+.nav-link-menu {
   margin: 0 !important;
   color: #222 !important;
 }
@@ -127,16 +131,12 @@ a {
   height: 93vh;
 }
 
-.active-menu {
-  font-weight: 700 !important;
-}
-
 .active-small-menu {
   background-color: #dedede !important;
 }
 
 .menu-item-group {
-  background: #f5f5f5;
+  background: #fbf7f7;
 }
 
 .sm-accordion-btn {
@@ -167,24 +167,26 @@ a {
   display: none;
   position: absolute;
   width: 15rem;
-  box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.4);
   top: 1rem;
   left: 5rem;
   z-index: 99999 !important;
   overflow-x: hidden;
   background: #fff;
 }
+
 // .dropdown:hover
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
 .dropdown-container {
   border: 2px solid rgb(218, 218, 218) !important;
 }
 
 
 .caret-left {
-	width: 0;
+  width: 0;
   height: 0;
   border-top: 1.5rem solid transparent;
   border-bottom: 1.5rem solid transparent;
@@ -220,8 +222,8 @@ a {
   color: #FFFFFF;
   background-color: #dadada;
 }
-menu-item-icon
-.dropdown-nav-link{
+
+menu-item-icon .dropdown-nav-link {
   margin: 0 !important;
   padding: 0.7rem;
   color: #222 !important;
@@ -239,5 +241,30 @@ menu-item-icon
   .mene-item {
     font-weight: 500 !important;
   }
+
   background-color: #c6c6c663 !important;
+}
+
+.active-menu {
+  font-weight: 700 !important;
+  background: #eee !important;
+  color: var(--primary-dark) !important;
+
+  span {
+    background: var(--primary-dark) !important;
+    color: white !important;
+    padding: 8px 0px !important;
+  }
+}
+
+.i-chip {
+  background: white;
+  color: darkgrey;
+  margin: 0px 10px;
+  border-radius: 4px;
+  width: 2.5rem;
+  display: flex;
+  justify-content: center;
+  font-size: 22px;
+
 }
