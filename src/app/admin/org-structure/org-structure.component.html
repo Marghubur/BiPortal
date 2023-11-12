@@ -19,95 +19,11 @@
                     </div>
                 </div>
                 <div class="x_panel">
-                    <div class="body genealogy-body genealogy-scroll row">
-                      <ng-container *ngIf="orgTree.length > 0">
-                        <div class="col-md-12 overflow-auto">
-                          <div class="position-absolute save-btn">
-                            <button class="btn btn-primary-c ms-2 " (click)="saveTree()"><i class="fa-regular fa-floppy-disk pe-1"></i> Save Hierarchy</button>
-                          </div>
-                            <div class="genealogy-tree" id="tree-node">
-                                <ng-container *ngIf="isLoaded">
-                                    <div [innerHTML]="node"></div>
-                                </ng-container>
-                            </div>
-                        </div>
-                        <div class="d-none col-md-2 border-start">
-                          <div class="col-md-12 text-end">
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="resetTree()">
-                              <i class="fa-solid fa-arrows-rotate text-danger"></i>
-                            </a>
-                          </div>
-                          <div class="col-12">
-                              <div class="form-group text-start">
-                                  <label class="form-label">Name</label>
-                                  <input type="text" class="form-control" name="memberName" [(ngModel)]="memberName">
-                              </div>
-                              <div class="form-group mt-2 text-start">
-                                  <label class="form-label">Designation</label>
-                                  <select class="form-control" name="memberDesignation" [(ngModel)]="memberDesignation">
-                                      <option value=0>Select Parent Node</option>
-                                      <option [value]=item.RoleId *ngFor="let item of orgTree">{{item.RoleName}}</option>
-                                  </select>
-                              </div>
-                          </div>
-                          <div class="col-md-12 mt-3">
-                            <button class="btn btn-primary-c" (click)="addedNewMember()"> <i class="fa-solid fa-plus pe-1"></i>Add</button>
-                            <button class="btn btn-primary-c ms-2" (click)="saveTree()"><i class="fa-regular fa-floppy-disk pe-1"></i> Save Hierarchy</button>
-                          </div>
-                      </div>
-                      </ng-container>
-                      <ng-container *ngIf="orgTree.length == 0">
-                        <div class="text-center my-5 py-5">
-                          <div class="text-center my-5 py-5">
-                            <span class="py-5 fs-5 fw-bold tet-dark">Record not found</span>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div>
+                  <ng-container *ngIf="isLoaded">
+                    <app-bot-tree-view [inputTree]="orgTree" (onSave)="saveTree($event)"></app-bot-tree-view>
+                  </ng-container>
                 </div>
             </div>
         </form>
     </div>
 </div>
-
-<!--Workflow Modal -->
-<div class="modal fade" id="delteHierarchyModal" tabindex="-1" aria-labelledby="delteHierarchyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content px-3">
-        <div class="modal-header border-bottom-0">
-          <h1 class="modal-title fs-5" id="delteHierarchyModalLabel">Delete Hierarchy Node</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" *ngIf="selectHierarchyNode != null">
-           <span class="fw-bold text-danger">Are you want to delete {{selectHierarchyNode.RoleName}} from Hierarchy.</span>
-            <ng-container *ngIf="selectedChildNodes.length > 0">
-              <div class="">
-                <div class="form-check col-auto mt-3">
-                  <input class="form-check-input" type="radio" [value]="true" [(ngModel)]="isDeleteAllNodes" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                  <label class="form-check-label" for="flexRadioDefault1">
-                    Cascade Delete (Parent with child nodes)
-                  </label>
-                </div>
-                <div class="form-check col-auto mt-3">
-                  <input class="form-check-input" type="radio" [value]="false" [(ngModel)]="isDeleteAllNodes" name="flexRadioDefault" id="flexRadioDefault2">
-                  <label class="form-check-label" for="flexRadioDefault2">
-                    Nodes are shifted to
-                  </label>
-                </div>
-              </div>
-              <div class="form-group mt-2 text-start" *ngIf="!isDeleteAllNodes">
-                <label class="form-label">Designation</label>
-                <select class="form-control" name="memberDesignation" [(ngModel)]="memberDesignation">
-                    <option value=0 disabled>Select Parent Node</option>
-                    <option [value]=item.RoleId *ngFor="let item of remainingDesignation">{{item.RoleName}}</option>
-                </select>
-              </div>
-            </ng-container>
-        </div>
-        <div class="modal-footer border-top-0">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark pe-1"></i>Close</button>
-          <button type="button" class="btn btn-danger" (click)="delteHerarchyNode()"><i class="fa-regular fa-trash-can pe-1"></i> Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>

@@ -318,16 +318,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="body genealogy-body genealogy-scroll d-flex">
-          <div class="col-md-8">
-            <div class="genealogy-tree">
-              <div [innerHTML]="node"></div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            tree view
-          </div>
-        </div>
+        <ng-container *ngIf="isTreeLoaded">
+          <app-bot-tree-view [inputTree]="orgTree"></app-bot-tree-view>
+        </ng-container>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

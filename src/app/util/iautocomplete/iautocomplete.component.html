@@ -5,7 +5,7 @@
       name="iautofill-textfield" (click)="ShowAutofillDropdown()" (focus)="ShowAutofillDropdown()"
       [placeholder]="placeholder" [attr.value]="InitValue" [attr.data]="InitData"  title="bt-autocomplete"/>
     <div class="iautofill-suggestion-dv d-none" name="suggestionBox-dv" title="bt-autocomplete">
-      <div class="d-flex">
+      <div class="d-flex flex-column">
         <div class="selected-item-chip" *ngIf="IsMultiSelect">
           selected Items
         </div>

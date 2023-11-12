@@ -20,12 +20,20 @@
                 </div>
               </div>
               <div *ngSwitchDefault>
-                <div class="text-end pe-2 my-2">
-                  <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList" class="text-decoration-none pe-3"><i class="fa-solid fa-plus pe-1"></i> Add Objective</a>
-                  <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()" *ngIf="isViewInList"><i class="fa-solid fa-plus pe-1"></i> Add Aprisal Cycle</button>
-                  <a href="javascript:void(0)" class="text-decoration-none" (click)="listview()">
-                    <i class="fa-solid fa-lg" [ngClass]="{'fa-bars': isViewInList, 'fa-grip' : !isViewInList}"></i>
-                  </a>
+                <div class="d-flex justify-content-between text-end pe-2 mb-1 mt-4">
+                  <div>
+                    <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList" class="text-decoration-none pe-3"><i class="fa-solid fa-plus pe-1"></i> Add Objective</a>
+                    <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()" *ngIf="isViewInList"><i class="fa-solid fa-plus pe-1"></i> Add Aprisal Cycle</button>
+                  </div>
+                  <div>
+                    <span class="fw-bold px-2">Click to add objective</span>
+                    <a href="javascript:void(0)" *ngIf="!isViewInList" class="text-decoration-none" (click)="listview()">
+                      <i class="fa-solid fa-object-ungroup"></i>
+                    </a>
+                    <a href="javascript:void(0)" *ngIf="isViewInList" class="text-decoration-none" (click)="listview()">
+                      <i class="fa-regular fa-object-ungroup"></i>
+                    </a>
+                  </div>
                 </div>
                 <ng-container *ngIf="!isViewInList">
                   <div class="row mt-3">

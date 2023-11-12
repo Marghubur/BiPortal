@@ -14,6 +14,7 @@ import { MessageModalComponent } from './message-modal/message-modal.component'
 import { FormsModule } from '@angular/forms';
 import { BhTimepickerComponent } from './bh-timepicker/bh-timepicker.component'
 import { NgModule } from '@angular/core';
+import { BotTreeViewComponent } from './bot-tree-view/bot-tree-view.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { NgModule } from '@angular/core';
     ImageLoaderComponent,
     EditorComponent,
     MessageModalComponent,
-    BhTimepickerComponent
+    BhTimepickerComponent,
+    BotTreeViewComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +48,8 @@ import { NgModule } from '@angular/core';
     ImageLoaderComponent,
     EditorComponent,
     MessageModalComponent,
-    BhTimepickerComponent
+    BhTimepickerComponent,
+    BotTreeViewComponent
   ]
 })
 export class UtilModule {

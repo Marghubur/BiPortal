@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
-import { GetRoles } from 'src/providers/ApplicationStorage';
+import { ResponseModel } from 'src/auth/jwtService';
+import { ApplicationStorage, GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Appraisal } from 'src/providers/constants';
@@ -27,7 +27,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   isSubmitted: boolean = false;
   isLoading: boolean = false;
   fromDate: NgbDateStruct | null;
-	toDate: NgbDateStruct | null;
+  toDate: NgbDateStruct | null;
   selfAppraisalFromDate: NgbDateStruct;
   selfAppraisalToDate: NgbDateStruct;
   selectionPeriodFromDate: NgbDateStruct;
@@ -47,13 +47,17 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   isWorkFlownChainShow: boolean = false;
   selectedWorkFlowDetail: any = null;
   node: any = null;
+  orgTree: Array<any> = [];
+  isTreeLoaded: boolean = false;
+  company: any = null;
 
   constructor(private http: AjaxService,
-              private nav:iNavigation,
-              private sanitize: DomSanitizer,
-              private fb: FormBuilder) {}
+    private nav: iNavigation,
+    private local: ApplicationStorage,
+    private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.company = this.local.findRecord("Companies")[0];
     this.roles = GetRoles();
     this.designation.className = "disabled-input"
     this.roleList = new autoCompleteModal();
@@ -121,51 +125,51 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     let date;
     if (this.currentApprisalCycle.AppraisalCycleStartDate) {
       date = new Date(this.currentApprisalCycle.AppraisalCycleStartDate);
-      this.fromDate={day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()}
+      this.fromDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() }
     }
     if (this.currentApprisalCycle.AppraisalCycleEndDate) {
       date = new Date(this.currentApprisalCycle.AppraisalCycleEndDate);
-      this.toDate = {day: date.getDate(),month: date.getMonth() + 1, year: date.getFullYear()};
+      this.toDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     if (this.currentApprisalCycle.SelfAppraisalStartDate) {
       date = new Date(this.currentApprisalCycle.SelfAppraisalStartDate);
-      this.selfAppraisalFromDate= {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.selfAppraisalFromDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     if (this.currentApprisalCycle.SelfAppraisalEndDate) {
       date = new Date(this.currentApprisalCycle.SelfAppraisalEndDate);
-      this.selfAppraisalToDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.selfAppraisalToDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     if (this.currentApprisalCycle.SelectionPeriodStartDate) {
       date = new Date(this.currentApprisalCycle.SelectionPeriodStartDate);
-      this.selectionPeriodFromDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.selectionPeriodFromDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     if (this.currentApprisalCycle.SelectionPeriodEndDate) {
       date = new Date(this.currentApprisalCycle.SelectionPeriodEndDate);
-      this.selectionPeriodToDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.selectionPeriodToDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     if (this.currentApprisalCycle.MultiraterFeedBackStartDate) {
       date = new Date(this.currentApprisalCycle.MultiraterFeedBackStartDate);
-      this.feedbackFromDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.feedbackFromDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     if (this.currentApprisalCycle.MultiraterFeedBackEndDate) {
       date = new Date(this.currentApprisalCycle.MultiraterFeedBackEndDate);
-      this.feedbackToDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.feedbackToDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     if (this.currentApprisalCycle.ReviewStartDate) {
       date = new Date(this.currentApprisalCycle.ReviewStartDate);
-      this.reviewFromDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.reviewFromDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     if (this.currentApprisalCycle.ReviewEndDate) {
       date = new Date(this.currentApprisalCycle.ReviewEndDate);
-      this.reviewToDate = {day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+      this.reviewToDate = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() };
     }
 
     this.selectedRoles = [];
@@ -175,7 +179,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       this.currentApprisalCycle.RoleIds.forEach(x => {
         let role = this.roles.find(i => i.RoleId == x);
         this.selectedRoles.push({
-          RoleId : role.RoleId,
+          RoleId: role.RoleId,
           RoleName: role.RoleName
         })
 
@@ -256,14 +260,14 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.appraisalForm.controls["AppraisalCycleStartDate"].setValue(date);
-    this.minDate = {year: date.getFullYear(), month: date.getMonth()+1, day: date.getDate()};
+    this.minDate = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
     this.isApprisalCycleSelected();
   }
 
   onToDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.appraisalForm.controls["AppraisalCycleEndDate"].setValue(date);
-    this.maxDate = {year: date.getFullYear(), month: date.getMonth()+1, day: date.getDate()};
+    this.maxDate = { year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate() };
     this.isApprisalCycleSelected();
   }
 
@@ -451,10 +455,10 @@ export class ManageAppraisalCategoryComponent implements OnInit {
 
   selectedroles(e: any) {
     let index = this.selectedRoles.findIndex(x => x.RoleId == e.value);
-    if(index == -1) {
+    if (index == -1) {
       let role = this.roleList.data.find(x => x.value == e.value);
       this.selectedRoles.push({
-        RoleId : role.value,
+        RoleId: role.value,
         RoleName: role.text
       });
     } else {
@@ -466,17 +470,32 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     this.isWorkFlownChainShow = !this.isWorkFlownChainShow;
     if (this.isWorkFlownChainShow) {
       this.http.get(`ApprovalChain/GetApprovalChainData/${this.selectedWorkflow.ApprovalWorkFlowId}`)
-      .then(res => {
-        if (res.ResponseBody) {
-          this.selectedWorkFlowDetail = res.ResponseBody.approvalWorkFlowChain;
-          console.log(this.selectedWorkFlowDetail)
-        }
-      })
+        .then(res => {
+          if (res.ResponseBody) {
+            this.selectedWorkFlowDetail = res.ResponseBody.approvalWorkFlowChain;
+            console.log(this.selectedWorkFlowDetail)
+          }
+        })
     }
   }
 
   viewApprovalChainFlow() {
-    $("#worflowChainModal").modal("show");
+    this.http.get(`ef/orgtree/getOrgTreeByRole/${this.company.CompanyId}/28`, true)
+      .then((respone: ResponseModel) => {
+        if (respone) {
+          this.orgTree = respone.ResponseBody;
+          this.orgTree = this.orgTree.filter(x => x.RoleName.toLocaleUpperCase() != "CEO"
+          && x.RoleName.toLocaleUpperCase() != "CTO"
+          && !x.IsDepartment);
+          Toast("Tree structure loaded successfully.");
+          $("#worflowChainModal").modal("show");
+          this.isTreeLoaded = true;
+        } else {
+          ErrorToast("Fail to add");
+        }
+      }).catch(e => {
+        ErrorToast(e.error);
+      });
   }
 }
 
