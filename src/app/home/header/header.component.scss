@@ -1,0 +1,59 @@
+.sticky-top {
+  top: 0px !important;
+}
+
+
+.menu {
+  display: none;
+  position: absolute;
+  top: 55px;
+  left: 10px;
+  background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.menu a {
+  color: white;
+  padding: 12px 16px;
+  display: block;
+  text-decoration: none;
+}
+
+
+.bg-aqua-light {
+  background-color: #DBF3FA !important;
+}
+
+.text-aqua {
+  color: #4AC2E4 !important;
+}
+
+.bg-green-light {
+  background-color: #E1F2E1 !important;
+}
+
+.text-green {
+  color: #6AC069 !important;
+}
+
+.bg-magenta-light {
+  background-color: #FBE9EF !important;
+}
+
+.text-magenta {
+  color: #E44C7D !important;
+}
+
+.bg-violet-light {
+  background-color: #E9E9FF !important
+}
+
+.text-violet {
+  color: #8484D7 !important;
+}
+
+.rounded-icon {
+  width: 4rem !important;
+  height: 4rem !important;
+}

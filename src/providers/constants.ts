@@ -39,6 +39,8 @@ export enum FileSystemType {
   Bills = 2
 }
 
+export const Price = "price";
+export const Support = "supprot";
 
 // ********************** API route pages  *******************
 
