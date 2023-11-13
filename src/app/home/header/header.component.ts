@@ -1,4 +1,6 @@
 import { Component, HostListener } from '@angular/core';
+import { Login } from 'src/providers/constants';
+import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
   selector: 'app-header',
@@ -6,6 +8,8 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+
+  constructor(private nav: iNavigation) { }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -20,6 +24,10 @@ export class HeaderComponent {
     if (event.target !== item && !item?.contains(targetElement) && targetElement.tagName.toLowerCase() !== "a") {
       item.style.display = "none";
     }
+  }
+
+  doLogin() {
+    this.nav.navigate(Login, null);
   }
 
   toggleMenu(e: any) {
