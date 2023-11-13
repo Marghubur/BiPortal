@@ -285,7 +285,7 @@
   justify-content: center;
   text-align: center;
 
-  a > i {
+  a>i {
     font-size: 1.2rem;
   }
 }
@@ -305,6 +305,7 @@
     padding-left: 1.2rem;
   }
 }
+
 .dropdown-menu-text {
   font-size: 13px !important;
 }
@@ -314,8 +315,8 @@
   height: 60px !important;
 }
 
-.icon-action{
-  a{
+.icon-action {
+  a {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -342,6 +343,11 @@
 }
 
 
-.nav-t-icon {
-  
+.cust-btn {
+  border: 1px solid #212529 !important;
+  border-radius: 0px 4px 4px 0px;
+}
+
+.cust-box {
+  border-radius: 4px 0px 0px 4px;
 }

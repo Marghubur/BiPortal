@@ -24,6 +24,7 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
   selectedChildNodes: Array<any> = [];
   isDeleteAllNodes: boolean = true;
   remainingDesignation: Array<any> = [];
+  isViewMode: boolean = true;
 
   @Output() onSave = new EventEmitter();
 
@@ -81,35 +82,45 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  enableInTree(e: any) {
+    alert('enabled');
+  }
+
   bindEventToNodes() {
     let value = this.elementRef.nativeElement.querySelector('div[id="tree-node"]');
-    value.querySelectorAll('div[data-name="edit-tree"]').forEach(item => {
-      item.addEventListener("dblclick", this.bindEvent.bind(this));
-    });
-
-    value.querySelectorAll('i[data-name="add-tree"]').forEach(item => {
-      item.addEventListener("click", this.bindAddEvent.bind(this));
-    });
-
-    value.querySelectorAll('button').forEach(item => {
-      item.addEventListener("click", this.bindNewName.bind(this));
-    });
-
-    value.querySelectorAll('i[data-name="delete-tree"]').forEach(item => {
-      item.addEventListener("click", this.bindDeleteEvent.bind(this));
-    });
-
-    value.querySelectorAll('.member-view-box').forEach(item => {
-      item.addEventListener("blur", this.bindCanvelEvent.bind(this));
-    });
-
-    value.querySelectorAll('i[data-name="cancel-tree"]').forEach(item => {
-      item.addEventListener("click", this.bindCanvelEvent.bind(this));
-    });
-
-    value.querySelectorAll('.form-group').forEach(item => {
-      item.addEventListener("keypress", this.onEnterBindNewName.bind(this));
-    });
+    if (this.isViewMode) {
+      value.querySelectorAll('.member-view-box').forEach(item => {
+        item.addEventListener("click", this.enableInTree.bind(this));
+      });
+    } else {
+      value.querySelectorAll('div[data-name="edit-tree"]').forEach(item => {
+        item.addEventListener("dblclick", this.bindEvent.bind(this));
+      });
+  
+      value.querySelectorAll('i[data-name="add-tree"]').forEach(item => {
+        item.addEventListener("click", this.bindAddEvent.bind(this));
+      });
+  
+      value.querySelectorAll('button').forEach(item => {
+        item.addEventListener("click", this.bindNewName.bind(this));
+      });
+  
+      value.querySelectorAll('i[data-name="delete-tree"]').forEach(item => {
+        item.addEventListener("click", this.bindDeleteEvent.bind(this));
+      });
+  
+      value.querySelectorAll('.member-view-box').forEach(item => {
+        item.addEventListener("blur", this.bindCanvelEvent.bind(this));
+      });
+  
+      value.querySelectorAll('i[data-name="cancel-tree"]').forEach(item => {
+        item.addEventListener("click", this.bindCanvelEvent.bind(this));
+      });
+  
+      value.querySelectorAll('.form-group').forEach(item => {
+        item.addEventListener("keypress", this.onEnterBindNewName.bind(this));
+      });
+    }
   }
 
   onEnterBindNewName(e: any) {
@@ -329,12 +340,18 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
         } else {
           parentNode += `<li>
                         <a href="javascript:void(0);" class="position-relative border no-department">
-                          {{addIcon}}
+                          ${
+                            this.isViewMode ? '' :
+                            '{{addIcon}}'
+                          }
                           {{Department}}
                           <div class="member-view-box mb-1" data-name="edit-tree" data-index=${nodes[i].RoleId}>
                             ${this.getUserNameOrAddNew(nodes[i].RoleName, nodes[i].ParentNode, nodes[i].RoleId)}
                           </div>
-                          <i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].RoleId}></i>
+                          ${
+                            this.isViewMode ? '' :
+                            `<i class="fa-solid fa-trash-can position-absolute delete-icon" data-bs-toggle="tooltip" data-bs-title="Delete" data-name="delete-tree" data-index=${nodes[i].RoleId}></i>`
+                          }                          
                         </a>
                       </li>`;
         }
@@ -392,7 +409,11 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
       } else {
         parentNode += `<li>
                       <a href="javascript:void(0);" class="position-relative border no-department">
-                        <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].RoleId}></i>
+                        ${this.isViewMode ? 
+                          '' : 
+                          `<i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].RoleId}></i>` 
+                        }
+                        
                         {{Department}}
                         <div class="member-view-box mb-1" data-name="edit-tree" data-index=${nodes[i].RoleId}>
                           <div class="p-box text-truncate" >${nodes[i].RoleName}</div>
@@ -410,7 +431,11 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
                             <i class="fa-solid fa-xmark position-absolute cancel-icon" data-name="cancel-tree" data-bs-toggle="tooltip" data-bs-title="Cancel" data-index=${nodes[i].RoleId}></i>
                           </div>
                         </div>
-                        <i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].RoleId}></i>
+
+                        ${this.isViewMode ? 
+                          '' : 
+                          `<i class="fa-solid fa-trash-can position-absolute delete-icon" data-name="delete-tree" data-bs-toggle="tooltip" data-bs-title="Delete" data-index=${nodes[i].RoleId}></i>` 
+                        }                        
                       </a>
                       <ul>
                         ${subRootNode}

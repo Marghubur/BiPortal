@@ -40,6 +40,17 @@
       </div>
     </div>
 
+    <div class="form-group fe-2 d-flex flex-column justify-content-center">
+      <div class="d-flex">
+        <div class="border cust-box w-100">
+          <input type="text" class="form-control border-0" placeholder="type here...">
+        </div>
+        <button class="btn btn-primary-c cust-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </div>
+
     <div>
       <div class="navbar-menu-wrapper d-flex align-items-center">
         <ul class="navbar-nav navbar-nav-right">
@@ -49,19 +60,6 @@
                 <option value="0">Font size</option>
                 <option [value]="i" *ngFor="let i of sizeOptions">{{i}}</option>
               </select>
-              <!-- <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-regular fa-bell" aria-hidden="true"></i>
-                <span class="count badge-counter">{{NotificationBadge}}</span>
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
-                <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
-                <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
-              </ul> -->
             </div>
           </li>
           <li class="d-none d-sm-block position-relative me-4">

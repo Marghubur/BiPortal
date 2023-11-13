@@ -87,6 +87,10 @@ export class iNavigation {
     return this.pageRoute.RouteDetail.find(x => x.Key === route);
   }
 
+  public getTopRoute() {
+    return this.pageRoute.PageName;
+  }
+
   public getRouteList() {
     return this.pageRoute.RouteDetail;
   }

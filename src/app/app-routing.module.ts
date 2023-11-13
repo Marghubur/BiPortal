@@ -3,6 +3,7 @@ import { Initialpage, Login } from 'src/providers/constants';
 import { NgModule } from '@angular/core';
 import { LoginComponent } from './home/login/login.component';
 import { LayoutComponent } from './layout/layout/layout.component';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -28,7 +29,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes)],
+  providers: [
+    { provide: LocationStrategy, useClass: PathLocationStrategy }
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

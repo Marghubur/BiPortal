@@ -96,7 +96,7 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
         }
 
         let menuItem = this.nav.getRouteList();
-        this.MenuName = menuItem[menuItem.length - 1].Key;
+        this.MenuName = menuItem[0].Key;
         this.BuildMenu(Master["Menu"]);
       }
     }
@@ -178,10 +178,6 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
 
   GoBlogsPage() {
     this.nav.navigate(Blogs, null);
-  }
-
-  AutoDemo() {
-    this.nav.navigate("/", null);
   }
 
   organizationSetting() {
