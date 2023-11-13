@@ -1,0 +1,92 @@
+<div class="col-md-12 bg-white sticky-top shadow py-2">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="javascript:void(0)" [routerLink]="['/']" >
+          <img src="assets/images/logo.png" alt="Bootstrap" width="30" height="30">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item pe-3 dropdown">
+              <a class="nav-link dropdown-toggle fw-semibold" href="javascript:void(0)" (click)="toggleMenu($event)">
+                Products
+              </a>
+              <div class="menu p-4 rounded" style="width: 40vw;" id="myMenu">
+                <div class="row">
+                  <div class="col-md-6 mt-2">
+                    <a href="javascript:void(0)" class="text-dark p-0">
+                      <div class="card p-3">
+                        <div class="rounded-icon mb-2 bg-aqua-light p-3 rounded-circle d-flex align-items-center justify-content-between">
+                          <i class="fa-solid fa-sack-dollar text-aqua fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Payroll</h4>
+                        <p>Transform your payroll experience with our groundbreaking system, automating tasks and streamlining processes for time efficiency.</p>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-md-6 mt-2">
+                    <a href="javascript:void(0)" class="text-dark p-0">
+                      <div class="card p-3">
+                        <div class="rounded-icon mb-2 bg-green-light p-3 rounded-circle d-flex align-items-center justify-content-between">
+                          <i class="fa-solid fa-user-large text-green fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">HR Management</h4>
+                        <p>Enhance your digital workplace by consolidating all people information in one accessible location for simplified access.</p>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-md-6 mt-3">
+                    <a href="javascript:void(0)" class="text-dark p-0">
+                      <div class="card p-3">
+                        <div class="rounded-icon mb-2 bg-magenta-light p-3 rounded-circle d-flex align-items-center justify-content-between">
+                          <i class="fa-solid fa-award text-magenta fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Performance</h4>
+                        <p>Cultivate engagement with a culture driven by contextual feedback and goals that align with the broader objectives of the organization.</p>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-md-6 mt-3">
+                    <a href="javascript:void(0)" class="text-dark p-0">
+                      <div class="card p-3">
+                        <div class="rounded-icon mb-2 bg-violet-light p-3 rounded-circle d-flex align-items-center justify-content-between">
+                          <i class="fa-regular fa-calendar-check text-violet fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold">Attendance & Timesheet</h4>
+                        <p>Keep a close eye on employee working hours and ensure prompt compensation, even in a remote working environment.</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="nav-item pe-3 dropdown">
+              <a class="nav-link dropdown-toggle fw-semibold" href="javascript:void(0)" (click)="toggleMenu($event)">
+                Customers
+              </a>
+              <div class="menu" id="supportMenu" style="width: 200px;">
+                <a href="javascript:void(0)" [routerLink]="['/support']" (click)="closeToggeMenu()">Support</a>
+              </div>
+            </li>
+            <li class="nav-item pe-3 fw-semibold">
+              <a class="nav-link" href="javascript:void(0)" [routerLink]="['/price']" (click)="closeToggeMenu()">Pricing</a>
+            </li>
+            <li class="nav-item pe-3 fw-semibold">
+              <a class="nav-link" href="javascript:void(0)" (click)="closeToggeMenu()">About</a>
+            </li>
+            <li class="nav-item pe-3 fw-semibold">
+              <a class="nav-link" href="javascript:void(0)" (click)="closeToggeMenu()">Carrers</a>
+            </li>
+          </ul>
+          <form class="d-flex" role="search">
+            <button class="btn me-3 btn-light text-dark rounded-pill fw-semibold" [routerLink]="['/login']"><i class="fa-solid fa-circle-user pe-1"></i> Login</button>
+            <button class="btn btn-primary-c rounded-pill">Start now, its, free!</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

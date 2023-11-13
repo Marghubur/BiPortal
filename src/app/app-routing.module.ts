@@ -1,14 +1,13 @@
 import { RouterModule, Routes } from '@angular/router';
-import { Initialpage, Login } from 'src/providers/constants';
 import { NgModule } from '@angular/core';
-import { LoginComponent } from './home/login/login.component';
 import { LayoutComponent } from './layout/layout/layout.component';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { HomeComponent } from './home/home/home.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent,
+    component: HomeComponent,
     loadChildren: () => import('./home/home.module')
     .then(m => m.HomeModule)
   },
