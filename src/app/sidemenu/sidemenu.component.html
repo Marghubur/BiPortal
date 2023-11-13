@@ -8,7 +8,40 @@
           <i class="fa-solid fa-thumb-tack" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
         </a>
       </div>
-      <div class="accordion" id="accordionExample">
+      <div class="accordion border-0" *ngFor="let catagory of Menu;let i = index;">
+        <div class="accordion-item border-0">
+          <div class="accordion-item-header" [attr.data-index]="i+1" (click)="toogle($event)">
+            <span class="i-chip">
+              <i class="{{catagory.ParentDetail.Icon}}"></i>
+            </span>
+            {{catagory.Name}}
+            <span *ngIf="catagory.ParentDetail.Badge != null"
+              class="badge bg-secondary ms-3">
+              NEW
+            </span>
+          </div><!-- /.accordion-item-header -->
+          <div class="accordion-item-body">
+            <div class="accordion-item-body-content">
+              <div class="menu-item-group">
+                <ng-container *ngFor="let item of catagory.Value">
+                  <a [routerLink]="['/bot/' + item.Link]" class="nav-link nav-link-menu a-font" (click)="cleanupEmpId(item.Link)"
+                    routerLinkActive="active-link">
+                    <div class="row menu-item-div align-items-center">
+                      <div class="col-md-1">
+                        <i class="menu-item-icon {{item.Icon}}"></i>
+                      </div>
+                      <div class="mene-item col-md-8 ps-3">
+                        {{item.Catagory}}
+                      </div>
+                    </div>
+                  </a>
+                </ng-container>
+              </div>
+            </div>
+          </div><!-- /.accordion-item-body -->
+        </div><!-- /.accordion-item -->
+      </div>
+      <!-- <div class="accordion" id="accordionExample">
         <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
           <h2 class="accordion-header" [id]="'heading'+i">
             <button class="accordion-button custom-accordion-btn" (click)="activeTab(i)" [ngClass]="{ 'collapsed active-menu': catagory.IsActive}" type="button"
@@ -43,7 +76,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- <hr> -->
       <div class="title_menu mt-3">
         <a (click)="navToMasterDataPasge()" *ngIf="isAdmin" class="text-dark custom-text" href="javascript:void(0)" routerLinkActive="router-link-active">
