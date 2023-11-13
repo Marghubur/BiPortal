@@ -81,7 +81,7 @@
         </div>
       </div>
       <div class="x_content">
-        <div class="t-table t-list t-border col-md-12">
+        <div class="t-table t-list col-md-12">
           <div class="hide-bar"></div>
           <div class="t-head">
             <div class="tr">
@@ -136,22 +136,6 @@
               </div>
               <div class="th f-small">
                 <div class="cell-wrapper">
-                  <!-- <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Month">
-                    <option value="0" selected>Month</option>
-                    <option value="1">Jan</option>
-                    <option value="2">Feb</option>
-                    <option value="3">Mar</option>
-                    <option value="4">Apr</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">Aug</option>
-                    <option value="9">Sep</option>
-                    <option value="10">Oct</option>
-                    <option value="11">Nov</option>
-                    <option value="12">Dec</option>
-                  </select> -->
                   <div class="t-filter" (click)="arrangeDetails(orderByMonthAsc, 'BillForMonth')">
                     <a href="javascript:void()" class="pe-2">Month</a>
                     <i class="fa-solid fa-arrow-down-wide-short"
@@ -161,22 +145,6 @@
                   </div>
                 </div>
               </div>
-              <!-- <div class="th f-small">
-                <div class="cell-wrapper">
-                  <select class="form-control table-filter-control form-control-sm" (keyup.enter)="filterRecords()"
-                    (keydown.esc)="refreshFilter()" [(ngModel)]="employeeFile.Year">
-                    <option value="0" selected>Year</option>
-                    <option [value]="item" *ngFor="let item of allBillingYears">{{item}}</option>
-                  </select>
-                  <div class="t-filter" (click)="arrangeDetails(orderByYearAsc, 'BillYear')">
-                    <a href="javascript:void()" class="pe-2">Year</a>
-                    <i class="fa-solid fa-arrow-down-wide-short"
-                      [ngClass]="{'d-none': orderByYearAsc == null || !orderByYearAsc }" aria-hidden="true"></i>
-                    <i class="fa-solid fa-arrow-down-short-wide"
-                      [ngClass]="{'d-none': orderByYearAsc == null || orderByYearAsc }" aria-hidden="true"></i>
-                  </div>
-                </div>
-              </div> -->
               <div class="th fe-1">
                 <div class="cell-wrapper">
                   <input class="form-control table-filter-control form-control-sm" readonly

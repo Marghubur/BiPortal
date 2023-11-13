@@ -122,7 +122,9 @@
                   <div class="tr py-2" *ngFor="let user of employeeDetail; let i = index;">
                     <div class="td align-middle fe-5">
                       <div class="cell-wrapper">
-                        <img [src]="user.ProfilePath" alt="profile" class="ps-2 user-profile">
+                        <div class="col-auto d-inline-block rounded-circle">
+                          <img [src]="user.ProfilePath" alt="profile" class="rounded-circle user-profile">
+                        </div>
                         <a href="javascript:void(0)" class="ps-2" (click)="EditCurrent(user)">{{user.FirstName}}
                           {{user.LastName}}
                           <small class="text-muted text-decoration-none ps-2">

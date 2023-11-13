@@ -32,7 +32,6 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
   isLoading: boolean = false;
   isMinimize: boolean = false;
   isMenuExpanded: boolean = true;
-
   @Output() authentication = new EventEmitter();
 
   toggleOffcanvas() {
@@ -75,7 +74,6 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
       this.isMenuExpanded = style.IsMenuExpanded;
       this.commonService.isMinimize.next(!this.isMenuExpanded);
     }
-
     console.log(JSON.stringify(style));
     this.IsLoggedIn = false;
     this.isAdmin = true;
@@ -243,6 +241,40 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
         this.local.updateLayoutConfig(this.isMenuExpanded);
       }
     });
+  }
+
+  firstOpenToggle() {
+    let accordionItemHeader = document.querySelector(".accordion-item-header");
+    accordionItemHeader.classList.toggle("active");
+    const accordionItemBody = accordionItemHeader.nextElementSibling;
+     if(accordionItemHeader.classList.contains("active")) {
+      (accordionItemBody as HTMLElement).style.maxHeight = accordionItemBody.scrollHeight + "px";
+     }
+     else {
+       (accordionItemBody as HTMLElement).style.maxHeight = '0px';
+     }
+  }
+
+  toogle(e: any) {
+    let index = Number(e.currentTarget.getAttribute("data-index"));
+    let elem = document.querySelectorAll(".accordion-item-header");
+    elem.forEach(x => {
+      let i = Number(x.getAttribute("data-index"));
+      if (x.classList.contains("active") && i != index) {
+        x.classList.toggle("active");
+        let nextSibling = x.nextElementSibling;
+        (nextSibling as HTMLElement).style.maxHeight = '0px';
+      }
+    })
+    let accordionItemHeader = e.currentTarget;
+    accordionItemHeader.classList.toggle("active");
+    const accordionItemBody = accordionItemHeader.nextElementSibling;
+     if(accordionItemHeader.classList.contains("active")) {
+      accordionItemBody.style.maxHeight = accordionItemBody.scrollHeight + "px";
+     }
+     else {
+       accordionItemBody.style.maxHeight = 0;
+     }
   }
 }
 
