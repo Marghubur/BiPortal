@@ -5,6 +5,12 @@ WORKDIR /app
 
 COPY . .
 
+# Copy the custom NGINX configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Start NGINX
+CMD ["nginx", "-g", "daemon off;"]
+
 RUN npm install
 
 RUN npm run build -- --configuration production
