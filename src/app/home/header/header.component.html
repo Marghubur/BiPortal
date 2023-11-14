@@ -75,7 +75,7 @@
               <a class="nav-link" href="javascript:void(0)" [routerLink]="['/price']" (click)="closeToggeMenu()">Pricing</a>
             </li>
             <li class="nav-item pe-3 fw-semibold">
-              <a class="nav-link" href="javascript:void(0)" (click)="closeToggeMenu()">About</a>
+              <a class="nav-link" href="javascript:void(0)" [routerLink]="['/contact']" (click)="closeToggeMenu()">Contact Us</a>
             </li>
             <li class="nav-item pe-3 fw-semibold">
               <a class="nav-link" href="javascript:void(0)" (click)="closeToggeMenu()">Carrers</a>
@@ -83,7 +83,7 @@
           </ul>
           <form class="d-flex" role="search">
             <button class="btn me-3 btn-light text-dark rounded-pill fw-semibold" (click)="doLogin()">
-              <i class="fa-solid fa-circle-user pe-1"></i> 
+              <i class="fa-solid fa-circle-user pe-1"></i>
               Login
             </button>
             <button class="btn btn-primary-c rounded-pill">Start now, its, free!</button>
