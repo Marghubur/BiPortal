@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-
+  // @HostListener('document:mousewheel')
+  @HostListener('indow.scroll', [])
+  onWindowScroll() {
+    let element = document.querySelector('.sticky-top') as HTMLElement;
+    if (document.body.scrollTop > 10 || document.documentElement.scrollTop > 10)
+      element.classList.add('shadow');
+    else
+      element.classList.remove('shadow');
+  }
 }
