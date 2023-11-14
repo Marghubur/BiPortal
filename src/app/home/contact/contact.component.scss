@@ -1,0 +1,9 @@
+textarea {
+  resize: none;
+}
+
+.content-wrapper {
+  position: -webkit-sticky;
+  position: sticky !important;
+  top: 6rem !important;
+}

@@ -42,6 +42,7 @@ export enum FileSystemType {
 export const Price = "price";
 export const Support = "support";
 export const Contact = "contact";
+export const FreeTrail = "freetrial";
 
 // ********************** API route pages  *******************
 
