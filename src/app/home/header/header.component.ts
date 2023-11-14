@@ -38,12 +38,9 @@ export class HeaderComponent {
   }
 
   ngOnInit() {
-      this.browserName = this.detectBrowserName();
-  }
+    this.browserName = this.detectBrowserName();
+}
 
-  doLogin() {
-    this.nav.navigate(Login, null);
-  }
 
   toggleMenu(e: any) {
     var menu = e.currentTarget.nextElementSibling
