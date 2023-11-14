@@ -37,11 +37,6 @@ export class HeaderComponent {
     }
   }
 
-  ngOnInit() {
-    this.browserName = this.detectBrowserName();
-}
-
-
   toggleMenu(e: any) {
     var menu = e.currentTarget.nextElementSibling
     menu.style.display = (menu.style.display === "block") ? "none" : "block";
