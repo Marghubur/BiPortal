@@ -1,0 +1,8 @@
+ul li::marker {
+  content: '✓';
+  color: green;
+  font-weight: bold;
+}
+li {
+  padding-left: 10px;
+}
