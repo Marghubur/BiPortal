@@ -26,10 +26,6 @@ export class HeaderComponent {
     }
   }
 
-  doLogin() {
-    this.nav.navigate(Login, null);
-  }
-
   toggleMenu(e: any) {
     var menu = e.currentTarget.nextElementSibling
     menu.style.display = (menu.style.display === "block") ? "none" : "block";
