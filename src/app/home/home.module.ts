@@ -11,6 +11,7 @@ import { SupportComponent } from './support/support.component';
 import { PriceComponent } from './price/price.component';
 import { FooterComponent } from './footer/footer.component';
 import { ContactComponent } from './contact/contact.component';
+import { FreeTrailComponent } from './free-trail/free-trail.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ContactComponent } from './contact/contact.component';
     SupportComponent,
     PriceComponent,
     FooterComponent,
-    ContactComponent
+    ContactComponent,
+    FreeTrailComponent
   ],
   imports: [
     CommonModule,
