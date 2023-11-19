@@ -103,9 +103,13 @@
                       </div>
                     </div>
                     <div class="d-block col-md-12 pt-1 pb-2 consume-leave-box">
-                      <canvas baseChart [data]="chartData" type="doughnut" [options]="chartOptions">
-                      </canvas>
-                      <!-- <canvas id="consumeLeaveChart" width="100" height="100"></canvas> -->
+                      <div [hidden]="!isLeaveConsume">
+                        <canvas baseChart [data]="chartData" type="doughnut" [options]="chartOptions">
+                        </canvas>
+                      </div>
+                      <div class="fw-bold text-dark py-5 my-5 text-center" *ngIf="!isLeaveConsume">
+                        NO LEAVE CONSUME
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -2,7 +2,7 @@
   <form autocomplete="off">
     <div class="x_panel col-md-12">
       <div [ngClass]="{'preload': !isEmployeesReady}">
-        <div class="col-12 row m-0 p-0 mb-4 skeleton align-items-center justify-content-between">
+        <div class="col-12 row m-0 p-0 skeleton align-items-center justify-content-between">
           <ng-container *ngIf="isEmployeesReady">
             <div class="x_header">
               <div class="d-flex justify-content-between mt-3">
@@ -54,13 +54,13 @@
             <tbody >
               <tr *ngFor="let item of dailyTimesheetDetails; let i = index">
                 <ng-container *ngIf="dailyTimesheetDetails.length > 0">
-                  <td>
+                  <td class="py-3">
                     <a href="javascript:void(0)" class="text-dark" (click)="viewTimeSheet(item)">
                       <span class="fw-bold pe-1">Timesheet From</span>{{item.TimesheetStartDate | date}}
                       <span class="fw-bold px-1">to</span>{{item.TimesheetEndDate | date}}
                     </a>
                   </td>
-                  <td>
+                  <td class="py-3">
                     <span *ngIf="item.TimesheetStatus == 2"><i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
                     <span *ngIf="item.TimesheetStatus == 8"><i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
                     <span *ngIf="item.TimesheetStatus == 9"><i class="fa-regular fa-square-check text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
@@ -85,19 +85,6 @@
             </tbody>
           </table>
         </ng-container>
-        <!-- <ng-container *ngIf="!isFormReady && clientId > 0">
-          <div class="py-5 my-5">
-            <h6 class="fw-bold fs-3 text-center text-dark">Timesheet detail is loading</h6>
-            <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-              <div class="col-md-3 modal-container  text-center cog-wheel">
-                <img src="assets/images/cog.gif" alt="" />
-                <h6 class="modal-title title-message">
-                  Please Wait ........
-                </h6>
-              </div>
-            </div>
-          </div>
-        </ng-container> -->
         <ng-container *ngIf="!isFormReady && clientId == 0">
           <div class="x_panel d-flex flex-direction-column justify-content-center">
             <div class="x_content py-5">
@@ -108,19 +95,6 @@
           </div>
         </ng-container>
       </ng-container>
-      <!-- <ng-container *ngIf="!isEmployeesReady">
-        <div class="py-5 my-5 x_panel">
-          <h6 class="fw-bold fs-3 text-center text-dark">Timesheet Details are loading</h6>
-          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </div>
-      </ng-container> -->
     </div>
   </form>
 </div>

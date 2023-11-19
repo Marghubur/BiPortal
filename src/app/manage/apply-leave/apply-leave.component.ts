@@ -50,6 +50,7 @@ export class ApplyLeaveComponent implements OnInit {
   FilesCollection: Array<any> = [];
   viewer: any = null;
   monthlyLeaveData: any = null;
+  isLeaveConsume: boolean = false;
   datePickerJson = {};
   json = {
     disable: [],
@@ -756,8 +757,12 @@ export class ApplyLeaveComponent implements OnInit {
           hoverBackgroundColor: bgColor,
         },
       ],
-
     };
+    let consumeLeave = this.chartDataset.filter(x => x.ConsumedLeave > 0);
+    if (consumeLeave && consumeLeave.length > 0)
+      this.isLeaveConsume = true;
+    else
+      this.isLeaveConsume = false;
 
     this.chartOptions = {
       responsive: true,
