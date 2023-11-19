@@ -35,6 +35,6 @@ jobs:
         image: istiyaqmi9/hiringbell-ui
         tags: latest
         registry: docker.io
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile-prod
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}    
