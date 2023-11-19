@@ -1,5 +1,4 @@
 import { Component, HostListener } from '@angular/core';
-import { Login } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -13,7 +12,6 @@ export class HeaderComponent {
   constructor(private nav: iNavigation) { }
 
   @HostListener('body:scroll', [])
-  // @HostListener('document:mousewheel')
   onScroll() {
     let element = document.querySelector('.sticky-top') as HTMLElement;
     if (document.body.scrollTop > 10 || document.documentElement.scrollTop > 10)
