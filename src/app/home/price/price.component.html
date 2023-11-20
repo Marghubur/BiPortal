@@ -3,216 +3,33 @@
     <h2 class="fw-bold text-center text-dark">Affordable excellence is our mantra. We believe in delivering outstanding value without the high price tag.</h2>
   </div>
   <h4 class="text-center fw-bold py-5 text-dark">Choose The Plan Which Suits You The Best</h4>
-  <div class="row">
-    <div class="col-md-3">
+  <div class="row" *ngIf="!isLoading">
+    <div class="col-md-3" *ngFor="let item of priceDetail">
       <div class="card py-3 shadow">
         <div class="text-center px-3 pb-4">
-          <h5 class="text-center text-dark fw-bold">Foundation</h5>
-          <p class="mb-0">Designed for businesses at the onset of their automation exploration.</p>
+          <h5 class="text-center text-dark fw-bold">{{item.PlanName}}</h5>
+          <p class="mb-0">{{item.Description}}</p>
         </div>
         <div class="border-top border-bottom py-4 text-center">
           <p class="mb-0 text-center">
-            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> 6,999</span>/month
+            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.Price}}</span>
           </p>
-          <p class="mb-0 text-center">(upto 100 employees)</p>
+          <p class="mb-0 text-center">({{item.EmployeeLimit}})</p>
           <span>+</span>
           <p class="mb-0 text-center">
-            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> 60</span>/month
+            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.AdditionalPrice}}</span>
           </p>
-          <p class="mb-0 text-center">per additional empoyee</p>
+          <p class="mb-0 text-center">({{item.AdditionalPriceDetail}})</p>
         </div>
         <div class="px-3">
           <button class="btn btn-primary-c mt-3 w-100">Free trial</button>
-          <h6 class="fw-bold text-center mt-4">Key automation capabilities necessary for optimized processes.</h6>
-          <h6 class="fw-bold mt-4 text-primary-c">CORE HR</h6>
-          <ul>
-            <li>Interactive Employee Profile</li>
-            <li>Advanced Role & Permission</li>
-            <li>Custom Notification</li>
-            <li>Asset Tracking</li>
-            <li>Document Storage</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">TIME TRACKING</h6>
-          <ul>
-            <li>Advanved Leave Management</li>
-            <li>Advanced Attendance Management</li>
-            <li>Advanced Timesheet Management</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">PAYROLL</h6>
-          <ul>
-            <li>Payroll Automation</li>
-            <li>Employee Tax Management</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">REMOTE EMPLOYEE ENGAGEMENT</h6>
-          <ul>
-            <li>One-One Meeting</li>
-            <li>Continuous Feedback</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">PERFORMANCE</h6>
-          <ul>
-            <li>360 Degree Performance</li>
-            <li>Performance Analytics</li>
-            <li>Goal Monitoring</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card py-3 shadow">
-        <div class="text-center px-3 pb-4">
-          <h5 class="text-center text-dark fw-bold">Foundation</h5>
-          <p class="mb-0">Designed for businesses at the onset of their automation exploration.</p>
-        </div>
-        <div class="border-top border-bottom py-4 text-center">
-          <p class="mb-0 text-center">
-            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> 6,999</span>/month
-          </p>
-          <p class="mb-0 text-center">(upto 100 employees)</p>
-          <span>+</span>
-          <p class="mb-0 text-center">
-            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> 60</span>/month
-          </p>
-          <p class="mb-0 text-center">per additional empoyee</p>
-        </div>
-        <div class="px-3">
-          <button class="btn btn-primary-c mt-3 w-100">Free trial</button>
-          <h6 class="fw-bold text-center mt-4">Key automation capabilities necessary for optimized processes.</h6>
-          <h6 class="fw-bold mt-4 text-primary-c">CORE HR</h6>
-          <ul>
-            <li>Interactive Employee Profile</li>
-            <li>Advanced Role & Permission</li>
-            <li>Custom Notification</li>
-            <li>Asset Tracking</li>
-            <li>Document Storage</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">TIME TRACKING</h6>
-          <ul>
-            <li>Advanved Leave Management</li>
-            <li>Advanced Attendance Management</li>
-            <li>Advanced Timesheet Management</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">PAYROLL</h6>
-          <ul>
-            <li>Payroll Automation</li>
-            <li>Employee Tax Management</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">REMOTE EMPLOYEE ENGAGEMENT</h6>
-          <ul>
-            <li>One-One Meeting</li>
-            <li>Continuous Feedback</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">PERFORMANCE</h6>
-          <ul>
-            <li>360 Degree Performance</li>
-            <li>Performance Analytics</li>
-            <li>Goal Monitoring</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card py-3 shadow">
-        <div class="text-center px-3 pb-4">
-          <h5 class="text-center text-dark fw-bold">Foundation</h5>
-          <p class="mb-0">Designed for businesses at the onset of their automation exploration.</p>
-        </div>
-        <div class="border-top border-bottom py-4 text-center">
-          <p class="mb-0 text-center">
-            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> 6,999</span>/month
-          </p>
-          <p class="mb-0 text-center">(upto 100 employees)</p>
-          <span>+</span>
-          <p class="mb-0 text-center">
-            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> 60</span>/month
-          </p>
-          <p class="mb-0 text-center">per additional empoyee</p>
-        </div>
-        <div class="px-3">
-          <button class="btn btn-primary-c mt-3 w-100">Free trial</button>
-          <h6 class="fw-bold text-center mt-4">Key automation capabilities necessary for optimized processes.</h6>
-          <h6 class="fw-bold mt-4 text-primary-c">CORE HR</h6>
-          <ul>
-            <li>Interactive Employee Profile</li>
-            <li>Advanced Role & Permission</li>
-            <li>Custom Notification</li>
-            <li>Asset Tracking</li>
-            <li>Document Storage</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">TIME TRACKING</h6>
-          <ul>
-            <li>Advanved Leave Management</li>
-            <li>Advanced Attendance Management</li>
-            <li>Advanced Timesheet Management</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">PAYROLL</h6>
-          <ul>
-            <li>Payroll Automation</li>
-            <li>Employee Tax Management</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">REMOTE EMPLOYEE ENGAGEMENT</h6>
-          <ul>
-            <li>One-One Meeting</li>
-            <li>Continuous Feedback</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">PERFORMANCE</h6>
-          <ul>
-            <li>360 Degree Performance</li>
-            <li>Performance Analytics</li>
-            <li>Goal Monitoring</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card py-3 shadow">
-        <div class="text-center px-3 pb-4">
-          <h5 class="text-center text-dark fw-bold">Foundation</h5>
-          <p class="mb-0">Designed for businesses at the onset of their automation exploration.</p>
-        </div>
-        <div class="border-top border-bottom py-4 text-center">
-          <p class="mb-0 text-center">
-            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> 6,999</span>/month
-          </p>
-          <p class="mb-0 text-center">(upto 100 employees)</p>
-          <span>+</span>
-          <p class="mb-0 text-center">
-            <span class="fw-bold text-dark"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> 60</span>/month
-          </p>
-          <p class="mb-0 text-center">per additional empoyee</p>
-        </div>
-        <div class="px-3">
-          <button class="btn btn-primary-c mt-3 w-100">Free trial</button>
-          <h6 class="fw-bold text-center mt-4">Key automation capabilities necessary for optimized processes.</h6>
-          <h6 class="fw-bold mt-4 text-primary-c">CORE HR</h6>
-          <ul>
-            <li>Interactive Employee Profile</li>
-            <li>Advanced Role & Permission</li>
-            <li>Custom Notification</li>
-            <li>Asset Tracking</li>
-            <li>Document Storage</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">TIME TRACKING</h6>
-          <ul>
-            <li>Advanved Leave Management</li>
-            <li>Advanced Attendance Management</li>
-            <li>Advanced Timesheet Management</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">PAYROLL</h6>
-          <ul>
-            <li>Payroll Automation</li>
-            <li>Employee Tax Management</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">REMOTE EMPLOYEE ENGAGEMENT</h6>
-          <ul>
-            <li>One-One Meeting</li>
-            <li>Continuous Feedback</li>
-          </ul>
-          <h6 class="fw-bold mt-4 text-primary-c">PERFORMANCE</h6>
-          <ul>
-            <li>360 Degree Performance</li>
-            <li>Performance Analytics</li>
-            <li>Goal Monitoring</li>
-          </ul>
+          <h6 class="fw-bold text-center mt-4">{{item.PlanSpecification}}</h6>
+          <ng-container *ngFor="let feature of item.Features">
+            <h6 class="fw-bold mt-4 text-primary-c">{{feature.FeatureName}}</h6>
+            <ul>
+              <li *ngFor="let featureDetail of feature.FeatureDetail">{{featureDetail}}</li>
+            </ul>
+          </ng-container>
         </div>
       </div>
     </div>

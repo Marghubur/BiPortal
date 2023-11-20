@@ -339,7 +339,7 @@ export class DocumentUser {
     EndDate: Date = null;
     EventName: string = null;
     IsHoliday: boolean = true;
-    IsHalfDay: boolean = null;
+    IsHalfDay: boolean = false;
     DescriptionNote: string = null;
     ApplicableFor: number = 0;
     Year: number = new Date().getFullYear();

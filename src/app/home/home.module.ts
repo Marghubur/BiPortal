@@ -12,6 +12,8 @@ import { PriceComponent } from './price/price.component';
 import { FooterComponent } from './footer/footer.component';
 import { ContactComponent } from './contact/contact.component';
 import { FreeTrailComponent } from './free-trail/free-trail.component';
+import { AboutusComponent } from './aboutus/aboutus.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -24,13 +26,16 @@ import { FreeTrailComponent } from './free-trail/free-trail.component';
     PriceComponent,
     FooterComponent,
     ContactComponent,
-    FreeTrailComponent
+    FreeTrailComponent,
+    AboutusComponent
   ],
   imports: [
     CommonModule,
     HomeRoutingModule,
     NgbAccordionModule,
-    NgbDropdownModule
+    NgbDropdownModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
 })
 export class HomeModule {

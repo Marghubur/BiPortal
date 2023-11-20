@@ -15,14 +15,14 @@
                 <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
                   class="fa-solid fa-paper-plane pe-1"></i> Email Link Config
                 </a>
-                <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa-solid fa-plus-square pe-2"></i>Add Holiday</button>
+                <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa-regular fa-plus-square pe-2"></i>Add Holiday</button>
               </div>
             </div>
           </div>
         </div>
         <ng-container *ngIf="isPageReady">
           <div class="x_content mt-4">
-            <div class="t-table t-list t-border col-md-12">
+            <div class="t-table t-list  col-md-12">
               <div class="hide-bar"></div>
               <div class="t-head">
                 <div class="tr">
@@ -122,7 +122,7 @@
               </div>
               <div class="t-body">
                 <ng-container *ngIf="allHolidayList.length > 0">
-                  <div class="tr py-2" *ngFor="let holiday of allHolidayList; let i = index;">
+                  <div class="tr py-3" *ngFor="let holiday of allHolidayList; let i = index;">
                     <div class="td align-middle text-center fe-index">
                       <div class="cell-wrapper">
                         {{holiday.Index}}
@@ -182,16 +182,6 @@
             <app-pagination [pagination]="holidayData" (onPageChange)="GetFilterResult($event)"></app-pagination>
           </div>
         </ng-container>
-        <!-- <ng-container *ngIf="!isPageReady">
-          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </ng-container> -->
       </div>
     </div>
   </div>

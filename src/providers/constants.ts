@@ -43,6 +43,7 @@ export const Price = "price";
 export const Support = "support";
 export const Contact = "contact";
 export const FreeTrail = "freetrial";
+export const AboutUs = "aboutus";
 
 // ********************** API route pages  *******************
 
