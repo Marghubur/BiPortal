@@ -1,7 +1,17 @@
 <div class="col-12 full-v main-container">
   <div class="col-12 x_panel row">
-    <div class="mt-3">
-      <app-breadcrums></app-breadcrums>
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Profile'" [subtitle]="'Details'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+          </div>
+        </div>
+      </div>
     </div>
     <div class="right-panel col-md-12 p-0">
       <ng-container *ngIf="isFormReady">

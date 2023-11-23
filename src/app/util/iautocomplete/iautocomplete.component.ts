@@ -614,6 +614,7 @@ export class
   text: string = "";
   selected?: boolean = false;
   email?: string = "";
+  ParentNode?: number = 0;
 }
 
 export class autoCompleteModal {
