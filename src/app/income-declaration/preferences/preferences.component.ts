@@ -55,17 +55,15 @@ export class PreferencesComponent implements OnInit {
     this.isPageReady= false;
     if (this.EmployeeId > 0) {
       this.http.get(`employee/GetEmployeeById/${this.EmployeeId}/1`).then((response: ResponseModel) => {
-        if(response.ResponseBody) {
-          if (response.ResponseBody) {
-            this.employeeDetail = response.ResponseBody;
-            this.employeeDetail.DOB = new Date(this.employeeDetail.DOB);
-            Toast("Record found.")
-          } else {
-            ErrorToast("Record not found");
-          }
+        if (response.ResponseBody) {
+          this.employeeDetail = response.ResponseBody;
+          this.employeeDetail.DOB = new Date(this.employeeDetail.DOB);
+          this.employeeDetail.PFJoinDate = new Date(this.employeeDetail.PFJoinDate);
           this.isPageReady= true;
+          Toast("Record found.")
         }
       }).catch(e => {
+        this.isPageReady= true;
         ErrorToast("No record found");
       });
     }

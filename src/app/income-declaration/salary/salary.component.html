@@ -20,7 +20,11 @@
       <div class="d-flex justify-content-between">
         <div class="col-8">
           <div class="px-1">
-            <app-breadcrums ></app-breadcrums>
+            <app-breadcrums [title]="'My Salary'" [subtitle]="'Details'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
           </div>
         </div>
       </div>
@@ -402,7 +406,7 @@
   aria-labelledby="slaryStructureHistoryLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-header text-white border-bottom-0">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="slaryStructureHistoryLabel">Salary structure Change History</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>

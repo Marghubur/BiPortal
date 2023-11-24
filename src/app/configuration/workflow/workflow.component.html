@@ -1,12 +1,17 @@
 <div class="col-md-12 col-sm-12 main-container">
     <div class="x_panel pb-0 mb-0">
       <div class="x_header">
-        <div class="d-flex align-items-baseline">
-          <h5 class="c-header">APPROVAL WORK FLOW</h5>
+        <div class="d-flex justify-content-between">
+          <div class="col-8">
+            <div class="px-1">
+              <app-breadcrums [title]="'APPROVAL WORK FLOW'"></app-breadcrums>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="x_header_title d-flex align-items-center justify-content-end">
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="px-1">
-        <app-breadcrums></app-breadcrums>
       </div>
       <div [ngSwitch]="isReady">
         <div *ngSwitchCase="false">

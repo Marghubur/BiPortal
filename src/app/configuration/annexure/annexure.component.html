@@ -1,14 +1,19 @@
 <div class="main-container">
     <div class="x_panel">
       <div class="x_header">
-        <div class="x_header_title d-flex align-items-center justify-content-between">
-          <h2>Annexure <small>Annexure template list</small></h2>
-          <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
-            class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
+        <div class="d-flex justify-content-between">
+          <div class="col-8">
+            <div class="px-1">
+              <app-breadcrums [title]="'Annexure'" [subtitle]="'Annexure template list'"></app-breadcrums>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="x_header_title d-flex align-items-center justify-content-end">
+              <a href="javascript:void(0)" (click)="navToEmailLinkConfig()" class="text-decoration-none fw-bold pe-4"><i
+                class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        <app-breadcrums></app-breadcrums>
       </div>
       <ng-container *ngIf="!isPageLoading">
         <div class="x_content">

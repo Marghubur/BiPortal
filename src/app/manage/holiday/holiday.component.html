@@ -335,7 +335,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="deleteHoliday()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-trash-can': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Delete' }}</span>
         </button>
       </div>

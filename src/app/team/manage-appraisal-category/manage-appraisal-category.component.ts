@@ -5,7 +5,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage, GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { Appraisal } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
@@ -21,7 +21,6 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   isPageReady: boolean = false;
   currentApprisalCycle: ApprisalCycle = new ApprisalCycle();
   selectedWorkflow: any = null;
-  approvalWorkFlows: Array<any> = null;
   isAppraisalCycleInSamePeriod: boolean = false;
   apprisalCycleDetail: Array<ApprisalCycle> = [];
   isSubmitted: boolean = false;
@@ -50,6 +49,9 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   orgTree: Array<any> = [];
   isTreeLoaded: boolean = false;
   company: any = null;
+  approvalChainGroup: Array<any> = [];
+  selectedRoleId: number = 0;
+  orgHierarchy: Array<any> = [];
 
   constructor(private http: AjaxService,
     private nav: iNavigation,
@@ -67,6 +69,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       this.roleList.data.push({
         text: x.RoleName,
         value: x.RoleId,
+        ParentNode: x.ParentNode,
         selected: false
       })
       this.designation.data.push({
@@ -105,7 +108,10 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     this.isPageReady = false;
     this.http.get(`eps/apprisalcatagory/getCategoryByCategoryId/${ObjectiveCatagoryId}`, true).then(res => {
       if (res.ResponseBody) {
-        this.approvalWorkFlows = res.ResponseBody.ApprovalWorkflow;
+        this.orgHierarchy = res.ResponseBody.OrganizationChain;
+        this.orgHierarchy = this.orgHierarchy.filter(x => x.RoleName.toLocaleUpperCase() != "CEO"
+          && x.RoleName.toLocaleUpperCase() != "CTO"
+          && !x.IsDepartment);
         if (res.ResponseBody.AppraisalCategory.length > 0) {
           this.appraisalDetailAndCategory = res.ResponseBody.AppraisalCategory;
           this.onEditCategory(this.appraisalDetailAndCategory[0]);
@@ -180,7 +186,8 @@ export class ManageAppraisalCategoryComponent implements OnInit {
         let role = this.roles.find(i => i.RoleId == x);
         this.selectedRoles.push({
           RoleId: role.RoleId,
-          RoleName: role.RoleName
+          RoleName: role.RoleName,
+          ParentNode: role.ParentNode
         })
 
       });
@@ -189,7 +196,8 @@ export class ManageAppraisalCategoryComponent implements OnInit {
           i.selected = true;
         else
           i.selected = false;
-      })
+      });
+      this.groupedRoleLevel();
     }
   }
 
@@ -215,7 +223,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       ReviewEndDate: new FormControl(this.currentApprisalCycle.ReviewEndDate, [Validators.required]),
       IsHikeApproval: new FormControl(this.currentApprisalCycle.IsHikeApproval),
       AppraisalDetailId: new FormControl(this.currentApprisalCycle.AppraisalDetailId),
-      ApprovalWorkflowId: new FormControl(this.currentApprisalCycle.ApprovalWorkflowId),
+      ApprovalWorkflow: new FormControl(this.currentApprisalCycle.ApprovalWorkflow),
       AppraisalName: new FormControl(this.currentApprisalCycle.AppraisalName, [Validators.required])
     });
     this.appraisalForm.controls['IsRaterSelectedByManager'].disable();
@@ -224,8 +232,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     this.appraisalForm.controls['CanRaterViewAppraisal'].disable();
     this.appraisalForm.controls['IsRequiredRatersFeedback'].disable();
     this.appraisalForm.controls['IsSelfAppraisal'].disable();
-    if (this.currentApprisalCycle.ApprovalWorkflowId && this.currentApprisalCycle.ApprovalWorkflowId > 0)
-      this.selectedWorkflow = this.approvalWorkFlows.find(x => x.ApprovalWorkFlowId == this.currentApprisalCycle.ApprovalWorkflowId);
+
   }
 
   get f() {
@@ -372,12 +379,6 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     }
   }
 
-  changeWorkflow(e: any) {
-    let value = Number(e.target.value);
-    if (value > 0)
-      this.selectedWorkflow = this.approvalWorkFlows.find(x => x.ApprovalWorkFlowId == value);
-  }
-
   addApprisalCycle() {
     this.isLoading = true;
     this.isSubmitted = true;
@@ -459,11 +460,13 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       let role = this.roleList.data.find(x => x.value == e.value);
       this.selectedRoles.push({
         RoleId: role.value,
-        RoleName: role.text
+        RoleName: role.text,
+        ParentNode: role.ParentNode
       });
     } else {
       this.selectedRoles.splice(index, 1);
     }
+    this.groupedRoleLevel();
   }
 
   viewWorkflowChain() {
@@ -480,22 +483,131 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   }
 
   viewApprovalChainFlow() {
-    this.http.get(`ef/orgtree/getOrgTreeByRole/${this.company.CompanyId}/28`, true)
-      .then((respone: ResponseModel) => {
-        if (respone) {
-          this.orgTree = respone.ResponseBody;
-          this.orgTree = this.orgTree.filter(x => x.RoleName.toLocaleUpperCase() != "CEO"
-          && x.RoleName.toLocaleUpperCase() != "CTO"
-          && !x.IsDepartment);
-          Toast("Tree structure loaded successfully.");
-          $("#worflowChainModal").modal("show");
-          this.isTreeLoaded = true;
-        } else {
-          ErrorToast("Fail to add");
-        }
-      }).catch(e => {
-        ErrorToast(e.error);
+    // if (this.selectedRoleId > 0) {
+    //   this.http.get(`ef/orgTree/getOrgTreeByRole/${this.company.CompanyId}/${this.selectedRoleId}`, true)
+    //   .then((respone: ResponseModel) => {
+    //     if (respone) {
+    //       this.orgTree = respone.ResponseBody;
+    //       this.orgTree = this.orgTree.filter(x => x.RoleName.toLocaleUpperCase() != "CEO"
+    //       && x.RoleName.toLocaleUpperCase() != "CTO"
+    //       && !x.IsDepartment);
+    //       if (this.orgTree && this.orgTree.length > 0) {
+    //         this.orgTree.forEach(x => {
+    //           x.IsHide = false;
+    //         })
+    //       }
+    //       Toast("Tree structure loaded successfully.");
+    //       $("#worflowChainModal").modal("show");
+    //       this.isTreeLoaded = true;
+    //     } else {
+    //       ErrorToast("Fail to add");
+    //     }
+    //   }).catch(e => {
+    //     ErrorToast(e.error);
+    //   });
+    // } else {
+    //   WarningToast("Please select level first");
+    // }
+    if (Number(this.selectedRoleId) > 0) {
+      this.isTreeLoaded = false;
+      this.orgTree = [];
+      let data = JSON.parse(this.currentApprisalCycle.ApprovalWorkflow);
+      let value = data.find(x => x.RoleId == Number(this.selectedRoleId));
+      if (value) {
+        value.Chain.forEach(x => {
+          let org = this.orgHierarchy.find(i => i.RoleId == x.RoleId);
+          org.IsActive = x.IsActive;
+          this.orgTree.push(org);
+        });
+        this.orgTree.push(this.orgHierarchy.find(i => i.RoleId == Number(this.selectedRoleId)));
+        $("#worflowChainModal").modal("show");
+        this.isTreeLoaded = true;
+      } else {
+        this.http.get(`ef/orgtree/getOrgTreeByRole/${this.company.CompanyId}/${this.selectedRoleId}`, true)
+        .then((respone: ResponseModel) => {
+          if (respone) {
+            this.orgTree = respone.ResponseBody;
+            this.orgTree = this.orgTree.filter(x => x.RoleName.toLocaleUpperCase() != "CEO"
+            && x.RoleName.toLocaleUpperCase() != "CTO"
+            && !x.IsDepartment);
+            Toast("Tree structure loaded successfully.");
+            $("#worflowChainModal").modal("show");
+            this.isTreeLoaded = true;
+          } else {
+            ErrorToast("Fail to add");
+          }
+        }).catch(e => {
+          ErrorToast(e.error);
+        });
+      }
+    }
+  }
+
+  groupedRoleLevel() {
+    this.approvalChainGroup = [];
+    let result = this.selectedRoles.reduce((a, b) => {
+      a[b.ParentNode] = a[b.ParentNode] || [];
+      a[b.ParentNode].push(b);
+      return a;
+    }, Object.create(null));
+    let keys = Object.keys(result);
+    let i = 0;
+    while(i < keys.length) {
+      this.approvalChainGroup.push({
+        Name:result[keys[i]].map(x => x.RoleName).join(', '),
+        RoleId:result[keys[i]].map(x => x.RoleId),
+        ParentNode: keys[i]
       });
+      i++;
+    }
+  }
+
+  removeNode(e: any) {
+    let roleId = Number(e.target.parentElement.getAttribute("data-index"));
+    let removeRole = this.orgTree.find(x => x.RoleId == roleId);
+    removeRole.IsActive = false;
+    this.orgTree.filter(x => x.ParentNode == roleId).map(i => i.ParentNode = removeRole.ParentNode);
+    e.target.parentElement.classList.add("hide-node");
+  }
+
+  saveAppraisallevel() {
+    let ids = this.approvalChainGroup.map(x => x.RoleId);
+    let selectedIds = [];
+    let data = [];
+    if (ids != null && ids.length > 0) {
+      ids.forEach(x => {
+        if (x.includes(Number(this.selectedRoleId))) {
+          selectedIds = x;
+        }
+      })
+    }
+    if (selectedIds && selectedIds.length > 0) {
+      this.orgTree.pop();
+      let chain = [];
+      this.orgTree.forEach(x => {
+        chain.push({
+          RoleId: x.RoleId,
+          IsActive: x.IsActive
+        })
+      })
+      selectedIds.forEach(x => {
+        data.push({
+          ObjectiveCatagoryId: this.currentApprisalCycle.ObjectiveCatagoryId,
+          RoleId: x,
+          IsDefaultChain: this.orgTree.filter(x => x.IsActive == true).length > 0 ? true : false,
+          Chain: chain
+        })
+      })
+    }
+    if (data) {
+      this.isLoading = true;
+      this.http.post('eps/apprisalcatagory/manageAppraisalLevel',data, true).then((res: ResponseModel) => {
+
+      }).catch(e => {
+        this.isLoading = false;
+        ErrorToast(e.error);
+      })
+    }
   }
 }
 
@@ -528,6 +640,6 @@ export class ApprisalCycle {
   RatersRequired: boolean = false;
   RolesId: string = null;
   Tags: Array<string> = [];
-  ApprovalWorkflowId: number = 0;
+  ApprovalWorkflow: string = null;
   AppraisalName: string = null;
 }
