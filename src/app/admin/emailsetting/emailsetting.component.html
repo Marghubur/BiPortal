@@ -140,7 +140,7 @@
                     <div class="col-md-12 mt-4 d-flex flex-column justify-content-end">
                       <div class="d-flex flex-row justify-content-end">
                         <button class="btn-primary-c btn" [disabled]="isLoading" (click)="submitChanges()">
-                          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-paper-plane': !isLoading}"></i>
+                          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-paper-plane': !isLoading}"></i>
                           <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Changes' }}</span>
                         </button>
                       </div>

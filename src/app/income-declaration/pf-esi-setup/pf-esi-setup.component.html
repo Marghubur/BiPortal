@@ -14,7 +14,7 @@
         <div class="col-12 p-2 my-4 row">
           <ng-container *ngIf="IsReady">
             <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING <button [disabled]="isLoading"
-                class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i [ngClass]="{'fa-solid fa-gear': !isLoading, 'fa-spin fa-solid fa-spinner': isLoading}"></i>
+                class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i [ngClass]="{'fa-solid fa-gear': !isLoading, 'fa-solid fa-spinner fa-spin': isLoading}"></i>
                <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span></button></p>
             <label>These setting will be used for the different calculatin like, Salary, GST etc.</label>
             <div class="mx-4 my-4 row" [formGroup]="PFandESIForm">

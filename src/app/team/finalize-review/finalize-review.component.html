@@ -137,7 +137,7 @@
                 </div>
                 <a href="javascript:void(0)"  class="fw-bold" (click)="showOffCanvas(item)">
                   <span class="pe-2">Objective's</span>
-                  <i  data-bs-toggle="tooltip" data-bs-placement="right" title="View objective" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-eye': !isLoading}"></i>
+                  <i  data-bs-toggle="tooltip" data-bs-placement="right" title="View objective" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-eye': !isLoading}"></i>
                 </a>
               </div>
             </div>
@@ -154,13 +154,13 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-danger ms-2"  [disabled]="isLoading" (click)="rejectAppraisal()" *ngIf="appraisalReviewStatus != 5">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-ban': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-ban': !isLoading}"></i>
           <span class="ps-2">
             Reject
           </span>
         </button>
         <button class="btn btn-success ms-2"  [disabled]="isLoading" (click)="approvedAppraisal()" *ngIf="appraisalReviewStatus != 9">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-check': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-check': !isLoading}"></i>
           <span class="ps-2">
             Approved
           </span>

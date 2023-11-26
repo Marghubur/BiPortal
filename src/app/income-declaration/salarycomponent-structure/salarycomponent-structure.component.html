@@ -38,8 +38,7 @@
               </div>
             </div>
           </div>
-          <div class="t-table t-list t-border col-md-12 my-3">
-            <div class="hide-bar bg-light"></div>
+          <div class="t-table t-list rounded col-md-12 my-3">
             <div class="t-head bg-light fw-bold">
               <div class="tr">
                 <div class="th text-truncate ps-3 fe-2">
@@ -318,7 +317,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitComponents()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Add' }}</span>
           </button>
       </div>
@@ -404,7 +403,7 @@
           <i class="fa pe-2 fa-solid fa-xmark"></i>
           Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateChanges()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-caret-square-o-right': !isLoading}"></i>
+          <i class="fa pe-2" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-caret-square-o-right': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Update' }}
         </button>
       </div>
@@ -430,7 +429,7 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark pe-2"></i>
           Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="inactiveComponent()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-caret-square-o-right': !isLoading}"></i>
+          <i class="fa pe-2" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-caret-square-o-right': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Inactive' }}
         </button>
       </div>

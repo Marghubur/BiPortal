@@ -130,7 +130,7 @@
         <a href="javascript:void(0)" (click)="CloseFolderPopup()"
           class="text-decoration-none text-danger btn-white pe-3" data-dismiss="modal"><i class="fa-solid fa-xmark pe-1"></i>Cancel</a>
         <a href="javascript:void(0)" (click)="CreateNewfolder()" class="text-decoration-none btn-white text-primary">
-          <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
           <span class="pe-1">{{ isLoading ? 'Waiting...' : 'Create' }}</span>
         </a>
       </div>
@@ -183,7 +183,7 @@
         <a href="javascript:void(0)" class="text-decoration-none text-danger btn-white pe-3"
           data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</a>
         <a href="javascript:void(0)" (click)="deleteFile()" class="text-decoration-none btn-white text-primary">
-          <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-trash-can-o': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-trash-can-o': !isLoading}"></i>
           {{ isLoading ? 'Waiting...' : 'Delete' }}
         </a>
       </div>
@@ -269,7 +269,7 @@
                     </div>
                     <div class="mt-4">
                       <button class="btn btn-primary-c" [disabled]="isLoading || btnDisable ||isLargeFile" (click)="SubmitFiles()">
-                        <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
+                        <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
                         {{ isLoading ? 'Waiting...' : 'Upload selected File' }}
                       </button>
                       <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"

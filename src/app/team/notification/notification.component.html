@@ -295,7 +295,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageNotification()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="currentNotification.NotificationId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="currentNotification.NotificationId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>

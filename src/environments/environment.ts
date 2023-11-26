@@ -8,10 +8,10 @@ export const environment = {
   OAuthClientId: "1084985264281-ehe21udg412eesl9p6uhksoh3s2r8d0c.apps.googleusercontent.com",
   OAuthSecret: "7pxr3O8iM4SVSs8ozTC5tXts",
 
-  //baseDotNetUrl: "http://localhost:5000/core/api/",
+  baseDotNetUrl: "http://localhost:5000/core/api/",
   baseSpringUrl: "http://localhost:8090/api/",
 
-   baseDotNetUrl: "http://bot.io/bot/dn/core/api/",
+  // baseDotNetUrl: "http://bot.io/bot/dn/core/api/",
   // baseSpringUrl: "http://bot.io/bot/sb/api/eps/",
 
   FolderDelimiter: "\\"

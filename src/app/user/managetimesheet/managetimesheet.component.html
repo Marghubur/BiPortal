@@ -33,15 +33,15 @@
             <div class="col-auto mt-3 row">
               <div class="col-auto">
                 <button type="button" class="btn btn-warning" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9" (click)="saveTimesheet()">
-                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
+                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
                 <button type="button" class="btn btn-success ms-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9" (click)="submitTimesheet()">
-                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
+                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Submit' }}
                 </button>
                 <button type="button" class="btn btn-danger ms-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
+                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Cancel' }}
                 </button>
               </div>
@@ -117,11 +117,11 @@
                 </div>
                 <div class="col-md-3 float-end text-end mt-3">
                   <button type="button" class="btn btn-primary-c btn-sm me-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
+                    <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Fill from previous Timesheet' }}
                   </button>
                   <button type="button" (click)="clearTimesheet()" class="btn btn-primary-c btn-sm" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading}"></i>
+                    <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Clear Timesheet' }}
                   </button>
                 </div>

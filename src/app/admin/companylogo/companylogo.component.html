@@ -42,7 +42,7 @@
                       <i class="fa-solid fa-pencil px-2 text-primary fa-lg"></i>
                     </a>
                     <a href="javascript:void(0)" class="text-decoration-none" (click)="deleteFile(item)">
-                      <i class="fa-lg text-danger" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-trash-can-o': !isLoading}" aria-hidden="true"></i>
+                      <i class="fa-lg text-danger" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-trash-can-o': !isLoading}" aria-hidden="true"></i>
                     </a>
                   </td>
               </tr>
@@ -147,7 +147,7 @@
       </div>
       <div class="modal-footer borde-top-0">
         <button type="button" class="btn btn-primary-c" [disabled]="FileDocumentList.length == 0" (click)="saveLogo()">
-          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-paper-plane': !isLoading}" aria-hidden="true"></i>
+          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-paper-plane': !isLoading}" aria-hidden="true"></i>
           <span class="ps-2">{{isLoading ? 'Wait..' : 'Upload file'}}</span>
         </button>
         <button type="button" class="btn btn-outline-info ms-2" (click)="resetFile()"

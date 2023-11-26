@@ -467,7 +467,7 @@
                                       <div class="text-end" *ngIf="isEditable">
                                         <button class="btn btn-danger me-2" (click)="closePTaxSetting()"><i class="fa-solid fa-xmark pe-2"></i>Cancel</button>
                                         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="savePtaxSlab()">
-                                          <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
+                                          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
                                           {{ isLoading ? 'Wait' : 'Save' }}
                                         </button>
                                       </div>
@@ -569,13 +569,13 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <ng-container *ngIf="currentCompnay.CompanyId != null && currentCompnay.CompanyId > 0">
               <button type="button" class="btn btn-primary-c" (click)="updateCompany()">
-                <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
+                <i class="fa pe-2" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-plus': !isLoading}"></i>
                 {{ isLoading ? 'Wait' : 'Update Company Group' }}
               </button>
             </ng-container>
             <ng-container *ngIf="currentCompnay.CompanyId <= 0">
               <button type="button" class="btn btn-primary-c" (click)="addNewCompany()">
-                <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+                <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
                 <span class="ps-2">{{ isLoading ? 'Wait' : 'Create Company Group' }}</span>
               </button>
             </ng-container>

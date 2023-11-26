@@ -215,7 +215,7 @@
             </div>
             <div class="text-end mt-3">
               <button type="button" class="btn btn-primary-c" (click)="saveSetting()" [disabled]="isLoading">
-                <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-gear': !isLoading}"></i>
+                <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-gear': !isLoading}"></i>
                 <span class="ps-2">{{ isLoading ? 'Wait' : 'Save setting' }}</span>
               </button>
             </div>

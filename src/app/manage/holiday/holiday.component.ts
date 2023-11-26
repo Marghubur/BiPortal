@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyHoliday } from 'src/app/adminmodal/admin-modals';
+import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, ToLocateDate, UserDetail } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { EmailLinkConfig, Holiday, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
@@ -37,6 +38,14 @@ export class HolidayComponent implements OnInit {
   mindate: any = null;
   maxdate: any = null;
   isAdmin: boolean = false;
+  isUploadFile: boolean = true;
+  file: File;
+  fileSize: string;
+  fileName: string;
+  isFileReady: boolean = false;
+  isDisable: boolean = true;
+  sampleFilePath: string = null;
+  basePath: string = null;
 
   constructor(private http: AjaxService,
               private fb: FormBuilder,
@@ -51,6 +60,7 @@ export class HolidayComponent implements OnInit {
     this.mindate = {year: new Date().getFullYear(), month: 1, day: 1};
     this.maxdate = {year: new Date().getFullYear(), month: 12, day: 31};
     this.holidayDetail = new CompanyHoliday();
+    this.basePath = this.http.GetImageBasePath();
     let userDetail = this.user.getInstance() as UserDetail;
     if (userDetail.RoleId == UserType.Admin)
       this.isAdmin = true;
@@ -331,6 +341,77 @@ export class HolidayComponent implements OnInit {
 
   navToEmailLinkConfig() {
     this.nav.navigate(EmailLinkConfig, Holiday);
+  }
+
+  uploadHolidayExcelPopup() {
+    this.cleanFileHandler();
+    $("#uploadHolidayExcelModal").modal('show');
+  }
+
+  cleanFileHandler() {
+    event.stopPropagation();
+    event.preventDefault();
+    $("#uploadHolidayexcelreader").val("");
+    this.fileSize = "";
+    this.fileName = "";
+    this.isFileReady = false;
+    this.isDisable = true;
+    this.isUploadFile = true;
+  }
+
+  excelfireBrowserFile() {
+    $("#uploadHolidayexcelreader").click();
+  }
+
+  readExcelData(e: any) {
+    this.file = e.target.files[0];
+    if (this.file !== undefined && this.file !== null) {
+      this.fileSize = (this.file.size / 1024).toFixed(2);
+      this.fileName = this.file.name;
+      this.isFileReady = true;
+      this.isDisable = false;
+      this.isUploadFile = false;
+    }
+  }
+
+  uploadExcel() {
+    this.isLoading = true;
+    if (this.file) {
+      let formData = new FormData();
+      formData.append("holidaydata", this.file);
+      this.http.post("CompanyCalender/UploadHolidayExcel", formData)
+      .then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          let data = response.ResponseBody;
+          if (data.length > 0) {
+            this.bindData(data);
+            $('#uploadHolidayExcelModal').modal('hide');
+            this.cleanFileHandler();
+            Toast("Data Uploaded successfull");
+            this.isLoading = false;
+          }
+        } else {
+          ErrorToast("Unable to upload the data");
+        }
+      }).catch(e => {
+        ErrorToast(e.HttpStatusMessage)
+        this.isLoading = false;
+      });
+    } else {
+      this.isLoading = false;
+      WarningToast("Please upload atleast one record");
+    }
+  }
+
+  getHolidaySampleFile() {
+    this.sampleFilePath = `${this.basePath}Documents/SampleExcel/Client_2/HolidaySample.xlsx`;
+    const a = document.createElement('a');
+    a.href = this.sampleFilePath;
+    a.download = 'HolidaySample.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(this.sampleFilePath);
   }
 
 }

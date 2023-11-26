@@ -31,7 +31,7 @@
                   <button class="btn btn-primary-c float-end" (click)="leavePlanPopUp()">
                     <i class="fa px-2" [ngClass]="{
                         'fa-plus': !isLoading,
-                        'fa-spin fa-solid fa-spinner': isLoading
+                        'fa-solid fa-spinner fa-spin': isLoading
                       }"></i>
                     {{ isLoading ? "Wait" : "Create Plan" }}
                   </button>
@@ -47,7 +47,7 @@
                           </p>
                           <button class="btn btn-success mt-4" (click)="leavePlanPopUp()">
                             <i class="fa pe-2" [ngClass]="{
-                                'fa-spin fa-solid fa-spinner': isLoading,
+                                'fa-solid fa-spinner fa-spin': isLoading,
                                 'fa-plus': !isLoading
                               }"></i>
                             {{ isLoading ? "Wait" : "ADD Leave Plan" }}
@@ -464,7 +464,7 @@
         </button>
         <button type="button" class="btn btn-primary-c" (click)="addLeavePlan()">
           <i  [ngClass]="{
-              'fa-spin fa-solid fa-spinner': isLoading,
+              'fa-solid fa-spinner fa-spin': isLoading,
               'fa-regular fa-square-plus': !isLoading
             }"></i>
           <span class="ps-2">{{ isLoading ? "wait" : "Save" }}</span>
@@ -577,7 +577,7 @@
         <button type="button" class="btn btn-primary-c" (click)="addLeaveType()">
           <i  [ngClass]="{
               'fa-plus fa-solid': !isLoading,
-              'fa-spin fa-solid fa-spinner': isLoading
+              'fa-solid fa-spinner fa-spin': isLoading
             }"></i>
           <span class="ps-2">{{ isLoading ? "Wait" : "Add Leave Type" }}</span>
         </button>
@@ -700,7 +700,7 @@
         <button type="button" class="btn btn-primary-c" (click)="saveLeaveType()">
           <i  [ngClass]="{
               'fa-regular fa-floppy-disk': !isLoading,
-              'fa-spin fa-solid fa-spinner': isLoading
+              'fa-solid fa-spinner fa-spin': isLoading
             }"></i><span class="ps-2">{{ isLoading ? "Wait" : "Save" }}</span>
         </button>
       </div>
@@ -731,7 +731,7 @@
         <a href="javascript:void(0)" class="text-decoration-none text-primary ps-3 fw-bold"
           (click)="saveDefaultPlan(currentPlan)"><i  [ngClass]="{
               'fa-regular fa-floppy-disk': !isLoading,
-              'fa-spin fa-solid fa-spinner': isLoading
+              'fa-solid fa-spinner fa-spin': isLoading
             }"></i><span class="ps-2">{{ isLoading ? "Wait" : "Save" }}</span></a>
       </div>
     </div>

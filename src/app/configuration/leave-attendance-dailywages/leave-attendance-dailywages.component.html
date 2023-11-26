@@ -478,7 +478,7 @@
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveLOPAjustment()">
-                <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                 <span class="ps-1">{{ isLoading ? 'Wait' : 'Save' }}</span>
               </button>
             </div>
@@ -518,7 +518,7 @@
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
                 <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveAttedanceAjustment()">
-                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+                    <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
             </div>
@@ -565,11 +565,11 @@
             <div class="modal-footer border-top-0">
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
                 <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitActionForLeave('Approved')">
-                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                    <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
                 <button type="button" class="btn btn-danger" [disabled]="isLoading" (click)="submitActionForLeave('Rejected')">
-                    <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-xmark': !isLoading}"></i>
+                    <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-xmark': !isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Reject' }}
                 </button>
             </div>

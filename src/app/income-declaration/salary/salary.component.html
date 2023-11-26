@@ -269,7 +269,7 @@
                           Switch to {{item.RegimeName}} (Section 115BAC)
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-solid fa-spinner fa-spin"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -281,7 +281,7 @@
                           Continue with {{item.RegimeName}}
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-solid fa-spinner fa-spin"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -366,7 +366,7 @@
                           Switch to {{item.RegimeName}} (Section 115BAC)
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-solid fa-spinner fa-spin"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -378,7 +378,7 @@
                           Continue with {{item.RegimeName}}
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fafa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fafa-solid fa-spinner fa-spin"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -500,7 +500,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button [disabled]="isLoading" class="btn btn-primary-c" (click)="addBonus()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           <span class="ps-2">Add</span>
         </button>
       </div>

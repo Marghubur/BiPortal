@@ -11,10 +11,10 @@
             </div>
             <div class="col-4">
               <div class="x_header_title d-flex align-items-center justify-content-end">
-                <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
-                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
+                <!-- <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="navToEmailLinkConfig()"><i
                   class="fa-solid fa-paper-plane pe-1"></i> Email Link Config
-                </a>
+                </a> -->
+                <a href="javascript:void(0)" class="pe-3" (click)="uploadHolidayExcelPopup()">Upload Holiay List</a>
                 <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa-regular fa-plus-square pe-2"></i>Add Holiday</button>
               </div>
             </div>
@@ -290,7 +290,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageHoliday()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="selectedHoliday.CompanyCalendarId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="selectedHoliday.CompanyCalendarId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>
@@ -335,9 +335,120 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="deleteHoliday()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-trash-can': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-trash-can': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Delete' }}</span>
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="uploadHolidayExcelModal" tabindex="-1" role="dialog" aria-labelledby="uploadHolidayExcelTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h4 class="modal-title">Upload ExcelFile</h4>
+        <button type="button" (click)="cleanFileHandler()" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body overflow-hidden">
+        <div class="col-md-12 row x_content">
+          <div class="col-md-6">
+            <input type="file" id="uploadHolidayexcelreader" (change)="readExcelData($event)" class="d-none" *ngIf="isUploadFile"
+              accept=".xlx, .xlsx" />
+            <div class="page-card">
+              <div class="card">
+                <div class="col-md-12 p-0">
+                  <div class="table-responsive">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                      <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                        aria-labelledby="home-tab">
+                        <div id="classmasterdata" class="col-md-12">
+                          <div name="ifilezone" class="ifilezone mb-4" (click)="excelfireBrowserFile()">
+                            <div class="col-md-12 py-5 custom-bg justify-content-center" *ngIf="isFileReady"
+                              name="uploading">
+                              <img src="assets/img/ExcelFile.png" />
+                              <div class="filetitle">
+                                File:
+                                <div name="filename" style="display: inline-block !important;">
+                                  {{ fileName }}
+                                </div>
+                              </div>
+                              <div>
+                                File size: &nbsp;
+                                <div name="filesize" style="display: inline-block !important;">
+                                  {{ fileSize }}
+                                </div>
+                                KB
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 ps-3 pb-3 rounded">
+            <div class="">
+              <p class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
+                correct format of excel sheet.
+                <a href="javascript:void(0)" (click)="getHolidaySampleFile()">Click to download the sample.</a>
+              </p>
+            </div>
+            <div class="filetitle text-center">Upload File Details</div>
+            <div *ngIf="isFileReady">
+              <div class="fw-bold">
+                File:
+                <div name="filename" style="display: inline-block !important;">
+                  {{ fileName }}
+                </div>
+              </div>
+              <div>
+                <div>
+                  File size: &nbsp;
+                  <div name="filesize" style="display: inline-block !important;">
+                    {{ fileSize }}
+                  </div>
+                  KB
+                </div>
+                <div>
+                  File type: &nbsp;
+                  <div name="uploadingdatetime" style="display: inline-block !important;">
+                    {{ file.type }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="!isFileReady">
+              <div class="fw-bold">
+                File: NA
+              </div>
+              <div>
+                <div>
+                  File size: &nbsp; NA
+                </div>
+                <div>
+                  No. of record(s): &nbsp; NA
+                </div>
+                <div>
+                  File type: &nbsp; NA
+                </div>
+              </div>
+            </div>
+            <div class="mt-4">
+              <button type="button" class="btn btn-primary-c" (click)="uploadExcel()" [disabled]="isDisable">
+                <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-upload': !isLoading}"></i>
+                <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
+              </button>
+              <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
+                [disabled]="isDisable">
+                <i class="fa-solid fa-eraser pe-2"></i> Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -186,7 +186,7 @@
                   <div class="row mb-3 px-3">
                     <button type="button" (click)="userRegistration()" [disabled]="isLoading || !agreeWithTermsAndCondition"
                       class="btn btn-primary-dark text-center">
-                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
                       {{ isLoading ? 'Wait' : 'Register' }}</button>
                   </div>
                   <div class="row mb-4 px-3">
@@ -246,7 +246,7 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button type="button" (click)="sendForgotPassword()" [disabled]="isLoading"
                       class="btn btn-primary-dark text-center">
-                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
                       {{ isLoading ? 'Sending' : 'Send' }}</button>
       </div>
     </div>

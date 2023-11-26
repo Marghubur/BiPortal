@@ -458,7 +458,7 @@
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-success"
                             (click)="nextDeclaration('otherExemptions')"> <span class="pe-2">{{isLoading ? 'Wait': 'Next'}}</span>
-                            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-arrow-right': !isLoading}"></i>
+                            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-right': !isLoading}"></i>
                           </button>
                         </div>
                       </ng-container>
@@ -646,11 +646,11 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('exemptions')">
-                            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
+                            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                             <span class="ps-2">{{isLoading ? 'Wait': 'Prev'}}</span>
                           </button>
                           <button type="button" class="btn btn-outline-success" (click)="nextDeclaration('taxSavingAllowance')"><span class="pe-2">{{isLoading ? 'Wait': 'Next'}}</span>
-                            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-arrow-right': !isLoading}"></i>
+                            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-right': !isLoading}"></i>
                           </button>
                         </div>
                       </ng-container>
@@ -834,7 +834,7 @@
                         </div>
                         <div class="modal-footer border-top-0">
                           <button type="button" class="btn btn-outline-primary" (click)="nextDeclaration('otherExemptions')">
-                            <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-arrow-left': !isLoading}"></i>
+                            <i class="fa pe-2" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
                             <span class="ps-2">{{isLoading ? 'Wait': 'Prev'}}</span>
                           </button>
                           <!-- <button type="button" class="btn btn-outline-success"
@@ -1078,7 +1078,7 @@
         <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="fireFileBrowser()"><i class="fa-solid fa-paperclip pe-2"></i>Add Attachment</a>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeDeclarationModal()">Close</button>
         <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="saveDeclaration(selectDeclaration)" [disabled]="isLargeFile">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Save' }}
         </button>
       </div>
@@ -1215,7 +1215,7 @@
               <button type="button" class="btn btn-secondary" (click)="navRentalpage(1)"><i
                   class="fa-solid fa-arrow-left pe-2"></i> Back</button>
               <button class="btn btn btn-primary-c" [disabled]="isLoading" (click)="submitRentResidence()">
-                <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                 {{ isLoading ? 'Wait' : 'Save' }}
               </button>
             </div>
@@ -1261,11 +1261,11 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
         <button class="btn btn btn-primary-c" *ngIf="deleteType == 'delete-declaration'" [disabled]="isLoading" (click)="deleteDeclaration()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Confirm' }}
         </button>
         <button class="btn btn btn-primary-c" *ngIf="deleteType == 'deletefile'" [disabled]="isLoading" (click)="deleteOnlyFile()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Confirm' }}
         </button>
       </div>
@@ -1326,7 +1326,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
         <button class="btn btn btn-primary-c" [disabled]="isLoading" (click)="deleteRentDeclaration()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Confirm' }}
         </button>
       </div>

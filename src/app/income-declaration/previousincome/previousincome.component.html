@@ -115,7 +115,7 @@
               <div class="bg-light pt-2 pb-4">
                 <span class="ps-3">Total Items: {{total}}</span>
                 <button type="button" class="btn btn-primary-c me-2 float-end" (click)="savePreviousIncome()">
-                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
               </div>

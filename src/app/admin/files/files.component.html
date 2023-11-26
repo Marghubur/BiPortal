@@ -470,7 +470,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i class="fa pe-2" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -533,7 +533,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateRecord()">
-          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>

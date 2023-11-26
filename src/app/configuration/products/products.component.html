@@ -311,7 +311,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageProduct()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="currentProduct.ProductId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="currentProduct.ProductId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>
@@ -517,7 +517,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageCatagory()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="currentCatagory.CatagoryId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="currentCatagory.CatagoryId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>

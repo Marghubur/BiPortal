@@ -146,7 +146,7 @@
           </div>
           <div class="col-md-2 text-end">
             <button class="btn btn-primary-c ms-2" (click)="startCycle()" [disabled]="isAmountExceed || isLoading">
-              <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
+              <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-hdd-o': !isLoading}"></i>
               <span class="ps-2">
                 Start All
               </span>
@@ -211,7 +211,7 @@
         <div class="text-end mt-3">
           <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading">Cancel</button>
           <button class="btn btn-primary-c ms-2" (click)="startCycle()" [disabled]="isAmountExceed || isLoading">
-            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-hdd-o': !isLoading}"></i>
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-hdd-o': !isLoading}"></i>
             <span class="ps-2">
               Start
             </span>
