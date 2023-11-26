@@ -72,7 +72,7 @@
         <div class="text-end mt-3 col-md-12">
           <button class="btn btn-outline-danger" (click)="resetEmailTemp()"><i class="fa-solid fa-trash-can pe-2"></i> Reset</button>
           <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveEmailTemplate()">
-            <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+            <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
             {{ isLoading ? 'Wait' : 'Save' }}
           </button>
         </div>

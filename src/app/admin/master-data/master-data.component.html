@@ -26,7 +26,7 @@
                   <h5>Uploaded Employee Records</h5>
                   <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
                     correct format of excel sheet.
-                    <a href="javascript:void(0)" (click)="generateFile()">Click to download the sample.</a>
+                    <a href="javascript:void(0)" (click)="getEmployeeSampleFile()">Click to download the sample.</a>
                   </p>
                 </div>
 
@@ -134,7 +134,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                   <h5>Uploaded Payroll Records</h5>
                   <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
-                    correct format of excel sheet. <a href="javascript:void(0)">Click to download the sample.</a></p>
+                    correct format of excel sheet. <a href="javascript:void(0)" (click)="getEmployeeWithPayrollSampleFile()">Click to download the sample.</a></p>
                 </div>
 
                 <div class="col-md-12 row x_content fade show">

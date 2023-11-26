@@ -119,7 +119,7 @@
               Tax or Other deductions (if
               any).</p>
             <button class="btn btn-primary-c float-end" [disabled]="isLoading" (click)="saveSalaryBreakup()">
-              <i class="fa pe-1" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-save': !isLoading}"></i>
+              <i class="fa pe-1" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-save': !isLoading}"></i>
               {{ isLoading ? 'Wait' : 'Save' }}
             </button>
           </ng-container>

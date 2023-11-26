@@ -264,7 +264,7 @@
         <div class="modal-footer border-top-0">
             <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
             <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateUpdateRequest()">
-                <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-check': !isLoading}"></i>
+                <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-check': !isLoading}"></i>
                 {{ isLoading ? 'Processing' : 'Submit' }}
             </button>
         </div>

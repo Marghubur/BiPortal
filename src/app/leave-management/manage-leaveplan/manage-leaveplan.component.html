@@ -1,31 +1,15 @@
 <div class="col-md-12 col-sm-12 main-container">
-  <!-- <div class="col-md-12 bg-light mb-3">
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page"
-          href="javascript:void(0)">ATTENDENCE</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')"
-          href="javascript:void(0)">TIMESHEET</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark nav-active" id="leave-tab" (click)="activateMe('leave-tab')"
-          href="javascript:void(0)">LEAVE</a>
-      </li>
-    </ul>
-  </div> -->
-
   <div class="x_panel pb-0 mb-0">
     <div class="x_header">
-      <div class="d-flex align-items-baseline">
-        <h5 class="c-header">LEAVE TYPE: </h5>
-        <h6 class="ps-1 c-header">{{leaveTypeDeatils.PlanName | uppercase}}</h6>
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'LEAVE TYPE:'" [subtitle]="'Add or update details'"></app-breadcrums>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
+    <!-- <h6 class="ps-1 c-header">{{leaveTypeDeatils.PlanName | uppercase}}</h6> -->
     <ng-container *ngIf="!isPageReady">
       <ng-container *ngIf="isDataLoaded">
         <div class="x_content pb-0">
@@ -188,7 +172,7 @@
                     </div>
                     <div class="text-end my-3">
                       <button class="btn btn-primary-c" (click)="submitLeaveQuota()">
-                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                       </button>
                     </div>
@@ -226,7 +210,7 @@
                     </div>
                     <div class="text-end my-3">
                       <button class="btn btn-primary-c" (click)="submitManagementLeave()">
-                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                       </button>
                     </div>
@@ -859,7 +843,7 @@
                     </div>
                     <div class="text-end">
                       <button class="btn btn-primary-c" (click)="submitLeaveAccrual()">
-                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                       </button>
                     </div>
@@ -1090,7 +1074,7 @@
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitApplyForLeave()">
-                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
@@ -1377,7 +1361,7 @@
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitLeaveRestriction()">
-                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
@@ -1578,7 +1562,7 @@
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitHolidayNWeekOffLeave()">
-                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
@@ -1724,7 +1708,7 @@
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitLeaveApproval()">
-                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>
@@ -2016,7 +2000,7 @@
                   </form>
                   <div class="text-end">
                     <button class="btn btn-primary-c" (click)="submitYearEndProcessing()">
-                      <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                       <span class="ps-2">{{ isLoading ? 'Wait' : 'Save & Next' }}</span>
                     </button>
                   </div>

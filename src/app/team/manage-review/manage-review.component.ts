@@ -347,6 +347,7 @@ export class ManageReviewComponent implements OnInit {
     if(!this.isSubmitted) {
       this.promotionAndHikeForm = item;
       this.selectedPromotionAndHike = item.value;
+      this.selectedPromotionAndHike.promotedDesignation ="0";
       this.promotionAndHikeForm.controls['promotedDesignation'].enable();
       $("#promotionHikeModal").modal('show');
     } else {

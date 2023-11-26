@@ -137,7 +137,7 @@
               <div class="col-12 text-end m-0 pt-2">
                 <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
                 <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="RegisterProject()">
-                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Register' }}
                 </button>
               </div>
@@ -238,7 +238,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="closeAddMemberPopUp()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Add Member' }}
         </button>
       </div>

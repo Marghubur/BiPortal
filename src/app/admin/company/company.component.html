@@ -270,7 +270,7 @@
                       <div class="col-md-6 mt-4 d-flex flex-column justify-content-end">
                         <div class="d-flex flex-row justify-content-end">
                           <button class="btn-primary-c btn" [disabled]="isLoading" (click)="submitChanges()">
-                            <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-paper-plane': !isLoading}"></i>
+                            <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-paper-plane': !isLoading}"></i>
                             <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Changes' }}</span>
                           </button>
                         </div>
@@ -505,11 +505,11 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark pe-2"></i> Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addUpdateAccount()" *ngIf="singleCompanyAccountInfo.BankAccountId > 0">
-          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Processing' : 'Update' }}</span>
         </button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addUpdateAccount()" *ngIf="singleCompanyAccountInfo.BankAccountId == 0">
-          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Processing' : 'Add' }}</span>
         </button>
       </div>

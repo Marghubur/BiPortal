@@ -87,8 +87,10 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   closeAddCompPopUp() {
-    this.groupComponents = this.selectedComponent;
-    this.activeComponent = this.selectedComponent;
+    if (this.selectedComponent && this.selectedComponent.length > 0) {
+      this.groupComponents = this.selectedComponent;
+      this.activeComponent = this.selectedComponent;
+    }
   }
 
   selectToAddComponent(event: any, item: any) {

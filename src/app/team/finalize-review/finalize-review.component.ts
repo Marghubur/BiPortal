@@ -27,6 +27,7 @@ export class FinalizeReviewComponent implements OnInit {
   selectedEmploye: any = null;
   objectives: Array<any> = [];
   userNameIcon: string = null;
+  appraisalReviewStatus: number = 0;
 
   constructor(private http: AjaxService,
               private user: UserService,
@@ -91,13 +92,41 @@ export class FinalizeReviewComponent implements OnInit {
     })
   }
 
-  getAppraisalFinalize(managerId: any) {
+  getAppraisalFinalize() {
     this.isLoading = true;
-    this.http.get(`eps/promotion/getPromotionAndHike/${managerId}`, true).then((res: ResponseModel) => {
+    this.http.get(`eps/promotion/getPromotionAndHike/${this.userDetail.UserId}`, true).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.allMemberAppraisalFinalizer = res.ResponseBody;
+        this.appraisalReviewStatus = this.allAppraisalFinalizer[0].Status;
+        console.log(this.allMemberAppraisalFinalizer)
         $("#viewMemberModal").modal('show');
         Toast("Finalizer record found");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  approvedAppraisal() {
+    this.isLoading = true;
+    this.http.post('eps/promotion/approveAppraisalReviewDetail', this.allMemberAppraisalFinalizer, true).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        $("#viewMemberModal").modal('hide');
+        Toast("Finalizer record approved successfully");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  rejectAppraisal() {
+    this.isLoading = true;
+    this.http.post('eps/promotion/rejectAppraisalReviewDetail', this.allMemberAppraisalFinalizer, true).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        $("#viewMemberModal").modal('hide');
+        Toast("Finalizer record rejected successfully");
         this.isLoading = false;
       }
     }).catch(e => {
