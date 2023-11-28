@@ -52,6 +52,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   approvalChainGroup: Array<any> = [];
   selectedRoleId: number = 0;
   orgHierarchy: Array<any> = [];
+  appraisalChainLevel: Array<any> = [];
 
   constructor(private http: AjaxService,
     private nav: iNavigation,
@@ -109,6 +110,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     this.http.get(`eps/apprisalcatagory/getCategoryByCategoryId/${ObjectiveCatagoryId}`, true).then(res => {
       if (res.ResponseBody) {
         this.orgHierarchy = res.ResponseBody.OrganizationChain;
+        this.appraisalChainLevel = res.ResponseBody.AppraisalChainLevel;
         this.orgHierarchy = this.orgHierarchy.filter(x => x.RoleName.toLocaleUpperCase() != "CEO"
           && x.RoleName.toLocaleUpperCase() != "CTO"
           && !x.IsDepartment);
@@ -223,7 +225,6 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       ReviewEndDate: new FormControl(this.currentApprisalCycle.ReviewEndDate, [Validators.required]),
       IsHikeApproval: new FormControl(this.currentApprisalCycle.IsHikeApproval),
       AppraisalDetailId: new FormControl(this.currentApprisalCycle.AppraisalDetailId),
-      ApprovalWorkflow: new FormControl(this.currentApprisalCycle.ApprovalWorkflow),
       AppraisalName: new FormControl(this.currentApprisalCycle.AppraisalName, [Validators.required])
     });
     this.appraisalForm.controls['IsRaterSelectedByManager'].disable();
@@ -483,39 +484,13 @@ export class ManageAppraisalCategoryComponent implements OnInit {
   }
 
   viewApprovalChainFlow() {
-    // if (this.selectedRoleId > 0) {
-    //   this.http.get(`ef/orgTree/getOrgTreeByRole/${this.company.CompanyId}/${this.selectedRoleId}`, true)
-    //   .then((respone: ResponseModel) => {
-    //     if (respone) {
-    //       this.orgTree = respone.ResponseBody;
-    //       this.orgTree = this.orgTree.filter(x => x.RoleName.toLocaleUpperCase() != "CEO"
-    //       && x.RoleName.toLocaleUpperCase() != "CTO"
-    //       && !x.IsDepartment);
-    //       if (this.orgTree && this.orgTree.length > 0) {
-    //         this.orgTree.forEach(x => {
-    //           x.IsHide = false;
-    //         })
-    //       }
-    //       Toast("Tree structure loaded successfully.");
-    //       $("#worflowChainModal").modal("show");
-    //       this.isTreeLoaded = true;
-    //     } else {
-    //       ErrorToast("Fail to add");
-    //     }
-    //   }).catch(e => {
-    //     ErrorToast(e.error);
-    //   });
-    // } else {
-    //   WarningToast("Please select level first");
-    // }
     if (Number(this.selectedRoleId) > 0) {
       this.isTreeLoaded = false;
       this.orgTree = [];
-      let data = JSON.parse(this.currentApprisalCycle.ApprovalWorkflow);
-      let value = data.find(x => x.RoleId == Number(this.selectedRoleId));
-      if (value) {
-        value.Chain.forEach(x => {
-          let org = this.orgHierarchy.find(i => i.RoleId == x.RoleId);
+      let value = this.appraisalChainLevel.filter(x => x.RoleId == Number(this.selectedRoleId));
+      if (value && value.length > 0) {
+        value.forEach(x => {
+          let org = this.orgHierarchy.find(i => i.RoleId == x.ApprovalRoleId);
           org.IsActive = x.IsActive;
           this.orgTree.push(org);
         });
@@ -566,7 +541,9 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     let roleId = Number(e.target.parentElement.getAttribute("data-index"));
     let removeRole = this.orgTree.find(x => x.RoleId == roleId);
     removeRole.IsActive = false;
-    this.orgTree.filter(x => x.ParentNode == roleId).map(i => i.ParentNode = removeRole.ParentNode);
+    if (this.orgTree.filter(x => x.RoleId == removeRole.ParentNode).length > 0)
+      this.orgTree.filter(x => x.ParentNode == roleId).map(i => i.ParentNode = removeRole.ParentNode);
+
     e.target.parentElement.classList.add("hide-node");
   }
 
@@ -586,23 +563,30 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       let chain = [];
       this.orgTree.forEach(x => {
         chain.push({
-          RoleId: x.RoleId,
+          ApprovalRoleId: x.RoleId,
           IsActive: x.IsActive
         })
       })
       selectedIds.forEach(x => {
-        data.push({
-          ObjectiveCatagoryId: this.currentApprisalCycle.ObjectiveCatagoryId,
-          RoleId: x,
-          IsDefaultChain: this.orgTree.filter(x => x.IsActive == true).length > 0 ? true : false,
-          Chain: chain
+        chain.forEach(i => {
+          data.push({
+            AppraisalChainLevelId: 0,
+            ObjectiveCatagoryId: this.currentApprisalCycle.ObjectiveCatagoryId,
+            RoleId: x,
+            IsDefaultChain: this.orgTree.filter(x => x.IsActive == true).length > 0 ? true : false,
+            ApprovalRoleId: i.ApprovalRoleId,
+            IsActive: i.IsActive
+          })
         })
       })
     }
-    if (data) {
+    if (data && data.length > 0) {
       this.isLoading = true;
       this.http.post('eps/apprisalcatagory/manageAppraisalLevel',data, true).then((res: ResponseModel) => {
-
+        if (res.ResponseBody) {
+          Toast(res.ResponseBody);
+          this.isLoading = false;
+        }
       }).catch(e => {
         this.isLoading = false;
         ErrorToast(e.error);
@@ -640,6 +624,5 @@ export class ApprisalCycle {
   RatersRequired: boolean = false;
   RolesId: string = null;
   Tags: Array<string> = [];
-  ApprovalWorkflow: string = null;
   AppraisalName: string = null;
 }

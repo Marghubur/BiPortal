@@ -12,7 +12,7 @@
       </div>
       <div>
         <ng-container *ngIf="isPageReady">
-          <ng-container *ngIf="projectDetails.length > 0 && selectedProject != null">
+          <ng-container *ngIf="submittedEmpObj.length > 0">
             <div class="row align-items-center justify-content-between" *ngIf="currentProjectAppraisal != null">
               <div class="col-md-12">
                 <span class="fw-bold text-dark">Project Appraisal Budget: <i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{currentProjectAppraisal.ProjectAppraisalBudget}}</span>
@@ -20,12 +20,12 @@
               </div>
             </div>
             <div class="col-md-12 mt-3">
-              <p class="card-text">{{selectedProject.ProjectDescription}}</p>
-              <ng-container *ngIf="selectedProject.ProjectMembers.length > 0">
+              <p class="card-text">{{submittedEmpObj[0].ProjectDescription}}</p>
+              <ng-container>
                 <div class="alert alert-success d-flex justify-content-between" role="alert" *ngIf="this.appraisalReviewDetail.length > 0">
                   <div class="col-auto">
                     <i class="fa-solid fa-bell fa-lg pe-2 text-dark"></i>
-                    <span>Review details are submited</span>
+                    <span>Review details</span>
                   </div>
                   <div class="col-auto" *ngIf="isSubmitted">
                     <a href="javascript:void(0)" (click)="reOpenCurrentAppraidal()">Re-open</a>
@@ -38,14 +38,14 @@
                   <form [formGroup]="appraisalHikeForm">
                     <div formArrayName="ProjectMemberHike">
                       <ng-container *ngFor="let item of hikeDetail.controls; let i = index;" [formGroupName]="i">
-                        <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card pb-4 pt-2" [ngClass]="{'custom-border': (item.get('status').value == 2 || item.get('status').value == 0), 'danger-border': item.get('status').value == 5, 'success-border': item.get('status').value == 9}">
+                        <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card pb-4 pt-2" [ngClass]="{'custom-border': (item.get('Status').value == 2 || item.get('Status').value == 0), 'danger-border': item.get('Status').value == 5, 'success-border': item.get('Status').value == 9}">
                           <div class="d-flex col-md-10 align-items-center">
                             <a href="javascript:void(0)" class="me-2">
                               <i class="fa-regular fa-circle-user fa-lg"></i>
                             </a>
                             <p class="mb-0 fs-6">
                               <span class="fw-bold text-primary-dc">
-                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSubmitted}" (click)="promotionHikePopUp(item)">{{item.get("fullName").value}} (Exp.: {{item.get("experience").value}} months)</a>
+                                <a href="javascript:void(0)" [ngClass]="{'pe-none': isSubmitted}" (click)="promotionHikePopUp(item)">{{item.get("FullName").value}} (Exp.: {{item.get("Experience").value}} months)</a>
                               </span>
                             </p>
                             <span class="px-2">|</span>
@@ -54,16 +54,19 @@
                               <ngb-rating [readonly]="true" rate="{{item.get('rating').value}}" [max]="5"></ngb-rating>
                               <!-- <span>{{item.get("rating").value}}/5</span> -->
                               <a href="javascript:void(0)" class="text-decoration-none ps-3" >
-                                <i class="fa-solid fa-lock" *ngIf="item.get('status').value != 2 && item.get('status').value != 0"></i>
+                                <i class="fa-solid fa-lock" *ngIf="item.get('Status').value != 2 && item.get('Status').value != 0"></i>
                               </a>
                               <!-- <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSubmitted}">
                                 <i class="fa-solid fa-lock-open"></i>
                               </a> -->
+                              <span class="rounded-pill ms-2 badge" [ngClass]="{'text-bg-danger': item.get('AppraisalStatus').value == 5, 'text-bg-success': item.get('AppraisalStatus').value == 9, 'text-bg-primary': item.get('AppraisalStatus').value == 8, 'text-bg-warning': item.get('AppraisalStatus').value == 0}">
+                                {{item.get('AppraisalStatus').value == 8 ? "Appraisal Submitted" : item.get('AppraisalStatus').value == 5 ? "Appraisal Rejected" : item.get('AppraisalStatus').value == 9 ? "Appraisal Approved" : "Appraisal Not Submitted"}}
+                              </span>
                             </div>
                           </div>
                           <div class="col-2 d-flex flex-row-reverse">
                             <div class="col-auto me-0 pe-0">
-                              <a href="javascript:void(0)" *ngIf="item.get('status').value == 2" (click)="editEmployeeObjective(item)" class="text-decoration-none pe-3">
+                              <a href="javascript:void(0)" *ngIf="item.get('Status').value == 2" (click)="editEmployeeObjective(item)" class="text-decoration-none pe-3">
                                 <i class="fa-solid fa-lock"></i>
                               </a>
                               <a href="javascript:void(0)" (click)="promotionHikePopUp(item)" class="text-decoration-none">
@@ -75,29 +78,29 @@
                             <p class="ms-2 mb-0 fs-6">
                               <i class="fa-solid fa-sack-dollar fa-lg pe-2 text-danger"></i>
                               <span class="">Salary: </span>
-                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("cTC").value}}</span>
+                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("CTC").value}}</span>
                             </p>
                             <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
                               <span class="">Proposed Hike Percentage: </span>
-                              <span>{{item.get("hikePercentage").value}} <i class="fa-solid fa-percent px-1"></i></span>
+                              <span>{{item.get("HikePercentage").value}} <i class="fa-solid fa-percent px-1"></i></span>
                             </p>
                             <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
                               <span class="">Proposed Hike Amount: </span>
-                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("hikeAmount").value}}</span>
+                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("HikeAmount").value}}</span>
                             </p>
                             <span class="px-3 fw-bold text-dark">|</span>
                             <p class="ms-2 mb-0 fs-6">
                               <i class="fa-solid fa-hand-holding-dollar fa-lg pe-2 text-danger"></i>
                               <span class="">Estimated Salary: </span>
-                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("estimatedSalary").value}}</span>
+                              <span><i class="fa-solid fa-indian-rupee-sign px-1"></i>{{item.get("EstimatedSalary").value}}</span>
                             </p>
                             <span class="px-3 fw-bold text-dark">|</span>
                             <div class="col-auto d-flex">
                               <span class="">Promoted Designation: </span>
                               <div>
-                                <select formControlName="promotedDesignation" class="form-control border-0 mt-0 pt-0 transparent-bg">
+                                <select formControlName="PromotedDesignation" class="form-control border-0 mt-0 pt-0 transparent-bg">
                                   <option value="0" >Same Designation</option>
                                   <option value="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
                                 </select>
@@ -107,7 +110,7 @@
                           <div class="d-flex align-items-center justify-content-between mt-2">
                             <div class="col-md-6 text-truncate ms-2">
                               <span class="fw-bold">Comment: </span>
-                              {{item.get("comments").value}}
+                              {{item.get("Comments").value}}
                             </div>
                             <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="fw-bold">
                               <span class="pe-2">Objective's</span>
@@ -133,7 +136,7 @@
               Proposed hike amount is exceed from project appraisal budget.
             </div>
           </ng-container>
-          <ng-container *ngIf="projectDetails.length == 0 || selectedProject == null ">
+          <ng-container *ngIf="submittedEmpObj.length == 0">
             <div class="fw-bold text-dark my-5 py-5">
               <p class="my-5 py-5 text-center fs-4">
                 Record not found.
@@ -171,8 +174,8 @@
                       {{userNameIcon | uppercase}}
                     </div>
                     <div class="ms-3 d-flex align-items-center">
-                      <h6 class="mb-0">{{selectedEmploye.fullName}}</h6>
-                      <small class="ps-2"> | Emp No.: {{selectedEmploye.employeeId}}</small>
+                      <h6 class="mb-0">{{selectedEmploye.FullName}}</h6>
+                      <small class="ps-2"> | Emp No.: {{selectedEmploye.EmployeeId}}</small>
                     </div>
                   </div>
                 </div>
@@ -242,16 +245,16 @@
       <div class="modal-body" *ngIf="selectedPromotionAndHike != null">
         <div class="">
           <label class="form-label col-md-4">Name:</label>
-          <label class="form-label ">{{selectedPromotionAndHike.fullName}}</label>
+          <label class="form-label ">{{selectedPromotionAndHike.FullName}}</label>
         </div>
         <div class="mt-3">
           <label class="form-label col-md-4">Present Salary:</label>
-          <label class="form-label"><i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{selectedPromotionAndHike.cTC}}</label>
+          <label class="form-label"><i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{selectedPromotionAndHike.CTC}}</label>
         </div>
         <div class="mt-3 d-flex align-items-center col-md-12">
           <label class="form-label col-md-4">Promoted Designation</label>
           <div class="col-md-8">
-            <select class="form-select" [(ngModel)]="selectedPromotionAndHike.promotedDesignation">
+            <select class="form-select" [(ngModel)]="selectedPromotionAndHike.PromotedDesignation">
               <option value="0" >Same Designation</option>
               <option [value]="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
             </select>
@@ -260,7 +263,7 @@
         <div class="mt-3 d-flex align-items-center col-md-12">
           <label class="form-label col-md-4">Proposed Hike Percentage</label>
           <div class="col-md-8 input-group-c">
-            <input type="text" [DecimalNumber]="5"  name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)"  class="form-control" [(ngModel)]="selectedPromotionAndHike.hikePercentage">
+            <input type="text" [DecimalNumber]="5"  name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)"  class="form-control" [(ngModel)]="selectedPromotionAndHike.HikePercentage">
             <span class="input-group-text" id="basic-addon1">%</span>
           </div>
         </div>
@@ -268,12 +271,12 @@
           <label class="form-label col-md-4">Proposed Hike Amount</label>
           <div class="col-md-8 input-group-c">
             <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-indian-rupee-sign"></i></span>
-            <input type="text" [DecimalNumber]="10"  name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)"  class="form-control rounded-end-0" [(ngModel)]="selectedPromotionAndHike.hikeAmount">
+            <input type="text" [DecimalNumber]="10"  name="ProposedHikeAmount" (keyup)="proposedHikeAmountCheck($event, i)"  class="form-control rounded-end-0" [(ngModel)]="selectedPromotionAndHike.HikeAmount">
           </div>
         </div>
         <div class="mt-3">
           <label class="form-label col-md-4">EstimatedSalary:</label>
-          <label class="form-label"><i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{selectedPromotionAndHike.estimatedSalary}}</label>
+          <label class="form-label"><i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{selectedPromotionAndHike.EstimatedSalary}}</label>
         </div>
         <div class="d-flex align-items-center">
           <label class="form-label col-md-4">Rating:</label>
@@ -284,7 +287,7 @@
         <div class="mt-3 d-flex align-items-center col-md-12">
           <label class="form-label pe-2 col-md-4">Comment</label>
           <div class="col-md-8">
-            <textarea rows="4" placeholder="Comments" type="text" class="form-control" [(ngModel)]="selectedPromotionAndHike.comments"></textarea>
+            <textarea rows="4" placeholder="Comments" type="text" class="form-control" [(ngModel)]="selectedPromotionAndHike.Comments"></textarea>
           </div>
         </div>
       </div>
@@ -307,11 +310,11 @@
       <div class="modal-body" *ngIf="selectedPromotionAndHike != null">
         <div class="">
           <label class="form-label col-md-4">Name:</label>
-          <label class="form-label ">{{selectedPromotionAndHike.fullName}}</label>
+          <label class="form-label ">{{selectedPromotionAndHike.FullName}}</label>
         </div>
         <div class="mt-3">
           <label class="form-label col-md-4">Present Salary:</label>
-          <label class="form-label"><i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{selectedPromotionAndHike.cTC}}</label>
+          <label class="form-label"><i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{selectedPromotionAndHike.CTC}}</label>
         </div>
         <div class="mt-3">
           <label class="form-label col-md-12">Please click

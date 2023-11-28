@@ -165,7 +165,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   buildSalaryComponentDetail(components: Array<any>) {
     this.isPageReady = false;
-    components = components.filter(x => x.IsAdHoc == 0);
+    //components = components.filter(x => x.IsAdHoc == 0);
     let i = 0;
     this.salaryComponentFields = [];
     while(i < components.length) {

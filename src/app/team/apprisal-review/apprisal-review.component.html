@@ -19,8 +19,7 @@
           </div>
           <div *ngSwitchDefault>
             <div class="x_content">
-              <div class="t-table t-list t-border col-md-12">
-                <div class="hide-bar"></div>
+              <div class="t-table t-list col-md-12">
                 <div class="t-head">
                   <div class="tr">
                     <div class="th fe-index">
@@ -31,32 +30,12 @@
                     <div class="th fe-2">
                       <div class="cell-wrapper">
                         Project Name
-                        <!-- <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                          (keyup.enter)="filterRecords()" autofocus [(ngModel)]="employeeDetails.Name"
-                          placeholder="Search by Name" id="namefilter"> -->
-                        <!-- <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
-                          <a href="javascript:void()" class="pe-2">Full Name</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
-                        </div> -->
                       </div>
                     </div>
                     <div class="th fe-1">Team</div>
                     <div class="th fe-4">
                       <div class="cell-wrapper">
                         Project Description
-                        <!-- <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
-                          placeholder="Search by MobileNumber"> -->
-                        <!-- <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
-                          <a href="javascript:void()" class="pe-2">Mobile Number</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
-                        </div> -->
                       </div>
                     </div>
                     <div class="th fe-1 text-center">Review Status</div>
@@ -83,13 +62,10 @@
                       </div>
                       <div class="td text-center fe-1 d-flex align-items-center justify-content-between">
                         <div class="cell-wrapper text-truncate ps-0">
-                          <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let item of project.Teams">
+                          <span class="badge fs-6 fw-normal bg-ant text-dark me-2" *ngFor="let item of project.Teams">
                             {{item}}
                           </span>
                         </div>
-                        <!-- <a href="javascript:void(0)" (click)="showOffCanvas(project)" class="text-success pe-3" type="button">
-                          <i class="fa fa-play" aria-hidden="true"></i>
-                        </a> -->
                       </div>
                       <div class="td align-middle fe-4 text-truncate">
                         <div class="cell-wrapper text-truncate">
