@@ -232,7 +232,7 @@ export class ManageReviewComponent implements OnInit {
       this.isLoading = false;
       return;
     }
-    let value = this.appraisalHikeForm.get('ProjectMemberHike').value;
+    let value = this.appraisalHikeForm.get('ProjectMemberHike').getRawValue();
     value.forEach(x => {
       if (x.AppraisalStatus == 0) {
         ErrorToast("Appraisal of all the employee are not submitted");

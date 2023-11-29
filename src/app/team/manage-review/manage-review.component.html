@@ -102,7 +102,7 @@
                               <div>
                                 <select formControlName="PromotedDesignation" class="form-control border-0 mt-0 pt-0 transparent-bg">
                                   <option value="0" >Same Designation</option>
-                                  <option value="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
+                                  <option [value]="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
                                 </select>
                               </div>
                             </div>
