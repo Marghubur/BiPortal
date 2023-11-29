@@ -21,8 +21,6 @@ export class ManageReviewComponent implements OnInit {
   appraisalHikeForm: FormGroup;
   isLoading: boolean = false;
   isAmountExceed: boolean = false;
-  selectedProject: any = null;
-  projectDetails: Array<any> = [];
   allProjectAppraisal: Array<any> = [];
   appraisalReviewDetail: Array<any> = [];
   userDetail: any = null;
@@ -36,6 +34,7 @@ export class ManageReviewComponent implements OnInit {
   promotionAndHikeForm: FormGroup;
   selectedPromotionAndHike: any = null;
   isSubmitted: boolean = false;
+  submittedEmpObj: Array<any> = [];
 
   constructor(private nav:iNavigation,
               private http: AjaxService,
@@ -50,16 +49,9 @@ export class ManageReviewComponent implements OnInit {
   }
 
   getProjectsMembers() {
-    this.selectedProject = null;
-    this.projectDetails = [];
     this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}/${this.project.ProjectId}`, true).then(res => {
       if (res.ResponseBody) {
-        let project = res.ResponseBody.Project;
-        if (project.findIndex(x => x.ProjectId == this.project.ProjectId) < 0) {
-          this.projectDetails = [];
-          return;
-        }
-        // project = project.filter(x => x.Team == this.selectedTeam.Team);
+        this.submittedEmpObj = res.ResponseBody.Project;
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
         this.appraisalReviewDetail = res.ResponseBody.ReviewDetail;
         if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
@@ -69,33 +61,8 @@ export class ManageReviewComponent implements OnInit {
             this.isSubmitted = true;
         }
 
-        if (project.length > 0) {
-          let result = project.reduce((a, b) => {
-            a[b.ProjectId] = a[b.ProjectId] || [];
-            a[b.ProjectId].push(b);
-            return a;
-          }, Object.create(null));
-
-          let keys = Object.keys(result);
-          let i = 0;
-          while(i < keys.length) {
-            this.projectDetails.push({
-              ProjectId:result[keys[0]][0].ProjectId,
-              ProjectName:result[keys[0]][0].ProjectName,
-              ProjectDescription:result[keys[0]][0].ProjectDescription,
-              ProjectMembers: result[keys[i]]
-            });
-            i++;
-          }
-          this.selectedProject = this.projectDetails[0];
-          this.currentProjectAppraisal = this.allProjectAppraisal.find(x => x.ProjectId == this.selectedProject.ProjectId);
-          if (this.selectedProject.ProjectMembers.length > 0) {
-            this.initAppraisalHike();
-          } else  {
-            this.isPageReady = true;
-            ErrorToast("Please add team members");
-            return;
-          }
+        if (this.submittedEmpObj.length > 0) {
+          this.initAppraisalHike();
           this.isPageReady = true;
           Toast("Project details found");
         } else {
@@ -116,7 +83,7 @@ export class ManageReviewComponent implements OnInit {
   }
 
   buildProjectMemberHike(): FormArray {
-    let data = this.selectedProject.ProjectMembers;
+    let data = this.submittedEmpObj;
     let dataArray: FormArray = this.fb.array([]);
     if(data != null && data.length > 0) {
       let i = 0;
@@ -126,25 +93,27 @@ export class ManageReviewComponent implements OnInit {
           reviewDetail = this.appraisalReviewDetail.find(x => x.ProjectId == data[i].ProjectId && x.CompanyId == data[i].CompanyId && x.EmployeeId == data[i].EmployeeId);
 
         dataArray.push(this.fb.group({
-          fullName: new FormControl(data[i].FullName),
-          memberType: new FormControl(data[i].MemberType),
-          designationName: new FormControl(data[i].DesignationName),
-          assignedOn: new FormControl(data[i].AssignedOn),
-          cTC: new FormControl(data[i].CTC),
-          employeeId: new FormControl(data[i].EmployeeId),
-          promotedDesignation: new FormControl({value: reviewDetail != null ? reviewDetail.PromotedDesignation : 0, disabled: true}),
-          hikePercentage: new FormControl(reviewDetail == null ? 0 : reviewDetail.HikePercentage),
-          hikeAmount: new FormControl(reviewDetail == null ? 0 : reviewDetail.HikeAmount),
-          experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0),
-          estimatedSalary: new FormControl(reviewDetail == null ? data[i].CTC : reviewDetail.EstimatedSalary),
-          comments: new FormControl(reviewDetail == null ? "" : reviewDetail.Comments),
+          FullName: new FormControl(data[i].FullName),
+          MemberType: new FormControl(data[i].MemberType),
+          DesignationName: new FormControl(data[i].DesignationName),
+          CTC: new FormControl(data[i].CTC),
+          EmployeeId: new FormControl(data[i].EmployeeId),
+          PromotedDesignation: new FormControl({value: reviewDetail != null ? reviewDetail.PromotedDesignation : 0, disabled: true}),
+          HikePercentage: new FormControl(reviewDetail == null ? 0 : reviewDetail.HikePercentage),
+          HikeAmount: new FormControl(reviewDetail == null ? 0 : reviewDetail.HikeAmount),
+          Experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0),
+          EstimatedSalary: new FormControl(reviewDetail == null ? data[i].CTC : reviewDetail.EstimatedSalary),
+          Comments: new FormControl(reviewDetail == null ? "" : reviewDetail.Comments),
           rating: new FormControl(reviewDetail == null ? 0 : reviewDetail.Rating),
-          projectId: new FormControl(data[i].ProjectId),
-          companyId: new FormControl(data[i].CompanyId),
-          appraisalDetailId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalDetailId),
-          appraisalReviewId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalReviewId),
-          appraisalCycleStartDate: new FormControl(data[i].appraisalCycleStartDate),
-          status: new FormControl(reviewDetail != null ? reviewDetail.Status : 0)
+          ProjectId: new FormControl(this.project.ProjectId),
+          CompanyId: new FormControl(data[i].CompanyId),
+          AppraisalStatus: new FormControl(data[i].Status),
+          AppraisalDetailId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalDetailId),
+          AppraisalReviewId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalReviewId),
+          AppraisalCycleStartDate: new FormControl(data[i].AppraisalCycleStartDate),
+          Status: new FormControl(reviewDetail != null ? reviewDetail.Status : 0),
+          DesignationId: new FormControl(data[i].DesignationId),
+          ObjectiveCategoryId: new FormControl(data[i].ObjectiveCategoryId)
         }));
         i++;
       }
@@ -167,26 +136,26 @@ export class ManageReviewComponent implements OnInit {
       elem.setAttribute("readonly", "");
       elem = document.getElementsByName("ProposedHikePercentage")[i];
       elem.removeAttribute("readonly");
-      formArray.controls[i].get("hikeAmount").setValue(0);
+      formArray.controls[i].get("HikeAmount").setValue(0);
       let value = Number(e.target.value);
       if (value > 0) {
-        let ctc = formArray.controls[i].get("cTC").value;
-        let hikeAmount = (ctc * value)/100;
-        formArray.controls[i].get("hikeAmount").setValue(hikeAmount);
-        formArray.controls[i].get("estimatedSalary").setValue(ctc + Number(hikeAmount));
+        let ctc = formArray.controls[i].get("CTC").value;
+        let HikeAmount = (ctc * value)/100;
+        formArray.controls[i].get("HikeAmount").setValue(HikeAmount);
+        formArray.controls[i].get("EstimatedSalary").setValue(ctc + Number(HikeAmount));
       }
     } else {
       let elem = document.getElementsByName("ProposedHikePercentage")[i];
       elem.setAttribute("readonly", "");
       elem = document.getElementsByName("ProposedHikeAmount")[i];
       elem.removeAttribute("readonly");
-      formArray.controls[i].get("hikePercentage").setValue(0);
+      formArray.controls[i].get("HikePercentage").setValue(0);
       let value = Number(e.target.value);
       if (value > 0) {
         let ctc = formArray.controls[i].get("CTC").value;
-        let hikePercentage = (value * 100)/ctc;
-        formArray.controls[i].get("hikePercentage").setValue(hikePercentage);
-        formArray.controls[i].get("estimatedSalary").setValue(ctc + value);
+        let HikePercentage = (value * 100)/ctc;
+        formArray.controls[i].get("HikePercentage").setValue(HikePercentage);
+        formArray.controls[i].get("EstimatedSalary").setValue(ctc + value);
       }
     }
   }
@@ -196,30 +165,30 @@ export class ManageReviewComponent implements OnInit {
     let value = Number(e.target.value);
     if (value > 0) {
       if (name == "ProposedHikePercentage") {
-        let hikeAmount = ((this.selectedPromotionAndHike.cTC * value)/100).toFixed(2);
-        this.selectedPromotionAndHike.hikeAmount = hikeAmount;
-        this.selectedPromotionAndHike.estimatedSalary = this.selectedPromotionAndHike.cTC + Number(hikeAmount);
+        let HikeAmount = ((this.selectedPromotionAndHike.CTC * value)/100).toFixed(2);
+        this.selectedPromotionAndHike.HikeAmount = HikeAmount;
+        this.selectedPromotionAndHike.EstimatedSalary = this.selectedPromotionAndHike.CTC + Number(HikeAmount);
       } else {
-        let hikePercentage = ((value * 100)/this.selectedPromotionAndHike.cTC).toFixed(2);
-        this.selectedPromotionAndHike.hikePercentage = hikePercentage;
-        this.selectedPromotionAndHike.estimatedSalary = this.selectedPromotionAndHike.cTC + value;
+        let HikePercentage = ((value * 100)/this.selectedPromotionAndHike.CTC).toFixed(2);
+        this.selectedPromotionAndHike.HikePercentage = HikePercentage;
+        this.selectedPromotionAndHike.EstimatedSalary = this.selectedPromotionAndHike.CTC + value;
       }
     } else {
-      this.selectedPromotionAndHike.hikePercentage = 0;
-      this.selectedPromotionAndHike.hikeAmount = 0;
+      this.selectedPromotionAndHike.HikePercentage = 0;
+      this.selectedPromotionAndHike.HikeAmount = 0;
     }
     // let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
     // if (value > 0) {
     //   if (name == "ProposedHikePercentage") {
     //     let ctc = formArray.controls[i].get("cTC").value;
-    //     let hikeAmount = ((ctc * value)/100).toFixed(2);
-    //     formArray.controls[i].get("hikeAmount").setValue(hikeAmount);
-    //     formArray.controls[i].get("estimatedSalary").setValue(ctc + Number(hikeAmount));
+    //     let HikeAmount = ((ctc * value)/100).toFixed(2);
+    //     formArray.controls[i].get("HikeAmount").setValue(HikeAmount);
+    //     formArray.controls[i].get("EstimatedSalary").setValue(ctc + Number(HikeAmount));
     //   } else {
     //     let ctc = formArray.controls[i].get("cTC").value;
-    //     let hikePercentage = ((value * 100)/ctc).toFixed(2);
-    //     formArray.controls[i].get("hikePercentage").setValue(hikePercentage);
-    //     formArray.controls[i].get("estimatedSalary").setValue(ctc + value);
+    //     let HikePercentage = ((value * 100)/ctc).toFixed(2);
+    //     formArray.controls[i].get("HikePercentage").setValue(HikePercentage);
+    //     formArray.controls[i].get("EstimatedSalary").setValue(ctc + value);
     //   }
     //   this.isTotalAmountExceed();
     // }
@@ -228,7 +197,7 @@ export class ManageReviewComponent implements OnInit {
   isTotalAmountExceed() {
     let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
     this.isAmountExceed = false;
-    let totalAmount = formArray.value.map(x => Number(x.hikeAmount)).reduce((a, b) => {return a + b;}, 0);
+    let totalAmount = formArray.value.map(x => Number(x.HikeAmount)).reduce((a, b) => {return a + b;}, 0);
     if (this.currentProjectAppraisal && totalAmount > this.currentProjectAppraisal.ProjectAppraisalBudget)
       this.isAmountExceed = true;
   }
@@ -237,11 +206,11 @@ export class ManageReviewComponent implements OnInit {
     let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
     let equalpercent = (100 / formArray.length).toFixed(2);
     for (let i = 0; i < formArray.length; i++) {
-      let ctc = formArray.controls[i].get("cTC").value;
-      let hikeAmount = ((ctc * Number(equalpercent))/100).toFixed(2);
-      formArray.controls[i].get("hikePercentage").setValue(equalpercent);
-      formArray.controls[i].get("hikeAmount").setValue(hikeAmount);
-      formArray.controls[i].get("estimatedSalary").setValue(ctc + Number(hikeAmount));
+      let ctc = formArray.controls[i].get("CTC").value;
+      let HikeAmount = ((ctc * Number(equalpercent))/100).toFixed(2);
+      formArray.controls[i].get("HikePercentage").setValue(equalpercent);
+      formArray.controls[i].get("HikeAmount").setValue(HikeAmount);
+      formArray.controls[i].get("EstimatedSalary").setValue(ctc + Number(HikeAmount));
     }
     this.isTotalAmountExceed();
   }
@@ -263,7 +232,14 @@ export class ManageReviewComponent implements OnInit {
       this.isLoading = false;
       return;
     }
-    let value = this.appraisalHikeForm.get('ProjectMemberHike').value;
+    let value = this.appraisalHikeForm.get('ProjectMemberHike').getRawValue();
+    value.forEach(x => {
+      if (x.AppraisalStatus == 0) {
+        ErrorToast("Appraisal of all the employee are not submitted");
+        this.isLoading = false;
+        return;
+      }
+    });
     this.http.post("eps/promotion/addPromotionAndHike", value, true).then(res => {
       if (res.ResponseBody) {
         this.appraisalReviewDetail = res.ResponseBody;
@@ -282,7 +258,7 @@ export class ManageReviewComponent implements OnInit {
 
   showOffCanvas(item: any) {
     this.selectedEmploye = item.value;
-    if (this.selectedEmploye && this.selectedEmploye.employeeId > 0) {
+    if (this.selectedEmploye && this.selectedEmploye.EmployeeId > 0) {
       var offcanvasRight = document.getElementById('riviewObjectiveOffCanvas');
       var bsOffcanvas = new bootstrap.Offcanvas(offcanvasRight);
       this.loadReviewDetail()
@@ -292,11 +268,11 @@ export class ManageReviewComponent implements OnInit {
 
   loadReviewDetail() {
     this.isObjectivesReady = false;
-    let designationId = 0;
-    this.http.get(`eps/performance/getEmployeeObjective/${designationId}/${this.userDetail.CompanyId}/${this.selectedEmploye.employeeId}`, true).then(res => {
+    let DesignationId = 0;
+    this.http.get(`eps/performance/getEmployeeObjective/${DesignationId}/${this.userDetail.CompanyId}/${this.selectedEmploye.EmployeeId}`, true).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.objectives = res.ResponseBody;
-        this.getUserNameIcon(this.selectedEmploye.fullName);
+        this.getUserNameIcon(this.selectedEmploye.FullName);
         console.log(this.objectives)
         Toast("Employee performance objective data loaded successsfully");
         this.isObjectivesReady = true;
@@ -319,7 +295,7 @@ export class ManageReviewComponent implements OnInit {
 
   rejectObjective() {
     this.isLoading = true;
-    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.employeeId}/${ItemStatus.Rejected}`, true).then(res => {
+    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Rejected}`, true).then(res => {
       if (res.ResponseBody) {
         Toast("Objective rejected");
         this.isLoading = false;
@@ -332,7 +308,7 @@ export class ManageReviewComponent implements OnInit {
 
   approveObjective() {
     this.isLoading = true;
-    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.employeeId}/${ItemStatus.Approved}`, true).then(res => {
+    this.http.get(`eps/performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Approved}`, true).then(res => {
       if (res.ResponseBody) {
         Toast("Objective approved successfully");
         this.isLoading = false;
@@ -344,34 +320,35 @@ export class ManageReviewComponent implements OnInit {
   }
 
   promotionHikePopUp(item: FormGroup) {
-    if(!this.isSubmitted) {
+    let value = item.value
+    if(value.AppraisalReviewId == 0) {
       this.promotionAndHikeForm = item;
       this.selectedPromotionAndHike = item.value;
-      this.selectedPromotionAndHike.promotedDesignation ="0";
-      this.promotionAndHikeForm.controls['promotedDesignation'].enable();
+      this.selectedPromotionAndHike.PromotedDesignation ="0";
+      this.promotionAndHikeForm.controls['PromotedDesignation'].enable();
       $("#promotionHikeModal").modal('show');
     } else {
-      this.selectedPromotionAndHike = item.value;
+      this.selectedPromotionAndHike = value;
       $("#reopenAppraisalModal").modal('show');
     }
   }
 
   applyPromotionHikeChanges() {
     let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
-    let value = formArray.value.find(x => x.employeeId == this.selectedPromotionAndHike.employeeId);
-    value.promotedDesignation = this.selectedPromotionAndHike.promotedDesignation;this.selectedPromotionAndHike.promotedDesignation;
-    value.hikePercentage = this.selectedPromotionAndHike.hikePercentage;
-    value.hikeAmount = this.selectedPromotionAndHike.hikeAmount;
-    value.estimatedSalary =this.selectedPromotionAndHike.estimatedSalary;
+    let value = formArray.value.find(x => x.EmployeeId == this.selectedPromotionAndHike.EmployeeId);
+    value.PromotedDesignation = this.selectedPromotionAndHike.PromotedDesignation;
+    value.HikePercentage = this.selectedPromotionAndHike.HikePercentage;
+    value.HikeAmount = this.selectedPromotionAndHike.HikeAmount;
+    value.EstimatedSalary =this.selectedPromotionAndHike.EstimatedSalary;
     value.rating = this.selectedPromotionAndHike.rating;
-    value.comments = this.selectedPromotionAndHike.comments;
+    value.Comments = this.selectedPromotionAndHike.Comments;
     this.appraisalHikeForm.controls['ProjectMemberHike'].patchValue(formArray.value);
-    this.promotionAndHikeForm.controls['promotedDesignation'].disable();
+    this.promotionAndHikeForm.controls['PromotedDesignation'].disable();
     $("#promotionHikeModal").modal('hide');
   }
 
   closePromotionHikePopup() {
-    this.promotionAndHikeForm.controls['promotedDesignation'].disable();
+    this.promotionAndHikeForm.controls['PromotedDesignation'].disable();
   }
 
   reOpenCurrentAppraidal() {
@@ -399,7 +376,7 @@ export class ManageReviewComponent implements OnInit {
     if (value) {
       console.log(value)
       this.isLoading =true;
-      this.http.get(`eps/promotion/reOpenEmployeeObjective/${value.employeeId}/${value.appraisalDetailId}`, true)
+      this.http.get(`eps/promotion/reOpenEmployeeObjective/${value.EmployeeId}/${value.AppraisalDetailId}`, true)
       .then((response: ResponseModel) => {
         if (response) {
           this.isLoading = false;

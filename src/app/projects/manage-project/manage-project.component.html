@@ -89,10 +89,6 @@
               <div class="row">
                 <div class="col-md-4 mt-3">
                   <label class="form-label">Project Manager</label>
-                  <!-- <select class="form-select" formControlName="ProjectManagerId">
-                    <option value=0 disabled>Select Project Manager</option>
-                    <option [value]="item.value" *ngFor="let item of employees">{{item.text}}</option>
-                  </select> -->
                   <p class="mb-0 fw-bold">{{projectForm.controls.ProjectManagerName.value != null ? projectForm.controls.ProjectManagerName.value : "Not Assign"}}</p>
                 </div>
               </div>
@@ -144,16 +140,6 @@
             </form>
           </div>
         </ng-container>
-        <!-- <ng-container *ngIf="!isReady">
-          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </ng-container> -->
       </div>
     </div>
   </div>
@@ -178,6 +164,10 @@
             <input type="text" class="form-control" placeholder="Team Name" [(ngModel)]="teamName">
           </div>
         </div>
+        <div class="col-md-12 row my-4" *ngIf="isReady">
+          <bot-multiselect [data]="employeesList" (OnSelect)="selectedEmployee($event)" (OnServerFilter)="serverFilter($event)">
+          </bot-multiselect>
+        </div>
         <div class="mt-3">
           <label class="form-label">Team Members</label>
           <div class="mt-3 teammember-container">
@@ -198,16 +188,7 @@
                     <td>
                       <select class="form-select" [(ngModel)]="item.MemberType">
                         <option value=0 selected disabled>Select Member Type</option>
-                        <option value=2>Project Manager</option>
-                        <option value=3>Project Architect</option>
-                        <option value=8>Solution Architect</option>
-                        <option value=9>Application Architect</option>
-                        <option value=10>Networking</option>
-                        <option value=11>Test Lead</option>
-                        <option value=3>Project Architect</option>
-                        <option value=4>Tester</option>
-                        <option value=20>Team Member</option>
-                        <option value=19>Team Lead</option>
+                        <option [value]="item.RoleId" *ngFor="let item of roles">{{item.RoleName}}</option>
                       </select>
                     </td>
                     <td>
@@ -225,13 +206,6 @@
                 </ng-container>
               </tbody>
             </table>
-              <!-- <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngIf="item.DesignationId != 3 && item.DesignationId != 19 && item.DesignationId != 2">
-                {{item.FullName}}
-              </span> -->
-          </div>
-          <div class="col-md-12 row my-4" *ngIf="isReady">
-            <bot-multiselect [data]="employeesList" (OnSelect)="selectedEmployee($event)">
-            </bot-multiselect>
           </div>
         </div>
       </div>
