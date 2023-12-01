@@ -10,7 +10,7 @@
       </div>
       <div class="accordion border-0" *ngFor="let catagory of Menu;let i = index;">
         <div class="accordion-item border-0">
-          <div class="accordion-item-header" [ngClass]="{'active': catagory.IsActive}" [attr.data-index]="i+1" (click)="toogle($event)">
+          <div class="accordion-item-header z-3" [ngClass]="{'active': catagory.IsActive}" [attr.data-index]="i+1" (click)="toogle($event)">
             <span class="i-chip">
               <i class="{{catagory.ParentDetail.Icon}}"></i>
             </span>
@@ -19,8 +19,9 @@
               class="badge bg-secondary ms-3">
               NEW
             </span>
-            <i class="fa-solid fa-caret-right fa-lg ms-auto px-2" [ngClass]="{'rotate-caret': catagory.IsActive}"></i>
-          </div><!-- /.accordion-item-header -->
+            <i class="fa-solid fa-caret-right fa-lg ms-auto ps-2 pe-4 z-0" [ngClass]="{'rotate-caret': catagory.IsActive}"></i>
+          </div>
+          <!-- /.accordion-item-header -->
           <div class="accordion-item-body" [ngClass]="{'active-body': catagory.IsActive}">
             <div class="accordion-item-body-content">
               <div class="menu-item-group">
