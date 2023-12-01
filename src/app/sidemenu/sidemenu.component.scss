@@ -322,6 +322,8 @@ h1 {
 
 .rotate-caret {
   transform: rotate(90deg);
+  transform-origin: center !important;
+  transition: all 0.3s linear;
 }
 
 .accordion-item-body {

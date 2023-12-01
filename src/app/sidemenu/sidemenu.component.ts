@@ -269,15 +269,14 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
     for (let i = 0; i < caret.length; i++) {
       if (caret[i].classList.contains("rotate-caret"))
       caret[i].classList.remove("rotate-caret");
-
     }
     if(accordionItemHeader.classList.contains("active")) {
       accordionItemBody.style.maxHeight = accordionItemBody.scrollHeight + "px";
-      e.target.getElementsByClassName("fa-caret-right")[0].classList.add("rotate-caret");
+      e.currentTarget.getElementsByClassName("fa-caret-right")[0].classList.add("rotate-caret");
     }
     else {
       accordionItemBody.style.maxHeight = 0;
-      e.target.getElementsByClassName("fa-caret-right")[0].classList.remove("rotate-caret");
+      e.currentTarget.getElementsByClassName("fa-caret-right")[0].classList.remove("rotate-caret");
     }
   }
 }
