@@ -5,7 +5,7 @@ export const environment = {
   OAuthSecret: "RspdEibsTlVS0nKi4izhFu4I",
 
   baseDotNetUrl: "http://bot.io/bot/dn/core/api/",
-  baseSpringUrl: "http://bot.io/bot/sb/api/eps/",
+  baseSpringUrl: "http://bot.io/bot/sb/api/",
 
   FolderDelimiter: "\/"
 };
