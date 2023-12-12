@@ -422,13 +422,13 @@
                                     <div class="col-md-1 mx-3">
                                       <input type="text" class="form-control" OnlyNumber="2" name="ToDate" formControlName="ToDate" (blur)="empLeaveMiddleDateValidation($event, i)">
                                     </div>
-                                    <label for="" class="form-label">of the month allocate</label>
+                                    <label  class="form-label">of the month allocate</label>
                                     <div class="col-md-1 mx-3">
                                       <input type="text" class="form-control"
                                            DecimalNumber="3"
                                             formControlName="AllocatedLeave">
                                     </div>
-                                    <label for="" class="form-label">days(s) of leave.</label>
+                                    <label  class="form-label">days(s) of leave.</label>
                                   </div>
                                 </div>
                                 <div class="col-md-2">
@@ -574,23 +574,23 @@
                           you
                           consider Weekly-Off & Holidays:</h6>
                         <div class="d-flex align-items-center">
-                          <label for="" class="form-label">Do not consider weekly-off as absent, for the purpose of
+                          <label  class="form-label">Do not consider weekly-off as absent, for the purpose of
                             attendance, if employee is present at least</label>
                           <div class="col-md-1 mx-2">
                             <input type="text" class="form-control form-control-sm" OnlyNumber="2"
                               formControlName="WeekOffAsAbsentIfAttendaceLessThen">
                           </div>
-                          <label for="" class="form-label">days in a Month.</label>
+                          <label  class="form-label">days in a Month.</label>
                         </div>
                         <div class="d-flex align-items-center mt-2">
-                          <label for="" class="form-label">Do not consider holiday as absent, for the purpose of
+                          <label  class="form-label">Do not consider holiday as absent, for the purpose of
                             attendance,
                             if employee is present at least</label>
                           <div class="col-md-1 mx-2">
                             <input type="text" class="form-control form-control-sm" OnlyNumber="2"
                               formControlName="HolidayAsAbsentIfAttendaceLessThen">
                           </div>
-                          <label for="" class="form-label">days in a Month.</label>
+                          <label  class="form-label">days in a Month.</label>
                         </div>
                       </div>
                     </div>
@@ -639,7 +639,7 @@
                                 [readonly]="leaveAccrualForm.controls.NoOfDaysForExtraLeave.value <= 0"
                                 name="NoOfDaysForExtraLeave" formControlName="NoOfDaysForExtraLeave">
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               days and not exceeding their annual quota.
                             </label>
                           </div>
@@ -677,7 +677,7 @@
                                 name="AllowOnlyIfAccrueBalanceIsAlleast"
                                 formControlName="AllowOnlyIfAccrueBalanceIsAlleast">
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               days.
                             </label>
                           </div>
@@ -700,7 +700,7 @@
                                 [readonly]="leaveAccrualForm.controls.NotAllowIfAlreadyOnLeaveMoreThan.value <= 0"
                                 formControlName="NotAllowIfAlreadyOnLeaveMoreThan">
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               days in previous Month. (irrespective of leave calender year)
                             </label>
                           </div>
@@ -831,7 +831,7 @@
                                 name="AfterHowManyDays" [readonly]="leaveAccrualForm.controls.AfterHowManyDays.value <= 0"
                                 formControlName="AfterHowManyDays">
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               days from date of accrual or credit.
                             </label>
                           </div>
@@ -932,18 +932,18 @@
                                     formControlName="RemaningCalendarDayInNotice">
                                 </div>
                                 <label class="px-2 form-label">Calendar days</label>
-                                <label for="" class="form-label ps-3">Need</label>
+                                <label  class="form-label ps-3">Need</label>
                                 <div class="col-md-1 mx-3">
                                   <input type="text" class="form-control" OnlyNumber="2"
                                     formControlName="RequiredCalendarDaysForLeaveApply">
                                 </div>
-                                <label for="" class="form-label">Calendar days Notice</label>
-                                <label for="" class="form-label ps-3">and contain at least</label>
+                                <label  class="form-label">Calendar days Notice</label>
+                                <label  class="form-label ps-3">and contain at least</label>
                                 <div class="col-md-1 mx-3">
                                   <input type="text" class="form-control" OnlyNumber="2"
                                     formControlName="RemaningWorkingDaysInNotice">
                                 </div>
-                                <label for="" class="form-label ps-3">working days</label>
+                                <label  class="form-label ps-3">working days</label>
                               </div>
                             </div>
                             <div class="col-md-2">
@@ -971,7 +971,7 @@
                             <input type="text" OnlyNumber="3" class="c-input"
                               formControlName="ApplyPriorBeforeLeaveDate">
                           </div>
-                          <label for="" class="form-label">
+                          <label  class="form-label">
                             calendar days prior to the leave date.
                           </label>
                         </div>
@@ -994,7 +994,7 @@
                             <input type="text" OnlyNumber="3" class="c-input"
                               formControlName="BackDateLeaveApplyNotBeyondDays">
                           </div>
-                          <label for="" class="form-label">
+                          <label  class="form-label">
                             calendar days back.
                           </label>
                         </div>
@@ -1049,7 +1049,7 @@
                                 [readonly]="applyForLeaveForm.controls.ProofRequiredIfDaysExceeds.value == 'false'"
                                 formControlName="NoOfDaysExceeded">
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               calendar days.
                             </label>
                           </div>
@@ -1094,7 +1094,7 @@
                                 [readonly]="leaveRestrictionForm.controls.CanApplyAfterProbation.value == 'false'"
                                 formControlName="DaysAfterProbation">
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               days after Probation ends. (Note: use 0 days if you don't want to allow any leave in probation.)
                             </label>
                           </div>
@@ -1113,7 +1113,7 @@
                                 [readonly]="leaveRestrictionForm.controls.CanApplyAfterJoining.value == 'false'"
                                 formControlName="DaysAfterJoining">
                             </div>
-                            <label for="" class="form-label pe-3">
+                            <label  class="form-label pe-3">
                               days after joining.
                             </label>
                           </div>
@@ -1137,7 +1137,7 @@
                                   [readonly]="leaveRestrictionForm.controls.IsAvailRestrictedLeavesInProbation.value == 'false'"
                                   formControlName="LeaveLimitInProbation">
                               </div>
-                              <label for="" class="form-label">
+                              <label  class="form-label">
                                 days of leave during probation (irrespective of accrual/credit).
                               </label>
                             </div>
@@ -1181,7 +1181,7 @@
                                 [readonly]="leaveRestrictionForm.controls.IsLeaveInNoticeExtendsNoticePeriod.value == 'false'"
                                 formControlName="NoOfTimesNoticePeriodExtended">
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               times the actual leave days.
                             </label>
                           </div>
@@ -1235,7 +1235,7 @@
                             <input type="text" OnlyNumber="3" class="c-input"
                               formControlName="GapBetweenTwoConsicutiveLeaveDates">
                           </div>
-                          <label for="" class="form-label">
+                          <label  class="form-label">
                             calendar days between two leave requests.
                           </label>
                         </div>
@@ -1252,7 +1252,7 @@
                             <input type="text" OnlyNumber="3" class="c-input"
                               formControlName="LimitOfMaximumLeavesInCalendarYear">
                           </div>
-                          <label for="" class="form-label">
+                          <label  class="form-label">
                             instance (leave request) in a leave calendar year.
                           </label>
                         </div>
@@ -1269,7 +1269,7 @@
                             <input type="text" OnlyNumber="3" class="c-input"
                               formControlName="LimitOfMaximumLeavesInCalendarMonth">
                           </div>
-                          <label for="" class="form-label">
+                          <label  class="form-label">
                             instance (leave request) in a calendar month.
                           </label>
                         </div>
@@ -1286,7 +1286,7 @@
                             <input type="text" OnlyNumber="3" class="c-input"
                               formControlName="MinLeaveToApplyDependsOnAvailable">
                           </div>
-                          <label for="" class="form-label">
+                          <label  class="form-label">
                             days to leave in a single instance when total available leave balance is greater than or equal
                             to
                           </label>
@@ -1308,7 +1308,7 @@
                             <input type="text" OnlyNumber="3" class="c-input"
                               formControlName="RestrictFromDayOfEveryMonth">
                           </div>
-                          <label for="" class="form-label">
+                          <label  class="form-label">
                             of every month.
                           </label>
                         </div>
@@ -1402,7 +1402,7 @@
                                 <option value="">Calender Days</option>
                               </select>
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               and
                             </label>
                           </div>
@@ -1497,7 +1497,7 @@
                                   <option value="">Calender Days</option>
                                 </select>
                               </div>
-                              <label for="" class="form-label">
+                              <label  class="form-label">
                                 and
                               </label>
                             </div>
@@ -1793,7 +1793,7 @@
                           Carry forward first and pay remaining?
                         </h6>
                         <div class="d-flex">
-                          <label for="" class="form-label">Leave for payment and carryforward is defined
+                          <label  class="form-label">Leave for payment and carryforward is defined
                             as</label>
                           <div class="col-md-1 ms-3">
                             <select class="form-select form-select-sm" formControlName="PayNCarryForwardDefineType">
@@ -1831,7 +1831,7 @@
                                     <input type="text" class="form-control form-control-sm" OnlyNumber="2"
                                       formControlName="CarryForwardPercent" />
                                   </div>
-                                  <label for="" class="form-label">% of remaining leave days</label>
+                                  <label  class="form-label">% of remaining leave days</label>
                                 </div>
                                 <div class="form-check d-flex align-items-center">
                                   <input class="form-check-input" type="checkbox"
@@ -1885,12 +1885,12 @@
                                   <input type="text" class="form-control form-control-sm" OnlyNumber="2"
                                     formControlName="PaybleForDays" />
                                 </div>
-                                <label for="" class="form-label">days and carry forward upto</label>
+                                <label  class="form-label">days and carry forward upto</label>
                                 <div class="col-md-1 mx-3">
                                   <input type="text" class="form-control form-control-sm" OnlyNumber="2"
                                     formControlName="CarryForwardForDays" />
                                 </div>
-                                <label for="" class="form-label ps-3">remaining days</label>
+                                <label  class="form-label ps-3">remaining days</label>
                               </div>
                               <i class="fa-solid fa-plus-circle fa-lg" (click)="createFixedPayNCarryForward()"></i>
                               <i class="fa-solid fa-trash-can ps-2 fa-lg" (click)="removeFixedPayNCarryForward(i)"></i>
@@ -1930,7 +1930,7 @@
                                 [readonly]="yearEndProcessForm.controls.DoestCarryForwardExpired.value == 'false'"
                                 formControlName="ExpiredAfter" />
                             </div>
-                            <label for="" class="form-label">
+                            <label  class="form-label">
                               days in the next leave calendar year.
                             </label>
                           </div>

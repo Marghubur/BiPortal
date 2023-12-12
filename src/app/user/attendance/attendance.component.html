@@ -211,15 +211,15 @@
                   <div class="col-md-12">
                     <div class="row">
                       <div class="mt-3 col-md-4">
-                        <label for="" class="form-label">Shift Title</label>
+                        <label  class="form-label">Shift Title</label>
                         <input type="text" readonly value="{{shiftDetail.ShiftTitle}}" class="form-control">
                       </div>
                       <div class="mt-3 col-md-4">
-                        <label for="" class="form-label">Description</label>
+                        <label  class="form-label">Description</label>
                         <input type="text" readonly value="{{shiftDetail.Description}}" class="form-control">
                       </div>
                       <div class="mt-3 col-md-4">
-                        <label for="" class="form-label">Total Working Days</label>
+                        <label  class="form-label">Total Working Days</label>
                         <input type="text" readonly value="{{shiftDetail.TotalWorkingDays}}" class="form-control">
                       </div>
                     </div>
@@ -495,7 +495,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
           <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
         </div>
         <div class="col-md-12 mt-3">
-          <label for="" class="form-label">Reason</label>
+          <label  class="form-label">Reason</label>
           <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" maxlength="100"  [ngModelOptions]="{standalone: true}"
             [(ngModel)]="commentValue"></textarea>
           <div class="alert alert-danger" *ngIf="isComment">
@@ -513,7 +513,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
           </ng-container>
         </div>
         <div class="mt-3" *ngIf="isEmployeesReady">
-          <label for="" class="form-label">Notify</label>
+          <label  class="form-label">Notify</label>
           <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
             [ngModelOptions]="{standalone: true}">
           </bot-autocomplete>
@@ -560,7 +560,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
           <app-editor [height]="55" [content]="EmailBody" [cleanUp]="eventsSubject.asObservable()"></app-editor>
         </div>
         <div class="col-md-12 mt-3">
-          <label for="" class="form-label">Reason</label>
+          <label  class="form-label">Reason</label>
           <textarea class="comment-text-area form-control" rows="2" placeholder="Enter your comment" name="commentValue" maxlength="100" [ngModelOptions]="{standalone: true}"
             [(ngModel)]="commentValue"></textarea>
           <div class="alert alert-danger" *ngIf="isComment">
@@ -578,7 +578,7 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
           </ng-container>
         </div>
         <div class="mt-3" *ngIf="isEmployeesReady">
-          <label for="" class="form-label">Notify</label>
+          <label  class="form-label">Notify</label>
           <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
             [ngModelOptions]="{standalone: true}">
           </bot-autocomplete>

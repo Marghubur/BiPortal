@@ -484,15 +484,15 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     // data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     this.projectDetail.SectionDescription= data;
     this.projectDetail.ProjectId = this.projectId;
-    // this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
-    //   if (res.ResponseBody) {
-    //     this.isloading = false;
-    //     Toast("Project details inserted/ updated successfully");
-    //   }
-    // }).catch(e => {
-    //   this.isloading = false;
-    //   Error(e);
-    // })
+    this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        this.isloading = false;
+        Toast("Project details inserted/ updated successfully");
+      }
+    }).catch(e => {
+      this.isloading = false;
+      Error(e);
+    })
   }
 
   removeHeaderTag(data: string) {

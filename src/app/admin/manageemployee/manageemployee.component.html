@@ -35,7 +35,7 @@
               <form [formGroup]="employeeForm" autocomplete="off">
                 <div class="blur-this">
                   <div class="col-12 row">
-                    <div class="col-md-3">
+                    <div class="col-md-3 ps-4">
                       <div class="x_header_title position-relative">
                         <div class="img-container-sq" (change)="uploadProfilePicture($event)">
                           <div class="img-container__box">
@@ -87,11 +87,11 @@
                           <label class="form-label">Date of birth *</label>
                           <form class="form-inline">
                             <div class="form-group w-100">
-                              <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.DOB.errors !== null && f.DOB.errors.required}">
+                              <div class="input-group inline-calendar w-100" [ngClass]="{'error-field': submitted && f.DOB.errors !== null && f.DOB.errors.required}">
                                 <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
                                   (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #d="ngbDatepicker">
                                 <div class="input-group-append">
-                                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                                  <button class="btn calendar" (click)="d.toggle()" type="button"><i
                                       class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                                   </button>
                                 </div>
@@ -112,14 +112,6 @@
                           </select>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label">CTC *</label>
-                          <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
-                            OnlyNumber="12" (keyup)="ctcChangeAmount($event)" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                            [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
-                        </div>
-                      </div>
-                      <div class="col-md-12 row m-0">
-                        <div class="col-md-4">
                           <label class="form-label">Payroll Calculate On</label>
                           <select class="form-select" formControlName="IsPayrollOnCTC" (change)="changePayrollCalculationType($event)">
                             <option value=true>CTC</option>
@@ -135,10 +127,16 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-12 m-0 row">
-                        <div class="col-6 p-3 pt-4">
+                      <div class="col-md-12 row m-0">
+                        <div class="col-md-4">
+                          <label class="form-label">CTC *</label>
+                          <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
+                            OnlyNumber="12" (keyup)="ctcChangeAmount($event)" onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
+                        </div>
+                        <div class="col-md-4">
                           <p>Select your gender</p>
-                          <div class="col-4 d-flex flex-row justify-content-between">
+                          <div class="col-6 d-flex flex-row justify-content-between">
                             <div>
                               <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="true" id="employeeGender1">
                               <label class="form-check-label" for="employeeGender1">Male</label>
@@ -156,7 +154,7 @@
                     <a href="javascript:void(0)" (click)="addUpadteClientPopUp()" class="text-decoration-none ps-3">Add or
                       Update Associate Clients <i class="fa-solid fa-plus ps-2"></i></a>
                   </ng-container>
-                  <div class="col-12 row m-0 mt-5">
+                  <div class="col-12 row m-0 mt-5 px-3">
                     <div class="x_panel x-panel-changed">
                       <div class="x_header">
                         <div class="x_header_title">
@@ -166,7 +164,7 @@
                       <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Designation *</label>
-                          <select name="DesignationId" class="form-control" formControlName="DesignationId"
+                          <select name="DesignationId" class="form-select" formControlName="DesignationId"
                             [ngClass]="{'error-field': submitted && (f.DesignationId.errors !== null && f.DesignationId.errors.required)}">
                             <option value=null disabled>Select Designation</option>
                             <option [value]="e.RoleId" *ngFor="let e of designations">{{e.RoleName}}</option>
@@ -180,7 +178,7 @@
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Role *</label>
-                          <select name="AccessLevelId" class="form-control" formControlName="AccessLevelId"
+                          <select name="AccessLevelId" class="form-select" formControlName="AccessLevelId"
                             [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
                             <option value=null disabled>Allocate role</option>
                             <option *ngFor="let item of userRoles" [value]="item.AccessLevelId">
@@ -190,7 +188,7 @@
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">User Type *</label>
-                          <select name="UserTypeId" class="form-control" formControlName="UserTypeId"
+                          <select name="UserTypeId" class="form-select" formControlName="UserTypeId"
                             [ngClass]="{'error-field': submitted && f.UserTypeId.errors !== null && f.UserTypeId.errors.required}">
                             <option value=null disabled>Select User Type</option>
                             <option value="1">Admin</option>
@@ -202,7 +200,7 @@
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Company *</label>
-                          <select class="form-control" formControlName="CompanyId"
+                          <select class="form-select" formControlName="CompanyId"
                             [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
                             <option value="" disabled>Select Company</option>
                             <option *ngFor="let item of companies" [value]="item.CompanyId">
@@ -317,19 +315,19 @@
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Work Exprience in month</label>
-                            <input class="form-control" placeholder="Year's of Exprience" OnlyNumber="3" onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            <input class="form-control" placeholder="Month's of Exprience" OnlyNumber="3" onkeypress="return event.charCode >=48 && event.charCode <=57"
                               name="ExprienceInYear" formControlName="ExprienceInYear"  [ngClass]="{'error-field': submitted && f.ExprienceInYear.errors !== null && f.ExprienceInYear.errors.required}"/>
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Date of joining</label>
                             <form class="form-inline">
                               <div class="form-group w-100">
-                                <div class="input-group w-100">
+                                <div class="input-group inline-calendar w-100">
                                   <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                                     [(ngModel)]="joiningDatemodel" (dateSelect)="onJoiningDateSelection($event)" ngbDatepicker
                                     #joiningDate="ngbDatepicker">
                                   <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary calendar" (click)="joiningDate.toggle()"
+                                    <button class="btn calendar" (click)="joiningDate.toggle()"
                                       type="button"><i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                                     </button>
                                   </div>
@@ -341,7 +339,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-12 row m-0 mt-3">
+                  <div class="col-12 row m-0 mt-3 px-3">
                     <div class="x_panel x-panel-changed">
                       <div class="x_header">
                         <div class="x_header_title">
@@ -361,11 +359,11 @@
                           <label class="form-label">PF Join Date</label>
                           <form class="form-inline">
                             <div class="form-group w-100">
-                              <div class="input-group w-100">
+                              <div class="input-group inline-calendar w-100">
                                 <input class="form-control" placeholder="yyyy-mm-dd" name="pfDatemodel" [(ngModel)]="pfDatemodel"
                                   (dateSelect)="onPFDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #pfd="ngbDatepicker">
                                 <div class="input-group-append">
-                                  <button class="btn btn-outline-secondary calendar" (click)="pfd.toggle()" type="button"><i
+                                  <button class="btn calendar" (click)="pfd.toggle()" type="button"><i
                                       class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                                   </button>
                                 </div>
@@ -507,11 +505,11 @@
                   <label class="form-label">Assign Date</label>
                   <form class="form-inline">
                     <div class="form-group w-100">
-                      <div class="input-group w-100" [ngClass]="{'error-field': isSubmitted && n.AssigneDate.errors !== null && n.AssigneDate.errors.required}">
+                      <div class="input-group inline-calendar w-100" [ngClass]="{'error-field': isSubmitted && n.AssigneDate.errors !== null && n.AssigneDate.errors.required}">
                         <input class="form-control" placeholder="yyyy-mm-dd" name="jp" [(ngModel)]="assignDateModel"
                           (dateSelect)="onAssignDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="assignMaxDate" #jd="ngbDatepicker">
                         <div class="input-group-append">
-                          <button class="btn btn-outline-secondary calendar" (click)="jd.toggle()" type="button"><i
+                          <button class="btn calendar" (click)="jd.toggle()" type="button"><i
                               class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                           </button>
                         </div>

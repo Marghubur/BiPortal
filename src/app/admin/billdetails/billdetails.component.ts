@@ -101,7 +101,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
       text: 'All result'
     }];
   }
-  
+
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({
       trigger: 'hover'
@@ -485,7 +485,10 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     $('#sendfileModal').modal('hide');
   }
 
-  downloadPdfDocx() {
+  downloadPdfDocx(ext?: string) {
+    if (ext)
+      this.downLoadFileExtension = ext;
+
     this.downlodFilePath = "";
     let updateFilePath = `${this.basePath}${this.FileDetail.FilePath}/${this.FileDetail.FileName}${this.downLoadFileExtension}`;
 
