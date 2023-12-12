@@ -87,8 +87,10 @@ export class CustomsalaryStructureComponent implements OnInit {
   }
 
   closeAddCompPopUp() {
-    this.groupComponents = this.selectedComponent;
-    this.activeComponent = this.selectedComponent;
+    if (this.selectedComponent && this.selectedComponent.length > 0) {
+      this.groupComponents = this.selectedComponent;
+      this.activeComponent = this.selectedComponent;
+    }
   }
 
   selectToAddComponent(event: any, item: any) {
@@ -163,7 +165,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   buildSalaryComponentDetail(components: Array<any>) {
     this.isPageReady = false;
-    components = components.filter(x => x.IsAdHoc == 0);
+    //components = components.filter(x => x.IsAdHoc == 0);
     let i = 0;
     this.salaryComponentFields = [];
     while(i < components.length) {

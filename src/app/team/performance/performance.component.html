@@ -412,7 +412,7 @@
                     </div>
                     <div class="text-end">
                       <button class="btn btn-primary-c" (click)="submitObjective()" [disabled]="isLoading || (objectives[0].PerformanceStatus == 8 || objectives[0].PerformanceStatus == 9)">
-                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
                         <span class="ps-2">
                           Submit Objective
                         </span>
@@ -489,7 +489,7 @@
               </div>
               <div class="col-auto">
                 <button class="btn btn-sm btn-primary-c" (click)="updateEmpObjectivePopUp()">
-                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-map-pin': !isLoading}"></i>
+                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-map-pin': !isLoading}"></i>
                   <span class="ps-1">
                     {{isLoading ? 'wait' : 'Update Progress'}}
                   </span>
@@ -692,7 +692,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="updateEmpObjective()" [disabled]="isLoading">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
             Update Objective
           </span>
@@ -792,7 +792,7 @@
       <div class="modal-footer border-top-0" *ngIf="selectedMeeting != null">
         <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="manageMeeting()" [disabled]="isLoading">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
             {{selectedMeeting.meetingId <= 0 ? 'Add' : 'Update'}} Meeting
           </span>
@@ -822,7 +822,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="deleteMeeting()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
             Delete meeting
           </span>
@@ -851,7 +851,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="completeMeeting()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
             Complete
           </span>
@@ -880,7 +880,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="cancelMeeting()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
             Cancel Meeting
           </span>

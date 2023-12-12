@@ -191,7 +191,7 @@
       <div class="modal-footer border-top-0 justify-content-start">
         <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
         <input type="file" id="fileAttachment" multiple class="d-none" (change)="uploadProfilePicture($event)">
-        <button type="button" class="btn btn-outline-primary" [disabled]="isLoading" (click)="sendEmailRequest()"><i class="" [ngClass]="{'fa-regular fa-paper-plane': !isLoading, 'fa-spin fa-solid fa-spinner': isLoading}"></i><span class="ps-2">{{ isLoading ? 'Wait' : 'Send' }}</span></button>
+        <button type="button" class="btn btn-outline-primary" [disabled]="isLoading" (click)="sendEmailRequest()"><i class="" [ngClass]="{'fa-regular fa-paper-plane': !isLoading, 'fa-solid fa-spinner fa-spin': isLoading}"></i><span class="ps-2">{{ isLoading ? 'Wait' : 'Send' }}</span></button>
         <span *ngIf="FileDocumentList.length > 0" class="fw-bold ps-3 pe-2 text-dark">{{FileDocumentList.length}} file attached</span>
         <a href="javascript:void(0)" class="text-decoration-none ps-2" (click)="fireBrowserFile()"><i class="fa-solid fa-paperclip pe-2"></i>Attach</a>
         <a href="javascript:void(0)" class="text-decoration-none ps-2"><i class="fa-brands fa-html5 pe-2"></i>Template</a>

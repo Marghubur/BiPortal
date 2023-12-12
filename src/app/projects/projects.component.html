@@ -37,45 +37,16 @@
                       <div class="th fe-2">
                         <div class="cell-wrapper">
                           Project Name
-                          <!-- <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                            (keyup.enter)="filterRecords()" autofocus [(ngModel)]="employeeDetails.Name"
-                            placeholder="Search by Name" id="namefilter"> -->
-                          <!-- <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'FirstName')">
-                            <a href="javascript:void()" class="pe-2">Full Name</a>
-                            <i class="fa-solid fa-arrow-down-wide-short"
-                              [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                            <i class="fa-solid fa-arrow-down-short-wide"
-                              [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
-                          </div> -->
                         </div>
                       </div>
                       <div class="th fe-5">
                         <div class="cell-wrapper">
                           Project Description
-                          <!-- <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                            (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Mobile"
-                            placeholder="Search by MobileNumber"> -->
-                          <!-- <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
-                            <a href="javascript:void()" class="pe-2">Mobile Number</a>
-                            <i class="fa-solid fa-arrow-down-wide-short"
-                              [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
-                            <i class="fa-solid fa-arrow-down-short-wide"
-                              [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
-                          </div> -->
                         </div>
                       </div>
                       <div class="th fe-2">
                         <div class="cell-wrapper">
                           Project Started On
-                          <!-- <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                            (keydown.esc)="resetFilter()" [(ngModel)]="employeeDetails.Email" placeholder="Search by Email"> -->
-                          <!-- <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
-                            <a href="javascript:void()" class="pe-2">Email Id</a>
-                            <i class="fa-solid fa-arrow-down-wide-short"
-                              [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                            <i class="fa-solid fa-arrow-down-short-wide"
-                              [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
-                          </div> -->
                         </div>
                       </div>
                       <div class="th fe-1 text-center">ACTIONS</div>
@@ -91,7 +62,7 @@
                         </div>
                         <div class="td align-middle fe-2">
                           <div class="cell-wrapper">
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="editProjectDetail(project)">{{project.ProjectName}}</a>
+                            <a href="javascript:void(0)" class="fw-bold" (click)="editProjectDetail(project)">{{project.ProjectName}}</a>
                           </div>
                         </div>
                         <div class="td align-middle fe-5">

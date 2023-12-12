@@ -322,7 +322,7 @@
         </div>
 
         <ng-container *ngIf="isFileFound">
-          <div class="t-table t-list t-border border-top-0 col-md-12">
+          <div class="t-table t-list  border-top-0 col-md-12">
             <div class="t-body">
               <div class="tr py-2">
                 <div class="th fe-1 justify-content-start align-items-start">
@@ -441,7 +441,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
-          <i class="pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i class="pe-2" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -504,7 +504,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateRecord()">
-          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -693,7 +693,7 @@
       <div class="modal-footer border-top-0  pe-5">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetFilter()">Close</button>
         <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="filterRecords()"><i
-            class="pe-2 " [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-filter': !isLoading}"></i>
+            class="pe-2 " [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-filter': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Filter Record' }}</button>
       </div>
     </div>
@@ -873,7 +873,7 @@
           </div>
           <div>
             <a href="javascript:void(0)" class="text-primary-c fw-bold" (click)="sendEmail()">
-              <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-paper-plane': !isLoading}" aria-hidden="true"></i>
+              <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-paper-plane': !isLoading}" aria-hidden="true"></i>
               <span class="ps-2">
                 <ng-container *ngIf="isLoading">Sending...</ng-container>
                 <ng-container *ngIf="!isLoading"><u>Send Email</u></ng-container>

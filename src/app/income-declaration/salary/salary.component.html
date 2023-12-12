@@ -20,7 +20,11 @@
       <div class="d-flex justify-content-between">
         <div class="col-8">
           <div class="px-1">
-            <app-breadcrums ></app-breadcrums>
+            <app-breadcrums [title]="'My Salary'" [subtitle]="'Details'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
           </div>
         </div>
       </div>
@@ -168,7 +172,7 @@
             <div class="pull-down">
               <div class="blur-this">
                 <div class="col-md-12">
-                  <div class="t-table t-list t-border col-md-12">
+                  <div class="t-table t-list  col-md-12">
                     <div class="hide-bar alert-primary"></div>
                     <div class="t-head alert-primary">
                       <div class="tr fw-bold text-dark">
@@ -265,7 +269,7 @@
                           Switch to {{item.RegimeName}} (Section 115BAC)
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-solid fa-spinner fa-spin"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -277,7 +281,7 @@
                           Continue with {{item.RegimeName}}
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-solid fa-spinner fa-spin"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -287,7 +291,7 @@
                   <span *ngIf="active == 2">Applicable to FY {{currentYear -2}} - {{currentYear -1}} (AY {{currentYear -2}} - {{currentYear -1}})</span></p>
                 <p *ngIf="active == 2" class="mb-0 py-2">As proposed in the union budget 2020, In the Income tax Act, the following section shall be
                   interested with effect from 1st day of April 2020.</p>
-                <div class="t-table t-list t-border col-md-12 mt-4">
+                <div class="t-table t-list  col-md-12 mt-4">
                   <div class="t-head alert-primary overflow-hidden">
                     <div class="tr bg-light fw-bold text-dark">
                       <div class="th">
@@ -362,7 +366,7 @@
                           Switch to {{item.RegimeName}} (Section 115BAC)
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fa-solid fa-spinner fa-spin"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -374,7 +378,7 @@
                           Continue with {{item.RegimeName}}
                         </ng-container>
                         <ng-container *ngIf="isLoading">
-                          <i class="fafa-spin fa-solid fa-spinner"></i><span class="ps-2">Waiting...</span>
+                          <i class="fafa-solid fa-spinner fa-spin"></i><span class="ps-2">Waiting...</span>
                         </ng-container>
                       </label>
                     </ng-container>
@@ -402,7 +406,7 @@
   aria-labelledby="slaryStructureHistoryLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-header text-white border-bottom-0">
+      <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="slaryStructureHistoryLabel">Salary structure Change History</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -496,7 +500,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button [disabled]="isLoading" class="btn btn-primary-c" (click)="addBonus()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           <span class="ps-2">Add</span>
         </button>
       </div>

@@ -153,7 +153,7 @@
                     <div class="col-md-10 col-sm-9" [ngClass]="{'col-md-10 col-sm-9': !isEdit, 'col-md-12 col-sm-12': isEdit}">
                       <app-editor [isEdit]="isEdit" [height]="55" [content]="htmlText"></app-editor>
                       <button class="btn btn-primary-c ms-3 float-end" [disabled]="isloading" (click)="saveProjectDetails()">
-                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isloading, 'fa-regular fa-file': !isloading}"></i>
+                        <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isloading, 'fa-regular fa-file': !isloading}"></i>
                         <span class="ps-2">{{ isloading ? 'Wait' : 'Save' }}</span>
                       </button>
                     </div>

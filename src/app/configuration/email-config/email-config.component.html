@@ -19,7 +19,7 @@
       </div>
       <ng-container *ngIf="!isPageLoading">
         <div class="x_content">
-          <div class="t-table t-list t-border mt-3 col-md-12">
+          <div class="t-table t-list  mt-3 col-md-12">
             <div class="hide-bar"></div>
             <div class="t-head">
               <div class="tr">
@@ -130,7 +130,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 <button class="btn btn-success" [disabled]="isLoading" (click)="addMapping()">
-                    <i [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
                     <span class="ps-2">{{ isLoading ? 'Wait' : 'Mapped' }}</span>
                 </button>
             </div>

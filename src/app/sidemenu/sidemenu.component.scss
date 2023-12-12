@@ -309,15 +309,21 @@ h1 {
   }
 }
 
-.accordion-item-header::after {
-  content: "\002B";
-  font-size: 2rem;
-  position: absolute;
-  right: 1rem;
-}
+// .accordion-item-header::after {
+//   content: "\002B";
+//   font-size: 2rem;
+//   position: absolute;
+//   right: 1rem;
+// }
 
-.accordion-item-header.active::after {
-  content: "\2212";
+// .accordion-item-header.active::after {
+//   content: "\2212";
+// }
+
+.rotate-caret {
+  transform: rotate(90deg);
+  transform-origin: center !important;
+  transition: all 0.3s linear;
 }
 
 .accordion-item-body {

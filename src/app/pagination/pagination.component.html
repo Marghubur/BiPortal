@@ -10,8 +10,11 @@
             <li class="page-item pre-btn" (click)="onPreviousPage(activePage - 1)"><a class="page-link"
               href="javascript:void(0);">«
               Previous</a></li>
-            <li class="page-item" [ngClass]="{'active': activePage === item}" *ngFor="let item of pages"
+            <li  i class="page-item" [ngClass]="{'active': activePage === item}" *ngFor="let item of pages"
               (click)="onNextPage(item)"><a class="page-link" href="javascript:void(0);">{{item}}</a></li>
+            <li class="page-item" (click)="onNextPage(activePage + 1)"><a class="page-link"
+                href="javascript:void(0);">Next
+                »</a></li>
           </ng-container>
           <ng-container *ngIf="pageCount > 10">
             <li class="page-item" (click)="onPageChanges(1)"><a class="page-link"

@@ -46,7 +46,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="t-table t-list t-border col-md-12 my-3">
+                    <div class="t-table t-list col-md-12 my-3">
                       <div class="hide-bar bg-light"></div>
                       <div class="t-head bg-light fw-bold">
                         <div class="tr">
@@ -141,8 +141,8 @@
                             <li class="list-group-item" *ngFor="let item of AdhocAllowance">
                               <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
                               <span class="alert alert-danger py-0 float-end m-0"
-                                *ngIf="item.TaxExempt">Taxable</span>
-                              <span class="alert alert-success py-0 float-end m-0" *ngIf="!item.TaxExempt">Non-Taxable
+                                *ngIf="!item.TaxExempt">Taxable</span>
+                              <span class="alert alert-success py-0 float-end m-0" *ngIf="item.TaxExempt">Non-Taxable
                                 -
                                 {{item.Section}}</span>
                             </li>
@@ -307,16 +307,16 @@
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" [disabled]="isLoading">Close</button>
         <ng-container *ngIf="CurrentRecurringComponent.ComponentId != ''">
-          <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
-            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <button type="button" class="btn btn-primary-c" (click)="addNewComp()" [disabled]="isLoading">
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Update Component' }}</span>
           </button>
         </ng-container>
         <ng-container *ngIf="CurrentRecurringComponent.ComponentId == ''">
-          <button type="button" class="btn btn-primary-c" (click)="addNewComp()">
-            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <button type="button" class="btn btn-primary-c" (click)="addNewComp()" [disabled]="isLoading">
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Create Component' }}</span>
           </button>
         </ng-container>
@@ -341,18 +341,18 @@
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
               <input type="text" formControlName="ComponentName" oninput="this.value = this.value.toUpperCase()"
-                placeholder="Component Name" class="form-control">
+                placeholder="Component Name" class="form-control" [ngClass]="{'error-field': submitted && a.ComponentName.errors !== null && a.ComponentName.errors.required}">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
               <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
-                placeholder="Component Full Name" class="form-control">
+                placeholder="Component Full Name" class="form-control" [ngClass]="{'error-field': submitted && a.ComponentFullName.errors !== null && a.ComponentFullName.errors.required}">
             </div>
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">COMPONENT DESCRIPTION</label>
             <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
-              class="form-control"></textarea>
+              class="form-control" [ngClass]="{'error-field': submitted && a.ComponentDescription.errors !== null && a.ComponentDescription.errors.required}"></textarea>
           </div>
           <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" value="" formControlName="TaxExempt"
@@ -376,10 +376,10 @@
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="addNewAdhocAllowance()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Create Adhoc Allowance' }}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" [disabled]="isLoading">Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="addNewAdhocAllowance()" [disabled]="isLoading">
+          <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-plus': !isLoading}"></i>
+          <span class="ps-1">{{ isLoading ? 'Wait' : 'Create Adhoc Allowance' }}</span>
         </button>
       </div>
     </div>
@@ -402,21 +402,21 @@
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT NAME</label>
               <input type="text" formControlName="ComponentName" oninput="this.value = this.value.toUpperCase()"
-                placeholder="Component Name" class="form-control">
+                placeholder="Component Name" class="form-control" [ngClass]="{'error-field': submitted && d.ComponentName.errors !== null && d.ComponentName.errors.required}">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
               <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
-                placeholder="Component Full Name" class="form-control">
+                placeholder="Component Full Name" class="form-control" [ngClass]="{'error-field': submitted && d.ComponentFullName.errors !== null && d.ComponentFullName.errors.required}">
             </div>
           </div>
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">COMPONENT DESCRIPTION</label>
             <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
-              class="form-control"></textarea>
+              class="form-control" [ngClass]="{'error-field': submitted && d.ComponentDescription.errors !== null && d.ComponentDescription.errors.required}"></textarea>
           </div>
           <div class="form-check mt-3">
-            <input class="form-check-input" type="checkbox" value="" formControlName="IsAffectinGross">
+            <input class="form-check-input" type="checkbox" formControlName="IsAffectinGross">
             <label class="form-check-label">
               THIS AFFECT ON GROSS
             </label>
@@ -424,10 +424,10 @@
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="addNewDeduction()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Create Deduction' }}
+        <button type="button" [disabled]="isLoading" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="addNewDeduction()">
+          <i class="fa-solid " [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-plus': !isLoading}"></i>
+          <span class="ps-1">{{ isLoading ? 'Wait' : 'Create Deduction' }}</span>
         </button>
       </div>
     </div>
@@ -448,10 +448,10 @@
         <form [formGroup]="BonusForm">
           <div class="row">
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">COMPONENT NAME</label>
+              <label for="" class="form-label">COMPONENT ID</label>
               <input type="text" formControlName="ComponentId" oninput="this.value = this.value.toUpperCase()"
                 [ngClass]="{'error-field': submitted && b.ComponentId.errors !== null && b.ComponentId.errors.required}"
-                placeholder="Component Name" class="form-control">
+                placeholder="Component ID" class="form-control">
             </div>
             <div class="col-md-6 mt-3">
               <label for="" class="form-label">COMPONENT FULL NAME</label>
@@ -463,15 +463,15 @@
           <div class="col-md-12 mt-3">
             <label for="" class="form-label">COMPONENT DESCRIPTION</label>
             <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
-              class="form-control"></textarea>
+              class="form-control" [ngClass]="{'error-field': submitted && b.ComponentDescription.errors !== null && b.ComponentDescription.errors.required}"></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="addNewBonus()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-plus': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Create Bonus' }}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" [disabled]="isLoading">Close</button>
+        <button type="button" class="btn btn-primary-c" (click)="addNewBonus()" [disabled]="isLoading">
+          <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-plus': !isLoading}"></i>
+          <span class="ps-1">{{ isLoading ? 'Wait' : 'Create Bonus' }}</span>
         </button>
       </div>
     </div>
@@ -482,15 +482,11 @@
 <div class="modal" id="excelSheetModal">
   <div class="modal-dialog modal-fullscreen p-4">
     <div class="modal-content rounded-3">
-
-      <!-- Modal Header -->
-      <div class="modal-header border-bottom-0" *ngIf="expandedTable">
+      <div class="modal-header border-bottom-0">
         <h4 class="modal-title">Upload ExcelFile</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-
-      <!-- Modal body -->
-      <div class="modal-body row overflow-hidden" *ngIf="expandedTable">
+      <div class="modal-body row overflow-hidden">
         <div class="col-md-4 x_content fade show" id="upload-container">
           <div class="">
             <input type="file" id="uploadexcel" (change)="readExcelData($event)" class="d-none" *ngIf="isUploadFile"
@@ -504,11 +500,6 @@
                         aria-labelledby="home-tab">
                         <div id="classmasterdata" class="col-md-12">
                           <div name="ifilezone" class="ifilezone mb-4" (click)="excelfireBrowserFile()">
-                            <div *ngIf="!isFileReady">
-                              <span style="color: darkgray;margin-top: 9rem;display: block;">
-                                Drop files here.
-                              </span>
-                            </div>
                             <div class="col-md-12 py-5 custom-bg justify-content-center" *ngIf="isFileReady"
                               name="uploading">
                               <img src="assets/img/ExcelFile.png" />
@@ -553,13 +544,6 @@
                   KB
                 </div>
                 <div>
-                  No. of record(s): &nbsp;
-                  <div name="noofrecords" style="display: inline-block !important;">
-                    <!-- {{ noOfRecords }} -->
-                    {{tableConfiguration.data.length}}
-                  </div>
-                </div>
-                <div>
                   File type: &nbsp;
                   <div name="uploadingdatetime" style="display: inline-block !important;">
                     {{ file.type }}
@@ -576,16 +560,13 @@
                   File size: &nbsp; NA
                 </div>
                 <div>
-                  No. of record(s): &nbsp; NA
-                </div>
-                <div>
                   File type: &nbsp; NA
                 </div>
               </div>
             </div>
             <div class="mt-4">
-              <button type="button" class="btn btn-primary-c" (click)="uploadExcelSheet($event)" [disabled]="isDisable">
-                <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
+              <button type="button" class="btn btn-primary-c" (click)="uploadExcelSheet()" [disabled]="isDisable">
+                <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-upload': !isLoading}"></i>
                 <span class="ps-2">{{ isLoading ? 'Uploading ...' : 'Upload selected excel data' }}</span>
               </button>
               <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
@@ -600,16 +581,11 @@
             <div class="x_header_title">
               <div>
                 <h5 class="d-inline">Uploaded Records</h5>
-                <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
-                  correct format of excel sheet. <a href="javascript:void(0)">Click to download the sample.</a></p>
-                <span *ngIf="isAvailable" class="d-inline">
-                  <a class="float-end" href="javascript:void(0)" (click)="expandTable()">
-                    <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
-                  </a>
-                </span>
+                <p class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
+                  correct format of excel sheet. <a href="javascript:void(0)" (click)="getComponentSampleFile()">Click to download the sample.</a></p>
               </div>
 
-              <div class="mt-4 border card p-5 uplod-message-container" *ngIf="!isAvailable">
+              <div class="mt-4 border card p-5 uplod-message-container">
                 <label for="" class="fw-bold">
                   Your uploaded file's converted tabal will be dispaly in this section.
                 </label>
@@ -620,74 +596,6 @@
                 </ul>
               </div>
             </div>
-            <div *ngIf="isAvailable">
-              <div class="uploada-data-scroll">
-                <table class="table table-striped table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th class="col-min-width" *ngFor="let header of tableConfiguration.header">
-                        <div class="mt-2">{{header.ColumnName}}</div>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <ng-container *ngFor="let data of tableConfiguration.data">
-                      <tr>
-                        <ng-container *ngFor="let header of tableConfiguration.header">
-                          <td>
-                            <div class="wrap-content">
-                              {{data[header.ColumnName]}}
-                            </div>
-                          </td>
-                        </ng-container>
-                      </tr>
-                    </ng-container>
-                  </tbody>
-                </table>
-              </div>
-              <!-- <div class="mt-3">
-                <app-pagination [pagination]="uploadedCandidatesData"
-                  (onPageChange)="changeUploadedRecords($event)"></app-pagination>
-              </div> -->
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-body" *ngIf="!expandedTable">
-        <div class="col-md-12 p-0">
-          <div class="x_content">
-            <div class="x_header_title overflow-hidden">
-              <h5 class="d-inline">Uploaded Records</h5>
-              <button type="button" class="btn-close float-end" (click)="closeExpandModel()"></button>
-            </div>
-            <div *ngIf="isAvailable" class="expand-modal-scroll">
-              <table class="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th class="col-min-width" *ngFor="let header of tableConfiguration.header">
-                      <div class="mt-2">{{header.ColumnName}}</div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ng-container *ngFor="let data of tableConfiguration.data">
-                    <tr>
-                      <ng-container *ngFor="let header of tableConfiguration.header">
-                        <td>
-                          <div class="wrap-content">
-                            {{data[header.ColumnName]}}
-                          </div>
-                        </td>
-                      </ng-container>
-                    </tr>
-                  </ng-container>
-                </tbody>
-              </table>
-            </div>
-            <!-- <div class="mt-3">
-              <app-pagination [pagination]="paginationData" (onPageChange)="displayActivePage($event)">
-              </app-pagination>
-            </div> -->
           </div>
         </div>
       </div>

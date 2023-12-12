@@ -17,7 +17,7 @@
       <div class="d-flex justify-content-between">
         <div class="col-8">
           <div class="px-1">
-            <app-breadcrums ></app-breadcrums>
+            <app-breadcrums [title]="'Preference'" [subtitle]="'Preference Details'"></app-breadcrums>
           </div>
         </div>
       </div>
@@ -89,19 +89,19 @@
             <div class="ps-3 pt-4">
               <h5 class="text-dark pb-1">PF Account Information</h5>
               <small>PF Status</small>
-              <p class="text-dark">{{satutoryInformation.PFStatus}}</p>
+              <p class="text-dark">{{employeeDetail.IsPFEnable ? 'Enable' : 'Disable'}}</p>
               <div class="row">
                 <div class="col-md-4">
                   <small>PF NUMBER</small>
-                  <p class="text-dark">{{satutoryInformation.PFNumber}}</p>
+                  <p class="text-dark">{{employeeDetail.PFNumber}}</p>
                 </div>
                 <div class="col-md-4">
                   <small>UNIVERSAL ACCOUNT NUMBER</small>
-                  <p class="text-dark">{{satutoryInformation.UniversalACNumber}}</p>
+                  <p class="text-dark">{{employeeDetail.UniversalAccountNumber}}</p>
                 </div>
                 <div class="col-md-3">
                   <small>PF JOIN DATE</small>
-                  <p class="text-dark">{{satutoryInformation.PFJoinDate | date}}</p>
+                  <p class="text-dark">{{employeeDetail.PFJoinDate | date}}</p>
                 </div>
               </div>
               <h5 class="text-dark pt-3 pb-1">ESI Account Information</h5>
@@ -118,9 +118,6 @@
                   <p class="text-dark">{{employeeDetail.City}}</p>
                 </div>
               </div>
-              <h5 class="text-dark pt-3 pb-1">LWF DETAILS</h5>
-              <small>LWF STATUS</small>
-              <p class="text-dark mb-0">{{satutoryInformation.LWFStatus}}</p>
             </div>
           </div>
         </div>
@@ -135,17 +132,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="py-5 my-5 x_panel border-0" *ngIf="!isPageReady">
-        <h6 class="fw-bold fs-3 text-center text-dark mt-5 pt-5">Preference is loading</h6>
-        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-          <div class="col-md-3 modal-container  text-center cog-wheel">
-            <img src="assets/images/cog.gif" alt="" />
-            <h6 class="modal-title title-message">
-              Please Wait ........
-            </h6>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </div>

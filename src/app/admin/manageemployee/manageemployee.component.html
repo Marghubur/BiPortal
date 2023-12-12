@@ -341,7 +341,41 @@
                       </div>
                     </div>
                   </div>
-
+                  <div class="col-12 row m-0 mt-3">
+                    <div class="x_panel x-panel-changed">
+                      <div class="x_header">
+                        <div class="x_header_title">
+                          <h2>Statutory Information <small>add pf details</small></h2>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
+                        <div class="col-md-4">
+                          <label class="form-label">PF Number</label>
+                          <input type="text" class="form-control" placeholder="PF Number" formControlName="PFNumber">
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">Universal Account Number</label>
+                          <input type="text" class="form-control" placeholder="Universal Account Number" formControlName="UniversalAccountNumber">
+                        </div>
+                        <div class="col-md-4">
+                          <label class="form-label">PF Join Date</label>
+                          <form class="form-inline">
+                            <div class="form-group w-100">
+                              <div class="input-group w-100">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="pfDatemodel" [(ngModel)]="pfDatemodel"
+                                  (dateSelect)="onPFDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #pfd="ngbDatepicker">
+                                <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary calendar" (click)="pfd.toggle()" type="button"><i
+                                      class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div class="col-12 row m-0 pt-5">
                     <div class="col-md-12 button groups text-end">
                       <div class="btn-group">
@@ -349,7 +383,7 @@
                       </div>
                       <div class="btn-group ms-2">
                         <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterEmployee()">
-                          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+                          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
                           {{ isLoading ? 'Wait' : 'Register' }}
                         </button>
                       </div>
@@ -511,7 +545,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-outline-success" (click)="addDetail()">
-          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span *ngIf="isUpdated" class="ps-2">
             Update changes
           </span>

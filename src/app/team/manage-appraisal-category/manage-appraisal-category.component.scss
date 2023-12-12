@@ -113,3 +113,7 @@ textarea {
 .genealogy-tree li a:hover+ul ul::before{
     border-color:  #fbba00;
 }
+
+.hide-node {
+  background-color: #eee !important;
+}

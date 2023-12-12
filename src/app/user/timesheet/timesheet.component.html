@@ -221,7 +221,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c btn-sm" [disabled]="isBlocked || isSubmitted" (click)="onSubmit()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-arrow-right-to-bracket': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-right-to-bracket': !isLoading}"></i>
           {{ isLoading ? 'Saving' : 'Submit' }}
         </button>
       </div>

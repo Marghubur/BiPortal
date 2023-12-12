@@ -72,10 +72,10 @@
                     <div class="d-flex my-1">
                       <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold ps-0"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
+                          [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
                       <a *ngIf="item.PresentDayStatus != 9" (click)="openAttendacneModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
+                          [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
                     </div>
                   </div>
                 </ng-container>
@@ -143,10 +143,10 @@
                     <div class="d-flex my-1">
                       <a *ngIf="item[0].TimesheetStatus!= 5" (click)="openTimesheetModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
+                          [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
                       <a *ngIf="item[0].TimesheetStatus != 9" (click)="openTimesheetModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
+                          [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
                     </div>
                   </div>
                 </ng-container>
@@ -242,10 +242,10 @@
                     <div class="d-flex my-1">
                       <a *ngIf="item.RequestStatusId!= 5" (click)="openLeaveModal('Rejected', item)" href="javascript:void(0)"
                         class="text-danger btn-sm fw-bold ps-0"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
+                          [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}"></i> Reject</a>
                       <a *ngIf="item.RequestStatusId != 9" (click)="openLeaveModal('Approved', item)" href="javascript:void(0)"
                         class="text-success ms-2 fw-bold btn-sm"><i class="fa pe-1"
-                          [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
+                          [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-check': !isLoading}"></i> Approve</a>
                     </div>
                   </div>
                 </ng-container>
@@ -475,7 +475,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" (click)="submitRequest()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Submit' }}
         </button>
       </div>
@@ -534,7 +534,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" (click)="submitTimesheetRequest()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Submit' }}
         </button>
       </div>
@@ -596,14 +596,14 @@
       <div *ngIf="requestModalData.IsApprove" class="modal-footer mt-0 border-top-0">
         <!-- <a href="javascript:void(0)" (click)="ApproveRequest()" class="text-decoration-none text-dark fw-bold">Approve</a> -->
         <button type="button" class="btn btn-success" (click)="ApproveRequest()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Approve' }}
         </button>
       </div>
       <div *ngIf="requestModalData.IsReject" class="modal-footer mt-0 border-top-0">
         <!-- <a href="javascript:void(0)" (click)="RejectRequest()" class="text-decoration-none text-dark fw-bold">Reject</a> -->
         <button type="button" class="btn btn-danger" (click)="RejectRequest()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Reject' }}
         </button>
       </div>

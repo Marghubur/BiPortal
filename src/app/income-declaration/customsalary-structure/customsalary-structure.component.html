@@ -105,7 +105,7 @@
               </div>
             </div>
 
-            <div class="t-table t-list t-border col-md-12 my-3">
+            <div class="t-table t-list  col-md-12 my-3">
               <div class="hide-bar bg-light"></div>
               <div class="t-head bg-light fw-bold">
                 <div class="tr">
@@ -178,7 +178,7 @@
             </div>
           </div>
         </div>
-        <div class="t-table t-list t-border col-md-12 my-3">
+        <div class="t-table t-list  col-md-12 my-3">
           <div class="hide-bar bg-light"></div>
           <div class="t-head bg-light fw-bold">
             <div class="tr">
@@ -241,7 +241,7 @@
             </div>
           </div>
         </div>
-        <div class="t-table t-list t-border col-md-12 my-3">
+        <div class="t-table t-list  col-md-12 my-3">
           <div class="hide-bar bg-light"></div>
           <div class="t-head bg-light fw-bold">
             <div class="tr">
@@ -334,7 +334,7 @@
               (keyup.Tab)="resetSalaryFilter($event)" [(ngModel)]="salaryCompFilterData" (keyup)="filterSalaryComponent($event)">
           </div>
         </div>
-        <div class="t-table mt-5 t-list t-border col-md-12 my-3">
+        <div class="t-table mt-5 t-list  col-md-12 my-3">
           <div class="hide-bar bg-light"></div>
           <div class="t-head bg-light fw-bold">
             <div class="tr">
@@ -474,7 +474,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary-c" (click)="updateValue()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">{{isLoading ? 'wait': 'Save Changes'}}</span>
         </button>
       </div>
@@ -564,7 +564,7 @@
                   </div>
                 </div>
               </div>
-              <div class="t-table t-list t-border col-md-12 my-3">
+              <div class="t-table t-list  col-md-12 my-3">
                 <div class="hide-bar bg-light"></div>
                 <div class="t-head bg-light fw-bold">
                   <div class="tr">
@@ -619,7 +619,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" (click)="addCustomSalaryStruct()">
-          <i class="fa pe-3" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i class="fa pe-3" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           {{isLoading ? 'wait': 'Add Salary Structure'}}
         </button>
       </div>
@@ -710,7 +710,7 @@
                 </div>
               </div>
             </div>
-            <div class="t-table t-list t-border col-md-12 my-3">
+            <div class="t-table t-list  col-md-12 my-3">
               <div class="hide-bar bg-light"></div>
               <div class="t-head bg-light fw-bold">
                 <div class="tr">
@@ -814,19 +814,19 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <ng-container *ngIf="isEditSalaryGroup && !isClone">
           <button type="button" class="btn btn-primary-c" (click)="updateSalaryGroup()">
-            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Update Salary Group' }}</span>
           </button>
         </ng-container>
         <ng-container *ngIf="!isEditSalaryGroup && !isClone">
           <button type="button" class="btn btn-primary-c" (click)="addSalaryGroup()">
-            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Create Salary Group' }}</span>
           </button>
         </ng-container>
         <ng-container *ngIf="isClone">
           <button type="button" class="btn btn-primary-c" (click)="cloneSalaryGroup()">
-            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Wait' : 'Clone Salary Group' }}</span>
           </button>
         </ng-container>
@@ -852,7 +852,7 @@
 
             <div class="col-md-12 mt-3">
               <label for="" class="form-label">Please confirm component</label>
-              <div class="t-table t-list t-border col-md-12 my-3">
+              <div class="t-table t-list  col-md-12 my-3">
                 <div class="hide-bar bg-light"></div>
                 <div class="t-head bg-light fw-bold">
                   <div class="tr">
@@ -892,7 +892,7 @@
       <div class="modal-footer border-top-0 me-3">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary-c" (click)="removeFromSalaryGroup()">
-            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-trash-can': !isLoading}"></i>
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-trash-can': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? 'Removing' : 'Remove From Group' }}</span>
           </button>
       </div>

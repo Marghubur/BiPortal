@@ -20,6 +20,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   model: NgbDateStruct;
   assignDateModel: NgbDateStruct;
   joiningDatemodel: NgbDateStruct;
+  pfDatemodel: NgbDateStruct;
   submitted: boolean = false;
   employeeForm: FormGroup = null;
   employeeModal: EmployeeDetail = null;
@@ -159,6 +160,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
         this.model = { day: this.employeeModal.DOB.getDate(), month: this.employeeModal.DOB.getMonth() + 1, year: this.employeeModal.DOB.getFullYear()};
         let date = ToLocateDate(this.employeeModal.CreatedOn);
         this.joiningDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        if (this.employeeModal.PFJoinDate)
+          date = ToLocateDate(this.employeeModal.PFJoinDate);
+        else
+          date = new Date();
+
+        this.pfDatemodel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         if (this.employeeModal.DesignationId == 0)
           this.employeeModal.DesignationId = null;
 
@@ -279,6 +286,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     this.employeeForm.controls["DOB"].setValue(date);
   }
 
+  onPFDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.employeeForm.controls["PFJoinDate"].setValue(date);
+  }
+
   onAssignDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
     this.addUpdateClientForm.controls["AssigneDate"].setValue(date);
@@ -342,6 +354,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       WorkShiftId: new FormControl(this.employeeModal.WorkShiftId, [Validators.required]),
       IsPayrollOnCTC: new FormControl(this.employeeModal.IsPayrollOnCTC ),
       SalaryGroupId: new FormControl(this.employeeModal.SalaryGroupId),
+      PFNumber: new FormControl(this.employeeModal.PFNumber != null ? this.employeeModal.PFNumber : 0),
+      UniversalAccountNumber: new FormControl(this.employeeModal.UniversalAccountNumber),
+      PFJoinDate: new FormControl(this.employeeModal.PFJoinDate)
     });
     if (this.employeeModal.IsPayrollOnCTC)
       this.employeeForm.controls['SalaryGroupId'].disable();

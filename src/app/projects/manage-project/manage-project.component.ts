@@ -1,12 +1,13 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
+import { Filter } from 'src/providers/userService';
 declare var $: any;
 
 @Component({
@@ -33,11 +34,13 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   teamName: string = null;
   selectedMember: any = null;
   isAddingTeam: boolean = false;
+  roles: Array<any> = [];
 
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
               private local: ApplicationStorage,
               private http: AjaxService) { }
+
   ngDoCheck(): void {
     this.onChnages();
   }
@@ -48,7 +51,8 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     this.employeesList.data = [];
     this.employeesList.placeholder = "Team Member";
     this.employeesList.className = "";
-
+    this.roles = this.local.findRecord("Roles");
+    this.roles = this.roles.filter(x => x.ParentNode != 0 && x.ParentNode != 1 && !x.IsDepartment);
     if (value)
       this.projectId = value.ProjectId;
     let data = this.local.findRecord("Companies");
@@ -292,6 +296,26 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   viewProjectMember(item: any) {
     this.selectedMember = item;
     $("#viewMemberModal").modal('show');
+  }
+
+  async serverFilter(query: string) {
+    if(query == null) {
+      query = "";
+    }
+
+    let filter: Filter = new Filter();
+    filter.SearchString = query;
+    filter.PageIndex = 1;
+    filter.PageSize = 100;
+    filter.CompanyId = 1;
+
+    let result: Array<pairData> = await this.http.getFilterEmployee(filter);
+    this.employeesList = {
+        data: result,
+        placeholder: "Select Employee",
+        className: "normal",
+        isMultiSelect: true
+    };
   }
 
 }

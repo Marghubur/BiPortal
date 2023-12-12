@@ -18,16 +18,16 @@ export class MasterDataComponent implements OnInit {
   isFileReady: boolean = false;
   noOfRecords: number;
   recordToUpload: any;
-  ws: any;
   isDisable: boolean = true;
-  tableConfiguration: tableConfiguration = null;
   isAvailable: boolean = false;
-  masterDataDetails: Array<any> = [];
   isLoading: boolean = false;
+  basePath:string = null;
+  sampleFilePath: string = null;
 
   constructor(private http: AjaxService) { }
 
   ngOnInit(): void {
+    this.basePath =  this.http.GetImageBasePath();
   }
 
   readExcelData(e: any) {
@@ -38,119 +38,8 @@ export class MasterDataComponent implements OnInit {
       this.isFileReady = true;
       this.isDisable = false;
       this.isUploadFile = false;
-      // readXlsxFile(this.file).then(data => {
-      //   // `rows` is an array of rows
-      //   // each row being an array of cells.
-      //   if (data) {
-      //     this.recordToUpload = data;
-      //     let excelData = data;
-      //     console.log(excelData);
-      //     if (excelData) {
-      //       this.tableConfiguration = new tableConfiguration();
-      //       this.tableConfiguration.totalRecords = 1;
-      //       this.tableConfiguration.header = excelData[0];
-      //       this.tableConfiguration.data = excelData.slice(1);
-      //       this.tableConfiguration.sampleData = this.tableConfiguration.data.slice(0, 10);
-      //       this.masterDataDetails = this.tableConfiguration.data;
-      //       this.tableConfiguration.isEnableAction = true;
-      //     }
-      //   } else {
-      //     this.cleanFileHandler();
-      //     ErrorToast("Excel data is not valid.");
-      //   }
-      // })
     }
   }
-
-  // readExcelData(e: any) {
-  //   this.file = e.target.files[0];
-
-  //   if (this.file !== undefined && this.file !== null) {
-  //     this.convertToJson(false).then(data => {
-  //       if (data) {
-  //         this.recordToUpload = data;
-  //         this.fileSize = (this.file.size / 1024).toFixed(2);
-  //         this.fileName = this.file.name;
-  //         this.noOfRecords = this.recordToUpload.length;
-  //         this.isFileReady = true;
-  //         this.isDisable = false;
-  //         this.isUploadFile = false;
-  //         let excelData = data.mapTable[0];
-  //         let rows: any = excelData;
-  //         if (excelData) {
-  //           this.tableConfiguration = new tableConfig();
-  //           this.tableConfiguration.totalRecords = 1;
-  //           this.tableConfiguration.header = excelData.value.Keys;
-  //           this.tableConfiguration.data = rows.value.Data;
-  //           this.tableConfiguration.sampleData = this.tableConfiguration.data.slice(0, 10);
-  //           // this.uploadedCandidatesData.TotalRecords = 0;
-  //           // if(this.tableConfiguration.data.length > 0) {
-  //           //   this.uploadedCandidatesData.TotalRecords = this.tableConfiguration.data.length;
-  //           // }
-  //           this.masterDataDetails = this.tableConfiguration.data;
-  //           this.tableConfiguration.isEnableAction = true;
-  //         }
-  //       } else {
-  //         this.cleanFileHandler();
-  //         ErrorToast("Excel data is not valid.");
-  //       }
-  //     });
-  //   }
-  // }
-
-  // convertToJson(onlyHeader: boolean = true): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-  //     let reader = new FileReader();
-  //     let workbookkk;
-  //     let XL_row_object;
-  //     let TempDictionary = new Dictionary<string, any>();
-  //     reader.readAsBinaryString(this.file);
-  //     reader.onload = function () {
-  //       let data = reader.result;
-  //       // workbookkk = read(data, { type: "binary" });
-  //       workbookkk.SheetNames.forEach(function (sheetName) {
-  //         XL_row_object = null;// utils.sheet_to_json(workbookkk.Sheets[sheetName]);
-  //         let position = TempDictionary.hasKey(sheetName);
-  //         if (
-  //           position === -1 &&
-  //           XL_row_object !== null &&
-  //           XL_row_object.length > 0
-  //         ) {
-  //           let RowDetail = XL_row_object[0];
-  //           let ColumnDetail = [];
-  //           if (RowDetail !== null) {
-  //             if (typeof RowDetail === "object") {
-  //               let Keys = Object.keys(RowDetail);
-  //               let index = 0;
-  //               let Type = "";
-  //               while (index < Keys.length) {
-  //                 Type = typeof RowDetail[Keys[index]];
-  //                 if (
-  //                   Type === "undefined" ||
-  //                   RowDetail[Keys[index]] === null ||
-  //                   RowDetail[Keys[index]] == ""
-  //                 ) {
-  //                   Type = "string";
-  //                 }
-  //                 ColumnDetail.push({
-  //                   ColumnName: Keys[index],
-  //                   ColumnType: Type
-  //                 });
-  //                 index++;
-  //               }
-  //             }
-  //           }
-  //           let SheetData = {
-  //             Keys: ColumnDetail,
-  //             Data: onlyHeader ? null : XL_row_object
-  //           };
-  //           TempDictionary.insert(sheetName, SheetData);
-  //         }
-  //         resolve(TempDictionary);
-  //       });
-  //     };
-  //   });
-  // }
 
   excelfireBrowserFile() {
     $("#uploadexcelreader").click();
@@ -235,66 +124,25 @@ export class MasterDataComponent implements OnInit {
     }
   }
 
-  // uploadExcelSheet($e: any) {
-  //   this.isLoading = true;
-  //   $e.preventDefault();
-  //   $e.stopPropagation();
-  //   let errroCounter = 0;
-
-  //   if (this.masterDataDetails.length > 0) {
-  //     this.http.post("Employee/UploadEmployeeExcel", this.masterDataDetails)
-  //     .then((response: ResponseModel) => {
-  //       if (response.ResponseBody) {
-  //         let data = response.ResponseBody;
-  //         if (data.length > 0) {
-  //           this.cleanFileHandler();
-  //           Toast("Data Uploaded successfull");
-  //           this.isLoading = false;
-  //         }
-  //       } else {
-  //         ErrorToast("Unable to upload the data");
-  //       }
-  //     }).catch(e => {
-  //       this.isLoading = false;
-  //     });
-  //   } else {
-  //     this.isLoading = false;
-  //     WarningToast("Please upload atleast one record");
-  //   }
-  // }
-
-  generateFile() {
-    this.http.get("GenerateExcel/ExportExcel").then((res:ResponseModel) => {
-      if (res.ResponseBody) {
-        var binaryData = atob(res.ResponseBody);
-
-        const blob = new Blob([new Uint8Array(binaryData.length).map((_, index) => binaryData.charCodeAt(index))], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        });
-
-        // Create a URL for the blob
-        const url = window.URL.createObjectURL(blob);
-
-        // Create a link element to trigger the download
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'EmployeeList.xlsx'; // Set the desired file name
-        a.click();
-
-        // Revoke the object URL to free up resources
-        window.URL.revokeObjectURL(url);
-      }
-    })
+  getEmployeeSampleFile() {
+    this.sampleFilePath = `${this.basePath}Documents/SampleExcel/Client_2/EmployeeRecordSample.xlsx`;
+    const a = document.createElement('a');
+    a.href = this.sampleFilePath;
+    a.download = 'EmployeeRecordSample.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(this.sampleFilePath);
   }
 
-}
-
-class tableConfiguration {
-  header: any = null;
-  data: Array<any> = [];
-  sampleData: Array<any> = [];
-  link: Array<any> = [];
-  templates: Array<any> = [];
-  totalRecords?: number = null;
-  isEnableAction?: boolean = false;
+  getEmployeeWithPayrollSampleFile() {
+    this.sampleFilePath = `${this.basePath}Documents/SampleExcel/Client_2/Employee_with_payroll_data_sample.xlsx`;
+    const a = document.createElement('a');
+    a.href = this.sampleFilePath;
+    a.download = 'Employee_with_payroll_data_sample.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(this.sampleFilePath);
+  }
 }

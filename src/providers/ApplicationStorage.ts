@@ -161,13 +161,15 @@ export function GetEmployees(): Array<pairData> {
   let Data: any = localStorage.getItem(Master);
   if (Data && Data.trim().length > 0) {
     Data = JSON.parse(Data);
-    employees = Data['EmployeeList'];      
+    employees = Data['EmployeeList'];
     if (!employees) {
       ErrorToast("Unable to load employee list. Please contact to admin.");
     }
   }
-
-  return employees;
+  if (employees.length > 100)
+    return employees.slice(0, 100)
+  else
+    return employees;
 }
 
 export function GetDepartments(): Array<any> {
@@ -175,7 +177,7 @@ export function GetDepartments(): Array<any> {
   let Data: any = localStorage.getItem(Master);
   if (Data && Data.trim().length > 0) {
     Data = JSON.parse(Data);
-    departments = Data['Department'];      
+    departments = Data['Department'];
     if (!departments) {
       ErrorToast("Unable to load department list. Please contact to admin.");
     }
@@ -189,7 +191,7 @@ export function GetRoles(): Array<any> {
   let Data: any = localStorage.getItem(Master);
   if (Data && Data.trim().length > 0) {
     Data = JSON.parse(Data);
-    roles = Data['Roles'];      
+    roles = Data['Roles'];
     if (!roles) {
       ErrorToast("Unable to load role list. Please contact to admin.");
     }

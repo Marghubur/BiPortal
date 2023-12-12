@@ -118,7 +118,7 @@
                   </ng-container>
                   <div class="mt-4 d-flex justify-content-end">
                       <button class="btn btn-primary-c" [disabled]="isLoading" (click)="addApprovalWorkFlow()">
-                        <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+                        <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
                         <span class="ps-2">{{ isLoading ? 'Wait' : 'Save Work Flow' }}</span>
                       </button>
                   </div>
@@ -156,7 +156,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-danger" [disabled]="isLoading" (click)="removeCurrent()">
-          <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-trash-can': !isLoading}"></i>
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-trash-can': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Delete' }}</span>
         </button>
       </div>

@@ -81,7 +81,7 @@
         </div>
       </div>
       <div class="x_content">
-        <div class="t-table t-list t-border col-md-12">
+        <div class="t-table t-list col-md-12">
           <div class="hide-bar"></div>
           <div class="t-head">
             <div class="tr">
@@ -351,7 +351,7 @@
         </div>
 
         <ng-container *ngIf="isFileFound">
-          <div class="t-table t-list t-border border-top-0 col-md-12">
+          <div class="t-table t-list  border-top-0 col-md-12">
             <div class="t-body">
               <div class="tr py-2">
                 <div class="th fe-1 justify-content-start align-items-start">
@@ -470,7 +470,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
-          <i class="fa pe-2" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i class="fa pe-2" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -533,7 +533,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateRecord()">
-          <i class="" [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>

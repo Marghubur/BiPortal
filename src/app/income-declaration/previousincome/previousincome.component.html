@@ -16,8 +16,18 @@
     </ul>
   </div>
   <div class="col-12 x_panel p-0 m-0">
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Previous Income'" [subtitle]="'Details'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+          </div>
+        </div>
+      </div>
     </div>
     <div class="right-panel col-md-12 p-0">
       <div class="col-md-12 bg-light mb-3 mt-3">
@@ -41,7 +51,7 @@
           <h5 class="text-dark">Previous Employment Details</h5>
           <p class="mb-0">Previous Employment details are necessary Wen employee change their job, this declaration is
             required for income tax computation.</p>
-          <div class="t-table t-list t-border my-3 col-md-12 bg-white" *ngIf="isRecordFound">
+          <div class="t-table t-list  my-3 col-md-12 bg-white" *ngIf="isRecordFound">
             <div class="t-head overflow-hidden custom-bg">
               <div class="tr bg-light py-3">
                 <div class="th px-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Month">MON</div>
@@ -105,7 +115,7 @@
               <div class="bg-light pt-2 pb-4">
                 <span class="ps-3">Total Items: {{total}}</span>
                 <button type="button" class="btn btn-primary-c me-2 float-end" (click)="savePreviousIncome()">
-                  <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
               </div>

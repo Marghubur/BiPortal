@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService, tableConfig } from 'src/providers/ajax.service';
+import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { PayrollSettings } from 'src/providers/constants';
-import { Dictionary } from 'src/providers/Generic/Code/Dictionary';
 import { iNavigation } from 'src/providers/iNavigation';
-import { Filter } from 'src/providers/userService';
-//import { read, utils } from 'xlsx';
 declare var $: any;
 
 @Component({
@@ -38,18 +35,12 @@ export class PayrollComponentsComponent implements OnInit {
   fileSize: string;
   fileName: string;
   isFileReady: boolean = false;
-  noOfRecords: number;
-  recordToUpload: any;
-  ws: any;
   file: File;
-  tableConfiguration: tableConfig = null;
-  isAvailable: boolean = false;
-  uploadedCandidatesData: Filter = null;
   isDisable: boolean = true;
-  SalaryComponentsDetail: Array<any> = [];
-  expandedTable: boolean = true;
   addHocComponent: PayrollComponentsModal = new PayrollComponentsModal();
   companyId: number = 0;
+  sampleFilePath: string = null;
+  basePath: string = null;
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
@@ -60,14 +51,13 @@ export class PayrollComponentsComponent implements OnInit {
     this.initadhocForm();
     this.initdeductionForm();
     this.initbonusForm();
+    this.basePath = this.http.GetImageBasePath();
     this.loadData();
 
     if (data > 0) {
       this.companyId = data;
       this.ComponentType = '';
-    }// else {
-    //   ErrorToast("Company was not selected. Please visit page again.");
-    // }
+    }
   }
 
   navigate() {
@@ -111,9 +101,9 @@ export class PayrollComponentsComponent implements OnInit {
 
   initadhocForm() {
     this.AdhocForm = this.fb.group({
-      ComponentName: new FormControl(''),
-      ComponentDescription: new FormControl(''),
-      ComponentFullName: new FormControl(''),
+      ComponentName: new FormControl('', [Validators.required]),
+      ComponentDescription: new FormControl('', [Validators.required]),
+      ComponentFullName: new FormControl('', [Validators.required]),
       TaxExempt: new FormControl(false),
       Section: new FormControl(''),
       IsAdHoc: new FormControl(true),
@@ -142,9 +132,9 @@ export class PayrollComponentsComponent implements OnInit {
 
   initdeductionForm() {
     this.DeductionForm = this.fb.group({
-      ComponentName: new FormControl(''),
-      ComponentDescription: new FormControl(''),
-      ComponentFullName: new FormControl(''),
+      ComponentName: new FormControl('', [Validators.required]),
+      ComponentDescription: new FormControl('', [Validators.required]),
+      ComponentFullName: new FormControl('', [Validators.required]),
       IsAffectinGross: new FormControl(false),
       IsAdHoc: new FormControl(true),
       AdHocId: new FormControl(3)
@@ -155,7 +145,7 @@ export class PayrollComponentsComponent implements OnInit {
     this.BonusForm = this.fb.group({
       ComponentId: new FormControl('', [Validators.required]),
       ComponentDescription: new FormControl('', [Validators.required]),
-      ComponentFullName: new FormControl(''),
+      ComponentFullName: new FormControl('', [Validators.required]),
       AdHocId: new FormControl(0)
     });
   }
@@ -177,16 +167,19 @@ export class PayrollComponentsComponent implements OnInit {
 
   AdhocPopUp() {
     this.AdhocForm.reset();
+    this.submitted = false;
     $('#CreateAdhocModal').modal('show');
   }
 
   BonusPopUp() {
     this.BonusForm.reset();
+    this.submitted = false;
     $('#CreateBonusModal').modal('show');
   }
 
   DeductionPopUp() {
     this.DeductionForm.reset();
+    this.submitted = false;
     $('#CreateDeductionModal').modal('show');
   }
 
@@ -251,9 +244,22 @@ export class PayrollComponentsComponent implements OnInit {
 
   addNewAdhocAllowance() {
     this.isLoading = true;
+    this.submitted = true;
     let value = this.AdhocForm.value;
     value.IsAdHoc = true;
     value.AdHocId = 1;
+    if (value.TaxExempt == null || value.TaxExempt == "")
+      value.TaxExempt = false;
+
+    if (value.SectionMaxLimit == null)
+      value.SectionMaxLimit = 0;
+
+    if (this.AdhocForm.invalid) {
+      ErrorToast("Please fill all the manditory fields");
+      this.isLoading = false;
+      return;
+    }
+
     if (value) {
       this.http.post("SalaryComponent/AddAdhocComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {
@@ -271,9 +277,19 @@ export class PayrollComponentsComponent implements OnInit {
 
   addNewDeduction() {
     this.isLoading = true;
+    this.submitted = true;
     let value = this.DeductionForm.value;
     value.AdHocId = 3;
     value.IsAdHoc = true;
+    if (value.IsAffectinGross == null || value.IsAffectinGross == "")
+      value.IsAffectinGross = false;
+
+    if (this.DeductionForm.invalid) {
+      ErrorToast("Please fill all the manditory fields");
+      this.isLoading = false;
+      return;
+    }
+
     if (value) {
       this.http.post("SalaryComponent/AddDeductionComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {
@@ -302,7 +318,7 @@ export class PayrollComponentsComponent implements OnInit {
     if (value) {
       this.http.post("SalaryComponent/AddBonusComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {
-          this.AdhocBonus = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 3);
+          this.AdhocBonus = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 2);
           $('#CreateBonusModal').modal('hide');
           Toast("Component added successfully.")
           this.isLoading = false;
@@ -335,7 +351,7 @@ export class PayrollComponentsComponent implements OnInit {
   filterRecords(e: any) {
     this.isReady = false;
     let text = e.target.value.toUpperCase();
-    this.RecurringComponent = this.AllComponents.filter (x => x.ComponentFullName.indexOf(text) != -1 || x.ComponentId.indexOf(text) != -1);
+    this.RecurringComponent = this.AllComponents.filter (x => (x.ComponentFullName.indexOf(text) != -1 || x.ComponentId.indexOf(text) != -1) && (x.IsAdHoc == false));
     this.isReady = true;
   }
 
@@ -347,103 +363,19 @@ export class PayrollComponentsComponent implements OnInit {
   }
 
   excelSheetModal() {
+    this.cleanFileHandler();
     $('#excelSheetModal').modal('show');
   }
 
   readExcelData(e: any) {
     this.file = e.target.files[0];
     if (this.file !== undefined && this.file !== null) {
-      this.convertToJson(false).then(data => {
-        if (data) {
-          this.recordToUpload = data;
-          this.fileSize = (this.file.size / 1024).toFixed(2);
-          this.fileName = this.file.name;
-          this.noOfRecords = this.recordToUpload.length;
-          this.isFileReady = true;
-          this.isDisable = false;
-          this.isUploadFile = false;
-          let excelData = data.mapTable[0];
-          let rows: any = excelData;
-          if (excelData) {
-            this.tableConfiguration = new tableConfig();
-            this.tableConfiguration.totalRecords = 1;
-            this.tableConfiguration.header = excelData.value.Keys;
-            this.tableConfiguration.data = rows.value.Data;
-            // this.uploadedCandidatesData.TotalRecords = 0;
-            // if(this.tableConfiguration.data.length > 0) {
-            //   this.uploadedCandidatesData.TotalRecords = this.tableConfiguration.data.length;
-            // }
-            this.SalaryComponentsDetail = this.tableConfiguration.data;
-            this.tableConfiguration.isEnableAction = true;
-            this.isAvailable = true;
-          }
-        } else {
-          this.cleanFileHandler();
-          ErrorToast("Excel data is not valid.");
-        }
-      });
+      this.fileSize = (this.file.size / 1024).toFixed(2);
+      this.fileName = this.file.name;
+      this.isFileReady = true;
+      this.isDisable = false;
+      this.isUploadFile = false;
     }
-  }
-
-  convertToJson(onlyHeader: boolean = true): Promise<any> {
-    return new Promise((resolve, reject) => {
-      let reader = new FileReader();
-      let workbookkk;
-      let XL_row_object;
-      let TempDictionary = new Dictionary<string, any>();
-      reader.readAsBinaryString(this.file);
-      reader.onload = function () {
-        let data = reader.result;
-        // workbookkk = read(data, { type: "binary" });
-        workbookkk.SheetNames.forEach(function (sheetName) {
-          XL_row_object = null; //utils.sheet_to_json(workbookkk.Sheets[sheetName]);
-          let position = TempDictionary.hasKey(sheetName);
-          if (
-            position === -1 &&
-            XL_row_object !== null &&
-            XL_row_object.length > 0
-          ) {
-            let RowDetail = XL_row_object[0];
-            let ColumnDetail = [];
-            if (RowDetail !== null) {
-              if (typeof RowDetail === "object") {
-                let Keys = Object.keys(RowDetail);
-                let index = 0;
-                let Type = "";
-                while (index < Keys.length) {
-                  Type = typeof RowDetail[Keys[index]];
-                  if (
-                    Type === "undefined" ||
-                    RowDetail[Keys[index]] === null ||
-                    RowDetail[Keys[index]] == ""
-                  ) {
-                    Type = "string";
-                  }
-                  ColumnDetail.push({
-                    ColumnName: Keys[index],
-                    ColumnType: Type
-                  });
-                  index++;
-                }
-              }
-            }
-            let SheetData = {
-              Keys: ColumnDetail,
-              Data: onlyHeader ? null : XL_row_object
-            };
-            TempDictionary.insert(sheetName, SheetData);
-          }
-          resolve(TempDictionary);
-        });
-      };
-    });
-  }
-
-  expandTable() {
-    this.expandedTable = false;
-  }
-  closeExpandModel(){
-    this.expandedTable = true;
   }
 
   excelfireBrowserFile() {
@@ -451,36 +383,22 @@ export class PayrollComponentsComponent implements OnInit {
   }
 
   cleanFileHandler() {
+    event.stopPropagation();
+    event.preventDefault();
     $("#uploadexcel").val("");
     this.fileSize = "";
     this.fileName = "";
     this.isFileReady = false;
-    this.noOfRecords = 0;
-    event.stopPropagation();
-    event.preventDefault();
-    this.isAvailable=false;
     this.isDisable = true;
     this.isUploadFile = true;
   }
 
-  uploadExcelSheet($e: any) {
+  uploadExcelSheet() {
     this.isLoading = true;
-    $e.preventDefault();
-    $e.stopPropagation();
-    let errroCounter = 0;
-    let i = 0;
-    while (i < this.SalaryComponentsDetail.length) {
-      let componentId = this.SalaryComponentsDetail.filter(x => x.ComponentId == this.SalaryComponentsDetail[i].ComponentId);
-      let componentname = this.SalaryComponentsDetail.filter(x => x.ComponentFullName == this.SalaryComponentsDetail[i].ComponentFullName && x.Section == this.SalaryComponentsDetail[i].Section);
-      if (componentId.length > 1 || componentname.length > 1) {
-        ErrorToast("Component Name or Component Full Name are duplicate.");
-        errroCounter ++;
-      }
-      i++;
-    }
-
-    if (errroCounter === 0 && this.SalaryComponentsDetail.length > 0) {
-      this.http.post("SalaryComponent/InsertUpdateSalaryComponentsByExcel", this.SalaryComponentsDetail)
+    if (this.file) {
+      let formData = new FormData();
+      formData.append("componentdata", this.file);
+      this.http.post("SalaryComponent/InsertUpdateSalaryComponentsByExcel", formData)
       .then((response: ResponseModel) => {
         if (response.ResponseBody) {
           let data = response.ResponseBody;
@@ -504,8 +422,27 @@ export class PayrollComponentsComponent implements OnInit {
     }
   }
 
+  getComponentSampleFile() {
+    this.sampleFilePath = `${this.basePath}Documents/SampleExcel/Client_2/HolidaySample.xlsx`;
+    const a = document.createElement('a');
+    a.href = this.sampleFilePath;
+    a.download = 'HolidaySample.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(this.sampleFilePath);
+  }
+
   get b() {
     return this.BonusForm.controls;
+  }
+
+  get a() {
+    return this.AdhocForm.controls;
+  }
+
+  get d() {
+    return this.DeductionForm.controls;
   }
 }
 

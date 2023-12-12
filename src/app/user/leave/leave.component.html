@@ -427,7 +427,7 @@
         <div class="modal-footer border-top-0 pe-4">
           <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-primary-c" [disabled]="isLoading || !isEnabled" (click)="submitLeave()">
-            <i  [ngClass]="{'fa-spin fa-solid fa-spinner': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
             {{ isLoading ? 'Wait' : 'Request' }}
           </button>
         </div>
