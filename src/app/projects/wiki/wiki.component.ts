@@ -118,8 +118,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
           // }
           this.isWikiAdded = true;
         }
-        else
-          this.projectDetail.SectionDescription = null;
+
         this.projectDetail.Title = data.Title;
         this.editableFlag = false;
         Toast("Wiki page loaded successfully.");
@@ -145,6 +144,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   addTitlePopUp() {
     this.isWikiAdded = true;
     this.isEdit = true;
+    this.common.isMinimize.next(true);
+
     this.projectDetail.Title = '[Add Title]';
     this.titleValue = '';
     this.titleValue = '[Add Section Title]';

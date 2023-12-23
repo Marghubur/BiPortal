@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -58,6 +58,9 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.eventSubscription = this.cleanUp.subscribe(() => this.cleanUpIFrame())
     }
     this.richTextField = document.getElementById("richTextField");
+    if (this.isEdit) {
+      document.getElementsByClassName('iframe-wrapper-container')[0].classList.remove('iframe-wrapper-container');
+    }
     this.toggleEdit();
   }
 
@@ -91,7 +94,7 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
             tags[i].parentNode.removeChild(tags[i]);
             parentNode.appendChild(document.createTextNode(text));
             (parentNode as HTMLElement).style.fontSize = "18px";
-            
+
           }
         }
       }else if (command === "formatBlock") {
@@ -124,7 +127,6 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
       if(!this.richTextField) {
         this.richTextField = document.getElementById("richTextField");
       }
-  
       e.target.classList.remove('iframe-wrapper-container');
       this.toggleEdit();
     }
@@ -135,13 +137,14 @@ export class EditorComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.richTextField = document.getElementById("richTextField");
     }
 
-    if(this.isInEditMode){
+    if(!this.isInEditMode){
         this.richTextField.contentDocument.designMode = 'Off';
         this.isInEditMode = false;
-    }else{
+      }else{
         this.richTextField.contentDocument.designMode = 'On';
         this.isInEditMode = true;
-    }
+      }
+    this.richTextField.contentWindow.document.body.focus();
     var body = this.richTextField.contentWindow.document.querySelector('body');
     body.style.fontSize = '18px';
 }

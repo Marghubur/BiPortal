@@ -309,6 +309,11 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   bindForm() {
     if (this.employeeModal.IsPayrollOnCTC == null)
       this.employeeModal.IsPayrollOnCTC = true;
+    if (this.employeeModal.ReportingManagerId > 0) {
+      let data = this.managerList.data.find(x => x.value == this.employeeModal.ReportingManagerId);
+      if (!data)
+        this.employeeModal.ReportingManagerId = 0;
+    }
 
     this.employeeForm = this.fb.group({
       FirstName: new FormControl(this.employeeModal.FirstName, [Validators.required]),
@@ -486,7 +491,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (this.employeeForm.get('ExprienceInYear').errors !== null)
       errroCounter++;
 
-    if (this.employeeModal.Pincode === null)
+    if (!this.employeeModal.Pincode)
       this.employeeModal.Pincode = 0;
 
     if (this.employeeModal.AllocatedClientId === null)
@@ -516,9 +521,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       formData.append(`${ProfileImage}_${this.imageIndex}`, file);
       let url: string = "";
       if(this.isUpdate)
-      url = `Employee/updateemployeedetail`;
+        url = `Employee/updateemployeedetail`;
       else
-      url = `Employee/employeeregistration`;
+        url = `Employee/employeeregistration`;
 
       this.http.post(url, formData)
       .then(res => {
