@@ -23,42 +23,42 @@
         <form [formGroup]="emaillinkForm" *ngIf="emaillinkForm">
           <div class="col-md-12 row">
             <div class="mt-3 col-md-3">
-              <label for="" class="form-label">Template Name</label>
+              <label  class="form-label">Template Name</label>
               <input type="text" formControlName="TemplateName" class="form-control" placeholder="e.g Billing Template" [ngClass]="{'error-field': submitted && f.TemplateName.errors !== null && f.TemplateName.errors.required}">
             </div>
             <div class="col-md-3 mt-3">
-              <label for="" class="form-label">Page Name</label>
+              <label  class="form-label">Page Name</label>
               <input type="text" class="form-control" formControlName="PageName" readonly placeholder="Page Name" [ngClass]="{'error-field': submitted && f.PageName.errors !== null && f.PageName.errors.required}">
             </div>
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">Page Description</label>
+              <label  class="form-label">Page Description</label>
               <input type="text" class="form-control" formControlName="PageDescription" placeholder="Page Description" [ngClass]="{'error-field': submitted && f.PageDescription.errors !== null && f.PageDescription.errors.required}">
             </div>
           </div>
           <div class="col-md-12 row">
             <div class="col-md-3 mt-3">
-              <label for="" class="form-label">Is Email GroupUsed</label>
+              <label  class="form-label">Is Email GroupUsed</label>
               <select class="form-select" (change)="EmailGroupUsed($event)" formControlName="IsEmailGroupUsed" [ngClass]="{'error-field': submitted && f.IsEmailGroupUsed.errors !== null && f.IsEmailGroupUsed.errors.required}">
                 <option value="true">Yes</option>
                 <option value="false">No</option>
               </select>
             </div>
             <div class="col-md-3 mt-3">
-              <label for="" class="form-label">Select Group</label>
+              <label  class="form-label">Select Group</label>
               <select class="form-select" disabled formControlName="EmailGroupId" name="EmailGroupId" [ngClass]="{'error-field': submitted && f.EmailGroupId.errors !== null && f.EmailGroupId.errors.required}">
                 <option value=null>Select Group</option>
                 <option value="1">No</option>
               </select>
             </div>
             <div class="col-md-3 mt-3">
-              <label for="" class="form-label">Is Triggered Automatically <i class="ps-2 fa-solid fa-circle-exclamation" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Automaticaally means when any change occur then email is send to defined email"></i></label>
+              <label  class="form-label">Is Triggered Automatically <i class="ps-2 fa-solid fa-circle-exclamation" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Automaticaally means when any change occur then email is send to defined email"></i></label>
               <select class="form-select" (change)="triggerStatus($event)" formControlName="IsTriggeredAutomatically" [ngClass]="{'error-field': submitted && f.IsTriggeredAutomatically.errors !== null && f.IsTriggeredAutomatically.errors.required}">
                 <option value="true">Yes</option>
                 <option value="false">No</option>
               </select>
             </div>
             <div class="col-md-3 mt-3" *ngIf="isEmployeesReady">
-              <label for="" class="form-label">Email</label>
+              <label  class="form-label">Email</label>
               <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail()" [(ngModel)]="employeeId" [ngModelOptions]="{standalone: true}"></bot-autocomplete>
             </div>
           </div>
@@ -78,15 +78,15 @@
           <ng-container >
             <div class="row">
               <div class="mt-3 col-md-3">
-                <label for="" class="form-label">Subject</label>
+                <label  class="form-label">Subject</label>
                 <input type="text" formControlName="SubjectLine" class="form-control" placeholder="e.g Bill detail" [ngClass]="{'error-field': submitted && f.SubjectLine.errors !== null && f.SubjectLine.errors.required}">
               </div>
               <div class="mt-3 col-md-3">
-                <label for="" class="form-label">Title</label>
+                <label  class="form-label">Title</label>
                 <input type="text" formControlName="EmailTitle" class="form-control" placeholder="e.g Title" [ngClass]="{'error-field': submitted && f.EmailTitle.errors !== null && f.EmailTitle.errors.required}">
               </div>
               <div class="my-3 col-md-3">
-                <label for="" class="form-label">Salutation</label>
+                <label  class="form-label">Salutation</label>
                 <input type="text" formControlName="Salutation" class="form-control" placeholder="e.g Dear Sir/ Madam" [ngClass]="{'error-field': submitted && f.Salutation.errors !== null && f.Salutation.errors.required}">
               </div>
             </div>

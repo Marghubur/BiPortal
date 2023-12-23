@@ -108,8 +108,8 @@
   <ng-container *ngIf="isMinimize">
     <div class="d-flex small-menu align-items-center justify-content-between flex-column h-100">
       <div class="">
-        <div class="py-3 dropdown col-md-12" *ngFor="let catagory of Menu;let i = index;" [ngClass]="{ 'active-small-menu': catagory.IsActive}">
-          <a href="javascript:void(0)" class="text-decoration-none text-center">
+        <div class="py-2 my-3 dropdown col-md-12 " *ngFor="let catagory of Menu;let i = index;" [ngClass]="{ 'active-sm': catagory.IsActive}">
+          <a href="javascript:void(0)" class="text-decoration-none text-center d-flex align-items-center justify-content-center">
             <span class="i-chip">
               <i class="{{catagory.ParentDetail.Icon}}"></i>
             </span>
@@ -120,9 +120,9 @@
               <p class="caret-left"></p>
               <p class="caret-left-bottom"></p>
             </div>
-            <a [routerLink]="['/' + item.Link]" class="dropdown-nav-link nav-link-menu a-font" (click)="cleanupEmpId(item.Link)"
+            <a [routerLink]="['/' + item.Link]" class="dropdown-nav-link nav-link-menu a-font" (click)="activeSmallMenu(item.Link, $event)"
               routerLinkActive="active-link" *ngFor="let item of catagory.Value">
-              <div class="row menu-item-div align-items-center">
+              <div class="row align-items-center">
                 <div class="col-md-1">
                   <i class="menu-item-icon {{item.Icon}}"></i>
                 </div>

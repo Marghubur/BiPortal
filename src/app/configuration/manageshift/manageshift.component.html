@@ -221,28 +221,28 @@
         <form [formGroup]="shiftForm">
           <div class="row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Company Name</label>
+              <label  class="form-label">Company Name</label>
               <input type="text" readonly formControlName="CompanyName" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Department *</label>
+              <label  class="form-label">Department *</label>
               <select class="form-select" formControlName="Department" [ngClass]="{'error-field': submitted && f.Department.errors !== null && f.Department.errors.required}">
                 <option value=null disabled>Select Department</option>
                 <option [value]="item.DepartmentId" *ngFor="let item of departments">{{item.DepartmentName}}</option>
               </select>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Shift Title *</label>
+              <label  class="form-label">Shift Title *</label>
               <input type="text" maxlength="40" oninput="this.value = this.value.toUpperCase()" placeholder="Enter shift title" formControlName="ShiftTitle" [ngClass]="{'error-field': submitted && f.ShiftTitle.errors !== null && f.ShiftTitle.errors.required}" class="form-control">
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Office Time (in min) *</label>
+              <label  class="form-label">Office Time (in min) *</label>
               <app-bh-timepicker formControlName="OfficeTime"></app-bh-timepicker>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Duration (in min) *</label>
+              <label  class="form-label">Duration (in min) *</label>
               <div class="row">
                 <div class="col-md-4">
                   <select formControlName="DurationHrs"  class="form-select" (change)="shiftDurationCalc()">
@@ -270,27 +270,27 @@
                 <div class="col-md-4">
                   <div class="d-flex align-items-center">
                     <input type="text" readonly OnlyNumber="3" class="form-control border-0" placeholder="Enter office duiration" formControlName="Duration" [ngClass]="{'error-field': submitted && f.Duration.errors !== null && f.Duration.errors.required}">
-                    <label for="" class="form-label ps-1 mb-0">mins</label>
+                    <label  class="form-label ps-1 mb-0">mins</label>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Lunch Duration (in min) *</label>
+              <label  class="form-label">Lunch Duration (in min) *</label>
               <input type="text" OnlyNumber="3" placeholder="Enter lunch duiration" formControlName="LunchDuration" [ngClass]="{'error-field': submitted && f.LunchDuration.errors !== null && f.LunchDuration.errors.required}" class="form-control">
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">Description</label>
+            <label  class="form-label">Description</label>
             <textarea class="form-control" oninput="this.value = this.value.toUpperCase()" formControlName="Description" placeholder="Enter description" maxlength="100" cols="30" rows="5"></textarea>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Total Working Days *</label>
+              <label  class="form-label">Total Working Days *</label>
               <input type="text" OnlyNumber="1" placeholder="Enter total working days" formControlName="TotalWorkingDays" [ngClass]="{'error-field': submitted && f.TotalWorkingDays.errors !== null && f.TotalWorkingDays.errors.required}" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Start Date *</label>
+              <label  class="form-label">Start Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
                   <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
@@ -306,7 +306,7 @@
               </form>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">End Date *</label>
+              <label  class="form-label">End Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
                   <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
@@ -323,7 +323,7 @@
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">Pick working days in a week:</label>
+            <label  class="form-label">Pick working days in a week:</label>
             <div class="d-flex">
               <div class="day-of-week" *ngFor="let day of days; let index = index;" [ngClass]="{'border-success': day.isEnabled}"
                   (click)="toggleDays(day.id, $event)">

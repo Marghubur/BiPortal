@@ -108,14 +108,14 @@
                     <div class="t-body overflow-hidden">
                       <ng-container>
                         <div class="tr py-2" *ngFor="let items of timesheetBreakup; let i = index; let last = last;">
-                          <div class="td align-middle text-center" *ngIf="i == 0"
+                          <div class="td py-2 align-middle text-center" *ngIf="i == 0"
                             [ngClass]="{'fe-1': items.Timesheet.length == 6, 'fe-2': items.Timesheet.length == 5, 'fe-3': items.Timesheet.length == 4, 'fe-4': items.Timesheet.length == 3, 'fe-5': items.Timesheet.length == 2, 'fe-6': items.Timesheet.length == 1, 'd-none': items.Timesheet.length == 7}">
                             <div class="cell-wrapper edit-cellwrapper">
                               <span class="d-none">{{items.Timesheet}}</span>
                             </div>
                           </div>
                           <ng-container *ngFor="let item of items.Timesheet">
-                            <div class="td fe-1 align-middle text-center">
+                            <div class="td py-2 fe-1 align-middle text-center">
                               <div class="cell-wrapper edit-cellwrapper">
                                 {{item.PresentDate | date}}
                                 <ng-container *ngIf="item.TimesheetStatus == 8 || item.TimesheetStatus == 9">

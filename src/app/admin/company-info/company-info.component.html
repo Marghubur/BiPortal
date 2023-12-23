@@ -17,7 +17,7 @@
               <option value="0">Select Company</option>
               <option value="{{companyInformation.CompanyId}}">{{companyInformation.CompanyName}}</option>
             </select> -->
-            <label for="" class="form-control bg-muted">{{companyInformation.CompanyName}}</label>
+            <label  class="form-control bg-muted">{{companyInformation.CompanyName}}</label>
           </div>
           <div class="text-end col-md-4">
             <button class="btn my-2 me-1 btn-outline-primary" *ngIf="ActivatedPage > 0 && ActivatedPage <3" (click)="activePage(ActivatedPage, 'next')">Next<i
@@ -37,7 +37,7 @@
             <h6 class="mb-0 py-3">Please provide the company information. This is the company that pays for the Payroll.
             </h6>
             <div class="col-md-3 my-2">
-              <label for="" class="foem-label pb-2 fw-bold">SELECT LEGAL ENTITY</label>
+              <label  class="foem-label pb-2 fw-bold">SELECT LEGAL ENTITY</label>
               <select class="form-select" formControlName="LegalEntity">
                 <option value="">Select Legal Entity</option>
                 <option [value]="companyInformation.CompanyName">{{companyInformation.CompanyName}}</option>
@@ -66,23 +66,23 @@
               </div>
             </div>
             <div class="py-2">
-              <label for="" class="form-label fw-bold">COMPANY INFORMATION</label>
+              <label  class="form-label fw-bold">COMPANY INFORMATION</label>
               <div class="row col-md-6">
                 <div class="col-md-6 my-2">
-                  <label for="" class="form-label">LEGAL NAME OF THE COMPANY</label>
+                  <label  class="form-label">LEGAL NAME OF THE COMPANY</label>
                   <input type="text" oninput="this.value = this.value.toUpperCase()" class="form-control"
                     placeholder="COMPANY FULL NAME"
                     [ngClass]="{'error-field': submitted && f['LegalEntity'].errors !== null && f['LegalEntity'].errors['required']}"
                     formControlName="LegalEntity">
                 </div>
                 <div class="col-md-6 my-2">
-                  <label for="" class="form-label">TYPE OF BUSINESS</label>
+                  <label  class="form-label">TYPE OF BUSINESS</label>
                   <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()" maxlength="60"
                     oninput="this.value = this.value.toUpperCase()" placeholder="TYPE OF BUSINESS"
                     formControlName="TypeOfBusiness">
                 </div>
                 <div class="col-md-6 my-2">
-                  <label for="" class="form-label">DATE OF INFORMATION</label>
+                  <label  class="form-label">DATE OF INFORMATION</label>
                   <form class="form-inline">
                     <div class="form-group w-100">
                       <div class="input-group w-100">
@@ -98,7 +98,7 @@
                   </form>
                 </div>
                 <div class="col-md-6 my-2">
-                  <label for="" class="form-label">REGISTERED OFFICE ADDRESS</label>
+                  <label  class="form-label">REGISTERED OFFICE ADDRESS</label>
                   <input type="text" class="form-control" placeholder="REGISTERED OFFICE ADDRESS" maxlength="100"
                     oninput="this.value = this.value.toUpperCase()" formControlName="FullAddress">
                 </div>

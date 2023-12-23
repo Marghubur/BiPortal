@@ -5,7 +5,7 @@
         <div class="d-flex justify-content-between">
           <div class="col-8">
             <div class="px-1">
-              <app-breadcrums [title]="'Project Appraisal Budget'" [subtitle]="'Project appraisal budget and review performance objectives'"></app-breadcrums>
+              <app-breadcrums [title]="'Manage Review'" [subtitle]="'Manage appraisal review details'"></app-breadcrums>
             </div>
           </div>
         </div>
@@ -13,14 +13,22 @@
       <div>
         <ng-container *ngIf="isPageReady">
           <ng-container *ngIf="submittedEmpObj.length > 0">
-            <div class="row align-items-center justify-content-between" *ngIf="currentProjectAppraisal != null">
-              <div class="col-md-12">
-                <span class="fw-bold text-dark">Project Appraisal Budget: <i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{currentProjectAppraisal.ProjectAppraisalBudget}}</span>
-                <span class="ps-2">({{currentProjectAppraisal.FromDate | date}} - {{currentProjectAppraisal.ToDate | date}})</span>
+            <div class="col-md-12 my-3 px-3">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h6 class="card-title fw-bold text-dark">Project: {{submittedEmpObj[0].ProjectName}} </h6>
+                  <p class="card-text text-dark" *ngIf="projectAppraisalBudget != null">
+                    Project Budget: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.ProjectAppraisalBudget | number: '1.2-2'}}
+                    <span class="px-2">|</span>
+                    Total Proposed Hike Amount: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.TotalHikeAmount | number: '1.2-2'}}
+                    <span class="px-2">|</span>
+                    Remaining Budget: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.ProjectAppraisalBudget - projectAppraisalBudget.TotalHikeAmount | number: '1.2-2'}}
+                  </p>
+                  <div class="alert alert-danger mb-0" role="alert" *ngIf="projectAppraisalBudget.TotalHikeAmount > projectAppraisalBudget.ProjectAppraisalBudget">
+                    Proposed hike amount is exceed from project appraisal budget.
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-md-12 mt-3">
-              <p class="card-text">{{submittedEmpObj[0].ProjectDescription}}</p>
               <ng-container>
                 <div class="alert alert-success d-flex justify-content-between" role="alert" *ngIf="this.appraisalReviewDetail.length > 0">
                   <div class="col-auto">
@@ -59,7 +67,7 @@
                               <!-- <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSubmitted}">
                                 <i class="fa-solid fa-lock-open"></i>
                               </a> -->
-                              <span class="rounded-pill ms-2 badge" [ngClass]="{'text-bg-danger': item.get('AppraisalStatus').value == 5, 'text-bg-success': item.get('AppraisalStatus').value == 9, 'text-bg-primary': item.get('AppraisalStatus').value == 8, 'text-bg-warning': item.get('AppraisalStatus').value == 0}">
+                              <span class="rounded-pill ms-2 badge" [ngClass]="{'text-bg-danger': item.get('AppraisalStatus').value == 5, 'text-bg-success': item.get('AppraisalStatus').value == 9, 'text-bg-primary': item.get('AppraisalStatus').value == 8, 'text-bg-warning': (item.get('AppraisalStatus').value == 0 || item.get('AppraisalStatus').value == 2)}">
                                 {{item.get('AppraisalStatus').value == 8 ? "Appraisal Submitted" : item.get('AppraisalStatus').value == 5 ? "Appraisal Rejected" : item.get('AppraisalStatus').value == 9 ? "Appraisal Approved" : "Appraisal Not Submitted"}}
                               </span>
                             </div>

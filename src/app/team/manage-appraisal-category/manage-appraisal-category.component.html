@@ -328,9 +328,48 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <ng-container *ngIf="isTreeLoaded">
-          <app-bot-tree-view [inputTree]="orgTree" (onRemove)="removeNode($event)"></app-bot-tree-view>
-        </ng-container>
+        <div class="row">
+          <div class="col-md-8 border-end">
+            <ng-container *ngIf="isTreeLoaded">
+              <app-bot-tree-view [isViewMode]="true" [inputTree]="orgTree" (onRemove)="removeNode($event)"></app-bot-tree-view>
+            </ng-container>
+          </div>
+          <div class="col-md-4" *ngIf="selectNode != null">
+            <div class="d-flex">
+              <div class="toggle-container d-inline-block  me-2 mt-1">
+                <input type="checkbox" class="toggle-checkbox" id="optionalChecked"  [(ngModel)]="isOptional" (click)="isOptionalLevel($event)">
+                <label class="toggle-label" for="optionalChecked">
+                  <div class="toggle-slider"></div>
+                </label>
+              </div>
+              <label class="form-check-label">
+                Optional
+              </label>
+            </div>
+            <div class="d-flex">
+              <div class="toggle-container d-inline-block  me-2 mt-1">
+                <input type="checkbox" class="toggle-checkbox" id="activeChecked"  [(ngModel)]="isActive" (click)="activeInactiveNod($event)">
+                <label class="toggle-label" for="activeChecked">
+                  <div class="toggle-slider"></div>
+                </label>
+              </div>
+              <label class="form-check-label">
+                Remove from approval cycle
+              </label>
+            </div>
+            <div class="d-flex">
+              <div class="toggle-container d-inline-block  me-2 mt-1">
+                <input type="checkbox" class="toggle-checkbox" id="toggle" (click)="directApprovalClick($event)">
+                <label class="toggle-label" for="toggle">
+                  <div class="toggle-slider"></div>
+                </label>
+              </div>
+              <label class="form-check-label" for="toggle">
+                "Direct Approval" to skip lower-level reviews and approve instantly.
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

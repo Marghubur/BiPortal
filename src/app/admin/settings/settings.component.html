@@ -525,7 +525,7 @@
             <form [formGroup]="companyGroupForm" *ngIf="companyGroupForm">
               <div class="row col-md-12">
                 <div class="col-md-6 mt-3">
-                  <label for="" class="form-label">COMPANY NAME</label>
+                  <label  class="form-label">COMPANY NAME</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}"
                     formControlName="CompanyName" oninput="this.value = this.value.toUpperCase()" type="text"
@@ -534,7 +534,7 @@
               </div>
               <div class="row col-md-12">
                 <div class="col-md-12 mt-3">
-                  <label for="" class="form-label">ABOUT COMPANY</label>
+                  <label  class="form-label">ABOUT COMPANY</label>
                   <textarea
                     [ngClass]="{'error-field': submitted && f.CompanyDetail.errors !== null && f.CompanyDetail.errors.required}" oninput="this.value = this.value.toUpperCase()"
                     formControlName="CompanyDetail" type="text" placeholder="Company Description"
@@ -543,14 +543,14 @@
               </div>
               <div class="row col-md-12">
                 <div class="col-md-6 mt-2">
-                  <label for="" class="form-label">COMPANY EMAIL</label>
+                  <label  class="form-label">COMPANY EMAIL</label>
                   <input
                     [ngClass]="{'error-field': submitted && f.Email.errors !== null && f.CompanyName.errors.required}"
                     formControlName="Email" type="Email"
                     placeholder="Company Email" class="form-control">
                 </div>
                 <div class="col-md-6 mt-2">
-                  <label for="" class="form-label">DATE OF INCORPORATION</label>
+                  <label  class="form-label">DATE OF INCORPORATION</label>
                   <form class="row row-cols-sm-auto">
                     <div class="col-md-12">
                       <div class="input-group">

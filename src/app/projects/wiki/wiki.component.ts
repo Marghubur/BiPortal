@@ -118,8 +118,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
           // }
           this.isWikiAdded = true;
         }
-        else
-          this.projectDetail.SectionDescription = null;
+
         this.projectDetail.Title = data.Title;
         this.editableFlag = false;
         Toast("Wiki page loaded successfully.");
@@ -145,6 +144,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   addTitlePopUp() {
     this.isWikiAdded = true;
     this.isEdit = true;
+    this.common.isMinimize.next(true);
+
     this.projectDetail.Title = '[Add Title]';
     this.titleValue = '';
     this.titleValue = '[Add Section Title]';
@@ -484,15 +485,15 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     // data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     this.projectDetail.SectionDescription= data;
     this.projectDetail.ProjectId = this.projectId;
-    // this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
-    //   if (res.ResponseBody) {
-    //     this.isloading = false;
-    //     Toast("Project details inserted/ updated successfully");
-    //   }
-    // }).catch(e => {
-    //   this.isloading = false;
-    //   Error(e);
-    // })
+    this.http.post("Project/AddWiki", this.projectDetail).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        this.isloading = false;
+        Toast("Project details inserted/ updated successfully");
+      }
+    }).catch(e => {
+      this.isloading = false;
+      Error(e);
+    })
   }
 
   removeHeaderTag(data: string) {

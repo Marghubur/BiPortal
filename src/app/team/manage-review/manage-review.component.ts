@@ -21,7 +21,7 @@ export class ManageReviewComponent implements OnInit {
   appraisalHikeForm: FormGroup;
   isLoading: boolean = false;
   isAmountExceed: boolean = false;
-  allProjectAppraisal: Array<any> = [];
+  projectAppraisalBudget: any = null;
   appraisalReviewDetail: Array<any> = [];
   userDetail: any = null;
   designation: Array<any> = null;
@@ -52,7 +52,9 @@ export class ManageReviewComponent implements OnInit {
     this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}/${this.project.ProjectId}`, true).then(res => {
       if (res.ResponseBody) {
         this.submittedEmpObj = res.ResponseBody.Project;
-        this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
+        if (res.ResponseBody.ProjectAppraisal && res.ResponseBody.ProjectAppraisal.length > 0)
+          this.projectAppraisalBudget = res.ResponseBody.ProjectAppraisal[0];
+
         this.appraisalReviewDetail = res.ResponseBody.ReviewDetail;
         if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
           if (this.appraisalReviewDetail.findIndex(x => x.Status == 2) >= 0)
@@ -217,11 +219,11 @@ export class ManageReviewComponent implements OnInit {
 
   applyHikeAndPromotion() {
     this.isLoading = true;
-    if (this.isSubmitted) {
-      ErrorToast("You already submmited your review");
-      this.isLoading = false;
-      return;
-    }
+    // if (this.isSubmitted) {
+    //   ErrorToast("You already submmited your review");
+    //   this.isLoading = false;
+    //   return;
+    // }
     if (this.appraisalHikeForm.invalid) {
       ErrorToast("Please fill all the manditory field");
       this.isLoading = false;
