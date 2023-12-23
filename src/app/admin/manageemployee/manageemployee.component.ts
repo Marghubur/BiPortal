@@ -7,7 +7,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, PlaceEmpty, Toast, ToFixed, ToLocateDate } from 'src/providers/common-service/common.service';
-import { EmailLinkConfig, Employees, ManageEmployee, OrganizationSetting, ProfileImage, SalaryBreakup, UserImage } from 'src/providers/constants';
+import { Employees, OrganizationSetting, ProfileImage, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -736,13 +736,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       ErrorToast("Please enter ctc");
       return;
     }
-    this.http.get(`SalaryComponent/GetSalaryGroupByCTC/${ctc}/${this.employeeUid}`).then(res => {
-      if (res.ResponseBody) {
-        this.nav.navigate(SalaryBreakup, this.employeeForm.value);
-      }
-    }).catch(e => {
-      ErrorToast(`No Salary group found for CTC = [ ${ctc} ]. Please create group for this bracket.`);
-    })
   }
 
   uploadProfilePicture(event: any) {
@@ -779,10 +772,6 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
       });
     };
-  }
-
-  navToEmailLinkConfig() {
-    this.nav.navigate(EmailLinkConfig, ManageEmployee);
   }
 
   changePayrollCalculationType(e: any) {

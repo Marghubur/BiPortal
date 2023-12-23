@@ -5,7 +5,7 @@ import { Shift } from 'src/app/adminmodal/admin-modals';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
-import { AdminNotification, EmailLinkConfig } from 'src/providers/constants';
+import { AdminNotification } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -163,10 +163,6 @@ export class ManageshiftComponent implements OnInit {
     this.days.map(day => day.isEnabled = false);
     this.initForm();
     $('#manageShiftModal').modal('show');
-  }
-
-  navToEmailLinkConfig() {
-    this.nav.navigate(EmailLinkConfig, AdminNotification);
   }
 
   initForm() {

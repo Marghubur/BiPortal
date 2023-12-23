@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { CommonService, ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { ResponseModel } from 'src/auth/jwtService';
-import { Clients, EmailLinkConfig, OrgLogo, ProfileImage, RegisterClient, UserType } from 'src/providers/constants';
+import { Clients, OrgLogo, ProfileImage, RegisterClient, UserType } from 'src/providers/constants';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { clientModal } from 'src/app/adminmodal/admin-modals';
 declare var $: any;
@@ -326,9 +326,5 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
         });
       });
     };
-  }
-
-  navToEmailLinkConfig() {
-    this.nav.navigate(EmailLinkConfig, RegisterClient);
   }
 }

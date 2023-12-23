@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
-import { AdminNotification, AImage, Doc, Docx, EmailLinkConfig, JImage, Pdf, PImage, Txt, UserType } from 'src/providers/constants';
+import { AdminNotification, AImage, Doc, Docx, JImage, Pdf, PImage, Txt, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -361,10 +361,6 @@ export class NotificationComponent implements OnInit {
       this.notificationData = e;
       this.loadData();
     }
-  }
-
-  navToEmailLinkConfig() {
-    this.nav.navigate(EmailLinkConfig, AdminNotification);
   }
 
   onStartDateSelection(e: NgbDateStruct) {

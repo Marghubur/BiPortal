@@ -152,6 +152,7 @@ export const DocumentsPage = `${CommonBaseRoute}/documentspage/:path`;
 // ********************** Admin route pages  *******************
 
 export const AdminBaseRoute = `${BaseSubUrlPath}/ems/admin`;
+export const OrgBaseRoute = `${BaseSubUrlPath}/ems/org`;
 export const Employees = `${BaseSubUrlPath}/ems/administration/employees`
 export const Dashboard = `${BaseSubUrlPath}/ems/administration/dashboard`
 export const BuildPdf = `${BaseSubUrlPath}/ems/administration/generatebill`
@@ -163,27 +164,26 @@ export const Resume = `${BaseSubUrlPath}/ems/administration/resumes`
 export const SideMenu = `${BaseSubUrlPath}/ems/administration/sidemenu`
 export const BillDetail = `${BaseSubUrlPath}/ems/administration/billdetail`
 export const Recent = `${BaseSubUrlPath}/ems/administration/recent`
-export const Roles = `${BaseSubUrlPath}/ems/settings/roles`
-export const Companies = `${BaseSubUrlPath}/ems/administration/Companies`
-export const CreateResume = `${BaseSubUrlPath}/ems/administration/CreateResume`
-export const Recruiter = `${BaseSubUrlPath}/ems/administration/Recruiter`
-export const AdminTaxcalculation = `${BaseSubUrlPath}/ems/administration/taxcalculation`
-export const AdminResetPassword = `${BaseSubUrlPath}/ems/administration/resetpassword`
-export const PayrollSettings = `${BaseSubUrlPath}/ems/settings/payrollsettings`
-export const CompanyInfo = `${BaseSubUrlPath}/ems/settings/payrollsettings/company-info`
-export const CompanySettings = `${BaseSubUrlPath}/ems/settings/payrollsettings/company-settings`
-export const OrganizationStruct = `${BaseSubUrlPath}/ems/organization/org-structure`
-export const Expenses = `${BaseSubUrlPath}/ems/administration/expenses`
-export const SalaryBreakup = `${BaseSubUrlPath}/ems/administration/employees/alarybreakup`
-export const EmailService = `${BaseSubUrlPath}/ems/administration/email`
-export const OrganizationSetting = `${BaseSubUrlPath}/ems/administration/organization-setting`
-export const EmailSetting = `${BaseSubUrlPath}/ems/settings/emailsetting`
-export const EmailLinkConfig = `${BaseSubUrlPath}/ems/settings/emaillinkconfig`
-export const Company = `${BaseSubUrlPath}/ems/settings/companysettings`
 export const EmailTemplate = `${BaseSubUrlPath}/ems/administration/emailtemplate`
 export const ManageEmailTemplate = `${BaseSubUrlPath}/ems/administration/emailtemplate/manageemailtemplate`
-export const CompanyLogo = `${BaseSubUrlPath}/ems/administration/companylogo`
-export const AdminMasterData = `${BaseSubUrlPath}/ems/administration/masterdata`
+
+// ********************** Admin route pages  *******************
+
+// ********************** Org route pages  *******************
+export const Roles = `${OrgBaseRoute}/ems/settings/roles`
+export const Companies = `${OrgBaseRoute}/ems/administration/Companies`
+export const AdminTaxcalculation = `${OrgBaseRoute}/ems/administration/taxcalculation`
+export const AdminResetPassword = `${OrgBaseRoute}/ems/administration/resetpassword`
+export const PayrollSettings = `${OrgBaseRoute}/ems/settings/payrollsettings`
+export const CompanyInfo = `${OrgBaseRoute}/ems/settings/payrollsettings/company-info`
+export const CompanySettings = `${OrgBaseRoute}/ems/settings/payrollsettings/company-settings`
+export const OrganizationStruct = `${OrgBaseRoute}/ems/organization/org-structure`
+export const EmailService = `${BaseSubUrlPath}/ems/administration/email`
+export const OrganizationSetting = `${OrgBaseRoute}/ems/administration/organization-setting`
+export const EmailSetting = `${OrgBaseRoute}/ems/settings/emailsetting`
+export const Company = `${OrgBaseRoute}/ems/settings/companysettings`
+export const CompanyLogo = `${OrgBaseRoute}/ems/administration/companylogo`
+export const AdminMasterData = `${OrgBaseRoute}/ems/administration/masterdata`
 
 // ********************** Admin route pages  *******************
 

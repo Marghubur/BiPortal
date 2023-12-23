@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { EmailLinkConfig, Holiday, UserType } from 'src/providers/constants';
+import { Holiday, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -337,10 +337,6 @@ export class HolidayComponent implements OnInit {
     this.holidayData.SearchString = `1=1 and CompanyId = ${this.companyId}`;
     this.holidayData.SortBy = FieldName +" "+ Order;
     this.loadData()
-  }
-
-  navToEmailLinkConfig() {
-    this.nav.navigate(EmailLinkConfig, Holiday);
   }
 
   uploadHolidayExcelPopup() {

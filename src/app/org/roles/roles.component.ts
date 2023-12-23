@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
-import { EmailLinkConfig, Roles } from 'src/providers/constants';
+import { Roles } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 
@@ -214,9 +214,5 @@ export class RolesComponent implements OnInit {
       $('#addRole').modal('hide');
       this.submitted = false;
     };
-  }
-
-  navToEmailLinkConfig() {
-    this.nav.navigate(EmailLinkConfig, Roles);
   }
 }

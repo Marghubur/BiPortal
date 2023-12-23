@@ -1,9 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LayoutComponent } from './layout/layout.component';
-import { AccountsBaseRoute, AdminBaseRoute, CommonBaseRoute, ConfigBaseRoute, LeaveBaseRoute, ManageBaseRoute, ProjectBaseRoute, TeamBaseRoute } from 'src/providers/constants';
+import { AccountsBaseRoute, AdminBaseRoute, CommonBaseRoute, ConfigBaseRoute, LeaveBaseRoute, ManageBaseRoute, OrgBaseRoute, ProjectBaseRoute, TeamBaseRoute } from 'src/providers/constants';
 
 const routes: Routes = [
+  {
+    matcher: (url) => {
+      if(url[0].path.split(/\/(.*)/s)[0] == OrgBaseRoute) {
+        return {
+          consumed: url
+        };
+      }
+      return null;
+    },
+    path: '',
+    loadChildren: () => import('../org/org.module')
+    .then(m => m.OrgModule)
+  },
   {
     matcher: (url) => {
       if(url[0].path.split(/\/(.*)/s)[0] == AdminBaseRoute) {

@@ -18,7 +18,7 @@ import { LoaderComponent } from '../loader/loader.component';
   imports: [
     CommonModule,
     LayoutRoutingModule,
-    NgChartsModule
+    NgChartsModule,
   ],
   providers: [
     ApplicationStorage

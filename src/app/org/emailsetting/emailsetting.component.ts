@@ -4,7 +4,7 @@ import { EmailSettings } from 'src/app/adminmodal/admin-modals';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { EmailLinkConfig, EmailSetting, OrgLogo } from 'src/providers/constants';
+import { EmailSetting, OrgLogo } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -132,9 +132,5 @@ export class EmailsettingComponent implements OnInit {
   fireBrowserFile() {
     this.submitted = true;
     $("#uploadocument").click();
-  }
-
-  navToEmailLinkConfig() {
-    this.nav.navigate(EmailLinkConfig, EmailSetting);
   }
 }

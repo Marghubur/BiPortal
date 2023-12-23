@@ -6,7 +6,7 @@ import { AddNumbers, CommonService, ErrorToast, Toast, ToFixed, WarningToast } f
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
 import { DateFormatter } from 'src/providers/DateFormatter';
-import { Attendance, BuildPdf, EmailLinkConfig, ItemStatus, UserType } from 'src/providers/constants';
+import { Attendance, BuildPdf, ItemStatus, UserType } from 'src/providers/constants';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Filter } from 'src/providers/userService';
 import { ApplicationData, EmployeeDetail, PdfModal } from 'src/app/adminmodal/admin-modals';
@@ -1288,9 +1288,5 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
         end = this.allTimesheet.length;
       i++;
     }
-  }
-
-  navToEmailLinkConfig() {
-    this.nav.navigate(EmailLinkConfig, BuildPdf);
   }
 }
