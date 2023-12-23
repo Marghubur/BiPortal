@@ -149,7 +149,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
           if (this.employeeDetail[i].FileName.includes("."))
             this.employeeDetail[i].ProfilePath = `${this.http.GetImageBasePath()}${this.employeeDetail[i].FilePath}/${this.employeeDetail[i].FileName}`;
           else
-            this.employeeDetail[i].ProfilePath = `${this.http.GetImageBasePath()}${this.employeeDetail[i].FilePath}/${this.employeeDetail[i].FileName}/${this.employeeDetail[i].FileExtension}`;
+            this.employeeDetail[i].ProfilePath = `${this.http.GetImageBasePath()}${this.employeeDetail[i].FilePath}/${this.employeeDetail[i].FileName}.${this.employeeDetail[i].FileExtension}`;
         } else {
           this.employeeDetail[i].ProfilePath = UserImage;
         }

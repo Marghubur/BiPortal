@@ -161,7 +161,24 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
   cleanupEmpId(link: string) {
     if (link == "accounts/declaration" || link == "accounts/salary" || link == "accounts/preferences")
       this.local.removeByKey("EmployeeId");
+  }
 
+  activeSmallMenu(link: string, e: any) {
+    if (link == "accounts/declaration" || link == "accounts/salary" || link == "accounts/preferences")
+      this.local.removeByKey("EmployeeId");
+
+    let menu = document.querySelectorAll(".dropdown");
+    if (menu && menu.length > 0) {
+      menu.forEach(x => {
+        if (x.classList.contains("active-sm"))
+          x.classList.remove("active-sm");
+      });
+    }
+    let elem = e.currentTarget.parentElement.parentElement;
+    if (elem) {
+      elem.classList.add("active-sm");
+    }
+    console.log(e.target);
   }
 
   NavigatetoHome() {

@@ -1,8 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 
 declare var bootstrap: any;
@@ -24,10 +22,10 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
   selectedChildNodes: Array<any> = [];
   isDeleteAllNodes: boolean = true;
   remainingDesignation: Array<any> = [];
-  isViewMode: boolean = true;
 
   @Output() onSave = new EventEmitter();
   @Output() onRemove = new EventEmitter();
+  @Input() isViewMode: boolean = true;
   @Input()
   set inputTree(data: any) {
     if (data) {
@@ -47,6 +45,7 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.company = this.local.findRecord("Companies")[0];
+    console.log(this.isViewMode)
   }
 
   getNextNodeIndex() {
@@ -330,7 +329,7 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
                         <a href="javascript:void(0);" class="position-relative border no-department">
                           {{addIcon}}
                           {{Department}}
-                          <div class="member-view-box mb-1 ${deactiveClass}">
+                          <div class="member-view-box  ${deactiveClass}">
                             <div class="member-image">
                               <img src="assets/images/faces/face.jpg" alt="Member">
                             </div>
@@ -349,7 +348,7 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
                             '{{addIcon}}'
                           }
                           {{Department}}
-                          <div class="member-view-box mb-1 ${deactiveClass}" data-name="edit-tree" data-index=${nodes[i].RoleId}>
+                          <div class="member-view-box  ${deactiveClass}" data-name="edit-tree" data-index=${nodes[i].RoleId}>
                             ${this.getUserNameOrAddNew(nodes[i].RoleName, nodes[i].ParentNode, nodes[i].RoleId)}
                           </div>
                           ${
@@ -385,7 +384,7 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
                       <a href="javascript:void(0);" class="position-relative border no-department">
                         <i class="fa-solid fa-plus position-absolute add-icon" data-bs-toggle="tooltip" data-bs-title="Add" data-name="add-tree" data-index=${nodes[i].RoleId}></i>
                         {{Department}}
-                        <div class="member-view-box mb-1 ${deactiveClass}">
+                        <div class="member-view-box  ${deactiveClass}">
                           <div class="member-image">
                             <i class="fa-solid fa-pencil position-absolute edit-icon"></i>
                             <img src="assets/images/faces/face.jpg" alt="Member">
@@ -422,7 +421,7 @@ export class BotTreeViewComponent implements OnInit, OnDestroy {
                         }
 
                         {{Department}}
-                        <div class="member-view-box mb-1 ${deactiveClass}" data-name="edit-tree" data-index=${nodes[i].RoleId}>
+                        <div class="member-view-box  ${deactiveClass}" data-name="edit-tree" data-index=${nodes[i].RoleId}>
                           <div class="p-box text-truncate" >${nodes[i].RoleName}</div>
                           <div class="form-check w-100 d-flex d-none">
                               <input class="form-check-input" type="checkbox" name="department">

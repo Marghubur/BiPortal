@@ -148,7 +148,7 @@
             <ng-container *ngIf="requestForm != null">
                 <div [formGroup]="requestForm" class="col-md-12 row m-0 p-0">
                     <div class="form-group col-4">
-                        <label for="">Request Type</label>
+                        <label >Request Type</label>
                         <select name="RequestTypeId" formControlName="RequestTypeId" (change)="enableAppropiateSection($event)" class="form-select" [ngClass]="{'error-field': submitted && f.RequestTypeId.errors !== null && f.RequestTypeId.errors.required}">
                             <option value="" disabled>Select request type</option>
                             <option value="SERVICE">SERVICE</option>
@@ -158,7 +158,7 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <label for="">Title</label>
+                        <label >Title</label>
                         <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control" [ngClass]="{'error-field': submitted && f.RequestTitle.errors !== null && f.RequestTitle.errors.required}">
                       </div>
                     </div>
@@ -174,11 +174,11 @@
                               <div name="BOOKING" class="col-12" [ngClass]="{'d-none': requestId != 'BOOKING'}">
                                   <div class="px-2 row" [ngClass]="{'d-none': requestId != 'BOOKING'}">
                                       <div class="form-group col-4 mt-3">
-                                          <label class="form-label" for="">Duration</label>
+                                          <label class="form-label" >Duration</label>
                                           <input type="text" name="Duration" formControlName="Duration" class="form-control" [ngClass]="{'error-field': submitted && f.Duration.errors !== null && f.Duration.errors.required}">
                                       </div>
                                       <div class="form-group col-4 mt-3">
-                                        <label class="form-label" for="">From date</label>
+                                        <label class="form-label" >From date</label>
                                         <form class="form-inline">
                                           <div class="form-group w-100">
                                             <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.FromDate.errors !== null && f.FromDate.errors.required}">
@@ -194,7 +194,7 @@
                                         </form>
                                       </div>
                                       <div class="form-group col-4 mt-3">
-                                        <label class="form-label" for="">To date</label>
+                                        <label class="form-label" >To date</label>
                                         <form class="form-inline">
                                           <div class="form-group w-100">
                                             <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.ToDate.errors !== null && f.ToDate.errors.required}">
@@ -214,19 +214,19 @@
                               <div name="PRODUCT" class="col-12" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
                                   <div class="px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
                                       <div class="form-group col-3 mt-3">
-                                          <label class="form-label" for="">Catagory</label>
+                                          <label class="form-label" >Catagory</label>
                                           <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
                                       </div>
                                       <div class="form-group mt-3 col-3">
-                                          <label class="form-label" for="">Brand</label>
+                                          <label class="form-label" >Brand</label>
                                           <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
                                       </div>
                                       <div class="form-group mt-3 col-4">
-                                          <label class="form-label" for="">Product</label>
+                                          <label class="form-label" >Product</label>
                                           <input type="number" name="Quantity" formControlName="Quantity" class="form-control">
                                       </div>
                                       <div class="form-group mt-3 col-2">
-                                          <label class="form-label" for="">Quantity</label>
+                                          <label class="form-label" >Quantity</label>
                                           <input type="text" name="Quantity" formControlName="Quantity" class="form-control">
                                       </div>
                                   </div>
@@ -239,7 +239,7 @@
                                   </div>
                               </div>
                               <div class="form-group col-12 mt-3">
-                                <label class="form-label" for="">Description</label>
+                                <label class="form-label" >Description</label>
                                 <textarea rows="5" name="RequestDescription" formControlName="RequestDescription" class="col-12 form-control"  [ngClass]="{'error-field': submitted && f.RequestDescription.errors !== null && f.RequestDescription.errors.required}">
                                 </textarea>
                               </div>

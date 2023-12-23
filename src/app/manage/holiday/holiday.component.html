@@ -199,15 +199,15 @@
         <form [formGroup]="holidayForm">
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Company Name</label>
+              <label  class="form-label">Company Name</label>
               <input type="text" placeholder="Company Name" readonly formControlName="CompanyName" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Event Name *</label>
+              <label  class="form-label">Event Name *</label>
               <input type="text" placeholder="Event Name" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32" formControlName="EventName" [ngClass]="{'error-field': submitted && f.EventName.errors !== null && f.EventName.errors.required}" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Holiday Type</label>
+              <label  class="form-label">Holiday Type</label>
               <select class="form-select" formControlName="HolidayType" [ngClass]="{'error-field': submitted && f.IsPublicHoliday.errors !== null && f.IsPublicHoliday.errors.required}">
                 <option value="1">Is Public Holiday</option>
                 <option value="2">Holiday</option>
@@ -217,7 +217,7 @@
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Start Date *</label>
+              <label  class="form-label">Start Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
                   <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
@@ -233,7 +233,7 @@
               </form>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">End Date *</label>
+              <label  class="form-label">End Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
                   <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
@@ -249,7 +249,7 @@
               </form>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Is HalfDay</label>
+              <label  class="form-label">Is HalfDay</label>
               <select class="form-select" formControlName="IsHalfDay" [ngClass]="{'error-field': submitted && f.IsHalfDay.errors !== null && f.IsHalfDay.errors.required}">
                 <option value="true">Yes</option>
                 <option value="false">No</option>
@@ -258,17 +258,17 @@
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Description Name *</label>
+              <label  class="form-label">Description Name *</label>
               <input type="text" class="form-control" [ngClass]="{'error-field': submitted && f.DescriptionNote.errors !== null && f.DescriptionNote.errors.required}" oninput="this.value = this.value.toUpperCase()"  formControlName="DescriptionNote" placeholder="Description Note">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Applicable For</label>
+              <label  class="form-label">Applicable For</label>
               <select class="form-select" formControlName="ApplicableFor" [ngClass]="{'error-field': submitted && f.ApplicableFor.errors !== null && f.ApplicableFor.errors.required}">
                 <option value="0">All</option>
               </select>
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Country *</label>
+              <label  class="form-label">Country *</label>
               <select formControlName="Country" class="form-select" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}" >
                 <option value=null selected>Select Country</option>
                 <option value="India">India</option>
@@ -279,7 +279,7 @@
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">Year</label>
+              <label  class="form-label">Year</label>
               <select class="form-select" formControlName="Year" disabled="" [ngClass]="{'error-field': submitted && f.Year.errors !== null && f.Year.errors.required}">
                 <option [value]="year" >{{year}}</option>
               </select>

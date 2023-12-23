@@ -89,7 +89,7 @@ export const Appraisal = `${TeamBaseRoute}/appraisal`;
 export const ApprisalReview = `${TeamBaseRoute}/apprisalreview`;
 export const ServiceRequest = `${TeamBaseRoute}/servicerequest`;
 export const Performance = `${TeamBaseRoute}/objectives`;
-export const ManageReview = `${TeamBaseRoute}/managereview`;
+export const ManageReview = `${TeamBaseRoute}/apprisalreview/managereview`;
 export const ManageAppraisalCategory = `${TeamBaseRoute}/appraisal/manageappraisalcategory`;
 export const FinalizeReview = `${TeamBaseRoute}/finalizereview`;
 

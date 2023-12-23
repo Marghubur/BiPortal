@@ -47,7 +47,7 @@
                           <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
                           <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="From" formControlName="MinTaxSlab" (keyup)="calcTaxAmount()">
                         </div>
-                        <label for="" class="form-label px-5">to</label>
+                        <label  class="form-label px-5">to</label>
                         <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
                           <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
                           <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="To" formControlName="MaxTaxSlab" (keyup)="calcTaxAmount()" (blur)="checkToAmount($event, i)">
@@ -58,10 +58,10 @@
                           <input type="number" [readonly]="!isEditable" class="form-control border-0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Rate" formControlName="TaxRatePercentage" (keyup)="calcTaxAmount()">
                           <i class="fa-solid fa-percent px-2"></i>
                         </div>
-                        <label for="" class="form-label ps-3">above &#x20B9; {{item.get("MinTaxSlab").value}}</label>
+                        <label  class="form-label ps-3">above &#x20B9; {{item.get("MinTaxSlab").value}}</label>
                       </div>
                       <div class="col-md-3">
-                        <label for="" class="form-label">&#x20B9; {{item.get("TaxAmount").value}}</label>
+                        <label  class="form-label">&#x20B9; {{item.get("TaxAmount").value}}</label>
                       </div>
                       <div class="col-md-1">
                         <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': !isEditable}">
@@ -115,7 +115,7 @@
                           <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
                           <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="From" formControlName="MinSurcahrgeSlab">
                         </div>
-                        <label for="" class="form-label px-5">to</label>
+                        <label  class="form-label px-5">to</label>
                         <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
                           <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
                           <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="To" formControlName="MaxSurchargeSlab" (blur)="checkSurchargeToAmount($event, i)">
@@ -205,14 +205,14 @@
             <form [formGroup]="ageGroupForm" *ngIf="ageGroupForm">
               <div class="row">
                 <div class="col-md-6">
-                  <label for="" class="form-label">Start Age Group</label>
+                  <label  class="form-label">Start Age Group</label>
                   <select class="form-select" (change)="fromAgeSelect($event)" formControlName="StartAgeGroup" [ngClass]="{'error-field': isSubmitted && a.StartAgeGroup.errors !== null && a.StartAgeGroup.errors.required}">
                     <option value=null disabled>Select Start Age Group</option>
                     <option  [value]="item" *ngFor="let item of fromAgeGroup">{{item}}</option>
                   </select>
                 </div>
                 <div class="col-md-6">
-                  <label for="" class="form-label">End Age Group</label>
+                  <label  class="form-label">End Age Group</label>
                   <select class="form-select" formControlName="EndAgeGroup" [ngClass]="{'error-field': isSubmitted && a.EndAgeGroup.errors !== null && a.EndAgeGroup.errors.required}">
                     <option value=null disabled>Select End Age Group</option>
                     <option [value]="item" *ngFor="let item of toAgeGroup">{{item == 110 ? 'Above': item}}</option>
@@ -271,11 +271,11 @@
           <div class="col-md-6">
             <form [formGroup]="taxRegimeDescForm" *ngIf="taxRegimeDescForm">
               <div class="col-md-12">
-                <label for="" class="form-label">Tax Regime Name</label>
+                <label  class="form-label">Tax Regime Name</label>
                 <input type="text" class="form-control" placeholder="Tax Regime Name" formControlName="RegimeName" [ngClass]="{'error-field': isSubmitted && f.RegimeName.errors !== null && f.RegimeName.errors.required}">
               </div>
               <div class="col-md-12 mt-3">
-                <label for="" class="form-label">Tax Regime Description</label>
+                <label  class="form-label">Tax Regime Description</label>
                 <textarea class="form-control regime-desc-box" placeholder="Tax Regime Description" cols="30" rows="4" formControlName="Description" [ngClass]="{'error-field': isSubmitted && f.Description.errors !== null && f.Description.errors.required}"></textarea>
               </div>
             </form>

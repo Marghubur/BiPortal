@@ -111,18 +111,18 @@
             <div class="modal-body">
                 <form [formGroup]="emailTempMapForm" *ngIf="emailTempMapForm">
                     <div class="mt-3">
-                        <label for="" class="form-label">Action Type</label>
+                        <label  class="form-label">Action Type</label>
                         <input type="text" maxlength="100" oninput="this.value = this.value.toUpperCase()" class="form-control" formControlName="EmailTemplateName" [ngClass]="{'error-field': submitted && f.EmailTemplateName.errors !== null && f.EmailTemplateName.errors.required}">
                     </div>
                     <div class="mt-3">
-                        <label for="" class="form-label">Template Name</label>
+                        <label  class="form-label">Template Name</label>
                         <select class="form-select" (change)="changeTemplate($event)" formControlName="TemplateId" [ngClass]="{'error-field': submitted && f.TemplateId.errors !== null && f.TemplateId.errors.required}">
                             <option value="0">Select Email Template</option>
                             <option [value]="item.EmailTemplateId" *ngFor="let item of allEmailTemplate">{{item.TemplateName}}</option>
                         </select>
                     </div>
                     <div class="mt-3">
-                        <label for="" class="form-label">Description</label>
+                        <label  class="form-label">Description</label>
                         <textarea class="form-control" readonly formControlName="Description" [ngClass]="{'error-field': submitted && f.Description.errors !== null && f.Description.errors.required}" oninput="this.value = this.value.toUpperCase()" placeholder="No description found" cols="30" rows="10"></textarea>
                     </div>
                 </form>

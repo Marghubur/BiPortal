@@ -1,16 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AttendanceComponent } from './attendance/attendance.component';
-import { ProfileComponent } from './profile/profile.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
-import { TimesheetComponent } from './timesheet/timesheet.component';
-import { LeaveComponent } from './leave/leave.component';
-import { TaxcalculationComponent } from './taxcalculation/taxcalculation.component';
-import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
-import { NotificationComponent } from './notification/notification.component';
-import { ApprovalRequestComponent } from './approval-request/approval-request.component';
-import { HolidayComponent } from './holiday/holiday.component';
-import { ManagetimesheetComponent } from './managetimesheet/managetimesheet.component';
 import { UserDashboard } from 'src/providers/constants';
 
 const routes: Routes = [

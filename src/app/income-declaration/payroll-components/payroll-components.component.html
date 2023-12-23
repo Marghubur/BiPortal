@@ -211,7 +211,7 @@
           <div class="col-md-12 mt-3">
             <div class="row">
               <div class="col-md-4 me-1">
-                <label for="" class="form-label">COMPONENT TYPE</label>
+                <label  class="form-label">COMPONENT TYPE</label>
                 <div class="col-md-12">
                   <select class="form-select"
                     [ngClass]="{'error-field': submitted && f.ComponentTypeId.errors !== null && f.ComponentTypeId.errors.required}"
@@ -226,7 +226,7 @@
                 </div>
               </div>
               <div class="col-md-4">
-                <label for="" class="form-label">COMPONENT CATEGORY</label>
+                <label  class="form-label">COMPONENT CATEGORY</label>
                 <div class="col-md-12">
                   <select class="form-select"
                     [ngClass]="{'error-field': submitted && f.ComponentCatagoryId.errors !== null && f.ComponentCatagoryId.errors.required}"
@@ -255,23 +255,23 @@
           </div>
           <div class="row col-md-12">
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">COMPONENT NAME</label>
+              <label  class="form-label">COMPONENT NAME</label>
               <input type="text" oninput="this.value = this.value.toUpperCase()" maxlength="10"
                 [ngClass]="{'error-field': submitted && f.ComponentName.errors !== null && f.ComponentName.errors.required}"
                 formControlName="ComponentName" placeholder="Component Name" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">COMPONENT FULL NAME</label>
+              <label  class="form-label">COMPONENT FULL NAME</label>
               <input type="text" formControlName="ComponentFullName" [readonly]="ComponentType == ''" maxlength="50"
                 placeholder="Component Full Name" oninput="this.value = this.value.toUpperCase()" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label for="" class="form-label">MAXIMUM LIMIT PER ANNUM</label>
+              <label  class="form-label">MAXIMUM LIMIT PER ANNUM</label>
               <input type="text" formControlName="MaxLimit" placeholder="Maximum Limit Per Annum" OnlyNumber="9" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 [readonly]="ComponentType == ''" class="form-control">
             </div>
             <div class="col-md-12 mt-3">
-              <label for="" class="form-label">COMPONENT DESCRIPTION</label>
+              <label  class="form-label">COMPONENT DESCRIPTION</label>
               <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description" maxlength="100"
                 [readonly]="ComponentType == ''" oninput="this.value = this.value.toUpperCase()" class="form-control"></textarea>
             </div>
@@ -286,13 +286,13 @@
             </div>
             <div class="row mx-2">
               <div class="col-md-6 mt-2">
-                <label for="" class="form-label">INCOME TAX SECTION</label>
+                <label  class="form-label">INCOME TAX SECTION</label>
                 <input type="text"  formControlName="Section" maxlength="12" [ngClass]="{'error-field': submitted && f.Section.errors !== null && f.Section.errors.required}"
                   oninput="this.value = this.value.toUpperCase()" placeholder="Enter Income Tax Section"
                   class="form-control">
               </div>
               <div class="col-md-6 mt-2">
-                <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
+                <label  class="form-label">SECTION MAXIMUM LIMIT</label>
                 <input type="number"  formControlName="SectionMaxLimit" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                   placeholder="Section Maximum Limit" class="form-control" OnlyNumber="9" [ngClass]="{'error-field': submitted && f.SectionMaxLimit.errors !== null && f.SectionMaxLimit.errors.required}">
               </div>
@@ -339,18 +339,18 @@
         <form [formGroup]="AdhocForm">
           <div class="row">
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">COMPONENT NAME</label>
+              <label  class="form-label">COMPONENT NAME</label>
               <input type="text" formControlName="ComponentName" oninput="this.value = this.value.toUpperCase()"
                 placeholder="Component Name" class="form-control" [ngClass]="{'error-field': submitted && a.ComponentName.errors !== null && a.ComponentName.errors.required}">
             </div>
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">COMPONENT FULL NAME</label>
+              <label  class="form-label">COMPONENT FULL NAME</label>
               <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
                 placeholder="Component Full Name" class="form-control" [ngClass]="{'error-field': submitted && a.ComponentFullName.errors !== null && a.ComponentFullName.errors.required}">
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">COMPONENT DESCRIPTION</label>
+            <label  class="form-label">COMPONENT DESCRIPTION</label>
             <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
               class="form-control" [ngClass]="{'error-field': submitted && a.ComponentDescription.errors !== null && a.ComponentDescription.errors.required}"></textarea>
           </div>
@@ -363,12 +363,12 @@
           </div>
           <div class="row">
             <div class="col-md-6 mt-2">
-              <label for="" class="form-label">INCOME TAX SECTION</label>
+              <label  class="form-label">INCOME TAX SECTION</label>
               <input type="text" formControlName="Section" placeholder="Enter Income Tax Section"
                 [readonly]="!isTaxExempt" class="form-control">
             </div>
             <div class="col-md-6 mt-2">
-              <label for="" class="form-label">SECTION MAXIMUM LIMIT</label>
+              <label  class="form-label">SECTION MAXIMUM LIMIT</label>
               <input type="text" OnlyNumber="9" formControlName="SectionMaxLimit" [readonly]="!isTaxExempt" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
                 placeholder="Section Maximum Limit" class="form-control">
             </div>
@@ -400,18 +400,18 @@
         <form [formGroup]="DeductionForm">
           <div class="row">
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">COMPONENT NAME</label>
+              <label  class="form-label">COMPONENT NAME</label>
               <input type="text" formControlName="ComponentName" oninput="this.value = this.value.toUpperCase()"
                 placeholder="Component Name" class="form-control" [ngClass]="{'error-field': submitted && d.ComponentName.errors !== null && d.ComponentName.errors.required}">
             </div>
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">COMPONENT FULL NAME</label>
+              <label  class="form-label">COMPONENT FULL NAME</label>
               <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
                 placeholder="Component Full Name" class="form-control" [ngClass]="{'error-field': submitted && d.ComponentFullName.errors !== null && d.ComponentFullName.errors.required}">
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">COMPONENT DESCRIPTION</label>
+            <label  class="form-label">COMPONENT DESCRIPTION</label>
             <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
               class="form-control" [ngClass]="{'error-field': submitted && d.ComponentDescription.errors !== null && d.ComponentDescription.errors.required}"></textarea>
           </div>
@@ -448,20 +448,20 @@
         <form [formGroup]="BonusForm">
           <div class="row">
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">COMPONENT ID</label>
+              <label  class="form-label">COMPONENT ID</label>
               <input type="text" formControlName="ComponentId" oninput="this.value = this.value.toUpperCase()"
                 [ngClass]="{'error-field': submitted && b.ComponentId.errors !== null && b.ComponentId.errors.required}"
                 placeholder="Component ID" class="form-control">
             </div>
             <div class="col-md-6 mt-3">
-              <label for="" class="form-label">COMPONENT FULL NAME</label>
+              <label  class="form-label">COMPONENT FULL NAME</label>
               <input type="text" formControlName="ComponentFullName" oninput="this.value = this.value.toUpperCase()"
                 [ngClass]="{'error-field': submitted && b.ComponentFullName.errors !== null && b.ComponentFullName.errors.required}"
                 placeholder="Component Full Name" class="form-control">
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label for="" class="form-label">COMPONENT DESCRIPTION</label>
+            <label  class="form-label">COMPONENT DESCRIPTION</label>
             <textarea type="text" formControlName="ComponentDescription" placeholder="Component Description"
               class="form-control" [ngClass]="{'error-field': submitted && b.ComponentDescription.errors !== null && b.ComponentDescription.errors.required}"></textarea>
           </div>
@@ -586,7 +586,7 @@
               </div>
 
               <div class="mt-4 border card p-5 uplod-message-container">
-                <label for="" class="fw-bold">
+                <label  class="fw-bold">
                   Your uploaded file's converted tabal will be dispaly in this section.
                 </label>
                 <ul class="ms-5 mt-1">

@@ -20,7 +20,7 @@
                 </div>
                 <div class="x_panel">
                   <ng-container *ngIf="isLoaded">
-                    <app-bot-tree-view [inputTree]="orgTree" (onSave)="saveTree($event)"></app-bot-tree-view>
+                    <app-bot-tree-view [isViewMode]="false" [inputTree]="orgTree" (onSave)="saveTree($event)"></app-bot-tree-view>
                   </ng-container>
                 </div>
             </div>

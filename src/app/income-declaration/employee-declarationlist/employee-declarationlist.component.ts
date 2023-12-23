@@ -134,6 +134,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     if (this.companySetting) {
       let currentMonth = new Date().getMonth();
       let currentYear = new Date().getFullYear();
+      this.payrollCalendar = [];
       for (let i = 0; i < 12; i++) {
         let status = 0;  // 1 = previous, 2 = current, 3 = upcoming
         if (this.companySetting.DeclarationStartMonth > 12) {
