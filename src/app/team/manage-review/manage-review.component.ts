@@ -106,7 +106,7 @@ export class ManageReviewComponent implements OnInit {
           Experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0),
           EstimatedSalary: new FormControl(reviewDetail == null ? data[i].CTC : reviewDetail.EstimatedSalary),
           Comments: new FormControl(reviewDetail == null ? "" : reviewDetail.Comments),
-          rating: new FormControl(reviewDetail == null ? 0 : reviewDetail.Rating),
+          Rating: new FormControl(reviewDetail == null ? 0 : reviewDetail.Rating),
           ProjectId: new FormControl(this.project.ProjectId),
           CompanyId: new FormControl(data[i].CompanyId),
           AppraisalStatus: new FormControl(data[i].Status),
@@ -342,7 +342,7 @@ export class ManageReviewComponent implements OnInit {
     value.HikePercentage = this.selectedPromotionAndHike.HikePercentage;
     value.HikeAmount = this.selectedPromotionAndHike.HikeAmount;
     value.EstimatedSalary =this.selectedPromotionAndHike.EstimatedSalary;
-    value.rating = this.selectedPromotionAndHike.rating;
+    value.Rating = this.selectedPromotionAndHike.Rating;
     value.Comments = this.selectedPromotionAndHike.Comments;
     this.appraisalHikeForm.controls['ProjectMemberHike'].patchValue(formArray.value);
     this.promotionAndHikeForm.controls['PromotedDesignation'].disable();
