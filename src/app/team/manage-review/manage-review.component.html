@@ -59,7 +59,7 @@
                             <span class="px-2">|</span>
                             <div class="col-auto d-flex align-items-center">
                               <span class="pe-1">Rating: </span>
-                              <ngb-rating [readonly]="true" rate="{{item.get('rating').value}}" [max]="5"></ngb-rating>
+                              <ngb-rating [readonly]="true" rate="{{item.get('Rating').value}}" [max]="5"></ngb-rating>
                               <!-- <span>{{item.get("rating").value}}/5</span> -->
                               <a href="javascript:void(0)" class="text-decoration-none ps-3" >
                                 <i class="fa-solid fa-lock" *ngIf="item.get('Status').value != 2 && item.get('Status').value != 0"></i>
@@ -289,7 +289,7 @@
         <div class="d-flex align-items-center">
           <label class="form-label col-md-4">Rating:</label>
           <div class="col-md-8">
-            <ngb-rating [(ngModel)]="selectedPromotionAndHike.rating" [max]="5"></ngb-rating>
+            <ngb-rating [(ngModel)]="selectedPromotionAndHike.Rating" [max]="5"></ngb-rating>
           </div>
         </div>
         <div class="mt-3 d-flex align-items-center col-md-12">
