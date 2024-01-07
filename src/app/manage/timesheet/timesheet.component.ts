@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
-import { UserDetail, WarningToast } from 'src/providers/common-service/common.service';
+import { Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AdminManageTimesheet, ItemStatus, UserType} from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
@@ -42,15 +43,24 @@ export class TimesheetComponent implements OnInit {
   timesheetData: Timesheet = null;
   today: Date = null;
 
+  hoveredDate: NgbDate | null = null;
+	timesheetFromDate: NgbDate | null; 
+	timesheetToDate: NgbDate | null; 
+  isLoading: boolean = false;
+
   constructor(private http: AjaxService,
     private nav: iNavigation,
-    private user: UserService
+    private user: UserService,
+    private calendar: NgbCalendar,
+    public formatter : NgbDateParserFormatter
   ) {
     this.employeeDetails.placeholder = "Employee";
     this.employeeDetails.data.push({
       value: '0',
       text: 'Select Employee'
     });
+    this.timesheetFromDate = this.calendar.getToday();
+    this.timesheetToDate= this.calendar.getNext(this.calendar.getToday(), 'd', 10);
   }
 
   ngOnInit(): void {
@@ -246,6 +256,59 @@ export class TimesheetComponent implements OnInit {
         });
         this.clientId = 0;
       }
+    }
+  }
+
+  onDateSelection(date: NgbDate) {
+		if (!this.timesheetFromDate && !this.timesheetToDate) {
+			this.timesheetFromDate = date;
+		} else if (this.timesheetFromDate && !this.timesheetToDate && date && date.after(this.timesheetFromDate)) {
+			this.timesheetToDate = date;
+		} else {
+			this.timesheetToDate = null;
+			this.timesheetFromDate = date;
+		}
+	}
+
+	isHovered(date: NgbDate) {
+		return (
+			this.timesheetFromDate && !this.timesheetToDate && this.hoveredDate && date.after(this.timesheetFromDate) && date.before(this.hoveredDate)
+		);
+	}
+
+	isInside(date: NgbDate) {
+		return this.timesheetToDate && date.after(this.timesheetFromDate) && date.before(this.timesheetToDate);
+	}
+
+	isRange(date: NgbDate) {
+		return (
+			date.equals(this.timesheetFromDate) ||
+			(this.timesheetToDate && date.equals(this.timesheetToDate)) ||
+			this.isInside(date) ||
+			this.isHovered(date)
+		);
+	}
+
+	validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
+		const parsed = this.formatter.parse(input);
+		return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+	}
+
+  generateTimesheet() {
+    if (this.timesheetFromDate) {
+      this.isLoading = true;
+      let value = {
+        TimesheetStartDate: new Date(this.timesheetFromDate.year, this.timesheetFromDate.month - 1, this.timesheetFromDate.day),
+        TimesheetEndDate: new Date(this.timesheetToDate.year, this.timesheetToDate.month - 1, this.timesheetToDate.day)
+      };
+      this.http.post("AutoTrigger/triggerWeeklyTimesheet", value, false).then((res: ResponseModel) => {
+        if (res.ResponseBody) {
+          Toast("Timesheet generated successfully");
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
     }
   }
 }

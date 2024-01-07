@@ -35,6 +35,8 @@ export class ManageReviewComponent implements OnInit {
   selectedPromotionAndHike: any = null;
   isSubmitted: boolean = false;
   submittedEmpObj: Array<any> = [];
+  isRevisedEnable: boolean = true;
+  revisedAppraisalComment: string = null;
 
   constructor(private nav:iNavigation,
               private http: AjaxService,
@@ -57,10 +59,10 @@ export class ManageReviewComponent implements OnInit {
 
         this.appraisalReviewDetail = res.ResponseBody.ReviewDetail;
         if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
-          if (this.appraisalReviewDetail.findIndex(x => x.Status == 2) >= 0)
-            this.isSubmitted = false;
-          else
+          if (this.appraisalReviewDetail.findIndex(x => x.AppraisalStatus == 9 && x.IsActive) >= 0)
             this.isSubmitted = true;
+          else
+            this.isSubmitted = false;
         }
 
         if (this.submittedEmpObj.length > 0) {
@@ -91,9 +93,12 @@ export class ManageReviewComponent implements OnInit {
       let i = 0;
       while(i < data.length) {
         let reviewDetail = null;
-        if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
+        let comment = null;
+        if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0){
           reviewDetail = this.appraisalReviewDetail.find(x => x.ProjectId == data[i].ProjectId && x.CompanyId == data[i].CompanyId && x.EmployeeId == data[i].EmployeeId);
-
+          if (reviewDetail)
+            comment = JSON.parse(reviewDetail.Comments)[0].Comments;
+        }
         dataArray.push(this.fb.group({
           FullName: new FormControl(data[i].FullName),
           MemberType: new FormControl(data[i].MemberType),
@@ -106,16 +111,19 @@ export class ManageReviewComponent implements OnInit {
           Experience: new FormControl(data[i].ExprienceInYear != null ? data[i].ExprienceInYear : 0),
           EstimatedSalary: new FormControl(reviewDetail == null ? data[i].CTC : reviewDetail.EstimatedSalary),
           Comments: new FormControl(reviewDetail == null ? "" : reviewDetail.Comments),
-          rating: new FormControl(reviewDetail == null ? 0 : reviewDetail.Rating),
+          FirstComments: new FormControl(reviewDetail == null ? "" : comment),
+          Rating: new FormControl(reviewDetail == null ? 0 : reviewDetail.Rating),
           ProjectId: new FormControl(this.project.ProjectId),
           CompanyId: new FormControl(data[i].CompanyId),
-          AppraisalStatus: new FormControl(data[i].Status),
+          ObjectiveStatus: new FormControl(data[i].Status),
+          AppraisalStatus: new FormControl(reviewDetail != null ? reviewDetail.AppraisalStatus : 0),
           AppraisalDetailId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalDetailId),
           AppraisalReviewId: new FormControl(reviewDetail == null ? 0 : reviewDetail.AppraisalReviewId),
           AppraisalCycleStartDate: new FormControl(data[i].AppraisalCycleStartDate),
           Status: new FormControl(reviewDetail != null ? reviewDetail.Status : 0),
           DesignationId: new FormControl(data[i].DesignationId),
-          ObjectiveCategoryId: new FormControl(data[i].ObjectiveCategoryId)
+          ObjectiveCategoryId: new FormControl(data[i].ObjectiveCategoryId),
+          IsActive: new FormControl(reviewDetail == null ? true : reviewDetail.IsActive)
         }));
         i++;
       }
@@ -219,11 +227,6 @@ export class ManageReviewComponent implements OnInit {
 
   applyHikeAndPromotion() {
     this.isLoading = true;
-    // if (this.isSubmitted) {
-    //   ErrorToast("You already submmited your review");
-    //   this.isLoading = false;
-    //   return;
-    // }
     if (this.appraisalHikeForm.invalid) {
       ErrorToast("Please fill all the manditory field");
       this.isLoading = false;
@@ -235,27 +238,31 @@ export class ManageReviewComponent implements OnInit {
       return;
     }
     let value = this.appraisalHikeForm.get('ProjectMemberHike').getRawValue();
+    let errorCount = 0;
     value.forEach(x => {
-      if (x.AppraisalStatus == 0) {
-        ErrorToast("Appraisal of all the employee are not submitted");
-        this.isLoading = false;
-        return;
+      if ( x.IsActive && x.ObjectiveStatus == 0) {
+        errorCount++;
       }
     });
-    this.http.post("eps/promotion/addPromotionAndHike", value, true).then(res => {
-      if (res.ResponseBody) {
-        this.appraisalReviewDetail = res.ResponseBody;
-        if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
-          this.isSubmitted = true;
+    if (errorCount == 0) {
+      this.http.post("eps/promotion/addPromotionAndHike", value, true).then(res => {
+        if (res.ResponseBody) {
+          this.appraisalReviewDetail = res.ResponseBody;
+          if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
+            this.isSubmitted = true;
+          this.isLoading = false;
+          Toast("Appraisal cycle started successfully");
+        } else {
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        ErrorToast(e.error);
         this.isLoading = false;
-        Toast("Appraisal cycle started successfully");
-      } else {
-        this.isLoading = false;
-      }
-    }).catch(e => {
-      ErrorToast(e.error);
+      })
+    } else {
+      ErrorToast("Appraisal of all the employee are not submitted");
       this.isLoading = false;
-    })
+    }
   }
 
   showOffCanvas(item: any) {
@@ -323,11 +330,12 @@ export class ManageReviewComponent implements OnInit {
 
   promotionHikePopUp(item: FormGroup) {
     let value = item.value
-    if(value.AppraisalReviewId == 0) {
+    if(value.AppraisalReviewId == 0 || value.AppraisalStatus == 10) {
       this.promotionAndHikeForm = item;
       this.selectedPromotionAndHike = item.value;
       this.selectedPromotionAndHike.PromotedDesignation ="0";
       this.promotionAndHikeForm.controls['PromotedDesignation'].enable();
+      this.selectedPromotionAndHike.Comments = "";
       $("#promotionHikeModal").modal('show');
     } else {
       this.selectedPromotionAndHike = value;
@@ -342,8 +350,9 @@ export class ManageReviewComponent implements OnInit {
     value.HikePercentage = this.selectedPromotionAndHike.HikePercentage;
     value.HikeAmount = this.selectedPromotionAndHike.HikeAmount;
     value.EstimatedSalary =this.selectedPromotionAndHike.EstimatedSalary;
-    value.rating = this.selectedPromotionAndHike.rating;
+    value.Rating = this.selectedPromotionAndHike.Rating;
     value.Comments = this.selectedPromotionAndHike.Comments;
+    value.FirstComments = this.selectedPromotionAndHike.Comments;
     this.appraisalHikeForm.controls['ProjectMemberHike'].patchValue(formArray.value);
     this.promotionAndHikeForm.controls['PromotedDesignation'].disable();
     $("#promotionHikeModal").modal('hide');
@@ -392,4 +401,43 @@ export class ManageReviewComponent implements OnInit {
       });
     }
   }
- }
+
+  removeEmployee(e: any, i: number) {
+    let staus = e.target.checked;
+    let formArray = this.appraisalHikeForm.get('ProjectMemberHike') as FormArray;
+    if (staus) {
+      formArray.controls[i].get("IsActive").setValue(true);
+    } else {
+      formArray.controls[i].get("IsActive").setValue(false);
+    }
+  }
+
+  revisedAppraisalPopUp() {
+    $("#revisedModal").modal('show');
+    this.revisedAppraisalComment = null;
+  }
+
+  revisedAppraisal() {
+    if (!this.revisedAppraisalComment) {
+      ErrorToast("Please add comments first");
+      return;
+    }
+    if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
+      this.isLoading =true;
+      this.http.post("eps/promotion/revisedAppraisal", this.appraisalReviewDetail, true)
+      .then((response: ResponseModel) => {
+        if (response) {
+          this.isSubmitted = false;
+          this.isLoading = false;
+          $("#revisedModal").modal('hide');
+          Toast("Appraisal send for revised successfully");
+        } else {
+          this.isLoading = false;
+          ErrorToast("Fail to revised the appraisal");
+        }
+      }).catch((e: any) => {
+        this.isLoading = false;
+      });
+    }
+  }
+}
