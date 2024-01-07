@@ -61,6 +61,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   attendance: Attendance;
   attendanceReviewData: Filter = new Filter();
   selectedAttendance: any = null;
+  filterYears: Array<number> = [];
 
   constructor(private http: AjaxService,
               private local : ApplicationStorage,
@@ -112,6 +113,10 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
     this.loadAutoComplete();
     let date = new Date();
+    let currentYear = date.getFullYear();
+    for (let i = 0; i < 3; i++) {
+      this.filterYears.push(currentYear - i);
+    }
     this.attendance = {
       EmployeeName: "",
       ForMonth: date.getMonth() + 1,

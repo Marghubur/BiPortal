@@ -182,6 +182,12 @@
                         <option value="5">Reject</option>
                       </select>
                     </div>
+                    <div class="col-md-2 py-2">
+                      <label class="form-label">Year</label>
+                      <select  class="form-select" (change)="getTimesheetRequest()" [(ngModel)]="timesheetRecord.ForYear">
+                        <option [value]="item" *ngFor="let item of filterYears">{{item}}</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <ng-container *ngFor="let item of timesheetDetail; let i=index;">
