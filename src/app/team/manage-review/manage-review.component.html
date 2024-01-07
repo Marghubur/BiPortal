@@ -30,13 +30,18 @@
                 </div>
               </div>
               <ng-container>
-                <div class="alert alert-success d-flex justify-content-between" role="alert" *ngIf="this.appraisalReviewDetail.length > 0">
+                <div class="alert alert-success d-flex justify-content-between" role="alert">
                   <div class="col-auto">
-                    <i class="fa-solid fa-bell fa-lg pe-2 text-dark"></i>
-                    <span>Review details</span>
+                    <ng-container *ngIf="isSubmitted">
+                      <i class="fa-solid fa-bell fa-lg pe-2 text-dark"></i>
+                      <span>Appraisal details submitted successfully</span>
+                    </ng-container>
                   </div>
-                  <div class="col-auto" *ngIf="isSubmitted">
+                  <!-- <div class="col-auto" *ngIf="isSubmitted">
                     <a href="javascript:void(0)" (click)="reOpenCurrentAppraidal()">Re-open</a>
+                  </div> -->
+                  <div class="col-auto" *ngIf="isRevisedEnable">
+                    <a href="javascript:void(0)" (click)="revisedAppraisalPopUp()">Revised Appraisal</a>
                   </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-between pb-3" *ngIf="currentProjectAppraisal != null">
@@ -46,8 +51,11 @@
                   <form [formGroup]="appraisalHikeForm">
                     <div formArrayName="ProjectMemberHike">
                       <ng-container *ngFor="let item of hikeDetail.controls; let i = index;" [formGroupName]="i">
-                        <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card pb-4 pt-2" [ngClass]="{'custom-border': (item.get('Status').value == 2 || item.get('Status').value == 0), 'danger-border': item.get('Status').value == 5, 'success-border': item.get('Status').value == 9}">
+                        <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card pb-4 pt-2" [ngClass]="{'custom-border': (item.get('AppraisalStatus').value == 2 || item.get('AppraisalStatus').value == 0), 'danger-border': item.get('AppraisalStatus').value == 5, 'success-border': item.get('AppraisalStatus').value == 9, 'remove-appraisal': !item.get('IsActive').value}">
                           <div class="d-flex col-md-10 align-items-center">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" (click)="removeEmployee($event, i)" checked>
+                            </div>
                             <a href="javascript:void(0)" class="me-2">
                               <i class="fa-regular fa-circle-user fa-lg"></i>
                             </a>
@@ -67,8 +75,11 @@
                               <!-- <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': isSubmitted}">
                                 <i class="fa-solid fa-lock-open"></i>
                               </a> -->
-                              <span class="rounded-pill ms-2 badge" [ngClass]="{'text-bg-danger': item.get('AppraisalStatus').value == 5, 'text-bg-success': item.get('AppraisalStatus').value == 9, 'text-bg-primary': item.get('AppraisalStatus').value == 8, 'text-bg-warning': (item.get('AppraisalStatus').value == 0 || item.get('AppraisalStatus').value == 2)}">
-                                {{item.get('AppraisalStatus').value == 8 ? "Appraisal Submitted" : item.get('AppraisalStatus').value == 5 ? "Appraisal Rejected" : item.get('AppraisalStatus').value == 9 ? "Appraisal Approved" : "Appraisal Not Submitted"}}
+                              <span class="rounded-pill ms-2 badge" [ngClass]="{'text-bg-danger': item.get('ObjectiveStatus').value == 5, 'text-bg-success': item.get('ObjectiveStatus').value == 9, 'text-bg-primary': item.get('ObjectiveStatus').value == 8, 'text-bg-warning': (item.get('ObjectiveStatus').value == 0 || item.get('ObjectiveStatus').value == 2)}">
+                                {{item.get('ObjectiveStatus').value == 8 ? "Objective Submitted" : item.get('ObjectiveStatus').value == 5 ? "Objective Rejected" : item.get('ObjectiveStatus').value == 9 ? "Objective Approved" : "Objective Not Submitted"}}
+                              </span>
+                              <span class="rounded-pill ms-2 badge" [ngClass]="{'text-bg-danger': item.get('AppraisalStatus').value == 5, 'text-bg-success': item.get('AppraisalStatus').value == 9, 'text-bg-primary': item.get('AppraisalStatus').value == 8, 'text-bg-warning': (item.get('AppraisalStatus').value == 0 || item.get('AppraisalStatus').value == 2 || item.get('AppraisalStatus').value == 10)}">
+                                {{item.get('AppraisalStatus').value == 9 ? "Appraisal Approved" : item.get('AppraisalStatus').value == 10 ? "Appraisal For Revised" :"Appraisal Not Approved"}}
                               </span>
                             </div>
                           </div>
@@ -118,7 +129,7 @@
                           <div class="d-flex align-items-center justify-content-between mt-2">
                             <div class="col-md-6 text-truncate ms-2">
                               <span class="fw-bold">Comment: </span>
-                              {{item.get("Comments").value}}
+                              {{item.get("FirstComments").value}}
                             </div>
                             <a href="javascript:void(0)" (click)="showOffCanvas(item)" class="fw-bold">
                               <span class="pe-2">Objective's</span>
@@ -131,10 +142,10 @@
                   </form>
               </ng-container>
             </div>
-            <div class="text-end mt-3">
-              <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading || isSubmitted">Cancel</button>
-              <button class="btn btn-primary-c ms-2" (click)="applyHikeAndPromotion()" [disabled]="isAmountExceed || isLoading || isSubmitted > 0">
-                <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-hdd-o': !isLoading}"></i>
+            <div class="text-end mt-3" *ngIf="!isSubmitted">
+              <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading">Cancel</button>
+              <button class="btn btn-primary-c ms-2" (click)="applyHikeAndPromotion()" [disabled]="isAmountExceed || isLoading">
+                <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                 <span class="ps-2">
                   Save
                 </span>
@@ -272,7 +283,7 @@
           <label class="form-label col-md-4">Proposed Hike Percentage</label>
           <div class="col-md-8 input-group-c">
             <input type="text" [DecimalNumber]="5"  name="ProposedHikePercentage" (keyup)="proposedHikeAmountCheck($event, i)"  class="form-control" [(ngModel)]="selectedPromotionAndHike.HikePercentage">
-            <span class="input-group-text" id="basic-addon1">%</span>
+            <span class="input-group-text rounded-0" id="basic-addon1">%</span>
           </div>
         </div>
         <div class="mt-3 d-flex align-items-center col-md-12">
@@ -332,6 +343,32 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Revised Modal -->
+<div class="modal fade" id="revisedModal" tabindex="-1" aria-labelledby="revisedModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="revisedModalLabel">Revised Appraisal</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Comment</label>
+        <input type="text" class="form-control" placeholder="Comments" [(ngModel)]="revisedAppraisalComment">
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary-c ms-2" (click)="revisedAppraisal()" [disabled]="isLoading">
+          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <span class="ps-2">
+            Save
+          </span>
+        </button>
       </div>
     </div>
   </div>
