@@ -70,6 +70,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   timesheetId: number = 0;
   bodyContent: any = null;
   maxDate: any = null;
+  billYears: Array<number> = [];
 
   constructor(private http: AjaxService,
     private fb: FormBuilder,
@@ -96,6 +97,10 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     this.isClientAssigned = true;
     this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.basePath = this.http.GetImageBasePath();
+    let currentYear = new Date().getFullYear();
+    for (let i = 0; i < 3; i++) {
+      this.billYears.push(currentYear - i);
+    }
     //----- edit mode -----
     if (this.existingData) {
       this.editMode = true;
@@ -147,11 +152,12 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
 
   getAttendance() {
     this.allTimesheet = [];
+    let year = this.pdfForm.get("billYear").value;
     let timesheetStatusFor = {
       "EmployeeId": this.currentEmployee.EmployeeUid,
       "UserTypeId": UserType.Employee,
       "ForMonth": this.originalBillingMonth,
-      "ForYear": this.model.year,
+      "ForYear": year,
       "ClientId": this.clientDetail.CompanyId
     }
 
@@ -186,7 +192,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     } else {
       let i = 0;
       while(i < lastDate.getDate()) {
-        let item = timesheet.find(x => new Date(x.PresentDate).getDate() == firstDate.getDate());
+        let item = timesheet.find(x => new Date(x.PresentDate).getDate() == firstDate.getDate() && new Date(x.PresentDate).getMonth() == firstDate.getMonth());
         if(item) {
           item.PresentDate = new Date(item.PresentDate);
           monthTimesheet.push(item);
@@ -218,7 +224,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     }
 
     this.allTimesheet.map(item => {
-      if(item.TimesheetStatus == 9)
+      if(item.TimesheetStatus == ItemStatus.Approved)
         burnDays++;
     });
 
