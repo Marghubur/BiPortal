@@ -64,10 +64,6 @@ export class ManagetimesheetComponent implements OnInit {
     this.fromDate = new Date(this.pageData.TimesheetStartDate);
     this.toDate = new Date(this.pageData.TimesheetEndDate);
 
-    let data = {
-      TimesheetId: this.pageData.TimesheetId
-    }
-
     this.http.get(`Timesheet/GetWeekTimesheetData/${this.pageData.TimesheetId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.currentWeekTimesheet = response.ResponseBody;
