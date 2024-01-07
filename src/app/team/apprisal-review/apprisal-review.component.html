@@ -44,7 +44,7 @@
                         Project Started On
                       </div>
                     </div>
-                    <div class="th fe-1 text-center">REVIEW & SUBMIT</div>
+                    <div class="th fe-1 text-center">Review</div>
                   </div>
                 </div>
                 <div class="t-body">
@@ -122,7 +122,7 @@
           </div>
           <div class="col-md-2 text-end">
             <button class="btn btn-primary-c ms-2" (click)="startCycle()" [disabled]="isAmountExceed || isLoading">
-              <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-hdd-o': !isLoading}"></i>
+              <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
               <span class="ps-2">
                 Start All
               </span>
@@ -187,7 +187,7 @@
         <div class="text-end mt-3">
           <button class="btn btn-secondary" data-bs-dismiss="offcanvas" [disabled]="isLoading">Cancel</button>
           <button class="btn btn-primary-c ms-2" (click)="startCycle()" [disabled]="isAmountExceed || isLoading">
-            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-hdd-o': !isLoading}"></i>
+            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
             <span class="ps-2">
               Start
             </span>
@@ -205,20 +205,5 @@
         </div>
       </ng-container>
     </ng-container>
-    <!-- <ng-container *ngIf="!isProjectDetailReady">
-      <div class="data-loading-loader">
-        <div class="py-5 my-5">
-          <h6 class="fw-bold fs-3 text-center text-dark">Projects are loading</h6>
-          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-12 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ng-container> -->
   </div>
 </div>
