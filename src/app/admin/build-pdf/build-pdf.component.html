@@ -118,8 +118,11 @@
                             <div class="td py-2 fe-1 align-middle text-center">
                               <div class="cell-wrapper edit-cellwrapper">
                                 {{item.PresentDate | date}}
-                                <ng-container *ngIf="item.TimesheetStatus == 8 || item.TimesheetStatus == 9">
+                                <ng-container *ngIf="item.TimesheetStatus == 9">
                                   <i class="ps-2 text-success fa-solid fa-check"></i>
+                                </ng-container>
+                                <ng-container *ngIf="item.TimesheetStatus == 8">
+                                  <i class="ps-2 text-warning fa-regular fa-clock"></i>
                                 </ng-container>
                                 <ng-container *ngIf="item.TimesheetStatus != 8 && item.TimesheetStatus != 9">
                                   <i class="ps-2 text-danger fa-solid fa-xmark"></i>
@@ -190,9 +193,12 @@
                             </div>
                             <div class="col-md-6">
                               <label class="form-label">Billing year*</label>
-                              <input inputtype="mandatory" class="form-control" placeholder="Year" onkeypress="return event.charCode >=48 && event.charCode <=57"
+                              <select class="form-select" formControlName="billYear" (change)="getAttendance($event)">
+                                <option [value]="item" *ngFor="let item of billYears">{{item}}</option>
+                              </select>
+                              <!-- <input inputtype="mandatory" class="form-control" placeholder="Year" onkeypress="return event.charCode >=48 && event.charCode <=57"
                                 [ngClass]="{'error-field': submitted && f.header.errors !== null && f.header.errors.required}" OnlyNumber="4"
-                                name="billYear" formControlName="billYear" [readonly]="!editMode"/>
+                                name="billYear" formControlName="billYear" [readonly]="!editMode"/> -->
                             </div>
                           </div>
                         </div>
@@ -564,8 +570,11 @@
                     <div class="td fe-1 align-middle text-center">
                       <div class="cell-wrapper edit-cellwrapper" (click)="enableDate(item)">
                         {{item.PresentDate | date}}
-                        <ng-container *ngIf="item.TimesheetStatus == 8 || item.TimesheetStatus == 9">
+                        <ng-container *ngIf="item.TimesheetStatus == 9">
                           <i class="ps-2 text-success fa-solid fa-check"></i>
+                        </ng-container>
+                        <ng-container *ngIf="item.TimesheetStatus == 8">
+                          <i class="ps-2 text-warning fa-regular fa-clock"></i>
                         </ng-container>
                         <ng-container *ngIf="item.TimesheetStatus != 8 && item.TimesheetStatus != 9">
                           <i class="ps-2 text-danger fa-solid fa-xmark"></i>
@@ -580,7 +589,7 @@
                     </div>
                   </div>
                   <div class="td align-middle text-center fe-index">
-                    <input class="form-check-input" [checked]="items.Status == 8" type="checkbox" data-checktype="weekly" (click)="weekSelected($event, items.Timesheet)">
+                    <input class="form-check-input" [checked]="items.Status == 9" type="checkbox" data-checktype="weekly" (click)="weekSelected($event, items.Timesheet)">
                   </div>
                 </div>
               </ng-container>
