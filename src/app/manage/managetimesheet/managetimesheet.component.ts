@@ -68,7 +68,7 @@ export class ManagetimesheetComponent implements OnInit {
       TimesheetId: this.pageData.TimesheetId
     }
 
-    this.http.post("Timesheet/GetWeekTimesheetData", data).then((response: ResponseModel) => {
+    this.http.get(`Timesheet/GetWeekTimesheetData/${this.pageData.TimesheetId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.currentWeekTimesheet = response.ResponseBody;
         this.buildPage(response.ResponseBody);
