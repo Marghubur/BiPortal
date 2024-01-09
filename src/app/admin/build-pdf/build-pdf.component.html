@@ -212,7 +212,7 @@
                             <label class="form-label">Date of Billing *</label>
                             <form class="form-inline">
                               <div class="form-group w-100">
-                                <div class="input-group w-100">
+                                <div class="input-group inline-calendar w-100">
                                   <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
                                     readonly (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                                   <div class="input-group-append">
@@ -544,7 +544,7 @@
             <a href="javascript:void(0)" class="pe-3" (click)="selectUnselect('select')"><i class="fa-solid fa-check pe-1 text-success"></i> Select All</a>
             <a href="javascript:void(0)" (click)="selectUnselect('deselect')"><i class="fa-solid fa-xmark pe-1 text-danger"></i> Deselect All</a>
           </div>
-          <div class="t-table border-cell t-list t-border col-md-12">
+          <div class="t-table border-cell t-list col-md-12">
             <div class="t-head overflow-hidden">
               <div class="tr">
                 <div class="th flex-grow-1 text-center fw-bold py-2 px-3 bg-ant">Monday</div>
