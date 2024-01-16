@@ -31,6 +31,8 @@ export class NavbarComponent implements OnInit, DoCheck {
   isLoading: boolean = false;
   logo: string = "";
   @Output() authentication = new EventEmitter();
+  selectedColor: string = "#ffffff";
+  currentStyle: any = null;
 
   toggleOffcanvas() {
     let $doc: any = document;
@@ -59,6 +61,10 @@ export class NavbarComponent implements OnInit, DoCheck {
   ngDoCheck(): void {
     let data = this.local.findRecord("UserDetail");
     let company = this.local.findRecord("Companies");
+    this.currentStyle = this.local.getMenuStyle();
+    if (this.currentStyle) {
+      this.selectedColor = this.currentStyle.NavbarColor;
+    }
     if(data) {
       if (data.UserTypeId == 1)
         this.isAdmin = true;
@@ -207,6 +213,19 @@ export class NavbarComponent implements OnInit, DoCheck {
     let size = 0.80;
     this.root.setAttribute("style", `font-size: ${size}vw !important`);
     this.commonService.SetDefaultFontSize(size);
+  }
+
+  changeColor(e: any) {
+    this.selectedColor = e.target.value;
+    this.http.post("Settings/LayoutConfigurationSetting", {
+      IsMenuExpanded: this.currentStyle == null ? true : this.currentStyle.IsMenuExpanded,
+      NavbarColor: this.selectedColor
+    }).then((response: ResponseModel) => {
+      if(response.ResponseBody) {
+        Toast("User layout configuration save.");
+        this.local.updateLayoutConfig(response.ResponseBody);
+      }
+    });
   }
 }
 

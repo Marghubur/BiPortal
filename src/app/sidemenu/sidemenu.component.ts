@@ -33,6 +33,7 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
   isMinimize: boolean = false;
   isMenuExpanded: boolean = true;
   @Output() authentication = new EventEmitter();
+  navbarColor: string = null;
 
   toggleOffcanvas() {
     let $doc: any = document;
@@ -73,6 +74,7 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
     if (style) {
       this.isMenuExpanded = style.IsMenuExpanded;
       this.commonService.isMinimize.next(!this.isMenuExpanded);
+      this.navbarColor = style.NavbarColor;
     }
     console.log(JSON.stringify(style));
     this.IsLoggedIn = false;
@@ -247,11 +249,12 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
   saveMenuStyle() {
     this.isMenuExpanded = !this.isMenuExpanded;
     this.http.post("Settings/LayoutConfigurationSetting", {
-      IsMenuExpanded: this.isMenuExpanded
+      IsMenuExpanded: this.isMenuExpanded,
+      NavbarColor: this.navbarColor
     }).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         Toast("User layout configuration save.");
-        this.local.updateLayoutConfig(this.isMenuExpanded);
+        this.local.updateLayoutConfig(response.ResponseBody);
       }
     });
   }

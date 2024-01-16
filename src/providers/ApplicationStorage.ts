@@ -97,7 +97,15 @@ export class ApplicationStorage {
       if (Data && Data != "") {
         Data = JSON.parse(Data);
         if (Data) {
-          Data["UserLayoutConfiguration"]["IsMenuExpanded"] = layoutConfig;
+          if (Data["UserLayoutConfiguration"]) {
+            Data["UserLayoutConfiguration"]["IsMenuExpanded"] = layoutConfig.IsMenuExpanded;
+            Data["UserLayoutConfiguration"]["NavbarColor"] = layoutConfig.NavbarColor;
+          } else {
+            Data["UserLayoutConfiguration"]  = {
+              IsMenuExpanded : layoutConfig.IsMenuExpanded,
+              NavbarColor : layoutConfig.NavbarColor
+            }
+          }
           localStorage.setItem(Master, JSON.stringify(Data));
         }
       }

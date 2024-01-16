@@ -5,7 +5,6 @@
 
 .navbar {
   font-family: Poppins, sans-serif;
-  background: white;
   border-bottom: 1px solid #d9d9d9;
   transition: background 0.25s ease;
   -webkit-transition: background 0.25s;
@@ -296,12 +295,10 @@
 
 .logo {
   display: flex !important;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
+  justify-content: start;
+  align-items: center;
 
   a {
-    width: 80%;
     padding-left: 1.2rem;
   }
 }
@@ -339,13 +336,13 @@
 
 .img-logo {
   width: auto !important;
-  max-height: 4rem !important;
+  max-height: 3rem !important;
 }
 
 
 .cust-btn {
   border: 1px solid #212529 !important;
-  border-radius: 0px 4px 4px 0px;
+  border-radius: 4px 0px 0px 4px;
 }
 
 .cust-box {
