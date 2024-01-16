@@ -1,4 +1,4 @@
-<nav class="navbar default-layout col-12 p-0 d-flex flex-row">
+<nav class="navbar default-layout col-12 p-0 d-flex flex-row" [style.background]="selectedColor">
   <div class="nav-content d-flex justify-content-between">
     <div class="menu-sm-burger" id="hamburger-item">
       <a href="javascript:void(0)" class="icon-deep" (click)="toggleMenu()">
@@ -6,11 +6,25 @@
       </a>
     </div>
     <div class="logo l-panel">
-      <a href="javascript:void(0)" routerLink="/admin"><img [src]="logo" class="img-logo"
-          alt="logo"></a>
+      <a href="javascript:void(0)" routerLink="/admin" class="text-decoration-none">
+        <img src="assets/images/logo.png" class="img-logo" alt="logo">
+      </a>
+      <span class="fw-bolder ps-3 fs-2 text-primary-dc">EMSTUM</span>
     </div>
-
-    <div class="fe-2 d-flex" *ngIf="isAdmin">
+    <div class="col-auto me-4">
+      <img [src]="logo" class="img-logo" alt="logo">
+    </div>
+    <div class="form-group fe-2 d-flex flex-column justify-content-center">
+      <div class="d-flex">
+        <button class="btn btn-primary-c cust-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <div class="border cust-box w-100">
+          <input type="text" class="form-control rounded-0 border-0" placeholder="type here...">
+        </div>
+      </div>
+    </div>
+    <div class="fe-2 d-flex align-items-center" *ngIf="isAdmin">
       <div class="d-flex justify-content-start">
         <div class="mx-3 d-flex justify-content-start icon-action ms-3">
           <a href="javascript:void(0)" (click)="navLogoPage()" [ngClass]="{'pe-none': isLoading}">
@@ -38,19 +52,10 @@
           </a>
         </div>
       </div>
-    </div>
-
-    <div class="form-group fe-2 d-flex flex-column justify-content-center">
-      <div class="d-flex">
-        <div class="border cust-box w-100">
-          <input type="text" class="form-control border-0" placeholder="type here...">
-        </div>
-        <button class="btn btn-primary-c cust-btn">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
+      <div class="col-auto">
+        <input type="color" (change)="changeColor($event)">
       </div>
     </div>
-
     <div>
       <div class="navbar-menu-wrapper d-flex align-items-center">
         <ul class="navbar-nav navbar-nav-right">
