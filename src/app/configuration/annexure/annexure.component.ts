@@ -104,7 +104,8 @@ export class AnnexureComponent implements OnInit {
   saveAnnexture() {
     this.isLoading = true;
     this.submitted = true;
-    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    // let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    let data = document.getElementById("editor").innerHTML;
     if (!data && data == "" && this.annextureform.invalid) {
       this.isLoading = false;
       return;

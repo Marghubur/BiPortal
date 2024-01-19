@@ -132,8 +132,8 @@ export class ManageEmailtemplateComponent implements OnInit {
     this.buildBody();
     this.isLoading = true;
     this.submitted = true;
-    //let data = document.getElementById("content-container").innerHTML;
-    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    let data = document.getElementById("editor").innerHTML;
+    // let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     if (this.emailTemplateForm.invalid || !data || data == "") {
       this.isLoading = false;
       return;

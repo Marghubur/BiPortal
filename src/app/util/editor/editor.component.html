@@ -65,7 +65,7 @@
   </div>
   <!-- <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Select All" (click)="execCmd('selectAll');">Select All</a> -->
 </div>
-<div class="editor" contenteditable="true" id="editor" (paste)="handlePaste($event)">
+<div #editor class="editor" contenteditable="true" [innerHTML]='innerHtmlText' id="editor" (paste)="handlePaste($event)">
   <p>Type your text here...</p>
 </div>
 

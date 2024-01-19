@@ -1,15 +1,17 @@
-import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
+import { AjaxService } from 'src/providers/ajax.service';
+import { ResponseModel } from 'src/auth/jwtService';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent {
+export class EditorComponent implements OnInit, AfterViewInit  {
   showingSourceCode: boolean = false;
   isInEditMode: boolean = true;
   richTextField: any;
@@ -23,14 +25,28 @@ export class EditorComponent {
   private eventSubscription: Subscription;
 
   @ViewChild('textFrame', {static: false}) iframe: ElementRef;
+  @ViewChild('editor') editor: ElementRef;
 
-  // constructor(private sanitizer: DomSanitizer,
-  //   private vcRef: ViewContainerRef){ }
+  constructor(
+    private http: AjaxService,
+    private sanitizer: DomSanitizer,
+    private vcRef: ViewContainerRef,
+    private renderer: Renderer2
+  ) { }
+
+  ngOnInit(): void {
+  }
+
+  ngAfterViewInit() {
+    this.bindEvents();
+
+  }
 
   @Input()
   set content(textContent: any) {
     if (textContent && textContent != "") {
-      //this.innerHtmlText = this.sanitizer.bypassSecurityTrustHtml(textContent);
+      this.innerHtmlText = this.sanitizer.bypassSecurityTrustHtml(textContent);
+      console.log(this.innerHtmlText);
     }
   }
 
@@ -43,157 +59,18 @@ export class EditorComponent {
 
   @Input() cleanUp: Observable<void>;
 
-//   ngAfterViewChecked(): void {
-//     $('[data-bs-toggle="tooltip"]').tooltip({
-//       trigger: 'hover'
-//     });
+  bindEvents() {
+    // Accessing the native element
+    const nativeElement = this.editor.nativeElement;
 
-//     $('[data-bs-toggle="tooltip"]').on('click', function () {
-//       $(this).tooltip('dispose');
-//     });
-//   }
+    // Accessing and binding events to specific elements within the container
+    const spanElement = nativeElement.querySelector('img');
+    if (spanElement) {
+      this.renderer.listen(spanElement, 'click', () => this.handleImageClick("element"));
+    }
 
-//   ngOnInit() {
-//     if(this.cleanUp) {
-//       this.eventSubscription = this.cleanUp.subscribe(() => this.cleanUpIFrame())
-//     }
-//     this.richTextField = document.getElementById("richTextField");
-//     if (this.isEdit) {
-//       document.getElementsByClassName('iframe-wrapper-container')[0].classList.remove('iframe-wrapper-container');
-//     }
-//     this.toggleEdit();
-//   }
-
-//   ngOnDestroy() {
-//     if(this.cleanUp) {
-//       this.eventSubscription.unsubscribe();
-//     }
-//   }
-
-//   cleanUpIFrame() {
-//     if(!this.richTextField) {
-//       this.richTextField = document.getElementById("richTextField");
-//     }
-
-//     this.richTextField.contentWindow.document.body.innerHTML = '';
-//   }
-
-//   execCmd (command) {
-//       this.richTextField.contentDocument.execCommand(command, false, null);
-//   }
-
-//   execCommandWithArg (command, arg) {
-//     let value = arg.target.value;
-//     let text = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.getSelection().toString();
-//     if (text && text != "" ) {
-//       if (Number(value) == 0 && command === "fontSize") {
-//         let tags = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.querySelectorAll<HTMLElement>('font');
-//         for (let i = 0; i < tags.length; i++) {
-//           if (tags[i].innerText === text) {
-//             let parentNode = tags[i].parentNode;
-//             tags[i].parentNode.removeChild(tags[i]);
-//             parentNode.appendChild(document.createTextNode(text));
-//             (parentNode as HTMLElement).style.fontSize = "18px";
-
-//           }
-//         }
-//       }else if (command === "formatBlock") {
-//         let tags = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.querySelectorAll<HTMLElement>('div');
-//         for (let i = 0; i < tags.length; i++) {
-//           if (tags[i].innerText === text) {
-//             tags[i].removeAttribute("fontsize")
-//           }
-//         }
-//         this.richTextField.contentDocument.execCommand(command, false, value);
-//       } else {
-//         this.richTextField.contentDocument.execCommand(command, false, value);
-//       }
-//     }
-//   }
-//   toggleSource () {
-//     if(this.showingSourceCode){
-//       this.richTextField.contentDocument.getElementsByTagName('body')[0].innerHTML =
-//       this.richTextField.contentDocument.getElementsByTagName('body')[0].textContent;
-//       this.showingSourceCode = false;
-//     }else{
-//       this.richTextField.contentDocument.getElementsByTagName('body')[0].textContent =
-//       this.richTextField.contentDocument.getElementsByTagName('body')[0].innerHTML;
-//       this.showingSourceCode = true;
-//     }
-//   }
-
-//   enableEditor(e: any) {
-//     if (this.isEdit) {
-//       if(!this.richTextField) {
-//         this.richTextField = document.getElementById("richTextField");
-//       }
-//       e.target.classList.remove('iframe-wrapper-container');
-//       this.toggleEdit();
-//     }
-//   }
-
-//   toggleEdit() {
-//     if(!this.richTextField) {
-//       this.richTextField = document.getElementById("richTextField");
-//     }
-
-//     if(!this.isInEditMode){
-//         this.richTextField.contentDocument.designMode = 'Off';
-//         this.isInEditMode = false;
-//       }else{
-//         this.richTextField.contentDocument.designMode = 'On';
-//         this.isInEditMode = true;
-//       }
-//     this.richTextField.contentWindow.document.body.focus();
-//     var body = this.richTextField.contentWindow.document.querySelector('body');
-//     body.style.fontSize = '18px';
-// }
-
-//   toggleDarkLight() {
-//       var element = document.getElementById("richtextcontainer");
-//       element.classList.toggle("dark-mode");
-//   }
-
-//   uploadProfilePicture(event: any) {
-//     this.imageURL = "";
-//     if (event.target.files) {
-//       var reader = new FileReader();
-//       reader.readAsDataURL(event.target.files[0]);
-//       reader.onload = (event: any) => {
-//         this.imageURL = event.target.result;
-//       };
-//       this.richTextField.contentDocument.execCommand('insertImage', false, this.imageURL);
-//     }
-//   }
-
-//   fireBrowserFile() {
-//     $("#uploarichimage").click();
-//   }
-
-//   tabelPopUp() {
-//     $('#tableModal').modal('show');
-//   }
-
-//   addTable() {
-//     var html = this.generateTable();
-//     this.richTextField.contentDocument.execCommand('insertHTML', false, html.toString());
-//     $('#tableModal').modal('hide');
-//   }
-
-//   generateTable() {
-//     let myRows = this.rows;
-//     let myColumns = this.columns;
-//     var html = '<table style="border-collapse: collapse; width: 100%;"><tbody>';
-//     for (let i = 0; i <myRows; i++) {
-//       html += "<tr>";
-//       for (let j = 0; j <myColumns; j++) {
-//         html += "<td style='padding: 15px; border: 1px solid #222; vertical-align: middle;'>&nbsp;</td>"
-//       }
-//       html += "</tr>";
-//     }
-//     html += "</tbody></table>";
-//     return html;
-//   }
+    // Add more logic for other elements if needed
+  }
 
   createTable() {
     var table = document.createElement('table');
@@ -260,6 +137,9 @@ export class EditorComponent {
             range.insertNode(div);
 
             reader.readAsDataURL(blob);
+          } else {
+            let text = event.clipboardData.getData("text/plain")
+            document.execCommand("insertText", false, text)
           }
         }
       }

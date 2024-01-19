@@ -313,7 +313,8 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       return;
     }
 
-    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    //let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    let data = document.getElementById("editor").innerHTML;
     if (!data) {
       this.isLoading = false;
       ErrorToast("Please enter talking points");

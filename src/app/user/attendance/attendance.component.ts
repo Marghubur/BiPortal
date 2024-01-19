@@ -293,7 +293,8 @@ export class AttendanceComponent implements OnInit {
         Id:reportmanager.value,
         Email:reportmanager.email})
     }
-    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    //let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    let data = document.getElementById("editor").innerHTML;
     if (data && data == "") {
       this.isLoading = false;
       return;

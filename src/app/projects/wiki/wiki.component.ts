@@ -452,7 +452,9 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   saveProjectDetails(e: any) {
     this.isloading = true;
     this.isEdit = false;
-    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    //let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    let data = document.getElementById("editor").innerHTML;
+
     //data = this.removeHeaderTag(data);
     // let headers = data.split("#").filter(x => x.includes("#"));
     // if (headers.length > 0) {
@@ -537,7 +539,8 @@ export class WikiComponent implements OnInit, AfterViewChecked {
   }
 
   splitText() {
-    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerText;
+    //let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerText;
+    let data = document.getElementById("editor").innerHTML;
     let header = data.split("##");
     if (header.length > 0) {
       header = header.filter(x => x != "");
