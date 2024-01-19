@@ -1,17 +1,16 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ResponseModel } from 'src/auth/jwtService';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit, AfterViewInit  {
+export class EditorComponent implements AfterViewInit, OnInit  {
   showingSourceCode: boolean = false;
   isInEditMode: boolean = true;
   richTextField: any;
@@ -22,24 +21,23 @@ export class EditorComponent implements OnInit, AfterViewInit  {
   columns: number = 0;
   IsSideIcon: boolean = true;
   containerHeight: number = 55;
+  $document:any = null;
+
   private eventSubscription: Subscription;
 
   @ViewChild('textFrame', {static: false}) iframe: ElementRef;
   @ViewChild('editor') editor: ElementRef;
 
-  constructor(
-    private http: AjaxService,
-    private sanitizer: DomSanitizer,
-    private vcRef: ViewContainerRef,
-    private renderer: Renderer2
-  ) { }
-
+  constructor( private sanitizer: DomSanitizer,
+                private vcRef: ViewContainerRef,
+                private renderer: Renderer2
+            ) { }
   ngOnInit(): void {
+    this.$document = document;
   }
 
   ngAfterViewInit() {
     this.bindEvents();
-
   }
 
   @Input()
@@ -60,19 +58,14 @@ export class EditorComponent implements OnInit, AfterViewInit  {
   @Input() cleanUp: Observable<void>;
 
   bindEvents() {
-    // Accessing the native element
     const nativeElement = this.editor.nativeElement;
-
-    // Accessing and binding events to specific elements within the container
     const spanElement = nativeElement.querySelector('img');
-    if (spanElement) {
+    if (spanElement)
       this.renderer.listen(spanElement, 'click', () => this.handleImageClick("element"));
-    }
-
-    // Add more logic for other elements if needed
   }
 
   createTable() {
+    $('#tableModal').modal('hide');
     var table = document.createElement('table');
     table.classList.add("table", "table-bordered")
     for (var i = 0; i < this.rows; i++) {
@@ -83,7 +76,7 @@ export class EditorComponent implements OnInit, AfterViewInit  {
         cell.textContent = 'Cell ' + (i + 1) + '-' + (j + 1);
       }
     }
-    document.execCommand('insertHTML', false, table.outerHTML);
+    this.$document.execCommand('insertHTML', false, table.outerHTML);
   }
 
   execCmd (command) {
@@ -196,18 +189,18 @@ export class EditorComponent implements OnInit, AfterViewInit  {
 
     // element.appendChild(top);
 
-    const bottom = document.createElement('div');
-    bottom.style.width = '100%';
-    bottom.style.height = size + 'px';
-    bottom.style.backgroundColor = 'transparent';
-    bottom.style.position = 'absolute';
-    bottom.style.bottom = - (size / 2) + 'px';
-    bottom.style.left = '0px';
-    bottom.style.cursor = 'n-resize';
+    // const bottom = document.createElement('div');
+    // bottom.style.width = '100%';
+    // bottom.style.height = size + 'px';
+    // bottom.style.backgroundColor = 'transparent';
+    // bottom.style.position = 'absolute';
+    // bottom.style.bottom = - (size / 2) + 'px';
+    // bottom.style.left = '0px';
+    // bottom.style.cursor = 'n-resize';
 
-    bottom.addEventListener('mousedown', resizeYPositive());
+    // bottom.addEventListener('mousedown', resizeYPositive());
 
-    element.appendChild(bottom);
+    // element.appendChild(bottom);
 
     // const left = document.createElement('div');
     // left.style.width = size + 'px';
@@ -284,21 +277,21 @@ export class EditorComponent implements OnInit, AfterViewInit  {
 
     // element.appendChild(corner3);
 
-    const corner4 = document.createElement('div');
-    corner4.style.border = "1px solid #d9d9d9";
-    corner4.style.background = "blanchedalmond !important";
-    corner4.style.width = size + 'px';
-    corner4.style.height = size + 'px';
-    corner4.style.backgroundColor = 'transparent';
-    corner4.style.position = 'absolute';
-    corner4.style.bottom = - (size / 2) + 'px';
-    corner4.style.right = - (size / 2) + 'px';
-    corner4.style.cursor = 'se-resize';
-    corner4.setAttribute("data-name", 'corner4');
-    corner4.addEventListener('mousedown', resizeXPositive());
-    corner4.addEventListener('mousedown', resizeYPositive());
+    // const corner4 = document.createElement('div');
+    // corner4.style.border = "1px solid #d9d9d9";
+    // corner4.style.background = "blanchedalmond !important";
+    // corner4.style.width = size + 'px';
+    // corner4.style.height = size + 'px';
+    // corner4.style.backgroundColor = 'transparent';
+    // corner4.style.position = 'absolute';
+    // corner4.style.bottom = - (size / 2) + 'px';
+    // corner4.style.right = - (size / 2) + 'px';
+    // corner4.style.cursor = 'se-resize';
+    // corner4.setAttribute("data-name", 'corner4');
+    // corner4.addEventListener('mousedown', resizeXPositive());
+    // corner4.addEventListener('mousedown', resizeYPositive());
 
-    element.appendChild(corner4);
+    // element.appendChild(corner4);
 
     function getComputedStyleProperty(key: string): number {
         return parseInt(window.getComputedStyle(element).getPropertyValue(key));

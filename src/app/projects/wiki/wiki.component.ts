@@ -454,7 +454,9 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     this.isEdit = false;
     //let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
     let data = document.getElementById("editor").innerHTML;
-
+    if (data.includes("cursor: e-resize;")) {
+      data = data.replaceAll("cursor: e-resize;", "");
+    }
     //data = this.removeHeaderTag(data);
     // let headers = data.split("#").filter(x => x.includes("#"));
     // if (headers.length > 0) {
