@@ -76,7 +76,9 @@ export class EditorComponent implements AfterViewInit, OnInit  {
         cell.textContent = 'Cell ' + (i + 1) + '-' + (j + 1);
       }
     }
-    this.$document.execCommand('insertHTML', false, table.outerHTML);
+
+    document.getElementById("editor").focus();
+    document.execCommand('insertHTML', false, table.outerHTML);
   }
 
   execCmd (command) {
@@ -119,10 +121,16 @@ export class EditorComponent implements AfterViewInit, OnInit  {
             var selection = window.getSelection();
             var range = selection.getRangeAt(0);
             var div = document.createElement('div');
+
+            // var barDiv = document.createElement('div');
+            // barDiv.setAttribute('style', 'width: 5rem; padding-left: 1rem; border: 2px solid #d3d3d3;');
+            // div.appendChild(barDiv);
+
             div.setAttribute("id", "element");
             div.setAttribute("contenteditable", 'false');
+            div.setAttribute("class", 'editor-content');
             div.appendChild(img);
-            div.setAttribute('style', 'position: relative; background-color: #f1f1f1; border: 1px solid #d3d3d3; margin-bottom: 2rem; left: 40px; top:  40px; width: 300px; height: 300px; border-radius: 5px;');
+            div.setAttribute('style', 'position: relative; background-color: #f1f1f1; border: 1px solid #d3d3d3; margin-bottom: 2rem; left: 40px; top:  40px; width: 230px; height: 140px; min-width: 230px; min-height: 140px; border-radius: 5px;');
             div.addEventListener('click', () => this.handleImageClick("element"));
             //this.makeResizable(div)
 
@@ -175,7 +183,7 @@ export class EditorComponent implements AfterViewInit, OnInit  {
   }
 
 
-  private makeResizable(element: HTMLElement, minW = 100, minH = 100, size = 20) {
+  private makeResizable(element: HTMLElement, minW = 100, minH = 100, size = 10) {
     // const top = document.createElement('div');
     // top.style.width = '100%';
     // top.style.height = size + 'px';
@@ -189,18 +197,18 @@ export class EditorComponent implements AfterViewInit, OnInit  {
 
     // element.appendChild(top);
 
-    // const bottom = document.createElement('div');
-    // bottom.style.width = '100%';
-    // bottom.style.height = size + 'px';
-    // bottom.style.backgroundColor = 'transparent';
-    // bottom.style.position = 'absolute';
-    // bottom.style.bottom = - (size / 2) + 'px';
-    // bottom.style.left = '0px';
-    // bottom.style.cursor = 'n-resize';
+    const bottom = document.createElement('div');
+    bottom.style.width = '100%';
+    bottom.style.height = size + 'px';
+    bottom.style.backgroundColor = 'transparent';
+    bottom.style.position = 'absolute';
+    bottom.style.bottom = - (size / 2) + 'px';
+    bottom.style.left = '0px';
+    bottom.style.cursor = 'n-resize';
 
-    // bottom.addEventListener('mousedown', resizeYPositive());
+    bottom.addEventListener('mousedown', resizeYPositive());
 
-    // element.appendChild(bottom);
+    element.appendChild(bottom);
 
     // const left = document.createElement('div');
     // left.style.width = size + 'px';
@@ -277,21 +285,21 @@ export class EditorComponent implements AfterViewInit, OnInit  {
 
     // element.appendChild(corner3);
 
-    // const corner4 = document.createElement('div');
-    // corner4.style.border = "1px solid #d9d9d9";
-    // corner4.style.background = "blanchedalmond !important";
-    // corner4.style.width = size + 'px';
-    // corner4.style.height = size + 'px';
-    // corner4.style.backgroundColor = 'transparent';
-    // corner4.style.position = 'absolute';
-    // corner4.style.bottom = - (size / 2) + 'px';
-    // corner4.style.right = - (size / 2) + 'px';
-    // corner4.style.cursor = 'se-resize';
-    // corner4.setAttribute("data-name", 'corner4');
-    // corner4.addEventListener('mousedown', resizeXPositive());
-    // corner4.addEventListener('mousedown', resizeYPositive());
+    const corner4 = document.createElement('div');
+    corner4.style.border = "1px solid #d9d9d9";
+    corner4.style.background = "blanchedalmond !important";
+    corner4.style.width = size + 'px';
+    corner4.style.height = size + 'px';
+    corner4.style.backgroundColor = 'transparent';
+    corner4.style.position = 'absolute';
+    corner4.style.bottom = - (size / 2) + 'px';
+    corner4.style.right = - (size / 2) + 'px';
+    corner4.style.cursor = 'se-resize';
+    corner4.setAttribute("data-name", 'corner4');
+    corner4.addEventListener('mousedown', resizeXPositive());
+    corner4.addEventListener('mousedown', resizeYPositive());
 
-    // element.appendChild(corner4);
+    element.appendChild(corner4);
 
     function getComputedStyleProperty(key: string): number {
         return parseInt(window.getComputedStyle(element).getPropertyValue(key));

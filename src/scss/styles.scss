@@ -987,3 +987,16 @@ a {
 }
 
 // -------------------------------------------------
+
+
+.editor-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -8px; /* Adjust this value to control the distance between the div and the line */
+  bottom: 0;
+  margin: auto;
+  height: 4rem;
+  width: 2px; /* Set your desired line width */
+  background-color: #000; /* Set your desired line color */
+}

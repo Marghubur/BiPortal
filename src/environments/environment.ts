@@ -6,11 +6,11 @@ export const environment = {
   production: false,
   env: "local",
 
-  baseDotNetUrl: "http://localhost:5000/core/api/",
-  baseSpringUrl: "http://localhost:8090/api/",
+  // baseDotNetUrl: "http://localhost:5000/core/api/",
+  // baseSpringUrl: "http://localhost:8090/api/",
 
-  //baseDotNetUrl: "http://bot.io/bot/dn/core/api/",
-  //baseSpringUrl: "http://bot.io/bot/sb/api/",
+  baseDotNetUrl: "http://bot.io/bot/dn/core/api/",
+  baseSpringUrl: "http://bot.io/bot/sb/api/",
 
   FolderDelimiter: "\\"
 };
