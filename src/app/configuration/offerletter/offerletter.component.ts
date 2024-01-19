@@ -89,7 +89,8 @@ export class OfferletterComponent implements OnInit {
   saveofferletter() {
     this.isLoading = true;
     this.submitted = true;
-    let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    //let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+    let data = document.getElementById("editor").innerHTML;
     if (!data && data == "" && this.offerletterForm.invalid) {
       this.isLoading = false;
       return;

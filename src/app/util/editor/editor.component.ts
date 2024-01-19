@@ -1,15 +1,16 @@
-import { AfterViewChecked, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
+import { AjaxService } from 'src/providers/ajax.service';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent {
+export class EditorComponent implements AfterViewInit, OnInit  {
   showingSourceCode: boolean = false;
   isInEditMode: boolean = true;
   richTextField: any;
@@ -20,17 +21,30 @@ export class EditorComponent {
   columns: number = 0;
   IsSideIcon: boolean = true;
   containerHeight: number = 55;
+  $document:any = null;
+
   private eventSubscription: Subscription;
 
   @ViewChild('textFrame', {static: false}) iframe: ElementRef;
+  @ViewChild('editor') editor: ElementRef;
 
-  // constructor(private sanitizer: DomSanitizer,
-  //   private vcRef: ViewContainerRef){ }
+  constructor( private sanitizer: DomSanitizer,
+                private vcRef: ViewContainerRef,
+                private renderer: Renderer2
+            ) { }
+  ngOnInit(): void {
+    this.$document = document;
+  }
+
+  ngAfterViewInit() {
+    this.bindEvents();
+  }
 
   @Input()
   set content(textContent: any) {
     if (textContent && textContent != "") {
-      //this.innerHtmlText = this.sanitizer.bypassSecurityTrustHtml(textContent);
+      this.innerHtmlText = this.sanitizer.bypassSecurityTrustHtml(textContent);
+      console.log(this.innerHtmlText);
     }
   }
 
@@ -43,159 +57,15 @@ export class EditorComponent {
 
   @Input() cleanUp: Observable<void>;
 
-//   ngAfterViewChecked(): void {
-//     $('[data-bs-toggle="tooltip"]').tooltip({
-//       trigger: 'hover'
-//     });
-
-//     $('[data-bs-toggle="tooltip"]').on('click', function () {
-//       $(this).tooltip('dispose');
-//     });
-//   }
-
-//   ngOnInit() {
-//     if(this.cleanUp) {
-//       this.eventSubscription = this.cleanUp.subscribe(() => this.cleanUpIFrame())
-//     }
-//     this.richTextField = document.getElementById("richTextField");
-//     if (this.isEdit) {
-//       document.getElementsByClassName('iframe-wrapper-container')[0].classList.remove('iframe-wrapper-container');
-//     }
-//     this.toggleEdit();
-//   }
-
-//   ngOnDestroy() {
-//     if(this.cleanUp) {
-//       this.eventSubscription.unsubscribe();
-//     }
-//   }
-
-//   cleanUpIFrame() {
-//     if(!this.richTextField) {
-//       this.richTextField = document.getElementById("richTextField");
-//     }
-
-//     this.richTextField.contentWindow.document.body.innerHTML = '';
-//   }
-
-//   execCmd (command) {
-//       this.richTextField.contentDocument.execCommand(command, false, null);
-//   }
-
-//   execCommandWithArg (command, arg) {
-//     let value = arg.target.value;
-//     let text = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.getSelection().toString();
-//     if (text && text != "" ) {
-//       if (Number(value) == 0 && command === "fontSize") {
-//         let tags = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.querySelectorAll<HTMLElement>('font');
-//         for (let i = 0; i < tags.length; i++) {
-//           if (tags[i].innerText === text) {
-//             let parentNode = tags[i].parentNode;
-//             tags[i].parentNode.removeChild(tags[i]);
-//             parentNode.appendChild(document.createTextNode(text));
-//             (parentNode as HTMLElement).style.fontSize = "18px";
-
-//           }
-//         }
-//       }else if (command === "formatBlock") {
-//         let tags = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.querySelectorAll<HTMLElement>('div');
-//         for (let i = 0; i < tags.length; i++) {
-//           if (tags[i].innerText === text) {
-//             tags[i].removeAttribute("fontsize")
-//           }
-//         }
-//         this.richTextField.contentDocument.execCommand(command, false, value);
-//       } else {
-//         this.richTextField.contentDocument.execCommand(command, false, value);
-//       }
-//     }
-//   }
-//   toggleSource () {
-//     if(this.showingSourceCode){
-//       this.richTextField.contentDocument.getElementsByTagName('body')[0].innerHTML =
-//       this.richTextField.contentDocument.getElementsByTagName('body')[0].textContent;
-//       this.showingSourceCode = false;
-//     }else{
-//       this.richTextField.contentDocument.getElementsByTagName('body')[0].textContent =
-//       this.richTextField.contentDocument.getElementsByTagName('body')[0].innerHTML;
-//       this.showingSourceCode = true;
-//     }
-//   }
-
-//   enableEditor(e: any) {
-//     if (this.isEdit) {
-//       if(!this.richTextField) {
-//         this.richTextField = document.getElementById("richTextField");
-//       }
-//       e.target.classList.remove('iframe-wrapper-container');
-//       this.toggleEdit();
-//     }
-//   }
-
-//   toggleEdit() {
-//     if(!this.richTextField) {
-//       this.richTextField = document.getElementById("richTextField");
-//     }
-
-//     if(!this.isInEditMode){
-//         this.richTextField.contentDocument.designMode = 'Off';
-//         this.isInEditMode = false;
-//       }else{
-//         this.richTextField.contentDocument.designMode = 'On';
-//         this.isInEditMode = true;
-//       }
-//     this.richTextField.contentWindow.document.body.focus();
-//     var body = this.richTextField.contentWindow.document.querySelector('body');
-//     body.style.fontSize = '18px';
-// }
-
-//   toggleDarkLight() {
-//       var element = document.getElementById("richtextcontainer");
-//       element.classList.toggle("dark-mode");
-//   }
-
-//   uploadProfilePicture(event: any) {
-//     this.imageURL = "";
-//     if (event.target.files) {
-//       var reader = new FileReader();
-//       reader.readAsDataURL(event.target.files[0]);
-//       reader.onload = (event: any) => {
-//         this.imageURL = event.target.result;
-//       };
-//       this.richTextField.contentDocument.execCommand('insertImage', false, this.imageURL);
-//     }
-//   }
-
-//   fireBrowserFile() {
-//     $("#uploarichimage").click();
-//   }
-
-//   tabelPopUp() {
-//     $('#tableModal').modal('show');
-//   }
-
-//   addTable() {
-//     var html = this.generateTable();
-//     this.richTextField.contentDocument.execCommand('insertHTML', false, html.toString());
-//     $('#tableModal').modal('hide');
-//   }
-
-//   generateTable() {
-//     let myRows = this.rows;
-//     let myColumns = this.columns;
-//     var html = '<table style="border-collapse: collapse; width: 100%;"><tbody>';
-//     for (let i = 0; i <myRows; i++) {
-//       html += "<tr>";
-//       for (let j = 0; j <myColumns; j++) {
-//         html += "<td style='padding: 15px; border: 1px solid #222; vertical-align: middle;'>&nbsp;</td>"
-//       }
-//       html += "</tr>";
-//     }
-//     html += "</tbody></table>";
-//     return html;
-//   }
+  bindEvents() {
+    const nativeElement = this.editor.nativeElement;
+    const spanElement = nativeElement.querySelector('img');
+    if (spanElement)
+      this.renderer.listen(spanElement, 'click', () => this.handleImageClick("element"));
+  }
 
   createTable() {
+    $('#tableModal').modal('hide');
     var table = document.createElement('table');
     table.classList.add("table", "table-bordered")
     for (var i = 0; i < this.rows; i++) {
@@ -206,7 +76,7 @@ export class EditorComponent {
         cell.textContent = 'Cell ' + (i + 1) + '-' + (j + 1);
       }
     }
-    document.execCommand('insertHTML', false, table.outerHTML);
+    this.$document.execCommand('insertHTML', false, table.outerHTML);
   }
 
   execCmd (command) {
@@ -260,6 +130,9 @@ export class EditorComponent {
             range.insertNode(div);
 
             reader.readAsDataURL(blob);
+          } else {
+            let text = event.clipboardData.getData("text/plain")
+            document.execCommand("insertText", false, text)
           }
         }
       }
@@ -316,18 +189,18 @@ export class EditorComponent {
 
     // element.appendChild(top);
 
-    const bottom = document.createElement('div');
-    bottom.style.width = '100%';
-    bottom.style.height = size + 'px';
-    bottom.style.backgroundColor = 'transparent';
-    bottom.style.position = 'absolute';
-    bottom.style.bottom = - (size / 2) + 'px';
-    bottom.style.left = '0px';
-    bottom.style.cursor = 'n-resize';
+    // const bottom = document.createElement('div');
+    // bottom.style.width = '100%';
+    // bottom.style.height = size + 'px';
+    // bottom.style.backgroundColor = 'transparent';
+    // bottom.style.position = 'absolute';
+    // bottom.style.bottom = - (size / 2) + 'px';
+    // bottom.style.left = '0px';
+    // bottom.style.cursor = 'n-resize';
 
-    bottom.addEventListener('mousedown', resizeYPositive());
+    // bottom.addEventListener('mousedown', resizeYPositive());
 
-    element.appendChild(bottom);
+    // element.appendChild(bottom);
 
     // const left = document.createElement('div');
     // left.style.width = size + 'px';
@@ -404,21 +277,21 @@ export class EditorComponent {
 
     // element.appendChild(corner3);
 
-    const corner4 = document.createElement('div');
-    corner4.style.border = "1px solid #d9d9d9";
-    corner4.style.background = "blanchedalmond !important";
-    corner4.style.width = size + 'px';
-    corner4.style.height = size + 'px';
-    corner4.style.backgroundColor = 'transparent';
-    corner4.style.position = 'absolute';
-    corner4.style.bottom = - (size / 2) + 'px';
-    corner4.style.right = - (size / 2) + 'px';
-    corner4.style.cursor = 'se-resize';
-    corner4.setAttribute("data-name", 'corner4');
-    corner4.addEventListener('mousedown', resizeXPositive());
-    corner4.addEventListener('mousedown', resizeYPositive());
+    // const corner4 = document.createElement('div');
+    // corner4.style.border = "1px solid #d9d9d9";
+    // corner4.style.background = "blanchedalmond !important";
+    // corner4.style.width = size + 'px';
+    // corner4.style.height = size + 'px';
+    // corner4.style.backgroundColor = 'transparent';
+    // corner4.style.position = 'absolute';
+    // corner4.style.bottom = - (size / 2) + 'px';
+    // corner4.style.right = - (size / 2) + 'px';
+    // corner4.style.cursor = 'se-resize';
+    // corner4.setAttribute("data-name", 'corner4');
+    // corner4.addEventListener('mousedown', resizeXPositive());
+    // corner4.addEventListener('mousedown', resizeYPositive());
 
-    element.appendChild(corner4);
+    // element.appendChild(corner4);
 
     function getComputedStyleProperty(key: string): number {
         return parseInt(window.getComputedStyle(element).getPropertyValue(key));

@@ -116,7 +116,8 @@ export class ConfigPerformanceComponent implements OnInit {
 
     let value = this.objectForm.value;
     if (errroCounter === 0 && value.CompanyId > 0) {
-      let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+      //let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
+      let data = document.getElementById("editor").innerHTML;
       if (data)
         value.Description = data;
 
