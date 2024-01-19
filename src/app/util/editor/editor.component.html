@@ -1,3 +1,81 @@
+<div class="d-flex align-items-center flex-wrap overflow-hidden col-md-12">
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Bold" href="javascript:void(0)" title="Negrito" (click)="execCmd('bold');"><i class="fa-solid fa-bold"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Italic" href="javascript:void(0)" (click)="execCmd('italic');"><i class="fa-solid fa-italic"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Underline" href="javascript:void(0)" (click)="execCmd('underline');"><i class="fa-solid fa-underline"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Remove Formar" href="javascript:void(0)" (click)="execCmd('removeFormat');"><i class="fa-solid fa-eraser"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Strike Through" href="javascript:void(0)" (click)="execCmd('strikeThrough');"><i class="fa-solid fa-strikethrough"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Justify Left" href="javascript:void(0)" (click)="execCmd('justifyLeft');"><i class="fa-solid fa-align-left"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Justify Center" href="javascript:void(0)" (click)="execCmd('justifyCenter');"><i class="fa-solid fa-align-center"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Justify Right" href="javascript:void(0)" (click)="execCmd('justifyRight');"><i class="fa-solid fa-align-right"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Justify Full" href="javascript:void(0)" (click)="execCmd('justifyFull');"><i class="fa-solid fa-align-justify"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Cut" href="javascript:void(0)" (click)="execCmd('cut');"><i class="fa-solid fa-scissors"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Copy" href="javascript:void(0)" (click)="execCmd('copy');"><i class="fa-regular fa-copy"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Indent" href="javascript:void(0)" (click)="execCmd('indent');"><i class="fa-solid fa-indent"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Outdent" href="javascript:void(0)" (click)="execCmd('outdent');"><i class="fa fa-outdent"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Subscript" href="javascript:void(0)" (click)="execCmd('subscript');"><i class="fa-solid fa-subscript"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Superscript" href="javascript:void(0)" (click)="execCmd('superscript');"><i class="fa-solid fa-superscript"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Undo" href="javascript:void(0)" (click)="execCmd('undo');"><i class="fa-solid fa-rotate-left"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Redo" href="javascript:void(0)" (click)="execCmd('redo');"><i class="fa-solid fa-repeat"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Unordered List" href="javascript:void(0)" (click)="execCmd('insertUnorderedList');"><i class="fa-solid fa-list-ul"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Ordered List" href="javascript:void(0)" (click)="execCmd('insertOrderedList');"><i class="fa-solid fa-list-ol"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Paragraph" href="javascript:void(0)" (click)="execCmd('insertParagraph');"><i class="fa-solid fa-paragraph"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Horizental Line" href="javascript:void(0)" (click)="execCmd('insertHorizontalRule');">HR</a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Unlink" href="javascript:void(0)" (click)="execCmd('unlink');"><i class="fa-solid fa-link-slash"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Code" href="javascript:void(0)" ><i class="fa-solid fa-code"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Editor" href="javascript:void(0)" ><i class="fa-solid fa-pencil"></i></a>
+  <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Table" href="javascript:void(0)" (click)="tabelPopUp()"><i class="fa-solid fa-table"></i></a>
+  <div class="col-auto">
+    <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Font Color" class="text-decoration-none" (change)="execCommandWithArg('foreColor', $event);">
+      <input type="color" >
+    </a>
+  </div>
+  <div class="col-auto ms-2">
+    <select class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Format Block" (change)="execCommandWithArg('formatBlock', $event);" >
+        <option value="" selected>Default</option>
+        <option value="H1">H1</option>
+        <option value="H2">H2</option>
+        <option value="H3">H3</option>
+        <option value="H4">H4</option>
+        <option value="H5">H5</option>
+        <option value="H6">H6</option>
+    </select>
+  </div>
+  <div class="col-auto mx-2">
+    <select class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Font Name" (change)="execCommandWithArg('fontName', $event);">
+        <option value="Arial">Arial</option>
+        <option value="Comic Sans MS">Comic Sans MS</option>
+        <option value="Courier">Courier</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Tahoma">Tahoma</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Verdana">Verdana</option>
+    </select>
+  </div>
+  <div class="col-auto mx-2">
+    <select class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Font Size" (change)="execCommandWithArg('fontSize', $event);">
+      <option value="0" selected>Default</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+    </select>
+  </div>
+  <!-- <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Select All" (click)="execCmd('selectAll');">Select All</a> -->
+</div>
+<div class="editor" contenteditable="true" id="editor" (paste)="handlePaste($event)">
+  <p>Type your text here...</p>
+</div>
+
+
+<div class="pasted-image" id="pastedImageContainer"></div>
+
+
+
+
+
 <!-- <div (click)="closePopOver()" (keydown.esc)="closePopOver()">
     <div (contextmenu)="manipulateSection($event)">
         <div>
@@ -72,7 +150,7 @@
 
 
 
-<div id="richtextcontainer" class="col-md-12 overflow-hidden mx-0 px-0">
+<!-- <div id="richtextcontainer" class="col-md-12 overflow-hidden mx-0 px-0">
   <div class="d-flex align-items-center flex-wrap overflow-hidden col-md-12" *ngIf="isEdit">
     <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Bold" href="javascript:void(0)" title="Negrito" (click)="execCmd('bold');"><i class="fa-solid fa-bold"></i></a>
     <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Italic" href="javascript:void(0)" (click)="execCmd('italic');"><i class="fa-solid fa-italic"></i></a>
@@ -95,7 +173,6 @@
     <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Ordered List" href="javascript:void(0)" (click)="execCmd('insertOrderedList');"><i class="fa-solid fa-list-ol"></i></a>
     <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Paragraph" href="javascript:void(0)" (click)="execCmd('insertParagraph');"><i class="fa-solid fa-paragraph"></i></a>
     <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Horizental Line" href="javascript:void(0)" (click)="execCmd('insertHorizontalRule');">HR</a>
-    <!-- <button class=" (click)="execCmd('createLink', prompt('Enter a URL', 'http://'));"><i class="fa fa-link"></i></button> -->
     <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Unlink" href="javascript:void(0)" (click)="execCmd('unlink');"><i class="fa-solid fa-link-slash"></i></a>
     <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Code" href="javascript:void(0)" (click)="toggleSource();"><i class="fa-solid fa-code"></i></a>
     <a class="text-decoration-none px-2 text-dark" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit Editor" href="javascript:void(0)" (click)="toggleEdit();"><i class="fa-solid fa-pencil"></i></a>
@@ -104,11 +181,6 @@
         <input type="color" >
       </a>
     </div>
-    <!-- <div class="col-auto">
-      <a href="javascript:void(0)" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Background Color" class="text-decoration-none" >
-        <input type="color" >
-      </a>
-    </div> -->
     <div class="col-auto">
       <select class="form-select" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Format Block" (change)="execCommandWithArg('formatBlock', $event);" >
           <option value="" selected>Default</option>
@@ -152,7 +224,7 @@
     <div class="iframe-wrapper-container"  (click)="enableEditor($event)"></div>
     <iframe id="richTextField" [srcdoc]="innerHtmlText" class="rounded w-100" [ngStyle]="{'height': containerHeight+'vh'}"></iframe>
   </div>
-</div>
+</div> -->
 
 <!-- Add Table -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="tableModal" tabindex="-1" aria-labelledby="tableModalLabel" aria-hidden="true">
@@ -176,7 +248,7 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-success" (click)="addTable()">
+        <button class="btn btn-success" (click)="createTable()">
           Add
         </button>
       </div>

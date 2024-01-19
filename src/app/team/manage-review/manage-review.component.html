@@ -54,7 +54,7 @@
                         <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box grid-card pb-4 pt-2" [ngClass]="{'custom-border': (item.get('AppraisalStatus').value == 2 || item.get('AppraisalStatus').value == 0), 'danger-border': item.get('AppraisalStatus').value == 5, 'success-border': item.get('AppraisalStatus').value == 9, 'remove-appraisal': !item.get('IsActive').value}">
                           <div class="d-flex col-md-10 align-items-center">
                             <div class="form-check">
-                              <input class="form-check-input" type="checkbox" (click)="removeEmployee($event, i)" checked>
+                              <input class="form-check-input" type="checkbox" (click)="removeEmployee($event, i)" [checked]='item.get("IsActive").value == true'>
                             </div>
                             <a href="javascript:void(0)" class="me-2">
                               <i class="fa-regular fa-circle-user fa-lg"></i>

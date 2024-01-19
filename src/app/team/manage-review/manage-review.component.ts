@@ -260,7 +260,7 @@ export class ManageReviewComponent implements OnInit {
         this.isLoading = false;
       })
     } else {
-      ErrorToast("Appraisal of all the employee are not submitted");
+      ErrorToast("Objective of all the employee are not submitted");
       this.isLoading = false;
     }
   }
