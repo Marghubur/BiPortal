@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -56,6 +56,29 @@ export class EditorComponent implements AfterViewInit, OnInit  {
   }
 
   @Input() cleanUp: Observable<void>;
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: Event) {
+    const clickedElement = event.target as HTMLElement;
+    if (clickedElement.tagName.toLowerCase() !== 'img')
+      this.removeElementsByAttribute('editor', 'data-name', ['e-resize', 'n-resize', 'corner4']);
+  }
+
+  private removeElementsByAttribute(parentId: string, attributeName: string, attributeValues: string[]) {
+    const parentElement = document.getElementById(parentId);
+    if (parentElement) {
+      const childElements = parentElement.querySelectorAll(`[${attributeName}]`);
+      if (childElements && childElements.length > 0) {
+        childElements.forEach(childElement => {
+          const attributeValue = childElement.getAttribute(attributeName);
+  
+          if (attributeValue && attributeValues.includes(attributeValue)) {
+            this.renderer.removeChild(parentElement, childElement);
+          }
+        });
+      }
+    }
+  }
 
   bindEvents() {
     const nativeElement = this.editor.nativeElement;
@@ -125,13 +148,13 @@ export class EditorComponent implements AfterViewInit, OnInit  {
             // var barDiv = document.createElement('div');
             // barDiv.setAttribute('style', 'width: 5rem; padding-left: 1rem; border: 2px solid #d3d3d3;');
             // div.appendChild(barDiv);
-
-            div.setAttribute("id", "element");
+            let id = "element" + this.getRandomNumber().toString();
+            img.addEventListener('click', () => this.handleImageClick(id));
+            div.setAttribute("id", id);
             div.setAttribute("contenteditable", 'false');
             div.setAttribute("class", 'editor-content');
             div.appendChild(img);
             div.setAttribute('style', 'position: relative; background-color: #f1f1f1; border: 1px solid #d3d3d3; margin-bottom: 2rem; left: 40px; top:  40px; width: 230px; height: 140px; min-width: 230px; min-height: 140px; border-radius: 5px;');
-            div.addEventListener('click', () => this.handleImageClick("element"));
             //this.makeResizable(div)
 
             range.deleteContents();
@@ -184,254 +207,261 @@ export class EditorComponent implements AfterViewInit, OnInit  {
 
 
   private makeResizable(element: HTMLElement, minW = 100, minH = 100, size = 10) {
+    // let isClassAdded = (element.childNodes[0] as HTMLElement).getAttribute("data-flag");
     // const top = document.createElement('div');
-    // top.style.width = '100%';
-    // top.style.height = size + 'px';
-    // top.style.backgroundColor = 'transparent';
-    // top.style.position = 'absolute';
-    // top.style.top = - (size / 2) + 'px';
-    // top.style.left = '0px';
-    // top.style.cursor = 'n-resize';
+  // top.style.width = '100%';
+  // top.style.height = size + 'px';
+  // top.style.backgroundColor = 'transparent';
+  // top.style.position = 'absolute';
+  // top.style.top = - (size / 2) + 'px';
+  // top.style.left = '0px';
+  // top.style.cursor = 'n-resize';
 
-    // top.addEventListener('mousedown', resizeYNegative());
+  // top.addEventListener('mousedown', resizeYNegative());
 
-    // element.appendChild(top);
+  // element.appendChild(top);
+  (element.childNodes[0] as HTMLElement).setAttribute("data-flag", 'true');
+  const bottom = document.createElement('div');
+  bottom.style.width = '100%';
+  bottom.style.height = size + 'px';
+  bottom.style.backgroundColor = 'transparent';
+  bottom.style.position = 'absolute';
+  bottom.style.bottom = - (size / 2) + 'px';
+  bottom.style.left = '0px';
+  bottom.style.cursor = 'n-resize';
+  bottom.setAttribute("data-name", "n-resize");
+  bottom.addEventListener('mousedown', resizeYPositive());
 
-    const bottom = document.createElement('div');
-    bottom.style.width = '100%';
-    bottom.style.height = size + 'px';
-    bottom.style.backgroundColor = 'transparent';
-    bottom.style.position = 'absolute';
-    bottom.style.bottom = - (size / 2) + 'px';
-    bottom.style.left = '0px';
-    bottom.style.cursor = 'n-resize';
+  element.appendChild(bottom);
 
-    bottom.addEventListener('mousedown', resizeYPositive());
+  // const left = document.createElement('div');
+  // left.style.width = size + 'px';
+  // left.style.height = '100%';
+  // left.style.backgroundColor = 'transparent';
+  // left.style.position = 'absolute';
+  // left.style.top = '0px';
+  // left.style.left = - (size / 2) + 'px';
+  // left.style.cursor = 'e-resize';
 
-    element.appendChild(bottom);
+  // left.addEventListener('mousedown', resizeXNegative());
 
-    // const left = document.createElement('div');
-    // left.style.width = size + 'px';
-    // left.style.height = '100%';
-    // left.style.backgroundColor = 'transparent';
-    // left.style.position = 'absolute';
-    // left.style.top = '0px';
-    // left.style.left = - (size / 2) + 'px';
-    // left.style.cursor = 'e-resize';
+  // element.appendChild(left);
 
-    // left.addEventListener('mousedown', resizeXNegative());
+  const right = document.createElement('div');
+  right.style.width = size + 'px';
+  right.style.height = '100%';
+  right.style.backgroundColor = 'transparent';
+  right.style.position = 'absolute';
+  right.style.top = '0px';
+  right.style.right = - (size / 2) + 'px';
+  right.style.cursor = 'e-resize';
+  right.setAttribute("data-name", "e-resize");
+  right.addEventListener('mousedown', resizeXPositive());
 
-    // element.appendChild(left);
+  element.appendChild(right);
 
-    const right = document.createElement('div');
-    right.style.width = size + 'px';
-    right.style.height = '100%';
-    right.style.backgroundColor = 'transparent';
-    right.style.position = 'absolute';
-    right.style.top = '0px';
-    right.style.right = - (size / 2) + 'px';
-    right.style.cursor = 'e-resize';
+  // const corner1 = document.createElement('div');
+  // corner1.style.width = size + 'px';
+  // corner1.style.border = "1px solid #d9d9d9";
+  // corner1.style.background = "blanchedalmond !important";
+  // corner1.style.height = size + 'px';
+  // corner1.style.backgroundColor = 'transparent';
+  // corner1.style.position = 'absolute';
+  // corner1.style.top = - (size / 2) + 'px';
+  // corner1.style.left = - (size / 2) + 'px';
+  // corner1.style.cursor = 'nw-resize';
+  // corner1.setAttribute("data-name", 'corner1');
+  // corner1.addEventListener('mousedown', resizeXNegative());
+  // corner1.addEventListener('mousedown', resizeYNegative());
 
-    right.addEventListener('mousedown', resizeXPositive());
+  // element.appendChild(corner1);
 
-    element.appendChild(right);
+  // const corner2 = document.createElement('div');
+  // corner2.style.width = size + 'px';
+  // corner2.style.border = "1px solid #d9d9d9";
+  // corner2.style.background = "blanchedalmond !important";
+  // corner2.style.height = size + 'px';
+  // corner2.style.backgroundColor = 'transparent';
+  // corner2.style.position = 'absolute';
+  // corner2.style.top = - (size / 2) + 'px';
+  // corner2.style.right = - (size / 2) + 'px';
+  // corner2.style.cursor = 'ne-resize';
+  // corner2.setAttribute("data-name", 'corner2');
 
-    // const corner1 = document.createElement('div');
-    // corner1.style.width = size + 'px';
-    // corner1.style.border = "1px solid #d9d9d9";
-    // corner1.style.background = "blanchedalmond !important";
-    // corner1.style.height = size + 'px';
-    // corner1.style.backgroundColor = 'transparent';
-    // corner1.style.position = 'absolute';
-    // corner1.style.top = - (size / 2) + 'px';
-    // corner1.style.left = - (size / 2) + 'px';
-    // corner1.style.cursor = 'nw-resize';
-    // corner1.setAttribute("data-name", 'corner1');
-    // corner1.addEventListener('mousedown', resizeXNegative());
-    // corner1.addEventListener('mousedown', resizeYNegative());
+  // corner2.addEventListener('mousedown', resizeXPositive());
+  // corner2.addEventListener('mousedown', resizeYNegative());
 
-    // element.appendChild(corner1);
+  // element.appendChild(corner2);
 
-    // const corner2 = document.createElement('div');
-    // corner2.style.width = size + 'px';
-    // corner2.style.border = "1px solid #d9d9d9";
-    // corner2.style.background = "blanchedalmond !important";
-    // corner2.style.height = size + 'px';
-    // corner2.style.backgroundColor = 'transparent';
-    // corner2.style.position = 'absolute';
-    // corner2.style.top = - (size / 2) + 'px';
-    // corner2.style.right = - (size / 2) + 'px';
-    // corner2.style.cursor = 'ne-resize';
-    // corner2.setAttribute("data-name", 'corner2');
+  // const corner3 = document.createElement('div');
+  // corner3.style.width = size + 'px';
+  // corner3.style.border = "1px solid #d9d9d9";
+  // corner3.style.background = "blanchedalmond !important";
+  // corner3.style.height = size + 'px';
+  // corner3.style.backgroundColor = 'transparent';
+  // corner3.style.position = 'absolute';
+  // corner3.style.bottom = - (size / 2) + 'px';
+  // corner3.style.left = - (size / 2) + 'px';
+  // corner3.style.cursor = 'sw-resize';
+  // corner3.setAttribute("data-name", 'corner3');
+  // corner3.addEventListener('mousedown', resizeXNegative());
+  // corner3.addEventListener('mousedown', resizeYPositive());
 
-    // corner2.addEventListener('mousedown', resizeXPositive());
-    // corner2.addEventListener('mousedown', resizeYNegative());
+  // element.appendChild(corner3);
 
-    // element.appendChild(corner2);
+  const corner4 = document.createElement('div');
+  corner4.style.border = "1px solid #d9d9d9";
+  corner4.style.background = "blanchedalmond !important";
+  corner4.style.width = size + 'px';
+  corner4.style.height = size + 'px';
+  corner4.style.backgroundColor = 'transparent';
+  corner4.style.position = 'absolute';
+  corner4.style.bottom = - (size / 2) + 'px';
+  corner4.style.right = - (size / 2) + 'px';
+  corner4.style.cursor = 'se-resize';
+  corner4.setAttribute("data-name", 'corner4');
+  corner4.addEventListener('mousedown', resizeXPositive());
+  corner4.addEventListener('mousedown', resizeYPositive());
 
-    // const corner3 = document.createElement('div');
-    // corner3.style.width = size + 'px';
-    // corner3.style.border = "1px solid #d9d9d9";
-    // corner3.style.background = "blanchedalmond !important";
-    // corner3.style.height = size + 'px';
-    // corner3.style.backgroundColor = 'transparent';
-    // corner3.style.position = 'absolute';
-    // corner3.style.bottom = - (size / 2) + 'px';
-    // corner3.style.left = - (size / 2) + 'px';
-    // corner3.style.cursor = 'sw-resize';
-    // corner3.setAttribute("data-name", 'corner3');
-    // corner3.addEventListener('mousedown', resizeXNegative());
-    // corner3.addEventListener('mousedown', resizeYPositive());
+  element.appendChild(corner4);
 
-    // element.appendChild(corner3);
+  function getComputedStyleProperty(key: string): number {
+      return parseInt(window.getComputedStyle(element).getPropertyValue(key));
+  }
 
-    const corner4 = document.createElement('div');
-    corner4.style.border = "1px solid #d9d9d9";
-    corner4.style.background = "blanchedalmond !important";
-    corner4.style.width = size + 'px';
-    corner4.style.height = size + 'px';
-    corner4.style.backgroundColor = 'transparent';
-    corner4.style.position = 'absolute';
-    corner4.style.bottom = - (size / 2) + 'px';
-    corner4.style.right = - (size / 2) + 'px';
-    corner4.style.cursor = 'se-resize';
-    corner4.setAttribute("data-name", 'corner4');
-    corner4.addEventListener('mousedown', resizeXPositive());
-    corner4.addEventListener('mousedown', resizeYPositive());
+  function resizeXPositive() {
+      let offsetX: number;
 
-    element.appendChild(corner4);
+      function dragMouseDown(e: MouseEvent) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        const { clientX } = e;
+        offsetX = clientX - element.offsetLeft - getComputedStyleProperty('width');
+        document.addEventListener('mouseup', closeDragElement);
+        document.addEventListener('mousemove', elementDrag);
+      }
 
-    function getComputedStyleProperty(key: string): number {
-        return parseInt(window.getComputedStyle(element).getPropertyValue(key));
-    }
+      function elementDrag(e: MouseEvent) {
+          const { clientX } = e;
+          let x = clientX - element.offsetLeft - offsetX;
+          if (x < minW) x = minW;
+          element.style.width = x + 'px';
+      }
 
-    function resizeXPositive() {
-        let offsetX: number;
+      function closeDragElement() {
+          document.removeEventListener('mouseup', closeDragElement);
+          document.removeEventListener('mousemove', elementDrag);
+      }
 
-        function dragMouseDown(e: MouseEvent) {
+      return dragMouseDown;
+  }
+
+  function resizeYPositive() {
+      let offsetY: number;
+
+      function dragMouseDown(e: MouseEvent) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+          const { clientY } = e;
+          offsetY = clientY - element.offsetTop - getComputedStyleProperty('height');
+          document.addEventListener('mouseup', closeDragElement);
+          document.addEventListener('mousemove', elementDrag);
+      }
+
+      function elementDrag(e: MouseEvent) {
+          const { clientY } = e;
+          let y = clientY - element.offsetTop - offsetY;
+          if (y < minH) y = minH;
+          element.style.height = y + 'px';
+      }
+
+      function closeDragElement() {
+          document.removeEventListener('mouseup', closeDragElement);
+          document.removeEventListener('mousemove', elementDrag);
+      }
+
+      return dragMouseDown;
+  }
+
+  function resizeXNegative() {
+      let offsetX: number;
+      let startX: number;
+      let startW: number;
+      let maxX: number;
+
+      function dragMouseDown(e: MouseEvent) {
           if (e.button !== 0) return;
           e.preventDefault();
           const { clientX } = e;
-          offsetX = clientX - element.offsetLeft - getComputedStyleProperty('width');
+          startX = getComputedStyleProperty('left');
+          startW = getComputedStyleProperty('width');
+          offsetX = clientX - startX;
+          maxX = startX + startW - minW;
+
           document.addEventListener('mouseup', closeDragElement);
           document.addEventListener('mousemove', elementDrag);
-        }
+      }
 
-        function elementDrag(e: MouseEvent) {
-            const { clientX } = e;
-            let x = clientX - element.offsetLeft - offsetX;
-            if (x < minW) x = minW;
-            element.style.width = x + 'px';
-        }
+      function elementDrag(e: MouseEvent) {
+          const { clientX } = e;
+          let x = clientX - offsetX;
+          let w = startW + startX - x;
+          if (w < minW) w = minW;
+          if (x > maxX) x = maxX;
+          element.style.left = x + 'px';
+          element.style.width = w + 'px';
+      }
 
-        function closeDragElement() {
-            document.removeEventListener('mouseup', closeDragElement);
-            document.removeEventListener('mousemove', elementDrag);
-        }
+      function closeDragElement() {
+          document.removeEventListener('mouseup', closeDragElement);
+          document.removeEventListener('mousemove', elementDrag);
+      }
 
-        return dragMouseDown;
+      return dragMouseDown;
+  }
+
+  function resizeYNegative() {
+      let offsetY: number;
+      let startY: number;
+      let startH: number;
+      let maxY: number;
+
+      function dragMouseDown(e: MouseEvent) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+          const { clientY } = e;
+          startY = getComputedStyleProperty('top');
+          startH = getComputedStyleProperty('height');
+          offsetY = clientY - startY;
+          maxY = startY + startH - minH;
+
+          document.addEventListener('mouseup', closeDragElement);
+          document.addEventListener('mousemove', elementDrag);
+      }
+
+      function elementDrag(e: MouseEvent) {
+          const { clientY } = e;
+          let y = clientY - offsetY;
+          let h = startH + startY - y;
+          if (h < minH) h = minH;
+          if (y > maxY) y = maxY;
+          element.style.top = y + 'px';
+          element.style.height = h + 'px';
+      }
+
+      function closeDragElement() {
+          document.removeEventListener('mouseup', closeDragElement);
+          document.removeEventListener('mousemove', elementDrag);
+      }
+
+      return dragMouseDown;
     }
+  }
 
-    function resizeYPositive() {
-        let offsetY: number;
-
-        function dragMouseDown(e: MouseEvent) {
-            if (e.button !== 0) return;
-            e.preventDefault();
-            const { clientY } = e;
-            offsetY = clientY - element.offsetTop - getComputedStyleProperty('height');
-            document.addEventListener('mouseup', closeDragElement);
-            document.addEventListener('mousemove', elementDrag);
-        }
-
-        function elementDrag(e: MouseEvent) {
-            const { clientY } = e;
-            let y = clientY - element.offsetTop - offsetY;
-            if (y < minH) y = minH;
-            element.style.height = y + 'px';
-        }
-
-        function closeDragElement() {
-            document.removeEventListener('mouseup', closeDragElement);
-            document.removeEventListener('mousemove', elementDrag);
-        }
-
-        return dragMouseDown;
-    }
-
-    function resizeXNegative() {
-        let offsetX: number;
-        let startX: number;
-        let startW: number;
-        let maxX: number;
-
-        function dragMouseDown(e: MouseEvent) {
-            if (e.button !== 0) return;
-            e.preventDefault();
-            const { clientX } = e;
-            startX = getComputedStyleProperty('left');
-            startW = getComputedStyleProperty('width');
-            offsetX = clientX - startX;
-            maxX = startX + startW - minW;
-
-            document.addEventListener('mouseup', closeDragElement);
-            document.addEventListener('mousemove', elementDrag);
-        }
-
-        function elementDrag(e: MouseEvent) {
-            const { clientX } = e;
-            let x = clientX - offsetX;
-            let w = startW + startX - x;
-            if (w < minW) w = minW;
-            if (x > maxX) x = maxX;
-            element.style.left = x + 'px';
-            element.style.width = w + 'px';
-        }
-
-        function closeDragElement() {
-            document.removeEventListener('mouseup', closeDragElement);
-            document.removeEventListener('mousemove', elementDrag);
-        }
-
-        return dragMouseDown;
-    }
-
-    function resizeYNegative() {
-        let offsetY: number;
-        let startY: number;
-        let startH: number;
-        let maxY: number;
-
-        function dragMouseDown(e: MouseEvent) {
-            if (e.button !== 0) return;
-            e.preventDefault();
-            const { clientY } = e;
-            startY = getComputedStyleProperty('top');
-            startH = getComputedStyleProperty('height');
-            offsetY = clientY - startY;
-            maxY = startY + startH - minH;
-
-            document.addEventListener('mouseup', closeDragElement);
-            document.addEventListener('mousemove', elementDrag);
-        }
-
-        function elementDrag(e: MouseEvent) {
-            const { clientY } = e;
-            let y = clientY - offsetY;
-            let h = startH + startY - y;
-            if (h < minH) h = minH;
-            if (y > maxY) y = maxY;
-            element.style.top = y + 'px';
-            element.style.height = h + 'px';
-        }
-
-        function closeDragElement() {
-            document.removeEventListener('mouseup', closeDragElement);
-            document.removeEventListener('mousemove', elementDrag);
-        }
-
-        return dragMouseDown;
-    }
+  getRandomNumber(): number {
+    const min = 1;
+    const max = 1000;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }
 
