@@ -457,6 +457,10 @@ export class WikiComponent implements OnInit, AfterViewChecked {
     if (data.includes("cursor: e-resize;")) {
       data = data.replaceAll("cursor: e-resize;", "");
     }
+
+    if (data.includes("data-flag='true'")) {
+      data = data.replaceAll("data-flag='true'", "");
+    }
     //data = this.removeHeaderTag(data);
     // let headers = data.split("#").filter(x => x.includes("#"));
     // if (headers.length > 0) {
