@@ -21,9 +21,6 @@ export class ResetpasswordComponent implements OnInit {
   isLogOut: boolean = false;
   isPasswordChanged: boolean = false;
   userDetail: UserDetail = new UserDetail();
-  password: string = 'password';
-  showPassword: boolean = false;
-  pass: string = 'pass';
   showConfirmPassword: boolean = false;
 
   constructor(private fb: FormBuilder,
@@ -34,7 +31,7 @@ export class ResetpasswordComponent implements OnInit {
 
   ngOnInit(): void {
     let expiredOn = this.local.getByKey(AccessTokenExpiredOn);
-    this.userDetail = this.user.getInstance() as UserDetail;
+    this.userDetail = this.user.getInstance();
     if(expiredOn === null || expiredOn === "")
     this.userDetail["TokenExpiryDuration"] = new Date();
     else
@@ -110,14 +107,17 @@ export class ResetpasswordComponent implements OnInit {
     this.isPasswordChanged = false;
   }
 
-  passwordShow(e: any) {
-    if (this.password === 'password') {
-      this.password = 'text';
-      this.showPassword = true;
-    } else {
-      this.password = 'password';
-      this.showPassword = false;
-    }
+  showPassword(e: any) {
+    e.currentTarget.previousElementSibling.previousElementSibling.removeAttribute("type");
+    e.currentTarget.previousElementSibling.previousElementSibling.setAttribute("type", "text");
+    e.currentTarget.previousElementSibling.classList.remove("d-none");
+    e.target.parentElement.classList.add("d-none");
   }
 
+  hidePassword(e: any) {
+    e.currentTarget.previousElementSibling.removeAttribute("type");
+    e.currentTarget.previousElementSibling.setAttribute("type", "password");
+    e.currentTarget.nextElementSibling.classList.remove("d-none")
+    e.target.parentElement.classList.add("d-none");
+  }
 }

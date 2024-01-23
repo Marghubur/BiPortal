@@ -504,7 +504,7 @@ export class ApplyLeaveComponent implements OnInit {
   LeaveChart(index: number, item: any) {
     let consumeLeave = 0;
     let leavedata: any = this.leaveData.filter(x => x.LeaveTypeId == item.LeavePlanTypeId);
-    if (leavedata) {
+    if (leavedata.length > 0) {
       consumeLeave = leavedata.map(x => x.NumOfDays).reduce((acc, curr) => {return acc + curr;}, 0)
     }
     this.chartDataset.push({

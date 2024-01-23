@@ -1,16 +1,15 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
 declare var $: any;
 import 'bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
-import { AjaxService } from 'src/providers/ajax.service';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements AfterViewInit, OnInit  {
+export class EditorComponent implements AfterViewInit  {
   showingSourceCode: boolean = false;
   isInEditMode: boolean = true;
   richTextField: any;
@@ -21,7 +20,6 @@ export class EditorComponent implements AfterViewInit, OnInit  {
   columns: number = 0;
   IsSideIcon: boolean = true;
   containerHeight: number = 55;
-  $document:any = null;
 
   private eventSubscription: Subscription;
 
@@ -32,9 +30,6 @@ export class EditorComponent implements AfterViewInit, OnInit  {
                 private vcRef: ViewContainerRef,
                 private renderer: Renderer2
             ) { }
-  ngOnInit(): void {
-    this.$document = document;
-  }
 
   ngAfterViewInit() {
     this.bindEvents();
@@ -71,11 +66,18 @@ export class EditorComponent implements AfterViewInit, OnInit  {
       if (childElements && childElements.length > 0) {
         childElements.forEach(childElement => {
           const attributeValue = childElement.getAttribute(attributeName);
-  
+
           if (attributeValue && attributeValues.includes(attributeValue)) {
             this.renderer.removeChild(parentElement, childElement);
           }
         });
+
+        let elem = document.getElementById("editor").querySelectorAll(".editor-content");
+        if (elem && elem.length > 0) {
+          elem.forEach(x => {
+            this.renderer.removeClass(x, 'editor-content');
+          })
+        }
       }
     }
   }
@@ -90,7 +92,8 @@ export class EditorComponent implements AfterViewInit, OnInit  {
   createTable() {
     $('#tableModal').modal('hide');
     var table = document.createElement('table');
-    table.classList.add("table", "table-bordered")
+    table.classList.add("table", "table-bordered");
+    table.style.width = '80%';
     for (var i = 0; i < this.rows; i++) {
       var row = table.insertRow(i);
       for (var j = 0; j < this.columns; j++) {
@@ -152,7 +155,8 @@ export class EditorComponent implements AfterViewInit, OnInit  {
             img.addEventListener('click', () => this.handleImageClick(id));
             div.setAttribute("id", id);
             div.setAttribute("contenteditable", 'false');
-            div.setAttribute("class", 'editor-content');
+            //div.setAttribute("class", 'editor-content');
+            div.setAttribute("data-name", 'editor-content');
             div.appendChild(img);
             div.setAttribute('style', 'position: relative; background-color: #f1f1f1; border: 1px solid #d3d3d3; margin-bottom: 2rem; left: 40px; top:  40px; width: 230px; height: 140px; min-width: 230px; min-height: 140px; border-radius: 5px;');
             //this.makeResizable(div)
@@ -220,7 +224,10 @@ export class EditorComponent implements AfterViewInit, OnInit  {
   // top.addEventListener('mousedown', resizeYNegative());
 
   // element.appendChild(top);
-  (element.childNodes[0] as HTMLElement).setAttribute("data-flag", 'true');
+  //(element.childNodes[0] as HTMLElement).setAttribute("data-flag", 'true');
+  if (!element.classList.contains("editor-content"))
+    element.classList.add("editor-content");
+
   const bottom = document.createElement('div');
   bottom.style.width = '100%';
   bottom.style.height = size + 'px';
