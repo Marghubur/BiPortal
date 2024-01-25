@@ -352,7 +352,7 @@ export class LoginComponent implements OnInit {
     let companyCode = (<HTMLInputElement> document.getElementById('RegisterCompanyCode')).value;
     if(email && email != '' && this.emailValidation(email) && companyCode) {
       let value = {
-        Email: email,
+        EmailId: email,
         CompanyCode: companyCode
       }
       this.http.forgotPassword('Login/ForgotPassword', value, false).then(res => {
