@@ -13,7 +13,7 @@ import { CompanylogoComponent } from '../org/companylogo/companylogo.component';
 import { MasterDataComponent } from '../org/master-data/master-data.component';
 import { OrgStructureComponent } from '../org/org-structure/org-structure.component';
 
-import {  
+import {
   Roles,
   AdminTaxcalculation,
   PayrollSettings,
@@ -27,8 +27,10 @@ import {
   Companies,
   AdminResetPassword,
   EmailSetting,
+  CronJobSetting,
 } from 'src/providers/constants';
 import { EmailsettingComponent } from './emailsetting/emailsetting.component';
+import { CronjobSettingComponent } from './cronjob-setting/cronjob-setting.component';
 
 const routes: Routes = [
   { path: Roles, component: RolesComponent },
@@ -37,13 +39,14 @@ const routes: Routes = [
   { path: PayrollSettings, component: SettingsComponent},
   { path: CompanySettings, component: CompanySettingsComponent},
   { path: CompanyInfo, component: CompanyInfoComponent},
-  { path: AdminTaxcalculation, component: TaxcalculationComponent},  
+  { path: AdminTaxcalculation, component: TaxcalculationComponent},
   { path: OrganizationSetting, component: OrganizationComponent},
   { path: Company, component: CompanyComponent},
   { path: CompanyLogo, component: CompanylogoComponent},
   { path: AdminMasterData, component: MasterDataComponent },
   { path: OrganizationStruct, component: OrgStructureComponent },
   { path: EmailSetting, component: EmailsettingComponent},
+  { path: CronJobSetting, component: CronjobSettingComponent}
 ];
 
 @NgModule({

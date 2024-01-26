@@ -184,6 +184,7 @@ export const EmailSetting = `${OrgBaseRoute}/emailsetting`
 export const Company = `${OrgBaseRoute}/companysettings`
 export const CompanyLogo = `${OrgBaseRoute}/companylogo`
 export const AdminMasterData = `${OrgBaseRoute}/masterdata`
+export const CronJobSetting = `${OrgBaseRoute}/cronjob`
 
 // ********************** Admin route pages  *******************
 
@@ -274,4 +275,11 @@ export enum ItemStatus
   Saved = 13,
   AutoPromoted = 14,
   FinalLevel = 15
+}
+
+export enum CronJobType {
+  Daily = 1,
+  Weekly = 2,
+  Monthly = 3,
+  Yearly = 4
 }

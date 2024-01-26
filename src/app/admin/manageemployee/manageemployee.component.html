@@ -9,16 +9,6 @@
                 <app-breadcrums [title]="'Employee'" [subtitle]="'Details'"></app-breadcrums>
               </div>
             </div>
-            <div class="col-4">
-              <div class="x_header_title d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4"><i
-                  class="fa-solid fa-paper-plane pe-1"></i> Configure</a>
-                  <!-- <ng-container *ngIf="isReady && employeeModal.EmployeeUid > 0">
-                    <a href="javascript:void(0)" [ngClass]="{'pe-none': !isCompaniesDetails, 'pe-none': employeeUid==0}" *ngIf="isReady" (click)="navToSalaryBreakup()" class="text-decoration-none fw-bold"><i
-                      class="fa-regular fa-money-bill-1 pe-1"></i> Breakup</a>
-                  </ng-container> -->
-              </div>
-            </div>
           </div>
         </div>
         <ng-container *ngIf="isReady">
@@ -349,11 +339,11 @@
                       <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                         <div class="col-md-4">
                           <label class="form-label">PF Number</label>
-                          <input type="text" class="form-control" placeholder="PF Number" formControlName="PFNumber">
+                          <input type="text" maxlength="30" class="form-control" placeholder="PF Number" formControlName="PFNumber">
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Universal Account Number</label>
-                          <input type="text" class="form-control" placeholder="Universal Account Number" formControlName="UniversalAccountNumber">
+                          <input type="text" class="form-control" placeholder="Universal Account Number" formControlName="UniversalAccountNumber" maxlength="40">
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">PF Join Date</label>

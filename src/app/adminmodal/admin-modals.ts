@@ -63,7 +63,7 @@ export class AssignedClients {
     WorkShiftId: number = 0;
     IsPayrollOnCTC: boolean = true;
     SalaryGroupId: number = null;
-    PFNumber: number = 0;
+    PFNumber: string = null;
     UniversalAccountNumber : string = null;
     PFJoinDate: Date = null;
   }
