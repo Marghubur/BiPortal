@@ -359,7 +359,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       WorkShiftId: new FormControl(this.employeeModal.WorkShiftId, [Validators.required]),
       IsPayrollOnCTC: new FormControl(this.employeeModal.IsPayrollOnCTC ),
       SalaryGroupId: new FormControl(this.employeeModal.SalaryGroupId),
-      PFNumber: new FormControl(this.employeeModal.PFNumber != null ? this.employeeModal.PFNumber : 0),
+      PFNumber: new FormControl(this.employeeModal.PFNumber),
       UniversalAccountNumber: new FormControl(this.employeeModal.UniversalAccountNumber),
       PFJoinDate: new FormControl(this.employeeModal.PFJoinDate)
     });

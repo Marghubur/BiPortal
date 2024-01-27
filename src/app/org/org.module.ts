@@ -17,6 +17,7 @@ import { EmailsettingComponent } from './emailsetting/emailsetting.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilModule } from '../util/util.module';
+import { CronjobSettingComponent } from './cronjob-setting/cronjob-setting.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { UtilModule } from '../util/util.module';
     MasterDataComponent,
     OrgStructureComponent,
     RolesComponent,
-    EmailsettingComponent
+    EmailsettingComponent,
+    CronjobSettingComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,135 @@
+<div class="col-12 full-v main-container">
+  <div class="x_panel mt-2">
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Cron Job'" [subtitle]="'Cron jobs settings'"></app-breadcrums>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="isPageReady">
+      <form [formGroup]="crobJobForm">
+        <div class="col-12 row m-0 mt-5">
+          <div class="col-md-6">
+            <div class="x_panel">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Leave Accrual<small>Leave Accrual Cron Job Setting</small></h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Cron job type</label>
+                  <select class="form-select" formControlName="LeaveAccrualCronType">
+                    <option value="0" disabled>Select Option</option>
+                    <option value="1">Daily</option>
+                    <option value="2">Weekly</option>
+                    <option value="3">Monthly</option>
+                    <option value="4">Yearly</option>
+                  </select>
+                </div>
+                <div class="row col-md-6">
+                  <div class="col-md-6" *ngIf="crobJobForm.controls.LeaveAccrualCronType.value >=2">
+                    <label class="form-label">Day</label>
+                    <select class="form-select" formControlName="LeaveAccrualCronDay">
+                      <option value="0" disabled>0</option>
+                      <option [value]="i+1" *ngFor="let item of [].constructor(31); let i=index">{{i+1}}{{(i+1 == 1 || i+1 == 11 || i+1 == 21 || i+1 == 31) ? 'st' : (i+1 == 2 || i+1 == 12 || i+1 == 22) ? 'nd' : (i+1 == 3 || i+1 == 13 || i+1 == 23) ? 'rd' : 'th'}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6" *ngIf="crobJobForm.controls.LeaveAccrualCronType.value !=0">
+                    <label class="form-label">Time (only hrs)</label>
+                    <select class="form-select" formControlName="LeaveAccrualCronTime">
+                      <option [value]="i" *ngFor="let item of [].constructor(23); let i=index">{{i}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="x_panel">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Timesheet<small>Timesheet Cron Job Setting</small></h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Cron job type</label>
+                  <select class="form-select" formControlName="TimesheetCronType">
+                    <option value="0" disabled>Select Option</option>
+                    <option value="1">Daily</option>
+                    <option value="2">Weekly</option>
+                    <option value="3">Monthly</option>
+                    <option value="4">Yearly</option>
+                  </select>
+                </div>
+                <div class="row col-md-6">
+                  <div class="col-md-6" *ngIf="crobJobForm.controls.TimesheetCronType.value >=2">
+                    <label class="form-label">Day</label>
+                    <select class="form-select" formControlName="TimesheetCronDay">
+                      <option value="0" disabled>0</option>
+                      <option [value]="i+1" *ngFor="let item of [].constructor(31); let i=index">{{i+1}}{{(i+1 == 1 || i+1 == 11 || i+1 == 21 || i+1 == 31) ? 'st' : (i+1 == 2 || i+1 == 12 || i+1 == 22) ? 'nd' : (i+1 == 3 || i+1 == 13 || i+1 == 23) ? 'rd' : 'th'}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6" *ngIf="crobJobForm.controls.TimesheetCronType.value !=0">
+                    <label class="form-label">Time (only hrs)</label>
+                    <select class="form-select" formControlName="TimesheetCronTime">
+                      <option [value]="i" *ngFor="let item of [].constructor(23); let i=index">{{i}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 row m-0 mt-5 align-items-end">
+          <div class="col-md-6">
+            <div class="x_panel">
+              <div class="x_header">
+                <div class="x_header_title">
+                  <h2>Leave Year End<small>Leave Year End Process Cron Job Setting</small></h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Cron job run on</label>
+                  <select class="form-select" formControlName="LeaveYearEndCronType">
+                    <option value="0" disabled>Select Option</option>
+                    <option value="1">Daily</option>
+                    <option value="2">Weekly</option>
+                    <option value="3">Monthly</option>
+                    <option value="4">Yearly</option>
+                  </select>
+                </div>
+                <div class="row col-md-6">
+                  <div class="col-md-6" *ngIf="crobJobForm.controls.LeaveYearEndCronType.value >=2">
+                    <label class="form-label">Day</label>
+                    <select class="form-select" formControlName="LeaveYearEndCronDay">
+                      <option value="0" disabled>0</option>
+                      <option [value]="i+1" *ngFor="let item of [].constructor(31); let i=index">{{i+1}}{{(i+1 == 1 || i+1 == 11 || i+1 == 21 || i+1 == 31) ? 'st' : (i+1 == 2 || i+1 == 12 || i+1 == 22) ? 'nd' : (i+1 == 3 || i+1 == 13 || i+1 == 23) ? 'rd' : 'th'}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6" *ngIf="crobJobForm.controls.LeaveYearEndCronType.value !=0">
+                    <label class="form-label">Time (only hrs)</label>
+                    <select class="form-select" formControlName="LeaveYearEndCronTime">
+                      <option [value]="i" *ngFor="let item of [].constructor(23); let i=index">{{i}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 text-end mb-1">
+            <button class="btn btn-primary-c" [disabled]="isLoading" (click)="saveCronSetting()">
+              <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-floppy-disk': !isLoading}"></i>
+              {{ isLoading ? 'Processing' : 'Submit' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</div>
