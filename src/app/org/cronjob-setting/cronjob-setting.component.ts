@@ -80,7 +80,7 @@ export class CronjobSettingComponent implements OnInit {
     }
 
     if (errorCount === 0) {
-      this.http.post("", value).then((res: ResponseModel) => {
+      this.http.post("CronJobSetting/ManageCronJObSetting", value).then((res: ResponseModel) => {
         if (res.ResponseBody) {
           this.isLoading = false;
         }
