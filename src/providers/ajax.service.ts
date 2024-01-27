@@ -9,6 +9,7 @@ import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { environment } from "src/environments/environment";
 import { Filter } from "./userService";
 import { pairData } from "src/app/util/iautocomplete/iautocomplete.component";
+import { SERVICE } from "./constants";
 
 @Injectable()
 export class AjaxService {
@@ -36,16 +37,20 @@ export class AjaxService {
     return JsonData;
   }
 
-  private GetBaseUrl(isJavaFlagOn: boolean) {
-    if(isJavaFlagOn)
-      return environment.baseSpringUrl;
-    else
-      return environment.baseDotNetUrl;
+  private GetBaseUrl(Service: SERVICE) {
+    let baseUrl = environment.baseDotNetUrl;
+    switch (Service) {
+      case SERVICE.PROJECT, SERVICE.PERFORMANCE, SERVICE.FILTER:
+        baseUrl = environment.baseSpringUrl;
+        break;
+    }
+
+    baseUrl += "api/" + Service + "/";
   }
 
   async getFilterEmployee(filter: Filter) {
     let result: Array<pairData> = [];
-    let response: ResponseModel = await this.post(`ef/filter/employeeFilterByName`, filter, true);
+    let response: ResponseModel = await this.post(`filter/employeeFilterByName`, filter, SERVICE.FILTER);
     if (response.ResponseBody && response.ResponseBody instanceof Array) {
       result = response.ResponseBody;
     }
@@ -53,8 +58,8 @@ export class AjaxService {
     return result;
   }
 
-  login(Url: string, Param: any, isJavaRoute: boolean = false): Promise<ResponseModel> {
-    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+  login(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
+    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
       this.http
@@ -85,9 +90,9 @@ export class AjaxService {
     });
   }
 
-  get(Url: string, isJavaRoute: boolean = false): Promise<ResponseModel> {
+  get(Url: string, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
-      let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+      let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
       return this.http
         .get(url, {
           observe: "response"
@@ -108,8 +113,8 @@ export class AjaxService {
     });
   }
 
-  post(Url: string, Param: any, isJavaRoute: boolean = false): Promise<any> {
-    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+  post(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
     return new Promise((resolve, reject) => {
       this.http
         .post(url, Param, {
@@ -133,8 +138,8 @@ export class AjaxService {
     });
   }
 
-  put(Url: string, Param: any, isJavaRoute: boolean = false): Promise<any> {
-    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+  put(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
     return new Promise((resolve, reject) => {
       this.http
         .put(url, Param, {
@@ -159,8 +164,8 @@ export class AjaxService {
     });
   }
 
-  delete(Url: string, Param?: any, isJavaRoute: boolean = false): Promise<any> {
-    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+  delete(Url: string, Param?: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
     return new Promise((resolve, reject) => {
       this.http.delete(url, {
         headers: {
@@ -186,8 +191,8 @@ export class AjaxService {
     });
   }
 
-  upload(Url: string, Param: any, isJavaRoute: boolean = false): Promise<any> {
-    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+  upload(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
     return new Promise((resolve, reject) => {
       this.http
         .post(url, Param, {
@@ -212,8 +217,8 @@ export class AjaxService {
     });
   }
 
-  forgotPassword(Url: string, Param: any, isJavaRoute: boolean = false): Promise<ResponseModel> {
-    let url = `${this.GetBaseUrl(isJavaRoute)}${Url}`;
+  forgotPassword(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
+    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
       this.http

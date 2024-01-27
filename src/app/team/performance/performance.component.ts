@@ -9,6 +9,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Subject } from 'rxjs';
+import { SERVICE } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -105,7 +106,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   loadData() {
     this.isPageReady = false;
     this.isPageLoading = true;
-    this.http.get(`eps/performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, true).then(res => {
+    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         let date = new Date();
         this.minDate = {year: date.getFullYear(), month: date.getMonth()+1, day: date.getDate()};
@@ -220,7 +221,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       ErrorToast("New value is greater than targeted value");
       return;
     }
-    this.http.post("eps/performance/updateEmployeeObjective", performvalue, true).then(res => {
+    this.http.post("performance/updateEmployeeObjective", performvalue, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody) {
         let value = res.ResponseBody;
         this.selectedObjective.EmployeePerformanceId = value.EmployeePerformanceId;
@@ -326,7 +327,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     if (this.selectedEmployee.length > 0)
       value.EmployeesMeeting = this.selectedEmployee.map(x => x.value);
 
-    this.http.post("eps/meeting/manageMeeting", value, true).then(res => {
+    this.http.post("meeting/manageMeeting", value, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody) {
         this.allMeetings = res.ResponseBody;
         this.bindMeetingData();
@@ -349,7 +350,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   getEmployeesMeeting() {
     this.isPageReady = false;
     this.isPageLoading = true;
-    this.http.get(`eps/meeting/getMeetingByEmpId/${this.employeeId}`, true).then(res => {
+    this.http.get(`meeting/getMeetingByEmpId/${this.employeeId}`, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.allMeetings = res.ResponseBody;
         this.bindMeetingData();
@@ -519,7 +520,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   completeMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`eps/meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/1`, true).then(res => {
+      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/1`, SERVICE.PERFORMANCE).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -541,7 +542,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   cancelMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`eps/meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/3`, true).then(res => {
+      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/3`, SERVICE.PERFORMANCE).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -563,7 +564,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   deleteMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.delete(`eps/meeting/deleteMeeting/${this.selectedMeeting.MeetingId}`,null, true).then(res => {
+      this.http.delete(`meeting/deleteMeeting/${this.selectedMeeting.MeetingId}`,null, SERVICE.PERFORMANCE).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -614,7 +615,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         }
       })
       if (errorCount === 0) {
-        this.http.get(`eps/performance/submitEmployeeObjective/${this.employeeId}`, true).then(res => {
+        this.http.get(`performance/submitEmployeeObjective/${this.employeeId}`, SERVICE.PERFORMANCE).then(res => {
           if (res.ResponseBody) {
             this.objectives = res.ResponseBody;
             Toast("Objective submitted successfully");
@@ -634,7 +635,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
 
   loadReviewDetail() {
     this.isPageLoading = true;
-    this.http.get(`eps/performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, true).then(res => {
+    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.objectives = res.ResponseBody;
         this.getUserNameIcon(null);

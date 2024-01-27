@@ -62,7 +62,7 @@ export class UserDashboardComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.employeeUid}`, false).then((res:ResponseModel) => {
+    this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.employeeUid}`).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.completeSalaryBreakup = res.ResponseBody.completeSalaryBreakup;
         this.completeSalaryDetail = JSON.parse(this.completeSalaryBreakup.CompleteSalaryDetail);

@@ -2,8 +2,8 @@ export const environment = {
   production: true,
   env: "staging",
 
-  baseDotNetUrl: "http://bot.io/bot/dn/core/api/",
-  baseSpringUrl: "http://bot.io/bot/sb/api/",
+  baseDotNetUrl: "http://bot.io/bot/dn/",
+  baseSpringUrl: "http://bot.io/bot/sb/",
 
   FolderDelimiter: "\/"
 };

@@ -3,6 +3,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { SERVICE } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -28,7 +29,7 @@ export class OrgStructureComponent implements OnInit {
   }
 
   loadTree() {
-    this.http.get(`ef/orgtree/getOrganizationHierarchy/${this.company.CompanyId}`, true)
+    this.http.get(`orgtree/getOrganizationHierarchy/${this.company.CompanyId}`, SERVICE.FILTER)
       .then((respone: ResponseModel) => {
         if (respone) {
           this.orgTree = respone.ResponseBody;
@@ -54,7 +55,7 @@ export class OrgStructureComponent implements OnInit {
 
   saveTree(result: Array<any>) {
     if (result && result.length > 0) {
-      this.http.post("ef/orgtree/addOrganizationHierarchy", result, true)
+      this.http.post("orgtree/addOrganizationHierarchy", result, SERVICE.FILTER)
         .then((respone: ResponseModel) => {
           if (respone) {
             Toast(respone.ResponseBody);

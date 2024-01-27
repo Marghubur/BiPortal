@@ -2,6 +2,7 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -85,7 +86,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   loadData() {
     this.isLoading = true;
-    this.http.get(`ef/runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, true).then(res => {
+    this.http.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, SERVICE.FILTER).then(res => {
       if (res.ResponseBody) {
         if (res.ResponseBody[0].length > 0)
           this.appliedLeaveDetail = res.ResponseBody[0];
@@ -134,7 +135,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
       Reason: this.selectedLeave.Reason
     }
     let filterId = 0;
-    this.http.post(`${endPoint}/${filterId}`, currentResponse, false).then((response:ResponseModel) => {
+    this.http.post(`${endPoint}/${filterId}`, currentResponse).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         $('#leaveActionModal').modal('hide');
         Toast("Submitted Successfully");
@@ -159,7 +160,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   getAttendanceDetail() {
     this.isLoading = true;
-    this.http.post("ef/runpayroll/getAttendancePage", this.attendanceData, true).then((res:ResponseModel) => {
+    this.http.post("runpayroll/getAttendancePage", this.attendanceData, SERVICE.FILTER).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
         this.attendanceDetail = res.ResponseBody;

@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -41,7 +42,7 @@ export class BudgetComponent implements OnInit {
 
   loadData() {
     this.isLoaded = false;
-    this.http.get(`ps/projectsAppraisal/getProjectAppraisal/${this.project.ProjectId}`, true).then(res => {
+    this.http.get(`projectsAppraisal/getProjectAppraisal/${this.project.ProjectId}`, SERVICE.PROJECT).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectAppraisal = res.ResponseBody;
         Toast("Record found");
@@ -96,7 +97,7 @@ export class BudgetComponent implements OnInit {
       return;
     }
     let value = this.projectAppraisalForm.value;
-    this.http.post("ps/projectsAppraisal/addProjectAppraisal", value, true).then(res => {
+    this.http.post("projectsAppraisal/addProjectAppraisal", value, SERVICE.PROJECT).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectAppraisal = res.ResponseBody;
         $('#manageProjectAppraisal').modal('hide');
@@ -119,7 +120,7 @@ export class BudgetComponent implements OnInit {
     }
     let value = this.projectAppraisalForm.value;
     if (value.ProjectAppraisalId > 0) {
-      this.http.put(`ps/projectsAppraisal/updateProjectAppraisal/${value.ProjectAppraisalId}`, value, true).then(res => {
+      this.http.put(`projectsAppraisal/updateProjectAppraisal/${value.ProjectAppraisalId}`, value, SERVICE.PROJECT).then(res => {
         if (res.ResponseBody && res.ResponseBody.length > 0) {
           this.projectAppraisal = res.ResponseBody;
           $('#manageProjectAppraisal').modal('hide');
