@@ -432,7 +432,6 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
       AssociatedPlanTypes: new FormControl(this.leavePlan.AssociatedPlanTypes),
       PlanStartCalendarDate: new FormControl(this.leavePlan.PlanStartCalendarDate, [Validators.required]),
       IsShowLeavePolicy: new FormControl(this.leavePlan.IsShowLeavePolicy),
-      IsUploadedCustomLeavePolicy: new FormControl(this.leavePlan.IsUploadedCustomLeavePolicy),
       IsApplyEntireLeave: new FormControl(this.leavePlan.IsApplyEntireLeave)
     })
   }
@@ -576,6 +575,5 @@ class LeavePlan {
   AssociatedPlanTypes: string = null;
   PlanStartCalendarDate: Date = null;
   IsShowLeavePolicy: boolean = true;
-  IsUploadedCustomLeavePolicy: boolean = false;
   IsApplyEntireLeave: boolean = false;
 }
