@@ -9,7 +9,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Subject } from 'rxjs';
-import { SERVICE } from 'src/providers/constants';
+import { ItemStatus, SERVICE } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -520,7 +520,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   completeMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/1`, SERVICE.PERFORMANCE).then(res => {
+      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/${ItemStatus.Completed}`, SERVICE.PERFORMANCE).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -542,7 +542,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   cancelMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/3`, SERVICE.PERFORMANCE).then(res => {
+      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/${ItemStatus.Canceled}`, SERVICE.PERFORMANCE).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();

@@ -343,6 +343,8 @@ export class LoginComponent implements OnInit {
   }
 
   forgotPasswordModal() {
+    (<HTMLInputElement> document.getElementById('registeredEmailId')).value = "";
+    (<HTMLInputElement> document.getElementById('RegisterCompanyCode')).value = "";
     $('#ForgotPasswordModal').modal('show');
   }
 
