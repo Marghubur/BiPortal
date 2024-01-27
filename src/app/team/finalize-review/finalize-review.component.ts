@@ -8,7 +8,7 @@ declare var bootstrap: any;
 import 'bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { iNavigation } from 'src/providers/iNavigation';
-import { ManageAppraisalCategory, ManageReview } from 'src/providers/constants';
+import { ManageAppraisalCategory, ManageReview, SERVICE } from 'src/providers/constants';
 
 @Component({
   selector: 'app-finalize-review',
@@ -41,7 +41,7 @@ export class FinalizeReviewComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.get("eps/promotion/getApprovePromotionAndHike", true).then((res: ResponseModel) => {
+    this.http.get("promotion/getApprovePromotionAndHike", SERVICE.PERFORMANCE).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         let finalizeAppraisalData = res.ResponseBody;
         if (finalizeAppraisalData && finalizeAppraisalData.length > 0) {
@@ -94,7 +94,7 @@ export class FinalizeReviewComponent implements OnInit {
 
   getAppraisalFinalize() {
     this.isLoading = true;
-    this.http.get(`eps/promotion/getPromotionAndHike/${this.userDetail.UserId}`, true).then((res: ResponseModel) => {
+    this.http.get(`promotion/getPromotionAndHike/${this.userDetail.UserId}`, SERVICE.PERFORMANCE).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.allMemberAppraisalFinalizer = res.ResponseBody;
         this.appraisalReviewStatus = this.allAppraisalFinalizer[0].Status;
@@ -110,7 +110,7 @@ export class FinalizeReviewComponent implements OnInit {
 
   approvedAppraisal() {
     this.isLoading = true;
-    this.http.post('eps/promotion/approveAppraisalReviewDetail', this.allMemberAppraisalFinalizer, true).then((res: ResponseModel) => {
+    this.http.post("promotion/approveAppraisalReviewDetail", this.allMemberAppraisalFinalizer, SERVICE.PERFORMANCE).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         $("#viewMemberModal").modal('hide');
         Toast("Finalizer record approved successfully");
@@ -123,7 +123,7 @@ export class FinalizeReviewComponent implements OnInit {
 
   rejectAppraisal() {
     this.isLoading = true;
-    this.http.post('eps/promotion/rejectAppraisalReviewDetail', this.allMemberAppraisalFinalizer, true).then((res: ResponseModel) => {
+    this.http.post("promotion/rejectAppraisalReviewDetail", this.allMemberAppraisalFinalizer, SERVICE.PERFORMANCE).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         $("#viewMemberModal").modal('hide');
         Toast("Finalizer record rejected successfully");
@@ -148,7 +148,7 @@ export class FinalizeReviewComponent implements OnInit {
   loadReviewDetail() {
     this.isObjectivesReady = false;
     let designationId = 0;
-    this.http.get(`eps/performance/getEmployeeObjective/${designationId}/${this.selectedEmploye.CompanyId}/${this.selectedEmploye.EmployeeId}`, true).then(res => {
+    this.http.get(`performance/getEmployeeObjective/${designationId}/${this.selectedEmploye.CompanyId}/${this.selectedEmploye.EmployeeId}`, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.objectives = res.ResponseBody;
         this.getUserNameIcon(this.selectedEmploye.FirstName, this.selectedEmploye.LastName);

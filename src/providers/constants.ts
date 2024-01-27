@@ -247,6 +247,17 @@ export const OrgLogo = "assets/images/organization-logo.jpg"
 
 export const MaxAllowedFileSize = 2048
 
+/*=================  API Service Names ========================*/
+
+export enum SERVICE {
+  CORE = "core",
+  AUTH = "auth",
+  PROJECT = "ps",
+  PERFORMANCE = "eps",
+  FILTER = "ef"
+}
+
+
 export enum UserType {
   Admin = 1,
   Employee = 2,

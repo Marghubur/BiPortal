@@ -5,6 +5,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
+import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -49,7 +50,7 @@ export class ConfigPerformanceComponent implements OnInit {
   loadData() {
     this.isPageReady = false;
     if (this.currentCompny.CompanyId > 0) {
-      this.http.post("eps/performance/getPerformanceObjective", this.objectiveData, true)
+      this.http.post("performance/getPerformanceObjective", this.objectiveData, SERVICE.PERFORMANCE)
       .then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
@@ -122,7 +123,7 @@ export class ConfigPerformanceComponent implements OnInit {
         value.Description = data;
 
       value.CanManagerSee = value.CanManagerSee == "true" ? true : false;
-      this.http.post("eps/performance/objectiveInsertUpdate", value, true).then(res => {
+      this.http.post("performance/objectiveInsertUpdate", value, SERVICE.PERFORMANCE).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
           $('#addObjectiveModal').modal('hide');

@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { ItemStatus, UserType } from 'src/providers/constants';
+import { ItemStatus, SERVICE, UserType } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -521,7 +521,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   getLeaveRequest() {
     this.isPageLoading = true;
-    this.http.post("LeaveRequest/GetLeaveRequestNotification", this.leaveRecord, false).then(response => {
+    this.http.post("LeaveRequest/GetLeaveRequestNotification", this.leaveRecord).then(response => {
       if(response.ResponseBody) {
         this.leaveRequestDetail = response.ResponseBody;
         if (this.leaveRequestDetail && this.leaveRequestDetail.length > 0) {
@@ -576,7 +576,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.isPageLoading = true;
     this.attendanceDetail = []
     this.attendanceData = new Filter();
-    this.http.post("AttendanceRequest/GetAttendenceRequestData", this.attendanceRecord, false).then(response => {
+    this.http.post("AttendanceRequest/GetAttendenceRequestData", this.attendanceRecord).then(response => {
       if(response.ResponseBody) {
         this.attendanceDetail = response.ResponseBody.FilteredAttendance;
         if (this.attendanceDetail && this.attendanceDetail.length > 0) {
@@ -615,7 +615,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   getTimesheetRequest() {
     this.isPageLoading = true;
-    this.http.post("TimesheetRequest/GetTimesheetRequestData", this.timesheetRecord, false).then(response => {
+    this.http.post("TimesheetRequest/GetTimesheetRequestData", this.timesheetRecord).then(response => {
       if(response.ResponseBody) {
         this.timesheetDetail = response.ResponseBody;
         if (this.timesheetDetail && this.timesheetDetail.length > 0) {
@@ -679,7 +679,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   getReviewAttendanceDetail() {
     this.isPageLoading = true;
-    this.http.post("ef/runpayroll/getAttendancePage", this.attendanceReviewData, true).then((res:ResponseModel) => {
+    this.http.post("runpayroll/getAttendancePage", this.attendanceReviewData, SERVICE.FILTER).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
         this.attendanceDetail = res.ResponseBody;

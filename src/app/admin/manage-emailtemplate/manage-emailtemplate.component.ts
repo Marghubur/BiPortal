@@ -142,7 +142,7 @@ export class ManageEmailtemplateComponent implements OnInit {
     let value = this.emailTemplateForm.value;
     value.BodyContent = data;
     formData.append('emailtemplate', JSON.stringify(value));
-    this.http.post("Email/InsertUpdateEmailTemplate", formData, false).then((res:ResponseModel) => {
+    this.http.post("Email/InsertUpdateEmailTemplate", formData).then((res:ResponseModel) => {
       if (res.ResponseBody && res.ResponseBody != '') {
         this.emailTemplateId = Number(res.ResponseBody);
         this.emailTemplateForm.get('EmailTemplateId').setValue(this.emailTemplateId);

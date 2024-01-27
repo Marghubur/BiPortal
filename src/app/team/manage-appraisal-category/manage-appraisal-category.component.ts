@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage, GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { Appraisal } from 'src/providers/constants';
+import { Appraisal, SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -110,7 +110,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
 
   loadData(ObjectiveCatagoryId: number) {
     this.isPageReady = false;
-    this.http.get(`eps/apprisalcatagory/getCategoryByCategoryId/${ObjectiveCatagoryId}`, true).then(res => {
+    this.http.get(`apprisalcatagory/getCategoryByCategoryId/${ObjectiveCatagoryId}`, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody) {
         this.orgHierarchy = res.ResponseBody.OrganizationChain;
         this.appraisalChainLevel = res.ResponseBody.AppraisalChainLevel;
@@ -250,7 +250,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     this.isAppraisalCycleInSamePeriod = false;
     let value = e.target.value;
     if (value) {
-      this.http.get(`eps/apprisalcatagory/getCategoryByCategoryId/${value}`, true).then(res => {
+      this.http.get(`apprisalcatagory/getCategoryByCategoryId/${value}`, SERVICE.PERFORMANCE).then(res => {
         if (res.ResponseBody && res.ResponseBody.AppraisalCategory.length > 0) {
           this.appraisalDetailAndCategory = res.ResponseBody.AppraisalCategory;
           let data: ApprisalCycle = this.appraisalDetailAndCategory[0];
@@ -402,7 +402,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     }
     let value = this.appraisalForm.value;
     value.RoleIds = this.selectedRoles.map(x => x.RoleId);
-    this.http.post("eps/apprisalcatagory/addAppraisalType", value, true).then(res => {
+    this.http.post("apprisalcatagory/addAppraisalType", value, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody) {
         this.currentAppraisalObjective = [];
         this.isAppraisalCycleInSamePeriod = false;
@@ -449,7 +449,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     }
     let value = this.appraisalForm.value;
     value.RoleIds = this.selectedRoles.map(x => x.RoleId);
-    this.http.put(`eps/apprisalcatagory/updateAppraisalType/${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
+    this.http.put(`apprisalcatagory/updateAppraisalType/${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, SERVICE.PERFORMANCE).then(res => {
       if (res.ResponseBody) {
         this.currentAppraisalObjective = [];
         Toast("Apprisal cycle inserted successfully");
@@ -506,7 +506,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
         $("#worflowChainModal").modal("show");
         this.isTreeLoaded = true;
       } else {
-        this.http.get(`ef/orgtree/getOrgTreeByRole/${this.company.CompanyId}/${this.selectedRoleId}`, true)
+        this.http.get(`orgtree/getOrgTreeByRole/${this.company.CompanyId}/${this.selectedRoleId}`, SERVICE.FILTER)
         .then((respone: ResponseModel) => {
           if (respone) {
             this.orgTree = respone.ResponseBody;
@@ -626,7 +626,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
     }
     if (data && data.length > 0) {
       this.isLoading = false;
-      this.http.post('eps/apprisalcatagory/manageAppraisalLevel',data, true).then((res: ResponseModel) => {
+      this.http.post("apprisalcatagory/manageAppraisalLevel", data, SERVICE.PERFORMANCE).then((res: ResponseModel) => {
         if (res.ResponseBody) {
           $("#worflowChainModal").modal("hide");
           Toast("Approval chain level insert/update successfully");

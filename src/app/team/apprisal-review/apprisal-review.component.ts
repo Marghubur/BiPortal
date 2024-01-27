@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { ProjectWiki, ProjectBudget, ManageProject, ManageReview } from 'src/providers/constants';
+import { ProjectWiki, ProjectBudget, ManageProject, ManageReview, SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -58,7 +58,7 @@ export class ApprisalReviewComponent implements OnInit{
   loadData() {
     this.isFileFound= false;
     this.isLoaded = false;
-    this.http.get(`ps/projects/get/${this.userDetail.UserId}`, true).then((res:ResponseModel) => {
+    this.http.get(`projects/get/${this.userDetail.UserId}`, SERVICE.PROJECT).then((res:ResponseModel) => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectDetail = res.ResponseBody;
         if (this.projectDetail && this.projectDetail.length > 0) {
@@ -100,7 +100,7 @@ export class ApprisalReviewComponent implements OnInit{
   getProjectsMembers() {
     this.selectedProject = null;
     this.projectDetails = [];
-    this.http.get(`ps/projects/memberdetail/${this.userDetail.UserId}`, true).then(res => {
+    this.http.get(`projects/memberdetail/${this.userDetail.UserId}`, SERVICE.PROJECT).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;
@@ -266,7 +266,7 @@ export class ApprisalReviewComponent implements OnInit{
       return;
     }
     let value = this.appraisalHikeForm.get('ProjectMemberHike').value;
-    // this.http.put(`eps/apprisalcatagory//${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
+    // this.http.put(`apprisalcatagory//${this.currentApprisalCycle.ObjectiveCatagoryId}`, value, true).then(res => {
     //   if (res.ResponseBody) {
     //     this.isLoading = false;
     //     this.closeCanvasRight();

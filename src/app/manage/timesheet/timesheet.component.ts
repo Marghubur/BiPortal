@@ -301,7 +301,7 @@ export class TimesheetComponent implements OnInit {
         TimesheetStartDate: new Date(this.timesheetFromDate.year, this.timesheetFromDate.month - 1, this.timesheetFromDate.day),
         TimesheetEndDate: new Date(this.timesheetToDate.year, this.timesheetToDate.month - 1, this.timesheetToDate.day)
       };
-      this.http.post("AutoTrigger/triggerWeeklyTimesheet", value, false).then((res: ResponseModel) => {
+      this.http.post("AutoTrigger/triggerWeeklyTimesheet", value).then((res: ResponseModel) => {
         if (res.ResponseBody) {
           Toast("Timesheet generated successfully");
           this.isLoading = false;

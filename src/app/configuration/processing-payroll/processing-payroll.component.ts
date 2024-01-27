@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { Toast } from 'src/providers/common-service/common.service';
-import { LeaveAttendanceDailywages } from 'src/providers/constants';
+import { LeaveAttendanceDailywages, SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -96,7 +96,7 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   callApiLoadData() {
-    this.http.get(`ef/runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Year}`, true)
+    this.http.get(`runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Year}`, SERVICE.FILTER)
     .then((response: ResponseModel) => {
       if(response.ResponseBody) {
         if (response.ResponseBody.length > 0) {
@@ -518,7 +518,7 @@ export class ProcessingPayrollComponent implements OnInit {
 
   runPayrollCalculation(flagId: number) {
     this.isLoading = true;
-    this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month}/${flagId}`, false)
+    this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month}/${flagId}`)
     .then((res:ResponseModel) => {
       if (res.ResponseBody) {
         $('#confirmPayrollFinalize').modal('hide');

@@ -1,6 +1,6 @@
 import { AjaxService } from "src/providers/ajax.service";
 import { iNavigation } from "src/providers/iNavigation";
-import { Dashboard, UserDashboard, UserType } from "src/providers/constants";
+import { Dashboard, SERVICE, UserDashboard, UserType } from "src/providers/constants";
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
@@ -120,7 +120,7 @@ export class LoginComponent implements OnInit {
 
         this.loginValue.Password = password.value;
         this.loginValue.CompanyCode = companyCode.value;
-        this.http.login('Login/Authenticate', this.loginValue).then((result: ResponseModel) => {
+        this.http.login('Login/Authenticate', this.loginValue, SERVICE.AUTH).then((result: ResponseModel) => {
           if (result.ResponseBody) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
@@ -229,7 +229,7 @@ export class LoginComponent implements OnInit {
       errorCounter++;
 
     if (this.registrationValue && errorCounter === 0) {
-      this.http.post('login/SignUpNew', this.registrationValue).then((result: ResponseModel) => {
+      this.http.post('login/SignUpNew', this.registrationValue, SERVICE.AUTH).then((result: ResponseModel) => {
         if (result.ResponseBody) {
           Toast("Registration done");
           this.isLoginPage = false;
@@ -355,7 +355,7 @@ export class LoginComponent implements OnInit {
         EmailId: email,
         CompanyCode: companyCode
       }
-      this.http.forgotPassword('Login/ForgotPassword', value, false).then(res => {
+      this.http.forgotPassword('Login/ForgotPassword', value, SERVICE.AUTH).then(res => {
         if (res.ResponseBody) {
           Toast("Password send on your email id. Please check your email");
           $('#ForgotPasswordModal').modal('hide');
