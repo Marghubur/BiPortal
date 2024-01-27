@@ -37,7 +37,7 @@ export class AjaxService {
     return JsonData;
   }
 
-  private GetBaseUrl(Service: SERVICE) {
+  private GetBaseUrl(Service: SERVICE, Url: string) {
     let baseUrl = environment.baseDotNetUrl;
     switch (Service) {
       case SERVICE.PROJECT, SERVICE.PERFORMANCE, SERVICE.FILTER:
@@ -45,7 +45,8 @@ export class AjaxService {
         break;
     }
 
-    baseUrl += "api/" + Service + "/";
+    baseUrl += "api/" + Service + `/${Url}`;
+    return baseUrl;
   }
 
   async getFilterEmployee(filter: Filter) {
@@ -59,7 +60,7 @@ export class AjaxService {
   }
 
   login(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
-    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
+    let url = this.GetBaseUrl(ServiceName, Url);
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
       this.http
@@ -92,7 +93,7 @@ export class AjaxService {
 
   get(Url: string, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
-      let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
+      let url = this.GetBaseUrl(ServiceName, Url);
       return this.http
         .get(url, {
           observe: "response"
@@ -114,7 +115,7 @@ export class AjaxService {
   }
 
   post(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
-    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
+    let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http
         .post(url, Param, {
@@ -139,7 +140,7 @@ export class AjaxService {
   }
 
   put(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
-    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
+    let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http
         .put(url, Param, {
@@ -165,7 +166,7 @@ export class AjaxService {
   }
 
   delete(Url: string, Param?: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
-    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
+    let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http.delete(url, {
         headers: {
@@ -192,7 +193,7 @@ export class AjaxService {
   }
 
   upload(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
-    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
+    let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http
         .post(url, Param, {
@@ -218,7 +219,7 @@ export class AjaxService {
   }
 
   forgotPassword(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
-    let url = `${this.GetBaseUrl(ServiceName)}${Url}`;
+    let url = this.GetBaseUrl(ServiceName, Url);
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
       this.http
