@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast } from 'src/providers/common-service/common.service';
-import { CronJobType } from 'src/providers/constants';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { CronJobType, SERVICE } from 'src/providers/constants';
 
 @Component({
   selector: 'app-cronjob-setting',
@@ -23,11 +23,31 @@ export class CronjobSettingComponent implements OnInit {
     LeaveYearEndCronDay: 0,
     LeaveYearEndCronTime: 0,
     LeaveYearEndCronType: 0,
-  }
+  };
+  isPageReady: boolean = false;
+
   constructor (private http: AjaxService,
               private fb: FormBuilder){}
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
+    this.isPageReady = false;
+    this.http.get("CronJobSetting/GetCronJobSetting", SERVICE.CORE).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        this.bindData(res.ResponseBody);
+        this.isPageReady = true;
+        Toast("Page lodaded");
+      }
+    }).catch(e => {
+      this.isPageReady = true;
+    })
+  }
+
+  bindData(res: any) {
+    this.cronJobDetail = res;
     this.initForm();
   }
 
@@ -82,6 +102,8 @@ export class CronjobSettingComponent implements OnInit {
     if (errorCount === 0) {
       this.http.post("CronJobSetting/ManageCronJObSetting", value).then((res: ResponseModel) => {
         if (res.ResponseBody) {
+          this.bindData(res.ResponseBody);
+          Toast("Cron job setting insert/updated successfully");
           this.isLoading = false;
         }
       }).catch(e => {
