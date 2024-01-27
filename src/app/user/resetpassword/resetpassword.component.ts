@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn } from 'src/providers/constants';
+import { AccessTokenExpiredOn, SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import { confirmPasswordValidator } from './confirmedpassword.validator'
@@ -69,7 +69,7 @@ export class ResetpasswordComponent implements OnInit {
       Mobile: this.userDetail.Mobile,
       UserId: this.userDetail.UserId
     }
-    this.http.post("login/ResetEmployeePassword", password)
+    this.http.post("login/ResetEmployeePassword", password, SERVICE.AUTH)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         Toast(response.ResponseBody);
