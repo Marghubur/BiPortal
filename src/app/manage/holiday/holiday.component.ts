@@ -400,7 +400,7 @@ export class HolidayComponent implements OnInit {
   }
 
   getHolidaySampleFile() {
-    this.sampleFilePath = `${this.basePath}Documents/SampleExcel/Client_2/HolidaySample.xlsx`;
+    this.sampleFilePath = "https://www.emstum.com/bot/dn/Files/ApplicationFiles/SampleExcel/HolidaySample.xlsx";
     const a = document.createElement('a');
     a.href = this.sampleFilePath;
     a.download = 'HolidaySample.xlsx';

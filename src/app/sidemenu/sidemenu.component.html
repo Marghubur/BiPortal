@@ -43,42 +43,6 @@
           </div><!-- /.accordion-item-body -->
         </div><!-- /.accordion-item -->
       </div>
-      <!-- <div class="accordion" id="accordionExample">
-        <div class="accordion-div" *ngFor="let catagory of Menu;let i = index;">
-          <h2 class="accordion-header" [id]="'heading'+i">
-            <button class="accordion-button custom-accordion-btn" (click)="activeTab(i)" [ngClass]="{ 'collapsed active-menu': catagory.IsActive}" type="button"
-              data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+i" aria-expanded="!catagory.IsActive"
-              [attr.aria-controls]="'collapse'+i">
-                <span class="i-chip">
-                  <i class="{{catagory.ParentDetail.Icon}}"></i>
-                </span>
-                {{catagory.Name}}
-                <span *ngIf="catagory.ParentDetail.Badge != null"
-                  class="badge bg-secondary ms-3">
-                  NEW
-                </span>
-            </button>
-          </h2>
-          <div [id]="'collapse'+i" class="accordion-collapse collapse" [ngClass]="{ 'show': catagory.IsActive }"
-            [attr.aria-labelledby]="'heading'+i" data-bs-parent="#accordionExample">
-            <div class="menu-item-group">
-              <ng-container *ngFor="let item of catagory.Value">
-                <a [routerLink]="['/bot/' + item.Link]" class="nav-link nav-link-menu a-font" (click)="cleanupEmpId(item.Link)"
-                  routerLinkActive="active-link">
-                  <div class="row menu-item-div align-items-center">
-                    <div class="col-md-1">
-                      <i class="menu-item-icon {{item.Icon}}"></i>
-                    </div>
-                    <div class="mene-item col-md-8">
-                      {{item.Catagory}}
-                    </div>
-                  </div>
-                </a>
-              </ng-container>
-            </div>
-          </div>
-        </div>
-      </div> -->
       <!-- <hr> -->
       <div class="title_menu mt-3">
         <a (click)="navToMasterDataPasge()" *ngIf="isAdmin" class="text-dark custom-text" href="javascript:void(0)" routerLinkActive="router-link-active">
@@ -86,8 +50,8 @@
             Uploda Master Data
           </a>
       </div>
-      <div class="text-center w-75 ms-3 mt-3 pb-4 custom-text d-none">
-        You're in a team-managed project Learn more
+      <div class="text-center  custom-text">
+        Emstum - V{{version}}
       </div>
     </div>
     <div class="w-100 position-absolute bg-secondary" class="menu-footer btn-primary-c">

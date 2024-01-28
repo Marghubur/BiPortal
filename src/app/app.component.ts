@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs';
 import { CommonService } from 'src/providers/common-service/common.service';
 import { Login } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
-import packageJson from '../../package.json';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +19,6 @@ export class AppComponent implements OnInit, OnDestroy {
   pageName: string = "";
   activePage:number = 0;
   navRouter: Subscription = null;
-  public version: string = packageJson.version;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
