@@ -40,7 +40,9 @@ export class AjaxService {
   private GetBaseUrl(Service: SERVICE, Url: string) {
     let baseUrl = environment.baseDotNetUrl;
     switch (Service) {
-      case SERVICE.PROJECT, SERVICE.PERFORMANCE, SERVICE.FILTER:
+      case SERVICE.PROJECT:
+      case SERVICE.PERFORMANCE:
+      case SERVICE.FILTER:
         baseUrl = environment.baseSpringUrl;
         break;
     }
