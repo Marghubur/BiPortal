@@ -423,7 +423,7 @@ export class PayrollComponentsComponent implements OnInit {
   }
 
   getComponentSampleFile() {
-    this.sampleFilePath = `${this.basePath}Documents/SampleExcel/Client_2/HolidaySample.xlsx`;
+    this.sampleFilePath = "https://www.emstum.com/bot/dn/Files/ApplicationFiles/SampleExcel/ComponentsSample.xlsx";
     const a = document.createElement('a');
     a.href = this.sampleFilePath;
     a.download = 'HolidaySample.xlsx';

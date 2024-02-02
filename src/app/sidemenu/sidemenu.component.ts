@@ -8,6 +8,7 @@ import { UserService } from "src/providers/userService";
 declare var $: any;
 import 'bootstrap';
 import { ResponseModel } from "src/auth/jwtService";
+import packageJson from '../../../package.json';
 
 @Component({
   selector: 'app-sidemenu',
@@ -34,6 +35,7 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
   isMenuExpanded: boolean = true;
   @Output() authentication = new EventEmitter();
   navbarColor: string = null;
+  version: string = packageJson.version;
 
   toggleOffcanvas() {
     let $doc: any = document;

@@ -5,10 +5,10 @@
         <a class="navbar-brand" href="javascript:void(0)" [routerLink]="['/']" >
           <img src="assets/images/logo.png" alt="Bootstrap" width="40" height="40">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation" (click)="isCollapsed = !isCollapsed">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarColor03" [ngbCollapse]="isCollapsed">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item pe-3 dropdown">
               <a class="nav-link dropdown-toggle fw-semibold" href="javascript:void(0)" (click)="toggleMenu($event)">

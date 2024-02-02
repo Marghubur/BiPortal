@@ -443,11 +443,18 @@ export class ApplyLeaveComponent implements OnInit {
     if (this.json.disable.length > 0) {
       this.isDisabled = (
         date: NgbDateStruct
+        //current: { day: number; month: number; year: number }
       ) => {
-        return this.json.disable.find((x) => {
-          this.isDisabled = (date: NgbDate) => { return this.calendar.getWeekday(date) >= 6 };;
-        });
-      }
+        return this.json.disabledDates.find(
+          (x) =>
+            new NgbDate(x.year, x.month, x.day).equals(date) ||
+            this.json.disable.includes(
+              this.calendar.getWeekday(new NgbDate(date.year, date.month, date.day))
+            )
+        )
+          ? true
+          : false;
+      };
     }
   }
 

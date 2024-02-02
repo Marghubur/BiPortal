@@ -8,6 +8,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 })
 export class HeaderComponent {
   browserName: string = '';
+  isCollapsed = true;
 
   constructor(private nav: iNavigation) { }
 

@@ -125,7 +125,7 @@ export class MasterDataComponent implements OnInit {
   }
 
   getEmployeeSampleFile() {
-    this.sampleFilePath = `${this.basePath}Documents/SampleExcel/Client_2/EmployeeRecordSample.xlsx`;
+    this.sampleFilePath = "https://www.emstum.com/bot/dn/Files/ApplicationFiles/SampleExcel/EmployeeRecordSample.xlsx";
     const a = document.createElement('a');
     a.href = this.sampleFilePath;
     a.download = 'EmployeeRecordSample.xlsx';
@@ -136,7 +136,7 @@ export class MasterDataComponent implements OnInit {
   }
 
   getEmployeeWithPayrollSampleFile() {
-    this.sampleFilePath = `${this.basePath}Documents/SampleExcel/Client_2/Employee_with_payroll_data_sample.xlsx`;
+    this.sampleFilePath = "https://www.emstum.com/bot/dn/Files/ApplicationFiles/SampleExcel/Employee_with_payroll_data_sample.xlsx";
     const a = document.createElement('a');
     a.href = this.sampleFilePath;
     a.download = 'Employee_with_payroll_data_sample.xlsx';
