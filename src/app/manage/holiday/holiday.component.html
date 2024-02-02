@@ -48,7 +48,7 @@
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" autofocus readonly
-                        placeholder="Search by Name">
+                        placeholder="Search by Start Date">
                       <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
                         <a href="javascript:void()" class="pe-2">Start Date</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
@@ -61,7 +61,7 @@
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" autofocus readonly
-                        placeholder="Search by Name">
+                        placeholder="Search by End date">
                         <div class="t-filter" (click)="arrangeDetails(orderByEndDateAsc, 'EndDate')">
                           <a href="javascript:void()" class="pe-2">End Date</a>
                           <i class="fa-solid fa-arrow-down-wide-short"
@@ -130,7 +130,7 @@
                     </div>
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
-                        {{holiday.DescriptionNote}}
+                        {{holiday.DescriptionNote | uppercase}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
