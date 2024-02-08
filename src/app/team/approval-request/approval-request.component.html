@@ -41,18 +41,21 @@
             <ng-container *ngIf="!isPageLoading">
               <ng-container>
                 <div class="mt-3" *ngIf="attendanceData.TotalRecords > 0">
-                  <app-pagination [pagination]="attendanceData" (onPageChange)="GetAttendanceFilterResult($event)"></app-pagination>
+                  <app-pagination [pagination]="attendanceData"
+                    (onPageChange)="GetAttendanceFilterResult($event)"></app-pagination>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="row col-md-10">
                     <div class="col-md-4 py-2">
                       <label class="form-label">Filter by name</label>
-                      <bot-autocomplete [data]="employeeList" [(ngModel)]="attendanceRecord.EmployeeId" (OnSelect)="getAttendanceRequest()" (keydown.esc)="resetFilter()">
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="attendanceRecord.EmployeeId"
+                        (OnSelect)="getAttendanceRequest()" (keydown.esc)="resetFilter()">
                       </bot-autocomplete>
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by requested on </label>
-                      <select  class="form-select"  (change)="getAttendanceRequest()" [(ngModel)]="attendanceRecord.TotalDays">
+                      <select class="form-select" (change)="getAttendanceRequest()"
+                        [(ngModel)]="attendanceRecord.TotalDays">
                         <option value="0" disabled selected>Select days</option>
                         <option value="7">Last 7 days</option>
                         <option value="14">Last 14 days</option>
@@ -61,7 +64,8 @@
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by status</label>
-                      <select  class="form-select" (change)="getAttendanceRequest()" [(ngModel)]="attendanceRecord.PresentDayStatus">
+                      <select class="form-select" (change)="getAttendanceRequest()"
+                        [(ngModel)]="attendanceRecord.PresentDayStatus">
                         <option value="0" disabled selected>Select status</option>
                         <option value="2">Pending</option>
                         <option value="9">Approved</option>
@@ -93,21 +97,23 @@
                       <div class="ms-3 col-auto">
                         <span class="fw-bold pe-1">Manager:</span>
                         {{item.ManagerName}} |
-                        <span class="mb-0"><i class="fa-solid fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa-solid fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
-                        <span class="badge ms-3" [ngClass]="{'bg-danger': item.PresentDayStatus == 5, 'bg-success': item.PresentDayStatus == 9, 'bg-primary': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}">
+                        <span class="mb-0"><i class="fa-solid fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i
+                            class="fa-solid fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
+                        <span class="badge ms-3"
+                          [ngClass]="{'bg-danger': item.PresentDayStatus == 5, 'bg-success': item.PresentDayStatus == 9, 'bg-primary': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}">
                           <i class="fa-solid fa-ban pe-1" *ngIf="item.PresentDayStatus == 5,"></i>
                           <i class="fa-solid fa-check pe-1" *ngIf="item.PresentDayStatus == 9"></i>
-                          <i class="fa-regular fa-clock pe-1" *ngIf="(item.PresentDayStatus != 9 && item.PresentDayStatus !=5)"></i>
-                          {{item.PresentDayStatus == 5 ? "Rejectd" : item.PresentDayStatus == 9 ? "Approved" : "Pending"}}
+                          <i class="fa-regular fa-clock pe-1"
+                            *ngIf="(item.PresentDayStatus != 9 && item.PresentDayStatus !=5)"></i>
+                          {{item.PresentDayStatus == 5 ? "Rejectd" : item.PresentDayStatus == 9 ? "Approved" :
+                          "Pending"}}
                         </span>
                       </div>
                     </div>
                     <div class="col-2 d-flex flex-row-reverse">
                       <div class="col-auto me-0 pe-0">
-                        <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)"
-                          class="">
-                          <i class="fa-solid pe-1"
-                            [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}">
+                        <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" class="">
+                          <i class="fa-solid pe-1" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}">
                           </i>
                           Reject
                         </a>
@@ -119,7 +125,8 @@
                     <div class="collapse show" [id]="'attendance'+i">
                       <div class="card card-body border-0">
                         <div class="row align-items-center justify-content-start">
-                          <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">{{item.SessionType > 1 ? 'Halfday' : 'Fullday'}}</span>
+                          <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">{{item.SessionType > 1 ? 'Halfday'
+                            : 'Fullday'}}</span>
                           <div class="col-md-6 text-truncate">
                             <span class="fw-bold">Message:</span>
                             {{item.UserComments == "" ? 'NA' : item.UserComments}}
@@ -155,18 +162,20 @@
             <ng-container *ngIf="!isPageLoading">
               <ng-container>
                 <div class="mt-3">
-                  <app-pagination [pagination]="timesheetData" (onPageChange)="GetTimesheetFilterResult($event)"></app-pagination>
+                  <app-pagination [pagination]="timesheetData"
+                    (onPageChange)="GetTimesheetFilterResult($event)"></app-pagination>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="row col-md-10">
                     <div class="col-md-4 py-2">
                       <label class="form-label">Filter by name</label>
-                      <bot-autocomplete [data]="employeeList" [(ngModel)]="timesheetRecord.EmployeeId" (OnSelect)="getTimesheetRequest()" (keydown.esc)="resetFilter()">
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="timesheetRecord.EmployeeId"
+                        (OnSelect)="getTimesheetRequest()" (keydown.esc)="resetFilter()">
                       </bot-autocomplete>
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by requested on </label>
-                      <select  class="form-select" >
+                      <select class="form-select">
                         <option value="0" disabled selected>Select days</option>
                         <option value="7">Last 7 days</option>
                         <option value="14">Last 14 days</option>
@@ -175,7 +184,8 @@
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by status</label>
-                      <select  class="form-select" (change)="getTimesheetRequest()" [(ngModel)]="timesheetRecord.TimesheetStatus">
+                      <select class="form-select" (change)="getTimesheetRequest()"
+                        [(ngModel)]="timesheetRecord.TimesheetStatus">
                         <option value="0" disabled selected>Select status</option>
                         <option value="8">Pending</option>
                         <option value="9">Approved</option>
@@ -184,7 +194,8 @@
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Year</label>
-                      <select  class="form-select" (change)="getTimesheetRequest()" [(ngModel)]="timesheetRecord.ForYear">
+                      <select class="form-select" (change)="getTimesheetRequest()"
+                        [(ngModel)]="timesheetRecord.ForYear">
                         <option [value]="item" *ngFor="let item of filterYears">{{item}}</option>
                       </select>
                     </div>
@@ -209,23 +220,43 @@
                       <div class="ms-3 col-auto">
                         <span class="fw-bold pe-1">Manager:</span>
                         {{item.ManagerName}} |
-                        <span class="mb-0"><i class="fa-solid fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa-solid fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
-                        <span class="badge ms-3" [ngClass]="{'bg-danger': item.TimesheetStatus == 5, 'bg-success': item.TimesheetStatus == 9, 'bg-primary': (item.TimesheetStatus != 9 && item.TimesheetStatus !=5)}">
+                        <span class="mb-0"><i class="fa-solid fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i
+                            class="fa-solid fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
+                        <span class="badge ms-3"
+                          [ngClass]="{'bg-danger': item.TimesheetStatus == 5, 'bg-success': item.TimesheetStatus == 9, 'bg-primary': (item.TimesheetStatus != 9 && item.TimesheetStatus !=5)}">
                           <i class="fa-solid fa-ban pe-1" *ngIf="item.TimesheetStatus == 5,"></i>
                           <i class="fa-solid fa-check pe-1" *ngIf="item.TimesheetStatus == 9"></i>
-                          <i class="fa-regular fa-clock pe-1" *ngIf="(item.TimesheetStatus != 9 && item.TimesheetStatus !=5)"></i>
+                          <i class="fa-regular fa-clock pe-1"
+                            *ngIf="(item.TimesheetStatus != 9 && item.TimesheetStatus !=5)"></i>
                           {{item.TimesheetStatus == 5 ? "Rejectd" : item.TimesheetStatus == 9 ? "Approved" : "Pending"}}
                         </span>
                       </div>
                     </div>
                     <div class="col-2 d-flex flex-row-reverse">
                       <div class="col-auto me-0 pe-0">
-                        <button *ngIf="item.TimesheetStatus != 5" (click)="openTimesheetModal('Rejected', item)"
-                          class="btn btn-danger btn-sm"><i class="fa pe-1"
-                            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
-                        <button *ngIf="item.TimesheetStatus != 9" (click)="openTimesheetModal('Approved', item)"
-                          class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
-                            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
+                        <div ngbDropdown class="d-inline-block">
+                          <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply"
+                            id="timesheet-action-dd" ngbDropdownToggle>
+                            <i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i>
+                          </button>
+                          <div ngbDropdownMenu aria-labelledby="timesheet-action-dd">
+                            <button ngbDropdownItem *ngIf="item.TimesheetStatus != 5" (click)="openTimesheetModal('Rejected', item)">
+                              <i class="fa pe-1" style="color: #cd1858;"
+                                [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-xmark': !isLoading}">
+                              </i>Reject
+                            </button>
+                            <button ngbDropdownItem *ngIf="item.TimesheetStatus != 5" (click)="openTimesheetModal('Reopen', item)">
+                              <i class="fa pe-1" style="color: #74c0fc;"
+                                [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-reply-all': !isLoading}">
+                              </i>Open timesheet
+                            </button>
+                            <button ngbDropdownItem *ngIf="item.TimesheetStatus != 9" (click)="openTimesheetModal('Approved', item)">
+                              <i class="fa pe-1"
+                                [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-check': !isLoading}"></i>
+                              Approve</button>
+                          </div>
+                        </div>
+                        <!--  -->
                       </div>
                     </div>
                     <div class="collapse show">
@@ -265,20 +296,22 @@
           <a ngbNavLink (click)="getLeaveRequest()">Leave</a>
           <ng-template ngbNavContent>
             <ng-container *ngIf="!isPageLoading">
-              <ng-container >
+              <ng-container>
                 <div class="mt-3" *ngIf="leaveData.TotalRecords > 0">
-                  <app-pagination [pagination]="leaveData" (onPageChange)="GeLeaveFilterResult($event)"></app-pagination>
+                  <app-pagination [pagination]="leaveData"
+                    (onPageChange)="GeLeaveFilterResult($event)"></app-pagination>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="row col-md-10">
                     <div class="col-md-4 py-2">
                       <label class="form-label">Filter by name</label>
-                      <bot-autocomplete [data]="employeeList" [(ngModel)]="leaveRecord.EmployeeId" (OnSelect)="getLeaveRequest()" (keydown.esc)="resetLeaveRequest()">
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="leaveRecord.EmployeeId"
+                        (OnSelect)="getLeaveRequest()" (keydown.esc)="resetLeaveRequest()">
                       </bot-autocomplete>
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by requested on </label>
-                      <select  class="form-select">
+                      <select class="form-select">
                         <option value="0" disabled selected>Select days</option>
                         <option value="7">Last 7 days</option>
                         <option value="14">Last 14 days</option>
@@ -287,7 +320,8 @@
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by status</label>
-                      <select  class="form-select" (change)="getLeaveRequest()" [(ngModel)]="leaveRecord.RequestStatusId">
+                      <select class="form-select" (change)="getLeaveRequest()"
+                        [(ngModel)]="leaveRecord.RequestStatusId">
                         <option value="0" disabled selected>Select status</option>
                         <option value="2">Pending</option>
                         <option value="9">Approved</option>
@@ -322,18 +356,23 @@
                       <div class="ms-3 col-auto">
                         <span class="fw-bold pe-1">Manager:</span>
                         {{item.ManagerName}} |
-                        <span class="mb-0"><i class="fa-solid fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i class="fa-solid fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
-                        <span class="badge  ms-3" [ngClass]="{'bg-danger': item.RequestStatusId == 5, 'bg-success': item.RequestStatusId == 9, 'bg-primary': (item.RequestStatusId != 9 && item.RequestStatusId !=5)}">
+                        <span class="mb-0"><i class="fa-solid fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i
+                            class="fa-solid fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
+                        <span class="badge  ms-3"
+                          [ngClass]="{'bg-danger': item.RequestStatusId == 5, 'bg-success': item.RequestStatusId == 9, 'bg-primary': (item.RequestStatusId != 9 && item.RequestStatusId !=5)}">
                           <i class="fa-solid fa-ban pe-1" *ngIf="item.RequestStatusId == 5,"></i>
                           <i class="fa-solid fa-check pe-1" *ngIf="item.RequestStatusId == 9"></i>
-                          <i class="fa-regular fa-clock pe-1" *ngIf="(item.RequestStatusId != 9 && item.RequestStatusId !=5)"></i>
+                          <i class="fa-regular fa-clock pe-1"
+                            *ngIf="(item.RequestStatusId != 9 && item.RequestStatusId !=5)"></i>
                           {{item.RequestStatusId == 5 ? "Rejectd" : item.RequestStatusId == 9 ? "Approved" : "Pending"}}
                         </span>
                         <span class="badge bg-c ms-3" *ngIf="item.ReporterDetail.length == 1">
                           <i class="fa-solid fa-at"></i>
                           <span class="ps-1">{{item.ReporterDetail[0].Name}}</span>
                         </span>
-                        <a href="javascript:void(0)" class="text-decoration-none" triggers="mouseenter:mouseleave" placement="end"  [ngbPopover]="popContent" [popoverTitle]="popTitle" *ngIf="item.ReporterDetail.length > 1">
+                        <a href="javascript:void(0)" class="text-decoration-none" triggers="mouseenter:mouseleave"
+                          placement="end" [ngbPopover]="popContent" [popoverTitle]="popTitle"
+                          *ngIf="item.ReporterDetail.length > 1">
                           <span class="badge bg-c ms-3">
                             <i class="fa-solid fa-at"></i>
                             <span class="ps-1">{{item.ReporterDetail.length}}</span>
@@ -362,18 +401,22 @@
                     </div>
                     <div class="col-auto d-flex flex-row-reverse">
                       <div class="col-auto me-0 pe-0">
-                        <button *ngIf="item.RequestStatusId != 5" [disabled]="item.IsDatePassed" (click)="openLeaveModal('Rejected', item)"
-                          class="btn btn-danger btn-sm"><i class="fa pe-1"
-                            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}"></i> Reject</button>
-                        <button *ngIf="item.RequestStatusId != 9" [disabled]="item.IsDatePassed" (click)="openLeaveModal('Approved', item)"
-                          class="btn btn-success ms-2 btn-sm"><i class="fa pe-1"
-                            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-check': !isLoading}"></i> Approve</button>
+                        <button *ngIf="item.RequestStatusId != 5" [disabled]="item.IsDatePassed"
+                          (click)="openLeaveModal('Rejected', item)" class="btn btn-danger btn-sm"><i class="fa pe-1"
+                            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}"></i>
+                          Reject</button>
+                        <button *ngIf="item.RequestStatusId != 9" [disabled]="item.IsDatePassed"
+                          (click)="openLeaveModal('Approved', item)" class="btn btn-success ms-2 btn-sm"><i
+                            class="fa pe-1"
+                            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-check': !isLoading}"></i>
+                          Approve</button>
                       </div>
                     </div>
                     <div class="collapse col-md-12 show" [id]="'attendance'+i">
                       <div class="card card-body border-0">
                         <div class="row align-items-center justify-content-start">
-                          <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">{{item.NumOfDays > 0 ? 'Full day' : 'Half day'}}</span>
+                          <span class="badge bg-c col-auto fw-normal ms-3 py-2 px-3">{{item.NumOfDays > 0 ? 'Full day' :
+                            'Half day'}}</span>
                           <!-- <div class="bg-c px-3 ms-3 rounded text-white col-auto">
                             <span class="fade-font">{{item.NumOfDays > 0 ? 'Full day' : 'Half day'}}</span>
                           </div> -->
@@ -418,12 +461,13 @@
                   <div class="row col-md-10">
                     <div class="col-md-4 py-2">
                       <label class="form-label">Filter by name</label>
-                      <bot-autocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="employeeId"
+                        (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
                       </bot-autocomplete>
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by requested on </label>
-                      <select  class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
+                      <select class="form-select" (change)="filter($event, 'requestedon')" [(ngModel)]="requestedOn">
                         <option value="0" disabled selected>Select days</option>
                         <option value="7">Last 7 days</option>
                         <option value="14">Last 14 days</option>
@@ -432,7 +476,8 @@
                     </div>
                     <div class="col-md-2 py-2">
                       <label class="form-label">Filter by status</label>
-                      <select  class="form-select" (change)="filter($event, 'status')" [(ngModel)]="missAttendanceStatus">
+                      <select class="form-select" (change)="filter($event, 'status')"
+                        [(ngModel)]="missAttendanceStatus">
                         <option value="0" disabled selected>Select status</option>
                         <option value="2">Pending</option>
                         <option value="9">Approved</option>
@@ -445,19 +490,25 @@
                   <thead>
                     <tr>
                       <th class="custom-th border-end" width="15%">
-                        <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark" (click)="arrangeDetails(orderByAttendanceDateAsc, 'AttendanceDate')">DATE</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByAttendanceDateAsc == null || !orderByAttendanceDateAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByAttendanceDateAsc == null || orderByAttendanceDateAsc }" aria-hidden="true"></i>
+                        <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark"
+                          (click)="arrangeDetails(orderByAttendanceDateAsc, 'AttendanceDate')">DATE</a>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByAttendanceDateAsc == null || !orderByAttendanceDateAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByAttendanceDateAsc == null || orderByAttendanceDateAsc }"
+                          aria-hidden="true"></i>
                       </th>
                       <th class="custom-th border-end" width="10%">REQUEST TYPE</th>
                       <th class="custom-th border-end" width="15%">
-                        <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark" (click)="arrangeDetails(orderByRequestedOnAsc, 'RequestedOn')">Requested On</a>
+                        <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark"
+                          (click)="arrangeDetails(orderByRequestedOnAsc, 'RequestedOn')">Requested On</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByRequestedOnAsc == null || !orderByRequestedOnAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByRequestedOnAsc == null || !orderByRequestedOnAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByRequestedOnAsc == null || orderByRequestedOnAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByRequestedOnAsc == null || orderByRequestedOnAsc }"
+                          aria-hidden="true"></i>
                       </th>
                       <th class="custom-th border-end" width="25%">NOTE</th>
                       <th class="custom-th border-end" width="10%">STATUS</th>
@@ -502,13 +553,14 @@
                         </td>
                         <td class="align-middle border-bottom">
                           <div ngbDropdown class="d-inline-block">
-                            <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply" [disabled]="attr.CurrentStatus == 5"
-                              id="dropdownBasic1" ngbDropdownToggle>
+                            <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply"
+                              [disabled]="attr.CurrentStatus == 5" id="dropdownBasic1" ngbDropdownToggle>
                               <i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i>
                             </button>
                             <div class="dropdown-menu p-0" ngbDropdownMenu aria-labelledby="dropdownBasic1">
                               <button ngbDropdownItem *ngIf="attr.CurrentStatus != 9">
-                                <a class="dropdown-item" (click)="showApproveRequestModal(attr)" href="javascript:void(0)">Approve</a>
+                                <a class="dropdown-item" (click)="showApproveRequestModal(attr)"
+                                  href="javascript:void(0)">Approve</a>
                               </button>
                               <button ngbDropdownItem (click)="showRejectRequestModal(attr)">
                                 <a class="dropdown-item" href="javascript:void(0)">Reject</a>
@@ -531,7 +583,8 @@
                   </tbody>
                 </table>
                 <div class="mt-3">
-                  <app-pagination [pagination]="requestFilter" (onPageChange)="GetFilterResult($event)"></app-pagination>
+                  <app-pagination [pagination]="requestFilter"
+                    (onPageChange)="GetFilterResult($event)"></app-pagination>
                 </div>
               </ng-container>
               <!-- <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
@@ -553,172 +606,179 @@
         <li [ngbNavItem]="5">
           <a ngbNavLink class="text-muted" (click)="getReviewAttendanceDetail()">Review Attendance</a>
           <ng-template ngbNavContent>
-            <div class="x_content" >
+            <div class="x_content">
               <div class="row align-items-center justify-content-between">
-                  <div class="col-md-11 row">
-                      <div class="cell-wrapper col-md-4 mb-3">
-                          <div class="t-filter" >
-                            <a href="javascript:void()" class="pe-2">Full Name</a>
-                          </div>
-                          <input class="form-control" (keyup.enter)="filterAttedanceReviewRecords()" autofocus [(ngModel)]="attendance.EmployeeName"
-                            placeholder="Search by Name" id="namefilter" (keydown.esc)="resetAttedanceReviewFilter()">
-                      </div>
-                      <div class="cell-wrapper col-md-1 mb-3">
-                        <div class="t-filter" >
-                          <a href="javascript:void()" class="pe-2">Month</a>
-                        </div>
-                        <select class="form-select" [(ngModel)]="attendance.ForMonth" (change)="filterAttedanceReviewRecords()">
-                          <option value="1">Jan</option>
-                          <option value="2">Feb</option>
-                          <option value="3">Mar</option>
-                          <option value="4">Apr</option>
-                          <option value="5">May</option>
-                          <option value="6">Jun</option>
-                          <option value="7">July</option>
-                          <option value="8">Aug</option>
-                          <option value="9">Sep</option>
-                          <option value="10">Oct</option>
-                          <option value="11">Nov</option>
-                          <option value="12">Dec</option>
-                        </select>
-                      </div>
-                      <div class="cell-wrapper col-md-1 mb-3">
-                        <div class="t-filter" >
-                          <a href="javascript:void()" class="pe-2">Year</a>
-                        </div>
-                        <select class="form-select" [(ngModel)]="attendance.ForYear">
-                          <option value="2023" selected>2023</option>
-                        </select>
-                      </div>
+                <div class="col-md-11 row">
+                  <div class="cell-wrapper col-md-4 mb-3">
+                    <div class="t-filter">
+                      <a href="javascript:void()" class="pe-2">Full Name</a>
+                    </div>
+                    <input class="form-control" (keyup.enter)="filterAttedanceReviewRecords()" autofocus
+                      [(ngModel)]="attendance.EmployeeName" placeholder="Search by Name" id="namefilter"
+                      (keydown.esc)="resetAttedanceReviewFilter()">
                   </div>
+                  <div class="cell-wrapper col-md-1 mb-3">
+                    <div class="t-filter">
+                      <a href="javascript:void()" class="pe-2">Month</a>
+                    </div>
+                    <select class="form-select" [(ngModel)]="attendance.ForMonth"
+                      (change)="filterAttedanceReviewRecords()">
+                      <option value="1">Jan</option>
+                      <option value="2">Feb</option>
+                      <option value="3">Mar</option>
+                      <option value="4">Apr</option>
+                      <option value="5">May</option>
+                      <option value="6">Jun</option>
+                      <option value="7">July</option>
+                      <option value="8">Aug</option>
+                      <option value="9">Sep</option>
+                      <option value="10">Oct</option>
+                      <option value="11">Nov</option>
+                      <option value="12">Dec</option>
+                    </select>
+                  </div>
+                  <div class="cell-wrapper col-md-1 mb-3">
+                    <div class="t-filter">
+                      <a href="javascript:void()" class="pe-2">Year</a>
+                    </div>
+                    <select class="form-select" [(ngModel)]="attendance.ForYear">
+                      <option value="2023" selected>2023</option>
+                    </select>
+                  </div>
+                </div>
               </div>
               <div class="excel-table" id="excel-table">
-                  <table>
-                    <thead>
-                      <ng-container >
-                        <tr >
-                          <th>Name</th>
-                          <th class="text-truncate" *ngFor="let data of monthDays">
-                            {{data}}
-                          </th>
-                          <th>A</th>
-                          <th>B</th>
-                          <th>C</th>
-                          <th>D</th>
-                          <th>E</th>
-                          <th>F</th>
-                          <th>G</th>
-                          <th>H</th>
-                          <th>I</th>
-                          <th>J</th>
-                        </tr>
-                      </ng-container>
-                    </thead>
-                    <tbody>
-                      <ng-container *ngIf="attendanceDetail.length > 0">
-                        <tr *ngFor="let item of attendanceDetail">
-                          <td>
-                              {{item.EmployeeName}}
+                <table>
+                  <thead>
+                    <ng-container>
+                      <tr>
+                        <th>Name</th>
+                        <th class="text-truncate" *ngFor="let data of monthDays">
+                          {{data}}
+                        </th>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>C</th>
+                        <th>D</th>
+                        <th>E</th>
+                        <th>F</th>
+                        <th>G</th>
+                        <th>H</th>
+                        <th>I</th>
+                        <th>J</th>
+                      </tr>
+                    </ng-container>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="attendanceDetail.length > 0">
+                      <tr *ngFor="let item of attendanceDetail">
+                        <td>
+                          {{item.EmployeeName}}
+                        </td>
+                        <ng-container *ngFor="let data of item.AttendanceDetail">
+                          <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
+                            <ng-container *ngIf="!data.IsOnLeave">
+                              <i class="fa-solid fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
+                              <i class="fa-solid fa-xmark text-white" *ngIf="data.PresentDayStatus == 5"></i>
+                              <a href="javascript:void(0)"
+                                (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
+                                <i class="fa-solid fa-triangle-exclamation text-warning"
+                                  *ngIf="data.PresentDayStatus == 0"></i>
+                              </a>
+                              <i class="fa-regular fa-clock text-danger" *ngIf="data.PresentDayStatus == 2"></i>
+                              <i class="fa-solid fa-gift"
+                                *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                            </ng-container>
+                            <ng-container *ngIf="data.IsOnLeave">
+                              <i class="fa-regular fa-flag"></i>
+                            </ng-container>
                           </td>
-                          <ng-container *ngFor="let data of item.AttendanceDetail">
-                              <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
-                                <ng-container *ngIf="!data.IsOnLeave">
-                                  <i class="fa-solid fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
-                                  <i class="fa-solid fa-xmark text-white" *ngIf="data.PresentDayStatus == 5"></i>
-                                  <a href="javascript:void(0)" (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
-                                      <i class="fa-solid fa-triangle-exclamation text-warning" *ngIf="data.PresentDayStatus == 0"></i>
-                                  </a>
-                                  <i class="fa-regular fa-clock text-danger" *ngIf="data.PresentDayStatus == 2"></i>
-                                  <i class="fa-solid fa-gift" *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
-                                </ng-container>
-                                <ng-container *ngIf="data.IsOnLeave">
-                                  <i class="fa-regular fa-flag"></i>
-                                </ng-container>
-                              </td>
-                          </ng-container>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                      </ng-container>
-                      <ng-container *ngIf="attendanceDetail.length == 0">
-                          <tr>
-                              <td colspan="31">
-                                  <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                                    <p class="my-5 py-5">Record Not Found</p>
-                                  </div>
-                              </td>
-                          </tr>
-                      </ng-container>
-                    </tbody>
-                  </table>
+                        </ng-container>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </ng-container>
+                    <ng-container *ngIf="attendanceDetail.length == 0">
+                      <tr>
+                        <td colspan="31">
+                          <div
+                            class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                            <p class="my-5 py-5">Record Not Found</p>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+              <div class="mt-3 row align-items-center justify-content-between">
+                <div class="col" *ngIf="!isPageLoading">
+                  <app-pagination [pagination]="attendanceReviewData"
+                    (onPageChange)="GetFilterLosspayResult($event)"></app-pagination>
                 </div>
-                <div class="mt-3 row align-items-center justify-content-between">
-                  <div class="col" *ngIf="!isPageLoading">
-                      <app-pagination [pagination]="attendanceReviewData" (onPageChange)="GetFilterLosspayResult($event)"></app-pagination>
+                <div class="col-auto row align-items-center">
+                  <div class="col-auto text-muted">
+                    Scroll
                   </div>
-                  <div class="col-auto row align-items-center">
-                    <div class="col-auto text-muted">
-                      Scroll
-                    </div>
-                    <div class="col-auto">
-                      <div id="scroll-dv" class="scroll-bar-dv border-0">
-                        <div class="inner-scroller" id="inner-scroller"></div>
-                      </div>
+                  <div class="col-auto">
+                    <div id="scroll-dv" class="scroll-bar-dv border-0">
+                      <div class="inner-scroller" id="inner-scroller"></div>
                     </div>
                   </div>
                 </div>
-                <div class="row mt-3">
-                  <div class="col-auto">
-                      <span class="px-2 py-1">
-                          <i class="fa-solid fa-check text-success"></i>
-                      </span>
-                      <span> Approved</span>
-                  </div>
-                  <div class="col-auto">
-                      <span class="px-2 py-1">
-                          <i class="fa-solid fa-xmark text-danger"></i>
-                      </span>
-                      <span> Rejected</span>
-                  </div>
-                  <div class="col-auto">
-                      <span class=" px-2 py-1">
-                          <i class="fa-solid fa-ban text-dark"></i>
-                      </span>
-                      <span> Blocked</span>
-                  </div>
-                  <div class="col-auto">
-                      <span class="px-2 py-1">
-                          <i class="fa-regular fa-clock text-warning"></i>
-                      </span>
-                      <span> Submitted</span>
-                  </div>
-                  <div class="col-auto">
-                    <span class="px-2 py-1">
-                        <i class="fa-solid fa-triangle-exclamation text-warning"></i>
-                    </span>
-                    <span> Not Submitted</span>
-                  </div>
-                  <div class="col-auto">
-                      <span class="holiday-color px-2 py-1">
-                          <i class="fa-solid fa-gift"></i>
-                      </span>
-                      <span> WeekOff/ Holiday</span>
-                  </div>
-                  <div class="col-auto">
-                    <span class=" px-2 py-1">
-                        <i class="fa-regular fa-flag"></i>
-                    </span>
-                    <span> Leave</span>
-                  </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-auto">
+                  <span class="px-2 py-1">
+                    <i class="fa-solid fa-check text-success"></i>
+                  </span>
+                  <span> Approved</span>
                 </div>
+                <div class="col-auto">
+                  <span class="px-2 py-1">
+                    <i class="fa-solid fa-xmark text-danger"></i>
+                  </span>
+                  <span> Rejected</span>
+                </div>
+                <div class="col-auto">
+                  <span class=" px-2 py-1">
+                    <i class="fa-solid fa-ban text-dark"></i>
+                  </span>
+                  <span> Blocked</span>
+                </div>
+                <div class="col-auto">
+                  <span class="px-2 py-1">
+                    <i class="fa-regular fa-clock text-warning"></i>
+                  </span>
+                  <span> Submitted</span>
+                </div>
+                <div class="col-auto">
+                  <span class="px-2 py-1">
+                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+                  </span>
+                  <span> Not Submitted</span>
+                </div>
+                <div class="col-auto">
+                  <span class="holiday-color px-2 py-1">
+                    <i class="fa-solid fa-gift"></i>
+                  </span>
+                  <span> WeekOff/ Holiday</span>
+                </div>
+                <div class="col-auto">
+                  <span class=" px-2 py-1">
+                    <i class="fa-regular fa-flag"></i>
+                  </span>
+                  <span> Leave</span>
+                </div>
+              </div>
             </div>
           </ng-template>
         </li>
@@ -786,7 +846,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" (click)="submitRequest()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Submit' }}
         </button>
       </div>
@@ -804,7 +864,8 @@
           <h5 *ngSwitchCase="'Rejected'" class="modal-title ps-4" id="timesheetModalLabel">Rejection Request modal</h5>
           <h5 *ngSwitchCase="'Approved'" class="modal-title ps-4" id="timesheetModalLabel">Approval request modal
           </h5>
-          <h5 *ngSwitchCase="'Othermember'" class="modal-title ps-4" id="timesheetModalLabel">Assign to other member</h5>
+          <h5 *ngSwitchCase="'Othermember'" class="modal-title ps-4" id="timesheetModalLabel">Assign to other member
+          </h5>
         </ng-container>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -851,7 +912,7 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-success" (click)="submitTimesheetRequest()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Submit' }}
         </button>
       </div>
@@ -861,12 +922,14 @@
 
 
 <!-- Employee Register or Update message modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="approval-attendance" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="approval-attendance" tabindex="-1"
+  aria-labelledby="messageModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="p-2 modal-content" *ngIf="requestModalData != null">
       <div class="modal-header border-bottom-0 pt-4">
         <ng-container [ngSwitch]="requestModalData.Title">
-          <h5 *ngSwitchCase="'Reject request'" class="modal-title ps-4" id="timesheetModalLabel">Rejection Request modal</h5>
+          <h5 *ngSwitchCase="'Reject request'" class="modal-title ps-4" id="timesheetModalLabel">Rejection Request modal
+          </h5>
           <h5 *ngSwitchCase="'Approve request'" class="modal-title ps-4" id="timesheetModalLabel">Approval request modal
           </h5>
         </ng-container>
@@ -886,7 +949,8 @@
                 Request by [{{currentApprovalRequest.EmployeeName}}]
               </p>
               <p class="mb-0 fw-bold fs-6">
-                <span class="fw-bold text-primary-c me-2">Attendance Date: {{currentApprovalRequest.AttendanceDate | date}}</span>
+                <span class="fw-bold text-primary-c me-2">Attendance Date: {{currentApprovalRequest.AttendanceDate |
+                  date}}</span>
               </p>
             </div>
             <div class="col-md-2">
@@ -913,21 +977,21 @@
       <div *ngIf="requestModalData.IsApprove" class="modal-footer mt-0 border-top-0">
         <!-- <a href="javascript:void(0)" (click)="ApproveRequest()" class="text-decoration-none text-dark fw-bold">Approve</a> -->
         <button type="button" class="btn btn-success" (click)="ApproveRequest()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Approve' }}
         </button>
       </div>
       <div *ngIf="requestModalData.IsReject" class="modal-footer mt-0 border-top-0">
         <!-- <a href="javascript:void(0)" (click)="RejectRequest()" class="text-decoration-none text-dark fw-bold">Reject</a> -->
         <button type="button" class="btn btn-danger" (click)="RejectRequest()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Reject' }}
         </button>
       </div>
     </div>
   </div>
 </div>
-  <!-- End -->
+<!-- End -->
 
 
 <!-- Pdf viewer modal -->
@@ -942,7 +1006,8 @@
 <!-- End pdf view modal -->
 
 <!-- View Rent file -->
-<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="managerleaveFileModal" tabindex="-1" aria-labelledby="managerleaveFileModalLabel" aria-hidden="true">
+<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="managerleaveFileModal"
+  tabindex="-1" aria-labelledby="managerleaveFileModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -950,7 +1015,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <ng-container >
+        <ng-container>
           <table class="table">
             <thead>
               <tr>
@@ -964,7 +1029,8 @@
                 <td class="counterCell">{{i+1}}</td>
                 <td>{{item.FileName}}.{{item.FileExtension}}</td>
                 <td>
-                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa-regular fa-eye px-2 text-dark"></i></a>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i
+                      class="fa-regular fa-eye px-2 text-dark"></i></a>
                 </td>
               </tr>
             </tbody>
@@ -977,41 +1043,44 @@
 <!-- End -->
 
 <!--Attendance Adjustment Modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="attendanceAdjustmentModal" tabindex="-1" aria-labelledby="attendanceAdjustmentModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="attendanceAdjustmentModal" tabindex="-1"
+  aria-labelledby="attendanceAdjustmentModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content px-4">
-          <div class="modal-header border-bottom-0">
-              <h1 class="modal-title fs-5" id="attendanceAdjustmentModalLabel">Attendance Adjustment</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <ng-container *ngIf="selectedAttendance != null">
-                <div class="col-md-12">
-                    <label  class="form-label">Name</label>
-                    <span>: {{selectedAttendance.EmployeeName}} </span>
-                </div>
-                <div class="col-md-12 mt-2">
-                    <label class="form-label">Date</label>
-                    <span>: {{selectedAttendance.AttendanceDay | date}} </span>
-                </div>
-                <div class="col-md-12 mt-2">
-                  <label  class="form-label">Submitted By</label>
-                  <span>: {{currentUser.FirstName}} {{currentUser.LastName}}</span>
-              </div>
-                <div class="col-md-12 mt-2">
-                  <label class="form-label">Message</label>
-                  <textarea class="form-control" placeholder="Message" rows="2" [(ngModel)]="selectedAttendance.UserComments"></textarea>
-              </div>
-            </ng-container>
-          </div>
-          <div class="modal-footer border-top-0">
-              <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" [disabled]="isLoading">Cancel</button>
-              <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveAttedanceAjustment()">
-                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
-                  {{ isLoading ? 'Wait' : 'Save' }}
-              </button>
-          </div>
+    <div class="modal-content px-4">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="attendanceAdjustmentModalLabel">Attendance Adjustment</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <div class="modal-body">
+        <ng-container *ngIf="selectedAttendance != null">
+          <div class="col-md-12">
+            <label class="form-label">Name</label>
+            <span>: {{selectedAttendance.EmployeeName}} </span>
+          </div>
+          <div class="col-md-12 mt-2">
+            <label class="form-label">Date</label>
+            <span>: {{selectedAttendance.AttendanceDay | date}} </span>
+          </div>
+          <div class="col-md-12 mt-2">
+            <label class="form-label">Submitted By</label>
+            <span>: {{currentUser.FirstName}} {{currentUser.LastName}}</span>
+          </div>
+          <div class="col-md-12 mt-2">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" placeholder="Message" rows="2"
+              [(ngModel)]="selectedAttendance.UserComments"></textarea>
+          </div>
+        </ng-container>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+          [disabled]="isLoading">Cancel</button>
+        <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveAttedanceAjustment()">
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+          {{ isLoading ? 'Wait' : 'Save' }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 <!-- End -->
