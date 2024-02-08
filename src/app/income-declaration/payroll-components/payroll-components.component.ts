@@ -47,17 +47,26 @@ export class PayrollComponentsComponent implements OnInit {
               private nav:iNavigation) { }
 
   ngOnInit(): void {
+    this.basePath = this.http.GetImageBasePath();
+    this.initData();
+  }
+
+  initData() {
     let data = this.nav.getValue();
     this.initadhocForm();
     this.initdeductionForm();
     this.initbonusForm();
-    this.basePath = this.http.GetImageBasePath();
     this.loadData();
 
     if (data > 0) {
       this.companyId = data;
       this.ComponentType = '';
     }
+  }
+
+  pageReload() {
+    this.active = 1;
+    this.initData();
   }
 
   navigate() {

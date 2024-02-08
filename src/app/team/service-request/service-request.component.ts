@@ -40,6 +40,11 @@ export class ServiceRequestComponent implements OnInit {
             ) { }
 
   ngOnInit(): void {
+    this.userDetail = this.user.getInstance();
+    this.initData();
+  }
+
+  initData() {
     this.employeesList = new autoCompleteModal();
     this.employeesList.data = [];
     this.employeesList.placeholder = "Employee";
@@ -48,13 +53,16 @@ export class ServiceRequestComponent implements OnInit {
     this.employeesList.isMultiSelect = true;
     this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.requestFilter = new Filter();
-    this.userDetail = this.user.getInstance();
     if (this.userDetail.UserTypeId == 1)
       this.apiURL = "GetServiceRequest";
     else
       this.apiURL = "GetServiceRequestByEmpId";
 
     this.loadPageData()
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   selectedEmployee(e: any) {

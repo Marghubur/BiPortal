@@ -1,0 +1,128 @@
+<div class="col-12 full-v main-container">
+  <div class="col-12 row p-0 m-0">
+    <div class="right-panel container col-md-12 p-0">
+      <div class="x_panel mt-2">
+        <div class="x_header">
+          <div class="d-flex justify-content-between">
+            <div class="col-8">
+              <div class="px-1">
+                <app-breadcrums [title]="'Database Connection'" [subtitle]="'Database Connction Details'"></app-breadcrums>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-container >
+          <form [formGroup]="jobsForm">
+            <div class="row px-3">
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Job Type Name</label>
+                <input type="text" formControlName="JobTypeName" class="form-control" placeholder="Job Type Name" maxlength="50"
+                oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': isSubmitted && f['JobTypeName'].errors !== null && f['JobTypeName'].errors['required']}">
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Job Type Description</label>
+                <input type="text" formControlName="JobTypeDescription" class="form-control" placeholder="Job Type Description" maxlength="250"
+                oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': isSubmitted && f['JobTypeDescription'].errors !== null && f['JobTypeDescription'].errors['required']}">
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Job Start Date</label>
+                <form class="form-inline">
+                  <div class="form-group w-100">
+                    <div class="input-group inline-calendar w-100" [ngClass]="{'error-field': isSubmitted && f['JobStartDate'].errors !== null && f['JobStartDate'].errors['required']}">
+                      <input class="form-control"placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="jobstartdateModel"
+                        (dateSelect)="onDateSelection($event)" ngbDatepicker [maxDate]="{year: 2050, month:12, day: 31}" [minDate]="minDate" #d="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn calendar" (click)="d.toggle()" type="button"><i
+                            class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Job End Date</label>
+                <form class="form-inline">
+                  <div class="form-group w-100">
+                    <div class="input-group inline-calendar w-100">
+                      <input class="form-control" placeholder="yyyy-mm-dd" name="edp" [(ngModel)]="jobenddateModel"
+                        (dateSelect)="onEndDateSelection($event)" ngbDatepicker [maxDate]="{year: 2050, month:12, day: 31}"  [minDate]="minDate" #ed="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn calendar" (click)="ed.toggle()" type="button"><i
+                            class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row px-3">
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Is Active Job</label>
+                <div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" formControlName="IsActiveJob" type="radio" name="IsActiveJob" id="IsActiveJob" [value]=true>
+                    <label class="form-check-label" for="IsActiveJob">Yes</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" formControlName="IsActiveJob" type="radio" name="IsActiveJob" id="IsActiveJob1" [value]=false>
+                    <label class="form-check-label" for="IsActiveJob1">No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Job Time (in hrs)</label>
+                <select class="form-select" formControlName="JobTime">
+                  <option value="{{i}}" *ngFor="let item of [].constructor(24); let i = index">{{i}}</option>
+                </select>
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Job Day of Week</label>
+                <select class="form-select" formControlName="JobDayOfWeek">
+                  <option value="{{i}}" *ngFor="let item of [].constructor(7); let i = index">{{i}}</option>
+                </select>
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Job Day of Month</label>
+                <select class="form-select" formControlName="JobDayOfMonth">
+                  <option value="{{i}}" *ngFor="let item of [].constructor(32); let i = index">{{i}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row px-3">
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Job Month of Year</label>
+                <select class="form-select" formControlName="JobMonthOfYear">
+                  <option value="{{i}}" *ngFor="let item of [].constructor(13); let i = index">{{i}}</option>
+                </select>
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Topic Name</label>
+                <input type="text" class="form-control" formControlName="TopicName" placeholder="Topic Name" maxlength="50" oninput="this.value = this.value.toLowerCase()"
+                 [ngClass]="{'error-field': isSubmitted && f['TopicName'].errors !== null && f['TopicName'].errors['required']}">
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Group Id</label>
+                <input type="text" class="form-control" formControlName="GroupId" placeholder="Topic Name" maxlength="50" oninput="this.value = this.value.toLowerCase()"
+                 [ngClass]="{'error-field': isSubmitted && f['GroupId'].errors !== null && f['GroupId'].errors['required']}">
+              </div>
+              <div class="col-md-3 mt-3">
+                <label  class="form-label">Template</label>
+                <input type="text" class="form-control" formControlName="Template" placeholder="Template" oninput="this.value = this.value.toLowerCase()">
+              </div>
+            </div>
+            <div class="mt-3 text-end">
+              <button class="btn btn-primary" (click)="saveJobsConnection()">
+                <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+                <span class="ps-2">
+                  Save Changes
+                </span>
+              </button>
+            </div>
+          </form>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

@@ -403,7 +403,9 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     let employeeBillDetail = {
       "EmployeeId": userFile.FileOwnerId,
       "ClientId": userFile.ClientId,
-      "FileId": fileId
+      "FileId": fileId,
+      "MonthName": userFile.Month,
+      "ForYear": userFile.Year
     };
     this.http.post("FileMaker/ReGenerateBill", employeeBillDetail).then((response: ResponseModel) => {
       let fileDetail: any = null;

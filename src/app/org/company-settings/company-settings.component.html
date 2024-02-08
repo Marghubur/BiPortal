@@ -1,16 +1,16 @@
 <div class="col-md-12 main-container">
   <div class="x_panel">
     <div class="x_header">
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between align-items-center">
         <div class="col-8">
           <div class="px-1">
             <app-breadcrums [title]="'Company Setting'" [subtitle]="'notice period, financiaal year etc'"></app-breadcrums>
           </div>
         </div>
-        <div class="col-4">
-          <div class="x_header_title d-flex align-items-center justify-content-end">
-            <!-- <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa-solid fa-plus pe-2"></i> Add Template</button> -->
-          </div>
+        <div class="col-auto">
+          <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+            <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+          </a>
         </div>
       </div>
     </div>

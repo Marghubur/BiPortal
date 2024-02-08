@@ -8,8 +8,7 @@ import { environment } from 'src/environments/environment';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { AdminNotification, AImage, Doc, Docx, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
-import { iNavigation } from 'src/providers/iNavigation';
+import { AImage, Doc, Docx, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
 
@@ -57,8 +56,7 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
               private http: AjaxService,
-              private sanitizer: DomSanitizer,
-              private nav: iNavigation) { }
+              private sanitizer: DomSanitizer) { }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({
@@ -71,9 +69,13 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    let data = this.local.findRecord("Companies");
     this.userDetail = this.local.findRecord("UserDetail");
     this.baseUrl = this.http.GetImageBasePath();
+    this.initData();
+  }
+
+  initData() {
+    let data = this.local.findRecord("Companies");
     this.currentProduct = new Product();
     this.productDetail = new Product();
     this.productData = new Filter();
@@ -95,6 +97,10 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
         this.initForm();
       }
     }
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   loadData() {

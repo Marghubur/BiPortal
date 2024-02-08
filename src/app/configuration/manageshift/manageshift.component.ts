@@ -32,7 +32,7 @@ export class ManageshiftComponent implements OnInit {
   isLoading: boolean = false;
   departments: any = null;
   allShift: Array<Shift> = [];
-  shiftDetail: Shift = new Shift();
+  shiftDetail: Shift = null;
   orderByShiftTitleAsc: boolean = null;
   orderByTotalWorkingDaysAsc: boolean = null;
   orderByStartDateAsc: boolean = null;
@@ -50,7 +50,6 @@ export class ManageshiftComponent implements OnInit {
               private nav: iNavigation) { }
 
   ngOnInit(): void {
-    let data = this.local.findRecord("Companies");
     let department = this.local.findRecord("Department");
     if (department && department.length > 0)
       this.departments= department;
@@ -73,8 +72,14 @@ export class ManageshiftComponent implements OnInit {
     ];
     this.mindate = {year: new Date().getFullYear(), month: 1, day: 1};
     this.maxdate = {year: new Date().getFullYear(), month: 12, day: 31};
+    this.initData();
+  }
+
+  initData() {
+    let data = this.local.findRecord("Companies");
     this.currentShift = new Shift();
     this.shiftData = new Filter();
+    this.shiftDetail = new Shift();
     if (!data) {
       return;
     } else {
@@ -89,6 +94,10 @@ export class ManageshiftComponent implements OnInit {
         this.initForm();
       }
     }
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   toggleDays(id: number, e: any) {

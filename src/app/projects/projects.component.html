@@ -3,7 +3,7 @@
       <form>
         <div class="x_panel mh-auto">
           <div class="x_header">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between align-items-center">
               <div class="col-8">
                 <div class="px-1">
                   <app-breadcrums [title]="'Project Detail'" [subtitle]="'Project details like: Project name, Company name etc.'"></app-breadcrums>
@@ -11,7 +11,9 @@
               </div>
               <div class="col-4">
                 <div class="x_header_title d-flex align-items-center justify-content-end">
-                  <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
+                  <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+                    <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+                  </a>
                   <button class="btn btn-primary-c float-end" (click)="addProject()"><i class="fa-solid fa-plus pe-2"></i>Add Project</button>
                 </div>
               </div>

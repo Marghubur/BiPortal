@@ -49,8 +49,12 @@ export class CompanyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    let data = this.local.findRecord("Companies");
     this.maxdate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
+    this.initData();
+  }
+
+  initData() {
+    let data = this.local.findRecord("Companies");
     if (!data) {
       return;
     } else {
@@ -66,6 +70,10 @@ export class CompanyComponent implements OnInit {
         this.loadData();
       }
     }
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   loadData() {

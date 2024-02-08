@@ -63,6 +63,10 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
   }
 
   ngOnInit(): void {
+    this.initData();
+  }
+
+  initData() {
     this.menuItem = {
       Config: true,
       Emp: false,
@@ -72,6 +76,10 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
     this.loadLeaveData();
     this.initLeaveTypeForm();
     this.initLeavePlanForm();
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   loadLeaveData() {

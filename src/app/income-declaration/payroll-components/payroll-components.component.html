@@ -1,11 +1,16 @@
 <div class="col-12 full-v main-container">
   <div class="x_panel">
     <div class="x_header">
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between align-items-center">
         <div class="col-8">
           <div class="px-1">
             <app-breadcrums [title]="'PAYROLL COMPONENTS'" ></app-breadcrums>
           </div>
+        </div>
+        <div class="col-auto">
+          <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+            <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+          </a>
         </div>
       </div>
     </div>

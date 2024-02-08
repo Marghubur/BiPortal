@@ -38,6 +38,12 @@ export class EmailTemplateComponent implements OnInit {
     this.loadData();
   }
 
+  pageReload() {
+    this.templateDetail = new EmailTemplate();
+    this.templateData = new Filter();
+    this.loadData();
+  }
+
   loadData() {
     this.isRecordFound = false;
     this.isPageLoading = true;

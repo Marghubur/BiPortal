@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
@@ -83,6 +82,14 @@ export class AttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userDetail = this.nav.getValue();
+    this.initData();
+  }
+
+  initData() {
+    let user = this.user.getInstance() as UserDetail;
+    if (user.RoleId == UserType.Admin)
+      this.isAdmin = true;
     var dt = new Date();
     var month = dt.getMonth();
     var year = dt.getFullYear();
@@ -93,14 +100,10 @@ export class AttendanceComponent implements OnInit {
     this.toModel = null;
     this.time = new Date();
     this.DayValue = this.time.getDay();
-    let user = this.user.getInstance() as UserDetail;
-    if (user.RoleId == UserType.Admin)
-      this.isAdmin = true;
-    this.userDetail = this.nav.getValue();
     this.loadAutoComplete();
     if(this.userDetail || user.RoleId != UserType.Admin || this.isMyAttendance) {
       this.isRedirected = true;
-      this.employeeId = this.userDetail != null ? this.userDetail.EmployeeUid : user.UserId;
+      this.employeeId = this.userDetail != null ? this.userDetail.UserId : user.UserId;
       this.userName = this.userDetail != null ? this.userDetail.FirstName + " " + this.userDetail.LastName : user.FirstName + " " + user.LastName;
       this.clientId = this.userDetail != null ? this.userDetail.CompanyId : user.CompanyId;
       if (this.userDetail == null)
@@ -113,6 +116,10 @@ export class AttendanceComponent implements OnInit {
       this.employeeId = 0;
       this.userName = "";
     }
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   previousMonthAttendance(month: number, index: number) {

@@ -28,7 +28,6 @@ export class TimesheetComponent implements OnInit {
   DayValue: number = 0;
   clientId: number = 0;
   clientDetail: autoCompleteModal = null;
-  client: any = null;
   NoClient: boolean = false;
   daysInMonth: number = 0;
   cachedData: any = null;
@@ -42,11 +41,11 @@ export class TimesheetComponent implements OnInit {
   month: any = "";
   timesheetData: Timesheet = null;
   today: Date = null;
-
   hoveredDate: NgbDate | null = null;
-	timesheetFromDate: NgbDate | null; 
-	timesheetToDate: NgbDate | null; 
+	timesheetFromDate: NgbDate | null;
+	timesheetToDate: NgbDate | null;
   isLoading: boolean = false;
+  clientName: string = null;
 
   constructor(private http: AjaxService,
     private nav: iNavigation,
@@ -64,6 +63,12 @@ export class TimesheetComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userDetail = this.user.getInstance() as UserDetail;
+    this.cachedData = this.nav.getValue();
+    this.initData();
+  }
+
+  initData() {
     var dt = new Date();
     this.month = dt.getMonth() + 1;
     var year = dt.getFullYear();
@@ -92,9 +97,8 @@ export class TimesheetComponent implements OnInit {
       ForYear: dt.getFullYear(),
       ForMonth: dt.getMonth() + 1
     }
-    this.userDetail = this.user.getInstance() as UserDetail;
+
     this.DayValue = this.time.getDay();
-    this.cachedData = this.nav.getValue();
     if(this.cachedData ||  this.userDetail.RoleId != UserType.Admin) {
       this.employeeId = this.cachedData != null ? this.cachedData.EmployeeUid :  this.userDetail.UserId;
       this.clientId = this.cachedData != null ? this.cachedData.ClientUid : 0;
@@ -107,7 +111,10 @@ export class TimesheetComponent implements OnInit {
       this.employeeId =0;
     }
     this.loadData();
+  }
 
+  pageReload() {
+    this.initData();
   }
 
   loadData() {
@@ -135,6 +142,7 @@ export class TimesheetComponent implements OnInit {
     this.http.post("Timesheet/GetTimesheetByFilter", this.timesheetData).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.dailyTimesheetDetails = response.ResponseBody;
+        console.log(this.dailyTimesheetDetails);
         this.isTimesheetDataLoaded = true;
       }
       this.isFormReady = true;
@@ -177,6 +185,7 @@ export class TimesheetComponent implements OnInit {
           this.toDate.setDate(this.toDate.getDate() + 2);
 
         this.timesheetData.ClientId = this.clientId;
+        this.clientName = this.clientDetail.data.find(x => x.value == this.clientId).text;
         this.loadTimesheets();
       }
     } else {
@@ -228,6 +237,7 @@ export class TimesheetComponent implements OnInit {
         this.NoClient = false;
         if (clients.length  == 1) {
           this.clientId = clients[0].CompanyId;
+          this.clientName = clients[0].CompanyName;
           this.clientDetail.data.push({
             text: clients[0].CompanyName,
             value: clients[0].CompanyId,

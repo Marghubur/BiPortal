@@ -57,6 +57,11 @@ export class ProjectsComponent implements OnInit {
     })
   }
 
+  pageReload() {
+    this.projectData = new Filter();
+    this.loadData();
+  }
+
   editProjectDetail(item: ProjectModal) {
     this.nav.navigate(ManageProject, item);
   }

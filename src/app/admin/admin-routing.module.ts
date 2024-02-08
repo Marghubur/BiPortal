@@ -1,5 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
-import { 
+import {
   BillDetail,
   BuildPdf,
   Clients,
@@ -11,6 +11,7 @@ import {
   EmailService,
   EmailTemplate,
   ManageEmailTemplate,
+  ManageCronJob,
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
@@ -24,6 +25,7 @@ import { EmailComponent } from './email/email.component';
 import { EmailTemplateComponent } from './email-template/email-template.component';
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
 import { NgModule } from '@angular/core';
+import { CronJobComponent } from './cron-job/cron-job.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -37,7 +39,8 @@ const routes: Routes = [
   { path: BillDetail, component: BilldetailsComponent},
   { path: EmailService, component: EmailComponent},
   { path: EmailTemplate, component: EmailTemplateComponent},
-  { path: ManageEmailTemplate, component: ManageEmailtemplateComponent}  
+  { path: ManageEmailTemplate, component: ManageEmailtemplateComponent},
+  { path: ManageCronJob, component: CronJobComponent}
 ];
 
 @NgModule({

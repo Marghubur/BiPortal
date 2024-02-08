@@ -3,17 +3,17 @@
     <div class="right-panel container col-md-12 p-0">
       <div class="x_panel mt-2">
         <div class="x_header">
-          <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between align-items-center">
             <div class="col-8">
               <div class="px-1">
                 <app-breadcrums [title]="'Holidays'" [subtitle]="'Details'"></app-breadcrums>
               </div>
             </div>
-            <div class="col-4">
+            <div class="col">
               <div class="x_header_title d-flex align-items-center justify-content-end">
-                <!-- <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4"><i
-                  class="fa-solid fa-paper-plane pe-1"></i> Email Link Config
-                </a> -->
+                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+                </a>
                 <a href="javascript:void(0)" class="pe-3" (click)="uploadHolidayExcelPopup()">Upload Holiay List</a>
                 <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa-regular fa-plus-square pe-2"></i>Add Holiday</button>
               </div>
