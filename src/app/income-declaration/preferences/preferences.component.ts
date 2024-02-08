@@ -16,7 +16,6 @@ import { UserService } from 'src/providers/userService';
 export class PreferencesComponent implements OnInit {
   PanInformation: PANInformation = new PANInformation();
   salaryDeposit: SalaryDeposit = new SalaryDeposit();
-  satutoryInformation: StatutoryInformation = new StatutoryInformation();
   cachedData: any = null;
   employeeDetail: EmployeeDetail = new EmployeeDetail();
   EmployeeId: number = 0;
@@ -29,18 +28,6 @@ export class PreferencesComponent implements OnInit {
               private http: AjaxService) { }
 
   ngOnInit(): void {
-    this.satutoryInformation = {
-      PFStatus: 'Enabled',
-      PFNumber: 11,
-      UniversalACNumber: 123456789123,
-      PFJoinDate: new Date(),
-      NameOfAcccount: 'MD ISTAYAQUE',
-      ESIStatus: 'Not Eligible',
-      State: 'Telangana',
-      RegisteredLocation: 'Telangana',
-      LWFStatus: "Disabled"
-    }
-
     this.userDetail = this.user.getInstance();
     let empid = this.local.getByKey("EmployeeId");
     if (empid)
@@ -48,6 +35,10 @@ export class PreferencesComponent implements OnInit {
     else
       this.EmployeeId = this.userDetail.UserId;
 
+    this.LoadData();
+  }
+
+  pageReload() {
     this.LoadData();
   }
 

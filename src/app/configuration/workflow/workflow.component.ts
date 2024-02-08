@@ -26,12 +26,20 @@ export class WorkflowComponent implements OnInit {
               private nav: iNavigation) { }
 
   ngOnInit(): void {
+    this.initData();
+  }
+
+  initData() {
     this.filter.SearchString = "1=1";
     this.filter.PageIndex = 1;
     this.filter.PageSize = 10;
     this.filter.TotalRecords = 0;
     this.workflowDetail = new WorkFlow();
     this.loadData();
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   loadData() {

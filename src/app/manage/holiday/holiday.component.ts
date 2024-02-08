@@ -54,14 +54,18 @@ export class HolidayComponent implements OnInit {
               private nav: iNavigation) { }
 
   ngOnInit(): void {
-    let data = this.local.findRecord("Companies");
     this.year = new Date().getFullYear();
+    this.basePath = this.http.GetImageBasePath();
+    this.initData();
+  }
+
+  initData() {
+    let data = this.local.findRecord("Companies");
+    let userDetail = this.user.getInstance() as UserDetail;
     this.holidayData = new Filter();
     this.mindate = {year: new Date().getFullYear(), month: 1, day: 1};
     this.maxdate = {year: new Date().getFullYear(), month: 12, day: 31};
     this.holidayDetail = new CompanyHoliday();
-    this.basePath = this.http.GetImageBasePath();
-    let userDetail = this.user.getInstance() as UserDetail;
     if (userDetail.RoleId == UserType.Admin)
       this.isAdmin = true;
     else
@@ -82,6 +86,10 @@ export class HolidayComponent implements OnInit {
         this.initForm();
       }
     }
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   loadData() {

@@ -3,32 +3,37 @@
     <form autocomplete="off">
       <div class="col-12 row m-0 p-0 mb-2">
         <div class="x_header">
-          <div class="d-flex justify-content-between mt-3">
+          <div class="d-flex justify-content-between mt-3 align-items-center">
             <div class="col-4">
-              <div class="px-1">
-                <app-breadcrums [title]="'Attendance'"></app-breadcrums>
-              </div>
+              <app-breadcrums [title]="'Attendance'"></app-breadcrums>
             </div>
-            <div class="col-8 row justify-content-end align-items-center" *ngIf="isEmployeesReady && isAdmin">
-              <div class="col-auto">
-                <input type="checkbox" class="form-check-input" [checked]="isMyAttendance" (click)="viewAttendance()">
-                <span class="ps-2">My attendance</span>
+            <div  class="col-auto row align-items-center">
+              <div class="col-auto row justify-content-end align-items-center" *ngIf="isEmployeesReady && isAdmin">
+                <div class="col-auto">
+                  <input type="checkbox" class="form-check-input" [checked]="isMyAttendance" (click)="viewAttendance()">
+                  <span class="ps-2">My attendance</span>
+                </div>
+                <div class="col-auto">
+                  <input type="checkbox" class="form-check-input" [checked]="!isMyAttendance" (click)="viewAttendance()">
+                  <span class="ps-2">View others</span>
+                </div>
+                <ng-container *ngIf="!isMyAttendance">
+                  <div class="col-md-3">
+                    <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
+                    [ngModelOptions]="{standalone: true}">
+                    </bot-autocomplete>
+                  </div>
+                  <div class="col-md-3 p-0 m-0">
+                    <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+                    </bot-autocomplete>
+                  </div>
+                </ng-container>
               </div>
               <div class="col-auto">
-                <input type="checkbox" class="form-check-input" [checked]="!isMyAttendance" (click)="viewAttendance()">
-                <span class="ps-2">View others</span>
+                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4 text-end" (click)="pageReload()">
+                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+                </a>
               </div>
-              <ng-container *ngIf="!isMyAttendance">
-                <div class="col-md-3">
-                  <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
-                  [ngModelOptions]="{standalone: true}">
-                  </bot-autocomplete>
-                </div>
-                <div class="col-md-3 p-0 m-0">
-                  <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-                  </bot-autocomplete>
-                </div>
-              </ng-container>
             </div>
           </div>
         </div>

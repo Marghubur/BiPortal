@@ -33,6 +33,10 @@ export class RolesComponent implements OnInit {
               private http: AjaxService) { }
 
   ngOnInit(): void {
+    this.initData();
+  }
+
+  initData() {
     this.isRolesLoaded = false;
     this.http.get("Roles/GetRoles").then((response: ResponseModel) => {
       if (response.ResponseBody) {
@@ -42,6 +46,10 @@ export class RolesComponent implements OnInit {
     this.initForm(0, []);
     this.Roleform();
     this.PermissionValue = 0;
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   getPermessionName(permissionValue: number) {

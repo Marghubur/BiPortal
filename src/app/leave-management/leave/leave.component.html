@@ -1,11 +1,16 @@
 <div class="col-md-12 col-sm-12 main-container">
   <div class="x_panel">
     <div class="x_header">
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between align-items-center">
         <div class="col-8">
           <div class="px-1">
             <app-breadcrums [title]="'Leave plans'" [subtitle]="'create and manage leaves'"></app-breadcrums>
           </div>
+        </div>
+        <div class="col-auto">
+          <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+            <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -97,15 +102,7 @@
               <div class="col-md-9">
                 <div class="x_panel border-0">
                   <ng-container *ngIf="isPageReady">
-                    <!-- <div class="x_header">
-                                  <div class="d-flex justify-content-between py-2">
-                                    <h6 class="fs-4">{{currentPlan.PlanName}}</h6>
-                                    <button class="btn btn-primary-c" (click)="bindLeaveTypeModal()"><i
-                                        class="fa-solid fa-plus pe-2"></i>Assign Leave</button>
-                                  </div>
-                                </div> -->
                     <div class="x_body">
-                      <!-- [ngClass]="{'disabled-li': LeavePlan.length == 0}" ----For inactive tab -->
                       <ul ngbNav #nav="ngbNav" [(activeId)]="groupActiveId" class="nav-tabs">
                         <li [ngbNavItem]="1">
                           <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('Config')">

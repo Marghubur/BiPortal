@@ -35,6 +35,10 @@ export class AnnexureComponent implements OnInit {
               private local: ApplicationStorage) { }
 
   ngOnInit(): void {
+    this.initData();
+  }
+
+  initData() {
     let companies = this.local.findRecord("Companies");
     if (companies) {
       this.currentCompany = companies.find(x => x.IsPrimaryCompany == 1);
@@ -47,6 +51,10 @@ export class AnnexureComponent implements OnInit {
         this.loadData();
       }
     }
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   loadData() {

@@ -47,6 +47,10 @@ export class SettingsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.initData();
+  }
+
+  initData() {
     this.currentCompnay = new CompanyGroup();
     this.menuItem = {
       CS: false,
@@ -56,6 +60,11 @@ export class SettingsComponent implements OnInit {
     }
     this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     this.loadData();
+  }
+
+  pageReload() {
+    this.groupActiveId = 1;
+    this.initData();
   }
 
   get f() {

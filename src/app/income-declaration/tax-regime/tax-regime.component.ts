@@ -41,6 +41,10 @@ export class TaxRegimeComponent implements OnInit {
     this.loadData();
   }
 
+  pageReload() {
+    this.loadData();
+  }
+
   loadData() {
     this.isRecordFound = false;
     this.http.get("TaxRegime/GetAllRegime").then(res => {

@@ -114,6 +114,22 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  pageReload() {
+    this.editMode = false;
+    this.isClientSelected = false;
+    this.allTimesheet = [];
+    if (this.existingData) {
+      this.editMode = true;
+      this.generateBillUrl = `filemaker/UpdateGeneratedBill`;
+      this.model = this.calendar.getToday();
+      this.initMonths();
+      this.editBillDetail();
+    } else {
+      this.generateBillUrl = `filemaker/GenerateBill`;
+      this.getNewForm();
+    }
+  }
+
   getNewForm() {
     this.initMonths();
     this.model = this.calendar.getToday();

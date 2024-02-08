@@ -22,7 +22,7 @@ export class CompanySettingsComponent implements OnInit {
   menuIndex: number = 1;
   isReady: boolean = false;
   payRollMonth: number = 0;
-  
+
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
               private nav: iNavigation,
@@ -45,6 +45,10 @@ export class CompanySettingsComponent implements OnInit {
     }else {
       ErrorToast("Company information doesn't found. Please contact to admin.");
     }
+  }
+
+  pageReload() {
+    this.loadPageData();
   }
 
   loadPageData() {

@@ -1,5 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgbCalendar, NgbDate, NgbDatepickerConfig, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { Subscription } from 'rxjs';
@@ -90,7 +91,8 @@ export class ApplyLeaveComponent implements OnInit {
               private user: UserService,
               private config: NgbDatepickerConfig,
               private fb: FormBuilder,
-              private calendar: NgbCalendar
+              private calendar: NgbCalendar,
+              private router: Router
               ) {
     config.minDate = {year: new Date().getFullYear(), month: 1, day: 1};
     config.maxDate = {year: new Date().getFullYear(), month: 12, day: 31};
@@ -110,6 +112,13 @@ export class ApplyLeaveComponent implements OnInit {
 
   ngOnInit(): void {
     this.cachedData = this.nav.getValue();
+    this.basePath = this.http.GetImageBasePath();
+    this.userDetail = this.user.getInstance() as UserDetail;
+    this.employeeId = this.userDetail.UserId;
+    this.initData();
+  }
+
+  initData() {
     this.fromdateModal = this.calendar.getToday();
     this.model = this.calendar.getToday();
     this.leaveDetail = new LeaveModal();
@@ -118,7 +127,6 @@ export class ApplyLeaveComponent implements OnInit {
     this.leaveDetail.LeaveTypeId = 0;
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
-    this.basePath = this.http.GetImageBasePath();
     this.managerList.placeholder = "Reporting Manager";
     this.managerList.data.push({
       value: 0,
@@ -127,10 +135,8 @@ export class ApplyLeaveComponent implements OnInit {
     this.managerList.className="";
     this.loadAutoComplete();
     if(!this.cachedData) {
-      this.userDetail = this.user.getInstance() as UserDetail;
       this.reportingManagerId = this.userDetail.ReportingManagerId;
       if(this.userDetail && this.userDetail != null) {
-        this.employeeId = this.userDetail.UserId;
         this.leaveDetail.EmployeeId = this.employeeId;
         this.clearChart();
         this.loadData();
@@ -138,6 +144,10 @@ export class ApplyLeaveComponent implements OnInit {
         Toast("Invalid user. Please login again.")
       }
     }
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   leavePopUp() {
@@ -330,6 +340,7 @@ export class ApplyLeaveComponent implements OnInit {
 
   bindData(res: any) {
     if(res.ResponseBody.LeaveTypeBriefs) {
+      this.leaveData = [];
       this.leaveData = res.ResponseBody.LeaveNotificationDetail;
       if (this.leaveData && this.leaveData.length > 0) {
         this.leaveData.forEach(x => {

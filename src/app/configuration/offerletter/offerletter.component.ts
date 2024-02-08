@@ -34,8 +34,12 @@ export class OfferletterComponent implements OnInit {
               private local: ApplicationStorage) { }
 
   ngOnInit(): void {
-    let companies = this.local.findRecord("Companies");
     this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
+    this.initData();
+  }
+
+  initData() {
+    let companies = this.local.findRecord("Companies");
     if (companies) {
       this.currentCompany = companies.find(x => x.IsPrimaryCompany == 1);
       if (!this.currentCompany) {
@@ -47,6 +51,10 @@ export class OfferletterComponent implements OnInit {
         this.loadData();
       }
     }
+  }
+
+  pageReload() {
+    this.initData();
   }
 
   loadData() {

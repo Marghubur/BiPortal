@@ -10,19 +10,6 @@
       </div>
     </div>
     <div class="col-12">
-      <!-- <ng-container *ngIf="isPageReady">
-        <div class="py-5 my-5">
-          <h6 class="fw-bold fs-3 text-center text-dark">Timesheet detail is loading</h6>
-          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </div>
-      </ng-container> -->
       <ng-container *ngIf="!isPageReady">
         <form [formGroup]="timesheetForm">
           <div class="col-md-12 row justify-content-between align-items-center">

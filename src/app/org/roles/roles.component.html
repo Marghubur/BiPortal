@@ -11,18 +11,18 @@
             </div>
             <div class="col-4">
               <div class="x_header_title d-flex align-items-center justify-content-end">
-                <!-- <h2>Email Link Config Details<small>like page name, emails etc</small></h2> -->
-                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4"><i
-                class="fa-solid fa-paper-plane pe-1"></i> Email Link Config</a>
-              <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
-                <i class="fa-regular fa-square-plus pe-2" aria-hidden="true"></i>Add Role
-              </button>
-              <button class="btn btn-outline-success btn-sm float-end ms-3" [disabled]="ispermissionAdding || !isRolesLoaded"
-                (click)="submitRole()">
-                <i [ngClass]="{'fa-solid fa-arrow-right-to-bracket': !ispermissionAdding, 'fa-solid fa-spinner fa-spin': ispermissionAdding}"
-                  aria-hidden="true"></i>
-                <span class="ps-2">{{ispermissionAdding ? 'Wait' : 'Save' }}</span>
-              </button>
+                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+                </a>
+                <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
+                  <i class="fa-regular fa-square-plus pe-2" aria-hidden="true"></i>Add Role
+                </button>
+                <button class="btn btn-outline-success btn-sm float-end ms-3" [disabled]="ispermissionAdding || !isRolesLoaded"
+                  (click)="submitRole()">
+                  <i class="fa-solid" [ngClass]="{'fa-arrow-right-to-bracket': !ispermissionAdding, 'fa-spinner fa-spin': ispermissionAdding}"
+                    aria-hidden="true"></i>
+                  <span class="ps-2">{{ispermissionAdding ? 'Wait' : 'Save' }}</span>
+                </button>
               </div>
             </div>
           </div>
