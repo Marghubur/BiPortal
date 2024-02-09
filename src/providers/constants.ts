@@ -256,7 +256,8 @@ export enum SERVICE {
   AUTH = "auth",
   PROJECT = "ps",
   PERFORMANCE = "eps",
-  FILTER = "ef"
+  FILTER = "ef",
+  JOBS = "jobs"
 }
 
 

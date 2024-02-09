@@ -43,6 +43,7 @@ export class AjaxService {
       case SERVICE.PROJECT:
       case SERVICE.PERFORMANCE:
       case SERVICE.FILTER:
+      case SERVICE.JOBS:
         baseUrl = environment.baseSpringUrl;
         break;
     }

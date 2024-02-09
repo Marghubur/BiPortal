@@ -645,7 +645,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   }
 
   resetTimesheetRequest() {
-    this.timesheetRecord.TimesheetStatus = 2;
+    this.timesheetRecord.TimesheetStatus = 8;
     this.timesheetRecord.EmployeeId = 0;
     this.timesheetRecord.PageIndex = 1;
     this.timesheetData = new Filter();
