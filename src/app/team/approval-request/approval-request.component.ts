@@ -271,6 +271,9 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       case 'Othermember':
         endPoint = `${this.timesheetController}/ReAssigneTimesheetRequest`;
         break;
+      case 'Reopen':
+        endPoint = `${this.timesheetController}/ReOpenTimesheetRequest`;
+        break;
     }
 
     this.http.put(`${endPoint}/${this.currentTimesheet.TimesheetId}/${this.filterId}`, this.timesheetRecord).then((response:ResponseModel) => {
