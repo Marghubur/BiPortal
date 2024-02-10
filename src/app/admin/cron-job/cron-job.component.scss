@@ -1,0 +1,26 @@
+
+.t-body {
+  max-height: 60vh !important;
+}
+
+.cell-wrapper {
+  padding-left: .6rem;
+  padding-right: .6rem;
+}
+
+.t-table .t-head,
+.t-body {
+  overflow-y: auto;
+}
+
+.t-filter {
+  justify-content: flex-start !important;
+}
+
+.custom-height {
+  height: 43vh !important;
+}
+
+.hide-bar {
+  height: 2.9rem !important;
+}

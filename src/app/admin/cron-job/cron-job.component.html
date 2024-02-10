@@ -1,126 +1,133 @@
-<div class="col-12 full-v main-container">
-  <div class="col-12 row p-0 m-0">
-    <div class="right-panel container col-md-12 p-0">
-      <div class="x_panel mt-2">
-        <div class="x_header">
-          <div class="d-flex justify-content-between">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'Database Connection'" [subtitle]="'Database Connction Details'"></app-breadcrums>
+<div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
+  <div class="x_panel">
+    <div class="x_header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Jobs detail'" [subtitle]="'All Jobs'"></app-breadcrums>
+          </div>
+        </div>
+        <div class="col-4 text-end">
+          <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+            <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+          </a>
+          <button class="btn btn-primary-c" (click)="addNewCronJob()"><i class="fa-solid fa-plus pe-2"></i>Add Jobs</button>
+        </div>
+      </div>
+    </div>
+    <div [ngSwitch]="isEmpPageReady">
+      <div *ngSwitchCase="false">
+        <div class="mt-5">
+          <app-pre-load-table></app-pre-load-table>
+        </div>
+      </div>
+      <div *ngSwitchDefault>
+        <ng-container>
+          <div class="x_content">
+            <div class="t-table t-list col-md-12">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th fe-3">
+                    <div class="cell-wrapper">
+                      <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                        (keyup.enter)="filterRecords()" autofocus [(ngModel)]="JobDetail.JobTypeName"
+                        placeholder="Search by Job Type Name">
+                      <div class="t-filter" (click)="arrangeDetails(orderByJobTypeNameAsc, 'JobTypeName')">
+                        <a href="javascript:void()" class="pe-2">Job Type Name</a>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByJobTypeNameAsc == null || !orderByJobTypeNameAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByJobTypeNameAsc == null || orderByJobTypeNameAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" readonly
+                        (keydown.esc)="resetFilter()" placeholder="Search by Start Date">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Job Start Date</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-3">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="JobDetail.TopicName" placeholder="Search by Topic Name">
+                      <div class="t-filter" (click)="arrangeDetails(orderByTopicNameAsc, 'TopicName')">
+                        <a href="javascript:void()" class="pe-2">Topic Name</a>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByTopicNameAsc == null || !orderByTopicNameAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByTopicNameAsc == null || orderByTopicNameAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-3">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                        (keydown.esc)="resetFilter()" [(ngModel)]="JobDetail.GroupId" placeholder="Search by Group Id">
+                      <div class="t-filter" (click)="arrangeDetails(orderByGroupIdAsc, 'GroupId')">
+                        <a href="javascript:void()" class="pe-2">Group Id</a>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByGroupIdAsc == null || !orderByGroupIdAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByGroupIdAsc == null || orderByGroupIdAsc }" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="th fe-1 text-center">ACTIONS</div>
+                </div>
+              </div>
+              <div class="t-body">
+                <ng-container *ngIf="allJobs.length > 0">
+                  <div class="tr py-2" *ngFor="let job of allJobs; let i = index;">
+                    <div class="td align-middle fe-3">
+                      <div class="cell-wrapper">
+                        {{job.JobTypeName}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{job.JobStartDate | date}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-3">
+                      <div class="cell-wrapper">
+                        {{job.TopicName}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-3">
+                      <div class="cell-wrapper">
+                        {{job.GroupId}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="d-flex flex-row justify-content-evenly">
+                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="editCronJob(job)" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="Edit job">
+                          <span class="badge bg-dark"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span>
+                        </a>
+                        <a href="javascript:void(0)" (click)="deleteCronJob(job)" [ngClass]="{'pe-none': isLoading}" data-bs-toggle="tooltip"
+                        data-bs-placement="right" title="Delete job">
+                          <span class="badge bg-danger"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="allJobs.length == 0">
+                  <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                    <p class="my-5 py-5">Record Not Found</p>
+                  </div>
+                </ng-container>
               </div>
             </div>
           </div>
-        </div>
-        <ng-container >
-          <form [formGroup]="jobsForm">
-            <div class="row px-3">
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Job Type Name</label>
-                <input type="text" formControlName="JobTypeName" class="form-control" placeholder="Job Type Name" maxlength="50"
-                oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': isSubmitted && f['JobTypeName'].errors !== null && f['JobTypeName'].errors['required']}">
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Job Type Description</label>
-                <input type="text" formControlName="JobTypeDescription" class="form-control" placeholder="Job Type Description" maxlength="250"
-                oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': isSubmitted && f['JobTypeDescription'].errors !== null && f['JobTypeDescription'].errors['required']}">
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Job Start Date</label>
-                <form class="form-inline">
-                  <div class="form-group w-100">
-                    <div class="input-group inline-calendar w-100" [ngClass]="{'error-field': isSubmitted && f['JobStartDate'].errors !== null && f['JobStartDate'].errors['required']}">
-                      <input class="form-control"placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="jobstartdateModel"
-                        (dateSelect)="onDateSelection($event)" ngbDatepicker [maxDate]="{year: 2050, month:12, day: 31}" [minDate]="minDate" #d="ngbDatepicker">
-                      <div class="input-group-append">
-                        <button class="btn calendar" (click)="d.toggle()" type="button"><i
-                            class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Job End Date</label>
-                <form class="form-inline">
-                  <div class="form-group w-100">
-                    <div class="input-group inline-calendar w-100">
-                      <input class="form-control" placeholder="yyyy-mm-dd" name="edp" [(ngModel)]="jobenddateModel"
-                        (dateSelect)="onEndDateSelection($event)" ngbDatepicker [maxDate]="{year: 2050, month:12, day: 31}"  [minDate]="minDate" #ed="ngbDatepicker">
-                      <div class="input-group-append">
-                        <button class="btn calendar" (click)="ed.toggle()" type="button"><i
-                            class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="row px-3">
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Is Active Job</label>
-                <div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" formControlName="IsActiveJob" type="radio" name="IsActiveJob" id="IsActiveJob" [value]=true>
-                    <label class="form-check-label" for="IsActiveJob">Yes</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" formControlName="IsActiveJob" type="radio" name="IsActiveJob" id="IsActiveJob1" [value]=false>
-                    <label class="form-check-label" for="IsActiveJob1">No</label>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Job Time (in hrs)</label>
-                <select class="form-select" formControlName="JobTime">
-                  <option value="{{i}}" *ngFor="let item of [].constructor(24); let i = index">{{i}}</option>
-                </select>
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Job Day of Week</label>
-                <select class="form-select" formControlName="JobDayOfWeek">
-                  <option value="{{i}}" *ngFor="let item of [].constructor(7); let i = index">{{i}}</option>
-                </select>
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Job Day of Month</label>
-                <select class="form-select" formControlName="JobDayOfMonth">
-                  <option value="{{i}}" *ngFor="let item of [].constructor(32); let i = index">{{i}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="row px-3">
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Job Month of Year</label>
-                <select class="form-select" formControlName="JobMonthOfYear">
-                  <option value="{{i}}" *ngFor="let item of [].constructor(13); let i = index">{{i}}</option>
-                </select>
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Topic Name</label>
-                <input type="text" class="form-control" formControlName="TopicName" placeholder="Topic Name" maxlength="50" oninput="this.value = this.value.toLowerCase()"
-                 [ngClass]="{'error-field': isSubmitted && f['TopicName'].errors !== null && f['TopicName'].errors['required']}">
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Group Id</label>
-                <input type="text" class="form-control" formControlName="GroupId" placeholder="Topic Name" maxlength="50" oninput="this.value = this.value.toLowerCase()"
-                 [ngClass]="{'error-field': isSubmitted && f['GroupId'].errors !== null && f['GroupId'].errors['required']}">
-              </div>
-              <div class="col-md-3 mt-3">
-                <label  class="form-label">Template</label>
-                <input type="text" class="form-control" formControlName="Template" placeholder="Template" oninput="this.value = this.value.toLowerCase()">
-              </div>
-            </div>
-            <div class="mt-3 text-end">
-              <button class="btn btn-primary" (click)="saveJobsConnection()">
-                <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
-                <span class="ps-2">
-                  Save Changes
-                </span>
-              </button>
-            </div>
-          </form>
+          <div class="mt-3">
+            <app-pagination [pagination]="jobData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
         </ng-container>
       </div>
     </div>

@@ -145,7 +145,8 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       ReportingManagerId : this.currentUser.UserId,
       ForYear: date.getFullYear(),
       TimesheetStatus: 8,
-      PageIndex: 1
+      PageIndex: 1,
+      Days: 0
     }
     let days = new Date(this.attendance.ForYear, this.attendance.ForMonth, 0).getDate();
     for (let i = 1; i <= days; i++) {
@@ -652,6 +653,24 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.getTimesheetRequest();
   }
 
+  filterByDateTimesheet(e: any) {
+    let value = Number(e.target.value);
+    let today = new Date();
+    if (value > 0) {
+      if (value == 7) {
+        this.timesheetRecord.TimesheetStartDate = new Date(today.setDate(today.getDate() - 7));
+        this.timesheetRecord.TimesheetEndDate = new Date();
+      } else if (value == 14) {
+        this.timesheetRecord.TimesheetStartDate = new Date(today.setDate(today.getDate() - 14));
+        this.timesheetRecord.TimesheetEndDate = new Date();
+      } else {
+        this.timesheetRecord.TimesheetStartDate = new Date(today.setDate(today.getDate() - 30));
+        this.timesheetRecord.TimesheetEndDate = new Date();
+      }
+      this.getTimesheetRequest();
+    }
+  }
+
   resetRequest() {
     switch (this.active) {
       case 1:
@@ -821,5 +840,8 @@ interface Timesheet {
   EmployeeId,
   ForYear,
   TimesheetStatus,
-  PageIndex
+  PageIndex,
+  TimesheetStartDate?,
+  TimesheetEndDate?,
+  Days?
 }
