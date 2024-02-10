@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, ToLocateDate, Toast } from 'src/providers/common-service/common.service';
 import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
@@ -28,7 +28,7 @@ export class ManageCronjobComponent implements OnInit {
     JobEndDate : null,
     JobId : 0,
     JobMonthOfYear : 0,
-    JobOccurrenceType : 0,
+    JobOccurrenceType : 1,
     JobStartDate : null,
     JobTime : 0,
     JobTypeDescription : "",
@@ -46,11 +46,11 @@ export class ManageCronjobComponent implements OnInit {
   ngOnInit(): void {
     this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     let data = this.nav.getValue();
+    this.initform();
     if (data) {
       this.cronJobId = data.JobId;
+      this.initData();
     }
-    this.initform();
-    this.initData();
   }
 
   loadData() {
@@ -58,6 +58,12 @@ export class ManageCronjobComponent implements OnInit {
     this.http.get(`manager/getJobsById/${this.cronJobId}`, SERVICE.JOBS).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.jobDetail = res.ResponseBody;
+        let date = ToLocateDate(this.jobDetail.JobStartDate);
+        this.jobstartdateModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        if (this.jobDetail.JobEndDate) {
+          let date = ToLocateDate(this.jobDetail.JobEndDate);
+          this.jobenddateModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+        }
         this.initform();
         this.isPageReady = true;
       }
