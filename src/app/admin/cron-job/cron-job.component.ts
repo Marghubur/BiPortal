@@ -4,6 +4,7 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast } from 'src/providers/common-service/common.service';
+import { SERVICE } from 'src/providers/constants';
 
 @Component({
   selector: 'app-cron-job',
@@ -49,7 +50,7 @@ export class CronJobComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.get(`manager/getAllJobs/${1}`).then((res: ResponseModel) => {
+    this.http.get(`manager/getAllJobs/${1}`, SERVICE.JOBS).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.jobDetail = res.ResponseBody;
         this.isPageReady = true;

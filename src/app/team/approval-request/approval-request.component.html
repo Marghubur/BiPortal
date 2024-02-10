@@ -73,11 +73,6 @@
                       </select>
                     </div>
                   </div>
-                  <!-- <div class="col-auto float-end">
-                    <button class="btn  btn-danger ms-2" (click)="resetAttendanceRequest()" placement="top" ngbTooltip="Reset filter">
-                      <i class="fa-solid fa-repeat"></i>
-                    </button>
-                  </div> -->
                 </div>
                 <ng-container *ngFor="let item of attendanceDetail; let i=index;">
                   <div class="row bg-white p-2 m-0 mb-3 d-flex justify-content-between rounded leave-box">
@@ -112,7 +107,7 @@
                     </div>
                     <div class="col-2 d-flex flex-row-reverse">
                       <div class="col-auto me-0 pe-0">
-                        <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" class="">
+                        <a *ngIf="item.PresentDayStatus != 5" (click)="openAttendacneModal('Rejected', item)" class="" href="javascript:void(0)">
                           <i class="fa-solid pe-1" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}">
                           </i>
                           Reject
@@ -143,16 +138,6 @@
                 </div>
               </ng-container>
             </ng-container>
-            <!-- <ng-container *ngIf="isPageLoading">
-              <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                <div class="col-md-3 modal-container  text-center cog-wheel">
-                  <img src="assets/images/cog.gif" alt="" />
-                  <h6 class="modal-title title-message">
-                    Please Wait ........
-                  </h6>
-                </div>
-              </div>
-            </ng-container> -->
           </ng-template>
         </li>
 
@@ -256,7 +241,6 @@
                               Approve</button>
                           </div>
                         </div>
-                        <!--  -->
                       </div>
                     </div>
                     <div class="collapse show">
@@ -279,16 +263,6 @@
                 </div>
               </ng-container>
             </ng-container>
-            <!-- <ng-container *ngIf="isPageLoading">
-              <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                <div class="col-md-3 modal-container  text-center cog-wheel">
-                  <img src="assets/images/cog.gif" alt="" />
-                  <h6 class="modal-title title-message">
-                    Please Wait ........
-                  </h6>
-                </div>
-              </div>
-            </ng-container> -->
           </ng-template>
         </li>
 
@@ -436,16 +410,6 @@
                 </div>
               </ng-container>
             </ng-container>
-            <!-- <ng-container *ngIf="isPageLoading">
-              <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                <div class="col-md-3 modal-container  text-center cog-wheel">
-                  <img src="assets/images/cog.gif" alt="" />
-                  <h6 class="modal-title title-message">
-                    Please Wait ........
-                  </h6>
-                </div>
-              </div>
-            </ng-container> -->
           </ng-template>
         </li>
 
@@ -587,19 +551,6 @@
                     (onPageChange)="GetFilterResult($event)"></app-pagination>
                 </div>
               </ng-container>
-              <!-- <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
-                <div class="py-5 my-5">
-                  <h6 class="fw-bold fs-3 text-center text-dark">Missed attendance and status is loading</h6>
-                  <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                    <div class="col-md-3 modal-container  text-center cog-wheel">
-                      <img src="assets/images/cog.gif" alt="" />
-                      <h6 class="modal-title title-message">
-                        Please Wait ........
-                      </h6>
-                    </div>
-                  </div>
-                </div>
-              </ng-container> -->
             </div>
           </ng-template>
         </li>
