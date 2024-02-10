@@ -24,6 +24,7 @@ import { AdminmodalModule } from './../adminmodal/adminmodal.module'
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { NgChartsModule } from 'ng2-charts';
 import { CronJobComponent } from './cron-job/cron-job.component';
+import { ManageCronjobComponent } from './manage-cronjob/manage-cronjob.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { CronJobComponent } from './cron-job/cron-job.component';
     EmailComponent,
     EmailTemplateComponent,
     ManageEmailtemplateComponent,
-    CronJobComponent
+    CronJobComponent,
+    ManageCronjobComponent
   ],
   imports: [
     CommonModule,

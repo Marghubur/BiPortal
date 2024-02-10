@@ -12,6 +12,7 @@ import {
   EmailTemplate,
   ManageEmailTemplate,
   ManageCronJob,
+  CronJob,
 } from 'src/providers/constants';
 import { HomeComponent } from './home/home.component';
 import { BilldetailsComponent } from './billdetails/billdetails.component';
@@ -26,6 +27,7 @@ import { EmailTemplateComponent } from './email-template/email-template.componen
 import { ManageEmailtemplateComponent } from './manage-emailtemplate/manage-emailtemplate.component';
 import { NgModule } from '@angular/core';
 import { CronJobComponent } from './cron-job/cron-job.component';
+import { ManageCronjobComponent } from './manage-cronjob/manage-cronjob.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -40,7 +42,8 @@ const routes: Routes = [
   { path: EmailService, component: EmailComponent},
   { path: EmailTemplate, component: EmailTemplateComponent},
   { path: ManageEmailTemplate, component: ManageEmailtemplateComponent},
-  { path: ManageCronJob, component: CronJobComponent}
+  { path: ManageCronJob, component: ManageCronjobComponent},
+  { path: CronJob, component: CronJobComponent}
 ];
 
 @NgModule({
