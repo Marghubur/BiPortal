@@ -844,7 +844,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       IsEmpResign: new FormControl(this.initiateExitDetail.IsEmpResign),
       IsDiscussWithEmployee: new FormControl(this.initiateExitDetail.IsDiscussWithEmployee),
       Summary: new FormControl(this.initiateExitDetail.Summary, [Validators.required]),
-      ManagerReason: new FormControl(this.initiateExitDetail.ManagerReason, [Validators.required]),
+      // ManagerReason: new FormControl(this.initiateExitDetail.ManagerReason, [Validators.required]),
       IsRecommendLastDay: new FormControl(this.initiateExitDetail.IsRecommendLastDay),
       IsRehire: new FormControl(this.initiateExitDetail.IsRehire),
       ManagerComment: new FormControl(this.initiateExitDetail.ManagerComment, [Validators.required]),
