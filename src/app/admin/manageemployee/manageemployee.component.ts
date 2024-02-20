@@ -7,7 +7,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { GetRoles } from 'src/providers/ApplicationStorage';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, PlaceEmpty, Toast, ToFixed, ToLocateDate } from 'src/providers/common-service/common.service';
-import { Employees, OrganizationSetting, ProfileImage, UserImage } from 'src/providers/constants';
+import { Employees, OrganizationSetting, ProfileImage, SERVICE, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -18,6 +18,8 @@ declare var $: any;
 })
 export class ManageemployeeComponent implements OnInit, OnDestroy {
   model: NgbDateStruct;
+  appliedtDateModel: NgbDateStruct;
+  lastWorkingDateModel: NgbDateStruct;
   assignDateModel: NgbDateStruct;
   joiningDatemodel: NgbDateStruct;
   pfDatemodel: NgbDateStruct;
@@ -66,6 +68,9 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
   shifts: Array<any> = [];
   designations: Array<any> = [];
   salaryGroup: Array<any> = [];
+  initiateExitForm: FormGroup;
+  initiateExitDetail: InitiateExit = null;
+  noticePeriodDate: Date = null;
 
   get f() {
     let data = this.employeeForm.controls;
@@ -793,4 +798,107 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       this.employeeForm.controls['SalaryGroupId'].enable();
     }
   }
+
+  initiateExistPopUp() {
+    this.initiateExitDetail = new InitiateExit();
+    this.loadEmpExistData();
+  }
+
+  loadEmpExistData() {
+    this.isLoading = true;
+    this.http.get(`Employee/GetEmployeeResignationById/${this.employeeModal.EmployeeUid}`, SERVICE.CORE).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        let companyNoticePeriodDays = res.ResponseBody.CompanySetting.NoticePeriodInDays;
+        if (res.ResponseBody.EmployeeNoticePeriod) {
+          this.initiateExitDetail = res.ResponseBody.EmployeeNoticePeriod;
+          let date = ToLocateDate(this.initiateExitDetail.ApplicableFrom);
+          this.appliedtDateModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+          date = ToLocateDate(this.initiateExitDetail.OfficialLastWorkingDay);
+          if (this.initiateExitDetail.IsRecommendLastDay) {
+            this.lastWorkingDateModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
+            this.noticePeriodDate = ToLocateDate(this.initiateExitDetail.ApplicableFrom);
+            this.noticePeriodDate.setDate(this.noticePeriodDate.getDate() + companyNoticePeriodDays);
+          } else {
+            this.noticePeriodDate = date;
+          }
+        } else {
+          let noticePeriodEndOn = new Date();
+          noticePeriodEndOn.setDate(noticePeriodEndOn.getDate() + companyNoticePeriodDays);
+          this.noticePeriodDate = noticePeriodEndOn;
+        }
+        this.initInitiateExitForm();
+        $('#initiateExistModal').modal('show');
+        this.submitted = false;
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.submitted = false;
+      this.isLoading = false;
+    })
+  }
+
+  initInitiateExitForm() {
+    this.initiateExitForm = this.fb.group({
+      EmployeeNoticePeriodId: new FormControl(this.initiateExitDetail.EmployeeNoticePeriodId),
+      EmployeeId: new FormControl(this.employeeModal.EmployeeUid),
+      IsEmpResign: new FormControl(this.initiateExitDetail.IsEmpResign),
+      IsDiscussWithEmployee: new FormControl(this.initiateExitDetail.IsDiscussWithEmployee),
+      Summary: new FormControl(this.initiateExitDetail.Summary, [Validators.required]),
+      ManagerReason: new FormControl(this.initiateExitDetail.ManagerReason, [Validators.required]),
+      IsRecommendLastDay: new FormControl(this.initiateExitDetail.IsRecommendLastDay),
+      IsRehire: new FormControl(this.initiateExitDetail.IsRehire),
+      ManagerComment: new FormControl(this.initiateExitDetail.ManagerComment, [Validators.required]),
+      OfficialLastWorkingDay: new FormControl(this.initiateExitDetail.OfficialLastWorkingDay)
+    })
+  }
+
+  onLastWorkingDateSelection(e: NgbDateStruct) {
+    let date = new Date(e.year, e.month - 1, e.day);
+    this.initiateExitForm.controls["OfficialLastWorkingDay"].setValue(date);
+  }
+
+  submitInitiateExist() {
+    this.isLoading = true;
+    this.submitted = true;
+    if (this.initiateExitForm.invalid) {
+      ErrorToast("Please fill or select the mandatory column");
+      this.isLoading = false;
+      return;
+    }
+    let value = this.initiateExitForm.value;
+    if (!value.IsRecommendLastDay) {
+      value.OfficialLastWorkingDay = this.noticePeriodDate;
+    }
+    this.http.post("Employee/ManageInitiateExist", value, SERVICE.CORE).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        Toast("Initatie exist submitted successfully");
+        this.isLoading = false;
+        this.submitted = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+      this.submitted = false;
+    })
+  }
+
+  get m() {
+    return this.initiateExitForm.controls;
+  }
+
+  slectRehire(e: any) {
+    alert(e.target.checked)
+  }
+}
+
+export class InitiateExit {
+  EmployeeNoticePeriodId: number = 0;
+  IsEmpResign: boolean = true;
+  IsDiscussWithEmployee: boolean = true;
+  Summary: string = null;
+  ManagerReason: string = null;
+  IsRecommendLastDay: boolean = false;
+  IsRehire: boolean = false;
+  ManagerComment: string = null;
+  OfficialLastWorkingDay: Date = null;
+  ApplicableFrom: Date = null;
 }

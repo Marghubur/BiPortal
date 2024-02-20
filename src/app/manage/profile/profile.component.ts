@@ -4,7 +4,7 @@ import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, ToLocateDate, UserDetail } from 'src/providers/common-service/common.service';
-import { ProfileImage, UserImage, UserType } from 'src/providers/constants';
+import { ProfileImage, SERVICE, UserImage, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -104,12 +104,16 @@ export class ManageComponent implements OnInit {
   imageIndex: number = 0;
   lanugages: Array<string> = ["Assamese", "Bengali", "Gujarati", "Hindi", "Kannada", "Kashmiri", "Konkani", "Malayalam", "Manipuri", "Marathi", "Nepali", "Oriya", "Punjabi", "Sanskrit", "Sindhi", "Tamil", "Telugu", "Urdu", "Bodo", "Santhali", "Maithili", "Dogri"].sort();
   @Output() authentication = new EventEmitter();
+  existOrgForm: FormGroup;
+  employeeExistDetail: EmployeeExist = new EmployeeExist();
+  companyNoticePeriodDays: number = 0;
+  noticePeriodEndOn: Date = null;
 
-    constructor(private http: AjaxService,
-    private fb: FormBuilder,
-    private calendar: NgbCalendar,
-    private user: UserService,
-    private nav: iNavigation
+  constructor(private http: AjaxService,
+  private fb: FormBuilder,
+  private calendar: NgbCalendar,
+  private user: UserService,
+  private nav: iNavigation
   ) { }
 
   ngOnInit(): void {
@@ -1866,6 +1870,66 @@ export class ManageComponent implements OnInit {
       item.removeAt(index);
     }
   }
+
+  loadEmpExistData() {
+    this.isLoading = true;
+    this.http.get(`Employee/GetEmployeeResignationById/${this.userModal.EmployeeId}`, SERVICE.CORE).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        if (res.ResponseBody.EmployeeNoticePeriod)
+          this.employeeExistDetail = res.ResponseBody.EmployeeNoticePeriod;
+
+        this.companyNoticePeriodDays = res.ResponseBody.CompanySetting.NoticePeriodInDays;
+        this.noticePeriodEndOn = new Date();
+        this.noticePeriodEndOn.setDate(this.noticePeriodEndOn.getDate() + this.companyNoticePeriodDays)
+        this.initExistOrgForm();
+        this.submitted = false;
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.submitted = false;
+      this.isLoading = false;
+    })
+  }
+
+  initExistOrgForm() {
+    this.existOrgForm = this.fb.group({
+      EmployeeNoticePeriodId: new FormControl(this.employeeExistDetail.EmployeeNoticePeriodId),
+      EmployeeId: new FormControl(this.userModal.EmployeeId),
+      EmployeeComment: new FormControl(this.employeeExistDetail.EmployeeComment, [Validators.required]),
+      EmployeeReason: new FormControl(this.employeeExistDetail.EmployeeReason, [Validators.required]),
+      IsDiscussWithManager: new FormControl(this.employeeExistDetail.IsDiscussWithManager),
+      CompanyNoticePeriodInDays: new FormControl(this.companyNoticePeriodDays)
+    });
+  }
+
+  submitResignation() {
+    this.isLoading = true;
+    this.submitted = true;
+    if (this.existOrgForm.invalid) {
+      this.isLoading = false;
+      ErrorToast("Please fill or select mandatory column");
+      return;
+    }
+
+    let value = this.existOrgForm.value;
+    this.http.post("Employee/SubmitResignation", value, SERVICE.CORE).then((res: ResponseModel) => {
+      if (res.ResponseBody) {
+        Toast(res.ResponseBody);
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  changeMyMind() {
+    this.employeeExistDetail = new EmployeeExist();
+    this.initExistOrgForm();
+  }
+
+  get f() {
+    return this.existOrgForm.controls;
+  }
 }
 
 export class ProfessionalUser {
@@ -2005,4 +2069,11 @@ export class LanguageDetail {
   LanguageWrite: boolean = null;
   ProficiencyLanguage: string = '';
   LanguageSpeak: boolean = null;
+}
+
+class EmployeeExist {
+  EmployeeNoticePeriodId: number = 0;
+  EmployeeComment: string = null;
+  EmployeeReason: string = null;
+  IsDiscussWithManager: boolean = false;
 }
