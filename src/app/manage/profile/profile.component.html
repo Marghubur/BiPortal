@@ -7,14 +7,6 @@
             <app-breadcrums [title]="'Profile'" [subtitle]="'User detail like employment, education etc.'"></app-breadcrums>
           </div>
         </div>
-        <!-- <div class="col-4">
-          <div class="x_header_title d-flex align-items-center justify-content-end">
-            <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4"><i
-              class="fa-solid fa-paper-plane pe-1"></i> Email Link Config
-            </a>
-            <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa-solid fa-plus-square pe-2"></i>Add Holiday</button>
-          </div>
-        </div> -->
       </div>
     </div>
     <div class="right-panel col-md-12 p-0">
@@ -823,25 +815,63 @@
                   </form>
                 </ng-template>
               </li>
+
+              <li [ngbNavItem]="9">
+                <a ngbNavLink (click)="loadEmpExistData()">Exist Org</a>
+                <ng-template ngbNavContent>
+                  <div class="alert alert-primary" role="alert">
+                    This will trigger your job resignation process! It is always advisable to talk your management first before coming here!
+                  </div>
+                  <form [formGroup]="existOrgForm" *ngIf="existOrgForm">
+                    <div class="mt-3">
+                      <label class="form-label">Did you have discuss with manager on your decision to exist?</label>
+                      <div class="col-md-12">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="IsDiscussWithManager" formControlName="IsDiscussWithManager" id="IsDiscussWithManager1" [value]="true">
+                          <label class="form-check-label" for="IsDiscussWithManager1">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="IsDiscussWithManager" formControlName="IsDiscussWithManager" id="IsDiscussWithManager2" [value]="false">
+                          <label class="form-check-label" for="IsDiscussWithManager2">No</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-3">
+                      <label class="form-label">Please select a reason for resignation</label>
+                      <select class="form-select" formControlName="EmployeeReason"
+                      [ngClass]="{'error-field': submitted && f.EmployeeReason.errors !== null && f.EmployeeReason.errors.required}">
+                        <option [value]="null">Select Reason</option>
+                        <option value="Explore Other Careers">Explore Other Careers</option>
+                        <option value="Other">Other</option>
+                        <option value="Personal Reasons">Personal Reasons</option>
+                        <option value="Relocating">Relocating</option>
+                        <option value="Retirement">Retirement</option>
+                      </select>
+                    </div>
+                    <div class="mt-3">
+                      <label class="form-label">Comment</label>
+                      <textarea class="form-control exist-comment" formControlName="EmployeeComment" rows="5" [readOnly]="f.EmployeeNoticePeriodId.value > 0"
+                      [ngClass]="{'error-field': submitted && f.EmployeeComment.errors !== null && f.EmployeeComment.errors.required}"></textarea>
+                    </div>
+                    <div class="alert alert-primary mt-3" role="alert">
+                      Note: As per the company policy, you are required to serve notice period of {{companyNoticePeriodDays}} days, till {{noticePeriodEndOn | date}}.
+                    </div>
+                    <div class="text-end" *ngIf="existOrgForm.controls.EmployeeNoticePeriodId.value == 0">
+                      <button class="btn btn-dark me-3" (click)="changeMyMind()">No, Changed my mind</button>
+                      <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitResignation()"><i
+                        class="pe-2 fa-solid" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-floppy-disk': !isLoading}"></i>
+                      {{ isLoading ? 'Wait' : 'Submit Resignation' }}
+                    </button>
+                    </div>
+                  </form>
+                </ng-template>
+              </li>
             </ul>
 
             <div [ngbNavOutlet]="nav" class="mt-5"></div>
           </div>
         </ng-container>
       </ng-container>
-      <!-- <ng-container *ngIf="!isFormReady">
-        <div class="py-5 my-5">
-          <h6 class="fw-bold fs-3 text-center text-dark">Profile Details are loading</h6>
-          <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </div>
-      </ng-container> -->
     </div>
   </div>
 </div>

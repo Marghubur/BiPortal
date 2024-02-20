@@ -117,7 +117,7 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-md-12 row m-0">
+                      <div class="col-md-12 row m-0 align-items-center">
                         <div class="col-md-4">
                           <label class="form-label">CTC *</label>
                           <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
@@ -136,6 +136,11 @@
                               <label class="form-check-label" for="employeeGender2">Female</label>
                             </div>
                           </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                          <a href="javascript:void(0)" class="text-decoration-none" (click)="initiateExistPopUp()">
+                            Initiate Exit
+                          </a>
                         </div>
                       </div>
                     </div>
@@ -566,3 +571,132 @@
   </div>
 </div>
 <!-- End -->
+
+
+<!-- Initiate Exist modal -->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="initiateExistModal"
+  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="iinitiateExistModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content px-3">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title" id="iinitiateExistModalLabel">Initiate Exit</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-primary" role="alert">
+          HR will take the final action on the exit request.
+        </div>
+        <form [formGroup]="initiateExitForm" *ngIf="initiateExitForm">
+          <div class="mt-3">
+            <label class="form-label">What is the reason for initating the exit?</label>
+            <div class="col-md-12">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="IsEmpResign" name="IsEmpResign" id="IsEmpResign1" [value]="true">
+                <label class="form-check-label" for="IsEmpResign1">Employee wants to resign</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="IsEmpResign" name="IsEmpResign" id="IsEmpResign2" [value]="false">
+                <label class="form-check-label" for="IsEmpResign2">Company decides to terminate</label>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Did you have discussion with employee on their decision to exit?</label>
+            <div class="col-md-12">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="IsDiscussWithEmployee" name="IsDiscussWithEmployee" id="IsDiscussWithEmployee1" [value]="true">
+                <label class="form-check-label" for="IsDiscussWithEmployee1">Yes</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName="IsDiscussWithEmployee" name="IsDiscussWithEmployee" id="IsDiscussWithEmployee2" [value]="false">
+                <label class="form-check-label" for="IsDiscussWithEmployee2">No</label>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Summary</label>
+            <textarea class="form-control exist-comment" formControlName="Summary" rows="3"
+            [ngClass]="{'error-field': submitted && m.Summary.errors !== null && m.Summary.errors.required}"></textarea>
+          </div>
+          <!-- <div class="mt-3">
+            <label class="form-label">Please select a reason for resignation</label>
+            <select class="form-select" formControlName="ManagerReason" [ngClass]="{'error-field': submitted && m.ManagerReason.errors !== null && m.ManagerReason.errors.required}">
+              <option [value]="null">Select Reason</option>
+              <option value="Explore Other Careers">Explore Other Careers</option>
+              <option value="Other">Other</option>
+              <option value="Personal Reasons">Personal Reasons</option>
+              <option value="Relocating">Relocating</option>
+              <option value="Retirement">Retirement</option>
+            </select>
+          </div> -->
+          <div class="mt-3">
+            <label class="form-label">When did employee provide the notice of exit?</label>
+            <form class="form-inline">
+              <div class="form-group w-100">
+                <div class="input-group inline-calendar w-100">
+                  <input class="form-control" placeholder="yyyy-mm-dd" name="exdp" [(ngModel)]="appliedtDateModel" readonly
+                   ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #exd="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn calendar" disabled (click)="exd.toggle()" type="button"><i
+                        class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Do you want to recommend a Last Working Day?</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="IsRecommendLastDay" name="IsRecommendLastDay" id="IsRecommendLastDay1" [value]="false">
+              <label class="form-check-label" for="IsRecommendLastDay1">Complete notice period ({{noticePeriodDate | date}})</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" formControlName="IsRecommendLastDay" name="IsRecommendLastDay" id="IsRecommendLastDay2" [value]="true">
+              <label class="form-check-label" for="IsRecommendLastDay2">Other date</label>
+            </div>
+            <ng-container *ngIf="m.IsRecommendLastDay.value == true">
+              <div class="mt-2">
+                <form class="form-inline">
+                  <div class="form-group w-100">
+                    <div class="input-group inline-calendar w-100">
+                      <input class="form-control" placeholder="yyyy-mm-dd" name="lwdp" [(ngModel)]="lastWorkingDateModel"
+                        (dateSelect)="onLastWorkingDateSelection($event)" ngbDatepicker [minDate]="minDate" [maxDate]="{year: 2070, month:12, day: 31}" #lwd="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn calendar" (click)="lwd.toggle()" type="button"><i
+                            class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </ng-container>
+          </div>
+          <div class="form-check form-switch mt-3">
+            <input class="form-check-input" type="checkbox" role="switch" id="isRehire" formControlName="IsRehire">
+            <label class="form-check-label" for="isRehire">Ok to Rehire?</label>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Comments</label>
+            <textarea class="form-control exist-comment" rows="3" formControlName="ManagerComment"
+            [ngClass]="{'error-field': submitted && m.ManagerComment.errors !== null && m.ManagerComment.errors.required}"></textarea>
+          </div>
+          <div class="mt-3">
+            <a href="javascript:voi(0)" class="text-decoration-none">
+              <i class="fa-solid fa-paperclip pe-2"></i> Attach Files
+            </a>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitInitiateExist()"><i
+          class="pe-2 fa-solid" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-floppy-disk': !isLoading}"></i>
+        {{ isLoading ? 'Wait' : 'Initiate Exist' }}
+      </button>
+      </div>
+    </div>
+  </div>
+</div>
