@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { AppHttpIntercepter } from './../auth/app.intercepter';
 import { JwtService } from './../auth/jwtService';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastComponent } from './toast/toast.component'
+import { ToastComponent } from './page-components/toast/toast.component'
 import { UserService } from 'src/providers/userService';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,7 +17,7 @@ import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 @NgModule({
   declarations: [
     AppComponent,
-    ToastComponent,
+    ToastComponent
     // InitialpageComponent,
   ],
   imports: [
@@ -26,12 +26,7 @@ import { ApplicationStorage } from 'src/providers/ApplicationStorage';
     RouterModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    // NgChartsModule,
-    // NgbModule,
-    // FormsModule,
-    // ReactiveFormsModule,
     HomeModule
-    // LayoutModule
   ],
   providers: [
     AjaxService,

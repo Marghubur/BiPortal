@@ -1000,3 +1000,14 @@ a {
   width: 2px; /* Set your desired line width */
   background-color: #000; /* Set your desired line color */
 }
+
+.header_bg {
+  background: url(../assets/header_bg.jpg) !important;
+  background-size: 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: top !important;
+}
+
+.body-curve {
+  border-radius: 20px 0px 0px 0px;
+}

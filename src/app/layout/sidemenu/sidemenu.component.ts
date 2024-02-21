@@ -1,14 +1,14 @@
-import { ApplicationStorage } from "../../providers/ApplicationStorage";
-import { AjaxService } from "../../providers/ajax.service";
-import { CommonService, ErrorToast, Toast, UserDetail } from "../../providers/common-service/common.service";
-import { AccessTokenExpiredOn, AdminMasterData, AdminNotification, Blogs, BuildPdf, Documents, Employees, Login, OrganizationSetting } from "../../providers/constants";
+import { AccessTokenExpiredOn, AdminMasterData, AdminNotification, Blogs, BuildPdf, Documents, Employees, Login, OrganizationSetting } from "src/providers/constants";
 import { Component, OnInit, Output, EventEmitter, AfterViewChecked } from "@angular/core";
 import { iNavigation } from "src/providers/iNavigation";
 import { UserService } from "src/providers/userService";
 declare var $: any;
 import 'bootstrap';
 import { ResponseModel } from "src/auth/jwtService";
-import packageJson from '../../../package.json';
+import packageJson from '../../../../package.json';
+import { CommonService, ErrorToast, Toast, UserDetail } from "src/providers/common-service/common.service";
+import { ApplicationStorage } from "src/providers/ApplicationStorage";
+import { AjaxService } from "src/providers/ajax.service";
 
 @Component({
   selector: 'app-sidemenu',

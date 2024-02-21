@@ -12,7 +12,7 @@ a {
   text-decoration: none;
   font-weight: 600;
   color: #222;
-  margin: 0px 2px;
+  margin: 0px 18px;
   display: block;
 }
 
@@ -39,16 +39,21 @@ a {
 
 .menu-container {
   height: 88vh !important;
-  overflow-y: auto !important;
+  overflow-y: hidden !important;
   overflow-x: hidden !important;
+}
+
+.menu-container:hover {
+  overflow-y: auto !important;
 }
 
 .menu-container::-webkit-scrollbar-thumb {
   background-color: transparent !important;
+  overflow-y: hidden;
 }
 
 .menu-container:hover::-webkit-scrollbar-thumb {
-  background: #cab5b5 !important;
+  background: #cab5b5 !important;  
 }
 
 .menu-top {
@@ -280,6 +285,10 @@ h1 {
   width: 100%;
 }
 
+.accordion-item:first-child {
+  margin-top: 0 !important;
+}
+
 .accordion-item {
   background-color: #fff;
   color: #111;
@@ -320,10 +329,14 @@ h1 {
 //   content: "\2212";
 // }
 
-.rotate-caret {
-  transform: rotate(90deg);
+.rotate-caret::before {
+  transform: rotate(90deg) !important
+}
+
+.arrow-pointer::before {
   transform-origin: center !important;
   transition: all 0.3s linear;
+  position: absolute;
 }
 
 .accordion-item-body {
@@ -361,4 +374,23 @@ h1 {
     color: white !important;
     padding: 8px 0px !important;
   }
+}
+
+.menu-head{
+  background: var(--primary) !important;
+  color: white;
+}
+
+.menu-info {
+  padding: 12px 0px;
+
+  img {
+    width: 4rem;
+    height: 4rem;
+    margin-right: 12px;
+  }
+}
+
+.x_content {
+  float: none !important;
 }

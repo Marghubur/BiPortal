@@ -54,7 +54,7 @@ import { ManageCronjobComponent } from './manage-cronjob/manage-cronjob.componen
     UtilModule,
     AdminmodalModule,
     CommonmodalModule,
-    NgChartsModule,
+    NgChartsModule
   ],
   providers: [
     CommonService,

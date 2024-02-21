@@ -62,7 +62,7 @@ export class AjaxService {
     return result;
   }
 
-  login(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
+  async login(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
     let url = this.GetBaseUrl(ServiceName, Url);
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
@@ -94,7 +94,7 @@ export class AjaxService {
     });
   }
 
-  get(Url: string, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
+  async get(Url: string, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
       let url = this.GetBaseUrl(ServiceName, Url);
       return this.http
@@ -117,7 +117,7 @@ export class AjaxService {
     });
   }
 
-  post(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+  async post(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
     let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http
@@ -142,7 +142,7 @@ export class AjaxService {
     });
   }
 
-  put(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+  async put(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
     let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http
@@ -168,7 +168,7 @@ export class AjaxService {
     });
   }
 
-  delete(Url: string, Param?: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+  async delete(Url: string, Param?: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
     let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http.delete(url, {
@@ -195,7 +195,7 @@ export class AjaxService {
     });
   }
 
-  upload(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+  async upload(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
     let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http
@@ -221,7 +221,7 @@ export class AjaxService {
     });
   }
 
-  forgotPassword(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
+  async forgotPassword(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
     let url = this.GetBaseUrl(ServiceName, Url);
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
