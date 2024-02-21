@@ -15,7 +15,7 @@
       <div class="d-flex align-items-center" *ngIf="isAdmin">
         <div class="d-flex justify-content-start">
           <div class="mx-3 d-flex justify-content-start icon-action ms-3">
-            <a href="javascript:void(0)" (click)="navLogoPage()" [ngClass]="{'pe-none': isLoading}">
+            <a href="javascript:void(0)" class="text-white" (click)="navLogoPage()" [ngClass]="{'pe-none': isLoading}">
               <div class="d-flex text-center flex-column">
                 <!-- <img src="../../assets/ext/image.png" alt="" > -->
                 <i class="fa-regular fa-image fa-lg pt-3 pb-2"></i>
@@ -24,7 +24,7 @@
             </a>
           </div>
           <div class="mx-3 d-flex col-auto justify-content-start icon-action">
-            <a href="javascript:void(0)" (click)="navCompanySetting()" [ngClass]="{'pe-none': isLoading}">
+            <a href="javascript:void(0)" class="text-white" (click)="navCompanySetting()" [ngClass]="{'pe-none': isLoading}">
               <div class="d-flex text-center flex-column col-md-12">
                 <i class="fa-solid fa-gear fa-lg py-3"></i>
                 <span class="w-100 d-flex justify-content-center">Setting</span>
@@ -32,7 +32,7 @@
             </a>
           </div>
           <div class="mx-3 d-flex col-auto justify-content-start icon-action">
-            <a href="javascript:void(0)" (click)="navOrgStructure()" [ngClass]="{'pe-none': isLoading}">
+            <a href="javascript:void(0)" class="text-white" (click)="navOrgStructure()" [ngClass]="{'pe-none': isLoading}">
               <div class="d-flex text-center flex-column col-md-12">
                 <i class="fa-solid fa-sitemap fa-lg py-3"></i>
                 <span class="w-100 d-flex justify-content-center">Org</span>
@@ -48,7 +48,7 @@
         <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
         <div class="input-group">
           <div class="input-group-text bg-transparent">
-            <a href="javascript:void(0)" class="text-dark">
+            <a href="javascript:void(0)" class="text-white">
               <i class="fa-solid fa-magnifying-glass"></i>
             </a>
           </div>
@@ -77,13 +77,13 @@
               </div>
             </li>
             <li class="d-none d-sm-block position-relative me-4">
-              <a href="javascript:void(0)" class="text-decoration-none" (click)="navNotificationPage()">
+              <a href="javascript:void(0)" class="text-decoration-none text-white" (click)="navNotificationPage()">
                 <i class="fa-regular fa-bell" aria-hidden="true"></i>
                 <span class="count badge-counter">{{NotificationBadge}}</span>
               </a>
             </li>
             <li class="d-none d-sm-block position-relative">
-              <a href="javascript:void(0)" class="text-decoration-none " (click)="navEmailPage()">
+              <a href="javascript:void(0)" class="text-decoration-none text-white " (click)="navEmailPage()">
                 <i class="fa-regular fa-envelope pe-1" aria-hidden="true"></i>
                 <span class="count badge-counter">{{NotificationBadge}}</span>
               </a>
@@ -110,7 +110,7 @@
                 <a href="javascript:void" id="anc-user"
                   class="d-flex flex-column justify-content-center text-dark pe-3 text-decoration-none"
                   (click)="ViewUserProfile()">
-                  <span class="profile-text">{{userDetail.LastName}}</span>
+                  <span class="profile-text text-white">{{userDetail.LastName}}</span>
                 </a>
                 <img class="img-xs rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
               </a>
