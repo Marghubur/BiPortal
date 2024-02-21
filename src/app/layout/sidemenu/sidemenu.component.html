@@ -1,12 +1,12 @@
 <div id="page-menu" class="page-menu" [ngClass]="{'position-relative mobile-mode-menu ': !isMinimize}">
   <ng-container *ngIf="!isMinimize">
     <div class="x_content d-flex justify-content-between m-0 p-0">
-      <div class="fe-1 ps-3 py-3 d-flex justify-content-start menu-info">
+      <div class="fe-1 ps-3 py-3 d-flex justify-content-start menu-info text-truncate">
         <app-image-loader [url]="'assets/faces/face.jpg'" [className]="'rounded rounded-circle me-3'">
         </app-image-loader>
-        <div class="d-flex text-white flex-column justify-content-center">
-          <div>Admin User</div>
-          <div>info@bottomhalf.in</div>
+        <div class="d-flex text-white flex-column justify-content-center text-truncate">
+          <div class="text-truncate">{{userDetail.FirstName}} {{userDetail.LastName != null ? userDetail.LastName : ''}}</div>
+          <div class="text-truncate">{{userDetail.EmailId}}</div>
         </div>
       </div>
       <a href="javascript:void(0)" (click)="saveMenuStyle()">
@@ -122,6 +122,6 @@
       </div>
     </div>
   </ng-container>
-  <div class="blur-sidemenu" *ngIf="isLoading">
-  </div>
+  <!-- <div class="blur-sidemenu" *ngIf="isLoading">
+  </div> -->
 </div>
