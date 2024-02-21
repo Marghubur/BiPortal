@@ -142,12 +142,19 @@
                             </span>
                           </a>
                           <a href="javascript:void(0)"><span class="badge bg-primary fa-regular fa-building user-edit-icon"
-                              data-bs-toggle="tooltip" data-bs-placement="right"
-                              title="{{user.FirstName}} {{user.LastName}} is associated with {{user.ClientJson.length}} clients">
-                              &nbsp;
-                              <span></span>
-                              <span *ngIf="user.ClientJson.length > 0">{{user.ClientJson.length}}</span>
-                              <span *ngIf="user.ClientJson.length == 0">0</span></span></a>
+                            data-bs-toggle="tooltip" data-bs-placement="right"
+                            title="{{user.FirstName}} {{user.LastName}} is associated with {{user.ClientJson.length}} clients">
+                            &nbsp;
+                            <span></span>
+                            <span *ngIf="user.ClientJson.length > 0">{{user.ClientJson.length}}</span>
+                            <span *ngIf="user.ClientJson.length == 0">0</span></span>
+                          </a>
+                          <a href="javascript:void(0)" class="text-decoration-none" data-bs-toggle="tooltip" (click)="generateAttendance(user)"
+                            data-bs-placement="right" title="Generate Attendance">
+                            <span class="ms-2 badge bg-dark">
+                              <i class="fa-solid fa-clipboard-user"></i>
+                            </span>
+                          </a>
                           <a href="javascript:void(0)" class="ms-3" (click)="goToAttendancePage(user)"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="View Attendance">
                             <span class="text-sm-left text-muted">Attendance</span>

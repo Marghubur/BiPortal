@@ -1,0 +1,127 @@
+<div class="main-container">
+    <div class="x_panel">
+      <div class="x_header">
+        <div class="d-flex justify-content-between">
+          <div class="col-8">
+            <div class="px-1">
+              <app-breadcrums [title]="'Email Template Mapping'" [subtitle]="'Mapping email template with request type'"></app-breadcrums>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container >
+        <div class="x_content px-3">
+          <div class="py-3">
+            <h5 class="fw-bold text-dark">For {{employeeName != null ? employeeName : "All Employee"}}</h5>
+          </div>
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+            <li [ngbNavItem]="1">
+              <button ngbNavLink>Manage Timesheet</button>
+              <ng-template ngbNavContent>
+                <div class="row align-items-center justify-content-between px-3 mt-3">
+                  <div class="col-md-6">
+                    <form class="row row-cols-sm-auto">
+                      <div class="col-12">
+                        <div class="dp-hidden position-absolute">
+                          <div class="input-group inline-calendar">
+                            <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="timesheetFromDate!" tabindex="-1"/>
+                            <ng-template #t let-date let-focused="focused">
+                              <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                                {{ date.day }}
+                              </span>
+                            </ng-template>
+                          </div>
+                        </div>
+                        <div class="input-group inline-calendar">
+                          <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(timesheetFromDate)" (input)="timesheetFromDate = validateInput(timesheetFromDate, dpFromDate.value)">
+                          <button class="btn calendar" (click)="datepicker.toggle()" type="button">
+                            <i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="input-group">
+                          <input readonly #dpToDate class="form-control inline-calendar" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(timesheetToDate)" (input)="timesheetToDate = validateInput(timesheetToDate, dpToDate.value)"/>
+                          <button disabled class="btn calendar" (click)="datepicker.toggle()" type="button">
+                            <i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-auto">
+                    <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generateTimesheet()">
+                      <i class="" [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+                      {{ isLoading ? 'Generating' : 'Generate Timesheet' }}
+                    </button>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+              <button ngbNavLink (click)="activeTab()">Manage Attendance</button>
+              <ng-template ngbNavContent>
+                <div class="row align-items-end mt-3">
+                  <div class="col-md-3">
+                    <label class="form-label">From Date</label>
+                    <form class="form-inline">
+                      <div class="form-group w-100">
+                        <div class="input-group inline-calendar w-100">
+                          <input class="form-control" placeholder="yyyy-mm-dd" name="lwdp" [(ngModel)]="attendanceFromDateModel"
+                            (dateSelect)="onAttendanceFromDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate" #afd="ngbDatepicker">
+                          <div class="input-group-append">
+                            <button class="btn calendar" (click)="afd.toggle()" type="button"><i
+                                class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">To Date</label>
+                    <form class="form-inline">
+                      <div class="form-group w-100">
+                        <div class="input-group inline-calendar w-100">
+                          <input class="form-control" placeholder="yyyy-mm-dd" name="lwdp" [(ngModel)]="ttendanceToDateModel"
+                            (dateSelect)="onAttendanceToDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate" #atd="ngbDatepicker">
+                          <div class="input-group-append">
+                            <button class="btn calendar" (click)="atd.toggle()" type="button"><i
+                                class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Default Attendance Staus</label>
+                    <select class="form-select" [(ngModel)]="attendanceStatus">
+                      <option value="0">Not Submitted</option>
+                      <option value="2">Pending</option>
+                      <option value="5">Rejected</option>
+                      <option value="8">Submitted</option>
+                      <option value="9">Approved</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3 text-end">
+                    <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="generateAttendance()"><i
+                      class="pe-2 fa-solid" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-floppy-disk': !isLoading}"></i>
+                      {{ isLoading ? 'Wait' : 'Generate Attendance' }}
+                    </button>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="3">
+              <button ngbNavLink (click)="activeTab()">Manage Leave</button>
+              <ng-template ngbNavContent>
+              </ng-template>
+            </li>
+          </ul>
+
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+      </ng-container>
+    </div>
+</div>
