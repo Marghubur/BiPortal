@@ -6,148 +6,155 @@
       </a>
     </div>
     <div class="logo l-panel">
-      <a href="javascript:void(0)" routerLink="/admin" class="text-decoration-none">
-        <img src="assets/images/logo.png" class="img-logo" alt="logo">
-      </a>
-      <span class="fw-bolder ps-3 fs-2 text-white">EMSTUM</span>
+      <span class="fw-bolder ps-3 fs-2 text-white">emstum</span>
     </div>
-    <div class="col-auto me-4">
-      <img [src]="logo" class="img-logo" alt="logo">
-    </div>
-    <div class="form-group fe-2 d-flex flex-column justify-content-center">
-      <div class="d-flex">
-        <button class="btn btn-primary-c cust-btn">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-        <div class="border cust-box w-100">
-          <input type="text" class="form-control rounded-0 border-0" placeholder="type here...">
+    <div class="d-flex r-panel justify-content-between">
+      <div class="d-flex align-items-center" *ngIf="isAdmin">
+        <div class="d-flex justify-content-start">
+          <div class="mx-3 d-flex justify-content-start icon-action ms-3">
+            <a href="javascript:void(0)" class="text-white" (click)="navLogoPage()" [ngClass]="{'pe-none': isLoading}">
+              <div class="d-flex text-center flex-column">
+                <!-- <img src="../../assets/ext/image.png" alt="" > -->
+                <i class="fa-regular fa-image fa-lg pt-3 pb-2"></i>
+                <span class="w-100 d-flex justify-content-center pt-2">Logo</span>
+              </div>
+            </a>
+          </div>
+          <div class="mx-3 d-flex col-auto justify-content-start icon-action">
+            <a href="javascript:void(0)" class="text-white" (click)="navCompanySetting()" [ngClass]="{'pe-none': isLoading}">
+              <div class="d-flex text-center flex-column col-md-12">
+                <i class="fa-solid fa-gear fa-lg py-3"></i>
+                <span class="w-100 d-flex justify-content-center">Setting</span>
+              </div>
+            </a>
+          </div>
+          <div class="mx-3 d-flex col-auto justify-content-start icon-action">
+            <a href="javascript:void(0)" class="text-white" (click)="navOrgStructure()" [ngClass]="{'pe-none': isLoading}">
+              <div class="d-flex text-center flex-column col-md-12">
+                <i class="fa-solid fa-sitemap fa-lg py-3"></i>
+                <span class="w-100 d-flex justify-content-center">Org</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <!-- <div class="col-auto">
+          <input type="color" (change)="changeColor($event)">
+        </div> -->
+      </div>
+      <div class="d-flex col-md-4 flex-column justify-content-center">
+        <label class="visually-hidden" for="autoSizingInputGroup">Username</label>
+        <div class="input-group">
+          <div class="input-group-text bg-transparent">
+            <a href="javascript:void(0)" class="text-white">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </a>
+          </div>
+          <input type="text" class="form-control" placeholder="type here...">
         </div>
       </div>
-    </div>
-    <div class="fe-2 d-flex align-items-center" *ngIf="isAdmin">
-      <div class="d-flex justify-content-start">
-        <div class="mx-3 d-flex justify-content-start icon-action ms-3">
-          <a href="javascript:void(0)" class="text-white" (click)="navLogoPage()" [ngClass]="{'pe-none': isLoading}">
-            <div class="d-flex text-center flex-column">
-              <!-- <img src="../../assets/ext/image.png" alt="" > -->
-              <i class="fa-regular fa-image fa-lg pt-3 pb-2"></i>
-              <span class="w-100 d-flex justify-content-center pt-2">Logo</span>
-            </div>
-          </a>
+      <!-- <div class="form-group d-flex flex-column justify-content-center col-md-4">
+        <div class="d-flex">
+          <button class="btn btn-primary-c cust-btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <div class="border cust-box w-100">
+            <input type="text" class="form-control rounded-0 border-0" placeholder="type here...">
+          </div>
         </div>
-        <div class="mx-3 d-flex col-auto justify-content-start icon-action">
-          <a href="javascript:void(0)" class="text-white" (click)="navCompanySetting()" [ngClass]="{'pe-none': isLoading}">
-            <div class="d-flex text-center flex-column col-md-12">
-              <i class="fa-solid fa-gear fa-lg py-3"></i>
-              <span class="w-100 d-flex justify-content-center">Setting</span>
-            </div>
-          </a>
-        </div>
-        <div class="mx-3 d-flex col-auto justify-content-start icon-action">
-          <a href="javascript:void(0)" class="text-white" (click)="navOrgStructure()" [ngClass]="{'pe-none': isLoading}">
-            <div class="d-flex text-center flex-column col-md-12">
-              <i class="fa-solid fa-sitemap fa-lg py-3"></i>
-              <span class="w-100 d-flex justify-content-center">Org</span>
-            </div>
-          </a>
-        </div>
-      </div>
-      <!-- <div class="col-auto">
-        <input type="color" (change)="changeColor($event)">
       </div> -->
-    </div>
-    <div>
-      <div class="navbar-menu-wrapper d-flex align-items-center">
-        <ul class="navbar-nav navbar-nav-right">
-          <li class="d-none d-sm-block">
-            <div class="btn-group">
-              <select class="form-select border-0" (change)="balanceZooming($event)">
-                <option value="0">Font size</option>
-                <option [value]="i" *ngFor="let i of sizeOptions">{{i}}</option>
-              </select>
-            </div>
-          </li>
-          <li class="d-none d-sm-block position-relative me-4">
-            <a href="javascript:void(0)" class="text-decoration-none text-white" (click)="navNotificationPage()">
-              <i class="fa-regular fa-bell" aria-hidden="true"></i>
-              <span class="count badge-counter">{{NotificationBadge}}</span>
-            </a>
-          </li>
-          <li class="d-none d-sm-block position-relative">
-            <a href="javascript:void(0)" class="text-decoration-none text-white" (click)="navEmailPage()">
-              <i class="fa-regular fa-envelope pe-1" aria-hidden="true"></i>
-              <span class="count badge-counter">{{NotificationBadge}}</span>
-            </a>
-            <!-- <div class="btn-group">
-              <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+      <div>
+        <div class="navbar-menu-wrapper d-flex align-items-center">
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="d-none d-sm-block">
+              <div class="btn-group">
+                <select class="form-select border-0" (change)="balanceZooming($event)">
+                  <option value="0">Font size</option>
+                  <option [value]="i" *ngFor="let i of sizeOptions">{{i}}</option>
+                </select>
+              </div>
+            </li>
+            <li class="d-none d-sm-block position-relative me-4">
+              <a href="javascript:void(0)" class="text-decoration-none text-white" (click)="navNotificationPage()">
+                <i class="fa-regular fa-bell" aria-hidden="true"></i>
                 <span class="count badge-counter">{{NotificationBadge}}</span>
               </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
-                <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
-                <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
-              </ul>
-            </div> -->
-          </li>
-
-          <li>
-            <a type="button" id="btn-user" class="btn border btn-user position-relative" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              <a href="javascript:void" id="anc-user"
-                class="d-flex flex-column justify-content-center text-dark pe-3 text-decoration-none"
-                (click)="ViewUserProfile()">
-                <span class="profile-text text-white">{{userDetail.LastName}}</span>
+            </li>
+            <li class="d-none d-sm-block position-relative">
+              <a href="javascript:void(0)" class="text-decoration-none text-white " (click)="navEmailPage()">
+                <i class="fa-regular fa-envelope pe-1" aria-hidden="true"></i>
+                <span class="count badge-counter">{{NotificationBadge}}</span>
               </a>
-              <img class="img-xs rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
-            </a>
+              <!-- <div class="btn-group">
+                <a type="button" class="btn position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+                  <span class="count badge-counter">{{NotificationBadge}}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item dropdown-menu-text" href="#">Action</a></li>
+                  <li><a class="dropdown-item dropdown-menu-text" href="#">Another action</a></li>
+                  <li><a class="dropdown-item dropdown-menu-text" href="#">Something else here</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item dropdown-menu-text" href="#">Separated link</a></li>
+                </ul>
+              </div> -->
+            </li>
 
-            <div *ngIf="!IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown lpp" ngbDropdownMenu
-              aria-labelledby="UserDropdown">
-              <a class="dropdown-item p-over-header p-0 lpp__a">
-                <div class="d-inline-block">
-                  <div
-                    class="py-3 px-4 d-flex align-items-center justify-content-center border-left border-right lpp__icon-circle">
-                    <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i>
+            <li>
+              <a type="button" id="btn-user" class="btn btn-user position-relative" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <a href="javascript:void" id="anc-user"
+                  class="d-flex flex-column justify-content-center text-dark pe-3 text-decoration-none"
+                  (click)="ViewUserProfile()">
+                  <span class="profile-text text-white">{{userDetail.LastName}}</span>
+                </a>
+                <img class="img-xs rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
+              </a>
+
+              <div *ngIf="!IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown lpp" ngbDropdownMenu
+                aria-labelledby="UserDropdown">
+                <a class="dropdown-item p-over-header p-0 lpp__a">
+                  <div class="d-inline-block">
+                    <div
+                      class="py-3 px-4 d-flex align-items-center justify-content-center border-left border-right lpp__icon-circle">
+                      <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i>
+                    </div>
                   </div>
-                </div>
-              </a>
-              <hr />
-              <a *ngIf="!IsLoggedIn" class="dropdown-item c-pointer ml-5" (click)="landLoginPage()">
-                Sign In
-              </a>
-            </div>
+                </a>
+                <hr />
+                <a *ngIf="!IsLoggedIn" class="dropdown-item c-pointer ml-5" (click)="landLoginPage()">
+                  Sign In
+                </a>
+              </div>
 
-            <div *ngIf="IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown adject-p-o lpp"
-              ngbDropdownMenu aria-labelledby="UserDropdown">
-              <a class="dropdown-item p-over-header p-0 lpp__a">
-                <div class="d-inline-block">
-                  <div class="d-flex align-items-center justify-content-center">
-                    <!-- <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i> -->
-                    <img class="img-xl rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
+              <div *ngIf="IsLoggedIn" class="dropdown-menu dropdown-menu-right navbar-dropdown adject-p-o lpp"
+                ngbDropdownMenu aria-labelledby="UserDropdown">
+                <a class="dropdown-item p-over-header p-0 lpp__a">
+                  <div class="d-inline-block">
+                    <div class="d-flex align-items-center justify-content-center">
+                      <!-- <i class="mdi mdi-account-outline mr-0 text-white lpp__circle_i"></i> -->
+                      <img class="img-xl rounded-circle" src="assets/images/faces/face.jpg" alt="Profile image">
+                    </div>
                   </div>
-                </div>
-              </a>
-              <hr class="m-0 p-0" />
-              <a class="dropdown-item c-pointer dropdown-menu-text mt-2" (click)="mangeAccount()">
-                Manage Accounts
-              </a>
-              <a class="dropdown-item c-pointer dropdown-menu-text" (click)="resetPassword()" >
-                Change Password
-              </a>
-              <!-- <a class="dropdown-item c-pointer dropdown-menu-text">
-                Check Inbox
-              </a> -->
-              <a class="dropdown-item c-pointer dropdown-menu-text" (click)="LogoutUser()">
-                Sign Out
-              </a>
-            </div>
-          </li>
-        </ul>
+                </a>
+                <hr class="m-0 p-0" />
+                <a class="dropdown-item c-pointer dropdown-menu-text mt-2" (click)="mangeAccount()">
+                  Manage Accounts
+                </a>
+                <a class="dropdown-item c-pointer dropdown-menu-text" (click)="resetPassword()">
+                  Change Password
+                </a>
+                <!-- <a class="dropdown-item c-pointer dropdown-menu-text">
+                  Check Inbox
+                </a> -->
+                <a class="dropdown-item c-pointer dropdown-menu-text" (click)="LogoutUser()">
+                  Sign Out
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
