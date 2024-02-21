@@ -1,14 +1,21 @@
-<div id="page-menu" class="bg-white menu-items page-menu" [ngClass]="{'position-relative mobile-mode-menu ': !isMinimize}">
+<div id="page-menu" class="page-menu" [ngClass]="{'position-relative mobile-mode-menu ': !isMinimize}">
   <ng-container *ngIf="!isMinimize">
-    <div id="menu-items" class="menu-container d-flex flex-column justify-content-between position-relative overflow-auto">
-      <div class="col-md-12">
-        <div class="x_content d-flex justify-content-between">
-          <div class="fe-1">User detail</div>
-          <a href="javascript:void(0)" (click)="saveMenuStyle()">
-            <i class="fa-solid fa-thumb-tack pinded-icon" [ngClass]="{'d-none': !isMenuExpanded}" aria-hidden="true"></i>
-            <i class="fa-solid fa-thumb-tack" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
-          </a>
+    <div class="x_content d-flex justify-content-between m-0 p-0">
+      <div class="fe-1 ps-3 py-3 d-flex justify-content-start menu-info">
+        <app-image-loader [url]="'assets/faces/face.jpg'" [className]="'rounded rounded-circle me-3'">
+        </app-image-loader>
+        <div class="d-flex text-white flex-column justify-content-center">
+          <div>Admin User</div>
+          <div>info@bottomhalf.in</div>
         </div>
+      </div>
+      <a href="javascript:void(0)" (click)="saveMenuStyle()">
+        <i class="fa-solid text-white fa-thumb-tack pinded-icon" [ngClass]="{'d-none': !isMenuExpanded}" aria-hidden="true"></i>
+        <i class="fa-solid text-white fa-thumb-tack" [ngClass]="{'d-none': isMenuExpanded}" aria-hidden="true"></i>
+      </a>
+    </div>
+    <div id="menu-items" class="menu-items menu-container bg-white d-flex flex-column justify-content-between position-relative">
+      <div class="col-md-12">
         <div class="accordion border-0" *ngFor="let catagory of Menu;let i = index;">
           <div class="accordion-item border-0">
             <div class="accordion-item-header z-3" [ngClass]="{'active': catagory.IsActive}" [attr.data-index]="i+1" (click)="toogle($event)">
@@ -20,7 +27,7 @@
                 class="badge bg-secondary ms-3">
                 NEW
               </span>
-              <i class="fa-solid fa-caret-right fa-lg ms-auto ps-2 pe-4 z-0" [ngClass]="{'rotate-caret': catagory.IsActive}"></i>
+              <i class="fa-solid fa-caret-right arrow-pointer fa-lg ms-auto ps-2 pe-4 z-0" [ngClass]="{'rotate-caret': catagory.IsActive}"></i>
             </div>
             <!-- /.accordion-item-header -->
             <div class="accordion-item-body" [ngClass]="{'active-body': catagory.IsActive}">
@@ -56,7 +63,7 @@
         Emstum - V {{version}}
       </div>
     </div>
-    <div class="w-100 position-absolute bg-secondary" class="menu-footer btn-primary-c">
+    <div class="w-100 position-absolute bg-secondary" class="menu-footer btn-primary-c d-none">
       <a href="javascript:void(0)" (click)="organizationSetting()" [hidden]="!isAdmin" >
         <i class="fa-solid fa-gear text-light custom-text" aria-hidden="true"></i>
       </a>
@@ -72,7 +79,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="isMinimize">
-    <div class="d-flex small-menu align-items-center justify-content-between flex-column h-100">
+    <div class="d-flex bg-white small-menu align-items-center justify-content-between flex-column h-100">
       <div class="">
         <div class="py-2 my-3 dropdown col-md-12 " *ngFor="let catagory of Menu;let i = index;" [ngClass]="{ 'active-sm': catagory.IsActive}">
           <a href="javascript:void(0)" class="text-decoration-none text-center d-flex align-items-center justify-content-center">

@@ -8,13 +8,13 @@ import { PaginationComponent } from '../pagination/pagination.component';
 import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
 import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component";
 import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component';
-import { ImageLoaderComponent } from './image-loader/image-loader.component';
 import { EditorComponent } from './editor/editor.component';
 import { MessageModalComponent } from './message-modal/message-modal.component'
 import { FormsModule } from '@angular/forms';
 import { BhTimepickerComponent } from './bh-timepicker/bh-timepicker.component'
 import { NgModule } from '@angular/core';
 import { BotTreeViewComponent } from './bot-tree-view/bot-tree-view.component';
+import { ImageLoaderComponent } from './image-loader/image-loader.component';
 
 @NgModule({
   declarations: [
@@ -26,11 +26,11 @@ import { BotTreeViewComponent } from './bot-tree-view/bot-tree-view.component';
     IautocompleteComponent,
     BreadcrumsComponent,
     PreLoadTableComponent,
-    ImageLoaderComponent,
     EditorComponent,
     MessageModalComponent,
     BhTimepickerComponent,
-    BotTreeViewComponent
+    BotTreeViewComponent,
+    ImageLoaderComponent
   ],
   imports: [
     CommonModule,
@@ -45,11 +45,11 @@ import { BotTreeViewComponent } from './bot-tree-view/bot-tree-view.component';
     BreadcrumsComponent,
     IautocompleteComponent,
     PreLoadTableComponent,
-    ImageLoaderComponent,
     EditorComponent,
     MessageModalComponent,
     BhTimepickerComponent,
-    BotTreeViewComponent
+    BotTreeViewComponent,
+    ImageLoaderComponent
   ]
 })
 export class UtilModule {
