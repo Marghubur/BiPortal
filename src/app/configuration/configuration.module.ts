@@ -14,9 +14,9 @@ import { WorkflowComponent } from './workflow/workflow.component';
 import { ManageWorkFlowComponent } from './manage-work-flow/manage-work-flow.component';
 import { ManageshiftComponent } from './manageshift/manageshift.component';
 import { ProductsComponent } from './products/products.component';
-import { EmailConfigComponent } from './email-config/email-config.component';
 import { ProcessingPayrollComponent } from './processing-payroll/processing-payroll.component';
 import { LeaveAttendanceDailywagesComponent } from './leave-attendance-dailywages/leave-attendance-dailywages.component';
+import { ManageActivityComponent } from './manage-activity/manage-activity.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +27,7 @@ import { LeaveAttendanceDailywagesComponent } from './leave-attendance-dailywage
     ManageWorkFlowComponent,
     ManageshiftComponent,
     ProductsComponent,
-    EmailConfigComponent,
+    ManageActivityComponent,
     ProcessingPayrollComponent,
     LeaveAttendanceDailywagesComponent
   ],

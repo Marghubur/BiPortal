@@ -4,7 +4,7 @@ import { tableConfig } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { AjaxService } from 'src/providers/ajax.service';
 import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { Attendance, Documents, DocumentsPage, Performance, Employees, Files, ManageEmployee, Profile, UserType, UserImage } from 'src/providers/constants';
+import { Attendance, Documents, DocumentsPage, Performance, Employees, Files, ManageEmployee, Profile, UserType, UserImage, ManageActivity } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -418,6 +418,10 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
         this.isLoading = false;
       })
     }
+  }
+
+  generateAttendance(item: any) {
+    this.nav.navigate(ManageActivity, item);
   }
 
   // empDeclaration() {
