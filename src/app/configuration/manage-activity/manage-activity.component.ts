@@ -77,9 +77,9 @@ export class ManageActivityComponent implements OnInit {
       AttendenceStatus: this.attendanceStatus,
       EmployeeId: this.employeeId
     }
-    console.log(value)
     this.http.post("Attendance/GenerateAttendance", value).then((res: ResponseModel) => {
       if (res.ResponseBody) {
+        Toast(res.ResponseBody);
         this.isLoading = false;
       }
     }).catch(e => {

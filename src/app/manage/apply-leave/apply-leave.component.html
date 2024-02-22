@@ -158,17 +158,17 @@
                     <div class="row mt-3 border-top">
                       <div class="col-md-6 border-end pt-3">
                         <h6 class="custom-text-size">AVAILABLE</h6>
-                        <p>{{leave.AvailableLeaves}}</p>
+                        <p>{{leave.AvailableLeaves | number: '1.2-2'}}</p>
                       </div>
                       <div class="col-md-6 pt-3">
                         <h6 class="custom-text-size">CONSUMED</h6>
-                        <p>{{leave.ConsumedLeave}}</p>
+                        <p>{{leave.ConsumedLeave | number: '1.2-2'}}</p>
                       </div>
                     </div>
                     <div class="row border-top">
                       <div class="col-md-4 border-end pt-3">
                         <h6 class="custom-text-size">ACCRUED SO FAR</h6>
-                        <p>{{leave.AccrualedTillDate}}</p>
+                        <p>{{leave.AccrualedTillDate | number: '1.2-2'}}</p>
                       </div>
                       <div class="col-md-4 border-end pt-3">
                         <h6 class="custom-text-size">CARRYOVER</h6>
@@ -176,7 +176,7 @@
                       </div>
                       <div class="col-md-4 pt-3">
                         <h6 class="custom-text-size">ANNUAL QUOTA</h6>
-                        <p>{{leave.MaxLeaveLimit}}</p>
+                        <p>{{leave.MaxLeaveLimit | number: '1.2-2'}}</p>
                       </div>
                     </div>
                   </div>
