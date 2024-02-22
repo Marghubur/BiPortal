@@ -1,8 +1,9 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { LayoutComponent } from './layout/layout/layout.component';
-import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { HomeComponent } from './home/home/home.component';
+import { RegisterNewOrgComponent } from './register-new-org/register-new-org.component';
+import { RegisterNewOrg } from 'src/providers/constants';
 
 const routes: Routes = [
   {
@@ -24,11 +25,13 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./layout/layout.module')
     .then(m => m.LayoutModule)
-  },
+  }, {
+    path: RegisterNewOrg, component: RegisterNewOrgComponent
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],  
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
