@@ -1,14 +1,18 @@
 <div class="col-12 full-v main-container">
-  <div class="col-12 x_panel row">
-    <div class="x_header">
+
+  <div class="d-flex flex-column justify-content-center col-12 p-0 m-0">
+    <div class="content-header">
       <div class="d-flex justify-content-between">
         <div class="col-8">
           <div class="px-1">
-            <app-breadcrums [title]="'Profile'" [subtitle]="'User detail like employment, education etc.'"></app-breadcrums>
+            <app-breadcrums [title]="'Manage you profile detail'"></app-breadcrums>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="x_panel">
     <div class="right-panel col-md-12 p-0">
       <ng-container *ngIf="isFormReady">
         <ng-container *ngIf="!isUser">
@@ -49,8 +53,8 @@
                           <div class="col-md-12 m-0 row">
                             <div class="col-md-6 mb-3">
                               <label class="form-label">First Name *</label>
-                              <input inputtype="mandatory" class="form-control" placeholder="First Name" name="FirstName"
-                                formControlName="FirstName" />
+                              <input inputtype="mandatory" class="form-control" placeholder="First Name"
+                                name="FirstName" formControlName="FirstName" />
                             </div>
                             <div class="col-md-6 mb-3">
                               <label class="form-label">Last Name *</label>
@@ -62,12 +66,14 @@
                           <div class="col-md-12 m-0 row">
                             <div class="col-md-6 mb-3">
                               <label class="form-label">Mobile Number </label>
-                              <input inputtype="mandatory" readonly class="form-control" placeholder="Mobile No.#" OnlyNumber="10" onkeypress="return event.charCode >=48 && event.charCode <=57"
+                              <input inputtype="mandatory" readonly class="form-control" placeholder="Mobile No.#"
+                                OnlyNumber="10" onkeypress="return event.charCode >=48 && event.charCode <=57"
                                 name="Mobile" formControlName="Mobile" />
                             </div>
                             <div class="col-md-6 mb-3">
                               <label class="form-label">Email Id </label>
-                              <input class="form-control" readonly placeholder="Email Id" name="Email" formControlName="Email" />
+                              <input class="form-control" readonly placeholder="Email Id" name="Email"
+                                formControlName="Email" />
                             </div>
                           </div>
                         </div>
@@ -76,7 +82,7 @@
                         <div class="card pt-3 mb-4 px-3">
                           <div class="x_header border-0">
                             <div class="x_header_title">
-                              <h2 cl class="fw-bold text-dark"ass="fw-bold">Attach Resume</h2>
+                              <h2 cl class="fw-bold text-dark" ass="fw-bold">Attach Resume</h2>
                             </div>
                             <h6 class="fw-normal">Resume is the most important document recruiters look for. Recruiters
                               generally do not
@@ -104,7 +110,8 @@
                                           </p>
                                         </div>
                                       </div>
-                                      <div class="col-md-12 bg-light align-items-center d-flex justify-content-center p-5"
+                                      <div
+                                        class="col-md-12 bg-light align-items-center d-flex justify-content-center p-5"
                                         *ngIf="uploading" name="uploading">
                                         <img src="assets/ext/file.png" class="resume-thumbnail" />
                                       </div>
@@ -125,7 +132,7 @@
                                       <div class="col-auto">
                                         <a href="javascript:void(0)" class="text-decoration-none">
                                           <img src="assets/img/file.png" alt="resume" class="resume-thumbnail"
-                                          (click)="viewResume()">
+                                            (click)="viewResume()">
                                         </a>
                                         <p class="mb-0 text-center fw-bold">{{resumeFileName}}</p>
                                       </div>
@@ -208,17 +215,20 @@
                           <div class="x_header_title">
                             <h2 class="fw-bold text-dark">Employment</h2>
                             <button class="btn btn-outline-primary btn-sm me-2 float-end" [disabled]="isLoading"
-                              (click)=" addEmployment()"><i class="fa-solid fa-plus-circle pe-1"></i> ADD Employment</button>
+                              (click)=" addEmployment()"><i class="fa-solid fa-plus-circle pe-1"></i> ADD
+                              Employment</button>
                           </div>
                         </div>
 
                         <ng-container formArrayName="Employments" *ngIf="!isEmpData">
                           <div class="col-md-12 ps-2" *ngFor="let item of employment.controls; let index = index;">
-                            <div [formGroupName]="index" class="col-md-12 row" [ngClass]="{'border-top mt-3': index > 0}">
+                            <div [formGroupName]="index" class="col-md-12 row"
+                              [ngClass]="{'border-top mt-3': index > 0}">
                               <div class="row mt-3">
                                 <div class="col-md-2 fw-bold">Designation:</div>
                                 <div class="col-md-10 fw-bold">{{item.get('Designation').value}}
-                                  <a href="javascript:void(0)" class="text-decoration-none float-end" (click)="editEmployment(item)">
+                                  <a href="javascript:void(0)" class="text-decoration-none float-end"
+                                    (click)="editEmployment(item)">
                                     <i class="fa-solid fa-pencil fa-lg text-primary ps-3 pt-2"></i>
                                   </a>
                                 </div>
@@ -229,17 +239,21 @@
                               </div>
                               <div class="row mt-3" *ngIf="item.get('CurrentSalary').value > 0">
                                 <div class="col-md-2">CurrentSalary:</div>
-                                <div class="col-md-10">{{item.get('CurrencyType').value == "USD" ? '$' : 'Rs'}} {{item.get('CurrentSalary').value}}</div>
+                                <div class="col-md-10">{{item.get('CurrencyType').value == "USD" ? '$' : 'Rs'}}
+                                  {{item.get('CurrentSalary').value}}</div>
                               </div>
                               <div class="row mt-3" *ngIf="item.get('Years').value > 0 || item.get('Months').value > 0">
                                 <div class="col-md-2">Project Duration:</div>
-                                <div class="col-md-10">{{item.get('Years').value }} years {{item.get('Months').value}} months</div>
+                                <div class="col-md-10">{{item.get('Years').value }} years {{item.get('Months').value}}
+                                  months</div>
                               </div>
-                              <div class="row mt-3" *ngIf="item.get('JobProfile').value != null && item.get('JobProfile').value != ''">
+                              <div class="row mt-3"
+                                *ngIf="item.get('JobProfile').value != null && item.get('JobProfile').value != ''">
                                 <div class="col-md-2">Job Profile:</div>
                                 <div class="col-md-10">{{item.get('JobProfile').value }}</div>
                               </div>
-                              <div class="row mt-3" *ngIf="item.get('Experties').value != null && item.get('Experties').value != ''">
+                              <div class="row mt-3"
+                                *ngIf="item.get('Experties').value != null && item.get('Experties').value != ''">
                                 <div class="col-md-2">Top 5 Key Skills:</div>
                                 <div class="col-md-10">{{item.get('Experties').value }}</div>
                               </div>
@@ -265,43 +279,50 @@
                       <div class="x_panel">
                         <div class="x_header">
                           <div class="x_header_title">
-                           <h2 class="fw-bold text-dark">Education</h2>
+                            <h2 class="fw-bold text-dark">Education</h2>
                             <!-- <button [disabled]="isLoading" class="btn btn-outline-success btn-sm float-end"
                               (click)="submitEducationDetail()"><i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                               {{ isLoading ? 'Wait' : 'Save' }}</button> -->
                             <button [disabled]="isLoading" class="btn btn-outline-primary btn-sm me-2 float-end"
-                              (click)=" addEducation()"><i class="fa-solid fa-plus-circle pe-1"></i> ADD EDUCATION</button>
+                              (click)=" addEducation()"><i class="fa-solid fa-plus-circle pe-1"></i> ADD
+                              EDUCATION</button>
                           </div>
                         </div>
                         <ng-container formArrayName="Educations" *ngIf="!isEducationData">
                           <div class="col-md-12 ps-2 row mt-2"
                             *ngFor="let item of education.controls; let index = index;">
-                            <div [formGroupName]="index" class="col-md-12 row" [ngClass]="{'border-top mt-3': index > 0}">
+                            <div [formGroupName]="index" class="col-md-12 row"
+                              [ngClass]="{'border-top mt-3': index > 0}">
                               <div class="row mt-3">
                                 <div class="col-md-2 fw-bold">Education:</div>
                                 <div class="col-md-10 fw-bold">{{item.get('Degree_Name').value}}
-                                  <a href="javascript:void(0)" class="text-decoration-none float-end" (click)="editEducation(item)">
+                                  <a href="javascript:void(0)" class="text-decoration-none float-end"
+                                    (click)="editEducation(item)">
                                     <i class="fa-solid fa-pencil fa-lg text-primary ps-3 pt-2"></i>
                                   </a>
                                 </div>
                               </div>
-                              <div class="row mt-3" *ngIf="item.get('Specialization').value != null && item.get('Specialization').value != ''">
+                              <div class="row mt-3"
+                                *ngIf="item.get('Specialization').value != null && item.get('Specialization').value != ''">
                                 <div class="col-md-2">Specialization:</div>
                                 <div class="col-md-10">{{item.get('Specialization').value}}</div>
                               </div>
-                              <div class="row mt-3" *ngIf="item.get('Passout_Year').value != null && item.get('Passout_Year').value != ''">
+                              <div class="row mt-3"
+                                *ngIf="item.get('Passout_Year').value != null && item.get('Passout_Year').value != ''">
                                 <div class="col-md-2">Passout Year:</div>
                                 <div class="col-md-10">{{item.get('Passout_Year').value}}</div>
                               </div>
-                              <div class="row mt-3" *ngIf="item.get('Course_Type').value != null && item.get('Course_Type').value != ''">
+                              <div class="row mt-3"
+                                *ngIf="item.get('Course_Type').value != null && item.get('Course_Type').value != ''">
                                 <div class="col-md-2">Course Type:</div>
                                 <div class="col-md-10">{{item.get('Course_Type').value | uppercase}}</div>
                               </div>
-                              <div class="row mt-3" *ngIf="item.get('Course').value != null && item.get('Course').value != ''">
+                              <div class="row mt-3"
+                                *ngIf="item.get('Course').value != null && item.get('Course').value != ''">
                                 <div class="col-md-2">Course:</div>
                                 <div class="col-md-10">{{item.get('Course').value }}</div>
                               </div>
-                              <div class="row mt-3" >
+                              <div class="row mt-3">
                                 <div class="col-md-2">University Name:</div>
                                 <div class="col-md-10">{{item.get('University_Name').value }}</div>
                               </div>
@@ -329,7 +350,8 @@
                           <div class="x_header_title pt-3 align-items-center justify-content-between">
                             <h2 class="fw-bold text-dark">Key Skills
                             </h2>
-                            <button class="btn btn-outline-primary float-end" (click)="editItSkillDetail()"><i class="fa-solid fa-plus-circle pe-2"></i>Add Skill</button>
+                            <button class="btn btn-outline-primary float-end" (click)="editItSkillDetail()"><i
+                                class="fa-solid fa-plus-circle pe-2"></i>Add Skill</button>
                           </div>
                         </div>
                         <table class="table table-striped table-striped">
@@ -344,16 +366,20 @@
                           </thead>
                           <tbody>
                             <ng-container formArrayName="TechnicalSkills" *ngIf="!isItSkillData">
-                              <ng-container *ngFor="let skills of skills.controls;let index = index" [formGroupName]="index">
+                              <ng-container *ngFor="let skills of skills.controls;let index = index"
+                                [formGroupName]="index">
                                 <tr>
                                   <td>{{skills.get("Language").value}}</td>
                                   <td>{{skills.get("Version").value}}</td>
                                   <td>
-                                    <span *ngIf="skills.get('LastUsed').value != null">{{skills.get("LastUsed").value | date}}</span>
+                                    <span *ngIf="skills.get('LastUsed').value != null">{{skills.get("LastUsed").value |
+                                      date}}</span>
                                   </td>
-                                  <td>{{skills.get("ExperienceInYear").value}} Years {{skills.get("ExperienceInMonth").value}} Months</td>
+                                  <td>{{skills.get("ExperienceInYear").value}} Years
+                                    {{skills.get("ExperienceInMonth").value}} Months</td>
                                   <td>
-                                    <a href="javascript:void(0)" class="text-decoration-none" (click)="editItSkillDetail()">
+                                    <a href="javascript:void(0)" class="text-decoration-none"
+                                      (click)="editItSkillDetail()">
                                       <i class="fa-solid fa-pencil ps-4 pt-2 text-primary fa-lg"></i>
                                     </a>
                                   </td>
@@ -386,7 +412,8 @@
                                 Add details about projects you have done in college, internship or at work.
                               </small>
                             </h2>
-                            <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="addProject()">
+                            <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn"
+                              (click)="addProject()">
                               <i class="fa-solid fa-plus-circle"></i> ADD
                               PROJECT</button>
                           </div>
@@ -410,22 +437,26 @@
                                 </div>
                                 <hr />
                                 <div class="mt-3 d-flex flex-row justify-content-start">
-                                  <div class="me-4 d-flex col-md-2 text-break flex-column justify-content-center fw-bold">
+                                  <div
+                                    class="me-4 d-flex col-md-2 text-break flex-column justify-content-center fw-bold">
                                     <p class="m-0 mb-1"><ins>Project</ins></p>
                                     <p class="fs-5">{{item.get("ProjectTitle").value}}:</p>
                                   </div>
                                   <div class="">
-                                    <ng-container *ngIf="item.get('ClientName').value != null && item.get('ClientName').value != ''">
+                                    <ng-container
+                                      *ngIf="item.get('ClientName').value != null && item.get('ClientName').value != ''">
                                       <label class="form-label text-dark fw-bold"></label>
                                       <span class="badge bg-primary text-white">Client:
                                         {{item.get("ClientName").value}}</span>
                                     </ng-container>
-                                    <ng-container *ngIf="item.get('ProjectDuration').value != null && item.get('ProjectDuration').value != ''">
+                                    <ng-container
+                                      *ngIf="item.get('ProjectDuration').value != null && item.get('ProjectDuration').value != ''">
                                       <span class="badge bg-warning text-white ms-2">
                                         Duration: {{item.get("ProjectDuration").value}} months
                                       </span>
                                     </ng-container>
-                                    <ng-container *ngIf="item.get('ProjectStatus').value != null && item.get('ProjectStatus').value != ''">
+                                    <ng-container
+                                      *ngIf="item.get('ProjectStatus').value != null && item.get('ProjectStatus').value != ''">
                                       <span class="badge bg-dark text-white ms-2">
                                         Status: {{item.get("ProjectStatus").value}}
                                       </span>
@@ -472,7 +503,8 @@
                                 <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</p>
-                            <ng-container *ngIf="userModal.Accomplishments.OnlineProfile != null && userModal.Accomplishments.OnlineProfile != ''">
+                            <ng-container
+                              *ngIf="userModal.Accomplishments.OnlineProfile != null && userModal.Accomplishments.OnlineProfile != ''">
                               <ng-container
                                 *ngFor="let item of accomplishmentsForm.controls.OnlineProfiles['controls'];let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
@@ -499,7 +531,8 @@
                                 <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add link to your Projects (e.g. Github links etc.).</p>
-                            <ng-container *ngIf="userModal.Accomplishments.WorkSample != null && userModal.Accomplishments.WorkSample != ''">
+                            <ng-container
+                              *ngIf="userModal.Accomplishments.WorkSample != null && userModal.Accomplishments.WorkSample != ''">
                               <ng-container *ngFor="let item of workSamples.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-dark">
@@ -509,7 +542,8 @@
                                         <i class="fa-solid fa-pencil text-white"></i>
                                       </a>
                                       <a href="javascript:void(0)">
-                                        <i class="fa-solid fa-trash-can text-white" (click)="deleteWorkSamplePopup(item)"></i>
+                                        <i class="fa-solid fa-trash-can text-white"
+                                          (click)="deleteWorkSamplePopup(item)"></i>
                                       </a>
                                     </div>
                                   </div>
@@ -525,7 +559,8 @@
                                 <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add links to your Online publications.</p>
-                            <ng-container *ngIf="userModal.Accomplishments.Research != null && userModal.Accomplishments.Research != ''">
+                            <ng-container
+                              *ngIf="userModal.Accomplishments.Research != null && userModal.Accomplishments.Research != ''">
                               <ng-container *ngFor="let item of researchs.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-secondary">
@@ -551,7 +586,8 @@
                                 <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add links to your Online presentations (e.g. Slideshare presentation links etc.).</p>
-                            <ng-container *ngIf="userModal.Accomplishments.Presentation != null && userModal.Accomplishments.Presentation != ''">
+                            <ng-container
+                              *ngIf="userModal.Accomplishments.Presentation != null && userModal.Accomplishments.Presentation != ''">
                               <ng-container *ngFor="let item of presentations.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-primary-c">
@@ -577,7 +613,8 @@
                                 <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add details of Patents you have filed.</p>
-                            <ng-container *ngIf="userModal.Accomplishments.Patent != null && userModal.Accomplishments.Patent != ''">
+                            <ng-container
+                              *ngIf="userModal.Accomplishments.Patent != null && userModal.Accomplishments.Patent != ''">
                               <ng-container *ngFor="let item of patents.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-success">
@@ -603,7 +640,8 @@
                                 <i class=" fa-solid fa-plus-circle"></i> Add</button>
                             </h6>
                             <p>Add details of Certifications you have achieved/completed</p>
-                            <ng-container *ngIf="userModal.Accomplishments.Certification != null && userModal.Accomplishments.Certification != ''">
+                            <ng-container
+                              *ngIf="userModal.Accomplishments.Certification != null && userModal.Accomplishments.Certification != ''">
                               <ng-container *ngFor="let item of certifications.controls;let index = index">
                                 <div class="col-md-12 mt-3" [formGroupName]="index">
                                   <div class="col-md-12 btn btn-warning">
@@ -637,7 +675,8 @@
                         <div class="x_header">
                           <div class="x_header_title align-items-center justify-content-between">
                             <h2 class="fw-bold text-dark">Career Profile</h2>
-                            <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="editCarrerProfile()">
+                            <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn"
+                              (click)="editCarrerProfile()">
                               <i class="fa-solid fa-plus-circle"></i> ADD Career Profile
                             </button>
                           </div>
@@ -650,37 +689,46 @@
                                 <div class="col-md-4">Current Industry:</div>
                                 <div class="col-md-8">{{item.get("Industry").value}}</div>
                               </div>
-                              <div class="mb-3 row" *ngIf="item.get('RoleCategory').value != null && item.get('RoleCategory').value != ''">
+                              <div class="mb-3 row"
+                                *ngIf="item.get('RoleCategory').value != null && item.get('RoleCategory').value != ''">
                                 <div class="col-md-4">Role Category:</div>
                                 <div class="col-md-8">{{item.get("RoleCategory").value}}</div>
                               </div>
                               <div class="row mb-3" *ngIf="item.get('DesiredTypePermanent').value > 0">
                                 <div class="col-md-4">Desired Job Type:</div>
-                                <div class="col-md-8">{{item.get("DesiredTypePermanent").value == 1 ? 'Permanent' : 'Contractual'}}</div>
+                                <div class="col-md-8">{{item.get("DesiredTypePermanent").value == 1 ? 'Permanent' :
+                                  'Contractual'}}</div>
                               </div>
                               <div class="row mb-3" *ngIf="item.get('DesiredEmploymentType').value > 0">
                                 <div class="col-md-4">Desired Employment Type:</div>
-                                <div class="col-md-8">{{item.get("DesiredEmploymentType").value == 1 ? 'Full Time' : 'Part Time'}}</div>
+                                <div class="col-md-8">{{item.get("DesiredEmploymentType").value == 1 ? 'Full Time' :
+                                  'Part Time'}}</div>
                               </div>
-                              <div class="mb-3 row" *ngIf="item.get('CurrencyType').value != null && item.get('CurrencyType').value != '' && item.get('ExpectedSalary').value > 0">
+                              <div class="mb-3 row"
+                                *ngIf="item.get('CurrencyType').value != null && item.get('CurrencyType').value != '' && item.get('ExpectedSalary').value > 0">
                                 <div class="col-md-4">Expected Salary :</div>
-                                <div class="col-md-8">{{item.get("CurrencyType").value == 'USD' ? '$' : 'Rs'}} {{item.get("ExpectedSalary").value}}</div>
+                                <div class="col-md-8">{{item.get("CurrencyType").value == 'USD' ? '$' : 'Rs'}}
+                                  {{item.get("ExpectedSalary").value}}</div>
                               </div>
                             </div>
                             <div class="col-md-6">
-                              <div class="mb-3 row" *ngIf="item.get('Department').value != null && item.get('Department').value != ''">
+                              <div class="mb-3 row"
+                                *ngIf="item.get('Department').value != null && item.get('Department').value != ''">
                                 <div class="col-md-4">Department:</div>
                                 <div class="col-md-8">{{item.get("Department").value}}</div>
                               </div>
-                              <div class="mb-3 row" *ngIf="item.get('Role').value != null && item.get('Role').value != ''">
+                              <div class="mb-3 row"
+                                *ngIf="item.get('Role').value != null && item.get('Role').value != ''">
                                 <div class="col-md-4">Job Role:</div>
                                 <div class="col-md-8">{{item.get("Role").value}}</div>
                               </div>
                               <div class="mb-3 row" *ngIf="item.get('PreferredShift').value > 0">
                                 <div class="col-md-4">Preferred Shift:</div>
-                                <div class="col-md-8">{{item.get("PreferredShift").value == 1 ? 'Day' :  item.get("PreferredShift").value == 2 ? 'Night' : 'Flexible'}}</div>
+                                <div class="col-md-8">{{item.get("PreferredShift").value == 1 ? 'Day' :
+                                  item.get("PreferredShift").value == 2 ? 'Night' : 'Flexible'}}</div>
                               </div>
-                              <div class="mb-3 row" *ngIf="item.get('PreferredWorkLocation').value != null && item.get('PreferredWorkLocation').value != ''">
+                              <div class="mb-3 row"
+                                *ngIf="item.get('PreferredWorkLocation').value != null && item.get('PreferredWorkLocation').value != ''">
                                 <div class="col-md-4">Preferred Work Location (Max 3):</div>
                                 <div class="col-md-8">{{item.get("PreferredWorkLocation").value}}</div>
                               </div>
@@ -707,7 +755,8 @@
                         <div class="x_header">
                           <div class="x_header_title align-items-center justify-content-between">
                             <h2 class="fw-bold text-dark">Personal Details</h2>
-                            <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn" (click)="editPersonalDetail()">
+                            <button class="btn btn-outline-primary btn-sm ms-2 float-end add-btn"
+                              (click)="editPersonalDetail()">
                               <i class="fa-solid fa-plus-circle"></i> ADD Personal Details
                             </button>
                           </div>
@@ -722,11 +771,13 @@
                               <div class="col-md-3">Gender : </div>
                               <div class="col-md-9">{{personalDetailForm.get("Gender").value | titlecase}}</div>
                             </div>
-                            <div class="row mt-3" *ngIf="personalDetailForm.get('Address').value != null && personalDetailForm.get('Address').value != ''">
+                            <div class="row mt-3"
+                              *ngIf="personalDetailForm.get('Address').value != null && personalDetailForm.get('Address').value != ''">
                               <div class="col-md-3">Permanent Address : </div>
                               <div class="col-md-9">{{personalDetailForm.get("Address").value}}</div>
                             </div>
-                            <div class="row mt-3" *ngIf="personalDetailForm.get('HomeTown').value != null && personalDetailForm.get('HomeTown').value != ''">
+                            <div class="row mt-3"
+                              *ngIf="personalDetailForm.get('HomeTown').value != null && personalDetailForm.get('HomeTown').value != ''">
                               <div class="col-md-3">Home Town : </div>
                               <div class="col-md-9">{{personalDetailForm.get("HomeTown").value | titlecase}}</div>
                             </div>
@@ -735,11 +786,15 @@
                               <div class="col-md-9">{{personalDetailForm.get("PinCode").value}}</div>
                             </div>
                             <div class="row mt-3">
-                              <div class="col-md-3" *ngIf="personalDetailForm.get('MaritalStatus').value != null && personalDetailForm.get('MaritalStatus').value != ''">Marital Status : </div>
+                              <div class="col-md-3"
+                                *ngIf="personalDetailForm.get('MaritalStatus').value != null && personalDetailForm.get('MaritalStatus').value != ''">
+                                Marital Status : </div>
                               <div class="col-md-9">{{personalDetailForm.get("MaritalStatus").value | titlecase}}</div>
                             </div>
                             <div class="row mt-3">
-                              <div class="col-md-3" *ngIf="personalDetailForm.get('Category').value != null && personalDetailForm.get('Category').value != ''">Category : </div>
+                              <div class="col-md-3"
+                                *ngIf="personalDetailForm.get('Category').value != null && personalDetailForm.get('Category').value != ''">
+                                Category : </div>
                               <div class="col-md-9">{{personalDetailForm.get("Category").value | titlecase}}</div>
                             </div>
                           </div>
@@ -760,20 +815,25 @@
                               <div class="col-md-3">Manager Email Id : </div>
                               <div class="col-md-9">{{userDetail.EmailId}}</div>
                             </div>
-                            <div class="row mt-3" *ngIf="personalDetailForm.get('DifferentlyAbled').value != null && personalDetailForm.get('DifferentlyAbled').value != ''">
+                            <div class="row mt-3"
+                              *ngIf="personalDetailForm.get('DifferentlyAbled').value != null && personalDetailForm.get('DifferentlyAbled').value != ''">
                               <div class="col-md-3">Differently Abled : </div>
-                              <div class="col-md-9">{{personalDetailForm.get("DifferentlyAbled").value | titlecase}}</div>
+                              <div class="col-md-9">{{personalDetailForm.get("DifferentlyAbled").value | titlecase}}
+                              </div>
                             </div>
-                            <div class="row mt-3" *ngIf="personalDetailForm.get('PermitUSA').value != null && personalDetailForm.get('PermitUSA').value != ''">
+                            <div class="row mt-3"
+                              *ngIf="personalDetailForm.get('PermitUSA').value != null && personalDetailForm.get('PermitUSA').value != ''">
                               <div class="col-md-3">Work Permit for USA : </div>
                               <div class="col-md-9">{{personalDetailForm.get("PermitUSA").value}}</div>
                             </div>
-                            <div class="row mt-3" *ngIf="personalDetailForm.get('PermitOtherCountry').value != null && personalDetailForm.get('PermitOtherCountry').value != ''">
+                            <div class="row mt-3"
+                              *ngIf="personalDetailForm.get('PermitOtherCountry').value != null && personalDetailForm.get('PermitOtherCountry').value != ''">
                               <div class="col-md-3">Work Permit for Other Countries : </div>
                               <div class="col-md-9">{{personalDetailForm.get("PermitOtherCountry").value}}</div>
                             </div>
                           </div>
-                          <ng-container *ngIf="langauge.controls.length > 0 && langauge.controls[0].get('Language').value != null && langauge.controls[0].get('Language').value != ''">
+                          <ng-container
+                            *ngIf="langauge.controls.length > 0 && langauge.controls[0].get('Language').value != null && langauge.controls[0].get('Language').value != ''">
                             <div class="mt-3 mb-3" formArrayName="Languages">
                               <h4 class="fw-bold">Language</h4>
                               <table class="table table-striped">
@@ -787,21 +847,28 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <ng-container *ngFor="let item of langauge.controls; let e = index" [formGroupName]="e">
+                                  <ng-container *ngFor="let item of langauge.controls; let e = index"
+                                    [formGroupName]="e">
                                     <tr>
                                       <td>{{item.get("Language").value}}</td>
                                       <td>{{item.get("ProficiencyLanguage").value}}</td>
                                       <td>
-                                        <span *ngIf="item.get('LanguageRead').value == true"><i class="fa-regular fa-square-check text-success"></i></span>
-                                        <span *ngIf="item.get('LanguageRead').value == false"><i class="fa-solid fa-xmark text-danger"></i></span>
+                                        <span *ngIf="item.get('LanguageRead').value == true"><i
+                                            class="fa-regular fa-square-check text-success"></i></span>
+                                        <span *ngIf="item.get('LanguageRead').value == false"><i
+                                            class="fa-solid fa-xmark text-danger"></i></span>
                                       </td>
                                       <td>
-                                        <span *ngIf="item.get('LanguageWrite').value == true"><i class="fa-regular fa-square-check text-success"></i></span>
-                                        <span *ngIf="item.get('LanguageWrite').value == false"><i class="fa-solid fa-xmark text-danger"></i></span>
+                                        <span *ngIf="item.get('LanguageWrite').value == true"><i
+                                            class="fa-regular fa-square-check text-success"></i></span>
+                                        <span *ngIf="item.get('LanguageWrite').value == false"><i
+                                            class="fa-solid fa-xmark text-danger"></i></span>
                                       </td>
                                       <td>
-                                        <span *ngIf="item.get('LanguageSpeak').value == true"><i class="fa-regular fa-square-check text-success"></i></span>
-                                        <span *ngIf="item.get('LanguageSpeak').value == false"><i class="fa-solid fa-xmark text-danger"></i></span>
+                                        <span *ngIf="item.get('LanguageSpeak').value == true"><i
+                                            class="fa-regular fa-square-check text-success"></i></span>
+                                        <span *ngIf="item.get('LanguageSpeak').value == false"><i
+                                            class="fa-solid fa-xmark text-danger"></i></span>
                                       </td>
                                     </tr>
                                   </ng-container>
@@ -820,18 +887,21 @@
                 <a ngbNavLink (click)="loadEmpExistData()">Exist Org</a>
                 <ng-template ngbNavContent>
                   <div class="alert alert-primary" role="alert">
-                    This will trigger your job resignation process! It is always advisable to talk your management first before coming here!
+                    This will trigger your job resignation process! It is always advisable to talk your management first
+                    before coming here!
                   </div>
                   <form [formGroup]="existOrgForm" *ngIf="existOrgForm">
                     <div class="mt-3">
                       <label class="form-label">Did you have discuss with manager on your decision to exist?</label>
                       <div class="col-md-12">
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="IsDiscussWithManager" formControlName="IsDiscussWithManager" id="IsDiscussWithManager1" [value]="true">
+                          <input class="form-check-input" type="radio" name="IsDiscussWithManager"
+                            formControlName="IsDiscussWithManager" id="IsDiscussWithManager1" [value]="true">
                           <label class="form-check-label" for="IsDiscussWithManager1">Yes</label>
                         </div>
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="IsDiscussWithManager" formControlName="IsDiscussWithManager" id="IsDiscussWithManager2" [value]="false">
+                          <input class="form-check-input" type="radio" name="IsDiscussWithManager"
+                            formControlName="IsDiscussWithManager" id="IsDiscussWithManager2" [value]="false">
                           <label class="form-check-label" for="IsDiscussWithManager2">No</label>
                         </div>
                       </div>
@@ -839,7 +909,7 @@
                     <div class="mt-3">
                       <label class="form-label">Please select a reason for resignation</label>
                       <select class="form-select" formControlName="EmployeeReason"
-                      [ngClass]="{'error-field': submitted && f.EmployeeReason.errors !== null && f.EmployeeReason.errors.required}">
+                        [ngClass]="{'error-field': submitted && f.EmployeeReason.errors !== null && f.EmployeeReason.errors.required}">
                         <option [value]="null">Select Reason</option>
                         <option value="Explore Other Careers">Explore Other Careers</option>
                         <option value="Other">Other</option>
@@ -850,18 +920,21 @@
                     </div>
                     <div class="mt-3">
                       <label class="form-label">Comment</label>
-                      <textarea class="form-control exist-comment" formControlName="EmployeeComment" rows="5" [readOnly]="f.EmployeeNoticePeriodId.value > 0"
-                      [ngClass]="{'error-field': submitted && f.EmployeeComment.errors !== null && f.EmployeeComment.errors.required}"></textarea>
+                      <textarea class="form-control exist-comment" formControlName="EmployeeComment" rows="5"
+                        [readOnly]="f.EmployeeNoticePeriodId.value > 0"
+                        [ngClass]="{'error-field': submitted && f.EmployeeComment.errors !== null && f.EmployeeComment.errors.required}"></textarea>
                     </div>
                     <div class="alert alert-primary mt-3" role="alert">
-                      Note: As per the company policy, you are required to serve notice period of {{companyNoticePeriodDays}} days, till {{noticePeriodEndOn | date}}.
+                      Note: As per the company policy, you are required to serve notice period of
+                      {{companyNoticePeriodDays}} days, till {{noticePeriodEndOn | date}}.
                     </div>
                     <div class="text-end" *ngIf="existOrgForm.controls.EmployeeNoticePeriodId.value == 0">
                       <button class="btn btn-dark me-3" (click)="changeMyMind()">No, Changed my mind</button>
-                      <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitResignation()"><i
-                        class="pe-2 fa-solid" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-floppy-disk': !isLoading}"></i>
-                      {{ isLoading ? 'Wait' : 'Submit Resignation' }}
-                    </button>
+                      <button type="button" [disabled]="isLoading" class="btn btn-primary-c"
+                        (click)="submitResignation()"><i class="pe-2 fa-solid"
+                          [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-floppy-disk': !isLoading}"></i>
+                        {{ isLoading ? 'Wait' : 'Submit Resignation' }}
+                      </button>
                     </div>
                   </form>
                 </ng-template>
@@ -921,7 +994,7 @@
         Tell recruiters what you know or what you are known for e.g. Direct Marketing, Oracle, Java etc. We will send
         you job recommendations based on these skills. Each skill is separated by a comma.
       </p>
-      <div class="modal-body" >
+      <div class="modal-body">
         <h5>Skills</h5>
         <div class="card px-3">
           <div class="skill-popup-box ">
@@ -935,8 +1008,8 @@
                           <span class=" text-spannderline">{{skills.get("Language").value}}</span>
                           <div class="ms-3 d-inline">
                             <a href="javascript:void(0)" class="pe-3" (click)="editItSkill(skills)">
-                                  <i class="fa-solid fa-pencil text-primary"></i>
-                                </a>
+                              <i class="fa-solid fa-pencil text-primary"></i>
+                            </a>
                             <a href="javascript:void(0)" (click)="deleteItSkill(skills)">
                               <i class="fa-solid fa-xmark text-dark"></i>
                             </a>
@@ -952,21 +1025,28 @@
           <div class="col-md-12 row my-4">
             <div class="col-md-3">
               <label class="form-label">Language</label>
-              <input type="text" class="form-control" maxlength="40" (keyup)="checkInputValue($event)" placeholder="Enter your area of Expertise/Specialization" oninput="this.value = this.value.toUpperCase()"
-                [(ngModel)]="ExptLanguage" name="ExptLanguage">
+              <input type="text" class="form-control" maxlength="40" (keyup)="checkInputValue($event)"
+                placeholder="Enter your area of Expertise/Specialization"
+                oninput="this.value = this.value.toUpperCase()" [(ngModel)]="ExptLanguage" name="ExptLanguage">
             </div>
             <div class="col-md-2">
               <label class="form-label">Version</label>
-              <input type="text" class="form-control" maxlength="8"onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46" placeholder="Version" (keyup)="checkInputValue($event)" [(ngModel)]="ExptVersion" name="ExptVersion">
+              <input type="text" class="form-control" maxlength="8"
+                onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
+                placeholder="Version" (keyup)="checkInputValue($event)" [(ngModel)]="ExptVersion" name="ExptVersion">
             </div>
             <div class="row col-md-4">
               <div class="col-md-6">
                 <label class="form-label">Exp in Yrs</label>
-                <input type="text" class="form-control" OnlyNumber="2" placeholder="Experience" (keyup)="checkInputValue($event)" name="ExptinYrs" [(ngModel)]="ExptinYrs" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                <input type="text" class="form-control" OnlyNumber="2" placeholder="Experience"
+                  (keyup)="checkInputValue($event)" name="ExptinYrs" [(ngModel)]="ExptinYrs"
+                  onkeypress="return event.charCode >=48 && event.charCode <=57">
               </div>
               <div class="col-md-6">
                 <label class="form-label">Exp in Mo</label>
-                <input type="text" class="form-control" OnlyNumber="2" placeholder="Experience" (keyup)="checkInputValue($event)" name="ExptinMonths" [(ngModel)]="ExptinMonths" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                <input type="text" class="form-control" OnlyNumber="2" placeholder="Experience"
+                  (keyup)="checkInputValue($event)" name="ExptinMonths" [(ngModel)]="ExptinMonths"
+                  onkeypress="return event.charCode >=48 && event.charCode <=57">
               </div>
             </div>
             <div class="col-md-3">
@@ -974,9 +1054,11 @@
               <form class="row row-cols-sm-auto">
                 <div class="col-12">
                   <div class="input-group">
-                    <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onkeyskillDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
-                           name="dp" [(ngModel)]="keySkilldate" ngbDatepicker #kd="ngbDatepicker">
-                    <button class="btn btn-outline-secondary calendar" (click)="kd.toggle()" type="button"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
+                    <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="onkeyskillDateSelection($event)"
+                      [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}" name="dp"
+                      [(ngModel)]="keySkilldate" ngbDatepicker #kd="ngbDatepicker">
+                    <button class="btn btn-outline-secondary calendar" (click)="kd.toggle()" type="button"><i
+                        class="fa-regular fa-calendar-days fa-lg"></i></button>
                   </div>
                 </div>
               </form>
@@ -1019,13 +1101,15 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Organization </label>
-                  <input class="form-control" placeholder="Organization name" maxlength="50" name="Organization" oninput="this.value = this.value.toUpperCase()"
-                    [(ngModel)]="editEmploymentModal.Organization" (keyup)="checkInputValue($event)"/>
+                  <input class="form-control" placeholder="Organization name" maxlength="50" name="Organization"
+                    oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editEmploymentModal.Organization"
+                    (keyup)="checkInputValue($event)" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Designation </label>
-                  <input class="form-control" placeholder="Enter Designation" maxlength="50" name="Designation" oninput="this.value = this.value.toUpperCase()"
-                    [(ngModel)]="editEmploymentModal.Designation" (keyup)="checkInputValue($event)"/>
+                  <input class="form-control" placeholder="Enter Designation" maxlength="50" name="Designation"
+                    oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editEmploymentModal.Designation"
+                    (keyup)="checkInputValue($event)" />
                 </div>
               </div>
               <div class="col-md-6">
@@ -1033,7 +1117,8 @@
                   <label class="form-label">Current Salary </label>
                   <div class="row">
                     <div class="col-md-6">
-                      <input class="form-control" OnlyNumber="9" name="CurrentSalary" [(ngModel)]="editEmploymentModal.CurrentSalary">
+                      <input class="form-control" OnlyNumber="9" name="CurrentSalary"
+                        [(ngModel)]="editEmploymentModal.CurrentSalary">
                     </div>
                     <div class="col-md-6">
                       <select name="CurrencyType" class="form-select" [(ngModel)]="editEmploymentModal.CurrencyType">
@@ -1096,8 +1181,9 @@
                 <fieldset class="m-0 p-0 border-0">
                   <div class="mb-3">
                     <label class="form-label">Describe your Job Profile</label>
-                    <textarea name="JobProfile" rows="5" placeholder="Type here ....." class="form-control" maxlength="400"
-                      (keydown)="countNumberofCharacter($event)" oninput="this.value = this.value.toUpperCase()"
+                    <textarea name="JobProfile" rows="5" placeholder="Type here ....." class="form-control"
+                      maxlength="400" (keydown)="countNumberofCharacter($event)"
+                      oninput="this.value = this.value.toUpperCase()"
                       [(ngModel)]="editEmploymentModal.JobProfile"></textarea>
                     <small class="float-end">{{remainingNumber}} Character(s) Left</small>
                   </div>
@@ -1106,7 +1192,8 @@
                     <label class="form-label">Top 5 key skills that you think are important for current
                       employment</label>
                     <textarea name="Experties" rows="5" maxlength="400"
-                      placeholder="Enter your area of Experties/Specialization" class="form-control" oninput="this.value = this.value.toUpperCase()"
+                      placeholder="Enter your area of Experties/Specialization" class="form-control"
+                      oninput="this.value = this.value.toUpperCase()"
                       [(ngModel)]="editEmploymentModal.Experties"></textarea>
                   </div>
                 </fieldset>
@@ -1175,13 +1262,15 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Education </label>
-                  <input class="form-control" placeholder="Education" (keyup)="checkInputValue($event)" name="Degree_Name" oninput="this.value = this.value.toUpperCase()"
-                    [(ngModel)]="editEducationModal.Degree_Name" maxlength="80"/>
+                  <input class="form-control" placeholder="Education" (keyup)="checkInputValue($event)"
+                    name="Degree_Name" oninput="this.value = this.value.toUpperCase()"
+                    [(ngModel)]="editEducationModal.Degree_Name" maxlength="80" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Specialization </label>
-                  <input class="form-control " placeholder="Specialization" name="Specialization" oninput="this.value = this.value.toUpperCase()"
-                    [(ngModel)]="editEducationModal.Specialization" maxlength="80"/>
+                  <input class="form-control " placeholder="Specialization" name="Specialization"
+                    oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editEducationModal.Specialization"
+                    maxlength="80" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Course Type</label>
@@ -1197,13 +1286,15 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label class="form-label">Course </label>
-                  <input class="form-control " placeholder="Course" name="Course" oninput="this.value = this.value.toUpperCase()" maxlength="80"
+                  <input class="form-control " placeholder="Course" name="Course"
+                    oninput="this.value = this.value.toUpperCase()" maxlength="80"
                     [(ngModel)]="editEducationModal.Course" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">University </label>
-                  <input class="form-control " (keyup)="checkInputValue($event)" placeholder="University Name" name="University_Name" oninput="this.value = this.value.toUpperCase()"
-                    [(ngModel)]="editEducationModal.University_Name" maxlength="80"/>
+                  <input class="form-control " (keyup)="checkInputValue($event)" placeholder="University Name"
+                    name="University_Name" oninput="this.value = this.value.toUpperCase()"
+                    [(ngModel)]="editEducationModal.University_Name" maxlength="80" />
                 </div>
                 <div class="mb-3 row">
                   <div class="col-md-6">
@@ -1214,8 +1305,7 @@
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">Grading System </label>
-                      <select name="Grading_System" class="form-select"
-                        [(ngModel)]="editEducationModal.Grading_System">
+                      <select name="Grading_System" class="form-select" [(ngModel)]="editEducationModal.Grading_System">
                         <option value="" disabled>Select grading system</option>
                         <option value="Scale10GradingSystem">Scale 10 Grading System</option>
                         <option value="Scale4GradingSystem">Scale 4 Grading System</option>
@@ -1257,8 +1347,9 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">Project Title *</label>
-                <input class="form-control" placeholder="Enter Project Title" maxlength="40" oninput="this.value = this.value.toUpperCase()"
-                  [(ngModel)]="editProjectModal.ProjectTitle" name="ProjectTitle" (keyup)="checkInputValue($event)"/>
+                <input class="form-control" placeholder="Enter Project Title" maxlength="40"
+                  oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editProjectModal.ProjectTitle"
+                  name="ProjectTitle" (keyup)="checkInputValue($event)" />
               </div>
               <div class="mb-3">
                 <label class="form-label">Project Duration *</label>
@@ -1280,15 +1371,15 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Technology Stack</label>
-                <input class="form-control" placeholder="Technology Stack" maxlength="80" name="TechnalogyStack" oninput="this.value = this.value.toUpperCase()"
-                  [(ngModel)]="editProjectModal.TechnalogyStack" />
+                <input class="form-control" placeholder="Technology Stack" maxlength="80" name="TechnalogyStack"
+                  oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editProjectModal.TechnalogyStack" />
               </div>
             </div>
             <div class="col-md-6">
               <div class="mb-3">
                 <label class="form-label">Tag project to client.</label>
-                <input class="form-control " placeholder="Select Employment/Education" maxlength="40" name="ClientName" oninput="this.value = this.value.toUpperCase()"
-                  [(ngModel)]="editProjectModal.ClientName" />
+                <input class="form-control " placeholder="Select Employment/Education" maxlength="40" name="ClientName"
+                  oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editProjectModal.ClientName" />
               </div>
               <div class="mb-3">
                 <label class="form-label">Project Status *</label>
@@ -1300,7 +1391,8 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Roles and Responsibility *</label>
-                <input class="form-control" placeholder="Roles and Responsibility" maxlength="80" name="RolesResponsibility" oninput="this.value = this.value.toUpperCase()"
+                <input class="form-control" placeholder="Roles and Responsibility" maxlength="80"
+                  name="RolesResponsibility" oninput="this.value = this.value.toUpperCase()"
                   [(ngModel)]="editProjectModal.RolesResponsibility" />
               </div>
             </div>
@@ -1309,7 +1401,9 @@
               <div class="mb-3">
                 <label class="form-label">Project Description</label>
                 <textarea row="10" placeholder="Type here ....." name="ProjectDetails" maxlength="4000"
-                  class="form-control  Detail-Project-txtarea" (keyup)="checkInputValue($event)" [(ngModel)]="editProjectModal.ProjectDetails" oninput="this.value = this.value.toUpperCase()"></textarea>
+                  class="form-control  Detail-Project-txtarea" (keyup)="checkInputValue($event)"
+                  [(ngModel)]="editProjectModal.ProjectDetails"
+                  oninput="this.value = this.value.toUpperCase()"></textarea>
               </div>
             </div>
           </form>
@@ -1369,8 +1463,9 @@
       <div class="modal-body" *ngIf="isEditOnlineProfile">
         <ng-container class="col-md-6 mt-2">
           <div>
-            <input type=" text" placeholder="Add link to Online profiles (e.g. Linkedin, Facebook etc.)." oninput="this.value = this.value.toUpperCase()"
-              [(ngModel)]="siteURL" (keyup)="checkInputValue($event)" class="mb-2 form-control" name="OnlineProfile">
+            <input type=" text" placeholder="Add link to Online profiles (e.g. Linkedin, Facebook etc.)."
+              oninput="this.value = this.value.toUpperCase()" [(ngModel)]="siteURL" (keyup)="checkInputValue($event)"
+              class="mb-2 form-control" name="OnlineProfile">
           </div>
         </ng-container>
       </div>
@@ -1429,8 +1524,9 @@
       <div class="modal-body" *ngIf="isEditWorkSample">
         <ng-container class="mt-2">
           <div>
-            <input type=" text" placeholder="Add link to your Projects (e.g. Github links etc.)." [(ngModel)]="siteURL" oninput="this.value = this.value.toUpperCase()"
-              class="mb-2 form-control" name="WorkSample" (keyup)="checkInputValue($event)">
+            <input type=" text" placeholder="Add link to your Projects (e.g. Github links etc.)." [(ngModel)]="siteURL"
+              oninput="this.value = this.value.toUpperCase()" class="mb-2 form-control" name="WorkSample"
+              (keyup)="checkInputValue($event)">
           </div>
         </ng-container>
       </div>
@@ -1487,8 +1583,9 @@
       <div class="modal-body" *ngIf="isEditResearch">
         <ng-container class="mt-2">
           <div>
-            <input type=" text" placeholder="Add links to your Online publications." [(ngModel)]="siteURL" oninput="this.value = this.value.toUpperCase()"
-              class="mb-2 form-control" (keyup)="checkInputValue($event)" name="Research">
+            <input type=" text" placeholder="Add links to your Online publications." [(ngModel)]="siteURL"
+              oninput="this.value = this.value.toUpperCase()" class="mb-2 form-control"
+              (keyup)="checkInputValue($event)" name="Research">
           </div>
         </ng-container>
       </div>
@@ -1545,8 +1642,9 @@
         <ng-container class="col-md-6 mt-2">
           <form autocomplete="off">
             <div>
-              <input type=" text" placeholder="Add details of Certifications you have achieved/completed." oninput="this.value = this.value.toUpperCase()"
-                class="mb-2 form-control" (click)="checkInputValue($event)" [(ngModel)]="siteURL" name="Certification">
+              <input type=" text" placeholder="Add details of Certifications you have achieved/completed."
+                oninput="this.value = this.value.toUpperCase()" class="mb-2 form-control"
+                (click)="checkInputValue($event)" [(ngModel)]="siteURL" name="Certification">
             </div>
           </form>
         </ng-container>
@@ -1603,7 +1701,8 @@
       <div class="modal-body" *ngIf="isEditPresentation">
         <ng-container class="mt-2">
           <div>
-            <input type=" text" [(ngModel)]="siteURL" name="Presentation" oninput="this.value = this.value.toUpperCase()"
+            <input type=" text" [(ngModel)]="siteURL" name="Presentation"
+              oninput="this.value = this.value.toUpperCase()"
               placeholder="Add links to your Online presentations (e.g. Slideshare presentation links etc.)."
               (click)="checkInputValue($event)" class="mb-2 form-control">
           </div>
@@ -1661,8 +1760,9 @@
       <div class="modal-body" *ngIf="isEditPatent">
         <ng-container class="col-md-6 mt-2">
           <div>
-            <input type=" text" placeholder="Add details of Patents you have filed." class="mb-2 form-control" oninput="this.value = this.value.toUpperCase()"
-              [(ngModel)]="siteURL" name="Patent" (click)="checkInputValue($event)">
+            <input type=" text" placeholder="Add details of Patents you have filed." class="mb-2 form-control"
+              oninput="this.value = this.value.toUpperCase()" [(ngModel)]="siteURL" name="Patent"
+              (click)="checkInputValue($event)">
           </div>
         </ng-container>
       </div>
@@ -1726,13 +1826,14 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Industry</label>
-              <input class="form-control " maxlength="40" placeholder="Industry" name="Industry" oninput="this.value = this.value.toUpperCase()"
-                [(ngModel)]="editCarrerProfileModal.Industry" (keyup)="checkInputValue($event)"/>
+              <input class="form-control " maxlength="40" placeholder="Industry" name="Industry"
+                oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editCarrerProfileModal.Industry"
+                (keyup)="checkInputValue($event)" />
             </div>
             <div class="mb-3">
               <label class="form-label">Role Category</label>
-              <input class="form-control " maxlength="40" placeholder="RoleCategory" name="RoleCategory" oninput="this.value = this.value.toUpperCase()"
-                [(ngModel)]="editCarrerProfileModal.RoleCategory" />
+              <input class="form-control " maxlength="40" placeholder="RoleCategory" name="RoleCategory"
+                oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editCarrerProfileModal.RoleCategory" />
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
@@ -1758,7 +1859,9 @@
               <label class="form-label">Expected Salary </label>
               <div class="row">
                 <div class="col-md-6">
-                  <input class="form-control" OnlyNumber="9" name="ExpectedSalary" [(ngModel)]="editCarrerProfileModal.ExpectedSalary" onkeypress="return event.charCode >=48 && event.charCode <=57">
+                  <input class="form-control" OnlyNumber="9" name="ExpectedSalary"
+                    [(ngModel)]="editCarrerProfileModal.ExpectedSalary"
+                    onkeypress="return event.charCode >=48 && event.charCode <=57">
                 </div>
                 <div class="col-md-6">
                   <select name="CurrencyType" class="form-select" [(ngModel)]="editCarrerProfileModal.CurrencyType">
@@ -1773,12 +1876,13 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Department</label>
-              <input class="form-control " maxlength="40" placeholder="Department" name="Department" oninput="this.value = this.value.toUpperCase()"
-                [(ngModel)]="editCarrerProfileModal.Department" />
+              <input class="form-control " maxlength="40" placeholder="Department" name="Department"
+                oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editCarrerProfileModal.Department" />
             </div>
             <div class="mb-3">
               <label class="form-label">Job Role</label>
-              <input class="form-control " maxlength="40" placeholder="Role" name="Role" [(ngModel)]="editCarrerProfileModal.Role" oninput="this.value = this.value.toUpperCase()"/>
+              <input class="form-control " maxlength="40" placeholder="Role" name="Role"
+                [(ngModel)]="editCarrerProfileModal.Role" oninput="this.value = this.value.toUpperCase()" />
             </div>
             <div class="mb-3">
               <label class="form-label">Preferred Shift</label>
@@ -1792,7 +1896,8 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Preferred Work Location (Max 3)</label>
-              <input class="form-control " maxlength="60" placeholder="Preferred Work Location" name="PreferredWorkLocation" oninput="this.value = this.value.toUpperCase()"
+              <input class="form-control " maxlength="60" placeholder="Preferred Work Location"
+                name="PreferredWorkLocation" oninput="this.value = this.value.toUpperCase()"
                 [(ngModel)]="editCarrerProfileModal.PreferredWorkLocation" />
             </div>
           </div>
@@ -1829,7 +1934,8 @@
             <form class="form-inline">
               <div class="form-group w-100">
                 <div class="input-group w-100">
-                  <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" readonly [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
+                  <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" readonly
+                    [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
                     (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker" required>
                   <div class="input-group-append">
                     <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
@@ -1861,23 +1967,23 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Permanent Address </label>
-            <input class="form-control" maxlength="100" placeholder="Full Address" name="Address" oninput="this.value = this.value.toUpperCase()"
-              [(ngModel)]="editPersonalDetailModal.Address" />
+            <input class="form-control" maxlength="100" placeholder="Full Address" name="Address"
+              oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editPersonalDetailModal.Address" />
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Home Town</label>
-            <input class="form-control" placeholder="Home Town" maxlength="40" name="HomeTown" oninput="this.value = this.value.toUpperCase()"
-              [(ngModel)]="editPersonalDetailModal.HomeTown" />
+            <input class="form-control" placeholder="Home Town" maxlength="40" name="HomeTown"
+              oninput="this.value = this.value.toUpperCase()" [(ngModel)]="editPersonalDetailModal.HomeTown" />
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Pin Code</label>
-            <input class="form-control" placeholder="Pin Code" OnlyNumber="6" name="Pin Code" type="number" onkeypress="return event.charCode >=48 && event.charCode <=57"
+            <input class="form-control" placeholder="Pin Code" OnlyNumber="6" name="Pin Code" type="number"
+              onkeypress="return event.charCode >=48 && event.charCode <=57"
               [(ngModel)]="editPersonalDetailModal.PinCode" />
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Marital Status </label>
-            <select class="form-select" [(ngModel)]="editPersonalDetailModal.MaritalStatus"
-              name="MaritalStatus">
+            <select class="form-select" [(ngModel)]="editPersonalDetailModal.MaritalStatus" name="MaritalStatus">
               <option value=null selected disabled>Select Marital Status</option>
               <option value="Single">Single/Unmarried</option>
               <option value="Married">Married</option>
@@ -1931,7 +2037,8 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Work Permit for Other Countries</label>
-            <input class="form-control" placeholder="You can choose 3 countries at max" maxlength="40" name="PermitOtherCountry" oninput="this.value = this.value.toUpperCase()"
+            <input class="form-control" placeholder="You can choose 3 countries at max" maxlength="40"
+              name="PermitOtherCountry" oninput="this.value = this.value.toUpperCase()"
               [(ngModel)]="editPersonalDetailModal.PermitOtherCountry" />
           </div>
         </div>
@@ -1942,7 +2049,8 @@
               [formGroupName]="e">
               <div class="col-md-6 mb-3 ps-0">
                 <label class="form-label">Language </label>
-                <select formControlName="Language" (change)="checkInputValue($event)" class="form-select" name="Language">
+                <select formControlName="Language" (change)="checkInputValue($event)" class="form-select"
+                  name="Language">
                   <option value="" selected disabled>Select Language</option>
                   <option [value]="lang" *ngFor="let lang of lanugages">{{lang}}</option>
                 </select>
@@ -1963,7 +2071,8 @@
               </div>
               <div class="col-md-6 mb-3 pe-0">
                 <label class="form-label">Proficiency</label>
-                <select name="" id="" (change)="checkInputValue($event)" class="form-select" formControlName="ProficiencyLanguage" name="ProficiencyLanguage">
+                <select name="" id="" (change)="checkInputValue($event)" class="form-select"
+                  formControlName="ProficiencyLanguage" name="ProficiencyLanguage">
                   <option value="" disabled>Select option</option>
                   <option value="Beginner">Beginner</option>
                   <option value="Proficient">Proficient</option>

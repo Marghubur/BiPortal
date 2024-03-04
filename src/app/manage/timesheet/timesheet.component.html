@@ -1,54 +1,61 @@
 <div class="main-container">
-  <form autocomplete="off">
-    <div class="x_panel col-md-12">
-      <div [ngClass]="{'preload': !isEmployeesReady}">
-        <div class="col-12 row m-0 p-0 skeleton align-items-center justify-content-between">
+
+  <div class="d-flex flex-column justify-content-center col-12 p-0 m-0">
+    <div [ngClass]="{'preload': !isEmployeesReady}">
+      <div class="content-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="col">
+            <div class="px-1">
+              <app-breadcrums [title]="'Timesheet'"></app-breadcrums>
+            </div>
+          </div>
+
           <ng-container *ngIf="isEmployeesReady">
-            <div class="x_header">
-              <div class="d-flex justify-content-between mt-3 align-items-center">
-                <div class="col">
-                  <div class="px-1">
-                    <app-breadcrums [title]="'Timesheet'"></app-breadcrums>
-                  </div>
-                </div>
-                <div class="col row justify-content-end align-items-center">
-                  <div class="col-md-3" *ngIf="!isRedirected">
-                    <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
-                      [ngModelOptions]="{standalone: true}">
-                    </bot-autocomplete>
-                  </div>
-                  <div class="col-md-3 p-0 m-0">
-                    <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" (OnSelect)="presentWeek()" [ngModelOptions]="{standalone: true}">
-                    </bot-autocomplete>
-                  </div>
-                  <div class="col-md-2">
-                    <select class="form-select" [disabled]="clientId == 0" (change)="filterTimesheet()" [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
-                      <option value="" selected disabled>Select by status</option>
-                      <option value="2">Pending</option>
-                      <option value="8">Submitted</option>
-                      <option value="13">Save</option>
-                      <option value="5">Rejected</option>
-                      <option value="9">Approved</option>
-                    </select>
-                  </div>
-                  <div class="col-md-1">
-                    <button class="btn  btn-primary-c" (click)="advanceFilterPopUp()">
-                      <i class="fa-solid fa-filter"></i>
-                    </button>
-                  </div>
-                  <div class="col-md-1">
-                    <button class="btn  btn-danger" (click)="pageReload()">
-                      <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-                    </button>
-                  </div>
-                </div>
+            <div class="col row justify-content-end align-items-center">
+              <div class="col-md-3" *ngIf="!isRedirected">
+                <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
+                  [ngModelOptions]="{standalone: true}">
+                </bot-autocomplete>
+              </div>
+              <div class="col-md-3 p-0 m-0">
+                <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" (OnSelect)="presentWeek()"
+                  [ngModelOptions]="{standalone: true}">
+                </bot-autocomplete>
+              </div>
+              <div class="col-md-2">
+                <select class="form-select" [disabled]="clientId == 0" (change)="filterTimesheet()"
+                  [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
+                  <option value="" selected disabled>Select by status</option>
+                  <option value="2">Pending</option>
+                  <option value="8">Submitted</option>
+                  <option value="13">Save</option>
+                  <option value="5">Rejected</option>
+                  <option value="9">Approved</option>
+                </select>
+              </div>
+              <div class="col-md-1">
+                <button class="btn  btn-primary-c" (click)="advanceFilterPopUp()">
+                  <i class="fa-solid fa-filter"></i>
+                </button>
+              </div>
+              <div class="col-md-1">
+                <button class="btn  btn-danger" (click)="pageReload()">
+                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+                    title="Reload this page"></i>
+                </button>
               </div>
             </div>
           </ng-container>
+
         </div>
       </div>
+    </div>
+  </div>
+
+  <form autocomplete="off">
+    <div class="x_panel">
       <ng-container *ngIf="isEmployeesReady">
-        <ng-container  *ngIf="isFormReady && clientId > 0">
+        <ng-container *ngIf="isFormReady && clientId > 0">
           <table class="table-middle table table-hover px-3">
             <thead>
               <tr>
@@ -57,7 +64,7 @@
                 <th class="">Status</th>
               </tr>
             </thead>
-            <tbody >
+            <tbody>
               <tr *ngFor="let item of dailyTimesheetDetails; let i = index">
                 <ng-container *ngIf="dailyTimesheetDetails.length > 0">
                   <td class="py-3 custom-border ps-3">
@@ -68,21 +75,32 @@
                       <span class="fw-semibold">{{clientName}}</span>
                     </div>
                     <a href="javascript:void(0)" class="text-dark" (click)="viewTimeSheet(item)">
-                      <span class="fw-bold pe-1" ><i class="fa-solid fa-calendar-days pe-2"></i>Date From: </span>{{item.TimesheetStartDate | date}}
+                      <span class="fw-bold pe-1"><i class="fa-solid fa-calendar-days pe-2"></i>Date From:
+                      </span>{{item.TimesheetStartDate | date}}
                       <span class="fw-bold px-1">To</span>{{item.TimesheetEndDate | date}}
                     </a>
                   </td>
-                  <td  class="py-3">
-                    <p class=""><span class="fw-semibold">Expected Burned Minutes: </span> {{item.ExpectedBurnedMinutes}} minutes</p>
-                    <p class="mb-0"><span class="fw-semibold">Actual Burned Minutes: </span> {{item.ActualBurnedMinutes}} minutes</p>
+                  <td class="py-3">
+                    <p class=""><span class="fw-semibold">Expected Burned Minutes: </span>
+                      {{item.ExpectedBurnedMinutes}} minutes</p>
+                    <p class="mb-0"><span class="fw-semibold">Actual Burned Minutes: </span>
+                      {{item.ActualBurnedMinutes}} minutes</p>
                   </td>
                   <td class="py-3">
-                    <span *ngIf="item.TimesheetStatus == 2"><i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>Penidng</span>
-                    <span *ngIf="item.TimesheetStatus == 8"><i class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i> Submitted</span>
-                    <span *ngIf="item.TimesheetStatus == 9"><i class="fa-regular fa-square-check text-success pt-1 pb-1 pe-2" aria-hidden="true"></i> Approved</span>
-                    <span *ngIf="item.TimesheetStatus == 6 "><i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Not Submitted</span>
-                    <span *ngIf="item.TimesheetStatus == 5 "><i class="fa-solid fa-ban text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i> Rejected</span>
-                    <span class="text-danger"  *ngIf="item.TimesheetStatus == -1">
+                    <span *ngIf="item.TimesheetStatus == 2"><i
+                        class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2"
+                        aria-hidden="true"></i>Penidng</span>
+                    <span *ngIf="item.TimesheetStatus == 8"><i
+                        class="fa-solid fa-exclamation text-warning pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                      Submitted</span>
+                    <span *ngIf="item.TimesheetStatus == 9"><i
+                        class="fa-regular fa-square-check text-success pt-1 pb-1 pe-2" aria-hidden="true"></i>
+                      Approved</span>
+                    <span *ngIf="item.TimesheetStatus == 6 "><i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2"
+                        aria-hidden="true"></i> Not Submitted</span>
+                    <span *ngIf="item.TimesheetStatus == 5 "><i class="fa-solid fa-ban text-danger pt-1 pb-1 pe-2"
+                        aria-hidden="true"></i> Rejected</span>
+                    <span class="text-danger" *ngIf="item.TimesheetStatus == -1">
                       <i class="fa-solid fa-xmark text-danger pt-1 pb-1 pe-2" aria-hidden="true"></i>
                       Readonly
                     </span>
@@ -102,12 +120,10 @@
           </table>
         </ng-container>
         <ng-container *ngIf="!isFormReady && clientId == 0">
-          <div class="x_panel d-flex flex-direction-column justify-content-center">
-            <div class="x_content py-5">
-              <p  class="h3 text-muted text-center py-5 my-5">
-                Please select employer to get timesheet.
-              </p>
-            </div>
+          <div class="x_content py-5">
+            <p class="h3 text-muted text-center py-5 my-5">
+              Please select employer to get timesheet.
+            </p>
           </div>
         </ng-container>
       </ng-container>

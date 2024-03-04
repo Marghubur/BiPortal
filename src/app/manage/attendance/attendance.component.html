@@ -1,43 +1,44 @@
 <div class="main-container">
-  <div class="x_panel">
-    <form autocomplete="off">
-      <div class="col-12 row m-0 p-0 mb-2">
-        <div class="x_header">
-          <div class="d-flex justify-content-between mt-3 align-items-center">
-            <div class="col-4">
-              <app-breadcrums [title]="'Attendance'"></app-breadcrums>
+  <div class="d-flex flex-column justify-content-center col-12 p-0 m-0">
+    <div class="content-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="col-4">
+          <app-breadcrums [title]="'Manage your attendance'"></app-breadcrums>
+        </div>
+        <div class="col-auto row align-items-center">
+          <div class="col-auto row justify-content-end align-items-center" *ngIf="isEmployeesReady && isAdmin">
+            <div class="col-auto">
+              <input type="checkbox" class="form-check-input" [checked]="isMyAttendance" (click)="viewAttendance()">
+              <span class="ps-2">My attendance</span>
             </div>
-            <div  class="col-auto row align-items-center">
-              <div class="col-auto row justify-content-end align-items-center" *ngIf="isEmployeesReady && isAdmin">
-                <div class="col-auto">
-                  <input type="checkbox" class="form-check-input" [checked]="isMyAttendance" (click)="viewAttendance()">
-                  <span class="ps-2">My attendance</span>
-                </div>
-                <div class="col-auto">
-                  <input type="checkbox" class="form-check-input" [checked]="!isMyAttendance" (click)="viewAttendance()">
-                  <span class="ps-2">View others</span>
-                </div>
-                <ng-container *ngIf="!isMyAttendance">
-                  <div class="col-md-3">
-                    <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
-                    [ngModelOptions]="{standalone: true}">
-                    </bot-autocomplete>
-                  </div>
-                  <div class="col-md-3 p-0 m-0">
-                    <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
-                    </bot-autocomplete>
-                  </div>
-                </ng-container>
-              </div>
-              <div class="col-auto">
-                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4 text-end" (click)="pageReload()">
-                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-                </a>
-              </div>
+            <div class="col-auto">
+              <input type="checkbox" class="form-check-input" [checked]="!isMyAttendance" (click)="viewAttendance()">
+              <span class="ps-2">View others</span>
             </div>
+            <ng-container *ngIf="!isMyAttendance">
+              <div class="col-md-3">
+                <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
+                  [ngModelOptions]="{standalone: true}">
+                </bot-autocomplete>
+              </div>
+              <div class="col-md-3 p-0 m-0">
+                <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" [ngModelOptions]="{standalone: true}">
+                </bot-autocomplete>
+              </div>
+            </ng-container>
+          </div>
+          <div class="col-auto">
+            <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4 text-end" (click)="pageReload()">
+              <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+                title="Reload this page"></i>
+            </a>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="x_panel">
+    <form autocomplete="off">
       <ng-container *ngIf="!isLoading && isEmployeesReady">
         <ng-container *ngIf="!isEmployeeSelected">
           <div class="my-5 py-5 d-flex align-items-center justify-content-center">
@@ -55,7 +56,8 @@
                   <div class="" *ngIf="!isLoading">
                     <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
                       <div class="col-md-4 d-flex align-items-center">
-                        <select (change)="filterByStatus()" class="form-select w-50" [(ngModel)]="filterAttendStatus" [ngModelOptions]="{standalone: true}">
+                        <select (change)="filterByStatus()" class="form-select w-50" [(ngModel)]="filterAttendStatus"
+                          [ngModelOptions]="{standalone: true}">
                           <option value=null selected disabled>Filter by status</option>
                           <option value="1">All</option>
                           <option value="0">Not Applied</option>
@@ -73,8 +75,10 @@
                       </div>
                       <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
                         <ng-container *ngFor="let month of monthName; let i = index">
-                          <input type="radio" class="btn-check" name="btnradio"  (click)="previousMonthAttendance(month.value, i)" id="btnradio{{i}}" autocomplete="off">
-                          <label class="btn btn-light month-btn" [ngClass]="{'active-month': i == activeMonth}" for="btnradio{{i}}">{{month.name}}</label>
+                          <input type="radio" class="btn-check" name="btnradio"
+                            (click)="previousMonthAttendance(month.value, i)" id="btnradio{{i}}" autocomplete="off">
+                          <label class="btn btn-light month-btn" [ngClass]="{'active-month': i == activeMonth}"
+                            for="btnradio{{i}}">{{month.name}}</label>
                         </ng-container>
                       </div>
                     </div>
@@ -93,7 +97,8 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let item of currentDays; let index = index" [ngClass]="{'leave-bg': item.IsOnLeave, 'empt-table-ht' : (item.PresentDayStatus == 3 || item.PresentDayStatus == 4 || item.IsOnLeave)}">
+                          <tr *ngFor="let item of currentDays; let index = index"
+                            [ngClass]="{'leave-bg': item.IsOnLeave, 'empt-table-ht' : (item.PresentDayStatus == 3 || item.PresentDayStatus == 4 || item.IsOnLeave)}">
                             <td class="align-middle">{{item.AttendanceDay | date: 'MMM d, EEE'}}
                             </td>
                             <td class="align-middle">
@@ -104,7 +109,8 @@
                                 <ng-container *ngIf="!item.IsOnLeave">
                                   <span class="badge text-bg-success ms-2" *ngSwitchCase="3">W-OFF</span>
                                   <span class="badge bg-secondary ms-2" *ngIf="item.PresentDayStatus == 4">HLDY</span>
-                                  <ng-container *ngIf="(item.PresentDayStatus != 3 || (item.PresentDayStatus == 4 && item.IsHoliday))">
+                                  <ng-container
+                                    *ngIf="(item.PresentDayStatus != 3 || (item.PresentDayStatus == 4 && item.IsHoliday))">
                                     <span class="badge bg-danger ms-2" *ngIf="item.WorkTypeId == 0">EMPTY</span>
                                     <span class="badge text-bg-success ms-2" *ngIf="item.WorkTypeId == 1">WFH</span>
                                     <span class="badge text-bg-success ms-2" *ngIf="item.WorkTypeId == 2">WFO</span>
@@ -112,29 +118,45 @@
                                 </ng-container>
                               </div>
                             </td>
-                            <ng-container *ngIf="(item.PresentDayStatus == 3 || (item.PresentDayStatus == 4 && !item.IsHalfDay) || (item.IsOnLeave && !item.IsHalfDay)); else viewcontainer">
+                            <ng-container
+                              *ngIf="(item.PresentDayStatus == 3 || (item.PresentDayStatus == 4 && !item.IsHalfDay) || (item.IsOnLeave && !item.IsHalfDay)); else viewcontainer">
                               <td colspan="6" class="align-middle">
-                                <div class="fw-bold text-success text-center">{{item.PresentDayStatus == 3 ? "Weekly-Off" : item.PresentDayStatus == 4 ? "Holiday" : "Leave"}} ({{item.AttendanceDay | date: 'EEEE'}})</div>
+                                <div class="fw-bold text-success text-center">{{item.PresentDayStatus == 3 ?
+                                  "Weekly-Off" : item.PresentDayStatus == 4 ? "Holiday" : "Leave"}}
+                                  ({{item.AttendanceDay | date: 'EEEE'}})</div>
                               </td>
                             </ng-container>
                             <ng-template #viewcontainer>
                               <td class="align-middle">
                                 <p class="pt-3">
                                   <ng-container *ngIf="item.IsOnLeave">
-                                    <ngb-progressbar type="danger" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
+                                    <ngb-progressbar type="danger" [value]="100" [striped]="true"
+                                      style="width: 40%;"></ngb-progressbar>
                                   </ng-container>
                                   <ng-container *ngIf="!item.IsOnLeave">
-                                    <ngb-progressbar *ngIf="item.PresentDayStatus == 12" type="info" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
-                                    <ngb-progressbar *ngIf="item.PresentDayStatus == 9" type="success" [value]="item.SessionType == 1 ? 100 : 50" [striped]="true" style="width: 40%;"></ngb-progressbar>
-                                    <ngb-progressbar *ngIf="item.PresentDayStatus == 2" type="info" [value]="item.SessionType == 1 ? 100 : 50" [striped]="true" style="width: 40%;"></ngb-progressbar>
-                                    <ngb-progressbar *ngIf="(!item.IsOpen && item.PresentDayStatus == 0) || item.PresentDayStatus == 5" type="danger" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
-                                    <ngb-progressbar *ngIf="item.IsOpen && item.PresentDayStatus == 0" type="primary" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
-                                    <ngb-progressbar *ngIf="item.PresentDayStatus == 3 || item.PresentDayStatus == 4" type="warning" [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
+                                    <ngb-progressbar *ngIf="item.PresentDayStatus == 12" type="info" [value]="100"
+                                      [striped]="true" style="width: 40%;"></ngb-progressbar>
+                                    <ngb-progressbar *ngIf="item.PresentDayStatus == 9" type="success"
+                                      [value]="item.SessionType == 1 ? 100 : 50" [striped]="true"
+                                      style="width: 40%;"></ngb-progressbar>
+                                    <ngb-progressbar *ngIf="item.PresentDayStatus == 2" type="info"
+                                      [value]="item.SessionType == 1 ? 100 : 50" [striped]="true"
+                                      style="width: 40%;"></ngb-progressbar>
+                                    <ngb-progressbar
+                                      *ngIf="(!item.IsOpen && item.PresentDayStatus == 0) || item.PresentDayStatus == 5"
+                                      type="danger" [value]="100" [striped]="true"
+                                      style="width: 40%;"></ngb-progressbar>
+                                    <ngb-progressbar *ngIf="item.IsOpen && item.PresentDayStatus == 0" type="primary"
+                                      [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
+                                    <ngb-progressbar *ngIf="item.PresentDayStatus == 3 || item.PresentDayStatus == 4"
+                                      type="warning" [value]="100" [striped]="true"
+                                      style="width: 40%;"></ngb-progressbar>
                                     <!-- <ngb-progressbar type="info" [value]="100" style="width: 40%;"></ngb-progressbar> -->
                                   </ng-container>
                                 </p>
                               </td>
-                              <td class="align-middle"><i class="fa-solid fa-circle pe-3 text-info"></i> {{item.LogOff}} hrs</td>
+                              <td class="align-middle"><i class="fa-solid fa-circle pe-3 text-info"></i> {{item.LogOff}}
+                                hrs</td>
                               <td class="align-middle">{{item.LogOn}} hrs</td>
                               <td class="align-middle">
                                 <div class="d-inline" [ngSwitch]="item.PresentDayStatus">
@@ -157,12 +179,10 @@
                               </td>
                               <td class="align-middle">
                                 <div class="" [ngSwitch]="item.PresentDayStatus">
-                                  <div placement="top" ngbTooltip="waiting" aria-expanded="false"
-                                  *ngSwitchCase = "2">
+                                  <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngSwitchCase="2">
                                     <i class="fa-regular fa-thumbs-up pe-2 text-secoundry"></i> Submitted
                                   </div>
-                                  <div placement="top" ngbTooltip="Not Applied" aria-expanded="false"
-                                  *ngSwitchCase = "0">
+                                  <div placement="top" ngbTooltip="Not Applied" aria-expanded="false" *ngSwitchCase="0">
                                     <ng-container *ngIf="item.IsOpen">
                                       <i class="fa-regular fa-clock pe-2 text-warning"></i>
                                       <span>Not Applied</span>
@@ -172,23 +192,19 @@
                                       <span>Blocked</span>
                                     </ng-container>
                                   </div>
-                                  <div placement="top" ngbTooltip="Weekend" aria-expanded="false"
-                                  *ngSwitchCase = "3">
+                                  <div placement="top" ngbTooltip="Weekend" aria-expanded="false" *ngSwitchCase="3">
                                     <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
                                   </div>
-                                  <div placement="top" ngbTooltip="Weekend" aria-expanded="false" *ngSwitchCase = "4">
+                                  <div placement="top" ngbTooltip="Weekend" aria-expanded="false" *ngSwitchCase="4">
                                     <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Holiday
                                   </div>
-                                  <div placement="top" ngbTooltip="Approved" aria-expanded="false"
-                                  *ngSwitchCase = "9">
+                                  <div placement="top" ngbTooltip="Approved" aria-expanded="false" *ngSwitchCase="9">
                                     <i class="fa-regular fa-square-check pe-2 text-success"></i> Approved
                                   </div>
-                                  <div placement="top" ngbTooltip="Rejected" aria-expanded="false"
-                                  *ngSwitchCase = "5">
+                                  <div placement="top" ngbTooltip="Rejected" aria-expanded="false" *ngSwitchCase="5">
                                     <i class="fa-solid fa-xmark pe-2 text-danger"></i> Rejected
                                   </div>
-                                  <div placement="top" ngbTooltip="Rejected" aria-expanded="false"
-                                  *ngSwitchCase = "12">
+                                  <div placement="top" ngbTooltip="Rejected" aria-expanded="false" *ngSwitchCase="12">
                                     <i class="fa-solid fa-paper-plane-o pe-2 text-danger"></i> Request raised
                                   </div>
                                 </div>
@@ -196,19 +212,22 @@
                               <td class="align-middle" *ngIf="isMyAttendance">
                                 <div class="d-flex align-items-center">
                                   <ng-container *ngIf="!item.IsOnLeave">
-                                    <div class="col" *ngIf="(item.PresentDayStatus == 0 || item.PresentDayStatus == 5 || (item.PresentDayStatus == 4 && item.IsHalfDay))">
+                                    <div class="col"
+                                      *ngIf="(item.PresentDayStatus == 0 || item.PresentDayStatus == 5 || (item.PresentDayStatus == 4 && item.IsHalfDay))">
                                       <div ngbDropdown class="d-inline-block">
                                         <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply"
                                           id="dropdownBasic1" ngbDropdownToggle>
                                           <i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i>
                                         </button>
-                                        <div class="dropdown-menu p-0 m-0" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                        <div class="dropdown-menu p-0 m-0" ngbDropdownMenu
+                                          aria-labelledby="dropdownBasic1">
                                           <button ngbDropdownItem *ngIf="item.IsOpen">
                                             <a class="dropdown-item" href="javascript:void(0)"
                                               (click)="applyWorkFromHome(item)">Apply WFH Request</a>
                                           </button>
                                           <button ngbDropdownItem *ngIf="!item.IsOpen">
-                                            <a class="dropdown-item" href="javascript:void(0)" (click)="requestPopUp(item)">
+                                            <a class="dropdown-item" href="javascript:void(0)"
+                                              (click)="requestPopUp(item)">
                                               Attendance is block. Please raise request if not absent
                                             </a>
                                           </button>
@@ -218,7 +237,8 @@
                                     <ng-container *ngIf="item.PresentDayStatus == 9">
                                       <span class="ms-2">
                                         <div placement="top" ngbTooltip="Approved" aria-expanded="false">
-                                          <i class="fa-regular fa-square-check zoom-2 text-success" aria-hidden="true"></i>
+                                          <i class="fa-regular fa-square-check zoom-2 text-success"
+                                            aria-hidden="true"></i>
                                         </div>
                                       </span>
                                     </ng-container>
@@ -238,7 +258,8 @@
                                       </div>
                                     </span>
                                     <span class="ms-2" *ngIf="item.PresentDayStatus == 12">
-                                      <div placement="left" ngbTooltip="Your request for blocked attendance is raised" aria-expanded="false">
+                                      <div placement="left" ngbTooltip="Your request for blocked attendance is raised"
+                                        aria-expanded="false">
                                         <i class="fa-regular fa-comment-dots zoom-2 text-dark" aria-hidden="true"></i>
                                       </div>
                                     </span>
@@ -281,15 +302,15 @@
                       <div class="col-md-12">
                         <div class="row">
                           <div class="mt-3 col-md-4">
-                            <label  class="form-label">Shift Title</label>
+                            <label class="form-label">Shift Title</label>
                             <input type="text" readonly value="{{shiftDetail.ShiftTitle}}" class="form-control">
                           </div>
                           <div class="mt-3 col-md-4">
-                            <label  class="form-label">Description</label>
+                            <label class="form-label">Description</label>
                             <input type="text" readonly value="{{shiftDetail.Description}}" class="form-control">
                           </div>
                           <div class="mt-3 col-md-4">
-                            <label  class="form-label">Total Working Days</label>
+                            <label class="form-label">Total Working Days</label>
                             <input type="text" readonly value="{{shiftDetail.TotalWorkingDays}}" class="form-control">
                           </div>
                         </div>
@@ -312,66 +333,87 @@
                                 <td class="py-3" class="fw-bold text-primary align-middle">Office Time</td>
                                 <td class="py-3">
                                   <div *ngIf="shiftDetail.IsMon">
-                                    <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    <span>{{shiftDetail.OfficeTime}}</span> to
+                                    <span>{{shiftDetail.OfficeEndTime}}</span>
                                   </div>
                                   <div *ngIf="!shiftDetail.IsMon" class="text-danger fw-bold">Weekend</div>
                                 </td>
                                 <td class="py-3">
                                   <div *ngIf="shiftDetail.IsTue">
-                                    <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    <span>{{shiftDetail.OfficeTime}}</span> to
+                                    <span>{{shiftDetail.OfficeEndTime}}</span>
                                   </div>
                                   <div *ngIf="!shiftDetail.IsTue" class="text-danger fw-bold">Weekend</div>
                                 </td>
                                 <td class="py-3">
                                   <div *ngIf="shiftDetail.IsWed">
-                                    <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    <span>{{shiftDetail.OfficeTime}}</span> to
+                                    <span>{{shiftDetail.OfficeEndTime}}</span>
                                   </div>
                                   <div *ngIf="!shiftDetail.IsWed" class="text-danger fw-bold">Weekend</div>
                                 </td>
                                 <td class="py-3">
                                   <div *ngIf="shiftDetail.IsThu">
-                                    <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    <span>{{shiftDetail.OfficeTime}}</span> to
+                                    <span>{{shiftDetail.OfficeEndTime}}</span>
                                   </div>
                                   <div *ngIf="!shiftDetail.IsThu" class="text-danger fw-bold">Weekend</div>
                                 </td>
                                 <td class="py-3">
                                   <div *ngIf="shiftDetail.IsFri">
-                                    <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    <span>{{shiftDetail.OfficeTime}}</span> to
+                                    <span>{{shiftDetail.OfficeEndTime}}</span>
                                   </div>
                                   <div *ngIf="!shiftDetail.IsFri" class="text-danger fw-bold">Weekend</div>
                                 </td>
                                 <td class="py-3">
                                   <div *ngIf="shiftDetail.IsSat">
-                                    <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    <span>{{shiftDetail.OfficeTime}}</span> to
+                                    <span>{{shiftDetail.OfficeEndTime}}</span>
                                   </div>
                                   <div *ngIf="!shiftDetail.IsSat" class="text-danger fw-bold">Weekend</div>
                                 </td>
                                 <td class="py-3">
                                   <div *ngIf="shiftDetail.IsSun">
-                                    <span>{{shiftDetail.OfficeTime}}</span> to <span>{{shiftDetail.OfficeEndTime}}</span>
+                                    <span>{{shiftDetail.OfficeTime}}</span> to
+                                    <span>{{shiftDetail.OfficeEndTime}}</span>
                                   </div>
                                   <div *ngIf="!shiftDetail.IsSun" class="text-danger fw-bold">Weekend</div>
                                 </td>
                               </tr>
                               <tr>
                                 <td class="py-3" class="fw-bold text-primary align-middle">Working Hours</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsMon}">{{shiftDetail.IsMon ? shiftDetail.Duration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsTue}">{{shiftDetail.IsTue ? shiftDetail.Duration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsWed}">{{shiftDetail.IsWed ? shiftDetail.Duration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsThu}">{{shiftDetail.IsThu ? shiftDetail.Duration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsFri}">{{shiftDetail.IsFri ? shiftDetail.Duration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSat}">{{shiftDetail.IsSat ? shiftDetail.Duration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSun}">{{shiftDetail.IsSun ? shiftDetail.Duration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsMon}">
+                                  {{shiftDetail.IsMon ? shiftDetail.Duration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsTue}">
+                                  {{shiftDetail.IsTue ? shiftDetail.Duration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsWed}">
+                                  {{shiftDetail.IsWed ? shiftDetail.Duration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsThu}">
+                                  {{shiftDetail.IsThu ? shiftDetail.Duration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsFri}">
+                                  {{shiftDetail.IsFri ? shiftDetail.Duration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSat}">
+                                  {{shiftDetail.IsSat ? shiftDetail.Duration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSun}">
+                                  {{shiftDetail.IsSun ? shiftDetail.Duration : '00:00'}} min</td>
                               </tr>
                               <tr>
                                 <td class="py-3" class="fw-bold text-primary align-middle">Lunch Duration</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsMon}">{{shiftDetail.IsMon ? shiftDetail.LunchDuration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsTue}">{{shiftDetail.IsTue ? shiftDetail.LunchDuration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsWed}">{{shiftDetail.IsWed ? shiftDetail.LunchDuration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsThu}">{{shiftDetail.IsThu ? shiftDetail.LunchDuration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsFri}">{{shiftDetail.IsFri ? shiftDetail.LunchDuration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSat}">{{shiftDetail.IsSat ? shiftDetail.LunchDuration : '00:00'}} min</td>
-                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSun}">{{shiftDetail.IsSun ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsMon}">
+                                  {{shiftDetail.IsMon ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsTue}">
+                                  {{shiftDetail.IsTue ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsWed}">
+                                  {{shiftDetail.IsWed ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsThu}">
+                                  {{shiftDetail.IsThu ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsFri}">
+                                  {{shiftDetail.IsFri ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSat}">
+                                  {{shiftDetail.IsSat ? shiftDetail.LunchDuration : '00:00'}} min</td>
+                                <td class="py-3" [ngClass]="{'fw-bold text-danger': !shiftDetail.IsSun}">
+                                  {{shiftDetail.IsSun ? shiftDetail.LunchDuration : '00:00'}} min</td>
                               </tr>
                             </tbody>
                           </table>
@@ -379,7 +421,8 @@
                       </div>
                     </ng-container>
                     <ng-container *ngIf="shiftDetail == null">
-                      <div class="custom-height fw-bold fs-3 text-danger my-5 py-5 d-flex align-items-center justify-content-center">
+                      <div
+                        class="custom-height fw-bold fs-3 text-danger my-5 py-5 d-flex align-items-center justify-content-center">
                         <p class="my-5 py-5">Record Not Found</p>
                       </div>
                     </ng-container>
@@ -430,19 +473,25 @@
                         <thead>
                           <tr>
                             <th class="custom-th border-end" width="10%">
-                              <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark" (click)="arrangeDetails(orderByAttendanceDateAsc, 'AttendanceDate')">DATE</a>
+                              <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark"
+                                (click)="arrangeDetails(orderByAttendanceDateAsc, 'AttendanceDate')">DATE</a>
                               <i class="fa-solid fa-arrow-down-wide-short"
-                                [ngClass]="{'d-none': orderByAttendanceDateAsc == null || !orderByAttendanceDateAsc }" aria-hidden="true"></i>
+                                [ngClass]="{'d-none': orderByAttendanceDateAsc == null || !orderByAttendanceDateAsc }"
+                                aria-hidden="true"></i>
                               <i class="fa-solid fa-arrow-down-short-wide"
-                                [ngClass]="{'d-none': orderByAttendanceDateAsc == null || orderByAttendanceDateAsc }" aria-hidden="true"></i>
+                                [ngClass]="{'d-none': orderByAttendanceDateAsc == null || orderByAttendanceDateAsc }"
+                                aria-hidden="true"></i>
                             </th>
                             <th class="custom-th border-end" width="10%">REQUEST TYPE</th>
                             <th class="custom-th border-end" width="15%">
-                              <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark" (click)="arrangeDetails(orderByRequestedOnAsc, 'RequestedOn')">RequestedOn</a>
+                              <a href="javascript:void(0)" class="text-decoration-none pe-2 text-dark"
+                                (click)="arrangeDetails(orderByRequestedOnAsc, 'RequestedOn')">RequestedOn</a>
                               <i class="fa-solid fa-arrow-down-wide-short"
-                                [ngClass]="{'d-none': orderByRequestedOnAsc == null || !orderByRequestedOnAsc }" aria-hidden="true"></i>
+                                [ngClass]="{'d-none': orderByRequestedOnAsc == null || !orderByRequestedOnAsc }"
+                                aria-hidden="true"></i>
                               <i class="fa-solid fa-arrow-down-short-wide"
-                                [ngClass]="{'d-none': orderByRequestedOnAsc == null || orderByRequestedOnAsc }" aria-hidden="true"></i>
+                                [ngClass]="{'d-none': orderByRequestedOnAsc == null || orderByRequestedOnAsc }"
+                                aria-hidden="true"></i>
                             </th>
                             <th class="custom-th border-end" width="25%">NOTE</th>
                             <th class="custom-th border-end" width="10%">STATUS</th>
@@ -499,7 +548,8 @@
                         </tbody>
                       </table>
                       <div class="mt-3">
-                        <app-pagination [pagination]="request" (onPageChange)="GetFilterResult($event)"></app-pagination>
+                        <app-pagination [pagination]="request"
+                          (onPageChange)="GetFilterResult($event)"></app-pagination>
                       </div>
                     </ng-container>
                     <!-- <ng-container *ngIf="attendanceRequestDetail.length == 0 && !attendanceRquestPageIsReady">
@@ -530,64 +580,65 @@
 
 <!-- Comment Modal Start-->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="commentModal" tabindex="-1"
-aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-lg">
-  <div class="modal-content">
-    <ng-container *ngIf="currentAttendance != null">
-      <div class="modal-header border-bottom-0" >
-        <h5 class="modal-title" id="exampleModalLabel">{{attendanceRequestType == 1 ? "Work From Home" : "Work From Office"}} Request</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="col-md-12 px-4 d-block">
-        <p class="mt-2">Enter your work from home reson and apply with one click.
-          Select your manage or reporting person under Notify section to get approval.</p>
-      </div>
-      <div class="modal-body px-4">
-        <div class="d-flex position-relative align-items-center">
-          <div class="col-md-8 d-flex">
-            <div class="col-md-6 ps-2 py-3 border">
-              <small>START DATE</small>
-              <p class="mb-0 text-dark fs-5">{{today | date}}</p>
-            </div>
-            <div class="col-md-6 pe-3 py-3 border text-end">
-              <small>END DATE</small>
-              <p class="mb-0 text-dark fs-5">{{tomorrow | date}}</p>
-            </div>
-          </div>
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <ng-container *ngIf="currentAttendance != null">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="exampleModalLabel">{{attendanceRequestType == 1 ? "Work From Home" : "Work From
+            Office"}} Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <span class="px-3 py-2 day-wfh">1day {{attendanceRequestType == 1 ? "WFH" : "WFO"}} </span>
-        <div class="row">
-          <div class="col-md-6 pt-3">
-            <label class="form-label">Request Type</label>
-            <select class="form-select" [(ngModel)]="attendanceRequestType">
-              <option value="1">Work From Home</option>
-              <option value="2">Work From Office</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <p class="mb-0 text-dark ps-2 pt-3">Session</p>
-            <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
-              <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio10" autocomplete="off" checked
-                value="1">
-              <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
-              <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio11" autocomplete="off"
-                value="2">
-              <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
-              <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio12" autocomplete="off"
-                value="3">
-              <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
+        <div class="col-md-12 px-4 d-block">
+          <p class="mt-2">Enter your work from home reson and apply with one click.
+            Select your manage or reporting person under Notify section to get approval.</p>
+        </div>
+        <div class="modal-body px-4">
+          <div class="d-flex position-relative align-items-center">
+            <div class="col-md-8 d-flex">
+              <div class="col-md-6 ps-2 py-3 border">
+                <small>START DATE</small>
+                <p class="mb-0 text-dark fs-5">{{today | date}}</p>
+              </div>
+              <div class="col-md-6 pe-3 py-3 border text-end">
+                <small>END DATE</small>
+                <p class="mb-0 text-dark fs-5">{{tomorrow | date}}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-12 mt-3">
-          <label  class="form-label">Reason</label>
-          <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue" maxlength="100"  [ngModelOptions]="{standalone: true}"
-            [(ngModel)]="commentValue"></textarea>
-          <div class="alert alert-danger" *ngIf="isComment">
-            Comment is required.
+          <span class="px-3 py-2 day-wfh">1day {{attendanceRequestType == 1 ? "WFH" : "WFO"}} </span>
+          <div class="row">
+            <div class="col-md-6 pt-3">
+              <label class="form-label">Request Type</label>
+              <select class="form-select" [(ngModel)]="attendanceRequestType">
+                <option value="1">Work From Home</option>
+                <option value="2">Work From Office</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0 text-dark ps-2 pt-3">Session</p>
+              <div class="btn-group mt-2 mb-4" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio10"
+                  autocomplete="off" checked value="1">
+                <label class="btn btn-outline-primary" for="btnradio10">Full Day</label>
+                <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio11"
+                  autocomplete="off" value="2">
+                <label class="btn btn-outline-primary" for="btnradio11">First Half</label>
+                <input type="radio" class="btn-check" name="SessionType" (click)="selectSession($event)" id="btnradio12"
+                  autocomplete="off" value="3">
+                <label class="btn btn-outline-primary" for="btnradio12">Second Half</label>
+              </div>
+            </div>
           </div>
-        </div>
-        <!-- <div>
+          <div class="col-md-12 mt-3">
+            <label class="form-label">Reason</label>
+            <textarea class="comment-text-area form-control" placeholder="Enter your comment" name="commentValue"
+              maxlength="100" [ngModelOptions]="{standalone: true}" [(ngModel)]="commentValue"></textarea>
+            <div class="alert alert-danger" *ngIf="isComment">
+              Comment is required.
+            </div>
+          </div>
+          <!-- <div>
           <ng-container *ngFor="let employee of employees; let i = index">
             <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
               {{employee.Name}}
@@ -597,62 +648,65 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             </span>
           </ng-container>
         </div> -->
-        <!-- <div class="mt-3" *ngIf="isEmployeesReady">
+          <!-- <div class="mt-3" *ngIf="isEmployeesReady">
           <label  class="form-label">Notify</label>
           <bot-autocomplete [data]="employeesList" (OnSelect)="addEmployeeEmail($event)" [(ngModel)]="reportingManagerId"
             [ngModelOptions]="{standalone: true}">
           </bot-autocomplete>
         </div> -->
-        <!-- <p class="mb-0">These employees will be notified through email when you WFH request applied.</p> -->
-      </div>
+          <!-- <p class="mb-0">These employees will be notified through email when you WFH request applied.</p> -->
+        </div>
 
-      <div class="modal-footer border-top-0 pe-4">
-        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitAttendance()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Request' }}
-        </button>
-      </div>
-    </ng-container>
+        <div class="modal-footer border-top-0 pe-4">
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="submitAttendance()">
+            <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Request' }}
+          </button>
+        </div>
+      </ng-container>
+    </div>
   </div>
-</div>
 </div>
 <!-- End -->
 
 <!-- Request Attendance Modal Start-->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="requestModal" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered modal-xl">
-  <div class="modal-content">
-    <ng-container>
-      <div class="modal-header border-bottom-0" >
-        <h5 class="modal-title" id="exampleModalLabel">Attendance is block. Click to send request for unblock</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="filterByStatus()"></button>
-      </div>
-      <div class="col-md-12 px-4 d-block">
-        <p class="mt-2">You can't apply attendance more than 4 days. Please fill details and send the request to your manager for unblock this attendance</p>
-      </div>
-      <div class="modal-body px-4">
-        <div class="d-flex position-relative align-items-center col-md-12 flex-wrap">
-          <div class="position-relative m-2 chip" *ngFor="let item of currentDays; ;let i= index">
-            <span class="px-3 badge">{{item.AttendanceDay | date: 'MMM d, EEE'}}</span>
-            <a href="javascript:void(0)" class="position-absolute" (click)="removeBlockDay(item, i)">
-              <i class="fa-solid fa-xmark"></i>
-            </a>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <ng-container>
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title" id="exampleModalLabel">Attendance is block. Click to send request for unblock</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="filterByStatus()"></button>
+        </div>
+        <div class="col-md-12 px-4 d-block">
+          <p class="mt-2">You can't apply attendance more than 4 days. Please fill details and send the request to your
+            manager for unblock this attendance</p>
+        </div>
+        <div class="modal-body px-4">
+          <div class="d-flex position-relative align-items-center col-md-12 flex-wrap">
+            <div class="position-relative m-2 chip" *ngFor="let item of currentDays; ;let i= index">
+              <span class="px-3 badge">{{item.AttendanceDay | date: 'MMM d, EEE'}}</span>
+              <a href="javascript:void(0)" class="position-absolute" (click)="removeBlockDay(item, i)">
+                <i class="fa-solid fa-xmark"></i>
+              </a>
+            </div>
           </div>
-        </div>
-        <div class="col-md-12 mt-3">
-          <app-editor [height]="28" [content]="EmailBody" [cleanUp]="eventsSubject.asObservable()"></app-editor>
-        </div>
-        <div class="col-md-12 mt-2">
-          <label  class="form-label">Reason</label>
-          <textarea class="comment-text-area form-control" rows="2" placeholder="Enter your comment" name="commentValue" maxlength="100" [ngModelOptions]="{standalone: true}"
-            [(ngModel)]="commentValue"></textarea>
-          <div class="alert alert-danger" *ngIf="isComment">
-            Comment is required.
+          <div class="col-md-12 mt-3">
+            <app-editor [height]="28" [content]="EmailBody" [cleanUp]="eventsSubject.asObservable()"></app-editor>
           </div>
-        </div>
-        <!-- <div>
+          <div class="col-md-12 mt-2">
+            <label class="form-label">Reason</label>
+            <textarea class="comment-text-area form-control" rows="2" placeholder="Enter your comment"
+              name="commentValue" maxlength="100" [ngModelOptions]="{standalone: true}"
+              [(ngModel)]="commentValue"></textarea>
+            <div class="alert alert-danger" *ngIf="isComment">
+              Comment is required.
+            </div>
+          </div>
+          <!-- <div>
           <ng-container *ngFor="let employee of employees; let i = index">
             <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
               {{employee.Name}}
@@ -668,17 +722,18 @@ aria-labelledby="exampleModalLabel" aria-hidden="true">
             [ngModelOptions]="{standalone: true}">
           </bot-autocomplete>
         </div> -->
-        <!-- <p class="mb-0">These employees will be notified through email when you WFH request applied.</p> -->
-      </div>
+          <!-- <p class="mb-0">These employees will be notified through email when you WFH request applied.</p> -->
+        </div>
 
-      <div class="modal-footer border-top-0 pe-4">
-        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" (click)="filterByStatus()">Cancel</button>
-        <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="sendRequest()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Send request' }}
-        </button>
-      </div>
-    </ng-container>
+        <div class="modal-footer border-top-0 pe-4">
+          <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+            (click)="filterByStatus()">Cancel</button>
+          <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="sendRequest()">
+            <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+            {{ isLoading ? 'Wait' : 'Send request' }}
+          </button>
+        </div>
+      </ng-container>
+    </div>
   </div>
-</div>
 </div>

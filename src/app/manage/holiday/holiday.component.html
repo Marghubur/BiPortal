@@ -1,25 +1,32 @@
 <div class="col-12 full-v main-container">
   <div class="col-12 row p-0 m-0">
-    <div class="right-panel container col-md-12 p-0">
-      <div class="x_panel mt-2">
-        <div class="x_header">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'Holidays'" [subtitle]="'Details'"></app-breadcrums>
-              </div>
+
+    <div class="d-flex flex-column justify-content-center col-12 p-0 m-0">
+      <div class="content-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="col-8">
+            <div class="px-1">
+              <app-breadcrums [title]="'Holidays'" [subtitle]="'Details'"></app-breadcrums>
             </div>
-            <div class="col">
-              <div class="x_header_title d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-                </a>
-                <a href="javascript:void(0)" class="pe-3" (click)="uploadHolidayExcelPopup()">Upload Holiay List</a>
-                <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i class="fa-regular fa-plus-square pe-2"></i>Add Holiday</button>
-              </div>
+          </div>
+          <div class="col">
+            <div class="x_header_title d-flex align-items-center justify-content-end">
+              <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+                <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+                  title="Reload this page"></i>
+              </a>
+              <a href="javascript:void(0)" class="pe-3" (click)="uploadHolidayExcelPopup()">Upload Holiay List</a>
+              <button *ngIf="isAdmin" class="btn btn-primary-c" (click)="addHolidayPopup()"><i
+                  class="fa-regular fa-plus-square pe-2"></i>Add Holiday</button>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+
+    <div class="right-panel container col-md-12 p-0">
+      <div class="x_panel">
         <ng-container *ngIf="isPageReady">
           <div class="x_content mt-4">
             <div class="t-table t-list  col-md-12">
@@ -33,48 +40,51 @@
                   </div>
                   <div class="th fe-2">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm"
-                        placeholder="Search by Name" (keydown.esc)="resetFilter()" oninput="this.value = this.value.toUpperCase()"
+                      <input class="form-control form-control-sm" placeholder="Search by Name"
+                        (keydown.esc)="resetFilter()" oninput="this.value = this.value.toUpperCase()"
                         (keyup.enter)="filterRecords()" autofocus [(ngModel)]="holidayDetail.DescriptionNote">
                       <div class="t-filter" (click)="arrangeDetails(orderByDescriptionNoteAsc, 'DescriptionNote')">
                         <a href="javascript:void()" class="pe-2">Name</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByDescriptionNoteAsc == null || !orderByDescriptionNoteAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByDescriptionNoteAsc == null || !orderByDescriptionNoteAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByDescriptionNoteAsc == null || orderByDescriptionNoteAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByDescriptionNoteAsc == null || orderByDescriptionNoteAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus readonly
-                        placeholder="Search by Start Date">
+                      <input class="form-control form-control-sm" autofocus readonly placeholder="Search by Start Date">
                       <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
                         <a href="javascript:void()" class="pe-2">Start Date</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus readonly
-                        placeholder="Search by End date">
-                        <div class="t-filter" (click)="arrangeDetails(orderByEndDateAsc, 'EndDate')">
-                          <a href="javascript:void()" class="pe-2">End Date</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByEndDateAsc == null || !orderByEndDateAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByEndDateAsc == null || orderByEndDateAsc }" aria-hidden="true"></i>
-                        </div>
+                      <input class="form-control form-control-sm" autofocus readonly placeholder="Search by End date">
+                      <div class="t-filter" (click)="arrangeDetails(orderByEndDateAsc, 'EndDate')">
+                        <a href="javascript:void()" class="pe-2">End Date</a>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByEndDateAsc == null || !orderByEndDateAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByEndDateAsc == null || orderByEndDateAsc }"
+                          aria-hidden="true"></i>
+                      </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus
-                        placeholder="Search by Total Days" readonly>
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Total Days" readonly>
                       <div class="t-filter default-cursor">
                         <a href="javascript:void(0)" class="pe-2 default-cursor">Total Days</a>
                       </div>
@@ -88,11 +98,14 @@
                         <option value="false">Full Day</option>
                       </select>
                       <div class="t-filter">
-                        <a href="javascript:void()" class="pe-2" (click)="arrangeDetails(orderByFullDayAsc, 'IsHalfDay')">FullDay/HalfDay</a>
+                        <a href="javascript:void()" class="pe-2"
+                          (click)="arrangeDetails(orderByFullDayAsc, 'IsHalfDay')">FullDay/HalfDay</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByFullDayAsc == null || !orderByFullDayAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByFullDayAsc == null || orderByFullDayAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByFullDayAsc == null || !orderByFullDayAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByFullDayAsc == null || orderByFullDayAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -104,9 +117,11 @@
                       <div class="t-filter" (click)="arrangeDetails(orderByCountryAsc, 'Country')">
                         <a href="javascript:void()" class="pe-2">Country</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByCountryAsc == null || !orderByCountryAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByCountryAsc == null || !orderByCountryAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByCountryAsc == null || orderByCountryAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByCountryAsc == null || orderByCountryAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -153,12 +168,12 @@
                         {{holiday.IsHalfDay ? 'HalfDay' : 'FullDay'}}
                       </div>
                     </div>
-                     <div class="td align-middle fe-1">
+                    <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
                         {{holiday.Country}}
                       </div>
                     </div>
-                    <div class="td align-middle fe-index"  *ngIf="isAdmin">
+                    <div class="td align-middle fe-index" *ngIf="isAdmin">
                       <div class="d-flex flex-row justify-content-evenly">
                         <a href="javascript:void(0)" (click)="editHoliday(holiday)">
                           <i class="fa-solid fa-pencil text-primary" aria-hidden="true"></i>
@@ -171,7 +186,8 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="allHolidayList.length == 0">
-                  <div class="custom-height fw-bold fs-3 py-5 my-5 text-danger d-flex align-items-center justify-content-center">
+                  <div
+                    class="custom-height fw-bold fs-3 py-5 my-5 text-danger d-flex align-items-center justify-content-center">
                     <p class="my-5 py-5">Record Not Found</p>
                   </div>
                 </ng-container>
@@ -188,27 +204,34 @@
 </div>
 
 <!-- Add/ Update Holiday List Modal -->
-<div class="modal fade" id="manageHolidayModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="manageHolidayModalLabel" aria-hidden="true">
+<div class="modal fade" id="manageHolidayModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="manageHolidayModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="manageHolidayModalLabel">{{selectedHoliday.CompanyCalendarId == 0 ? 'Add' : 'Update'}} Holiday</h5>
+        <h5 class="modal-title" id="manageHolidayModalLabel">{{selectedHoliday.CompanyCalendarId == 0 ? 'Add' :
+          'Update'}} Holiday</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="holidayForm">
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Company Name</label>
+              <label class="form-label">Company Name</label>
               <input type="text" placeholder="Company Name" readonly formControlName="CompanyName" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Event Name *</label>
-              <input type="text" placeholder="Event Name" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32" formControlName="EventName" [ngClass]="{'error-field': submitted && f.EventName.errors !== null && f.EventName.errors.required}" class="form-control">
+              <label class="form-label">Event Name *</label>
+              <input type="text" placeholder="Event Name" oninput="this.value = this.value.toUpperCase()"
+                onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
+                formControlName="EventName"
+                [ngClass]="{'error-field': submitted && f.EventName.errors !== null && f.EventName.errors.required}"
+                class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Holiday Type</label>
-              <select class="form-select" formControlName="HolidayType" [ngClass]="{'error-field': submitted && f.IsPublicHoliday.errors !== null && f.IsPublicHoliday.errors.required}">
+              <label class="form-label">Holiday Type</label>
+              <select class="form-select" formControlName="HolidayType"
+                [ngClass]="{'error-field': submitted && f.IsPublicHoliday.errors !== null && f.IsPublicHoliday.errors.required}">
                 <option value="1">Is Public Holiday</option>
                 <option value="2">Holiday</option>
                 <option value="3">Custom Holiday</option>
@@ -217,12 +240,14 @@
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Start Date *</label>
+              <label class="form-label">Start Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
+                  <div class="input-group w-100"
+                    [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="fromModel"
-                      (dateSelect)="onfromDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #fd="ngbDatepicker">
+                      (dateSelect)="onfromDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate"
+                      #fd="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="fd.toggle()" type="button"><i
                           class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
@@ -233,12 +258,14 @@
               </form>
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">End Date *</label>
+              <label class="form-label">End Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
+                  <div class="input-group w-100"
+                    [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="toModel"
-                      (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #d="ngbDatepicker">
+                      (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate"
+                      #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
                           class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
@@ -249,8 +276,9 @@
               </form>
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Is HalfDay</label>
-              <select class="form-select" formControlName="IsHalfDay" [ngClass]="{'error-field': submitted && f.IsHalfDay.errors !== null && f.IsHalfDay.errors.required}">
+              <label class="form-label">Is HalfDay</label>
+              <select class="form-select" formControlName="IsHalfDay"
+                [ngClass]="{'error-field': submitted && f.IsHalfDay.errors !== null && f.IsHalfDay.errors.required}">
                 <option value="true">Yes</option>
                 <option value="false">No</option>
               </select>
@@ -258,18 +286,23 @@
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Description Name *</label>
-              <input type="text" class="form-control" [ngClass]="{'error-field': submitted && f.DescriptionNote.errors !== null && f.DescriptionNote.errors.required}" oninput="this.value = this.value.toUpperCase()"  formControlName="DescriptionNote" placeholder="Description Note">
+              <label class="form-label">Description Name *</label>
+              <input type="text" class="form-control"
+                [ngClass]="{'error-field': submitted && f.DescriptionNote.errors !== null && f.DescriptionNote.errors.required}"
+                oninput="this.value = this.value.toUpperCase()" formControlName="DescriptionNote"
+                placeholder="Description Note">
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Applicable For</label>
-              <select class="form-select" formControlName="ApplicableFor" [ngClass]="{'error-field': submitted && f.ApplicableFor.errors !== null && f.ApplicableFor.errors.required}">
+              <label class="form-label">Applicable For</label>
+              <select class="form-select" formControlName="ApplicableFor"
+                [ngClass]="{'error-field': submitted && f.ApplicableFor.errors !== null && f.ApplicableFor.errors.required}">
                 <option value="0">All</option>
               </select>
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Country *</label>
-              <select formControlName="Country" class="form-select" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}" >
+              <label class="form-label">Country *</label>
+              <select formControlName="Country" class="form-select"
+                [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}">
                 <option value=null selected>Select Country</option>
                 <option value="India">India</option>
                 <option value="SriLanka">Sri Lanka</option>
@@ -279,18 +312,20 @@
           </div>
           <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Year</label>
-              <select class="form-select" formControlName="Year" disabled="" [ngClass]="{'error-field': submitted && f.Year.errors !== null && f.Year.errors.required}">
-                <option [value]="year" >{{year}}</option>
+              <label class="form-label">Year</label>
+              <select class="form-select" formControlName="Year" disabled=""
+                [ngClass]="{'error-field': submitted && f.Year.errors !== null && f.Year.errors.required}">
+                <option [value]="year">{{year}}</option>
               </select>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i>
+          Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageHoliday()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="selectedHoliday.CompanyCalendarId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="selectedHoliday.CompanyCalendarId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>
@@ -300,7 +335,8 @@
 </div>
 
 <!-- Delete Holiday Modal -->
-<div class="modal fade" id="deleteHolidayModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteHolidayModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteHolidayModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="deleteHolidayModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
@@ -333,9 +369,10 @@
         <p class="text-danger fw-bold mb-0">* Note: If you delete then it will be permanently deleted.</p>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Close</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i>
+          Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="deleteHoliday()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-trash-can': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-trash-can': !isLoading}"></i>
           <span class="ps-2">{{ isLoading ? 'Wait' : 'Delete' }}</span>
         </button>
       </div>
@@ -343,7 +380,8 @@
   </div>
 </div>
 
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="uploadHolidayExcelModal" tabindex="-1" role="dialog" aria-labelledby="uploadHolidayExcelTitle" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="uploadHolidayExcelModal" tabindex="-1"
+  role="dialog" aria-labelledby="uploadHolidayExcelTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -353,8 +391,8 @@
       <div class="modal-body overflow-hidden">
         <div class="col-md-12 row x_content">
           <div class="col-md-6">
-            <input type="file" id="uploadHolidayexcelreader" (change)="readExcelData($event)" class="d-none" *ngIf="isUploadFile"
-              accept=".xlx, .xlsx" />
+            <input type="file" id="uploadHolidayexcelreader" (change)="readExcelData($event)" class="d-none"
+              *ngIf="isUploadFile" accept=".xlx, .xlsx" />
             <div class="page-card">
               <div class="card">
                 <div class="col-md-12 p-0">

@@ -1,41 +1,49 @@
 <div class="main-container">
-  <div class="col-12 x_panel row m-0 p-0 mb-4 overflow-hidden">
-    <div class="x_header">
-      <div class="d-flex justify-content-between mt-3">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Manage Timesheet'" [subtitle]="'Details'"></app-breadcrums>
-          </div>
+  <div class="d-flex flex-column justify-content-center col-12 p-0 m-0">
+    <div class="content-header">
+      <div class="col-8">
+        <div class="px-1">
+          <app-breadcrums [title]="'Manage Timesheet'" [subtitle]="'Details'"></app-breadcrums>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="col-12 x_panel row m-0 p-0 mb-4 overflow-hidden">
     <div class="col-12">
       <ng-container *ngIf="!isPageReady">
         <form [formGroup]="timesheetForm">
           <div class="col-md-12 row justify-content-between align-items-center">
             <div class="col-md-4 mt-3">
-              <label  class="form-label me-2 fw-bold fs-5">Developer Name:</label>
-              <label  class="form-label me-2 fw-bold fs-5">{{pageData.UserName}}</label>
+              <label class="form-label me-2 fw-bold fs-5">Developer Name:</label>
+              <label class="form-label me-2 fw-bold fs-5">{{pageData.UserName}}</label>
             </div>
             <div class="col-auto mt-3 row" *ngIf="!isAdmin">
               <div class="col-auto">
-                <button type="button" class="btn btn-warning" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9" (click)="saveTimesheet()">
-                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
+                <button type="button" class="btn btn-warning"
+                  [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9"
+                  (click)="saveTimesheet()">
+                  <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Save' }}
                 </button>
-                <button type="button" class="btn btn-success ms-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9" (click)="submitTimesheet()">
-                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
+                <button type="button" class="btn btn-success ms-2"
+                  [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9"
+                  (click)="submitTimesheet()">
+                  <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Submit' }}
                 </button>
-                <button type="button" class="btn btn-danger ms-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                  <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
+                <button type="button" class="btn btn-danger ms-2"
+                  [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
+                  <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                   {{ isLoading ? 'Wait' : 'Cancel' }}
                 </button>
               </div>
               <div class="col ps-0">
                 <div ngbDropdown class="d-inline-block">
-                  <button type="button" [disabled]="weeklyTimesheetDetail.TimesheetStatus == 8 || isLoading || weeklyTimesheetDetail.TimesheetStatus == 9" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                    <a href="javascript:void(0)" class="text-decoration-none" >
+                  <button type="button"
+                    [disabled]="weeklyTimesheetDetail.TimesheetStatus == 8 || isLoading || weeklyTimesheetDetail.TimesheetStatus == 9"
+                    class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                    <a href="javascript:void(0)" class="text-decoration-none">
                       More Actions
                       <i class="fa-solid fa-caret-down ps-2" data-name="dropdown-icon"></i>
                     </a>
@@ -64,12 +72,17 @@
                   Comments
                 </div>
                 <div class="col-md-9">
-                  <textarea placeholder="Additional Info" [readOnly]="(weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true) || weeklyTimesheetDetail.TimesheetStatus == 9" formControlName="UserComments" class="form-control" rows="3" maxlength="100"></textarea>
+                  <textarea placeholder="Additional Info"
+                    [readOnly]="(weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true) || weeklyTimesheetDetail.TimesheetStatus == 9"
+                    formControlName="UserComments" class="form-control" rows="3" maxlength="100"></textarea>
                 </div>
               </div>
             </div>
             <div class="col-md-6 d-flex align-items-center justify-content-center">
-              <span class="fw-bold text-dark fs-5">Your timesheet is {{weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true ? 'Submitted' : weeklyTimesheetDetail.TimesheetStatus == 2 && weeklyTimesheetDetail.IsSaved == false? 'Pending' : weeklyTimesheetDetail.TimesheetStatus == 5 ? 'Rejected' : weeklyTimesheetDetail.TimesheetStatus == 9 ? 'Approved' : 'Saved'}}</span>
+              <span class="fw-bold text-dark fs-5">Your timesheet is {{weeklyTimesheetDetail.TimesheetStatus == 8 &&
+                weeklyTimesheetDetail.IsSubmitted == true ? 'Submitted' : weeklyTimesheetDetail.TimesheetStatus == 2 &&
+                weeklyTimesheetDetail.IsSaved == false? 'Pending' : weeklyTimesheetDetail.TimesheetStatus == 5 ?
+                'Rejected' : weeklyTimesheetDetail.TimesheetStatus == 9 ? 'Approved' : 'Saved'}}</span>
             </div>
           </div>
           <div class="col-12 row m-0 mt-5">
@@ -103,12 +116,14 @@
                   </div>
                 </div>
                 <div class="col-auto float-end text-end mt-3">
-                  <button type="button" class="btn btn-primary-c btn-sm me-2" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                    <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
+                  <button type="button" class="btn btn-primary-c btn-sm me-2"
+                    [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
+                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Fill from previous Timesheet' }}
                   </button>
-                  <button type="button" (click)="clearTimesheet()" class="btn btn-primary-c btn-sm" [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
-                    <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
+                  <button type="button" (click)="clearTimesheet()" class="btn btn-primary-c btn-sm"
+                    [disabled]="isLoading || weeklyTimesheetDetail.TimesheetStatus == 8 || weeklyTimesheetDetail.TimesheetStatus == 9">
+                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading}"></i>
                     {{ isLoading ? 'Wait' : 'Clear Timesheet' }}
                   </button>
                 </div>
@@ -136,7 +151,9 @@
                         <td class="text-primary" [ngClass]="{'table-active': item.get('IsWeekEnd').value == false}">
                           <div class="d-flex justify-content-center align-items-center">
                             {{item.get("PresentDate").value | date: 'ccc'}}
-                            <i *ngIf="weeklyTimesheetDetail.TimesheetStatus != 2 || (item.get('IsWeekEnd').value == false && weeklyTimesheetDetail.TimesheetStatus == 2)" class="fa-solid fa-circle ps-2" [ngClass]="{'text-secondary': item.get('IsWeekEnd').value == false, 'text-info': weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true && item.get('IsWeekEnd').value == true, 'text-danger':  weeklyTimesheetDetail.TimesheetStatus == 5  && item.get('IsWeekEnd').value == true, 'text-success':  weeklyTimesheetDetail.TimesheetStatus == 9  && item.get('IsWeekEnd').value == true}"></i>
+                            <i *ngIf="weeklyTimesheetDetail.TimesheetStatus != 2 || (item.get('IsWeekEnd').value == false && weeklyTimesheetDetail.TimesheetStatus == 2)"
+                              class="fa-solid fa-circle ps-2"
+                              [ngClass]="{'text-secondary': item.get('IsWeekEnd').value == false, 'text-info': weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true && item.get('IsWeekEnd').value == true, 'text-danger':  weeklyTimesheetDetail.TimesheetStatus == 5  && item.get('IsWeekEnd').value == true, 'text-success':  weeklyTimesheetDetail.TimesheetStatus == 9  && item.get('IsWeekEnd').value == true}"></i>
                           </div>
                         </td>
                       </ng-container>
@@ -155,11 +172,18 @@
                     <tr>
                       <td>Standard Time</td>
                       <ng-container *ngFor="let item of weeklydata.controls; let i = index" [formGroupName]="i">
-                        <td class="text-primary" [ngClass]="{'table-active': (weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true) || weeklyTimesheetDetail.TimesheetStatus == 9}">
+                        <td class="text-primary"
+                          [ngClass]="{'table-active': (weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true) || weeklyTimesheetDetail.TimesheetStatus == 9}">
                           <div class="d-flex justify-content-center">
-                            <input type="text" class="border-0 w-25 text-end" [readOnly]="(weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true) || weeklyTimesheetDetail.TimesheetStatus == 9" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="ActualHours" (keyup)="manageHrsField(i, $event)">
+                            <input type="text" class="border-0 w-25 text-end"
+                              [readOnly]="(weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true) || weeklyTimesheetDetail.TimesheetStatus == 9"
+                              onkeypress="return event.charCode >=48 && event.charCode <=57"
+                              formControlName="ActualHours" (keyup)="manageHrsField(i, $event)">
                             <span>:</span>
-                            <input type="text" class="border-0 w-25" [readOnly]="(weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true) || weeklyTimesheetDetail.TimesheetStatus == 9" onkeypress="return event.charCode >=48 && event.charCode <=57" formControlName="ActualMinutes" (keyup)="manageMinField(i, $event)">
+                            <input type="text" class="border-0 w-25"
+                              [readOnly]="(weeklyTimesheetDetail.TimesheetStatus == 8 && weeklyTimesheetDetail.IsSubmitted == true) || weeklyTimesheetDetail.TimesheetStatus == 9"
+                              onkeypress="return event.charCode >=48 && event.charCode <=57"
+                              formControlName="ActualMinutes" (keyup)="manageMinField(i, $event)">
                           </div>
                         </td>
                       </ng-container>
