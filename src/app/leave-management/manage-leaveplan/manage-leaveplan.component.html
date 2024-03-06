@@ -1,15 +1,12 @@
 <div class="col-md-12 col-sm-12 main-container">
-  <div class="x_panel pb-0 mb-0">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'LEAVE TYPE:'" [subtitle]="'Add or update details'"></app-breadcrums>
-          </div>
-        </div>
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'LEAVE TYPE:'" [subtitle]="'Add or update details'"></app-breadcrums>
       </div>
     </div>
-    <!-- <h6 class="ps-1 c-header">{{leaveTypeDeatils.PlanName | uppercase}}</h6> -->
+  </div>
+  <div class="x_panel pb-0 mb-0">
     <ng-container *ngIf="!isPageReady">
       <ng-container *ngIf="isDataLoaded">
         <div class="x_content pb-0">
