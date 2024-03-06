@@ -1,14 +1,14 @@
 <div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
-  <div class="x_panel">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Employees'" [subtitle]="'bill details'"></app-breadcrums>
-          </div>
-        </div>
+
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Employees'"></app-breadcrums>
       </div>
     </div>
+  </div>
+
+  <div class="x_panel">
     <ng-container>
       <div class="x_header">
         <div class="x_header_title mt-3">
@@ -18,7 +18,8 @@
                 <label class="form-label pe-3 mt-1">Developer</label>
                 <div class="col-md-9">
                   <bot-autocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
-                    (OnSelect)="onEmloyeeChanged($event)" (OnServerFilter)="serverFilter($event)" (keydown.esc)="resetFilter()">
+                    (OnSelect)="onEmloyeeChanged($event)" (OnServerFilter)="serverFilter($event)"
+                    (keydown.esc)="resetFilter()">
                   </bot-autocomplete>
                 </div>
               </div>
@@ -171,7 +172,7 @@
               <div class="th f-small">
                 <div class="cell-wrapper">
                   <select class="form-select table-filter-control" (change)="filterRecords()"
-                     [(ngModel)]="employeeFile.GSTStatus">
+                    [(ngModel)]="employeeFile.GSTStatus">
                     <option value="0" disabled>Status</option>
                     <option value="1">Completed</option>
                     <option value="2">Pending</option>
@@ -197,10 +198,13 @@
                     <div class="td align-middle fe-2">
                       <div class="cell-wrapper">
                         <div class="d-flex flex-row justify-content-between align-items-center">
-                          <a href="javascript:void(0)" class="bold-anc" (click)="EditCurrentDocument(user)">#{{user.BillNo}}</a>
+                          <a href="javascript:void(0)" class="bold-anc"
+                            (click)="EditCurrentDocument(user)">#{{user.BillNo}}</a>
                           <div class="d-flex flex-row justify-content-around align-items-center">
-                            <span class="badge bg-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="Total days">D {{user.NoOfDays}}</span>
-                            <span class="badge bg-danger ms-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Absecent days">AB {{user.Absent}}</span>
+                            <span class="badge bg-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                              title="Total days">D {{user.NoOfDays}}</span>
+                            <span class="badge bg-danger ms-2" data-bs-toggle="tooltip" data-bs-placement="right"
+                              title="Absecent days">AB {{user.Absent}}</span>
                             <a href="javascript:void(0)" (click)="viewPdfFile(user)">
                               <span class="badge bg-success ms-1 me-1"><i class="fa-regular fa-file-pdf"></i></span>
                             </a>
@@ -208,12 +212,13 @@
                               <span class="badge bg-danger ms-1 me-1"><i class="fa-solid fa-paper-plane"></i></span>
                             </a>
                             <a href="javascript:void(0)" class="h-font ms-1" (click)="UpdateCurrent(user)">
-                              <i class="fa-solid fa-circle-check fa-lg text-success" *ngIf="user.Status == '1'" data-bs-trigger="hover"
-                                data-bs-toggle="tooltip" data-bs-placement="right" title="Bill Paid"></i>
+                              <i class="fa-solid fa-circle-check fa-lg text-success" *ngIf="user.Status == '1'"
+                                data-bs-trigger="hover" data-bs-toggle="tooltip" data-bs-placement="right"
+                                title="Bill Paid"></i>
                               <i class="fa-regular fa-circle-xmark text-danger fa-lg" *ngIf="user.Status == '3'"
                                 data-bs-toggle="tooltip" data-bs-placement="right" title="Bill Canceled"></i>
-                              <i class="fa-regular fa-clock text-dark" *ngIf="user.Status == '7'" data-bs-toggle="tooltip"
-                                data-bs-placement="right" title="Bill Raised"></i>
+                              <i class="fa-regular fa-clock text-dark" *ngIf="user.Status == '7'"
+                                data-bs-toggle="tooltip" data-bs-placement="right" title="Bill Raised"></i>
                               <i class="fa-solid fa-triangle-exclamation fa-lg text-warning" *ngIf="user.Status == '2'"
                                 data-bs-toggle="tooltip" data-bs-placement="right" title="Bill Pending"></i>
                               <i class="fa-solid fa-ban fa-lg text-danger" *ngIf="user.Status == '5'"
@@ -266,14 +271,13 @@
                     </div>
                     <div class="td align-middle f-small">
                       <div class="cell-wrapper text-center">
-                        <a href="javascript:void(0)" class="h-font"
-                          (click)="updateGSTStatus(user)">
+                        <a href="javascript:void(0)" class="h-font" (click)="updateGSTStatus(user)">
                           <i class="fa-solid fa-circle-check fa-lg text-success" *ngIf="user.GSTStatus == '1'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Completed"></i>
                           <i class="fa-regular fa-circle-xmark text-danger fa-lg" *ngIf="user.GSTStatus == '3'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Canceled"></i>
-                          <i class="fa-regular fa-clock text-dark" *ngIf="user.GSTStatus == '7'" data-bs-toggle="tooltip"
-                            data-bs-placement="right" title="Raised"></i>
+                          <i class="fa-regular fa-clock text-dark" *ngIf="user.GSTStatus == '7'"
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Raised"></i>
                           <i class="fa-solid fa-triangle-exclamation fa-lg text-warning" *ngIf="user.GSTStatus == '2'"
                             data-bs-toggle="tooltip" data-bs-placement="right" title="Pending"></i>
                           <i class="fa-solid fa-ban fa-lg text-danger" *ngIf="user.GSTStatus == '5'"
@@ -287,7 +291,8 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="!isFileFound">
-                  <div class="custom-height fw-bold fs-3 text-danger my-5 py-5 d-flex align-items-center justify-content-center">
+                  <div
+                    class="custom-height fw-bold fs-3 text-danger my-5 py-5 d-flex align-items-center justify-content-center">
                     <p class="my-5 py-5">Record Not Found</p>
                   </div>
                 </ng-container>
@@ -367,7 +372,8 @@
                 <form class="form-inline">
                   <div class="form-group w-100">
                     <div class="input-group w-100">
-                      <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
+                      <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                        [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
                         (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                       <div class="input-group-append">
                         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
@@ -413,7 +419,8 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
-          <i class="pe-2" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i class="pe-2"
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -435,7 +442,7 @@
           <div [formGroup]="documentForm" class="col-md-12 ">
             <div class="col-md-12 row m-0">
               <div class="col-6 form-group">
-                <label  class="form-label">File Status</label>
+                <label class="form-label">File Status</label>
                 <select formControlName="StatusId" name="StatusId" class="form-select">
                   <option value="0" disabled>File Status Type</option>
                   <option value="1">Completed</option>
@@ -447,11 +454,12 @@
                 </select>
               </div>
               <div class="col-6 form-group">
-                <label  class="form-label">Updated On</label>
+                <label class="form-label">Updated On</label>
                 <form class="form-inline">
                   <div class="form-group w-100">
                     <div class="input-group w-100">
-                      <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
+                      <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                        [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
                         (dateSelect)="onDateSelection($event)" ngbDatepicker #billd="ngbDatepicker">
                       <div class="input-group-append">
                         <button class="btn btn-outline-secondary calendar" (click)="billd.toggle()" type="button"><i
@@ -465,8 +473,8 @@
             </div>
             <div class="col-md-12 row m-0">
               <div class="form-group mt-4">
-                <label >Notes</label>
-                <textarea name="Notes" rows="6" maxlength="250"  formControlName="Notes" class="form-control"></textarea>
+                <label>Notes</label>
+                <textarea name="Notes" rows="6" maxlength="250" formControlName="Notes" class="form-control"></textarea>
               </div>
             </div>
             <p *ngIf="isError fw-bold" class="ps-3 text-danger fw-bold pb-0 pt-3">File Status is manditory</p>
@@ -476,7 +484,8 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateRecord()">
-          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i class=""
+            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
@@ -549,15 +558,18 @@
             <div class="col-12 d-flex mb-3 align-items-center">
               <div class="ms-2 me-3">
                 <input type="radio" name="bydate" value="0" (click)="selectBillOption($event)">
-                <a href="javascript:void(0)" (click)="selectBillOption($event, 0)" class="text-decoration-none"> Filter between dates</a>
+                <a href="javascript:void(0)" (click)="selectBillOption($event, 0)" class="text-decoration-none"> Filter
+                  between dates</a>
               </div>
               <div class="ms-2 me-3">
                 <input type="radio" name="bydate" value="1" (click)="selectBillOption($event)">
-                <a href="javascript:void(0)" (click)="selectBillOption($event, 1)" class="text-decoration-none"> Before date</a>
+                <a href="javascript:void(0)" (click)="selectBillOption($event, 1)" class="text-decoration-none"> Before
+                  date</a>
               </div>
               <div class="ms-2 me-2">
                 <input type="radio" name="bydate" value="2" (click)="selectBillOption($event)">
-                <a href="javascript:void(0)" (click)="selectBillOption($event, 2)" class="text-decoration-none"> After date</a>
+                <a href="javascript:void(0)" (click)="selectBillOption($event, 2)" class="text-decoration-none"> After
+                  date</a>
               </div>
             </div>
 
@@ -572,11 +584,11 @@
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="fromDateSelection($event)" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
-                        name="from" [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
+                      <input class="form-control" placeholder="yyyy-mm-dd" (dateSelect)="fromDateSelection($event)"
+                        [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate" name="from"
+                        [(ngModel)]="fromModel" ngbDatepicker #from="ngbDatepicker">
                       <div class="input-group-append">
-                        <button class="btn btn-outline-dark adv-srch-calenderbtn" (click)="from.toggle()"
-                          type="button">
+                        <button class="btn btn-outline-dark adv-srch-calenderbtn" (click)="from.toggle()" type="button">
                           <i class="fa-regular fa-calendar-days fa-lg"></i>
                         </button>
                       </div>
@@ -586,11 +598,12 @@
               </div>
 
               <div class="col-md-3">
-                <label  class="form-label">To</label>
+                <label class="form-label">To</label>
                 <form class="form-inline">
                   <div class="form-group">
                     <div class="input-group">
-                      <input class="form-control" placeholder="yyyy-mm-dd" [readonly]="isReadonly" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
+                      <input class="form-control" placeholder="yyyy-mm-dd" [readonly]="isReadonly"
+                        [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
                         (dateSelect)="toDateSelection($event)" name="to" [(ngModel)]="toModel" ngbDatepicker
                         #to="ngbDatepicker">
                       <div class="input-group-append">
@@ -742,8 +755,8 @@
       <div class="modal-header border-bottom-0 d-flex">
         <h5 class="modal-title">Download Or Send Bill As EMail</h5>
         <div class="position-relative w-75 text-end" *ngIf="isBillGenerated">
-          <input type="text" class="border-0 me-4 w-75 text-end"  [(ngModel)]="emailTemplate.EmailSubject"
-                      placeholder="Enter your subject">
+          <input type="text" class="border-0 me-4 w-75 text-end" [(ngModel)]="emailTemplate.EmailSubject"
+            placeholder="Enter your subject">
           <i class="edit fa-regular fa-pen-to-square position-absolute"></i>
         </div>
       </div>
@@ -758,10 +771,10 @@
                       <img src="assets/ext/pdf.png" alt="pdf extension">
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
-                        <a href="javascript:void(0)" (click)="downloadPdfDocx('.pdf')" class="text-primary-c fw-b">
-                          <i class="fa-solid fa-download text-primary-c pe-2"></i>
-                          PDF
-                        </a>
+                      <a href="javascript:void(0)" (click)="downloadPdfDocx('.pdf')" class="text-primary-c fw-b">
+                        <i class="fa-solid fa-download text-primary-c pe-2"></i>
+                        PDF
+                      </a>
                     </div>
                   </div>
                   <div class="form-check">
@@ -790,7 +803,8 @@
 
                   <div class="col-md-8">
                     <div class="input-group">
-                      <input type="email" class="form-control" placeholder="Email Id" name="add-email" aria-label="Email Id" aria-describedby="add-email">
+                      <input type="email" class="form-control" placeholder="Email Id" name="add-email"
+                        aria-label="Email Id" aria-describedby="add-email">
                       <button class="btn btn-primary-c" type="button" (click)="addEmailId()" id="add-email">
                         <i class="fa-solid fa-plus pe-2"></i>Add
                       </button>
@@ -820,7 +834,7 @@
                 </div>
                 <div class="mb-1">
                   <div class="position-relative">
-                    <input type="text" class="border-0 w-75"  [(ngModel)]="emailTemplate.EmailTitle"
+                    <input type="text" class="border-0 w-75" [(ngModel)]="emailTemplate.EmailTitle"
                       placeholder="Enter your title">
                     <i class="edit fa-solid fa-pencil position-absolute"></i>
                   </div>
@@ -843,12 +857,12 @@
       <div class="modal-footer border-top-0">
         <div class="d-flex flex-row justify-context-end">
           <div class="me-3">
-            <a href="javascript:void(0)" class="text-decoration-none text-muted"
-            (click)="closePopUp()">Close</a>
+            <a href="javascript:void(0)" class="text-decoration-none text-muted" (click)="closePopUp()">Close</a>
           </div>
           <div>
             <a href="javascript:void(0)" class="text-primary-c fw-bold" (click)="sendEmail()">
-              <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-paper-plane': !isLoading}" aria-hidden="true"></i>
+              <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-paper-plane': !isLoading}"
+                aria-hidden="true"></i>
               <span class="ps-2">
                 <ng-container *ngIf="isLoading">Sending...</ng-container>
                 <ng-container *ngIf="!isLoading"><u>Send Email</u></ng-container>

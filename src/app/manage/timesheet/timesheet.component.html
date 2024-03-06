@@ -3,51 +3,49 @@
   <div class="d-flex flex-column justify-content-center col-12 p-0 m-0">
     <div [ngClass]="{'preload': !isEmployeesReady}">
       <div class="content-header">
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="col">
-            <div class="px-1">
-              <app-breadcrums [title]="'Timesheet'"></app-breadcrums>
+        <div class="col">
+          <div class="px-1">
+            <app-breadcrums [title]="'Timesheet'"></app-breadcrums>
+          </div>
+        </div>
+
+        <ng-container *ngIf="isEmployeesReady">
+          <div class="col row justify-content-end align-items-center">
+            <div class="col-md-3" *ngIf="!isRedirected">
+              <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
+                [ngModelOptions]="{standalone: true}">
+              </bot-autocomplete>
+            </div>
+            <div class="col-md-3 p-0 m-0">
+              <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" (OnSelect)="presentWeek()"
+                [ngModelOptions]="{standalone: true}">
+              </bot-autocomplete>
+            </div>
+            <div class="col-md-2">
+              <select class="form-select" [disabled]="clientId == 0" (change)="filterTimesheet()"
+                [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
+                <option value="" selected disabled>Select by status</option>
+                <option value="2">Pending</option>
+                <option value="8">Submitted</option>
+                <option value="13">Save</option>
+                <option value="5">Rejected</option>
+                <option value="9">Approved</option>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <button class="btn  btn-primary-c" (click)="advanceFilterPopUp()">
+                <i class="fa-solid fa-filter"></i>
+              </button>
+            </div>
+            <div class="col-md-1">
+              <button class="btn  btn-danger" (click)="pageReload()">
+                <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+                  title="Reload this page"></i>
+              </button>
             </div>
           </div>
+        </ng-container>
 
-          <ng-container *ngIf="isEmployeesReady">
-            <div class="col row justify-content-end align-items-center">
-              <div class="col-md-3" *ngIf="!isRedirected">
-                <bot-autocomplete [data]="employeesList" (OnSelect)="findEmployee($event)" [(ngModel)]="employeeId"
-                  [ngModelOptions]="{standalone: true}">
-                </bot-autocomplete>
-              </div>
-              <div class="col-md-3 p-0 m-0">
-                <bot-autocomplete [data]="clientDetail" [(ngModel)]="clientId" (OnSelect)="presentWeek()"
-                  [ngModelOptions]="{standalone: true}">
-                </bot-autocomplete>
-              </div>
-              <div class="col-md-2">
-                <select class="form-select" [disabled]="clientId == 0" (change)="filterTimesheet()"
-                  [(ngModel)]="timesheetData.TimesheetStatus" [ngModelOptions]="{standalone: true}">
-                  <option value="" selected disabled>Select by status</option>
-                  <option value="2">Pending</option>
-                  <option value="8">Submitted</option>
-                  <option value="13">Save</option>
-                  <option value="5">Rejected</option>
-                  <option value="9">Approved</option>
-                </select>
-              </div>
-              <div class="col-md-1">
-                <button class="btn  btn-primary-c" (click)="advanceFilterPopUp()">
-                  <i class="fa-solid fa-filter"></i>
-                </button>
-              </div>
-              <div class="col-md-1">
-                <button class="btn  btn-danger" (click)="pageReload()">
-                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
-                    title="Reload this page"></i>
-                </button>
-              </div>
-            </div>
-          </ng-container>
-
-        </div>
       </div>
     </div>
   </div>
