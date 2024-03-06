@@ -15,20 +15,18 @@
       </li>
     </ul>
   </div>
-  <div class="col-12 x_panel p-0 m-0">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'My Salary'" [subtitle]="'Details'"></app-breadcrums>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="x_header_title d-flex align-items-center justify-content-end">
-          </div>
-        </div>
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'My Salary'" [subtitle]="'Details'"></app-breadcrums>
       </div>
     </div>
+    <div class="col-4">
+      <div class="x_header_title d-flex align-items-center justify-content-end">
+      </div>
+    </div>
+  </div>
+  <div class="col-12 x_panel p-0 m-0">
     <div class="right-panel col-md-12 p-0">
       <ng-container *ngIf="isReady">
         <div class="container-fluid">

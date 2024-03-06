@@ -1,31 +1,10 @@
 <div class="col-md-12 col-sm-12 main-container">
-  <div class="col-md-12 bg-light mb-3">
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link text-dark" id="attendance-tab" (click)="activateMe('attendance-tab')" aria-current="page"
-          href="javascript:void(0)">ATTENDENCE</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark" id="timesheet-tab" (click)="activateMe('timesheet-tab')"
-          href="javascript:void(0)">TIMESHEET</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark nav-active" id="leave-tab" (click)="activateMe('leave-tab')"
-          href="javascript:void(0)">LEAVE</a>
-      </li>
-    </ul>
+  <div class="content-header">
+    <div class="px-1">
+      <app-breadcrums [title]="'YEAR END PROCESS'" [subtitle]="'STANDARD LEAVE PLAN 2022'"></app-breadcrums>
+    </div>
   </div>
   <div class="x_panel">
-    <div class="x_header">
-      <div class="d-flex align-items-center">
-        <h2 class="text-dark fw-bold">YEAR END PROCESS</h2>
-        <h2 class="ms-3">STANDARD LEAVE PLAN 2022</h2>
-      </div>
-      <div class="clearfix"></div>
-    </div>
-    <div class="px-1">
-      <app-breadcrums></app-breadcrums>
-    </div>
     <div class="x_content">
       <div class="row mt-3">
         <div class="col-md-3">

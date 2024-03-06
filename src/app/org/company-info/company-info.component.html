@@ -1,14 +1,12 @@
 <div class="col-md-12 main-container">
-  <div class="x_panel">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'COMPANY INFORMATION'"></app-breadcrums>
-          </div>
-        </div>
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'COMPANY INFORMATION'"></app-breadcrums>
       </div>
     </div>
+  </div>
+  <div class="x_panel">
     <div class="my-3 px-5" *ngIf="isPageReady">
       <form [formGroup]="companyInformationForm">
         <div class="row justify-content-between">
@@ -26,7 +24,7 @@
                 class="fa-solid fa-arrow-left pe-2"></i>Previous</button>
           </div>
         </div>
-        <div class="progress-step col-md-6 mx-3 my-2">
+        <div class="progress-step col-md-8 mx-auto my-2">
           <div class="custom-progress" id="progress"></div>
           <div class="progress-step-item active" (click)="activePage(1)" data-title="COMPANY INFO"></div>
           <div class="progress-step-item" (click)="activePage(2)" data-title="BANK ACCOUNT"></div>

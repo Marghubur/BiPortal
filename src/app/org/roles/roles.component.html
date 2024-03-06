@@ -1,32 +1,30 @@
 <div class="col-12 full-v main-container" [ngClass]="{'preload': !isRolesLoaded}">
   <div>
     <form [formGroup]="rolesForm">
-      <div class="x_panel">
-        <div class="x_header">
-          <div class="d-flex justify-content-between">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'Roles'" [subtitle]="'Manage user roles.'"></app-breadcrums>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="x_header_title d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-                </a>
-                <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
-                  <i class="fa-regular fa-square-plus pe-2" aria-hidden="true"></i>Add Role
-                </button>
-                <button class="btn btn-outline-success btn-sm float-end ms-3" [disabled]="ispermissionAdding || !isRolesLoaded"
-                  (click)="submitRole()">
-                  <i class="fa-solid" [ngClass]="{'fa-arrow-right-to-bracket': !ispermissionAdding, 'fa-spinner fa-spin': ispermissionAdding}"
-                    aria-hidden="true"></i>
-                  <span class="ps-2">{{ispermissionAdding ? 'Wait' : 'Save' }}</span>
-                </button>
-              </div>
-            </div>
+      <div class="content-header">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Roles'" [subtitle]="'Manage user roles.'"></app-breadcrums>
           </div>
         </div>
+        <div class="col-4">
+          <div class="x_header_title d-flex align-items-center justify-content-end">
+            <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+              <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+            </a>
+            <button class="btn btn-sm btn-outline-primary float-end ms-3" (click)="addRolePopUp()">
+              <i class="fa-regular fa-square-plus pe-2" aria-hidden="true"></i>Add Role
+            </button>
+            <button class="btn btn-outline-success btn-sm float-end ms-3" [disabled]="ispermissionAdding || !isRolesLoaded"
+              (click)="submitRole()">
+              <i class="fa-solid" [ngClass]="{'fa-arrow-right-to-bracket': !ispermissionAdding, 'fa-spinner fa-spin': ispermissionAdding}"
+                aria-hidden="true"></i>
+              <span class="ps-2">{{ispermissionAdding ? 'Wait' : 'Save' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="x_panel">
         <div class="col-12 row m-0 pt-3">
           <div class="col-md-4">
             <label class="form-label">Existing Roles *</label>

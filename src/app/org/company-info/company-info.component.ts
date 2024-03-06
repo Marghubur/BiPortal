@@ -44,7 +44,6 @@ export class CompanyInfoComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private http: AjaxService,
-              private dateFormat: DateFormatter,
               private nav: iNavigation) { }
 
   get f () {
