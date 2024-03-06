@@ -1,54 +1,53 @@
 <div class="main-container" [ngClass]="{'preload': !isClientFound}">
-  <div class="col-md-12">
-    <div class="col-12 u-header curren-bg row m-0 my-3 align-items-center">
-      <div class="col-md-3">
-        <div class="d-inline-block c-tab" id="client-tab">
-          <a class="a-tab tab-active" (click)="SwitchTab($event, 1)">
-            Active
-          </a>
-          <!-- <a class="a-tab" (click)="SwitchTab($event, 0)">
-            InActive
-          </a>
-          <a class="a-tab" (click)="SwitchTab($event, -1)">
-            All
-          </a> -->
-        </div>
-      </div>
-      <div class="col-md-7 row m-0">
-        <div class="col-md-10">
-          <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-            (keyup.enter)="globalFilter()" placeholder="Search by any: (Client Name, Primary Contact No, Email, City)"
-            [(ngModel)]="anyFilter">
-        </div>
-        <div class="col-md-2">
-          <button class="btn btn-primary-c" (click)="globalFilter()"
-            (keydown.esc)="resetFilter()">
-            <i class="fa-solid fa-filter"></i>
-          </button>
-          <button class="btn btn-danger ms-2" (click)="resetFilter()">
-            <i class="fa-solid fa-arrow-rotate-right"></i>
-          </button>
-        </div>
-      </div>
 
-      <div class="col-md-2 inline-row d-r p-0 m-0">
-        <div class="">
-          <button class="btn btn-sp btn-lightorange" (click)="navtoRegisterClient()"
-            routerLinkActive="router-link-active"> <i class="fa-regular fa-square-plus ps-2" aria-hidden="true"></i>Add
-            Client</button>
+  <div class="content-header">
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-md-4 d-flex">
+          <div class="px-1">
+            <app-breadcrums [title]="'Client detail'"></app-breadcrums>
+          </div>
+          <div class="d-inline-block c-tab" id="client-tab">
+            <a class="a-tab tab-active" (click)="SwitchTab($event, 1)">
+              Active
+            </a>
+            <!-- <a class="a-tab" (click)="SwitchTab($event, 0)">
+              InActive
+            </a>
+            <a class="a-tab" (click)="SwitchTab($event, -1)">
+              All
+            </a> -->
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="x_panel">
-      <div class="x_header">
-        <div class="d-flex justify-content-between">
-          <div class="col-8">
-            <div class="px-1">
-              <app-breadcrums [title]="'Client detail'" [subtitle]="'Add or update details'"></app-breadcrums>
-            </div>
+        <div class="col-md-6 d-flex">
+          <div class="fe-2">
+            <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+              (keyup.enter)="globalFilter()" placeholder="Search by any: (Client Name, Primary Contact No, Email, City)"
+              [(ngModel)]="anyFilter">
+          </div>
+          <div class="fe-1">
+            <button class="btn btn-primary-c" (click)="globalFilter()"
+              (keydown.esc)="resetFilter()">
+              <i class="fa-solid fa-filter"></i>
+            </button>
+            <button class="btn btn-danger ms-2" (click)="resetFilter()">
+              <i class="fa-solid fa-arrow-rotate-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-md-2 inline-row d-r p-0 m-0">
+          <div class="">
+            <button class="btn btn-sp btn-lightorange" (click)="navtoRegisterClient()"
+              routerLinkActive="router-link-active"> <i class="fa-regular fa-square-plus ps-2" aria-hidden="true"></i>Add
+              Client</button>
           </div>
         </div>
       </div>
+    </div>    
+  </div>
+
+  <div class="col-md-12">
+    <div class="x_panel">      
       <div [ngSwitch]="isClientFound">
         <div *ngSwitchCase="false">
           <div class="mt-5">

@@ -106,6 +106,18 @@ input::-ms-input-placeholder {
   overflow-y: auto;
 }
 
+.x_panel_body {
+  position: relative;
+  width: 100%;
+  height: auto !important;
+  padding: 10px 12px;
+  display: inline-block;
+  background: #fff;
+  border: 1px solid #e6e9ed;
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+}
+
 .x_header h2 {
   margin: 5px 0 6px;
   float: left;
@@ -126,18 +138,17 @@ input::-ms-input-placeholder {
 }
 
 .x_header {
-  border-bottom: 2px solid #e6e9ed;
+  // border-bottom: 2px solid #e6e9ed;
   padding: 1px 5px 6px;
   margin-bottom: 10px;
 }
 
 .content-header {
-  border-bottom: 2px solid #e6e9ed;
   padding: 10px 5px;
-  margin-bottom: 10px;
   background: white;
   border-radius: 10px 10px 0px 0px;
   height: var(--content-header-height);
+  margin-bottom: .5rem !important;
 }
 
 .content-header h2 {
