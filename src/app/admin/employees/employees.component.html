@@ -1,50 +1,48 @@
 <div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
 
   <div class="content-header">
-    <div class="d-flex justify-content-between">
-      <div class="col-6 d-flex">
-        <div class="col-auto px-1">
-          <app-breadcrums [title]="'Employee detail'"></app-breadcrums>
-        </div>
-        <div class="col-auto">
-          <div class="d-inline-block c-tab" id="emp-tab">
-            <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.Active}" (click)="SwitchTab($event, 1)">
-              Active
-            </a>
-            <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.InActive}" (click)="SwitchTab($event, 0)">
-              InActive
-            </a>
-            <!-- <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
+    <div class="col-6 d-flex">
+      <div class="col-auto px-1">
+        <app-breadcrums [title]="'Employee detail'"></app-breadcrums>
+      </div>
+      <div class="col-auto">
+        <div class="d-inline-block c-tab" id="emp-tab">
+          <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.Active}" (click)="SwitchTab($event, 1)">
+            Active
+          </a>
+          <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.InActive}" (click)="SwitchTab($event, 0)">
+            InActive
+          </a>
+          <!-- <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
               Allsss
             </a> -->
-          </div>
-        </div>
-        <div class="col-md-2 ms-3">
-          <select class="form-select" (change)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="companyId">
-            <option value=0 selected>All</option>
-            <option [value]="item.CompanyId" *ngFor="let item of companies">{{item.CompanyName}}</option>
-          </select>
         </div>
       </div>
-      <div class="col-6 d-fex text-end">
-        <!-- <a href="javascript:void(0)" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="export as pdf">
+      <div class="col-md-2 ms-3">
+        <select class="form-select" (change)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="companyId">
+          <option value=0 selected>All</option>
+          <option [value]="item.CompanyId" *ngFor="let item of companies">{{item.CompanyName}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-6 d-fex text-end">
+      <!-- <a href="javascript:void(0)" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="export as pdf">
           <i class="fa-regular fa-file-pdf fa-lg"></i>
         </a> -->
-        <div class="col-auto d-flex justify-content-end text-end">
-          <button class="btn btn-lightorange" (click)="navtoAddEmp()" routerLinkActive="router-link-active"> <i
-              class="fa-regular fa-square-plus ms-1" aria-hidden="true"></i>
-            Add Employee
-          </button>
-          <input type="text" class="mx-2 form-control form-control-sm g-search" (keydown.esc)="resetFilter()"
-            (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
-            [(ngModel)]="anyFilter">
-          <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
-            <i class="fa-solid fa-filter"></i>
-          </button>
-          <button class="btn btn-danger ms-1" (click)="resetFilter()">
-            <i class="fa-solid fa-arrow-rotate-right"></i>
-          </button>
-        </div>
+      <div class="col-auto d-flex justify-content-end text-end">
+        <button class="btn btn-lightorange" (click)="navtoAddEmp()" routerLinkActive="router-link-active"> <i
+            class="fa-regular fa-square-plus ms-1" aria-hidden="true"></i>
+          Add Employee
+        </button>
+        <input type="text" class="mx-2 form-control form-control-sm g-search" (keydown.esc)="resetFilter()"
+          (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
+          [(ngModel)]="anyFilter">
+        <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
+          <i class="fa-solid fa-filter"></i>
+        </button>
+        <button class="btn btn-danger ms-1" (click)="resetFilter()">
+          <i class="fa-solid fa-arrow-rotate-right"></i>
+        </button>
       </div>
     </div>
   </div>
