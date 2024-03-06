@@ -15,19 +15,17 @@
       </li>
     </ul>
   </div>
-  <div class="col-12 x_panel p-0 m-0">
-    <div class="x_header">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Employee declaration'" [subtitle]="'Add or update details'"></app-breadcrums>
-          </div>
-        </div>
-        <div class="col-4 text-end">
-          <h5 class="pe-2 text-dark">{{employeeName}}</h5>
-        </div>
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Employee declaration'" [subtitle]="'Add or update details'"></app-breadcrums>
       </div>
     </div>
+    <div class="col-4 text-end">
+      <h5 class="pe-2 text-dark">{{employeeName}}</h5>
+    </div>
+  </div>
+  <div class="col-12 x_panel p-0 m-0">
     <div [ngClass]="{'blur-section': !SectionIsReady}">
       <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
         <div class="blur-section__content">

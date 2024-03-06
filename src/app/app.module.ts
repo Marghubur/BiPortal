@@ -13,12 +13,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { HomeModule } from './home/home.module';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { RegisterNewOrgComponent } from './register-new-org/register-new-org.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToastComponent
-    // InitialpageComponent,
+    ToastComponent,
+    RegisterNewOrgComponent
   ],
   imports: [
     BrowserModule,
@@ -26,6 +28,8 @@ import { ApplicationStorage } from 'src/providers/ApplicationStorage';
     RouterModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     HomeModule
   ],
   providers: [

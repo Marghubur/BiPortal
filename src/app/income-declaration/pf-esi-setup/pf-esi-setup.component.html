@@ -1,16 +1,14 @@
 <div class="col-12 full-v main-container">
   <div>
     <form>
-      <div class="x_panel">
-        <div class="x_header">
-          <div class="d-flex justify-content-between">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'PF & ESI'" [subtitle]="'Setup PF & ESI rules and value.'"></app-breadcrums>
-              </div>
-            </div>
+      <div class="content-header">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'PF & ESI'" [subtitle]="'Setup PF & ESI rules and value.'"></app-breadcrums>
           </div>
         </div>
+      </div>
+      <div class="x_panel">
         <div class="col-12 p-2 my-4 row">
           <ng-container *ngIf="IsReady">
             <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING <button [disabled]="isLoading"

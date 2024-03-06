@@ -1,29 +1,27 @@
 <div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
-  <div class="x_panel">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Employee detail'" [subtitle]="'Add or update details'"></app-breadcrums>
-          </div>
-        </div>
-        <div class="col-4 text-end row">
-          <div class="col-md-9">
-            <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-              (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
-              [(ngModel)]="anyFilter">
-          </div>
-          <div class="col-md-3">
-            <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
-              <i class="fa-solid fa-filter"></i>
-            </button>
-            <button class="btn  btn-danger ms-2" (click)="resetFilter()">
-              <i class="fa-solid fa-repeat"></i>
-            </button>
-          </div>
-        </div>
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Employee detail'" [subtitle]="'Add or update details'"></app-breadcrums>
       </div>
     </div>
+    <div class="col-4 text-end row">
+      <div class="col-md-9">
+        <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+          (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
+          [(ngModel)]="anyFilter">
+      </div>
+      <div class="col-md-3">
+        <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
+          <i class="fa-solid fa-filter"></i>
+        </button>
+        <button class="btn  btn-danger ms-2" (click)="resetFilter()">
+          <i class="fa-solid fa-repeat"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="x_panel">
     <div [ngSwitch]="isEmpPageReady">
       <div *ngSwitchCase="false">
         <div class="mt-5">

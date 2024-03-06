@@ -1,16 +1,14 @@
 <div class="col-12 full-v main-container" [ngClass]="{'preload': !isPageReady}">
   <div>
     <form>
-      <div class="x_panel">
-        <div class="x_header">
-          <div class="d-flex justify-content-between">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'GENERAL PAYROLL SETTING'" ></app-breadcrums>
-              </div>
-            </div>
+      <div class="content-header">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'GENERAL PAYROLL SETTING'" ></app-breadcrums>
           </div>
         </div>
+      </div>
+      <div class="x_panel">
         <ng-container *ngIf="isPageReady">
           <h4 class="fw-bold text-dark my-3 px-2 py-3">
             <span>PAYROLL CYCLE SETTING</span>
