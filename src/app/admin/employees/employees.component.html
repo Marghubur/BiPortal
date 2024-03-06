@@ -1,65 +1,55 @@
 <div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
-  <div class="col-12 u-header curren-bg row m-0 my-3 align-items-center">
-    <div class="col-auto">
-      <div class="d-inline-block c-tab" id="emp-tab">
-        <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.Active}" (click)="SwitchTab($event, 1)">
-          Active
-        </a>
-        <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.InActive}" (click)="SwitchTab($event, 0)">
-          InActive
-        </a>
-        <!-- <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
-          Allsss
+
+  <div class="content-header">
+    <div class="d-flex justify-content-between">
+      <div class="col-6 d-flex">
+        <div class="col-auto px-1">
+          <app-breadcrums [title]="'Employee detail'"></app-breadcrums>
+        </div>
+        <div class="col-auto">
+          <div class="d-inline-block c-tab" id="emp-tab">
+            <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.Active}" (click)="SwitchTab($event, 1)">
+              Active
+            </a>
+            <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.InActive}" (click)="SwitchTab($event, 0)">
+              InActive
+            </a>
+            <!-- <a class="a-tab" [ngClass]="{'tab-active': isActiveTab.All}" (click)="SwitchTab($event, -1)">
+              Allsss
+            </a> -->
+          </div>
+        </div>
+        <div class="col-md-2 ms-3">
+          <select class="form-select" (change)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="companyId">
+            <option value=0 selected>All</option>
+            <option [value]="item.CompanyId" *ngFor="let item of companies">{{item.CompanyName}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-6 d-fex text-end">
+        <!-- <a href="javascript:void(0)" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="export as pdf">
+          <i class="fa-regular fa-file-pdf fa-lg"></i>
         </a> -->
-      </div>
-    </div>
-    <div class="col-md-2 ms-3">
-      <select class="form-select" (change)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="companyId">
-        <option value=0 selected>All</option>
-        <option [value]="item.CompanyId" *ngFor="let item of companies">{{item.CompanyName}}</option>
-      </select>
-    </div>
-    <div class="col-md-2 inline-row d-r p-0 m-0 text-start">
-        <button class="btn btn-sp btn-lightorange" (click)="navtoAddEmp()"
-          routerLinkActive="router-link-active"> <i class="fa-regular fa-square-plus ms-1" aria-hidden="true"></i>
-          Add Employee
-        </button>
-    </div>
-    <div class="col-md-5 align-items-center justify-content-end row m-0 ms-auto p-0 text-end">
-      <div class="col-md-9">
-        <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-          (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
-          [(ngModel)]="anyFilter">
-      </div>
-      <div class="col-auto">
-        <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
-          <i class="fa-solid fa-filter"></i>
-        </button>
-        <button class="btn btn-danger ms-1" (click)="resetFilter()">
-          <i class="fa-solid fa-arrow-rotate-right"></i>
-        </button>
+        <div class="col-auto d-flex justify-content-end text-end">
+          <button class="btn btn-lightorange" (click)="navtoAddEmp()" routerLinkActive="router-link-active"> <i
+              class="fa-regular fa-square-plus ms-1" aria-hidden="true"></i>
+            Add Employee
+          </button>
+          <input type="text" class="mx-2 form-control form-control-sm g-search" (keydown.esc)="resetFilter()"
+            (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
+            [(ngModel)]="anyFilter">
+          <button class="btn  btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
+            <i class="fa-solid fa-filter"></i>
+          </button>
+          <button class="btn btn-danger ms-1" (click)="resetFilter()">
+            <i class="fa-solid fa-arrow-rotate-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   </div>
+
   <div class="x_panel">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Employee detail'" [subtitle]="'Add or update details'"></app-breadcrums>
-          </div>
-        </div>
-        <div class="col-4 text-end">
-          <!-- <a href="javascript:void(0)" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="export as pdf">
-            <i class="fa-regular fa-file-pdf fa-lg"></i>
-          </a> -->
-          <a href="{{downlodexcelFilePath}}" class="d-none" id="downloadexistingfiled"></a>
-          <a href="javascript:void(0)" class="text-success ms-3" (click)="exportData(2)" data-bs-toggle="tooltip" data-bs-placement="right" title="export as excel">
-            <i class="fa-regular fa-file-excel fa-lg"></i>
-          </a>
-        </div>
-      </div>
-    </div>
     <div [ngSwitch]="isEmpPageReady">
       <div *ngSwitchCase="false">
         <div class="mt-5">
@@ -114,7 +104,16 @@
                       </div>
                     </div>
                   </div>
-                  <div class="th fe-1 text-center">ACTIONS</div>
+                  <div class="th fe-1 text-center">
+                    <div class="cell-wrapper">
+                      <a href="{{downlodexcelFilePath}}" class="d-none" id="downloadexistingfiled"></a>
+                      <a href="javascript:void(0)" class="text-success ms-3" (click)="exportData(2)"
+                        data-bs-toggle="tooltip" data-bs-placement="right" title="export as excel">
+                        <i class="fa-regular fa-file-excel fa-lg"></i>
+                      </a>
+                      <div>ACTIONS</div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="t-body">
@@ -132,8 +131,9 @@
                           </small>
                         </a>
                         <div class="float-end">
-                          <a href="javascript:void(0)"  data-bs-toggle="tooltip" (click)="goToPerformancePage(user)"
-                            data-bs-placement="right" title="View Employee Performance"><span class="badge bg-secondary me-3"><i
+                          <a href="javascript:void(0)" data-bs-toggle="tooltip" (click)="goToPerformancePage(user)"
+                            data-bs-placement="right" title="View Employee Performance"><span
+                              class="badge bg-secondary me-3"><i
                                 class="fa-solid fa-chart-column  user-edit-icon"></i></span></a>
                           <a href="javascript:void(0)" (click)="editProfile(user)" data-bs-toggle="tooltip"
                             data-bs-placement="right" title="View Profile">
@@ -141,16 +141,17 @@
                               <i class="fa-solid fa-user user-edit-icon"></i>
                             </span>
                           </a>
-                          <a href="javascript:void(0)"><span class="badge bg-primary fa-regular fa-building user-edit-icon"
-                            data-bs-toggle="tooltip" data-bs-placement="right"
-                            title="{{user.FirstName}} {{user.LastName}} is associated with {{user.ClientJson.length}} clients">
-                            &nbsp;
-                            <span></span>
-                            <span *ngIf="user.ClientJson.length > 0">{{user.ClientJson.length}}</span>
-                            <span *ngIf="user.ClientJson.length == 0">0</span></span>
+                          <a href="javascript:void(0)"><span
+                              class="badge bg-primary fa-regular fa-building user-edit-icon" data-bs-toggle="tooltip"
+                              data-bs-placement="right"
+                              title="{{user.FirstName}} {{user.LastName}} is associated with {{user.ClientJson.length}} clients">
+                              &nbsp;
+                              <span></span>
+                              <span *ngIf="user.ClientJson.length > 0">{{user.ClientJson.length}}</span>
+                              <span *ngIf="user.ClientJson.length == 0">0</span></span>
                           </a>
-                          <a href="javascript:void(0)" class="text-decoration-none" data-bs-toggle="tooltip" (click)="generateAttendance(user)"
-                            data-bs-placement="right" title="Generate Attendance">
+                          <a href="javascript:void(0)" class="text-decoration-none" data-bs-toggle="tooltip"
+                            (click)="generateAttendance(user)" data-bs-placement="right" title="Generate Attendance">
                             <span class="ms-2 badge bg-dark">
                               <i class="fa-solid fa-clipboard-user"></i>
                             </span>
@@ -177,26 +178,32 @@
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="d-flex flex-row justify-content-evenly">
-                        <a href="javascript:void(0)" (click)="ViewFiles(user)" [ngClass]="{'pe-none': isLoading}" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="View Files">
+                        <a href="javascript:void(0)" (click)="ViewFiles(user)" [ngClass]="{'pe-none': isLoading}"
+                          data-bs-toggle="tooltip" data-bs-placement="right" title="View Files">
                           <span class="badge bg-primary"><i class="fa-solid fa-file" aria-hidden="true"></i></span>
                         </a>
-                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="AddEditDocuments(user)" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="View Documents">
-                          <span class="badge bg-dark"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></span>
+                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="AddEditDocuments(user)"
+                          data-bs-toggle="tooltip" data-bs-placement="right" title="View Documents">
+                          <span class="badge bg-dark"><i class="fa-regular fa-folder-open"
+                              aria-hidden="true"></i></span>
                         </a>
-                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="CreatePopup(user)" [ngClass]="{'pe-none': user.EmployeeUid == 1}">
+                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="CreatePopup(user)"
+                          [ngClass]="{'pe-none': user.EmployeeUid == 1}">
                           <ng-container [ngSwitch]="user.IsActive">
                             <span *ngSwitchCase="true">
-                              <span class="badge bg-danger" data-bs-toggle="tooltip"
-                              data-bs-placement="right" title="Inactive employee">
-                                <i class="" [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-trash-can': !isLoading}" aria-hidden="true"></i>
+                              <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="right"
+                                title="Inactive employee">
+                                <i class=""
+                                  [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-trash-can': !isLoading}"
+                                  aria-hidden="true"></i>
                               </span>
                             </span>
                             <span *ngSwitchDefault>
-                              <span class="badge bg-success" data-bs-toggle="tooltip"
-                              data-bs-placement="right" title="Active Employee">
-                                <i class="" [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-shuffle': !isLoading}" aria-hidden="true" aria-hidden="true"></i>
+                              <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="right"
+                                title="Active Employee">
+                                <i class=""
+                                  [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-shuffle': !isLoading}"
+                                  aria-hidden="true" aria-hidden="true"></i>
                               </span>
                             </span>
                           </ng-container>
@@ -210,7 +217,8 @@
                   </div>
                 </ng-container>
                 <ng-container *ngIf="!isFileFound">
-                  <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                  <div
+                    class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                     <p class="my-5 py-5">Record Not Found</p>
                   </div>
                 </ng-container>
@@ -277,13 +285,15 @@
         </table>
       </div>
       <div class="modal-footer border-top-0">
-        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="ClosePopup()" class="text-decoration-none text-danger btn-white pe-3"
-          data-dismiss="modal">Cancel</a>
-        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeleteCurrent(singleEmployee)" *ngIf="singleEmployee?.IsActive == true"
-          class="text-decoration-none btn-white text-primary"><i class="" [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading}"></i>
+        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="ClosePopup()"
+          class="text-decoration-none text-danger btn-white pe-3" data-dismiss="modal">Cancel</a>
+        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeleteCurrent(singleEmployee)"
+          *ngIf="singleEmployee?.IsActive == true" class="text-decoration-none btn-white text-primary"><i class=""
+            [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Remove' }}</a>
         <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="DeactivatedEmployee(singleEmployee)"
-          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary"><i class="" [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading}"></i>
+          *ngIf="singleEmployee?.IsActive == false" class="text-decoration-none btn-white text-primary"><i class=""
+            [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Activate' }}</a>
       </div>
     </div>

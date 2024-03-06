@@ -1,5 +1,6 @@
 <div class="container-fluid main-container">
-  <div class="x_panel mt-2">
+
+  <div class="content-header">
     <div class="x_header">
       <div class="d-flex justify-content-between">
         <div class="col-8">
@@ -11,220 +12,246 @@
         </div>
       </div>
     </div>
-    <div class="x_content mt-4" *ngIf="isLoaded">
-      <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row" *ngIf="clientForm">
-        <div class="mb-5">
-          <div class="col-12 row m-0">
-            <div class="col-md-4">
-              <div class="x_header_title position-relative">
-                <div class="img-container-sq" (change)="uploadClientLogo($event)">
-                  <div class="img-container__box">
-                    <img [attr.src]="profileURL" alt="User">
-                    <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
-                      formControlName="ProfileImgPath" />
-                    <div class="img-container__btn mt-2">
-                      <button class="btn btn-outline-success form-control" (click)="fireBrowserFile()">Browse</button>
+  </div>
+
+  <div class="col-12">
+    <div class="x_panel">
+      <div class="x_content mt-4" *ngIf="isLoaded">
+        <form [formGroup]="clientForm" autocomplete="off" class="col-md-12 row" *ngIf="clientForm">
+          <div class="mb-5">
+            <div class="col-12 row m-0">
+              <div class="col-md-4">
+                <div class="x_header_title position-relative">
+                  <div class="img-container-sq" (change)="uploadClientLogo($event)">
+                    <div class="img-container__box">
+                      <img [attr.src]="profileURL" alt="User">
+                      <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
+                        formControlName="ProfileImgPath" />
+                      <div class="img-container__btn mt-2">
+                        <button class="btn btn-outline-success form-control" (click)="fireBrowserFile()">Browse</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-8 p-0">
-              <div class="col-md-12 row">
-                <div class="col-md-4">
-                  <label class="form-label">Client/Organization Name *</label>
-                  <input placeholder="Client or organization name" class="form-control" name="ClientName" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="ClientName" maxlength="100"
-                    [ngClass]="{'error-field': submitted && f.ClientName.errors !== null && f.ClientName.errors.required}" />
+              <div class="col-md-8 p-0">
+                <div class="col-md-12 row">
+                  <div class="col-md-4">
+                    <label class="form-label">Client/Organization Name *</label>
+                    <input placeholder="Client or organization name" class="form-control" name="ClientName"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="ClientName" maxlength="100"
+                      [ngClass]="{'error-field': submitted && f.ClientName.errors !== null && f.ClientName.errors.required}" />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Primary No.# *</label>
+                    <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="10"
+                      onkeypress="return event.charCode >=48 && event.charCode <=57"
+                      [ngClass]="{'error-field': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
+                      name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
+                  </div>
+                  <div class="col-md-4 pb-3">
+                    <label class="form-label">Email Id *</label>
+                    <input class="form-control" placeholder="Email Id" maxlength="40"
+                      [ngClass]="{'error-field': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}"
+                      name="Email" formControlName="Email" />
+                  </div>
                 </div>
-                <div class="col-md-4">
-                  <label class="form-label">Primary No.# *</label>
-                  <input class="form-control" placeholder="Primary Phone No.#" OnlyNumber="10" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                    [ngClass]="{'error-field': submitted && f.PrimaryPhoneNo.errors !== null && f.PrimaryPhoneNo.errors.required}"
-                    name="PrimaryPhoneNo" formControlName="PrimaryPhoneNo" />
-                </div>
-                <div class="col-md-4 pb-3">
-                  <label class="form-label">Email Id *</label>
-                  <input class="form-control" placeholder="Email Id" maxlength="40"
-                    [ngClass]="{'error-field': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}" name="Email"
-                    formControlName="Email" />
-                </div>
-              </div>
 
-              <div class="col-md-12 row">
-                <div class="col-md-4 mb-3">
-                  <label class="form-label">PAN No.#</label>
-                  <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()" maxlength="10"
-                    name="PanNo" formControlName="PanNo" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
+                <div class="col-md-12 row">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">PAN No.#</label>
+                    <input class="form-control" placeholder="PAN No.#" oninput="this.value = this.value.toUpperCase()"
+                      maxlength="10" name="PanNo" formControlName="PanNo"
+                      onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">Alternate No.#</label>
+                    <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo"
+                      OnlyNumber="10" formControlName="SecondaryPhoneNo" />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">FAX No.# (optional)</label>
+                    <input class="form-control" placeholder="FAX No.#" name="Fax" maxlength="10"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="Fax" />
+                  </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                  <label class="form-label">Alternate No.#</label>
-                  <input class="form-control" placeholder="Alternate Phone No.#" name="SecondaryPhoneNo" OnlyNumber="10"
-                    formControlName="SecondaryPhoneNo" />
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label class="form-label">FAX No.# (optional)</label>
-                  <input class="form-control" placeholder="FAX No.#" name="Fax" maxlength="10"
-                    oninput="this.value = this.value.toUpperCase()" formControlName="Fax" />
-                </div>
-              </div>
 
-              <div class="col-md-12 row">
-                <div class="col-md-4 mb-3">
-                  <label class="form-label">GSTIN No.# *</label>
-                  <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No." maxlength="16"
-                  name="GSTNO" formControlName="GSTNO" [ngClass]="{'error-field': submitted && f.GSTNO.errors !== null && f.GSTNO.errors.required}"/>
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label class="form-label">Mobile No.# (optional)</label>
-                  <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                  OnlyNumber="10" />
-                </div>
-                <div class="col-md-4 mb-3">
-                  <label class="form-label">Select Shift *</label>
-                  <bot-autocomplete [data]="shiftDetail" formControlName="WorkShiftId">
-                  </bot-autocomplete>
-                  <!-- <input class="form-control" placeholder="Workshift Id" name="WorkShiftId" formControlName="WorkShiftId" OnlyNumber="1"> -->
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 row m-0 mb-4">
-          <div class="col-md-12">
-            <div class="x_panel mh-auto">
-              <div class="x_header">
-                <div class="x_header_title">
-                  <h2>Other Email's<small>These email can be used as secoundry emails.</small></h2>
-                </div>
-              </div>
-              <div class="col-md-12 mt-4 mb-3 mb-3 row">
-                <div class="col-md-3">
-                  <label class="form-label">Other Email 1</label>
-                  <input placeholder="Other Email 1" class="form-control" name="OtherEmail_4" maxlength="40"
-                    formControlName="OtherEmail_1" />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Other Email 2</label>
-                  <input placeholder="Other Email 2" class="form-control" name="OtherEmail_2" maxlength="40"
-                    formControlName="OtherEmail_2" />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Other Email 3</label>
-                  <input placeholder="Other Email 3" class="form-control" name="OtherEmail_3" maxlength="40"
-                    formControlName="OtherEmail_3" />
-                </div>
-                <div class="col-md-3">
-                  <label class="form-label">Other Email 4</label>
-                  <input placeholder="Other Email 4" class="form-control" name="OtherEmail_4" maxlength="40"
-                    formControlName="OtherEmail_4" />
+                <div class="col-md-12 row">
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">GSTIN No.# *</label>
+                    <input class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="GSTIN No."
+                      maxlength="16" name="GSTNO" formControlName="GSTNO"
+                      [ngClass]="{'error-field': submitted && f.GSTNO.errors !== null && f.GSTNO.errors.required}" />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">Mobile No.# (optional)</label>
+                    <input class="form-control" placeholder="Mobile No.#" name="MobileNo" formControlName="MobileNo"
+                      onkeypress="return event.charCode >=48 && event.charCode <=57" OnlyNumber="10" />
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label class="form-label">Select Shift *</label>
+                    <bot-autocomplete [data]="shiftDetail" formControlName="WorkShiftId">
+                    </bot-autocomplete>
+                    <!-- <input class="form-control" placeholder="Workshift Id" name="WorkShiftId" formControlName="WorkShiftId" OnlyNumber="1"> -->
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="col-12 row m-0">
-          <div class="col-md-6">
-            <div class="x_panel">
-              <div class="x_header">
-                <div class="x_header_title">
-                  <h2>Bank Detail<small>Bank related detail for transaction.</small></h2>
+          <div class="col-12 row m-0 mb-4">
+            <div class="col-md-12">
+              <div class="x_panel_body mh-auto">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Other Email's<small>These email can be used as secoundry emails.</small></h2>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-12 mb-3 mb-3 row">
-                <!-- <label class="form-label">Address *</label> -->
-                <div class="col-md-12 mt-4">
-                  <label class="form-label">Bank Name</label>
-                  <input placeholder="Bank name" class="form-control" name="BankName"  oninput="this.value = this.value.toUpperCase()" maxlength="40"
-                    formControlName="BankName" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
-                </div>
-                <div class="col-md-12 mt-4">
-                  <label class="form-label">Account No.#</label>
-                  <input placeholder="Account No.#" class="form-control" OnlyNumber="30" name="AccountNo" formControlName="AccountNo"  OnlyNumber="34" onkeypress="return event.charCode >=48 && event.charCode <=57"/>
-                </div>
-                <div class="col-md-12 mt-4">
-                  <label class="form-label">IFSC Code</label>
-                  <input placeholder="IFSC Code" class="form-control" name="IFSC" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
-                    oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" maxlength="11"/>
-                </div>
-                <div class="col-md-12 mt-4">
-                  <label class="form-label">Branch Name (Optional)</label>
-                  <input placeholder="Branch name" class="form-control" name="BranchName"  oninput="this.value = this.value.toUpperCase()" maxlength="40"
-                    formControlName="BranchName" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
+                <div class="col-md-12 mt-4 mb-3 mb-3 row">
+                  <div class="col-md-3">
+                    <label class="form-label">Other Email 1</label>
+                    <input placeholder="Other Email 1" class="form-control" name="OtherEmail_4" maxlength="40"
+                      formControlName="OtherEmail_1" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Other Email 2</label>
+                    <input placeholder="Other Email 2" class="form-control" name="OtherEmail_2" maxlength="40"
+                      formControlName="OtherEmail_2" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Other Email 3</label>
+                    <input placeholder="Other Email 3" class="form-control" name="OtherEmail_3" maxlength="40"
+                      formControlName="OtherEmail_3" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Other Email 4</label>
+                    <input placeholder="Other Email 4" class="form-control" name="OtherEmail_4" maxlength="40"
+                      formControlName="OtherEmail_4" />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="col-md-6">
-            <div class="x_panel">
-              <div class="x_header">
-                <div class="x_header_title">
-                  <h2>Organization/Client Other Detail<small>
-                      Other detail like Address, State etc.</small></h2>
+          <div class="col-12 row m-0">
+            <div class="col-md-6">
+              <div class="x_panel_body">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Bank Detail<small>Bank related detail for transaction.</small></h2>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-12 mb-3 mb-3 row">
-                <div class="col-md-6 mt-4">
-                  <label class="form-label">Country *</label>
-                  <input placeholder="Country" class="form-control" name="Country" formControlName="Country" maxlength="50" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}"/>
-                </div>
-                <div class="col-md-6 mt-4">
-                  <label class="form-label">State *</label>
-                  <input placeholder="State" class="form-control" name="State" formControlName="State" maxlength="40" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.State.errors !== null && f.State.errors.required}"/>
-                </div>
-                <div class="col-md-6 mt-4">
-                  <label class="form-label">City *</label>
-                  <input placeholder="City" class="form-control" name="City" formControlName="City" maxlength="40" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"  oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.City.errors !== null && f.City.errors.required}"/>
-                </div>
-                <div class="col-md-6 mt-4">
-                  <label class="form-label">Pincode *</label>
-                  <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6" [ngClass]="{'error-field': submitted && f.Pincode.errors !== null && f.Pincode.errors.required}"
-                    formControlName="Pincode" />
-                </div>
-                <div class="col-md-6 mt-4">
-                  <label class="form-label">Address Line 1 *</label>
-                  <input placeholder="Address Line 1" class="form-control" name="FirstAddress" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.FirstAddress.errors !== null && f.FirstAddress.errors.required}"
-                    formControlName="FirstAddress" maxlength="40"/>
-                </div>
-                <div class="col-md-6 mt-4">
-                  <label class="form-label">Address Line 2 *</label>
-                  <input placeholder="Address Line 2" class="form-control" name="SecondAddress" maxlength="40" oninput="this.value = this.value.toUpperCase()" [ngClass]="{'error-field': submitted && f.SecondAddress.errors !== null && f.SecondAddress.errors.required}"
-                    formControlName="SecondAddress" />
-                </div>
-                <div class="col-md-6 mt-4">
-                  <label class="form-label">Address Line 3</label>
-                  <input placeholder="Address Line 3" class="form-control" name="ThirdAddress" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="ThirdAddress" maxlength="40"/>
-                </div>
-                <div class="col-md-6 mt-4">
-                  <label class="form-label">Address Line 4</label>
-                  <input placeholder="Address Line 4" class="form-control" name="ForthAddress" oninput="this.value = this.value.toUpperCase()"
-                    formControlName="ForthAddress" maxlength="40"/>
+                <div class="col-md-12 mb-3 mb-3 row">
+                  <!-- <label class="form-label">Address *</label> -->
+                  <div class="col-md-12 mt-4">
+                    <label class="form-label">Bank Name</label>
+                    <input placeholder="Bank name" class="form-control" name="BankName"
+                      oninput="this.value = this.value.toUpperCase()" maxlength="40" formControlName="BankName"
+                      onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32" />
+                  </div>
+                  <div class="col-md-12 mt-4">
+                    <label class="form-label">Account No.#</label>
+                    <input placeholder="Account No.#" class="form-control" OnlyNumber="30" name="AccountNo"
+                      formControlName="AccountNo" OnlyNumber="34"
+                      onkeypress="return event.charCode >=48 && event.charCode <=57" />
+                  </div>
+                  <div class="col-md-12 mt-4">
+                    <label class="form-label">IFSC Code</label>
+                    <input placeholder="IFSC Code" class="form-control" name="IFSC"
+                      onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="IFSC" maxlength="11" />
+                  </div>
+                  <div class="col-md-12 mt-4">
+                    <label class="form-label">Branch Name (Optional)</label>
+                    <input placeholder="Branch name" class="form-control" name="BranchName"
+                      oninput="this.value = this.value.toUpperCase()" maxlength="40" formControlName="BranchName"
+                      onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" />
+                  </div>
                 </div>
               </div>
             </div>
+
+            <div class="col-md-6">
+              <div class="x_panel_body">
+                <div class="x_header">
+                  <div class="x_header_title">
+                    <h2>Organization/Client Other Detail<small>
+                        Other detail like Address, State etc.</small></h2>
+                  </div>
+                </div>
+                <div class="col-md-12 mb-3 mb-3 row">
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Country *</label>
+                    <input placeholder="Country" class="form-control" name="Country" formControlName="Country"
+                      maxlength="50" oninput="this.value = this.value.toUpperCase()"
+                      [ngClass]="{'error-field': submitted && f.Country.errors !== null && f.Country.errors.required}" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">State *</label>
+                    <input placeholder="State" class="form-control" name="State" formControlName="State" maxlength="40"
+                      onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
+                      oninput="this.value = this.value.toUpperCase()"
+                      [ngClass]="{'error-field': submitted && f.State.errors !== null && f.State.errors.required}" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">City *</label>
+                    <input placeholder="City" class="form-control" name="City" formControlName="City" maxlength="40"
+                      onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
+                      oninput="this.value = this.value.toUpperCase()"
+                      [ngClass]="{'error-field': submitted && f.City.errors !== null && f.City.errors.required}" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Pincode *</label>
+                    <input placeholder="Pincode" class="form-control" name="Pincode" OnlyNumber="6"
+                      [ngClass]="{'error-field': submitted && f.Pincode.errors !== null && f.Pincode.errors.required}"
+                      formControlName="Pincode" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Address Line 1 *</label>
+                    <input placeholder="Address Line 1" class="form-control" name="FirstAddress"
+                      oninput="this.value = this.value.toUpperCase()"
+                      [ngClass]="{'error-field': submitted && f.FirstAddress.errors !== null && f.FirstAddress.errors.required}"
+                      formControlName="FirstAddress" maxlength="40" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Address Line 2 *</label>
+                    <input placeholder="Address Line 2" class="form-control" name="SecondAddress" maxlength="40"
+                      oninput="this.value = this.value.toUpperCase()"
+                      [ngClass]="{'error-field': submitted && f.SecondAddress.errors !== null && f.SecondAddress.errors.required}"
+                      formControlName="SecondAddress" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Address Line 3</label>
+                    <input placeholder="Address Line 3" class="form-control" name="ThirdAddress"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="ThirdAddress" maxlength="40" />
+                  </div>
+                  <div class="col-md-6 mt-4">
+                    <label class="form-label">Address Line 4</label>
+                    <input placeholder="Address Line 4" class="form-control" name="ForthAddress"
+                      oninput="this.value = this.value.toUpperCase()" formControlName="ForthAddress" maxlength="40" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-        </div>
-
-        <div class="col-12 row m-0 pt-5">
-          <div class="col-md-12 button groups text-end">
-            <div class="btn-group">
-              <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
-            </div>
-            <div class="btn-group ms-2">
-              <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generate()">
-                <i class="" [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
-                {{ isLoading ? 'Processing' : 'Submit' }}
-              </button>
+          <div class="col-12 row m-0 pt-5">
+            <div class="col-md-12 button groups text-end">
+              <div class="btn-group">
+                <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+              </div>
+              <div class="btn-group ms-2">
+                <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generate()">
+                  <i class=""
+                    [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+                  {{ isLoading ? 'Processing' : 'Submit' }}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </form>
-    </div>
-    <!-- <ng-container *ngIf="!isLoaded">
+        </form>
+      </div>
+      <!-- <ng-container *ngIf="!isLoaded">
       <div class="py-5 my-5">
         <h6 class="fw-bold fs-3 text-center text-dark">Clients/ Register Client Details are loading</h6>
         <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
@@ -237,17 +264,21 @@
         </div>
       </div>
     </ng-container> -->
+    </div>
   </div>
 </div>
 
 
 <!-- Employee Register or Update message modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1"
+  aria-labelledby="messageModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="p-2 modal-content">
       <div class="modal-body text-dark d-flex align-items-center mb-0 pb-0">
         <div class="wrapper-checkmark me-3">
-          <svg class="checkmark-register" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          <svg class="checkmark-register" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
           </svg>
         </div>
         Congratulation!! client detail registered/ updated successfully!

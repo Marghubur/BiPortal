@@ -1,16 +1,20 @@
 <div class="col-12 full-v main-container">
-  <div class="col-12 row p-0 m-0">
-    <div class="right-panel container col-md-12 p-0">
-      <div class="x_panel mt-2">
-        <div class="x_header">
-          <div class="d-flex justify-content-between">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'Employee'" [subtitle]="'Details'"></app-breadcrums>
-              </div>
-            </div>
+
+  <div class="content-header">
+    <div class="x_header">
+      <div class="d-flex justify-content-between">
+        <div class="col-8">
+          <div class="px-1">
+            <app-breadcrums [title]="'Manage mployee detail'"></app-breadcrums>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 row p-0 m-0">
+    <div class="right-panel container col-md-12 p-0">
+      <div class="x_panel">        
         <ng-container *ngIf="isReady">
           <div class="x_content mt-4">
             <div [ngClass]="{'blur-section': !isCompaniesDetails}">
@@ -150,7 +154,7 @@
                       Update Associate Clients <i class="fa-solid fa-plus ps-2"></i></a>
                   </ng-container>
                   <div class="col-12 row m-0 mt-5 px-3">
-                    <div class="x_panel x-panel-changed">
+                    <div class="x_panel_body">
                       <div class="x_header">
                         <div class="x_header_title">
                           <h2>Roles & Manage<small>add roles and mangers</small></h2>
@@ -213,7 +217,7 @@
                   </div>
                   <div class="col-12 row m-0 mt-5">
                     <div class="col-md-6">
-                      <div class="x_panel">
+                      <div class="x_panel_body">
                         <div class="x_header">
                           <div class="x_header_title">
                             <h2>Personal Detail<small>Fill employee personal details</small></h2>
@@ -272,7 +276,7 @@
                     </div>
 
                     <div class="col-md-6">
-                      <div class="x_panel">
+                      <div class="x_panel_body">
                         <div class="x_header">
                           <div class="x_header_title">
                             <h2>Account Detail<small>Fill employee account details</small></h2>
@@ -335,7 +339,7 @@
                     </div>
                   </div>
                   <div class="col-12 row m-0 mt-3 px-3">
-                    <div class="x_panel x-panel-changed">
+                    <div class="x_panel_body x-panel-changed">
                       <div class="x_header">
                         <div class="x_header_title">
                           <h2>Statutory Information <small>add pf details</small></h2>

@@ -1,6 +1,7 @@
 <div class="col-md-12 col-sm-12 main-container">
-  <div class="x_panel">
-    <div class="x_header">
+
+  <div class="d-flex flex-column justify-content-center col-12 p-0 m-0">
+    <div class="content-header">
       <div class="d-flex justify-content-between align-items-center">
         <div class="col-8">
           <div class="px-1">
@@ -9,11 +10,15 @@
         </div>
         <div class="col-auto">
           <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-            <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+            <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+              title="Reload this page"></i>
           </a>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="x_panel">
     <div class="x_content" [hidden]="!isPageReady">
       <ng-container>
         <div class="row pt-3">
@@ -127,7 +132,7 @@
                         Monthly Leave Status
                       </h6>
                       <div>
-                        <i class="fa-solid fa-circle-info fa-lg p-3"  aria-hidden="true"></i>
+                        <i class="fa-solid fa-circle-info fa-lg p-3" aria-hidden="true"></i>
                       </div>
                     </div>
                     <div class="d-block mt-2">
@@ -147,7 +152,7 @@
                         {{leave.PlanName}}
                       </h6>
                       <div>
-                        <i class="fa-solid fa-arrows-rotate fa-lg p-3" aria-hidden="true"  (click)="loadData()"></i>
+                        <i class="fa-solid fa-arrows-rotate fa-lg p-3" aria-hidden="true" (click)="loadData()"></i>
                       </div>
                     </div>
                     <div class="d-block mt-2">
@@ -219,7 +224,8 @@
             </div>
             <div class="t-body custom-height text-dark">
               <ng-container *ngIf="leaveData.length > 0">
-                <div class="tr py-2" *ngFor="let item of leaveData" [ngClass]="{'pending-leave': item.LeaveStatus == 2, 'rejected-leave': item.LeaveStatus == 5, 'approved-leave': item.LeaveStatus == 9}">
+                <div class="tr py-2" *ngFor="let item of leaveData"
+                  [ngClass]="{'pending-leave': item.LeaveStatus == 2, 'rejected-leave': item.LeaveStatus == 5, 'approved-leave': item.LeaveStatus == 9}">
                   <div class="td align-middle fe-2">
                     <div class="cell-wrapper">
                       <div class="d-flex flex-column justify-content-center">
@@ -236,7 +242,8 @@
                           </div>
                         </div>
                       </div>
-                      <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item.FileIds)" *ngIf="item.FileIds != null && item.FileIds != '[]'" class="text-decoration-none ps-4">
+                      <a href="javascript:void(0)" (click)="viewLeaveAttachmentModal(item.FileIds)"
+                        *ngIf="item.FileIds != null && item.FileIds != '[]'" class="text-decoration-none ps-4">
                         Attached Document
                       </a>
                     </div>
@@ -277,7 +284,8 @@
                 </div>
               </ng-container>
               <ng-container *ngIf="leaveData.length <=0">
-                <div class="custom-height py-5 my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                <div
+                  class="custom-height py-5 my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                   <p class="my-5 py-5">Record Not Found</p>
                 </div>
               </ng-container>
@@ -317,18 +325,18 @@
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control ms-0 fs-5 ps-0 pt-0 border-0" placeholder="yyyy-mm-dd"   [markDisabled]="isDisabled"
-                            (dateSelect)="onDateSelection($event)" name="dp" [(ngModel)]="fromdateModal" ngbDatepicker
-                            #fromdate="ngbDatepicker">
-                          <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()" [disabled]="!isEnabled"
-                            type="button"></button>
+                          <input class="form-control ms-0 fs-5 ps-0 pt-0 border-0" placeholder="yyyy-mm-dd"
+                            [markDisabled]="isDisabled" (dateSelect)="onDateSelection($event)" name="dp"
+                            [(ngModel)]="fromdateModal" ngbDatepicker #fromdate="ngbDatepicker">
+                          <button class="btn btn-outline-secondary calendar d-none" (click)="fromdate.toggle()"
+                            [disabled]="!isEnabled" type="button"></button>
                         </div>
                       </div>
                     </form>
                   </div>
                   <div class="ms-3">
-                    <button class="btn btn-outline-secondary calendar" (click)="fromdate.toggle()" type="button" [disabled]="!isEnabled"><i
-                        class="fa-regular fa-calendar-days fa-lg"></i></button>
+                    <button class="btn btn-outline-secondary calendar" (click)="fromdate.toggle()" type="button"
+                      [disabled]="!isEnabled"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
                   </div>
                 </div>
               </div>
@@ -340,18 +348,18 @@
                     <form class="row row-cols-sm-auto">
                       <div class="col-12">
                         <div class="input-group">
-                          <input class="form-control pe-0 text-end fs-5 pt-0 border-0" placeholder="yyyy-mm-dd" [minDate]="maxDate"
-                            (dateSelect)="onDateSelect($event)" name="dp" [markDisabled]="isDisabled" [(ngModel)]="model" ngbDatepicker
-                            #d="ngbDatepicker">
-                          <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()" [disabled]="!isEnabled"
-                            type="button"></button>
+                          <input class="form-control pe-0 text-end fs-5 pt-0 border-0" placeholder="yyyy-mm-dd"
+                            [minDate]="maxDate" (dateSelect)="onDateSelect($event)" name="dp"
+                            [markDisabled]="isDisabled" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                          <button class="btn btn-outline-secondary calendar d-none" (click)="d.toggle()"
+                            [disabled]="!isEnabled" type="button"></button>
                         </div>
                       </div>
                     </form>
                   </div>
                   <div class="ms-3">
-                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button" [disabled]="!isEnabled"><i
-                        class="fa-regular fa-calendar-days fa-lg"></i></button>
+                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"
+                      [disabled]="!isEnabled"><i class="fa-regular fa-calendar-days fa-lg"></i></button>
                   </div>
                 </div>
               </div>
@@ -378,7 +386,8 @@
             </div>
             <div class="col-md-6">
               <label class="form-label">Leave Type</label>
-              <select class="form-select mb-3" (change)="validateLeaveStatus($event)" aria-label=".form-select-lg example" formControlName="LeaveTypeId"
+              <select class="form-select mb-3" (change)="validateLeaveStatus($event)"
+                aria-label=".form-select-lg example" formControlName="LeaveTypeId"
                 [ngClass]="{'error-field':submitted && f['LeaveTypeId'].errors != null && f['LeaveTypeId'].errors['required']}">
                 <option value="" disabled>Select leave type</option>
                 <option [value]="l.LeavePlanTypeId" *ngFor="let l of leaveTypes">
@@ -389,27 +398,32 @@
               </select>
             </div>
           </div>
-          <label class="form-label mb-0 text-dark ps-2 fs-5">Reason <small *ngIf="currentLeaveType != null && currentLeaveType.IsCommentsRequired">(Required *)</small></label>
-          <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment" name="Reason" maxlength="100"
-            formControlName="Reason" [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
+          <label class="form-label mb-0 text-dark ps-2 fs-5">Reason <small
+              *ngIf="currentLeaveType != null && currentLeaveType.IsCommentsRequired">(Required *)</small></label>
+          <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment"
+            name="Reason" maxlength="100" formControlName="Reason"
+            [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
           <div class="col-md-12 mt-4">
             <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify To</p>
-            <bot-autocomplete [data]="managerList" [(ngModel)]="reportingManagerId" [ngModelOptions]="{standalone: true}">
+            <bot-autocomplete [data]="managerList" [(ngModel)]="reportingManagerId"
+              [ngModelOptions]="{standalone: true}">
             </bot-autocomplete>
           </div>
           <p class="mb-0 py-2">These employees will be notified through email when you leave request is approved.</p>
           <div>
-            <input type="file" id="leaveAttachment" (change)="uploadLeaveAttachment($event)" multiple class="d-none" accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf">
+            <input type="file" id="leaveAttachment" (change)="uploadLeaveAttachment($event)" multiple class="d-none"
+              accept=".png, .jpg, .pdf. .doc, .docx, .txt, application/pdf">
             <a href="javascript:void(0)" class="text-decoration-none" (click)="fireBrowse()">
               <i class="fa-solid fa-paperclip pe-2"></i>Add Attachment
             </a>
-            <span class="fw-bold ps-2 text-dark" *ngIf="FileDocumentList.length > 0">{{FileDocumentList.length}} file selected</span>
+            <span class="fw-bold ps-2 text-dark" *ngIf="FileDocumentList.length > 0">{{FileDocumentList.length}} file
+              selected</span>
           </div>
         </div>
         <div class="modal-footer border-top-0 pe-4">
           <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-primary-c" [disabled]="isLoading || !isEnabled" (click)="submitLeave()">
-            <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
+            <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
             {{ isLoading ? 'Wait' : 'Request' }}
           </button>
         </div>
@@ -431,7 +445,8 @@
 <!-- End pdf view modal -->
 
 <!-- View Rent file -->
-<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveFileModal" tabindex="-1" aria-labelledby="leaveFileModalLabel" aria-hidden="true">
+<div class="modal fade delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" id="leaveFileModal"
+  tabindex="-1" aria-labelledby="leaveFileModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
@@ -439,7 +454,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <ng-container >
+        <ng-container>
           <table class="table">
             <thead>
               <tr>
@@ -453,7 +468,8 @@
                 <td class="counterCell">{{i+1}}</td>
                 <td>{{item.FileName}}.{{item.FileExtension}}</td>
                 <td>
-                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i class="fa-regular fa-eye px-2 text-dark"></i></a>
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewFile(item)"><i
+                      class="fa-regular fa-eye px-2 text-dark"></i></a>
                 </td>
               </tr>
             </tbody>
