@@ -1,155 +1,161 @@
 <div class="main-container">
-  <div class="x_panel">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Appraisal Cycle'"></app-breadcrums>
-          </div>
-        </div>
+
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Appraisal Cycle'"></app-breadcrums>
       </div>
     </div>
+  </div>
+
+  <div class="x_panel">
     <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
       <li [ngbNavItem]="1">
-        <button ngbNavLink >Appraisal Cycle Group</button>
+        <button ngbNavLink>Appraisal Cycle Group</button>
         <ng-template ngbNavContent>
-            <div [ngSwitch]="isPageReady">
-              <div *ngSwitchCase="false">
-                <div class="mt-5">
-                  <app-pre-load-table></app-pre-load-table>
+          <div [ngSwitch]="isPageReady">
+            <div *ngSwitchCase="false">
+              <div class="mt-5">
+                <app-pre-load-table></app-pre-load-table>
+              </div>
+            </div>
+            <div *ngSwitchDefault>
+              <div class="d-flex justify-content-between text-end pe-2 mb-1 mt-4">
+                <div>
+                  <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList"
+                    class="text-decoration-none pe-3"><i class="fa-solid fa-plus pe-1"></i> Add Objective</a>
+                  <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()" *ngIf="isViewInList"><i
+                      class="fa-solid fa-plus pe-1"></i> Add Aprisal Cycle</button>
+                </div>
+                <div>
+                  <span class="fw-bold px-2">Click to add objective</span>
+                  <a href="javascript:void(0)" *ngIf="!isViewInList" class="text-decoration-none" (click)="listview()">
+                    <i class="fa-solid fa-object-ungroup"></i>
+                  </a>
+                  <a href="javascript:void(0)" *ngIf="isViewInList" class="text-decoration-none" (click)="listview()">
+                    <i class="fa-regular fa-object-ungroup"></i>
+                  </a>
                 </div>
               </div>
-              <div *ngSwitchDefault>
-                <div class="d-flex justify-content-between text-end pe-2 mb-1 mt-4">
-                  <div>
-                    <a href="javascript:void(0)" (click)="manageAppraisalObjectivePopUp()" *ngIf="!isViewInList" class="text-decoration-none pe-3"><i class="fa-solid fa-plus pe-1"></i> Add Objective</a>
-                    <button class="btn btn-primary-c mx-3" (click)="addAprisalCyclePopUp()" *ngIf="isViewInList"><i class="fa-solid fa-plus pe-1"></i> Add Aprisal Cycle</button>
-                  </div>
-                  <div>
-                    <span class="fw-bold px-2">Click to add objective</span>
-                    <a href="javascript:void(0)" *ngIf="!isViewInList" class="text-decoration-none" (click)="listview()">
-                      <i class="fa-solid fa-object-ungroup"></i>
-                    </a>
-                    <a href="javascript:void(0)" *ngIf="isViewInList" class="text-decoration-none" (click)="listview()">
-                      <i class="fa-regular fa-object-ungroup"></i>
-                    </a>
-                  </div>
-                </div>
-                <ng-container *ngIf="!isViewInList">
-                  <div class="row mt-3">
-                    <div class="col-md-3">
-                      <div class="d-flex align-items-center border">
-                        <i class="fa-solid fa-magnifying-glass pe-2 ps-3"></i>
-                        <input type="text" placeholder="Search" class="form-control border-0" (keydown.esc)="resetFilter()"
-                        (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ObjectiveCatagoryType"/>
-                      </div>
-                      <div class="d-flex align-items-center justify-content-between my-2">
-                        <h6 class="pt-3 pb-2 ps-2">APPRAISAL GROUP</h6>
-                        <button class="btn btn-primary-c float-end" (click)="addAprisalCyclePopUp()">
-                          <i class="fa px-2" [ngClass]="{
+              <ng-container *ngIf="!isViewInList">
+                <div class="row mt-3">
+                  <div class="col-md-3">
+                    <div class="d-flex align-items-center border">
+                      <i class="fa-solid fa-magnifying-glass pe-2 ps-3"></i>
+                      <input type="text" placeholder="Search" class="form-control border-0"
+                        (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()"
+                        [(ngModel)]="apprisalDetail.ObjectiveCatagoryType" />
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between my-2">
+                      <h6 class="pt-3 pb-2 ps-2">APPRAISAL GROUP</h6>
+                      <button class="btn btn-primary-c float-end" (click)="addAprisalCyclePopUp()">
+                        <i class="fa px-2" [ngClass]="{
                               'fa-plus': !isLoading,
                               'fa-solid fa-spinner fa-spin': isLoading
                             }"></i>
-                          {{ isLoading ? "Wait" : "Add Aprisal Cycle" }}
-                        </button>
-                      </div>
-                      <div class="x_panel p-0">
-                        <ul class="list-group side-group">
-                          <ng-container *ngIf="apprisalCycleDetail.length === 0">
-                            <li>
-                              <div class="text-center mt-5 px-4">
-                                <h5>No Appraisal Group found.</h5>
-                                <p>
-                                  User below button or above add button to add one.
-                                </p>
-                                <button class="btn btn-success mt-4" (click)="addAprisalCyclePopUp()">
-                                  <i class="fa pe-2" [ngClass]="{
+                        {{ isLoading ? "Wait" : "Add Aprisal Cycle" }}
+                      </button>
+                    </div>
+                    <div class="x_panel p-0">
+                      <ul class="list-group side-group">
+                        <ng-container *ngIf="apprisalCycleDetail.length === 0">
+                          <li>
+                            <div class="text-center mt-5 px-4">
+                              <h5>No Appraisal Group found.</h5>
+                              <p>
+                                User below button or above add button to add one.
+                              </p>
+                              <button class="btn btn-success mt-4" (click)="addAprisalCyclePopUp()">
+                                <i class="fa pe-2" [ngClass]="{
                                       'fa-solid fa-spinner fa-spin': isLoading,
                                       'fa-plus': !isLoading
                                     }"></i>
-                                    {{ isLoading ? "Wait" : "Add Aprisal Cycle" }}
-                                </button>
-                              </div>
+                                {{ isLoading ? "Wait" : "Add Aprisal Cycle" }}
+                              </button>
+                            </div>
+                          </li>
+                        </ng-container>
+                        <ng-container *ngIf="apprisalCycleDetail.length > 0">
+                          <ng-container *ngFor="let item of apprisalCycleDetail; let i = index">
+                            <li
+                              class="list-group-item border-0 border-bottom p-0 d-flex justify-content-between align-items-start">
+                              <a href="javascript:void(0)" (click)="selectedAppraisal(i, item)"
+                                class="d-block w-100 px-3 text-decoration-none text-dark"
+                                [ngClass]="{ 'active-tab': i == 0 }">
+                                <div class="d-flex flex-row w-100 justify-content-between mt-4">
+                                  <div class="ms-2 col-md-11 me-auto">
+                                    <div class="fw-bold fs-6">
+                                      {{ item.ObjectiveCatagoryType }}
+                                    </div>
+                                    <p class="mb-0 text-truncate">{{item.TypeDescription}}</p>
+                                  </div>
+                                  <div class="col-md-1 d-flex flex-column align-items-end">
+                                    <a href="javascript:void(0)" (click)="editApprisalPopUp(item)"><i
+                                        class="fa-solid fa-pencil fa-lg text-white"></i></a>
+                                    <a href="javascript:void(0)"><i
+                                        class="fa-solid fa-trash-can fa-lg text-white pt-3"></i></a>
+                                  </div>
+                                </div>
+                                <p class="mb-0 text-dark ps-2 pb-2 pt-2">
+                                  <!-- {{item.AppraisalCycleStartDate | date}} - {{item.AppraisalCycleEndDate | date}} -->
+                                </p>
+                              </a>
                             </li>
                           </ng-container>
-                          <ng-container *ngIf="apprisalCycleDetail.length > 0">
-                            <ng-container *ngFor="let item of apprisalCycleDetail; let i = index">
-                              <li
-                                class="list-group-item border-0 border-bottom p-0 d-flex justify-content-between align-items-start">
-                                <a href="javascript:void(0)" (click)="selectedAppraisal(i, item)"
-                                  class="d-block w-100 px-3 text-decoration-none text-dark"
-                                  [ngClass]="{ 'active-tab': i == 0 }">
-                                  <div class="d-flex flex-row w-100 justify-content-between mt-4">
-                                    <div class="ms-2 col-md-11 me-auto">
-                                      <div class="fw-bold fs-6">
-                                        {{ item.ObjectiveCatagoryType }}
-                                      </div>
-                                      <p class="mb-0 text-truncate">{{item.TypeDescription}}</p>
-                                    </div>
-                                    <div class="col-md-1 d-flex flex-column align-items-end">
-                                      <a href="javascript:void(0)" (click)="editApprisalPopUp(item)"><i
-                                          class="fa-solid fa-pencil fa-lg text-white"></i></a>
-                                      <a href="javascript:void(0)"><i class="fa-solid fa-trash-can fa-lg text-white pt-3"></i></a>
-                                    </div>
-                                  </div>
-                                  <p class="mb-0 text-dark ps-2 pb-2 pt-2">
-                                    <!-- {{item.AppraisalCycleStartDate | date}} - {{item.AppraisalCycleEndDate | date}} -->
-                                  </p>
-                                </a>
-                              </li>
-                            </ng-container>
-                          </ng-container>
-                        </ul>
-                      </div>
+                        </ng-container>
+                      </ul>
                     </div>
-                    <div class="col-md-9">
-                      <ng-container *ngIf="isObjectiveFound">
-                        <div class="t-table t-list  col-md-12">
-                          <div class="hide-bar"></div>
-                          <div class="t-head">
-                            <div class="tr py-2 fw-bold ps-2">
-                              <div class="td fe-index">
-                                <div class="cell-wrapper">Index</div>
-                              </div>
-                              <div class="td fe-4">
-                                <div class="cell-wrapper">Objectives</div>
-                              </div>
-                              <div class="td fe-1">
-                                <div class="cell-wrapper">Target Value</div>
-                              </div>
+                  </div>
+                  <div class="col-md-9">
+                    <ng-container *ngIf="isObjectiveFound">
+                      <div class="t-table t-list  col-md-12">
+                        <div class="hide-bar"></div>
+                        <div class="t-head">
+                          <div class="tr py-2 fw-bold ps-2">
+                            <div class="td fe-index">
+                              <div class="cell-wrapper">Index</div>
+                            </div>
+                            <div class="td fe-4">
+                              <div class="cell-wrapper">Objectives</div>
+                            </div>
+                            <div class="td fe-1">
+                              <div class="cell-wrapper">Target Value</div>
                             </div>
                           </div>
-                          <div class="t-body custom-height">
-                            <ng-container *ngIf="currentAppraisalObjective.length > 0">
-                              <div *ngFor="let item of currentAppraisalObjective; let i=index;" class="tr align-items-center py-2 ps-2">
-                                <div class="td fe-index">
-                                  <div class="cell-wrapper">
-                                    {{i+1}}
-                                  </div>
-                                </div>
-                                <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
-                                  <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
-                                  <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
-                                </div>
-                                <div class="td fe-1">
-                                  <div class="cell-wrapper">
-                                    {{item.TargetValue}} {{item.ProgressMeassureType == 1? '%' : ''}}
-                                  </div>
-                                </div>
-                              </div>
-                            </ng-container>
-                            <ng-container *ngIf="currentAppraisalObjective.length == 0">
-                              <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
-                                No Objective were found. Please add one
-                                by using
-                                <b class="text-primary-c">Add Objective</b>
-                                button.
-                              </div>
-                            </ng-container>
-                          </div>
                         </div>
-                      </ng-container>
-                      <!-- <ng-container *ngIf="!isObjectiveFound">
+                        <div class="t-body custom-height">
+                          <ng-container *ngIf="currentAppraisalObjective.length > 0">
+                            <div *ngFor="let item of currentAppraisalObjective; let i=index;"
+                              class="tr align-items-center py-2 ps-2">
+                              <div class="td fe-index">
+                                <div class="cell-wrapper">
+                                  {{i+1}}
+                                </div>
+                              </div>
+                              <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
+                                <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
+                                <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip"
+                                  data-bs-placement="right" title="{{item.Description}}"></i>
+                              </div>
+                              <div class="td fe-1">
+                                <div class="cell-wrapper">
+                                  {{item.TargetValue}} {{item.ProgressMeassureType == 1? '%' : ''}}
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="currentAppraisalObjective.length == 0">
+                            <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
+                              No Objective were found. Please add one
+                              by using
+                              <b class="text-primary-c">Add Objective</b>
+                              button.
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <!-- <ng-container *ngIf="!isObjectiveFound">
                         <div class="data-loading-loader">
                           <div class="py-5 my-5">
                             <h6 class="fw-bold fs-3 text-center text-dark">Objective are loading</h6>
@@ -164,275 +170,309 @@
                           </div>
                         </div>
                       </ng-container> -->
-                    </div>
                   </div>
-                </ng-container>
-                <ng-container *ngIf="isViewInList">
-                  <div class="x_content">
-                    <div class="t-table t-list  col-md-12">
-                      <div class="hide-bar"></div>
-                      <div class="t-head">
-                        <div class="tr">
-                          <div class="th fe-index">
-                            <div class="t-filter t-index text-center">
-                              <a href="javascript:void()" class="ps-3">#</a>
-                            </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="isViewInList">
+                <div class="x_content">
+                  <div class="t-table t-list  col-md-12">
+                    <div class="hide-bar"></div>
+                    <div class="t-head">
+                      <div class="tr">
+                        <div class="th fe-index">
+                          <div class="t-filter t-index text-center">
+                            <a href="javascript:void()" class="ps-3">#</a>
                           </div>
-                          <div class="th fe-2">
-                            <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" (keydown.esc)="resetFilter()" readonly
-                                (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ObjectiveCatagoryType"
-                                placeholder="Search by Apprisal Name">
-                              <div class="t-filter" (click)="arrangeDetails(orderByObjectiveCatagoryTypeAsc, 'ObjectiveCatagoryType')">
-                                <a href="javascript:void()" class="pe-2">Appraisal Name</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || !orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
-                                <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-2">
-                            <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                                (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ObjectiveCatagoryType"
-                                placeholder="Search by Apprisal Name">
-                              <div class="t-filter" (click)="arrangeDetails(orderByObjectiveCatagoryTypeAsc, 'ObjectiveCatagoryType')">
-                                <a href="javascript:void()" class="pe-2">Category Name</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || !orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
-                                <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || orderByObjectiveCatagoryTypeAsc }" aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-3">
-                            <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                              (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.TypeDescription"
-                                placeholder="Search by Apprisal Cycle Period">
-                              <div class="t-filter" (click)="arrangeDetails(orderByTypeDescriptionAsc, 'TypeDescription')">
-                                <a href="javascript:void()" class="pe-2">Description</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }" aria-hidden="true"></i>
+                        </div>
+                        <div class="th fe-2">
+                          <div class="cell-wrapper">
+                            <input class="form-control form-control-sm" (keydown.esc)="resetFilter()" readonly
+                              (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ObjectiveCatagoryType"
+                              placeholder="Search by Apprisal Name">
+                            <div class="t-filter"
+                              (click)="arrangeDetails(orderByObjectiveCatagoryTypeAsc, 'ObjectiveCatagoryType')">
+                              <a href="javascript:void()" class="pe-2">Appraisal Name</a>
+                              <i class="fa-solid fa-arrow-down-wide-short"
+                                [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || !orderByObjectiveCatagoryTypeAsc }"
+                                aria-hidden="true"></i>
                               <i class="fa-solid fa-arrow-down-short-wide"
-                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }" aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <select class="form-select" disabled (select)="filterRecords()" >
-                                <option selected disabled>Select</option>
-                                <option value='true'>Active</option>
-                                <option value="false">De-Active</option>
-                              </select>
-                              <div class="t-filter" >
-                                <a href="javascript:void()" class="pe-2">Status</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }" aria-hidden="true"></i>
-                                <i class="fa-solid fa-arrow-down-short-wide"
-                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }" aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-2">
-                            <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" (keydown.esc)="resetFilter()" readonly
-                              (keyup.enter)="filterRecords()"
-                                placeholder="Search by Apprisal Cycle Period">
-                              <div class="t-filter" (click)="arrangeDetails(orderByTypeDescriptionAsc, 'TypeDescription')">
-                                <a href="javascript:void()" class="pe-2">Cycle Period</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }" aria-hidden="true"></i>
-                              <i class="fa-solid fa-arrow-down-short-wide"
-                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }" aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-3">
-                            <div class="cell-wrapper">
-                              <select class="form-select" [(ngModel)]="apprisalDetail.RolesId" (change)="filterRecords()">
-                                <option value=null >All</option>
-                                <option [value]="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
-                              </select>
-                              <div class="t-filter">
-                                <a href="javascript:void()" class="pe-2">Tags</a>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1 text-center">
-                            <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
-                              <i class="fa-solid fa-filter">
-                                <span>Filter</span>
-                              </i>
-                            </a>
-                            <div class="t-filter d-block text-center">
-                              <a href="javascript:void(0)">ACTIONS</a>
+                                [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || orderByObjectiveCatagoryTypeAsc }"
+                                aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="t-body">
-                        <ng-container *ngIf="apprisalCycleDetail.length > 0">
-                          <div class="tr py-2" *ngFor="let item of apprisalCycleDetail;">
-                            <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
-                            <div class="td align-middle d-flex justify-content-between fe-2">
-                              <div class="text-truncate">
-                                {{item.AppraisalName}}
-                              </div>
-                            </div>
-                            <div class="td align-middle d-flex justify-content-between fe-2">
-                              <div class="text-truncate">
-                                {{item.ObjectiveCatagoryType}}
-                              </div>
-                            </div>
-                            <div class="td align-middle text-truncate fe-3">
-                              <div class="cell-wrapper text-truncate">
-                                {{item.TypeDescription}}
-                              </div>
-                            </div>
-                            <div class="td align-middle text-truncate fe-1">
-                              <div class="cell-wrapper text-truncate">
-                                {{item.IsActiveCycle ? 'Active' : 'De-Active'}}
-                              </div>
-                            </div>
-                            <div class="td align-middle text-truncate fe-2">
-                              <div class="cell-wrapper text-truncate">
-                                {{item.AppraisalCycleStartDate | date}} - {{item.AppraisalCycleEndDate | date}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-3">
-                              <div class="cell-wrapper flex-w">
-                                <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2" *ngFor="let tag of item.Tags">
-                                  {{tag}}
-                                </span>
-                              </div>
-                            </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" (click)="viewObjectiveAppraisalPopup(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Apprisal">
-                                <i class="fa-solid fa-pencil" aria-hidden="true"></i>
-                              </a>
-                              <a href="javascript:void(0)" class="ms-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Apprisal">
-                                <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                              </a>
-                              <a href="javascript:void(0)" *ngIf="item.IsActiveCycle" class="ms-3" (click)="changeAppraisalStatusPopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Stop Apprisal">
-                                <i class="fa-solid fa-stop text-danger" aria-hidden="true"></i>
-                              </a>
-                              <a href="javascript:void(0)" *ngIf="!item.IsActiveCycle" class="ms-3" (click)="changeAppraisalStatusPopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Start Apprisal">
-                                <i class="fa-solid fa-play text-success" aria-hidden="true"></i>
-                              </a>
+                        <div class="th fe-2">
+                          <div class="cell-wrapper">
+                            <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                              (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.ObjectiveCatagoryType"
+                              placeholder="Search by Apprisal Name">
+                            <div class="t-filter"
+                              (click)="arrangeDetails(orderByObjectiveCatagoryTypeAsc, 'ObjectiveCatagoryType')">
+                              <a href="javascript:void()" class="pe-2">Category Name</a>
+                              <i class="fa-solid fa-arrow-down-wide-short"
+                                [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || !orderByObjectiveCatagoryTypeAsc }"
+                                aria-hidden="true"></i>
+                              <i class="fa-solid fa-arrow-down-short-wide"
+                                [ngClass]="{'d-none': orderByObjectiveCatagoryTypeAsc == null || orderByObjectiveCatagoryTypeAsc }"
+                                aria-hidden="true"></i>
                             </div>
                           </div>
-                        </ng-container>
+                        </div>
+                        <div class="th fe-3">
+                          <div class="cell-wrapper">
+                            <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                              (keyup.enter)="filterRecords()" [(ngModel)]="apprisalDetail.TypeDescription"
+                              placeholder="Search by Apprisal Cycle Period">
+                            <div class="t-filter"
+                              (click)="arrangeDetails(orderByTypeDescriptionAsc, 'TypeDescription')">
+                              <a href="javascript:void()" class="pe-2">Description</a>
+                              <i class="fa-solid fa-arrow-down-wide-short"
+                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }"
+                                aria-hidden="true"></i>
+                              <i class="fa-solid fa-arrow-down-short-wide"
+                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }"
+                                aria-hidden="true"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="th fe-1">
+                          <div class="cell-wrapper">
+                            <select class="form-select" disabled (select)="filterRecords()">
+                              <option selected disabled>Select</option>
+                              <option value='true'>Active</option>
+                              <option value="false">De-Active</option>
+                            </select>
+                            <div class="t-filter">
+                              <a href="javascript:void()" class="pe-2">Status</a>
+                              <i class="fa-solid fa-arrow-down-wide-short"
+                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }"
+                                aria-hidden="true"></i>
+                              <i class="fa-solid fa-arrow-down-short-wide"
+                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }"
+                                aria-hidden="true"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="th fe-2">
+                          <div class="cell-wrapper">
+                            <input class="form-control form-control-sm" (keydown.esc)="resetFilter()" readonly
+                              (keyup.enter)="filterRecords()" placeholder="Search by Apprisal Cycle Period">
+                            <div class="t-filter"
+                              (click)="arrangeDetails(orderByTypeDescriptionAsc, 'TypeDescription')">
+                              <a href="javascript:void()" class="pe-2">Cycle Period</a>
+                              <i class="fa-solid fa-arrow-down-wide-short"
+                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || !orderByTypeDescriptionAsc }"
+                                aria-hidden="true"></i>
+                              <i class="fa-solid fa-arrow-down-short-wide"
+                                [ngClass]="{'d-none': orderByTypeDescriptionAsc == null || orderByTypeDescriptionAsc }"
+                                aria-hidden="true"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="th fe-3">
+                          <div class="cell-wrapper">
+                            <select class="form-select" [(ngModel)]="apprisalDetail.RolesId" (change)="filterRecords()">
+                              <option value=null>All</option>
+                              <option [value]="item.RoleId" *ngFor="let item of designation">{{item.RoleName}}</option>
+                            </select>
+                            <div class="t-filter">
+                              <a href="javascript:void()" class="pe-2">Tags</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="th fe-1 text-center">
+                          <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold"
+                            (click)="filterRecords()">
+                            <i class="fa-solid fa-filter">
+                              <span>Filter</span>
+                            </i>
+                          </a>
+                          <div class="t-filter d-block text-center">
+                            <a href="javascript:void(0)">ACTIONS</a>
+                          </div>
+                        </div>
                       </div>
-                      <ng-container *ngIf="apprisalCycleDetail.length == 0">
-                        <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                          <p class="my-5 py-5">Record Not Found</p>
+                    </div>
+                    <div class="t-body">
+                      <ng-container *ngIf="apprisalCycleDetail.length > 0">
+                        <div class="tr py-2" *ngFor="let item of apprisalCycleDetail;">
+                          <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
+                          <div class="td align-middle d-flex justify-content-between fe-2">
+                            <div class="text-truncate">
+                              {{item.AppraisalName}}
+                            </div>
+                          </div>
+                          <div class="td align-middle d-flex justify-content-between fe-2">
+                            <div class="text-truncate">
+                              {{item.ObjectiveCatagoryType}}
+                            </div>
+                          </div>
+                          <div class="td align-middle text-truncate fe-3">
+                            <div class="cell-wrapper text-truncate">
+                              {{item.TypeDescription}}
+                            </div>
+                          </div>
+                          <div class="td align-middle text-truncate fe-1">
+                            <div class="cell-wrapper text-truncate">
+                              {{item.IsActiveCycle ? 'Active' : 'De-Active'}}
+                            </div>
+                          </div>
+                          <div class="td align-middle text-truncate fe-2">
+                            <div class="cell-wrapper text-truncate">
+                              {{item.AppraisalCycleStartDate | date}} - {{item.AppraisalCycleEndDate | date}}
+                            </div>
+                          </div>
+                          <div class="td align-middle fe-3">
+                            <div class="cell-wrapper flex-w">
+                              <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2"
+                                *ngFor="let tag of item.Tags">
+                                {{tag}}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="td align-middle text-center fe-1">
+                            <a href="javascript:void(0)" (click)="viewObjectiveAppraisalPopup(item)"
+                              data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Apprisal">
+                              <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="ms-3" data-bs-toggle="tooltip" data-bs-placement="right"
+                              title="Delete Apprisal">
+                              <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
+                            </a>
+                            <a href="javascript:void(0)" *ngIf="item.IsActiveCycle" class="ms-3"
+                              (click)="changeAppraisalStatusPopUp(item)" data-bs-toggle="tooltip"
+                              data-bs-placement="right" title="Stop Apprisal">
+                              <i class="fa-solid fa-stop text-danger" aria-hidden="true"></i>
+                            </a>
+                            <a href="javascript:void(0)" *ngIf="!item.IsActiveCycle" class="ms-3"
+                              (click)="changeAppraisalStatusPopUp(item)" data-bs-toggle="tooltip"
+                              data-bs-placement="right" title="Start Apprisal">
+                              <i class="fa-solid fa-play text-success" aria-hidden="true"></i>
+                            </a>
+                          </div>
                         </div>
                       </ng-container>
                     </div>
+                    <ng-container *ngIf="apprisalCycleDetail.length == 0">
+                      <div
+                        class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                        <p class="my-5 py-5">Record Not Found</p>
+                      </div>
+                    </ng-container>
                   </div>
-                  <div class="mt-3" *ngIf="isPageReady">
-                    <app-pagination [pagination]="apprisalData" (onPageChange)="GetFilterResult($event)"></app-pagination>
-                  </div>
-                </ng-container>
+                </div>
+                <div class="mt-3" *ngIf="isPageReady">
+                  <app-pagination [pagination]="apprisalData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <button ngbNavLink (click)="loadAllObjective()">Performance Objective</button>
+        <ng-template ngbNavContent>
+          <div [ngSwitch]="isPageReady">
+            <div *ngSwitchCase="false">
+              <div class="mt-5">
+                <app-pre-load-table></app-pre-load-table>
               </div>
             </div>
-          </ng-template>
-        </li>
-        <li [ngbNavItem]="2">
-          <button ngbNavLink (click)="loadAllObjective()">Performance Objective</button>
-          <ng-template ngbNavContent>
-            <div [ngSwitch]="isPageReady">
-              <div *ngSwitchCase="false">
-                <div class="mt-5">
-                  <app-pre-load-table></app-pre-load-table>
-                </div>
-              </div>
-              <div *ngSwitchDefault>
-                <ng-container>
-                  <div class="x_content">
-                    <div class="text-end mb-3">
-                      <button class="btn btn-primary-c" (click)="addObjectivePopUp()"><i class="fa-solid fa-plus pe-1"></i> Add Objective</button>
-                    </div>
-                    <div class="t-table t-list  col-md-12">
-                      <div class="hide-bar"></div>
-                      <div class="t-head">
-                        <div class="tr">
-                          <div class="th fe-index">
-                            <div class="t-filter t-index">
-                              <a href="javascript:void()" class="ps-3">#</a>
-                            </div>
+            <div *ngSwitchDefault>
+              <ng-container>
+                <div class="x_content">
+                  <div class="text-end mb-3">
+                    <button class="btn btn-primary-c" (click)="addObjectivePopUp()"><i
+                        class="fa-solid fa-plus pe-1"></i> Add Objective</button>
+                  </div>
+                  <div class="t-table t-list  col-md-12">
+                    <div class="hide-bar"></div>
+                    <div class="t-head">
+                      <div class="tr">
+                        <div class="th fe-index">
+                          <div class="t-filter t-index">
+                            <a href="javascript:void()" class="ps-3">#</a>
                           </div>
-                          <div class="th fe-4">
-                            <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" (keydown.esc)="resetFilterObjective()"
-                                (keyup.enter)="filterRecordsObjective()" [(ngModel)]="objectDetail.Objective"
-                                placeholder="Search by Objective">
-                              <div class="t-filter" (click)="arrangeObjectiveDetails(orderByObjectiveAsc, 'Objective')">
-                                <a href="javascript:void()" class="pe-2">Objectives</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }" aria-hidden="true"></i>
-                                <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }" aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" (keyup.enter)="filterRecordsObjective()"
-                                (keydown.esc)="resetFilterObjective()" [(ngModel)]="objectDetail.TargetValue" placeholder="Search by Target Value">
-                              <div class="t-filter" (click)="arrangeObjectiveDetails(orderBTargetValueAsc, 'TargetValue')">
-                                <a href="javascript:void()" class="pe-3">Target Value</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }" aria-hidden="true"></i>
-                                <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }" aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1 text-center">
-                            <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecordsObjective()">
-                              <i class="fa-solid fa-filter">
-                                <span>Filter</span>
-                              </i>
-                            </a>
-                            <div class="t-filter d-block text-center">
-                              <a href="javascript:void(0)">ACTIONS</a>
+                        </div>
+                        <div class="th fe-4">
+                          <div class="cell-wrapper">
+                            <input class="form-control form-control-sm" (keydown.esc)="resetFilterObjective()"
+                              (keyup.enter)="filterRecordsObjective()" [(ngModel)]="objectDetail.Objective"
+                              placeholder="Search by Objective">
+                            <div class="t-filter" (click)="arrangeObjectiveDetails(orderByObjectiveAsc, 'Objective')">
+                              <a href="javascript:void()" class="pe-2">Objectives</a>
+                              <i class="fa-solid fa-arrow-down-wide-short"
+                                [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }"
+                                aria-hidden="true"></i>
+                              <i class="fa-solid fa-arrow-down-short-wide"
+                                [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }"
+                                aria-hidden="true"></i>
                             </div>
                           </div>
                         </div>
+                        <div class="th fe-1">
+                          <div class="cell-wrapper">
+                            <input class="form-control form-control-sm" (keyup.enter)="filterRecordsObjective()"
+                              (keydown.esc)="resetFilterObjective()" [(ngModel)]="objectDetail.TargetValue"
+                              placeholder="Search by Target Value">
+                            <div class="t-filter"
+                              (click)="arrangeObjectiveDetails(orderBTargetValueAsc, 'TargetValue')">
+                              <a href="javascript:void()" class="pe-3">Target Value</a>
+                              <i class="fa-solid fa-arrow-down-wide-short"
+                                [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }"
+                                aria-hidden="true"></i>
+                              <i class="fa-solid fa-arrow-down-short-wide"
+                                [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }"
+                                aria-hidden="true"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="th fe-1 text-center">
+                          <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold"
+                            (click)="filterRecordsObjective()">
+                            <i class="fa-solid fa-filter">
+                              <span>Filter</span>
+                            </i>
+                          </a>
+                          <div class="t-filter d-block text-center">
+                            <a href="javascript:void(0)">ACTIONS</a>
+                          </div>
+                        </div>
                       </div>
-                      <div class="t-body">
-                        <ng-container *ngIf="objectiveDetails.length > 0">
-                          <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
-                            <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
-                            <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
-                              <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
-                              <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{item.TargetValue}} {{item.ProgressMeassureType == 1? '%' : ''}}
-                              </div>
-                            </div>
-                            <div class="td align-middle text-center fe-1">
-                              <a href="javascript:void(0)" (click)="editObjectivePopUp(item)" data-bs-toggle="tooltip" data-bs-placement="right" title="Edit Objective">
-                                <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
-                              </a>
-                              <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete Objective">
-                                <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                              </a>
+                    </div>
+                    <div class="t-body">
+                      <ng-container *ngIf="objectiveDetails.length > 0">
+                        <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                          <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
+                          <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
+                            <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
+                            <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right"
+                              title="{{item.Description}}"></i>
+                          </div>
+                          <div class="td align-middle fe-1">
+                            <div class="cell-wrapper">
+                              {{item.TargetValue}} {{item.ProgressMeassureType == 1? '%' : ''}}
                             </div>
                           </div>
-                        </ng-container>
-                        <ng-container *ngIf="objectiveDetails.length == 0 && !isPageReady">
-                          <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                            <p class="my-5 py-5">Record Not Found</p>
+                          <div class="td align-middle text-center fe-1">
+                            <a href="javascript:void(0)" (click)="editObjectivePopUp(item)" data-bs-toggle="tooltip"
+                              data-bs-placement="right" title="Edit Objective">
+                              <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right"
+                              title="Delete Objective">
+                              <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
+                            </a>
                           </div>
-                        </ng-container>
-                        <!-- <ng-container *ngIf="objectiveDetails.length == 0 && isPageReady">
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="objectiveDetails.length == 0 && !isPageReady">
+                        <div
+                          class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                          <p class="my-5 py-5">Record Not Found</p>
+                        </div>
+                      </ng-container>
+                      <!-- <ng-container *ngIf="objectiveDetails.length == 0 && isPageReady">
                           <div class="data-loading-loader">
                             <div class="py-5 my-5">
                               <h6 class="fw-bold fs-3 text-center text-dark">Objectives are loading</h6>
@@ -447,26 +487,27 @@
                             </div>
                           </div>
                         </ng-container> -->
-                      </div>
                     </div>
                   </div>
-                  <div class="mt-3" *ngIf="isPageReady">
-                    <app-pagination [pagination]="objectiveData" (onPageChange)="GetFilterObjectiveResult($event)"></app-pagination>
-                  </div>
-                </ng-container>
-              </div>
+                </div>
+                <div class="mt-3" *ngIf="isPageReady">
+                  <app-pagination [pagination]="objectiveData"
+                    (onPageChange)="GetFilterObjectiveResult($event)"></app-pagination>
+                </div>
+              </ng-container>
             </div>
-          </ng-template>
-        </li>
-      </ul>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
     <div [ngbNavOutlet]="nav" class="mt-2"></div>
   </div>
 </div>
 
 
 <!-- Manage Performance Objective -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addObjectiveModal" aria-labelledby="addObjectiveModalLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addObjectiveModal"
+  aria-labelledby="addObjectiveModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl ">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
@@ -477,8 +518,10 @@
         <form [formGroup]="objectForm" *ngIf="objectForm">
           <div class="">
             <label class="form-label">Objective</label>
-            <input type="text" placeholder="Ex: Provide an awesome customer experience" class="form-control" formControlName="Objective" maxlength="100"
-            [ngClass]="{'error-field': isSubmitted && m.Objective.errors !== null && m.Objective.errors.required}" oninput="this.value = this.value.toUpperCase()">
+            <input type="text" placeholder="Ex: Provide an awesome customer experience" class="form-control"
+              formControlName="Objective" maxlength="100"
+              [ngClass]="{'error-field': isSubmitted && m.Objective.errors !== null && m.Objective.errors.required}"
+              oninput="this.value = this.value.toUpperCase()">
           </div>
           <div class="mt-3">
             <label class="form-label">Description</label>
@@ -487,19 +530,24 @@
           <div class="mt-3">
             <label class="form-label d-block">Progress measured as</label>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" formControlName="ProgressMeassureType" type="radio" name="ProgressMeassureType" id="inlineRadio1" value="1" (click)="changeProgressMeassur($event)"
-               [ngClass]="{'error-field': isSubmitted && m.ProgressMeassureType.errors !== null && m.ProgressMeassureType.errors.required}">
+              <input class="form-check-input" formControlName="ProgressMeassureType" type="radio"
+                name="ProgressMeassureType" id="inlineRadio1" value="1" (click)="changeProgressMeassur($event)"
+                [ngClass]="{'error-field': isSubmitted && m.ProgressMeassureType.errors !== null && m.ProgressMeassureType.errors.required}">
               <label class="form-check-label" for="inlineRadio1">Percent Complete</label>
             </div>
             <div class="row">
               <ng-container *ngIf="objectForm.controls.ProgressMeassureType.value == '1'">
                 <div class="col-md-6 mt-3">
                   <label class="form-label">Start Value</label>
-                  <input type="text" [OnlyNumber]="3" formControlName="StartValue" class="form-control" placeholder="Start Value" [ngClass]="{'error-field': isSubmitted && m.StartValue.errors !== null && m.StartValue.errors.required}">
+                  <input type="text" [OnlyNumber]="3" formControlName="StartValue" class="form-control"
+                    placeholder="Start Value"
+                    [ngClass]="{'error-field': isSubmitted && m.StartValue.errors !== null && m.StartValue.errors.required}">
                 </div>
                 <div class="col-md-6 mt-3">
                   <label class="form-label">Target Value</label>
-                  <input type="text" [OnlyNumber]="3" formControlName="TargetValue" class="form-control" placeholder="Target Value" [ngClass]="{'error-field': isSubmitted && m.TargetValue.errors !== null && m.TargetValue.errors.required}">
+                  <input type="text" [OnlyNumber]="3" formControlName="TargetValue" class="form-control"
+                    placeholder="Target Value"
+                    [ngClass]="{'error-field': isSubmitted && m.TargetValue.errors !== null && m.TargetValue.errors.required}">
                 </div>
               </ng-container>
             </div>
@@ -509,9 +557,9 @@
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="addObjective()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
-           {{currentObject.ObjectiveId == 0 ? 'Add' : 'Update'}} Objective
+            {{currentObject.ObjectiveId == 0 ? 'Add' : 'Update'}} Objective
           </span>
         </button>
       </div>
@@ -521,8 +569,8 @@
 <!-- Close Modal -->
 
 <!-- Manage Objective In Appraisal Cycle-->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addAppraisalObjective" aria-labelledby="addAppraisalObjectiveLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addAppraisalObjective"
+  aria-labelledby="addAppraisalObjectiveLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
@@ -549,27 +597,33 @@
                       <div class="t-filter" (click)="arrangeObjectiveDetails(orderByObjectiveAsc, 'Objective')">
                         <a href="javascript:void()" class="pe-2">Objectives</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" (keyup.enter)="filterRecordsObjective()"
-                        (keydown.esc)="resetFilterObjective()" [(ngModel)]="objectDetail.TargetValue" placeholder="Search by Target Value">
+                        (keydown.esc)="resetFilterObjective()" [(ngModel)]="objectDetail.TargetValue"
+                        placeholder="Search by Target Value">
                       <div class="t-filter" (click)="arrangeObjectiveDetails(orderBTargetValueAsc, 'TargetValue')">
                         <a href="javascript:void()" class="pe-3">Target Value</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-index text-center">
-                    <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecordsObjective()">
+                    <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold"
+                      (click)="filterRecordsObjective()">
                       <i class="fa-solid fa-filter">
                         <span>Filter</span>
                       </i>
@@ -586,7 +640,8 @@
                     <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
                     <div class="td align-middle fe-3 text-truncate d-flex align-items-center">
                       <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
-                      <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>
+                      <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right"
+                        title="{{item.Description}}"></i>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
@@ -594,29 +649,32 @@
                       </div>
                     </div>
                     <div class="td align-middle text-center fe-index">
-                      <input class="form-check-input" (click)="manageObjective($event, item)" type="checkbox" [checked]="item.IsAdded == true">
+                      <input class="form-check-input" (click)="manageObjective($event, item)" type="checkbox"
+                        [checked]="item.IsAdded == true">
                     </div>
                   </div>
                 </ng-container>
               </div>
               <ng-container *ngIf="objectiveDetails.length == 0">
-                <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                <div
+                  class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                   <p class="my-5 py-5">Record Not Found</p>
                 </div>
               </ng-container>
             </div>
           </div>
           <div class="mt-3" *ngIf="objectiveDetails.length > 0">
-            <app-pagination [pagination]="objectiveData" (onPageChange)="GetFilterObjectiveResult($event)"></app-pagination>
+            <app-pagination [pagination]="objectiveData"
+              (onPageChange)="GetFilterObjectiveResult($event)"></app-pagination>
           </div>
         </ng-container>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="addAppraisalObjective()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">
-           {{currentObject.ObjectiveId == 0 ? 'Add' : 'Update'}} Objective
+            {{currentObject.ObjectiveId == 0 ? 'Add' : 'Update'}} Objective
           </span>
         </button>
       </div>
@@ -627,7 +685,8 @@
 
 
 <!--Appraisal Status Confirmation Modal -->
-<div class="modal fade" id="confirmationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="confirmationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content px-3">
       <div class="modal-header borde-bottom-0">
@@ -635,14 +694,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body fw-bold text-danger" *ngIf="selectedAppraisalCycle != null">
-        Are you want {{selectedAppraisalCycle.IsActiveCycle ? "de-active" : 'Active'}} {{selectedAppraisalCycle.AppraisalName}}
+        Are you want {{selectedAppraisalCycle.IsActiveCycle ? "de-active" : 'Active'}}
+        {{selectedAppraisalCycle.AppraisalName}}
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-primary-c" (click)="changeAppraisalStatus()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
           <span class="ps-2">
-           save
+            save
           </span>
         </button>
       </div>

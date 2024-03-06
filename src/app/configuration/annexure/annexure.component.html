@@ -1,231 +1,242 @@
 <div class="main-container">
-    <div class="x_panel">
-      <div class="x_header">
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="col-8">
-            <div class="px-1">
-              <app-breadcrums [title]="'Annexure'" [subtitle]="'Annexure template list'"></app-breadcrums>
-            </div>
-          </div>
-          <div class="col-auto">
-            <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-              <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-      <ng-container *ngIf="!isPageLoading">
-        <div class="x_content">
-          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-              <li [ngbNavItem]="1">
-                <a ngbNavLink (click)="changeAnnexureSection()">Annexure-I</a>
-                <ng-template ngbNavContent>
-                  <ng-container *ngIf="isPageReady">
-                    <div class="x_content">
-                      <form [formGroup]="annextureform" *ngIf="annextureform">
-                        <div class="row px-4 justify-content-between">
-                          <div class="col-md-4 my-3">
-                            <label  class="form-label">Company Name</label>
-                            <input type="text" readonly class="form-control" formControlName="CompanyName">
-                          </div>
-                          <div class="col-md-4 my-3">
-                            <label  class="form-label">Template Name</label>
-                            <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name" oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName" [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
-                          </div>
-                        </div>
-                        <app-editor [content]="htmlText" [height]="55"></app-editor>
-                      </form>
-                      <div class="text-end pe-4">
-                        <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
-                          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
-                          <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
-                        </button>
-                      </div>
-                    </div>
-                  </ng-container>
-                  <!-- <ng-container *ngIf="!isPageReady">
-                    <div class="py-5 my-5">
-                      <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
-                      <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                        <div class="col-md-3 modal-container  text-center cog-wheel">
-                          <img src="assets/images/cog.gif" alt="" />
-                          <h6 class="modal-title title-message">
-                            Please Wait ........
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container> -->
-                </ng-template>
-              </li>
-              <li [ngbNavItem]="2">
-                <a ngbNavLink (click)="changeAnnexureSection()">Annexure-II</a>
-                <ng-template ngbNavContent>
-                  <ng-container *ngIf="isPageReady">
-                    <div class="x_content">
-                      <form [formGroup]="annextureform" *ngIf="annextureform">
-                        <div class="row px-4 justify-content-between">
-                          <div class="col-md-4 my-3">
-                            <label  class="form-label">Company Name</label>
-                            <input type="text" readonly class="form-control" formControlName="CompanyName">
-                          </div>
-                          <div class="col-md-4 my-3">
-                            <label  class="form-label">Template Name</label>
-                            <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name" oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName" [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
-                          </div>
-                        </div>
-                        <app-editor [content]="htmlText" [height]="55"></app-editor>
-                      </form>
-                      <div class="text-end pe-4">
-                        <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
-                          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
-                          <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
-                        </button>
-                      </div>
-                    </div>
-                  </ng-container>
-                  <!-- <ng-container *ngIf="!isPageReady">
-                    <div class="py-5 my-5">
-                      <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
-                      <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                        <div class="col-md-3 modal-container  text-center cog-wheel">
-                          <img src="assets/images/cog.gif" alt="" />
-                          <h6 class="modal-title title-message">
-                            Please Wait ........
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container> -->
-                </ng-template>
-              </li>
-              <li [ngbNavItem]="3">
-                <a ngbNavLink (click)="changeAnnexureSection()">Annexure-III</a>
-                <ng-template ngbNavContent>
-                  <ng-container *ngIf="isPageReady">
-                    <div class="x_content">
-                      <form [formGroup]="annextureform" *ngIf="annextureform">
-                        <div class="row px-4 justify-content-between">
-                          <div class="col-md-4 my-3">
-                            <label  class="form-label">Company Name</label>
-                            <input type="text" readonly class="form-control" formControlName="CompanyName">
-                          </div>
-                          <div class="col-md-4 my-3">
-                            <label  class="form-label">Template Name</label>
-                            <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name" oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName" [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
-                          </div>
-                        </div>
-                        <app-editor [content]="htmlText" [height]="55"></app-editor>
-                      </form>
-                      <div class="text-end pe-4">
-                        <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
-                          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
-                          <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
-                        </button>
-                      </div>
-                    </div>
-                  </ng-container>
-                  <!-- <ng-container *ngIf="!isPageReady">
-                    <div class="py-5 my-5">
-                      <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
-                      <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                        <div class="col-md-3 modal-container  text-center cog-wheel">
-                          <img src="assets/images/cog.gif" alt="" />
-                          <h6 class="modal-title title-message">
-                            Please Wait ........
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-container> -->
-                </ng-template>
-              </li>
-              <li [ngbNavItem]="4">
-                  <a ngbNavLink (click)="changeAnnexureSection()">Annexure-IV</a>
-                  <ng-template ngbNavContent>
-                    <ng-container *ngIf="isPageReady">
-                      <div class="x_content">
-                        <form [formGroup]="annextureform" *ngIf="annextureform">
-                          <div class="row px-4 justify-content-between">
-                            <div class="col-md-4 my-3">
-                              <label  class="form-label">Company Name</label>
-                              <input type="text" readonly class="form-control" formControlName="CompanyName">
-                            </div>
-                            <div class="col-md-4 my-3">
-                              <label  class="form-label">Template Name</label>
-                              <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name" oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName" [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
-                            </div>
-                          </div>
-                          <app-editor [content]="htmlText" [height]="55"></app-editor>
-                        </form>
-                        <div class="text-end pe-4">
-                          <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
-                            <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
-                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
-                          </button>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <!-- <ng-container *ngIf="!isPageReady">
-                      <div class="py-5 my-5">
-                        <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
-                        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                          <div class="col-md-3 modal-container  text-center cog-wheel">
-                            <img src="assets/images/cog.gif" alt="" />
-                            <h6 class="modal-title title-message">
-                              Please Wait ........
-                            </h6>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container> -->
-                  </ng-template>
-                </li>
-                <li [ngbNavItem]="5">
-                  <a ngbNavLink (click)="changeAnnexureSection()">Annexure-V</a>
-                  <ng-template ngbNavContent>
-                    <ng-container *ngIf="isPageReady">
-                      <div class="x_content">
-                        <form [formGroup]="annextureform" *ngIf="annextureform">
-                          <div class="row px-4 justify-content-between">
-                            <div class="col-md-4 my-3">
-                              <label  class="form-label">Company Name</label>
-                              <input type="text" readonly class="form-control" formControlName="CompanyName">
-                            </div>
-                            <div class="col-md-4 my-3">
-                              <label  class="form-label">Template Name</label>
-                              <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name" oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName" [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
-                            </div>
-                          </div>
-                          <app-editor [content]="htmlText" [height]="55"></app-editor>
-                        </form>
-                        <div class="text-end pe-4">
-                          <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
-                            <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
-                            <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
-                          </button>
-                        </div>
-                      </div>
-                    </ng-container>
-                    <!-- <ng-container *ngIf="!isPageReady">
-                      <div class="py-5 my-5">
-                        <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
-                        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                          <div class="col-md-3 modal-container  text-center cog-wheel">
-                            <img src="assets/images/cog.gif" alt="" />
-                            <h6 class="modal-title title-message">
-                              Please Wait ........
-                            </h6>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container> -->
-                  </ng-template>
-                </li>
-          </ul>
 
-          <div [ngbNavOutlet]="nav" class="mt-2"></div>
-        </div>
-      </ng-container>
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Annexure'" [subtitle]="'Annexure template list'"></app-breadcrums>
+      </div>
     </div>
+    <div class="col-auto">
+      <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+        <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+          title="Reload this page"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="x_panel">
+    <ng-container *ngIf="!isPageLoading">
+      <div class="x_content">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink (click)="changeAnnexureSection()">Annexure-I</a>
+            <ng-template ngbNavContent>
+              <ng-container *ngIf="isPageReady">
+                <div class="x_content">
+                  <form [formGroup]="annextureform" *ngIf="annextureform">
+                    <div class="row px-4 justify-content-between">
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" readonly class="form-control" formControlName="CompanyName">
+                      </div>
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Template Name</label>
+                        <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name"
+                          oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName"
+                          [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
+                      </div>
+                    </div>
+                    <app-editor [content]="htmlText" [height]="55"></app-editor>
+                  </form>
+                  <div class="text-end pe-4">
+                    <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
+                      <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- <ng-container *ngIf="!isPageReady">
+                    <div class="py-5 my-5">
+                      <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                      <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-md-3 modal-container  text-center cog-wheel">
+                          <img src="assets/images/cog.gif" alt="" />
+                          <h6 class="modal-title title-message">
+                            Please Wait ........
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container> -->
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink (click)="changeAnnexureSection()">Annexure-II</a>
+            <ng-template ngbNavContent>
+              <ng-container *ngIf="isPageReady">
+                <div class="x_content">
+                  <form [formGroup]="annextureform" *ngIf="annextureform">
+                    <div class="row px-4 justify-content-between">
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" readonly class="form-control" formControlName="CompanyName">
+                      </div>
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Template Name</label>
+                        <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name"
+                          oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName"
+                          [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
+                      </div>
+                    </div>
+                    <app-editor [content]="htmlText" [height]="55"></app-editor>
+                  </form>
+                  <div class="text-end pe-4">
+                    <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
+                      <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- <ng-container *ngIf="!isPageReady">
+                    <div class="py-5 my-5">
+                      <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                      <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-md-3 modal-container  text-center cog-wheel">
+                          <img src="assets/images/cog.gif" alt="" />
+                          <h6 class="modal-title title-message">
+                            Please Wait ........
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container> -->
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="3">
+            <a ngbNavLink (click)="changeAnnexureSection()">Annexure-III</a>
+            <ng-template ngbNavContent>
+              <ng-container *ngIf="isPageReady">
+                <div class="x_content">
+                  <form [formGroup]="annextureform" *ngIf="annextureform">
+                    <div class="row px-4 justify-content-between">
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" readonly class="form-control" formControlName="CompanyName">
+                      </div>
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Template Name</label>
+                        <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name"
+                          oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName"
+                          [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
+                      </div>
+                    </div>
+                    <app-editor [content]="htmlText" [height]="55"></app-editor>
+                  </form>
+                  <div class="text-end pe-4">
+                    <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
+                      <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- <ng-container *ngIf="!isPageReady">
+                    <div class="py-5 my-5">
+                      <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                      <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                        <div class="col-md-3 modal-container  text-center cog-wheel">
+                          <img src="assets/images/cog.gif" alt="" />
+                          <h6 class="modal-title title-message">
+                            Please Wait ........
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container> -->
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="4">
+            <a ngbNavLink (click)="changeAnnexureSection()">Annexure-IV</a>
+            <ng-template ngbNavContent>
+              <ng-container *ngIf="isPageReady">
+                <div class="x_content">
+                  <form [formGroup]="annextureform" *ngIf="annextureform">
+                    <div class="row px-4 justify-content-between">
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" readonly class="form-control" formControlName="CompanyName">
+                      </div>
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Template Name</label>
+                        <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name"
+                          oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName"
+                          [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
+                      </div>
+                    </div>
+                    <app-editor [content]="htmlText" [height]="55"></app-editor>
+                  </form>
+                  <div class="text-end pe-4">
+                    <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
+                      <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- <ng-container *ngIf="!isPageReady">
+                      <div class="py-5 my-5">
+                        <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                          <div class="col-md-3 modal-container  text-center cog-wheel">
+                            <img src="assets/images/cog.gif" alt="" />
+                            <h6 class="modal-title title-message">
+                              Please Wait ........
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container> -->
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="5">
+            <a ngbNavLink (click)="changeAnnexureSection()">Annexure-V</a>
+            <ng-template ngbNavContent>
+              <ng-container *ngIf="isPageReady">
+                <div class="x_content">
+                  <form [formGroup]="annextureform" *ngIf="annextureform">
+                    <div class="row px-4 justify-content-between">
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" readonly class="form-control" formControlName="CompanyName">
+                      </div>
+                      <div class="col-md-4 my-3">
+                        <label class="form-label">Template Name</label>
+                        <input type="text" class="form-control" value="OFFER LETTER" placeholder="Template Name"
+                          oninput="this.value = this.value.toUpperCase()" formControlName="TemplateName"
+                          [ngClass]="{'error-field': submitted && m.TemplateName.errors !== null && m.TemplateName.errors.required}">
+                      </div>
+                    </div>
+                    <app-editor [content]="htmlText" [height]="55"></app-editor>
+                  </form>
+                  <div class="text-end pe-4">
+                    <button class="btn btn-primary-c ms-3" [disabled]="isLoading" (click)="saveAnnexture()">
+                      <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-file': !isLoading}"></i>
+                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- <ng-container *ngIf="!isPageReady">
+                      <div class="py-5 my-5">
+                        <h6 class="fw-bold fs-3 text-center text-dark">Offer letter template is loading</h6>
+                        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
+                          <div class="col-md-3 modal-container  text-center cog-wheel">
+                            <img src="assets/images/cog.gif" alt="" />
+                            <h6 class="modal-title title-message">
+                              Please Wait ........
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container> -->
+            </ng-template>
+          </li>
+        </ul>
+
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </ng-container>
+  </div>
 </div>

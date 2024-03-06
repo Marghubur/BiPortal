@@ -1,20 +1,21 @@
 <div class="col-md-12 main-container" [ngClass]="{'preload': !isEmpPageReady}">
-  <div class="x_panel">
-    <div class="x_header">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Jobs detail'" [subtitle]="'All Jobs'"></app-breadcrums>
-          </div>
-        </div>
-        <div class="col-4 text-end">
-          <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-            <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-          </a>
-          <button class="btn btn-primary-c" (click)="addNewCronJob()"><i class="fa-solid fa-plus pe-2"></i>Add Jobs</button>
-        </div>
+
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Jobs detail'" [subtitle]="'All Jobs'"></app-breadcrums>
       </div>
     </div>
+    <div class="col-4 text-end">
+      <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+        <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+          title="Reload this page"></i>
+      </a>
+      <button class="btn btn-primary-c" (click)="addNewCronJob()"><i class="fa-solid fa-plus pe-2"></i>Add Jobs</button>
+    </div>
+  </div>
+
+  <div class="x_panel">
     <div [ngSwitch]="isEmpPageReady">
       <div *ngSwitchCase="false">
         <div class="mt-5">
@@ -36,9 +37,11 @@
                       <div class="t-filter" (click)="arrangeDetails(orderByJobTypeNameAsc, 'JobTypeName')">
                         <a href="javascript:void()" class="pe-2">Job Type Name</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByJobTypeNameAsc == null || !orderByJobTypeNameAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByJobTypeNameAsc == null || !orderByJobTypeNameAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByJobTypeNameAsc == null || orderByJobTypeNameAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByJobTypeNameAsc == null || orderByJobTypeNameAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -54,13 +57,16 @@
                   <div class="th fe-3">
                     <div class="cell-wrapper">
                       <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                        (keydown.esc)="resetFilter()" [(ngModel)]="JobDetail.TopicName" placeholder="Search by Topic Name">
+                        (keydown.esc)="resetFilter()" [(ngModel)]="JobDetail.TopicName"
+                        placeholder="Search by Topic Name">
                       <div class="t-filter" (click)="arrangeDetails(orderByTopicNameAsc, 'TopicName')">
                         <a href="javascript:void()" class="pe-2">Topic Name</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByTopicNameAsc == null || !orderByTopicNameAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByTopicNameAsc == null || !orderByTopicNameAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByTopicNameAsc == null || orderByTopicNameAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByTopicNameAsc == null || orderByTopicNameAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -71,9 +77,11 @@
                       <div class="t-filter" (click)="arrangeDetails(orderByGroupIdAsc, 'GroupId')">
                         <a href="javascript:void()" class="pe-2">Group Id</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByGroupIdAsc == null || !orderByGroupIdAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByGroupIdAsc == null || !orderByGroupIdAsc }"
+                          aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByGroupIdAsc == null || orderByGroupIdAsc }" aria-hidden="true"></i>
+                          [ngClass]="{'d-none': orderByGroupIdAsc == null || orderByGroupIdAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -105,20 +113,23 @@
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="d-flex flex-row justify-content-evenly">
-                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="editCronJob(job)" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="Edit job">
-                          <span class="badge bg-dark"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></span>
+                        <a href="javascript:void(0)" [ngClass]="{'pe-none': isLoading}" (click)="editCronJob(job)"
+                          data-bs-toggle="tooltip" data-bs-placement="right" title="Edit job">
+                          <span class="badge bg-dark"><i class="fa-solid fa-pen-to-square"
+                              aria-hidden="true"></i></span>
                         </a>
-                        <a href="javascript:void(0)" (click)="deleteCronJob(job)" [ngClass]="{'pe-none': isLoading}" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="Delete job">
-                          <span class="badge bg-danger"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></span>
+                        <a href="javascript:void(0)" (click)="deleteCronJob(job)" [ngClass]="{'pe-none': isLoading}"
+                          data-bs-toggle="tooltip" data-bs-placement="right" title="Delete job">
+                          <span class="badge bg-danger"><i class="fa-regular fa-trash-can"
+                              aria-hidden="true"></i></span>
                         </a>
                       </div>
                     </div>
                   </div>
                 </ng-container>
                 <ng-container *ngIf="allJobs.length == 0">
-                  <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                  <div
+                    class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                     <p class="my-5 py-5">Record Not Found</p>
                   </div>
                 </ng-container>

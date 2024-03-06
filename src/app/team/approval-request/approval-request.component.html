@@ -1,27 +1,23 @@
 <div class="main-container">
 
   <div class="content-header">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-6">
-          <div class="px-1">
-            <app-breadcrums [title]="'Manage your requests'"></app-breadcrums>
-          </div>
-        </div>
-        <div class="col-4 row align-items-center justify-content-end">
-          <div class="col-auto" *ngIf="isAdmin">
-            <div class="d-flex">
-              <div class="row">
-                <div class="col">
-                  <div ngbDropdown class="d-inline-block">
-                    <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                      {{filterText}}
-                    </button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                      <button ngbDropdownItem (click)="updatePage(1)">Assigned to me</button>
-                      <button ngbDropdownItem (click)="updatePage(2)">All request(s)</button>
-                    </div>
-                  </div>
+    <div class="col-6">
+      <div class="px-1">
+        <app-breadcrums [title]="'Manage your requests'"></app-breadcrums>
+      </div>
+    </div>
+    <div class="col-4 row align-items-center justify-content-end">
+      <div class="col-auto" *ngIf="isAdmin">
+        <div class="d-flex">
+          <div class="row">
+            <div class="col">
+              <div ngbDropdown class="d-inline-block">
+                <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                  {{filterText}}
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem (click)="updatePage(1)">Assigned to me</button>
+                  <button ngbDropdownItem (click)="updatePage(2)">All request(s)</button>
                 </div>
               </div>
             </div>

@@ -1,116 +1,121 @@
 <div class="col-md-12 col-sm-12 main-container">
-    <div class="x_panel pb-0 mb-0">
-      <div class="x_header">
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="col-8">
-            <div class="px-1">
-              <app-breadcrums [title]="'APPROVAL WORK FLOW'"></app-breadcrums>
-            </div>
-          </div>
-          <div class="col-auto">
-            <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-              <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-            </a>
-          </div>
+
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Approval work flow'"></app-breadcrums>
+      </div>
+    </div>
+    <div class="col-auto">
+      <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+        <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+          title="Reload this page"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="x_panel pb-0 mb-0">
+    <div [ngSwitch]="isReady">
+      <div *ngSwitchCase="false">
+        <div class="mt-5">
+          <app-pre-load-table></app-pre-load-table>
         </div>
       </div>
-      <div [ngSwitch]="isReady">
-        <div *ngSwitchCase="false">
-          <div class="mt-5">
-            <app-pre-load-table></app-pre-load-table>
-          </div>
-        </div>
-        <div *ngSwitchDefault>
-          <ng-container>
-            <div class="x_content">
-              <div class="t-table t-list  col-md-12">
-                <div class="hide-bar"></div>
-                <div class="t-head">
-                  <div class="tr">
-                    <div class="th fe-index">
-                      <div class="t-index">
-                        <a href="javascript:void()" class="ps-3">#</a>
+      <div *ngSwitchDefault>
+        <ng-container>
+          <div class="x_content">
+            <div class="t-table t-list  col-md-12">
+              <div class="hide-bar"></div>
+              <div class="t-head">
+                <div class="tr">
+                  <div class="th fe-index">
+                    <div class="t-index">
+                      <a href="javascript:void()" class="ps-3">#</a>
+                    </div>
+                  </div>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                        [(ngModel)]="workflowDetail.Title" (keydown.esc)="resetFilter()" placeholder="Search by Title">
+                      <div class="t-filter" (click)="arrangeDetails(orderByTitleAsc, 'Title')">
+                        <a href="javascript:void(0)" class="pe-2">Title</a>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByTitleAsc == null || !orderByTitleAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByTitleAsc == null || orderByTitleAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
-                    <div class="th fe-2">
-                      <div class="cell-wrapper">
-                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" [(ngModel)]="workflowDetail.Title"
-                          (keydown.esc)="resetFilter()" placeholder="Search by Title">
-                        <div class="t-filter" (click)="arrangeDetails(orderByTitleAsc, 'Title')">
-                          <a href="javascript:void(0)" class="pe-2">Title</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByTitleAsc == null || !orderByTitleAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByTitleAsc == null || orderByTitleAsc }" aria-hidden="true"></i>
-                        </div>
+                  </div>
+                  <div class="th fe-2">
+                    <div class="cell-wrapper">
+                      <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                        [(ngModel)]="workflowDetail.TitleDescription" (keydown.esc)="resetFilter()"
+                        placeholder="Search by Title Description">
+                      <div class="t-filter" (click)="arrangeDetails(orderByTitleDescAsc, 'TitleDescription')">
+                        <a href="javascript:void0()" class="pe-2">Description</a>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByTitleDescAsc == null || !orderByTitleDescAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByTitleDescAsc == null || orderByTitleDescAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
-                    <div class="th fe-2">
-                      <div class="cell-wrapper">
-                        <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()" [(ngModel)]="workflowDetail.TitleDescription"
-                          (keydown.esc)="resetFilter()" placeholder="Search by Title Description">
-                        <div class="t-filter" (click)="arrangeDetails(orderByTitleDescAsc, 'TitleDescription')">
-                          <a href="javascript:void0()" class="pe-2">Description</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByTitleDescAsc == null || !orderByTitleDescAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByTitleDescAsc == null || orderByTitleDescAsc }" aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1 text-center">
-                      <div class="cell-wrapper">
-                        <button class="btn btn-primary-c" (click)="addWorkFlowPopUp()">Add Work Flow</button>
-                        <div class="t-filter default-cursor justify-content-center">
-                          <a href="javascript:void(0)" class="pe-2 default-cursor">ACTIONS</a>
-                        </div>
+                  </div>
+                  <div class="th fe-1 text-center">
+                    <div class="cell-wrapper">
+                      <button class="btn btn-primary-c" (click)="addWorkFlowPopUp()">Add Work Flow</button>
+                      <div class="t-filter default-cursor justify-content-center">
+                        <a href="javascript:void(0)" class="pe-2 default-cursor">ACTIONS</a>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="t-body">
-                  <ng-container *ngIf="isFileFound">
-                    <div class="tr py-2" *ngFor="let item of approvalWorkFlowList; let i = index;">
-                        <div class="td align-middle text-center fe-index">
-                            <div class="cell-wrapper">
-                            {{item.Index}}
-                            </div>
-                        </div>
-                        <div class="td align-middle fe-2">
-                            <div class="cell-wrapper">
-                                <a href="javascript:void(0)" (click)="EditCurrent(item)">
-                                    {{item.Title}}
-                                </a>
-                            </div>
-                        </div>
-                        <div class="td align-middle fe-2">
-                            <div class="cell-wrapper">
-                            {{item.TitleDescription}}
-                            </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                            <div class="d-flex flex-row justify-content-evenly">
-                                <a href="javascript:void(0)" (click)="EditCurrent(item)" data-bs-toggle="tooltip"
-                                data-bs-placement="right" title="Edit current record">
-                                    <span class="badge bg-dark"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
-                                </a>
-                            </div>
-                        </div>
+              </div>
+              <div class="t-body">
+                <ng-container *ngIf="isFileFound">
+                  <div class="tr py-2" *ngFor="let item of approvalWorkFlowList; let i = index;">
+                    <div class="td align-middle text-center fe-index">
+                      <div class="cell-wrapper">
+                        {{item.Index}}
+                      </div>
                     </div>
-                  </ng-container>
-                  <ng-container *ngIf="!isFileFound">
-                    <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        <a href="javascript:void(0)" (click)="EditCurrent(item)">
+                          {{item.Title}}
+                        </a>
+                      </div>
                     </div>
-                  </ng-container>
-                </div>
+                    <div class="td align-middle fe-2">
+                      <div class="cell-wrapper">
+                        {{item.TitleDescription}}
+                      </div>
+                    </div>
+                    <div class="td align-middle fe-1">
+                      <div class="d-flex flex-row justify-content-evenly">
+                        <a href="javascript:void(0)" (click)="EditCurrent(item)" data-bs-toggle="tooltip"
+                          data-bs-placement="right" title="Edit current record">
+                          <span class="badge bg-dark"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!isFileFound">
+                  <div
+                    class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                    <p class="my-5 py-5">Record Not Found</p>
+                  </div>
+                </ng-container>
               </div>
             </div>
-            <div class="mt-3">
-              <app-pagination [pagination]="filter" (onPageChange)="GetFilterResult($event)"></app-pagination>
-            </div>
-          </ng-container>
-        </div>
+          </div>
+          <div class="mt-3">
+            <app-pagination [pagination]="filter" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
+        </ng-container>
       </div>
     </div>
+  </div>
 </div>

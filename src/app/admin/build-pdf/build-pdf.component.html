@@ -1,22 +1,23 @@
 <div class="container-fluid main-container" [ngClass]="{'preload': !pageDataIsReady}">
-  <div class="x_panel">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Generate bill'" [subtitle]="'generate bill in docx and pdf format.'"></app-breadcrums>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="x_header_title d-flex align-items-center justify-content-end">
-            <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-              <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-            </a>
-            <button class="btn btn-outline-success text-end" (click)="getNewForm()">New Bill</button>
-          </div>
-        </div>
+
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Generate bill'" [subtitle]="'generate bill in docx and pdf format.'"></app-breadcrums>
       </div>
     </div>
+    <div class="col-4">
+      <div class="x_header_title d-flex align-items-center justify-content-end">
+        <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+          <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+            title="Reload this page"></i>
+        </a>
+        <button class="btn btn-outline-success text-end" (click)="getNewForm()">New Bill</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="x_panel">
     <div *ngIf="pageDataIsReady">
       <div class="x_content mt-4">
         <form [formGroup]="pdfForm" id="gpdfform" class="col-md-12 row">
@@ -64,7 +65,8 @@
                 </label>
               </div>
               <div class="col-6 text-end">
-                <a href="javascript:void(0)" class="text-primary-c fw-bold pe-5" [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="viewTimesheetDetail()">
+                <a href="javascript:void(0)" class="text-primary-c fw-bold pe-5"
+                  [ngClass]="{'blur-text pe-none': !isClientSelected}" (click)="viewTimesheetDetail()">
                   Edit TimeSheet</a>
               </div>
             </div>
@@ -129,7 +131,7 @@
               </div>
               <div class="col-12 row m-0">
                 <div class="col-md-6 mt-4">
-                  <div class="x_panel skeleton">
+                  <div class="x_panel_body skeleton">
                     <div class="x_header">
                       <div class="x_header_title">
                         <h2>Bill<small>Bill details</small></h2>
@@ -152,8 +154,8 @@
                           [ngClass]="{'error-field': submitted && f.senderSecondAddress.errors !=null && f.senderSecondAddress.errors.required}" />
                       </div>
                       <div class="col-md-6 d-none">
-                        <input placeholder="Primary Contact No" class="form-control mt-4"
-                          name="senderPrimaryContactNo" formControlName="senderPrimaryContactNo"
+                        <input placeholder="Primary Contact No" class="form-control mt-4" name="senderPrimaryContactNo"
+                          formControlName="senderPrimaryContactNo"
                           [ngClass]="{'error-field': submitted && f.senderPrimaryContactNo.errors !=null && f.senderPrimaryContactNo.errors.required}" />
                       </div>
                       <div class="col-md-6 d-none">
@@ -191,16 +193,17 @@
                       <div class="col-md-12 mt-2 row">
                         <div class="col-md-6 mb-3">
                           <label class="form-label">Bill No. (optional)</label>
-                          <input inputtype="mandatory" class="form-control" placeholder="Bill No." name="billNo" maxlength="10"
-                            [readonly]="!editMode" formControlName="billNo" />
+                          <input inputtype="mandatory" class="form-control" placeholder="Bill No." name="billNo"
+                            maxlength="10" [readonly]="!editMode" formControlName="billNo" />
                         </div>
                         <div class="col-md-6 pb-3 ">
                           <label class="form-label">Date of Billing *</label>
                           <form class="form-inline">
                             <div class="form-group w-100">
                               <div class="input-group inline-calendar w-100">
-                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate"
-                                  readonly (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                                  [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="maxDate" readonly
+                                  (dateSelect)="onDateSelection($event)" ngbDatepicker #d="ngbDatepicker">
                                 <div class="input-group-append">
                                   <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
                                     type="button"><i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
@@ -216,7 +219,7 @@
                 </div>
 
                 <div class="col-md-6 mt-4">
-                  <div class="x_panel">
+                  <div class="x_panel_body">
                     <div class="x_header">
                       <div class="x_header_title">
                         <h2>Total<small>Total calculation</small></h2>
@@ -252,15 +255,16 @@
                       <div class="col-md-12 mb-4 row">
                         <div class="col-md-3 ps-4 pe-0">
                           <label class="form-label">No. of days *</label>
-                          <input type="text" class="form-control" placeholder="No. of working days" name="workingDay" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                            OnlyNumber="2" [readonly]="!isClientSelected || !editMode" (keyup)="changeWorkingDays($event)"
+                          <input type="text" class="form-control" placeholder="No. of working days" name="workingDay"
+                            onkeypress="return event.charCode >=48 && event.charCode <=57" OnlyNumber="2"
+                            [readonly]="!isClientSelected || !editMode" (keyup)="changeWorkingDays($event)"
                             formControlName="workingDay" />
                         </div>
                         <div class="col-md-3 ps-4 pe-0">
                           <label class="form-label">Actual *</label>
                           <select name="actualDaysBurned" class="form-select"
-                            [ngClass]="{'disable-field': !isClientSelected}" formControlName="actualDaysBurned" [disabled]="!editMode"
-                            (change)="calculateAmount($event)">
+                            [ngClass]="{'disable-field': !isClientSelected}" formControlName="actualDaysBurned"
+                            [disabled]="!editMode" (change)="calculateAmount($event)">
                             <option value="0">0 Days</option>
                             <option *ngFor="let day of days" value="{{day}}">
                               {{day}} Days
@@ -281,7 +285,8 @@
                         <div class="col-md-3 ps-4 pe-0">
                           <label class="form-label">Package *</label>
                           <input class="form-control" placeholder="Pacakage amount" name="packageAmount" maxlength="12"
-                            formControlName="packageAmount" (keyup)="getFixedAmount($event)" [readonly]="!editMode" onkeypress="return (event.charCode >=48 && event.charCode <=57) || event.charCode == 46"
+                            formControlName="packageAmount" (keyup)="getFixedAmount($event)" [readonly]="!editMode"
+                            onkeypress="return (event.charCode >=48 && event.charCode <=57) || event.charCode == 46"
                             [ngClass]="{'error-field': submitted && f.packageAmount.errors !== null && f.packageAmount.errors.required}" />
                         </div>
                       </div>
@@ -309,7 +314,7 @@
                         <div class="col-md-4">
                           <label class="form-label">IGST</label>
                           <input type="number" class="form-control" id="igst" placeholder="IGST" name="iGST"
-                            formControlName="iGST" (keyup)="checkIGST($event)"  DecimalNumber="5"
+                            formControlName="iGST" (keyup)="checkIGST($event)" DecimalNumber="5"
                             [ngClass]="{'error-field': submitted && f.iGST.errors !== null && f.iGST.errors.required}"
                             [readonly]="!isClientSelected" />
                           <blockquote class="blockquote gst-text">
@@ -366,7 +371,8 @@
                   </div>
                   <div class="btn-group ms-2">
                     <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generate()">
-                      <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+                      <i class=""
+                        [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
                       {{ isLoading ? 'Processing' : 'Generate' }}
                     </button>
                   </div>
@@ -388,8 +394,9 @@
       <div class="modal-header border-bottom-0 d-flex">
         <h5 class="modal-title">Download Or Send Bill As EMail</h5>
         <div class="position-relative col-md-7 text-end pe-4" *ngIf="isBillGenerated">
-          <input type="text" class="border-0 me-4 w-100 text-end" maxlength="80"  [(ngModel)]="emailTemplate.EmailSubject" oninput="this.value = this.value.toUpperCase()"
-                      placeholder="Enter your subject">
+          <input type="text" class="border-0 me-4 w-100 text-end" maxlength="80"
+            [(ngModel)]="emailTemplate.EmailSubject" oninput="this.value = this.value.toUpperCase()"
+            placeholder="Enter your subject">
           <i class="edit fa-solid fa-pencil position-absolute"></i>
         </div>
       </div>
@@ -404,10 +411,10 @@
                       <img src="assets/ext/pdf.png" alt="pdf extension">
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
-                        <a href="javascript:void(0)" (click)="getFileExtension('pdf')" class="text-primary-c fw-b">
-                          <i class="fa-solid fa-download text-primary-c pe-2"></i>
-                          PDF
-                        </a>
+                      <a href="javascript:void(0)" (click)="getFileExtension('pdf')" class="text-primary-c fw-b">
+                        <i class="fa-solid fa-download text-primary-c pe-2"></i>
+                        PDF
+                      </a>
                     </div>
                   </div>
                   <div class="form-check">
@@ -435,7 +442,8 @@
 
                   <div class="col-md-8">
                     <div class="input-group">
-                      <input type="email" class="form-control" placeholder="Email Id" name="add-email" aria-label="Email Id" aria-describedby="add-email">
+                      <input type="email" class="form-control" placeholder="Email Id" name="add-email"
+                        aria-label="Email Id" aria-describedby="add-email">
                       <button class="btn btn-primary-c" type="button" (click)="addEmailId()" id="add-email">
                         <i class="fa-solid fa-plus pe-2"></i>Add
                       </button>
@@ -465,8 +473,8 @@
                 </div>
                 <div class="mb-1">
                   <div class="position-relative">
-                    <input type="text" class="border-0 w-75"  [(ngModel)]="emailTemplate.EmailTitle" oninput="this.value = this.value.toUpperCase()"
-                      placeholder="Enter your title">
+                    <input type="text" class="border-0 w-75" [(ngModel)]="emailTemplate.EmailTitle"
+                      oninput="this.value = this.value.toUpperCase()" placeholder="Enter your title">
                     <i class="edit fa-solid fa-pencil position-absolute"></i>
                   </div>
                 </div>
@@ -486,12 +494,12 @@
       <div class="modal-footer border-top-0">
         <div class="d-flex flex-row justify-context-end">
           <div class="me-3">
-            <a href="javascript:void(0)" class="text-decoration-none text-muted"
-            (click)="closePopUp()">Close</a>
+            <a href="javascript:void(0)" class="text-decoration-none text-muted" (click)="closePopUp()">Close</a>
           </div>
           <div>
             <a href="javascript:void(0)" class="text-primary-c fw-bold" (click)="sendEmail()">
-              <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-paper-plane': !isLoading}" aria-hidden="true"></i>
+              <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-paper-plane': !isLoading}"
+                aria-hidden="true"></i>
               <span class="ps-2">
                 <ng-container *ngIf="isLoading">Sending...</ng-container>
                 <ng-container *ngIf="!isLoading"><u>Send Email</u></ng-container>
@@ -526,8 +534,10 @@
       <div class="modal-body px-5 mt-0 pt-0">
         <div class="col-md-12 px-3" *ngIf="allTimesheet.length > 0">
           <div class="py-3">
-            <a href="javascript:void(0)" class="pe-3" (click)="selectUnselect('select')"><i class="fa-solid fa-check pe-1 text-success"></i> Select All</a>
-            <a href="javascript:void(0)" (click)="selectUnselect('deselect')"><i class="fa-solid fa-xmark pe-1 text-danger"></i> Deselect All</a>
+            <a href="javascript:void(0)" class="pe-3" (click)="selectUnselect('select')"><i
+                class="fa-solid fa-check pe-1 text-success"></i> Select All</a>
+            <a href="javascript:void(0)" (click)="selectUnselect('deselect')"><i
+                class="fa-solid fa-xmark pe-1 text-danger"></i> Deselect All</a>
           </div>
           <div class="t-table border-cell t-list col-md-12">
             <div class="t-head overflow-hidden">
@@ -574,7 +584,8 @@
                     </div>
                   </div>
                   <div class="td align-middle text-center fe-index">
-                    <input class="form-check-input" [checked]="items.Status == 9" type="checkbox" data-checktype="weekly" (click)="weekSelected($event, items.Timesheet)">
+                    <input class="form-check-input" [checked]="items.Status == 9" type="checkbox"
+                      data-checktype="weekly" (click)="weekSelected($event, items.Timesheet)">
                   </div>
                 </div>
               </ng-container>
@@ -586,7 +597,8 @@
         </div>
       </div>
       <div class="modal-footer border-top-0 pe-5 pb-3">
-        <a href="javascript:void(0)" class="text-decoration-none text-success" (click)="updateActualDays()" data-bs-dismiss="modal"><i class="fa-solid fa-check pe-2"></i> Save</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-success" (click)="updateActualDays()"
+          data-bs-dismiss="modal"><i class="fa-solid fa-check pe-2"></i> Save</a>
       </div>
     </div>
   </div>

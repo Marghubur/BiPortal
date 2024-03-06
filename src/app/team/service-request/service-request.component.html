@@ -1,21 +1,22 @@
 <div class="col-12 full-v main-container" [ngClass]="{'preload': !isPageReady}">
+
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Service Request'"></app-breadcrums>
+      </div>
+    </div>
+    <div class="col text-end">
+      <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+        <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+          title="Reload this page"></i>
+      </a>
+    </div>
+  </div>
+
   <div class="col-12 row p-0 m-0">
     <div class="right-panel container col-md-12 p-0">
-      <div class="x_panel mt-2">
-        <div class="x_header">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'Service Request'" [subtitle]="'List all service request'"></app-breadcrums>
-              </div>
-            </div>
-            <div class="col text-end">
-              <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-                <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-              </a>
-            </div>
-          </div>
-        </div>
+      <div class="x_panel">
         <div class="x_content mt-4">
           <div class="x_panel">
             <div [ngSwitch]="isPageReady">
@@ -38,28 +39,30 @@
                           <div class="th fe-1">
                             <div class="cell-wrapper">
                               <input class="form-control form-control-sm" readonly (keydown.esc)="resetFilter()"
-                                (keyup.enter)="filterRecords()" autofocus
-                                placeholder="Search by Name" id="namefilter">
+                                (keyup.enter)="filterRecords()" autofocus placeholder="Search by Name" id="namefilter">
                               <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ColumnName')">
                                 <a href="javascript:void()" class="pe-2">Request Type</a>
                                 <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                                  [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }"
+                                  aria-hidden="true"></i>
                                 <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
+                                  [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }"
+                                  aria-hidden="true"></i>
                               </div>
                             </div>
                           </div>
                           <div class="th fe-2">
                             <div class="cell-wrapper">
                               <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                                (keydown.esc)="resetFilter()"
-                                placeholder="Search by Title" readonly>
+                                (keydown.esc)="resetFilter()" placeholder="Search by Title" readonly>
                               <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
                                 <a href="javascript:void()" class="pe-2">Title</a>
                                 <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }" aria-hidden="true"></i>
+                                  [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }"
+                                  aria-hidden="true"></i>
                                 <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }" aria-hidden="true"></i>
+                                  [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }"
+                                  aria-hidden="true"></i>
                               </div>
                             </div>
                           </div>
@@ -70,15 +73,18 @@
                               <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
                                 <a href="javascript:void()" class="pe-2">Description</a>
                                 <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
+                                  [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }"
+                                  aria-hidden="true"></i>
                                 <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
+                                  [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }"
+                                  aria-hidden="true"></i>
                               </div>
                             </div>
                           </div>
                           <div class="th fe-1 text-center">
                             <div class="cell-wrapper">
-                              <button class="btn btn-primary-c" (click)="addService()"><i class="fa-solid fa-plus pe-1"></i> Add Service</button>
+                              <button class="btn btn-primary-c" (click)="addService()"><i
+                                  class="fa-solid fa-plus pe-1"></i> Add Service</button>
                               <div class="t-filter align-items-center justify-content-center">
                                 ACTION
                               </div>
@@ -87,47 +93,50 @@
                         </div>
                       </div>
                       <div class="t-body">
-                          <ng-container>
-                              <div class="tr py-2" *ngFor="let service of requestDetail;let index = index;">
-                                <div class="td align-middle text-center fe-index">
-                                  <div class="cell-wrapper">
-                                      {{index + 1}}
-                                  </div>
-                                </div>
-                                <div class="td align-middle fe-1">
-                                  <div class="cell-wrapper ">
-                                    {{service.RequestTypeId}}
-                                  </div>
-                                </div>
-                                <div class="td align-middle fe-2 text-truncate">
-                                  <div class="cell-wrapper text-truncate">
-                                    {{service.RequestTitle}}
-                                  </div>
-                                </div>
-                                <div class="td align-middle fe-4 text-truncate">
-                                  <div class="cell-wrapper text-truncate">
-                                    {{service.RequestDescription}}
-                                  </div>
-                                </div>
-                                <div class="td align-middle fe-1">
-                                  <div class="d-flex flex-row justify-content-evenly">
-                                    <a href="javascript:void(0)" (click)="EditCurrent(service)">
-                                      <span class="badge bg-primary"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
-                                    </a>
-                                  </div>
-                                </div>
+                        <ng-container>
+                          <div class="tr py-2" *ngFor="let service of requestDetail;let index = index;">
+                            <div class="td align-middle text-center fe-index">
+                              <div class="cell-wrapper">
+                                {{index + 1}}
                               </div>
-                          </ng-container>
-                          <ng-container *ngIf="requestDetail == null || requestDetail.length == 0">
-                              <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                              <p class="my-5 py-5">Record Not Found</p>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="cell-wrapper ">
+                                {{service.RequestTypeId}}
                               </div>
-                          </ng-container>
+                            </div>
+                            <div class="td align-middle fe-2 text-truncate">
+                              <div class="cell-wrapper text-truncate">
+                                {{service.RequestTitle}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-4 text-truncate">
+                              <div class="cell-wrapper text-truncate">
+                                {{service.RequestDescription}}
+                              </div>
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <div class="d-flex flex-row justify-content-evenly">
+                                <a href="javascript:void(0)" (click)="EditCurrent(service)">
+                                  <span class="badge bg-primary"><i class="fa-solid fa-pencil"
+                                      aria-hidden="true"></i></span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="requestDetail == null || requestDetail.length == 0">
+                          <div
+                            class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                            <p class="my-5 py-5">Record Not Found</p>
+                          </div>
+                        </ng-container>
                       </div>
                     </div>
                   </div>
                   <div class="mt-3">
-                    <app-pagination [pagination]="requestFilter" (onPageChange)="GetFilterResult($event)"></app-pagination>
+                    <app-pagination [pagination]="requestFilter"
+                      (onPageChange)="GetFilterResult($event)"></app-pagination>
                   </div>
                 </ng-container>
               </div>
@@ -141,137 +150,148 @@
 
 <!-- Active and Deactive  Model -->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addupdateModal" tabindex="-1"
-        role="dialog" aria-labelledby="deleteTitleTitle" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-        <div class="modal-content">
-        <div class="modal-header border-bottom-0">
-            <h5 class="modal-title font-weight-bold text-dark">
-            Add/Update service request
-            </h5>
-        </div>
-        <div class="modal-body p-4">
-            <ng-container *ngIf="requestForm != null">
-                <div [formGroup]="requestForm" class="col-md-12 row m-0 p-0">
-                    <div class="form-group col-4">
-                        <label >Request Type</label>
-                        <select name="RequestTypeId" formControlName="RequestTypeId" (change)="enableAppropiateSection($event)" class="form-select" [ngClass]="{'error-field': submitted && f.RequestTypeId.errors !== null && f.RequestTypeId.errors.required}">
-                            <option value="" disabled>Select request type</option>
-                            <option value="SERVICE">SERVICE</option>
-                            <option value="BOOKING">BOOKING</option>
-                            <option value="PRODUCT">PRODUCT</option>
-                        </select>
+  role="dialog" aria-labelledby="deleteTitleTitle" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title font-weight-bold text-dark">
+          Add/Update service request
+        </h5>
+      </div>
+      <div class="modal-body p-4">
+        <ng-container *ngIf="requestForm != null">
+          <div [formGroup]="requestForm" class="col-md-12 row m-0 p-0">
+            <div class="form-group col-4">
+              <label>Request Type</label>
+              <select name="RequestTypeId" formControlName="RequestTypeId" (change)="enableAppropiateSection($event)"
+                class="form-select"
+                [ngClass]="{'error-field': submitted && f.RequestTypeId.errors !== null && f.RequestTypeId.errors.required}">
+                <option value="" disabled>Select request type</option>
+                <option value="SERVICE">SERVICE</option>
+                <option value="BOOKING">BOOKING</option>
+                <option value="PRODUCT">PRODUCT</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control"
+                  [ngClass]="{'error-field': submitted && f.RequestTitle.errors !== null && f.RequestTitle.errors.required}">
+              </div>
+            </div>
+
+            <div class="col-md-12 m-0 p-0 row">
+              <ng-container>
+                <div class="min-h-25 pb-3">
+                  <div name="SERVICE" class="col-12 d-none">
+                    <div class="px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'SERVICE'}">
+
                     </div>
-                    <div class="col-md-4">
-                      <div class="form-group">
-                        <label >Title</label>
-                        <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control" [ngClass]="{'error-field': submitted && f.RequestTitle.errors !== null && f.RequestTitle.errors.required}">
+                  </div>
+                  <div name="BOOKING" class="col-12" [ngClass]="{'d-none': requestId != 'BOOKING'}">
+                    <div class="px-2 row" [ngClass]="{'d-none': requestId != 'BOOKING'}">
+                      <div class="form-group col-4 mt-3">
+                        <label class="form-label">Duration</label>
+                        <input type="text" name="Duration" formControlName="Duration" class="form-control"
+                          [ngClass]="{'error-field': submitted && f.Duration.errors !== null && f.Duration.errors.required}">
+                      </div>
+                      <div class="form-group col-4 mt-3">
+                        <label class="form-label">From date</label>
+                        <form class="form-inline">
+                          <div class="form-group w-100">
+                            <div class="input-group w-100"
+                              [ngClass]="{'error-field': submitted && f.FromDate.errors !== null && f.FromDate.errors.required}">
+                              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="frommodel"
+                                (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="maxDate"
+                                [maxDate]="{year: 2050, month:1, day: 1}" #d="ngbDatepicker">
+                              <div class="input-group-append">
+                                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
+                                    class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="form-group col-4 mt-3">
+                        <label class="form-label">To date</label>
+                        <form class="form-inline">
+                          <div class="form-group w-100">
+                            <div class="input-group w-100"
+                              [ngClass]="{'error-field': submitted && f.ToDate.errors !== null && f.ToDate.errors.required}">
+                              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tomodel"
+                                (dateSelect)="toDateSelection($event)" ngbDatepicker [minDate]="maxDate"
+                                [maxDate]="{year: 2050, month:1, day: 1}" #td="ngbDatepicker">
+                              <div class="input-group-append">
+                                <button class="btn btn-outline-secondary calendar" (click)="td.toggle()"
+                                  type="button"><i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
                       </div>
                     </div>
-
-                    <div class="col-md-12 m-0 p-0 row">
-                      <ng-container>
-                          <div class="min-h-25 pb-3">
-                            <div name="SERVICE" class="col-12 d-none">
-                                <div class="px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'SERVICE'}">
-
-                                </div>
-                            </div>
-                              <div name="BOOKING" class="col-12" [ngClass]="{'d-none': requestId != 'BOOKING'}">
-                                  <div class="px-2 row" [ngClass]="{'d-none': requestId != 'BOOKING'}">
-                                      <div class="form-group col-4 mt-3">
-                                          <label class="form-label" >Duration</label>
-                                          <input type="text" name="Duration" formControlName="Duration" class="form-control" [ngClass]="{'error-field': submitted && f.Duration.errors !== null && f.Duration.errors.required}">
-                                      </div>
-                                      <div class="form-group col-4 mt-3">
-                                        <label class="form-label" >From date</label>
-                                        <form class="form-inline">
-                                          <div class="form-group w-100">
-                                            <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.FromDate.errors !== null && f.FromDate.errors.required}">
-                                              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="frommodel"
-                                                (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="maxDate" [maxDate]="{year: 2050, month:1, day: 1}" #d="ngbDatepicker">
-                                              <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
-                                                    class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
-                                                </button>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </form>
-                                      </div>
-                                      <div class="form-group col-4 mt-3">
-                                        <label class="form-label" >To date</label>
-                                        <form class="form-inline">
-                                          <div class="form-group w-100">
-                                            <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.ToDate.errors !== null && f.ToDate.errors.required}">
-                                              <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tomodel"
-                                                (dateSelect)="toDateSelection($event)" ngbDatepicker [minDate]="maxDate" [maxDate]="{year: 2050, month:1, day: 1}" #td="ngbDatepicker">
-                                              <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary calendar" (click)="td.toggle()" type="button"><i
-                                                    class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
-                                                </button>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </form>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div name="PRODUCT" class="col-12" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
-                                  <div class="px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
-                                      <div class="form-group col-3 mt-3">
-                                          <label class="form-label" >Catagory</label>
-                                          <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
-                                      </div>
-                                      <div class="form-group mt-3 col-3">
-                                          <label class="form-label" >Brand</label>
-                                          <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
-                                      </div>
-                                      <div class="form-group mt-3 col-4">
-                                          <label class="form-label" >Product</label>
-                                          <input type="number" name="Quantity" formControlName="Quantity" class="form-control">
-                                      </div>
-                                      <div class="form-group mt-3 col-2">
-                                          <label class="form-label" >Quantity</label>
-                                          <input type="text" name="Quantity" formControlName="Quantity" class="form-control">
-                                      </div>
-                                  </div>
-                              </div>
-                              <div name="NOT" class="col-12" [ngClass]="{'d-none': requestId != ''}">
-                                  <div class="px-2 pt-4 d-flex flex-column justify-content-center">
-                                      <p class="disable-color display-6 fw-bold text-center m-0 p-0">
-                                          PLEASE SELECT REQUEST TYPE
-                                      </p>
-                                  </div>
-                              </div>
-                              <div class="form-group col-12 mt-3">
-                                <label class="form-label" >Description</label>
-                                <textarea rows="5" name="RequestDescription" formControlName="RequestDescription" class="col-12 form-control"  [ngClass]="{'error-field': submitted && f.RequestDescription.errors !== null && f.RequestDescription.errors.required}">
-                                </textarea>
-                              </div>
-                              <div class="d-flex flex-wrap mt-3">
-                                <div *ngFor="let item of managers">
-                                  <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
-                                    {{item.text}}
-                                  </span>
-                                </div>
-                              </div>
-                              <div class="mt-3">
-                                <bot-autocomplete [data]="employeesList"  (OnSelect)="selectedEmployee($event)" [(ngModel)]="employeeIds" [ngModelOptions]="{standalone: true}">
-                                </bot-autocomplete>
-                              </div>
-                          </div>
-                      </ng-container>
+                  </div>
+                  <div name="PRODUCT" class="col-12" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
+                    <div class="px-2 pt-4 row" [ngClass]="{'d-none': requestId != 'PRODUCT'}">
+                      <div class="form-group col-3 mt-3">
+                        <label class="form-label">Catagory</label>
+                        <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
+                      </div>
+                      <div class="form-group mt-3 col-3">
+                        <label class="form-label">Brand</label>
+                        <input type="text" name="RequestTitle" formControlName="RequestTitle" class="form-control">
+                      </div>
+                      <div class="form-group mt-3 col-4">
+                        <label class="form-label">Product</label>
+                        <input type="number" name="Quantity" formControlName="Quantity" class="form-control">
+                      </div>
+                      <div class="form-group mt-3 col-2">
+                        <label class="form-label">Quantity</label>
+                        <input type="text" name="Quantity" formControlName="Quantity" class="form-control">
+                      </div>
                     </div>
+                  </div>
+                  <div name="NOT" class="col-12" [ngClass]="{'d-none': requestId != ''}">
+                    <div class="px-2 pt-4 d-flex flex-column justify-content-center">
+                      <p class="disable-color display-6 fw-bold text-center m-0 p-0">
+                        PLEASE SELECT REQUEST TYPE
+                      </p>
+                    </div>
+                  </div>
+                  <div class="form-group col-12 mt-3">
+                    <label class="form-label">Description</label>
+                    <textarea rows="5" name="RequestDescription" formControlName="RequestDescription"
+                      class="col-12 form-control"
+                      [ngClass]="{'error-field': submitted && f.RequestDescription.errors !== null && f.RequestDescription.errors.required}">
+                                </textarea>
+                  </div>
+                  <div class="d-flex flex-wrap mt-3">
+                    <div *ngFor="let item of managers">
+                      <span class="badge fs-6 fw-normal bg-ant text-dark me-2 my-2">
+                        {{item.text}}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <bot-autocomplete [data]="employeesList" (OnSelect)="selectedEmployee($event)"
+                      [(ngModel)]="employeeIds" [ngModelOptions]="{standalone: true}">
+                    </bot-autocomplete>
+                  </div>
                 </div>
-            </ng-container>
-        </div>
-        <div class="modal-footer border-top-0">
-            <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
-            <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateUpdateRequest()">
-                <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-check': !isLoading}"></i>
-                {{ isLoading ? 'Processing' : 'Submit' }}
-            </button>
-        </div>
-        </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="modal-footer border-top-0">
+        <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
+        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateUpdateRequest()">
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-check': !isLoading}"></i>
+          {{ isLoading ? 'Processing' : 'Submit' }}
+        </button>
+      </div>
     </div>
+  </div>
 </div>

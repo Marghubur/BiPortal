@@ -1,24 +1,26 @@
 <div class="col-12 full-v main-container">
+
+  <div class="x_header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Shift'" [subtitle]="'Details'"></app-breadcrums>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="x_header_title d-flex align-items-center justify-content-end">
+        <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+          <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+            title="Reload this page"></i>
+        </a>
+        <button class="btn btn-primary-c" (click)="addShiftPopUp()"><i class="fa-solid fa-plus pe-2"></i>Add
+          Shift</button>
+      </div>
+    </div>
+  </div>
+
   <div class="col-12 row p-0 m-0">
     <div class="right-panel container col-md-12 p-0">
-      <div class="x_panel mt-2">
-        <div class="x_header">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'Shift'" [subtitle]="'Details'"></app-breadcrums>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="x_header_title d-flex align-items-center justify-content-end">
-                <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-                  <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
-                </a>
-              <button class="btn btn-primary-c" (click)="addShiftPopUp()"><i class="fa-solid fa-plus pe-2"></i>Add Shift</button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="x_panel">
         <ng-container *ngIf="isPageReady">
           <div class="x_content mt-4">
             <div class="t-table t-list  col-md-12">
@@ -32,66 +34,80 @@
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Shift Title" [(ngModel)]="shiftDetail.ShiftTitle"
-                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Shift Title"
+                        [(ngModel)]="shiftDetail.ShiftTitle" oninput="this.value = this.value.toUpperCase()"
+                        (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByShiftTitleAsc, 'ShiftTitle')">
                         <a href="javascript:void(0)" class="pe-2">Shift Title</a>
-                           <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByShiftTitleAsc == null || !orderByShiftTitleAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByShiftTitleAsc == null || orderByShiftTitleAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByShiftTitleAsc == null || !orderByShiftTitleAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByShiftTitleAsc == null || orderByShiftTitleAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by Working days in week" [(ngModel)]="shiftDetail.TotalWorkingDays"
-                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by Working days in week"
+                        [(ngModel)]="shiftDetail.TotalWorkingDays" oninput="this.value = this.value.toUpperCase()"
+                        (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByTotalWorkingDaysAsc, 'TotalWorkingDays')">
                         <a href="javascript:void(0)" class="pe-2">Working Days(in week)</a>
-                           <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || !orderByTotalWorkingDaysAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || orderByTotalWorkingDaysAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || !orderByTotalWorkingDaysAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByTotalWorkingDaysAsc == null || orderByTotalWorkingDaysAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" autofocus placeholder="Search by Start date" readonly
-                       oninput="this.value = this.value.toUpperCase()">
+                        oninput="this.value = this.value.toUpperCase()">
                       <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
                         <a href="javascript:void(0)" class="pe-2">Start Date</a>
-                           <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by office time" [(ngModel)]="shiftDetail.OfficeTime"
-                       oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by office time"
+                        [(ngModel)]="shiftDetail.OfficeTime" oninput="this.value = this.value.toUpperCase()"
+                        (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByOfficeTimeAsc, 'OfficeTime')">
                         <a href="javascript:void(0)" class="pe-2">Office Time</a>
-                           <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByOfficeTimeAsc == null || !orderByOfficeTimeAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByOfficeTimeAsc == null || orderByOfficeTimeAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByOfficeTimeAsc == null || !orderByOfficeTimeAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByOfficeTimeAsc == null || orderByOfficeTimeAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by duration in min" [(ngModel)]="shiftDetail.Duration"
-                        oninput="this.value = this.value.toUpperCase()" (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by duration in min"
+                        [(ngModel)]="shiftDetail.Duration" oninput="this.value = this.value.toUpperCase()"
+                        (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByDurationAsc, 'Duration')">
                         <a href="javascript:void(0)" class="pe-2">Duration (in min)</a>
-                           <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByDurationAsc == null || !orderByDurationAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByDurationAsc == null || orderByDurationAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByDurationAsc == null || !orderByDurationAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByDurationAsc == null || orderByDurationAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -100,23 +116,26 @@
                       <input class="form-control form-control-sm" autofocus placeholder="Search by Status" readonly>
                       <div class="t-filter" (click)="arrangeDetails(orderByStatusAsc, 'Status')">
                         <a href="javascript:void(0)" class="pe-2">Status</a>
-                           <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByStatusAsc == null || !orderByStatusAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByStatusAsc == null || orderByStatusAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByStatusAsc == null || !orderByStatusAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByStatusAsc == null || orderByStatusAsc }" aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
                   <div class="th fe-1">
                     <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus placeholder="Search by lunch duration" [(ngModel)]="shiftDetail.LunchDuration"
-                      (keyup.enter)="filterRecords()" (keydown.esc)="resetFilter()">
+                      <input class="form-control form-control-sm" autofocus placeholder="Search by lunch duration"
+                        [(ngModel)]="shiftDetail.LunchDuration" (keyup.enter)="filterRecords()"
+                        (keydown.esc)="resetFilter()">
                       <div class="t-filter" (click)="arrangeDetails(orderByLunchDurationAsc, 'LunchDuration')">
                         <a href="javascript:void(0)" class="pe-2">Lunch Dur (in min)</a>
-                           <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByLunchDurationAsc == null || !orderByLunchDurationAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByLunchDurationAsc == null || orderByLunchDurationAsc }" aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-wide-short"
+                          [ngClass]="{'d-none': orderByLunchDurationAsc == null || !orderByLunchDurationAsc }"
+                          aria-hidden="true"></i>
+                        <i class="fa-solid fa-arrow-down-short-wide"
+                          [ngClass]="{'d-none': orderByLunchDurationAsc == null || orderByLunchDurationAsc }"
+                          aria-hidden="true"></i>
                       </div>
                     </div>
                   </div>
@@ -164,7 +183,8 @@
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{item.Status == 2 ? 'Pending' : item.Status == 5 ? 'Rejected' : item.Status == 3 ? 'Canceled' : 'Approved'}}
+                        {{item.Status == 2 ? 'Pending' : item.Status == 5 ? 'Rejected' : item.Status == 3 ? 'Canceled' :
+                        'Approved'}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
@@ -210,42 +230,48 @@
 </div>
 
 <!-- View File Modal -->
-<div class="modal fade view-popup" id="manageShiftModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="manageShiftModalLabel" aria-hidden="true">
+<div class="modal fade view-popup" id="manageShiftModal" data-bs-backdrop="static" data-bs-keyboard="false"
+  tabindex="-1" aria-labelledby="manageShiftModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="manageShiftModalLabel">{{currentShift.WorkShiftId > 0 ? 'Edit' : 'Add'}} shift deatil</h5>
+        <h5 class="modal-title" id="manageShiftModalLabel">{{currentShift.WorkShiftId > 0 ? 'Edit' : 'Add'}} shift
+          deatil</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="shiftForm">
           <div class="row">
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Company Name</label>
+              <label class="form-label">Company Name</label>
               <input type="text" readonly formControlName="CompanyName" class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Department *</label>
-              <select class="form-select" formControlName="Department" [ngClass]="{'error-field': submitted && f.Department.errors !== null && f.Department.errors.required}">
+              <label class="form-label">Department *</label>
+              <select class="form-select" formControlName="Department"
+                [ngClass]="{'error-field': submitted && f.Department.errors !== null && f.Department.errors.required}">
                 <option value=null disabled>Select Department</option>
                 <option [value]="item.DepartmentId" *ngFor="let item of departments">{{item.DepartmentName}}</option>
               </select>
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Shift Title *</label>
-              <input type="text" maxlength="40" oninput="this.value = this.value.toUpperCase()" placeholder="Enter shift title" formControlName="ShiftTitle" [ngClass]="{'error-field': submitted && f.ShiftTitle.errors !== null && f.ShiftTitle.errors.required}" class="form-control">
+              <label class="form-label">Shift Title *</label>
+              <input type="text" maxlength="40" oninput="this.value = this.value.toUpperCase()"
+                placeholder="Enter shift title" formControlName="ShiftTitle"
+                [ngClass]="{'error-field': submitted && f.ShiftTitle.errors !== null && f.ShiftTitle.errors.required}"
+                class="form-control">
             </div>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Office Time (in min) *</label>
+              <label class="form-label">Office Time (in min) *</label>
               <app-bh-timepicker formControlName="OfficeTime"></app-bh-timepicker>
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Duration (in min) *</label>
+              <label class="form-label">Duration (in min) *</label>
               <div class="row">
                 <div class="col-md-4">
-                  <select formControlName="DurationHrs"  class="form-select" (change)="shiftDurationCalc()">
+                  <select formControlName="DurationHrs" class="form-select" (change)="shiftDurationCalc()">
                     <option value="0" selected>0 hr</option>
                     <option value="1">1 hr</option>
                     <option value="2">2 hrs</option>
@@ -262,40 +288,50 @@
                   </select>
                 </div>
                 <div class="col-md-4">
-                  <select formControlName="DurationMinutes"  class="form-select" (change)="shiftDurationCalc()">
+                  <select formControlName="DurationMinutes" class="form-select" (change)="shiftDurationCalc()">
                     <option value="0" selected disabled>0 min</option>
                     <option [value]="item" *ngFor="let item of minutes">{{item}} {{item == 1 ? 'min' : 'mins'}}</option>
                   </select>
                 </div>
                 <div class="col-md-4">
                   <div class="d-flex align-items-center">
-                    <input type="text" readonly OnlyNumber="3" class="form-control border-0" placeholder="Enter office duiration" formControlName="Duration" [ngClass]="{'error-field': submitted && f.Duration.errors !== null && f.Duration.errors.required}">
-                    <label  class="form-label ps-1 mb-0">mins</label>
+                    <input type="text" readonly OnlyNumber="3" class="form-control border-0"
+                      placeholder="Enter office duiration" formControlName="Duration"
+                      [ngClass]="{'error-field': submitted && f.Duration.errors !== null && f.Duration.errors.required}">
+                    <label class="form-label ps-1 mb-0">mins</label>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Lunch Duration (in min) *</label>
-              <input type="text" OnlyNumber="3" placeholder="Enter lunch duiration" formControlName="LunchDuration" [ngClass]="{'error-field': submitted && f.LunchDuration.errors !== null && f.LunchDuration.errors.required}" class="form-control">
+              <label class="form-label">Lunch Duration (in min) *</label>
+              <input type="text" OnlyNumber="3" placeholder="Enter lunch duiration" formControlName="LunchDuration"
+                [ngClass]="{'error-field': submitted && f.LunchDuration.errors !== null && f.LunchDuration.errors.required}"
+                class="form-control">
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label  class="form-label">Description</label>
-            <textarea class="form-control" oninput="this.value = this.value.toUpperCase()" formControlName="Description" placeholder="Enter description" maxlength="100" cols="30" rows="5"></textarea>
+            <label class="form-label">Description</label>
+            <textarea class="form-control" oninput="this.value = this.value.toUpperCase()" formControlName="Description"
+              placeholder="Enter description" maxlength="100" cols="30" rows="5"></textarea>
           </div>
           <div class="row">
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Total Working Days *</label>
-              <input type="text" OnlyNumber="1" placeholder="Enter total working days" formControlName="TotalWorkingDays" [ngClass]="{'error-field': submitted && f.TotalWorkingDays.errors !== null && f.TotalWorkingDays.errors.required}" class="form-control">
+              <label class="form-label">Total Working Days *</label>
+              <input type="text" OnlyNumber="1" placeholder="Enter total working days"
+                formControlName="TotalWorkingDays"
+                [ngClass]="{'error-field': submitted && f.TotalWorkingDays.errors !== null && f.TotalWorkingDays.errors.required}"
+                class="form-control">
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">Start Date *</label>
+              <label class="form-label">Start Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
+                  <div class="input-group w-100"
+                    [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="frommodel"
-                      (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #d="ngbDatepicker">
+                      (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate"
+                      #d="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
                           class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
@@ -306,12 +342,14 @@
               </form>
             </div>
             <div class="col-md-4 mt-3">
-              <label  class="form-label">End Date *</label>
+              <label class="form-label">End Date *</label>
               <form class="form-inline">
                 <div class="form-group w-100">
-                  <div class="input-group w-100" [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
+                  <div class="input-group w-100"
+                    [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="tomodel"
-                      (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate" #td="ngbDatepicker">
+                      (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate"
+                      #td="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="td.toggle()" type="button"><i
                           class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
@@ -323,14 +361,16 @@
             </div>
           </div>
           <div class="col-md-12 mt-3">
-            <label  class="form-label">Pick working days in a week:</label>
+            <label class="form-label">Pick working days in a week:</label>
             <div class="d-flex">
-              <div class="day-of-week" *ngFor="let day of days; let index = index;" [ngClass]="{'border-success': day.isEnabled}"
-                  (click)="toggleDays(day.id, $event)">
+              <div class="day-of-week" *ngFor="let day of days; let index = index;"
+                [ngClass]="{'border-success': day.isEnabled}" (click)="toggleDays(day.id, $event)">
                 <a href="javascript:void(0)" [ngClass]="{'ms-0': index == 0, 'blur-text': !day.isEnabled}">
                   {{day.day}}
-                  <i class="fa-solid fa-toggle-on ps-2 text-success" [ngClass]="{'d-none': !day.isEnabled}" name="selection-on"></i>
-                  <i class="fa-solid fa-toggle-off ps-2 text-muted" [ngClass]="{'d-none': day.isEnabled}" name="selection-off" aria-hidden="true"></i>
+                  <i class="fa-solid fa-toggle-on ps-2 text-success" [ngClass]="{'d-none': !day.isEnabled}"
+                    name="selection-on"></i>
+                  <i class="fa-solid fa-toggle-off ps-2 text-muted" [ngClass]="{'d-none': day.isEnabled}"
+                    name="selection-off" aria-hidden="true"></i>
                 </a>
               </div>
             </div>
@@ -340,7 +380,7 @@
       <div class="modal-footer border-top-0">
         <a href="javascript:void(0)" class="text-dark px-3" data-bs-dismiss="modal">Close</a>
         <button class="btn btn-primary-c" [disabled]="isLoading" (click)="CreateUpdateRequest()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-check': !isLoading}"></i>
+          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-check': !isLoading}"></i>
           {{ isLoading ? 'Processing' : 'Submit' }}
         </button>
       </div>
