@@ -760,9 +760,12 @@ export class ApplyLeaveComponent implements OnInit {
   bindDonutChartData() {
     let bgColor = ['#379237', 'rgba(255, 159, 64, 0.2)', '#379273', 'rgba(153, 102, 255, 0.2)'];
     let data = [];
-    for (let i = 0; i <  this.chartDataset.length; i++) {
+    for (let i = 0; i < this.chartDataset.length; i++) {
       let value = (this.chartDataset[i].ConsumedLeave/this.chartDataset[i].MaxLeaveLimit) *100;
-      data.push(value);
+      if (!isNaN(value))
+        data.push(value);
+      else
+        data.push(0);
     }
     this.chartData = {
       labels: this.chartDataset.map(x => x.PlanName),
@@ -785,7 +788,7 @@ export class ApplyLeaveComponent implements OnInit {
     this.chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: 60
+      cutout: 40
       // plugins: {
       //   title: {
       //     display: true,

@@ -1,5 +1,4 @@
 <div class="col-md-12 col-sm-12 main-container">
-
   <div class="content-header">
     <div class="col-8">
       <div class="px-1">
@@ -97,7 +96,7 @@
           <div id="leave-chart">
             <h5 class="mt-3 pt-3 pb-3">My Leave Status</h5>
             <div class="row">
-              <div class="col-md-3">
+              <div class="col-md-4">
                 <div class="card">
                   <div class="card-body pb-0">
                     <div class="d-flex justify-content-between mb-0 pb-0">
@@ -110,7 +109,7 @@
                     </div>
                     <div class="d-block col-md-12 pt-1 pb-2 consume-leave-box">
                       <div [hidden]="!isLeaveConsume">
-                        <canvas baseChart [data]="chartData" type="doughnut" [options]="chartOptions">
+                        <canvas baseChart [data]="chartData"  type="doughnut" [options]="chartOptions">
                         </canvas>
                       </div>
                       <div class="fw-bold text-dark py-5 my-5 text-center" *ngIf="!isLeaveConsume">
