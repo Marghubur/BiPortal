@@ -106,7 +106,7 @@ export class JwtService {
                         error.ResponseBody.UserMessage != "") {
                         ErrorToast(error.ResponseBody.UserMessage);
                     } else {
-                        return;
+                        break;
                     }
                 }
                 break;

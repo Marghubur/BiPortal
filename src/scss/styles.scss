@@ -678,15 +678,6 @@ fieldset {
   }
 }
 
-/* Customize arrow buttons */
-::-webkit-scrollbar-button:vertical:decrement {
-  background-color: #ccc; /* Color of the up arrow button */
-}
-
-::-webkit-scrollbar-button:vertical:increment {
-  background-color: #ccc; /* Color of the down arrow button */
-}
-
 ::-webkit-scrollbar {
   width: 10px;
 }

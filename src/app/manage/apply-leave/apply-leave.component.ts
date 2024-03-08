@@ -264,6 +264,7 @@ export class ApplyLeaveComponent implements OnInit {
       }).catch(e => {
         this.submitted = false;
         this.isLoading = false;
+        ErrorToast(e.HttpStatusMessage);
       });
     }
   }
