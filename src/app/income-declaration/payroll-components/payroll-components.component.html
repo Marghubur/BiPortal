@@ -11,8 +11,8 @@
       </a>
     </div>
   </div>
-  <div class="x_panel">
-    <ul ngbNav #nav="ngbNav" [(activeId)]="activetab" class="nav-tabs mt-4 mb-3">
+  <div class="x_panel pb-0">
+    <ul ngbNav #nav="ngbNav" [(activeId)]="activetab" class="nav-tabs mt-4">
       <li [ngbNavItem]="1" (click)="navigate()">
         <a ngbNavLink>COMPANY GROUPS</a>
         <ng-template ngbNavContent>
@@ -70,7 +70,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="t-body custom-height">
+                      <div class="t-body">
                         <ng-container *ngIf="RecurringComponent.length > 0">
                           <div class="tr py-2" *ngFor="let item of RecurringComponent">
                             <div class="td ps-3 text-truncate fe-2">

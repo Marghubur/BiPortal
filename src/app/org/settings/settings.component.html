@@ -13,15 +13,15 @@
           </a>
         </div>
       </div>
-      <div class="x_panel overflow-hidden">
+      <div class="x_panel pb-0">
         <ng-container *ngIf="isPageLoading">
-          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mt-4 mb-3">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs mt-4">
             <li [ngbNavItem]="1">
               <a ngbNavLink>COMPANY GROUPS</a>
               <ng-template ngbNavContent>
-                <div class="col-md-12 m-0 p-0 row">
+                <div class="col-md-12 m-0 p-0 row overflow-auto">
                   <div class="col-md-3 col-sm-12 ps-0 ">
-                    <div class="x_panel p-0">
+                    <div class="x_panel_body p-0">
                       <div class="x_header p-3">
                         <div class="x_header_title d-flex flex-row justify-content-between">
                           <h5 class="text-primary-c m-0">
@@ -90,7 +90,7 @@
                   </div>
                   <div class="col-md-9 col-sm-12 pe-0" [ngClass]="{'preload': !isPageReady}">
                     <ng-container>
-                      <div class="x_panel">
+                      <div class="x_panel_body overflow-hidden">
                           <ul ngbNav #nav="ngbNav" [ngClass]="{'disabled-li': Companys.length == 0}"
                             [(activeId)]="groupActiveId" class="nav-tabs">
                             <li [ngbNavItem]="1">
