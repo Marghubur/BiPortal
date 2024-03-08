@@ -395,6 +395,7 @@ export class HolidayComponent implements OnInit {
             this.isLoading = false;
           }
         } else {
+          this.isLoading = false;
           ErrorToast("Unable to upload the data");
         }
       }).catch(e => {

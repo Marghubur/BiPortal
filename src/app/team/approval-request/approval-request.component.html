@@ -420,10 +420,13 @@
         <li [ngbNavItem]="4">
           <a ngbNavLink class="text-muted" (click)="loadAttendanceRequestDetail()">Request</a>
           <ng-template ngbNavContent>
-            <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3">
+            <!-- <div class="col-md-12 row align-items-center bg-white justify-content-between mt-4 py-3">
               <span class="ps-4">Work From Home / On Duty Request</span>
+            </div> -->
+            <div class="mt-3" *ngIf="attendanceRquestPageIsReady">
+              <app-pagination [pagination]="requestFilter" (onPageChange)="GetFilterResult($event)"></app-pagination>
             </div>
-            <div class="x_panel">
+            <div class="x_panel_body">
               <ng-container *ngIf="attendanceRquestPageIsReady">
                 <div class="d-flex align-items-center justify-content-between">
                   <div class="row col-md-10">
@@ -489,10 +492,10 @@
                       <tr *ngFor="let attr of attendanceRequestDetail">
                         <td class="align-middle border-end border-bottom">
                           <div class="d-flex align-items-center justify-content-between">
-                            <p>{{attr.AttendanceDate | date}}</p>
+                            <p class="mb-0">{{attr.AttendanceDate | date}}</p>
                             <div class="d-flex align-items-center flex-column">
-                              <i class="fa-solid fa-house fa-lg"></i>
-                              <p class="mt-2">1 Day</p>
+                              <i class="fa-solid fa-house fa-lg pb-3"></i>
+                              <p class="mb-0">1 Day</p>
                             </div>
                           </div>
                         </td>
@@ -521,7 +524,7 @@
                         </td>
                         <td class="align-middle border-bottom">
                           <div ngbDropdown class="d-inline-block">
-                            <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply"
+                            <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Action"
                               [disabled]="attr.CurrentStatus == 5" id="dropdownBasic1" ngbDropdownToggle>
                               <i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i>
                             </button>
@@ -550,10 +553,6 @@
                     </ng-container>
                   </tbody>
                 </table>
-                <div class="mt-3">
-                  <app-pagination [pagination]="requestFilter"
-                    (onPageChange)="GetFilterResult($event)"></app-pagination>
-                </div>
               </ng-container>
             </div>
           </ng-template>
