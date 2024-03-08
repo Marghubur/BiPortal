@@ -87,15 +87,15 @@ export class ApplyLeaveComponent implements OnInit {
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
   constructor(private nav: iNavigation,
-              private http: AjaxService,
-              private user: UserService,
-              private config: NgbDatepickerConfig,
-              private fb: FormBuilder,
-              private calendar: NgbCalendar,
-              private router: Router
-              ) {
-    config.minDate = {year: new Date().getFullYear(), month: 1, day: 1};
-    config.maxDate = {year: new Date().getFullYear(), month: 12, day: 31};
+    private http: AjaxService,
+    private user: UserService,
+    private config: NgbDatepickerConfig,
+    private fb: FormBuilder,
+    private calendar: NgbCalendar,
+    private router: Router
+  ) {
+    config.minDate = { year: new Date().getFullYear(), month: 1, day: 1 };
+    config.maxDate = { year: new Date().getFullYear(), month: 12, day: 31 };
     config.outsideDays = 'hidden';
     this.findDisabledDate();
   }
@@ -123,7 +123,7 @@ export class ApplyLeaveComponent implements OnInit {
     this.model = this.calendar.getToday();
     this.leaveDetail = new LeaveModal();
     this.leaveDetail.LeaveFromDay = new Date(this.model.year, this.model.month, this.model.day);
-    this.leaveDetail.LeaveToDay = new Date(new Date().setDate( this.leaveDetail.LeaveFromDay.getDate() + 1));
+    this.leaveDetail.LeaveToDay = new Date(new Date().setDate(this.leaveDetail.LeaveFromDay.getDate() + 1));
     this.leaveDetail.LeaveTypeId = 0;
     this.managerList = new autoCompleteModal();
     this.managerList.data = [];
@@ -132,11 +132,11 @@ export class ApplyLeaveComponent implements OnInit {
       value: 0,
       text: "Default Manager"
     });
-    this.managerList.className="";
+    this.managerList.className = "";
     this.loadAutoComplete();
-    if(!this.cachedData) {
+    if (!this.cachedData) {
       this.reportingManagerId = this.userDetail.ReportingManagerId;
-      if(this.userDetail && this.userDetail != null) {
+      if (this.userDetail && this.userDetail != null) {
         this.leaveDetail.EmployeeId = this.employeeId;
         this.clearChart();
         this.loadData();
@@ -180,7 +180,7 @@ export class ApplyLeaveComponent implements OnInit {
       value.RequestType = 1;
       value.Session = Number(value.Session);
       let reportingmanager = this.managerList.data.find(x => x.value == this.reportingManagerId);
-      if(!reportingmanager) {
+      if (!reportingmanager) {
         ErrorToast("Reporting manager is not selected. Please select one.");
         this.submitted = false;
         this.isLoading = false;
@@ -222,8 +222,8 @@ export class ApplyLeaveComponent implements OnInit {
         return;
       }
 
-      let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate())) /(1000 * 60 * 60 * 24)) + 1;
-      if (leaveDay <=0) {
+      let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate())) / (1000 * 60 * 60 * 24)) + 1;
+      if (leaveDay <= 0) {
         ErrorToast("Please select a valid end date");
         this.isLoading = false;
         return;
@@ -235,7 +235,7 @@ export class ApplyLeaveComponent implements OnInit {
         return;
       }
 
-      if (this.leaveDays > 0 && !value.IsProjectedFutureDateAllowed){
+      if (this.leaveDays > 0 && !value.IsProjectedFutureDateAllowed) {
         this.checkIsLeaveAvailabel();
         if (!this.isLoading)
           return;
@@ -252,7 +252,7 @@ export class ApplyLeaveComponent implements OnInit {
 
       formData.append('leave', JSON.stringify(value));
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
-      this.http.post('Leave/ApplyLeave', formData).then ((res:ResponseModel) => {
+      this.http.post('Leave/ApplyLeave', formData).then((res: ResponseModel) => {
         if (res.ResponseBody) {
           this.bindData(res);
           this.isEnabled = false;
@@ -270,10 +270,10 @@ export class ApplyLeaveComponent implements OnInit {
   }
 
   onDateSelect(e: NgbDateStruct) {
-    let value  = new Date(e.year, e.month-1, e.day);
-    if (value.setHours(0,0,0,0) >= this.leaveDetail.LeaveFromDay.setHours(0,0,0,0)) {
+    let value = new Date(e.year, e.month - 1, e.day);
+    if (value.setHours(0, 0, 0, 0) >= this.leaveDetail.LeaveFromDay.setHours(0, 0, 0, 0)) {
       this.leaveDetail.LeaveToDay = value;
-      this.leaveDays = Math.floor((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate()) ) /(1000 * 60 * 60 * 24)) + 1;
+      this.leaveDays = Math.floor((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(this.leaveDetail.LeaveFromDay.getFullYear(), this.leaveDetail.LeaveFromDay.getMonth(), this.leaveDetail.LeaveFromDay.getDate())) / (1000 * 60 * 60 * 24)) + 1;
       this.leaveForm.get('LeaveToDay').setValue(value);
     }
     else
@@ -281,18 +281,18 @@ export class ApplyLeaveComponent implements OnInit {
   }
 
   onDateSelection(e: NgbDateStruct) {
-    let value  = new Date(e.year, e.month-1, e.day);
+    let value = new Date(e.year, e.month - 1, e.day);
     this.leaveForm.get('LeaveToDay').setValue(value);
     this.leaveForm.get('LeaveFromDay').setValue(value);
     this.leaveDetail.LeaveFromDay = value;
     this.leaveDetail.LeaveToDay = value;
-    let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) /(1000 * 60 * 60 * 24)) + 1;
+    let leaveDay = Math.round((Date.UTC(this.leaveDetail.LeaveToDay.getFullYear(), this.leaveDetail.LeaveToDay.getMonth(), this.leaveDetail.LeaveToDay.getDate()) - Date.UTC(value.getFullYear(), value.getMonth(), value.getDate())) / (1000 * 60 * 60 * 24)) + 1;
     if (leaveDay > 0)
       this.leaveDays = leaveDay;
     else
       this.leaveDays = 0;
-    this.maxDate = {year: e.year, month: e.month, day: e.day};
-    this.model = { day: value.getDate(), month: value.getMonth()+1, year: value.getFullYear()};
+    this.maxDate = { year: e.year, month: e.month, day: e.day };
+    this.model = { day: value.getDate(), month: value.getMonth() + 1, year: value.getFullYear() };
   }
 
   leaveRequestForm() {
@@ -331,16 +331,16 @@ export class ApplyLeaveComponent implements OnInit {
     }
 
     this.http.post('Leave/GetAllLeavesByEmpId', value)
-    .then((res: ResponseModel) => {
-      if (res.ResponseBody)
-        this.bindData(res);
-    }).catch(e => {
-      this.isPageReady = true;
-    })
+      .then((res: ResponseModel) => {
+        if (res.ResponseBody)
+          this.bindData(res);
+      }).catch(e => {
+        this.isPageReady = true;
+      })
   }
 
   bindData(res: any) {
-    if(res.ResponseBody.LeaveTypeBriefs) {
+    if (res.ResponseBody.LeaveTypeBriefs) {
       this.leaveData = [];
       this.leaveData = res.ResponseBody.LeaveNotificationDetail;
       if (this.leaveData && this.leaveData.length > 0) {
@@ -351,7 +351,7 @@ export class ApplyLeaveComponent implements OnInit {
         })
       }
       let plandetail = res.ResponseBody.LeaveTypeBriefs;
-      if(plandetail) {
+      if (plandetail) {
         this.leaveTypes = plandetail;
       } else {
         this.leaveTypes = [];
@@ -377,7 +377,7 @@ export class ApplyLeaveComponent implements OnInit {
   bindChartData() {
     let i = 0;
     this.chartDataset = [];
-    while(i < this.leaveTypes.length) {
+    while (i < this.leaveTypes.length) {
       this.LeaveChart(i, this.leaveTypes[i]);
       i++;
     }
@@ -385,7 +385,7 @@ export class ApplyLeaveComponent implements OnInit {
     this.MonthlyStatusChart();
 
 
-    if(this.observer != null)
+    if (this.observer != null)
       this.observer.unsubscribe();
 
     this.observer = this.entireChart.changes.subscribe(t => {
@@ -401,7 +401,7 @@ export class ApplyLeaveComponent implements OnInit {
     for (let i = 0; i < allHoliday.length; i++) {
       let startDate = ToLocateDate(allHoliday[i].StartDate);
       let endDate = ToLocateDate(allHoliday[i].EndDate);
-      let gap = (endDate.setHours(0,0,0,) - startDate.setHours(0,0,0,0))/ (1000*60*60*24);
+      let gap = (endDate.setHours(0, 0, 0,) - startDate.setHours(0, 0, 0, 0)) / (1000 * 60 * 60 * 24);
       for (let j = 0; j <= gap; j++) {
         this.json.disabledDates.push({
           year: startDate.getFullYear(),
@@ -425,7 +425,7 @@ export class ApplyLeaveComponent implements OnInit {
       this.json.disable.push(2);
 
     if (!shiftDetail.IsWed)
-        this.json.disable.push(3);
+      this.json.disable.push(3);
 
     if (!shiftDetail.IsThu)
       this.json.disable.push(4);
@@ -473,17 +473,17 @@ export class ApplyLeaveComponent implements OnInit {
   buildChartData(context: any, index: any) {
     let item = this.chartDataset[index];
     let bgColor = []
-    switch(index % 7) {
+    switch (index % 7) {
       case 0:
-        bgColor = ['red', '#379237'];
+        bgColor = ['#de5d5d', '#308dd9'];
         break;
-        default:
-        case 1:
-          bgColor = ['red', 'rgba(255, 159, 64, 0.2)'];
-          break;
-        case 2:
-          bgColor = ['red', '#379273'];
-          break;
+      case 1:
+        bgColor = ['black', '#de7345'];
+        break;
+      case 2:
+        bgColor = ['#96443e', '#579663'];
+        break;
+      default:
         bgColor = ['blue', 'rgba(153, 102, 255, 0.2)'];
         break;
     }
@@ -503,7 +503,7 @@ export class ApplyLeaveComponent implements OnInit {
       },
       options: {
         maintainAspectRatio: false,
-        cutout: 60
+        cutout: 45
       }
     });
 
@@ -512,7 +512,7 @@ export class ApplyLeaveComponent implements OnInit {
 
   DestroyGraphInstances() {
     let i = 0;
-    while(i < this.graphInstances.length) {
+    while (i < this.graphInstances.length) {
       this.graphInstances[i].destroy();
       i++;
     }
@@ -524,7 +524,7 @@ export class ApplyLeaveComponent implements OnInit {
     let consumeLeave = 0;
     let leavedata: any = this.leaveData.filter(x => x.LeaveTypeId == item.LeavePlanTypeId);
     if (leavedata.length > 0) {
-      consumeLeave = leavedata.map(x => x.NumOfDays).reduce((acc, curr) => {return acc + curr;}, 0)
+      consumeLeave = leavedata.map(x => x.NumOfDays).reduce((acc, curr) => { return acc + curr; }, 0)
     }
     this.chartDataset.push({
       PlanName: item.LeavePlanTypeName,
@@ -545,7 +545,7 @@ export class ApplyLeaveComponent implements OnInit {
   }
 
   PageChange(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.employeeData = e;
       this.GetFilterResult();
     }
@@ -554,32 +554,30 @@ export class ApplyLeaveComponent implements OnInit {
   GetFilterResult() {
     this.leaveData = [];
     let year = new Date().getFullYear();
-    this.http.post('Leave/GetAllLeavesByEmpId',this.employeeId)
-    .then ((response:ResponseModel) => {
-      if (response.ResponseBody) {
-        this.bindData(response);
+    this.http.post('Leave/GetAllLeavesByEmpId', this.employeeId)
+      .then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          this.bindData(response);
 
-        // for (let i = 0; i < this.leaveTypes.length; i++) {
-        //   let value = this.leaveData.filter(x => x.LeaveType == this.leaveTypes[i].LeavePlanTypeId);
-        //   if (value.length > 0) {
-        //     let totalDays = 0;
-        //     for (let j = 0; j < value.length; j++) {
-        //       totalDays +=  value[j].NoOfDays;
-        //     }
-        //     this.leaveTypes[i].TotalLeaveTaken = totalDays
-        //   };
-        // }
+          // for (let i = 0; i < this.leaveTypes.length; i++) {
+          //   let value = this.leaveData.filter(x => x.LeaveType == this.leaveTypes[i].LeavePlanTypeId);
+          //   if (value.length > 0) {
+          //     let totalDays = 0;
+          //     for (let j = 0; j < value.length; j++) {
+          //       totalDays +=  value[j].NoOfDays;
+          //     }
+          //     this.leaveTypes[i].TotalLeaveTaken = totalDays
+          //   };
+          // }
 
-        // if(leaveDetail.length > 0)
-        //   this.employeeData.TotalRecords = leaveDetail[0].Total;
-        // else
+          // if(leaveDetail.length > 0)
+          //   this.employeeData.TotalRecords = leaveDetail[0].Total;
+          // else
           this.employeeData.TotalRecords = 0;
-        this.isLeaveDataFilter = true;
-      }
-    });
+          this.isLeaveDataFilter = true;
+        }
+      });
   }
-
-
 
   LoadDoughnutchart() {
     let label = [];
@@ -587,8 +585,8 @@ export class ApplyLeaveComponent implements OnInit {
     label = this.chartDataset.map(x => x.PlanName);
     let bgColor = ['#E14D2A', '#3F0071', 'blue'];
     let data = [];
-    for (let i = 0; i <  this.chartDataset.length; i++) {
-      let value = (this.chartDataset[i].ConsumedLeave/this.chartDataset[i].MaxLeaveLimit) *100;
+    for (let i = 0; i < this.chartDataset.length; i++) {
+      let value = (this.chartDataset[i].ConsumedLeave / this.chartDataset[i].MaxLeaveLimit) * 100;
       data.push(value);
     }
     let elem: any = document.getElementById('consumeLeaveChart');
@@ -604,7 +602,7 @@ export class ApplyLeaveComponent implements OnInit {
           data: data,
           hoverOffset: 4,
           hoverBackgroundColor: bgColor,
-      }]
+        }]
       },
       options: {
         maintainAspectRatio: false,
@@ -616,56 +614,56 @@ export class ApplyLeaveComponent implements OnInit {
     this.graphInstances.push(consumeChart);
   }
 
-  MonthlyStatusChart(){
+  MonthlyStatusChart() {
     let elem: any = document.getElementById('MonthlyStatusChart');
     let ctx = elem.getContext('2d');
     let myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: Object.keys(this.monthlyLeaveData),
-            datasets: [{
-                label: '# of Pattern',
-                barThickness: 20,
-                data: Object.values(this.monthlyLeaveData),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          responsive: true,
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
+      type: 'bar',
+      data: {
+        labels: Object.keys(this.monthlyLeaveData),
+        datasets: [{
+          label: '# of Pattern',
+          barThickness: 20,
+          data: Object.values(this.monthlyLeaveData),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
           }
+        }
       }
     });
 
@@ -673,7 +671,7 @@ export class ApplyLeaveComponent implements OnInit {
   }
 
   validateLeaveStatus(e: any) {
-    if(e.target.value) {
+    if (e.target.value) {
       let value = parseInt(e.target.value);
       this.currentLeaveType = this.leaveTypes.find(i => i.LeavePlanTypeId == value);
       if (this.currentLeaveType) {
@@ -759,10 +757,10 @@ export class ApplyLeaveComponent implements OnInit {
   }
 
   bindDonutChartData() {
-    let bgColor = ['#379237', 'rgba(255, 159, 64, 0.2)', '#379273', 'rgba(153, 102, 255, 0.2)'];
+    let bgColor = ['#308dd9', '#d98129', '#379273', 'rgba(153, 102, 255, 0.2)'];
     let data = [];
     for (let i = 0; i < this.chartDataset.length; i++) {
-      let value = (this.chartDataset[i].ConsumedLeave/this.chartDataset[i].MaxLeaveLimit) *100;
+      let value = (this.chartDataset[i].ConsumedLeave / this.chartDataset[i].MaxLeaveLimit) * 100;
       if (!isNaN(value))
         data.push(value);
       else
@@ -789,7 +787,7 @@ export class ApplyLeaveComponent implements OnInit {
     this.chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: 40
+      cutout: 60
       // plugins: {
       //   title: {
       //     display: true,
