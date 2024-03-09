@@ -71,10 +71,14 @@ export class ApprisalReviewComponent implements OnInit{
         this.isLoaded = true;
         Toast("Record found");
       } else {
-         this.isFileFound= false;
+        this.isFileFound= false;
         this.isLoaded = true;
         this.projectData.TotalRecords = 0;
       }
+    }).catch(e => {
+      this.isFileFound= false;
+      this.isLoaded = true;
+      this.projectData.TotalRecords = 0;
     })
   }
 
