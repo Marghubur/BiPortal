@@ -71,6 +71,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   currentMonth: string = "";
   selectDeclaration: any = null;
   employeeName: string = null;
+  taxRegimeDetails: any = [];
+  taxSlab: Array<any> = [];
+  dob: any = null;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -776,6 +779,27 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   gotoTaxSection() {
     this.nav.navigateRoot(AdminIncomeTax, this.EmployeeId)
   }
+
+  newIncomeTaxRegimePopUp() {
+    this.http.get("TaxRegime/GetAllRegime").then(res => {
+      if (res.ResponseBody) {
+        this.taxRegimeDetails = res.ResponseBody;
+        let empRegime = this.employeeDeclaration.EmployeeCurrentRegime;
+        if (empRegime == 0 || empRegime == null)
+          this.active = this.taxRegimeDetails.taxRegimeDesc.find(x => x.IsDefaultRegime == 1).TaxRegimeDescId;
+        else
+          this.active = empRegime;
+        //this.filterTaxSlab();
+        $('#newIncomeTaxRegime').modal('show');
+      }
+    })
+  }
+
+  // filterTaxSlab() {
+  //   let dob = this.currentEmployee.DOB;
+  //   let age = new Date().getFullYear() - new Date(dob).getFullYear();
+  //   this.taxSlab = this.taxRegimeDetails.taxRegime.filter(x => x.RegimeDescId == this.active && x.StartAgeGroup < age && x.EndAgeGroup >= age);
+  // }
 }
 
 interface IncomeDeclaration {

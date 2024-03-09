@@ -53,6 +53,7 @@ export class ApplyLeaveComponent implements OnInit {
   monthlyLeaveData: any = null;
   isLeaveConsume: boolean = false;
   datePickerJson = {};
+  employeeProject: Array<any> = [];
   json = {
     disable: [],
     disabledDates: [],
@@ -153,6 +154,9 @@ export class ApplyLeaveComponent implements OnInit {
   leavePopUp() {
     this.isPageReady = true;
     this.leaveDetail = new LeaveModal();
+    if (this.employeeProject.length == 1)
+      this.leaveDetail.ProjectId = this.employeeProject[0].ProjectId;
+
     this.currentLeaveType = null;
     this.leaveRequestForm();
     this.leaveDetail.LeaveFromDay = new Date();
@@ -306,6 +310,7 @@ export class ApplyLeaveComponent implements OnInit {
       LeaveTypeId: new FormControl('', [Validators.required]),
       UserTypeId: new FormControl(this.leaveDetail.UserTypeId),
       EmployeeId: new FormControl(this.employeeId),
+      ProjectId: new FormControl(this.leaveDetail.ProjectId),
       LeavePlanName: new FormControl('')
     })
   }
@@ -356,6 +361,12 @@ export class ApplyLeaveComponent implements OnInit {
       } else {
         this.leaveTypes = [];
       }
+
+      if (res.ResponseBody.EmployeeProject != null && res.ResponseBody.EmployeeProject.length > 0) {
+        this.employeeProject = res.ResponseBody.EmployeeProject;
+      }
+      else
+        this.employeeProject = [];
 
       if (res.ResponseBody.ShiftDetail) {
         this.findWeekend(res.ResponseBody.ShiftDetail);
@@ -787,7 +798,7 @@ export class ApplyLeaveComponent implements OnInit {
     this.chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: 60
+      cutout: 50,
       // plugins: {
       //   title: {
       //     display: true,
@@ -796,6 +807,12 @@ export class ApplyLeaveComponent implements OnInit {
       //     display: true
       //   },
       // },
+      plugins: {
+        legend: {
+          display: true, // Optionally show legend
+          position: 'left'
+        }
+      }
     }
   }
 

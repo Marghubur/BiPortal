@@ -378,9 +378,24 @@
                 </ng-container>
               </div>
             </div>
+          </div>
+          <div class="row align-items-center justify-content-between">
+            <div class="col-md-6">
+              <label class="form-label">Project</label>
+              <select class="form-select" formControlName="ProjectId" [disabled]="employeeProject.length == 0 || employeeProject.length == 1">
+                <option value="0" selected *ngIf="employeeProject.length == 0">No Project Assigned</option>
+                <ng-container *ngIf="employeeProject.length == 1">
+                  <option [value]="item.ProjectId" *ngFor="let item of employeeProject">{{item.ProjectName}}</option>
+                </ng-container>
+                <ng-container *ngIf="employeeProject.length > 1">
+                  <option value="0">Select Project</option>
+                  <option [value]="item.ProjectId" *ngFor="let item of employeeProject">{{item.ProjectName}}</option>
+                </ng-container>
+              </select>
+            </div>
             <div class="col-md-6">
               <label class="form-label">Leave Type</label>
-              <select class="form-select mb-3" (change)="validateLeaveStatus($event)"
+              <select class="form-select" (change)="validateLeaveStatus($event)"
                 aria-label=".form-select-lg example" formControlName="LeaveTypeId"
                 [ngClass]="{'error-field':submitted && f['LeaveTypeId'].errors != null && f['LeaveTypeId'].errors['required']}">
                 <option value="" disabled>Select leave type</option>
@@ -392,12 +407,12 @@
               </select>
             </div>
           </div>
-          <label class="form-label mb-0 text-dark ps-2 fs-5">Reason <small
-              *ngIf="currentLeaveType != null && currentLeaveType.IsCommentsRequired">(Required *)</small></label>
+          <p class="form-label mb-0 text-dark ps-2 fs-5 mt-3">Reason <small
+              *ngIf="currentLeaveType != null && currentLeaveType.IsCommentsRequired">(Required *)</small></p>
           <textarea [readonly]="!isEnabled" class="comment-text-area form-control" placeholder="Enter your comment"
             name="Reason" maxlength="100" formControlName="Reason"
             [ngClass]="{'error-field':submitted && f['Reason'].errors != null && f['Reason'].errors['required']}"></textarea>
-          <div class="col-md-12 mt-4">
+          <div class="col-md-12 mt-3">
             <p class="mb-0 text-dark ps-2 fs-5 py-2">Notify To</p>
             <bot-autocomplete [data]="managerList" [(ngModel)]="reportingManagerId"
               [ngModelOptions]="{standalone: true}">
