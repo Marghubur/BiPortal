@@ -26,8 +26,6 @@ export class SalaryComponent implements OnInit {
   salaryComponents: Array<any> = [];
   salaryDetail: any = null;
   isReady: boolean = false;
-  taxRegimeDetails: any = [];
-  taxSlab: Array<any> = [];
   currentEmployee: any = null;
   model: NgbDateStruct;
   submitted: boolean = false;
@@ -57,27 +55,6 @@ export class SalaryComponent implements OnInit {
     this.initBonusForm();
 
     this.minDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
-  }
-
-  newIncomeTaxRegimePopUp() {
-    this.http.get("TaxRegime/GetAllRegime").then(res => {
-      if (res.ResponseBody) {
-        this.taxRegimeDetails = res.ResponseBody;
-        let empRegime = this.currentEmployee.EmployeeCurrentRegime;
-        if (empRegime == 0 || empRegime == null)
-          this.active = this.taxRegimeDetails.taxRegimeDesc.find(x => x.IsDefaultRegime == 1).TaxRegimeDescId;
-        else
-          this.active = empRegime;
-        this.filterTaxSlab();
-        $('#newIncomeTaxRegime').modal('show');
-      }
-    })
-  }
-
-  filterTaxSlab() {
-    let dob = this.currentEmployee.DOB;
-    let age = new Date().getFullYear() - new Date(dob).getFullYear();
-    this.taxSlab = this.taxRegimeDetails.taxRegime.filter(x => x.RegimeDescId == this.active && x.StartAgeGroup < age && x.EndAgeGroup >= age);
   }
 
   getSalaryBreakup() {

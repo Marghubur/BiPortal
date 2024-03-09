@@ -648,6 +648,7 @@ export class DocumentUser {
     EmployeeId: number = 0;
     LeavePlanName: string = null;
     IsProjectedFutureDateAllowed: boolean = false;
+    ProjectId: number = 0;
   }
 
   export class LeaveDetails {
