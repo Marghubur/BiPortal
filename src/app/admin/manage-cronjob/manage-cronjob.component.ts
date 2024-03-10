@@ -13,6 +13,7 @@ import { iNavigation } from 'src/providers/iNavigation';
   styleUrls: ['./manage-cronjob.component.scss']
 })
 export class ManageCronjobComponent implements OnInit {
+  serviceTypes: Array<any> = [];
   jobstartdateModel: NgbDateStruct;
   jobenddateModel: NgbDateStruct;
   minDate: any = null;
@@ -57,7 +58,8 @@ export class ManageCronjobComponent implements OnInit {
     this.isPageReady = false;
     this.http.get(`manager/getJobsById/${this.cronJobId}`, SERVICE.JOBS).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        this.jobDetail = res.ResponseBody;
+        this.jobDetail = res.ResponseBody["Job"];
+        this.serviceTypes = res.ResponseBody["ServiceType"];
         let date = ToLocateDate(this.jobDetail.JobStartDate);
         this.jobstartdateModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
         if (this.jobDetail.JobEndDate) {

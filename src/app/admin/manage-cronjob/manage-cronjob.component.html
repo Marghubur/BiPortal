@@ -31,9 +31,12 @@
               </div>
               <div class="col-md-3 mt-3">
                 <label class="form-label">Job Type Name</label>
-                <input type="text" formControlName="JobTypeName" class="form-control" placeholder="Job Type Name"
-                  maxlength="50" oninput="this.value = this.value.toUpperCase()"
-                  [ngClass]="{'error-field': isSubmitted && f['JobTypeName'].errors !== null && f['JobTypeName'].errors['required']}">
+                <select formControlName="JobTypeName" class="form-control">
+                  <option value="0">Select Job Type</option>
+                  <option value={{item.ServiceTypeId}} *ngFor="let item of serviceTypes">
+                    {{item.ServiceName}}
+                  </option>
+                </select>
               </div>
               <div class="col-md-3 mt-3">
                 <label class="form-label">Job Type Description</label>
