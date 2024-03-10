@@ -7,6 +7,8 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
 import 'bootstrap';
+import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 
 @Component({
   selector: 'app-employee-declarationlist',
@@ -31,23 +33,32 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   scrollDiv: any = null;
   excelTable: any = null;
   salaryComponents: Array<any> = [];
+  isEmployeeSelected: boolean = false;
+  autoCompleteModal: autoCompleteModal = null;
+  employeeId: number = 0;
 
   constructor(private http: AjaxService,
-              private nav: iNavigation) {}
+              private nav: iNavigation,
+              private local: ApplicationStorage) {}
 
   ngOnInit(): void {
     this.basePath = this.http.GetImageBasePath();
     this.salaryComponents = [{"ComponentId": "BS","ComponentName": "BASIC SALARY"},
-    {"ComponentId": "CA", "ComponentName": "CONVEYANCE ALLOWANCE"},
-    {"ComponentId": "EPER-PF", "ComponentName": "EMPLOYER CONTRIBUTION TOWARDS PF"},
-    {"ComponentId": "HRA", "ComponentName": "HOUSE RENT ALLOWANCE"},
-    {"ComponentId": "MA", "ComponentName": "MEDICAL ALLOWANCE"},
-    {"ComponentId": "SHA", "ComponentName": "SHIFT ALLOWANCE"},
-    {"ComponentId": "LTA", "ComponentName": "TRAVEL REIMBURSSEMENT"},
-    {"ComponentId": "CRA", "ComponentName": "CAR RUNNING ALLOWANCE"},
-    {"ComponentId": "TIA", "ComponentName": "TELEPHONE AND INTERNET ALLOWANCE"},
-    {"ComponentId": "SPA", "ComponentName": "SPECIAL ALLOWANCE"}
-  ]
+      {"ComponentId": "CA", "ComponentName": "CONVEYANCE ALLOWANCE"},
+      {"ComponentId": "EPER-PF", "ComponentName": "EMPLOYER CONTRIBUTION TOWARDS PF"},
+      {"ComponentId": "HRA", "ComponentName": "HOUSE RENT ALLOWANCE"},
+      {"ComponentId": "MA", "ComponentName": "MEDICAL ALLOWANCE"},
+      {"ComponentId": "SHA", "ComponentName": "SHIFT ALLOWANCE"},
+      {"ComponentId": "LTA", "ComponentName": "TRAVEL REIMBURSSEMENT"},
+      {"ComponentId": "CRA", "ComponentName": "CAR RUNNING ALLOWANCE"},
+      {"ComponentId": "TIA", "ComponentName": "TELEPHONE AND INTERNET ALLOWANCE"},
+      {"ComponentId": "SPA", "ComponentName": "SPECIAL ALLOWANCE"}
+    ]
+    this.autoCompleteModal = {
+      data: GetEmployees(),
+      placeholder: "Select Employee",
+      className: "normal"
+    };
     this.LoadData();
   }
 
@@ -104,7 +115,11 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   }
 
   resetFilter() {
-
+    this.autoCompleteModal = {
+      data: [],
+      placeholder: "All result"
+    };
+    this.autoCompleteModal.data = GetEmployees();
   }
 
   bindData() {
@@ -270,5 +285,31 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       ErrorToast(e.HttpStatusMessage);
       this.isLoading = false;
     })
+  }
+
+  onEmloyeeChanged(_: any) {
+    this.employeeData.SearchString = "";
+    this.employeeData.SearchString = `1=1 and EmployeeId = ${this.employeeId}`;
+    this.isEmployeeSelected = true;
+    this.LoadData();
+  }
+
+  async serverFilter(query: string) {
+    if(query == null) {
+      query = "";
+    }
+
+    let filter: Filter = new Filter();
+    filter.SearchString = query;
+    filter.PageIndex = 1;
+    filter.PageSize = 100;
+    filter.CompanyId = 1;
+
+    let result: Array<pairData> = await this.http.getFilterEmployee(filter);
+    this.autoCompleteModal = {
+        data: result,
+        placeholder: "Select Employee",
+        className: "normal"
+    };
   }
 }

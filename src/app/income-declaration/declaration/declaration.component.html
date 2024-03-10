@@ -69,7 +69,7 @@
                   <li class="pt-3">
                     <p class="mb-0">
                       Your Income and tax liability computed as per {{employeeDeclaration.EmployeeCurrentRegime == 1 ? 'Old income tax' : 'New income tax'}} regime. To learn more, and switch to {{employeeDeclaration.EmployeeCurrentRegime == 2 ? 'Old income tax' : 'New income tax'}} regime,
-                      <span><a href="javascript:void(0)" (click)="newIncomeTaxRegimePopUp()" class="text-decoration-none text-primary">click here.</a></span>
+                      <span><a href="javascript:void(0)" (click)="newIncomeTaxRegimePopUp()" class="text-decoration-none text-primary fw-bold">click here.</a></span>
                     </p>
                   </li>
                   <li class="pt-3">'$' - Not considered for exemption if opted <form action="" method="post"></form> New tax regime (Section 115BAC).</li>
@@ -880,7 +880,7 @@
                         <div class="alert alert-warning fs-6" role="alert" *ngIf="houseRentDetail.TotalRent > 0 && houseRentDetail.TotalRent > 100000">
                           The total rent amount for this financial year exceeds INR 1,00,000. You need to provide Owner PAN details or Signed documents.
                         </div>
-                        <div class="col-md-12 row">
+                        <div class="col-md-12 row pb-5">
                           <div class="col-md-9 ps-3">
                             <div class="col-md-12">
                               <div class="card px-3 pb-3">
@@ -1373,7 +1373,7 @@
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="newIncomeTaxRegime" tabindex="-1"
   aria-labelledby="newIncomeTaxRegimeLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
-    <div class="modal-content mx-3">
+    <div class="modal-content px-3">
       <div class="sticky-modal-header">
         <div class="modal-header bg-light">
           <h5 class="modal-title" id="newIncomeTaxRegimeLabel">Switch to Section</h5>
@@ -1399,7 +1399,7 @@
             <ng-template ngbNavContent>
               <ng-container >
                 <p class="alert mb-0 alert-info" *ngIf="active == 2">Section 115BAC is optional Individuals will have the options to pay taxes as
-                  per new tax sales from FY {{currentYear - 2}} - {{currentYear -1}} onwards.</p>
+                  per new tax sales from FY {{year - 2}} - {{year -1}} onwards.</p>
                 <div class="text-end">
                   <div class="btn-group py-3" role="group" aria-label="Basic radio toggle button group">
                     <ng-container *ngIf="active == 2">
@@ -1428,7 +1428,7 @@
                   </div>
                 </div>
                 <p class="mb-0 fs-5 text-dark">Income Tax Slabs for Individuals of {{active == 1 ? 'your': 'any'}} age group under {{item.RegimeName}} -
-                  <span *ngIf="active == 2">Applicable to FY {{currentYear -2}} - {{currentYear -1}} (AY {{currentYear -2}} - {{currentYear -1}})</span></p>
+                  <span *ngIf="active == 2">Applicable to FY {{year -2}} - {{year -1}} (AY {{year -2}} - {{year -1}})</span></p>
                 <p *ngIf="active == 2" class="mb-0 py-2">As proposed in the union budget 2020, In the Income tax Act, the following section shall be
                   interested with effect from 1st day of April 2020.</p>
                 <div class="t-table t-list  col-md-12 mt-4">
@@ -1495,7 +1495,7 @@
                     {{currentYear}}</div>
                   </ng-container>
                 <p class="mb-0">To find out which tax regime suits you best, <a href="javascript:void(0)"
-                    class="text-decoration-none" (click)="gotoTaxCalculation()">click here</a>
+                    class="text-decoration-none">click here</a>
                 </p>
                 <div class="text-end">
                   <div class="btn-group py-3" role="group" aria-label="Basic radio toggle button group">
@@ -1528,14 +1528,80 @@
             </ng-template>
           </li>
         </ng-container>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink>Comparision</a>
+          <ng-template ngbNavContent>
+            <h4 class="fw-bold text-dark py-3">Here you can see the comparision betwwen of old and new tax regime</h4>
+            <div class="row">
+              <div class="col-md-6">
+                <h5 class="text-dark">Income Tax Slabs for Individuals of your age group under Old Tax Regime</h5>
+                <div class="t-table t-list  col-md-12 mt-4">
+                  <div class="t-head alert-primary overflow-hidden">
+                    <div class="tr bg-light fw-bold text-dark">
+                      <div class="th fe-3">
+                        <div class="cell-wrapper">
+                          INCOME TAX SLAB
+                        </div>
+                      </div>
+                      <div class="th">
+                        TAX RATE
+                      </div>
+                    </div>
+                  </div>
+                  <div class="t-head overflow-hidden">
+                    <div class="tr py-3" *ngFor="let item of oldTaxRegimeSlab; let last=last" [ngClass]="{'fw-bold text-dark': last}">
+                      <div class="td fe-3">
+                        <div class="cell-wrapper">
+                          {{item[1].Description}}
+                        </div>
+                      </div>
+                      <div class="td">
+                        <div class="cell-wrapper">
+                          <i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{item[1].Value | number:'1.2-2'}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h5 class="text-dark">Income Tax Slabs for Individuals of your age group under New Tax Regime</h5>
+                <div class="t-table t-list  col-md-12 mt-4">
+                  <div class="t-head alert-primary overflow-hidden">
+                    <div class="tr bg-light fw-bold text-dark">
+                      <div class="th fe-3">
+                        <div class="cell-wrapper">
+                          INCOME TAX SLAB
+                        </div>
+                      </div>
+                      <div class="th">
+                        TAX RATE
+                      </div>
+                    </div>
+                  </div>
+                  <div class="t-head overflow-hidden">
+                    <div class="tr py-3" *ngFor="let item of newTaxRegimeSlab; let last=last" [ngClass]="{'fw-bold text-dark': last}">
+                      <div class="td fe-3">
+                        <div class="cell-wrapper">
+                          {{item[1].Description}}
+                        </div>
+                      </div>
+                      <div class="td">
+                        <div class="cell-wrapper">
+                          <i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{item[1].Value | number:'1.2-2'}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
       </ul>
 
       <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </div>
-      <!-- <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c">Save changes</button>
-      </div> -->
     </div>
   </div>
 </div>

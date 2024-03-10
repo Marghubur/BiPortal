@@ -353,7 +353,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       DOB: new FormControl(this.employeeModal.DOB, [Validators.required]),
       FileId: new FormControl(this.employeeModal.FileId),
       AccessLevelId: new FormControl(this.employeeModal.AccessLevelId, [Validators.required]),
-      UserTypeId: new FormControl(this.employeeModal.UserTypeId, [Validators.required]),
+      UserTypeId: new FormControl({value: this.employeeModal.UserTypeId, disabled: true}, [Validators.required, ]),
       ReportingManagerId: new FormControl(this.employeeModal.ReportingManagerId),
       DesignationId: new FormControl(this.employeeModal.DesignationId, [Validators.required]),
       OrganizationId: new FormControl(this.currentCompanyDetail.OrganizationId, [Validators.required]),

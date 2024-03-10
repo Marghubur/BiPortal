@@ -174,10 +174,11 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Member Name</th>
-                  <th>Member Type</th>
-                  <th>Member Grade</th>
+                  <th class="align-top">#</th>
+                  <th class="align-top" width="15%">Member Name</th>
+                  <th class="align-top">Project Role 
+                    <p class="mb-0"><small>(This role is only for the current project level, it will not impact on your actual role at organization level.)</small></p>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -187,19 +188,8 @@
                     <td>{{item.FullName}}</td>
                     <td>
                       <select class="form-select" [(ngModel)]="item.MemberType">
-                        <option value=0 selected disabled>Select Member Type</option>
+                        <option value=0 selected disabled>Select Role</option>
                         <option [value]="item.RoleId" *ngFor="let item of roles">{{item.RoleName}}</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select class="form-select" [(ngModel)]="item.Grade">
-                        <option value=null selected>Select Grade</option>
-                        <option value="A+">A+</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
                       </select>
                     </td>
                   </tr>
