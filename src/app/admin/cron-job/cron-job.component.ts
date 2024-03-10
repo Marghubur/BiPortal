@@ -30,9 +30,10 @@ export class CronJobComponent implements OnInit {
     JobStartDate : null,
     JobTime : 0,
     JobTypeDescription : "",
-    JobTypeName : "",
+    KafkaServiceNameId : 0,
     Template : "",
-    TopicName : ""
+    TopicName : "",
+    JobTypeName: ""
   }
   constructor(private http: AjaxService,
               private nav: iNavigation) {}
@@ -68,9 +69,10 @@ export class CronJobComponent implements OnInit {
       JobStartDate : null,
       JobTime : 0,
       JobTypeDescription : "",
-      JobTypeName : "",
+      KafkaServiceNameId : 0,
       Template : "",
-      TopicName : ""
+      TopicName : "",
+      JobTypeName: ""
     };
     this.loadData();
   }

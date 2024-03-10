@@ -33,9 +33,10 @@ export class ManageCronjobComponent implements OnInit {
     JobStartDate : null,
     JobTime : 0,
     JobTypeDescription : "",
-    JobTypeName : "",
+    KafkaServiceNameId : 0,
     Template : "",
-    TopicName : ""
+    TopicName : "",
+    JobTypeName: ""
   };
   cronJobId: number = 0;
 
@@ -87,7 +88,7 @@ export class ManageCronjobComponent implements OnInit {
   initform() {
     this.jobsForm = this.fb.group({
       JobId: new FormControl(this.jobDetail.JobId),
-      JobTypeName: new FormControl(this.jobDetail.JobTypeName, [Validators.required]),
+      KafkaServiceNameId: new FormControl(this.jobDetail.KafkaServiceNameId, [Validators.required]),
       JobTypeDescription: new FormControl(this.jobDetail.JobTypeDescription, [Validators.required]),
       IsActiveJob: new FormControl(this.jobDetail.IsActiveJob),
       JobStartDate: new FormControl(this.jobDetail.JobStartDate, [Validators.required]),
@@ -99,7 +100,8 @@ export class ManageCronjobComponent implements OnInit {
       JobOccurrenceType: new FormControl(this.jobDetail.JobOccurrenceType),
       TopicName: new FormControl(this.jobDetail.TopicName, [Validators.required]),
       GroupId: new FormControl(this.jobDetail.GroupId, [Validators.required]),
-      Template: new FormControl(this.jobDetail.Template)
+      Template: new FormControl(this.jobDetail.Template),
+      JobTypeName: new FormControl("")
     })
   }
 
@@ -127,6 +129,7 @@ export class ManageCronjobComponent implements OnInit {
     }
 
     let value = this.jobsForm.value;
+    value.JobTypeName = this.serviceTypes.find(x => x.ServiceTypeId == value.KafkaServiceNameId).ServiceName;
     this.http.post("manager/manageJobs", value, SERVICE.JOBS).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         Toast("Job detail insert/updated successfully");
@@ -141,7 +144,7 @@ export class ManageCronjobComponent implements OnInit {
 
 export interface Jobs {
   JobId: number,
-  JobTypeName: string,
+  KafkaServiceNameId: number,
   JobTypeDescription: string,
   IsActiveJob: boolean,
   JobStartDate: Date,
@@ -154,4 +157,5 @@ export interface Jobs {
   TopicName: string,
   GroupId: string,
   Template: string,
+  JobTypeName: string
 }

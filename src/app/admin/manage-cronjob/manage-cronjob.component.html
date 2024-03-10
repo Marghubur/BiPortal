@@ -31,7 +31,7 @@
               </div>
               <div class="col-md-3 mt-3">
                 <label class="form-label">Job Type Name</label>
-                <select formControlName="JobTypeName" class="form-control">
+                <select formControlName="KafkaServiceNameId" class="form-select" [ngClass]="{'error-field': isSubmitted && f['KafkaServiceNameId'].errors !== null && f['KafkaServiceNameId'].errors['required']}">
                   <option value="0">Select Job Type</option>
                   <option value={{item.ServiceTypeId}} *ngFor="let item of serviceTypes">
                     {{item.ServiceName}}
@@ -122,13 +122,13 @@
                 <select class="form-select" formControlName="JobDayOfWeek">
                   <option value="{{i}}" *ngFor="let item of [].constructor(7); let i = index">
                     <div [ngSwitch]="i">
-                      <div *ngSwitchCase="1">Monday</div>
-                      <div *ngSwitchCase="2">Tuesday</div>
-                      <div *ngSwitchCase="3">Wdnesday</div>
-                      <div *ngSwitchCase="4">Thursday</div>
-                      <div *ngSwitchCase="5">Friday</div>
-                      <div *ngSwitchCase="7">Sunday</div>
-                      <div *ngSwitchDefault>Saturday</div>
+                      <div *ngSwitchCase="0">Monday</div>
+                      <div *ngSwitchCase="1">Tuesday</div>
+                      <div *ngSwitchCase="2">Wdnesday</div>
+                      <div *ngSwitchCase="3">Thursday</div>
+                      <div *ngSwitchCase="4">Friday</div>
+                      <div *ngSwitchCase="5">Saturday</div>
+                      <div *ngSwitchCase="6">Sunday</div>
                     </div>
                   </option>
                 </select>
