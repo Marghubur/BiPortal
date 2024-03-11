@@ -359,33 +359,6 @@
                           Record Not Found
                         </div>
                       </ng-container>
-                      <!-- <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Timing</th>
-                            <th scope="col">Platform</th>
-                            <th scope="col">Meeting Frequency</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody class="table-group-divider">
-                          <tr *ngFor="let item of allMeetings; let i= index;">
-                            <th scope="row">{{i+1}}</th>
-                            <td>{{item.meetingTitle}}</td>
-                            <td>
-                              {{item.startTime}} - {{item.endTime}} ({{item.meetingDuration}})
-                              <p class="mb-0">{{item.meetingDate | date}}</p>
-                            </td>
-                            <td>{{item.meetingPlaforms}}</td>
-                            <td>{{item.meetingFrequency == 1 ? 'Only Once' : item.meetingFrequency == 2 ? 'Weekly' : item.meetingFrequency == 3 ? 'Monthly' : 'Once Every Two Weeks'}}</td>
-                            <td>
-                              <a href="javascript:void(0)" class="text-decoration-none" (click)="editMeetings(item)"><i class="fa-solid fa-pencil"></i></a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table> -->
                     </ng-container>
                   </ng-container>
                   <!-- <ng-container *ngIf="isPageLoading">
