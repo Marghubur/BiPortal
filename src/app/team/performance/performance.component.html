@@ -377,7 +377,7 @@
               <li [ngbNavItem]="3">
                 <a ngbNavLink (click)="loadReviewDetail()">Performance Reviews</a>
                 <ng-template ngbNavContent>
-                  <ng-container *ngIf="!isPageLoading">
+                  <ng-container *ngIf="objectives.length > 0">
                     <h5 class="mt-3 fw-bold">My Performance Reviews</h5>
                     <small class="text-muted">The following are the performance reviews in which I was reviewed.</small>
                     <div class="d-flex mt-3">
@@ -450,16 +450,11 @@
                       </button>
                     </div>
                   </ng-container>
-                  <!-- <ng-container *ngIf="isPageLoading">
-                    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-                      <div class="col-md-3 modal-container  text-center cog-wheel">
-                        <img src="assets/images/cog.gif" alt="" />
-                        <h6 class="modal-title title-message">
-                          Please Wait ........
-                        </h6>
-                      </div>
+                  <ng-container *ngIf="objectives.length == 0">
+                    <div class="py-5 my-5">
+                      <p class="text-center py-5 my-5 fs-1">Performance review not found.</p>
                     </div>
-                  </ng-container> -->
+                  </ng-container>
                 </ng-template>
               </li>
             </ul>
