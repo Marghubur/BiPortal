@@ -5,7 +5,13 @@
         <app-breadcrums [title]="'Employee detail'" [subtitle]="'Add or update details'"></app-breadcrums>
       </div>
     </div>
-    <div class="col-4 text-end row">
+    <div class="col-4">
+      <bot-autocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
+        (OnSelect)="onEmloyeeChanged($event)" (OnServerFilter)="serverFilter($event)"
+         (keydown.esc)="resetFilter()">
+      </bot-autocomplete>
+    </div>
+    <!-- <div class="col-4 text-end row">
       <div class="col-md-9">
         <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
           (keyup.enter)="globalFilter()" placeholder="Search by any: (Name, Mobile, Email And Title)"
@@ -19,140 +25,147 @@
           <i class="fa-solid fa-repeat"></i>
         </button>
       </div>
-    </div>
+    </div> -->
   </div>
   <div class="x_panel">
-    <div [ngSwitch]="isEmpPageReady">
-      <div *ngSwitchCase="false">
-        <div class="mt-5">
-          <app-pre-load-table></app-pre-load-table>
-        </div>
-      </div>
-      <div *ngSwitchDefault class="overflow-hidden">
-        <ng-container>
-          <div class="x_content mt-0">
-            <div class="row mb-3">
-              <div class="col-auto mt-3" *ngFor="let item of payrollCalendar; let i=index;">
-                <a href="javascript:void(0)" class="text-decoration-none" (click)="selectPayrollMonth(item)">
-                  <div class="card text-center pt-2 active-payroll" [ngClass]="{'active-payroll': selectedPayrollCalendar.Month == item.Month}" data-name="payroll-tab">
-                    <h5 class="text-center text-dark px-1">{{item.MonthName}} {{item.Year}}</h5>
-                    <small class="text-muted px-1 pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
-                    <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 2, 'text-bg-secondary': item.Status == 3, 'bg-c text-white': item.Status == 1}">
-                      <i class="fa-regular fa-square-check pe-1" *ngIf="item.Status == 2"></i>
-                      <i class="fa-solid fa-arrow-left pe-1" *ngIf="item.Status == 1"></i>
-                      {{item.Status == 1 ? 'PREVIOUS' : item.Status == 2 ? 'CURRENT' : 'UPCOMING'}}
-                      <i class="fa-solid fa-arrow-right ps-1" *ngIf="item.Status == 3"></i>
-                    </small>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="col-md-12 row align-items-center justify-content-end py-3">
-              <div class="col-auto">
-                <a href="{{downlodexcelFilePath}}" class="d-none" id="downloadAllDeclarationExcel"></a>
-                <a href="javascript:void(0)" (click)="downloadDeclaration()" [ngClass]="{'pe-none': isLoading}">
-                  <i class="fa-solid fa-download fa-lg"></i>
-                  <span class="ps-2 fs-6">Download</span>
-                </a>
-              </div>
-            </div>
-            <div class="excel-table" id="excel-table">
-              <table>
-                <thead>
-                  <ng-container *ngIf="employeeSalaries.length > 0">
-                    <tr>
-                      <th width="10%">
-                        Full Name
-                      </th>
-                      <th>Gross</th>
-                      <th>Arrear</th>
-                      <th>Gross Total</th>
-                      <th>Pre Mnth Gross<i class="fa-solid fa-circle-exclamation ps-2" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="Previous Month Gross"></i>
-                      </th>
-                      <th class="text-truncate" *ngFor="let data of salaryComponents" >
-                        {{data.ComponentId}} <i class="fa-solid fa-circle-exclamation ps-2" data-bs-toggle="tooltip"
-                        data-bs-placement="right" title="{{data.ComponentName}}"></i>
-                      </th>
-                      <th>Others</th>
-                      <th>A</th>
-                      <th>B</th>
-                      <th>C</th>
-                      <th>D</th>
-                      <th>E</th>
-                      <th>F</th>
-                      <th>G</th>
-                      <th>H</th>
-                      <th>I</th>
-                      <th>J</th>
-                      <th>K</th>
-                      <th>L</th>
-                      <th>M</th>
-                      <th>N</th>
-                    </tr>
-                  </ng-container>
-                </thead>
-                <tbody>
-                  <ng-container *ngIf="employeeSalaries.length > 0">
-                    <tr *ngFor="let item of employeeSalaries">
-                      <td>
-                        <div class="d-flex align-items-center text-truncate">
-                          <i class="fa-solid fa-user"></i>
-                          <a href="javascript:void(0)" class="text-decoration-none ms-2" (click)="viewDeclaration(item)">
-                            <span class="text-decoration-underline">{{item.FullName}}</span>
-                            <span class="text-muted  pe-1">
-                              [{{item.EmployeeId}}]
-                            </span>
-                          </a>
-                        </div>
-                      </td>
-                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.Gross | number : "1.0-0") : "0"}}</td>
-                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearGross | number : "1.0-0") : "0"}}</td>
-                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearGross + item.Gross | number : "1.0-0") : "0"}}</td>
-                      <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.PreMonthGross | number : "1.0-0") : "0"}}</td>
-                      <td *ngFor="let data of item.Salary"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </ng-container>
-                  <ng-container *ngIf="employeeSalaries.length == 0">
-                    <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
-                    </div>
-                  </ng-container>
-                </tbody>
-              </table>
-            </div>
+    <ng-container *ngIf="isEmployeeSelected">
+      <div [ngSwitch]="isEmpPageReady">
+        <div *ngSwitchCase="false">
+          <div class="mt-5">
+            <app-pre-load-table></app-pre-load-table>
           </div>
-          <div class="mt-3 row align-items-center justify-content-between">
-            <div class="col">
-              <app-pagination [pagination]="employeeData" (onPageChange)="GetFilterResult($event)"></app-pagination>
-            </div>
-            <div class="col-auto row align-items-center">
-              <div class="col-auto text-muted">
-                Scroll
+        </div>
+        <div *ngSwitchDefault class="overflow-hidden">
+          <ng-container>
+            <div class="x_content mt-0">
+              <div class="row mb-3">
+                <div class="col-auto mt-3" *ngFor="let item of payrollCalendar; let i=index;">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="selectPayrollMonth(item)">
+                    <div class="card text-center pt-2 active-payroll" [ngClass]="{'active-payroll': selectedPayrollCalendar.Month == item.Month}" data-name="payroll-tab">
+                      <h5 class="text-center text-dark px-1">{{item.MonthName}} {{item.Year}}</h5>
+                      <small class="text-muted px-1 pb-1">{{item.MonthName | uppercase}} {{item.StartDate}} - {{item.MonthName | uppercase}} {{item.EndDate}}</small>
+                      <small class="d-block text-center mb-0 pb-1" [ngClass]="{'text-bg-success ': item.Status == 2, 'text-bg-secondary': item.Status == 3, 'bg-c text-white': item.Status == 1}">
+                        <i class="fa-regular fa-square-check pe-1" *ngIf="item.Status == 2"></i>
+                        <i class="fa-solid fa-arrow-left pe-1" *ngIf="item.Status == 1"></i>
+                        {{item.Status == 1 ? 'PREVIOUS' : item.Status == 2 ? 'CURRENT' : 'UPCOMING'}}
+                        <i class="fa-solid fa-arrow-right ps-1" *ngIf="item.Status == 3"></i>
+                      </small>
+                    </div>
+                  </a>
+                </div>
               </div>
-              <div class="col-auto">
-                <div id="scroll-dv" class="scroll-bar-dv border-0">
-                  <div class="inner-scroller" id="inner-scroller"></div>
+              <div class="col-md-12 row align-items-center justify-content-end py-3">
+                <div class="col-auto">
+                  <a href="{{downlodexcelFilePath}}" class="d-none" id="downloadAllDeclarationExcel"></a>
+                  <a href="javascript:void(0)" (click)="downloadDeclaration()" [ngClass]="{'pe-none': isLoading}">
+                    <i class="fa-solid fa-download fa-lg"></i>
+                    <span class="ps-2 fs-6">Download</span>
+                  </a>
+                </div>
+              </div>
+              <div class="excel-table" id="excel-table">
+                <table>
+                  <thead>
+                    <ng-container *ngIf="employeeSalaries.length > 0">
+                      <tr>
+                        <th width="10%">
+                          Full Name
+                        </th>
+                        <th>Gross</th>
+                        <th>Arrear</th>
+                        <th>Gross Total</th>
+                        <th>Pre Mnth Gross<i class="fa-solid fa-circle-exclamation ps-2" data-bs-toggle="tooltip"
+                          data-bs-placement="right" title="Previous Month Gross"></i>
+                        </th>
+                        <th class="text-truncate" *ngFor="let data of salaryComponents" >
+                          {{data.ComponentId}} <i class="fa-solid fa-circle-exclamation ps-2" data-bs-toggle="tooltip"
+                          data-bs-placement="right" title="{{data.ComponentName}}"></i>
+                        </th>
+                        <th>Others</th>
+                        <th>A</th>
+                        <th>B</th>
+                        <th>C</th>
+                        <th>D</th>
+                        <th>E</th>
+                        <th>F</th>
+                        <th>G</th>
+                        <th>H</th>
+                        <th>I</th>
+                        <th>J</th>
+                        <th>K</th>
+                        <th>L</th>
+                        <th>M</th>
+                        <th>N</th>
+                      </tr>
+                    </ng-container>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="employeeSalaries.length > 0">
+                      <tr *ngFor="let item of employeeSalaries">
+                        <td>
+                          <div class="d-flex align-items-center text-truncate">
+                            <i class="fa-solid fa-user"></i>
+                            <a href="javascript:void(0)" class="text-decoration-none ms-2" (click)="viewDeclaration(item)">
+                              <span class="text-decoration-underline">{{item.FullName}}</span>
+                              <span class="text-muted  pe-1">
+                                [{{item.EmployeeId}}]
+                              </span>
+                            </a>
+                          </div>
+                        </td>
+                        <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.Gross | number : "1.0-0") : "0"}}</td>
+                        <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearGross | number : "1.0-0") : "0"}}</td>
+                        <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearGross + item.Gross | number : "1.0-0") : "0"}}</td>
+                        <td><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.PreMonthGross | number : "1.0-0") : "0"}}</td>
+                        <td *ngFor="let data of item.Salary"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </ng-container>
+                    <ng-container *ngIf="employeeSalaries.length == 0">
+                      <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                        <p class="my-5 py-5">Record Not Found</p>
+                      </div>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="mt-3 row align-items-center justify-content-between">
+              <div class="col">
+                <app-pagination [pagination]="employeeData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+              </div>
+              <div class="col-auto row align-items-center">
+                <div class="col-auto text-muted">
+                  Scroll
+                </div>
+                <div class="col-auto">
+                  <div id="scroll-dv" class="scroll-bar-dv border-0">
+                    <div class="inner-scroller" id="inner-scroller"></div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </ng-container>
+          </ng-container>
+        </div>
       </div>
-    </div>
+    </ng-container>
+    <ng-container *ngIf="!isEmployeeSelected">
+      <div class="fw-bold text-dark py-5 my-5">
+        <p class="text-center fw-bold fs-4 py-5 my-5">Please select employee first</p>
+      </div>
+    </ng-container>
   </div>
 </div>

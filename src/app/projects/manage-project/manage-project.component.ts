@@ -168,12 +168,6 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         errroCounter++;
     let teammember = this.teamMembers.filter(x => x.DesignationId != 2 && x.DesignationId != 3);
     if (teammember.length > 0) {
-      let notSelectedGrade = teammember.filter(x => x.Grade == null || x.Grade == "");
-      if (notSelectedGrade.length > 0) {
-        ErrorToast("Please add employee's grade first");
-        this.isLoading = false;
-        return;
-      }
       let membertype = teammember.filter(x => x.MemberType == null || x.MemberType == 0);
       if (membertype.length > 0) {
         this.isLoading = false;
@@ -248,11 +242,9 @@ export class ManageProjectComponent implements OnInit, DoCheck {
         ProjectMemberDetailId : 0,
         ProjectId : 0,
         EmployeeId : emp.value,
-        DesignationId : emp.DesignationId,
         FullName : emp.text,
         Email : emp.email,
         MemberType: 20,
-        Grade: null,
         IsActive : true,
         Team: this.teamName
       });

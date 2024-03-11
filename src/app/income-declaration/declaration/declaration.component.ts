@@ -74,6 +74,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   taxRegimeDetails: any = [];
   taxSlab: Array<any> = [];
   dob: any = null;
+  oldTaxRegimeSlab: Array<any> = [];
+  newTaxRegimeSlab: Array<any> = [];
+  currentYear: number = 0;
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
@@ -83,10 +86,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.rentalPage = 1;
-    this.currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleString("en-us", { month: "short" })
+    let date = new Date();
+    this.currentYear = date.getFullYear();
+    this.currentMonth = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" })
     this.userDetail = this.user.getInstance() as UserDetail;
     this.EmployeeId = this.userDetail.UserId;
-    this.year = new Date().getFullYear();
+    this.year = date.getFullYear();
     this.basePath = this.http.GetImageBasePath();
 
     if (this.userDetail.RoleId == 1) {
@@ -203,6 +208,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.TaxSavingAlloance = response.TaxSavingAlloance;
         this.EmployeeDeclarationId = response.EmployeeDeclarationId;
         this.employeeEmail = response.Email;
+        this.oldTaxRegimeSlab = Object.entries(this.employeeDeclaration.IncomeTaxSlab).reverse();
+        this.newTaxRegimeSlab = Object.entries(this.employeeDeclaration.NewRegimIncomeTaxSlab).reverse();
 
         if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
           let rentDetail = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
@@ -789,17 +796,17 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.active = this.taxRegimeDetails.taxRegimeDesc.find(x => x.IsDefaultRegime == 1).TaxRegimeDescId;
         else
           this.active = empRegime;
-        //this.filterTaxSlab();
+        this.filterTaxSlab();
         $('#newIncomeTaxRegime').modal('show');
       }
     })
   }
 
-  // filterTaxSlab() {
-  //   let dob = this.currentEmployee.DOB;
-  //   let age = new Date().getFullYear() - new Date(dob).getFullYear();
-  //   this.taxSlab = this.taxRegimeDetails.taxRegime.filter(x => x.RegimeDescId == this.active && x.StartAgeGroup < age && x.EndAgeGroup >= age);
-  // }
+  filterTaxSlab() {
+    let dob = this.employeeDeclaration.DOB;
+    let age = new Date().getFullYear() - new Date(dob).getFullYear();
+    this.taxSlab = this.taxRegimeDetails.taxRegime.filter(x => x.RegimeDescId == this.active && x.StartAgeGroup < age && x.EndAgeGroup >= age);
+  }
 }
 
 interface IncomeDeclaration {

@@ -1,13 +1,9 @@
 <div class="col-12 full-v main-container">
 
   <div class="content-header">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Manage mployee detail'"></app-breadcrums>
-          </div>
-        </div>
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Manage mployee detail'"></app-breadcrums>
       </div>
     </div>
   </div>
@@ -176,7 +172,7 @@
                           </bot-autocomplete>
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label">Role *</label>
+                          <label class="form-label">Menu Access Role *</label>
                           <select name="AccessLevelId" class="form-select" formControlName="AccessLevelId"
                             [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
                             <option value=null disabled>Allocate role</option>
