@@ -73,17 +73,21 @@ export class HomeComponent implements OnInit {
           }
         }
 
-        let i = 0;
-        while(i < this.clientBillPayment.length) {
-          this.totalPendingPayment += this.clientBillPayment[i].PaidAmount;
-          this.isPaymenyPending = true;
-          i++;
+        if (this.clientBillPayment && this.clientBillPayment.length > 0) {
+          let i = 0;
+          while(i < this.clientBillPayment.length) {
+            this.totalPendingPayment += this.clientBillPayment[i].PaidAmount;
+            this.isPaymenyPending = true;
+            i++;
+          }
         }
 
-        let index = 0;
-        while(index < this.gstPaymentDetail.length) {
-          this.totalGSTAmount += this.gstPaymentDetail[index].amount;
-          index++;
+        if (this.gstPaymentDetail && this.gstPaymentDetail.length > 0) {
+          let index = 0;
+          while(index < this.gstPaymentDetail.length) {
+            this.totalGSTAmount += this.gstPaymentDetail[index].amount;
+            index++;
+          }
         }
 
         this.LoadLineChart();
