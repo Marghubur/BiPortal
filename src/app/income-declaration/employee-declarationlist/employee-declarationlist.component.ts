@@ -1,6 +1,6 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -9,6 +9,7 @@ declare var $: any;
 import 'bootstrap';
 import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
+import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 
 @Component({
   selector: 'app-employee-declarationlist',
@@ -37,22 +38,23 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   autoCompleteModal: autoCompleteModal = null;
   employeeId: number = 0;
 
-  constructor(private http: AjaxService,
-              private nav: iNavigation,
-              private local: ApplicationStorage) {}
+  constructor(private http: CoreHttpService,
+    private filterHttp: EmployeeFilterHttpService,
+    private nav: iNavigation,
+    private local: ApplicationStorage) { }
 
   ngOnInit(): void {
     this.basePath = this.http.GetImageBasePath();
-    this.salaryComponents = [{"ComponentId": "BS","ComponentName": "BASIC SALARY"},
-      {"ComponentId": "CA", "ComponentName": "CONVEYANCE ALLOWANCE"},
-      {"ComponentId": "EPER-PF", "ComponentName": "EMPLOYER CONTRIBUTION TOWARDS PF"},
-      {"ComponentId": "HRA", "ComponentName": "HOUSE RENT ALLOWANCE"},
-      {"ComponentId": "MA", "ComponentName": "MEDICAL ALLOWANCE"},
-      {"ComponentId": "SHA", "ComponentName": "SHIFT ALLOWANCE"},
-      {"ComponentId": "LTA", "ComponentName": "TRAVEL REIMBURSSEMENT"},
-      {"ComponentId": "CRA", "ComponentName": "CAR RUNNING ALLOWANCE"},
-      {"ComponentId": "TIA", "ComponentName": "TELEPHONE AND INTERNET ALLOWANCE"},
-      {"ComponentId": "SPA", "ComponentName": "SPECIAL ALLOWANCE"}
+    this.salaryComponents = [{ "ComponentId": "BS", "ComponentName": "BASIC SALARY" },
+    { "ComponentId": "CA", "ComponentName": "CONVEYANCE ALLOWANCE" },
+    { "ComponentId": "EPER-PF", "ComponentName": "EMPLOYER CONTRIBUTION TOWARDS PF" },
+    { "ComponentId": "HRA", "ComponentName": "HOUSE RENT ALLOWANCE" },
+    { "ComponentId": "MA", "ComponentName": "MEDICAL ALLOWANCE" },
+    { "ComponentId": "SHA", "ComponentName": "SHIFT ALLOWANCE" },
+    { "ComponentId": "LTA", "ComponentName": "TRAVEL REIMBURSSEMENT" },
+    { "ComponentId": "CRA", "ComponentName": "CAR RUNNING ALLOWANCE" },
+    { "ComponentId": "TIA", "ComponentName": "TELEPHONE AND INTERNET ALLOWANCE" },
+    { "ComponentId": "SPA", "ComponentName": "SPECIAL ALLOWANCE" }
     ]
     this.autoCompleteModal = {
       data: GetEmployees(),
@@ -71,17 +73,17 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       $(this).tooltip('dispose');
     });
 
-    if(this.scrollDiv == null) {
+    if (this.scrollDiv == null) {
       this.scrollDiv = document.getElementById("scroll-dv");
 
-      if(this.scrollDiv != null) {
+      if (this.scrollDiv != null) {
         this.initHandler();
       }
     }
   }
 
   initHandler() {
-    this.scrollDiv.addEventListener('scroll', function(e) {
+    this.scrollDiv.addEventListener('scroll', function (e) {
       var elem = document.getElementById("excel-table");
       var innerElem = document.getElementById("inner-scroller");
       var left = ((elem.clientWidth) / (innerElem.clientWidth)) * e.currentTarget.scrollLeft;
@@ -96,22 +98,22 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   LoadData() {
     this.isEmpPageReady = false;
     this.http.post("SalaryComponent/GetAllSalaryDetail", this.employeeData).
-    then((response: ResponseModel) => {
-      if (response.ResponseBody) {
-        this.employeeDetail = response.ResponseBody.SalaryDetail;
-        this.companySetting = response.ResponseBody.CompanySetting[0];
-        if (this.employeeDetail.length > 0) {
-          this.employeeData.TotalRecords = this.employeeDetail[0].Total;
+      then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          this.employeeDetail = response.ResponseBody.SalaryDetail;
+          this.companySetting = response.ResponseBody.CompanySetting[0];
+          if (this.employeeDetail.length > 0) {
+            this.employeeData.TotalRecords = this.employeeDetail[0].Total;
+            this.isEmpPageReady = true;
+          } else {
+            this.employeeData.TotalRecords = 0;
+          }
+          this.bindData();
           this.isEmpPageReady = true;
-        } else {
-          this.employeeData.TotalRecords = 0;
+          let elem = document.getElementById('namefilter');
+          if (elem) elem.focus();
         }
-        this.bindData();
-        this.isEmpPageReady = true;
-        let elem = document.getElementById('namefilter');
-        if(elem)elem.focus();
-      }
-    });
+      });
   }
 
   resetFilter() {
@@ -123,14 +125,14 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   }
 
   bindData() {
-    let currentMonth = new Date().getMonth() +1;
+    let currentMonth = new Date().getMonth() + 1;
     this.employeeSalaries = [];
     this.employeeDetail.forEach(x => {
       let data = JSON.parse(x.CompleteSalaryDetail)
       let prsentMonth = data.find(x => x.MonthNumber == currentMonth);
       let prevMonthNumber = currentMonth - 1;
       if (prevMonthNumber == 0)
-          prevMonthNumber = 12;
+        prevMonthNumber = 12;
 
       let prevMonth = null;
       if (prevMonthNumber != 3)
@@ -156,28 +158,28 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
           this.companySetting.DeclarationStartMonth = 1;
           this.companySetting.FinancialYear = this.companySetting.FinancialYear + 1;
         }
-        if ((this.companySetting.DeclarationStartMonth-1) == currentMonth)
+        if ((this.companySetting.DeclarationStartMonth - 1) == currentMonth)
           status = 2;
-        else if ((this.companySetting.DeclarationStartMonth-1) < currentMonth && this.companySetting.FinancialYear == currentYear)
+        else if ((this.companySetting.DeclarationStartMonth - 1) < currentMonth && this.companySetting.FinancialYear == currentYear)
           status = 1;
         else
           status = 3;
 
         this.payrollCalendar.push({
-          MonthName: new Date(this.companySetting.FinancialYear, this.companySetting.DeclarationStartMonth-1, 1).toLocaleString('default', { month: 'short' }),
-          Month: this.companySetting.DeclarationStartMonth-1,
+          MonthName: new Date(this.companySetting.FinancialYear, this.companySetting.DeclarationStartMonth - 1, 1).toLocaleString('default', { month: 'short' }),
+          Month: this.companySetting.DeclarationStartMonth - 1,
           Year: this.companySetting.FinancialYear,
-          StartDate: new Date(this.companySetting.FinancialYear, this.companySetting.DeclarationStartMonth-1, 1).getDate(),
-          EndDate: new Date(this.companySetting.FinancialYear, this.companySetting.DeclarationStartMonth , 0).getDate(),
+          StartDate: new Date(this.companySetting.FinancialYear, this.companySetting.DeclarationStartMonth - 1, 1).getDate(),
+          EndDate: new Date(this.companySetting.FinancialYear, this.companySetting.DeclarationStartMonth, 0).getDate(),
           Status: status
         });
-        this.companySetting.DeclarationStartMonth = this.companySetting.DeclarationStartMonth +1;
+        this.companySetting.DeclarationStartMonth = this.companySetting.DeclarationStartMonth + 1;
       }
       this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == currentMonth);
     }
   }
 
-  buildSalaryDetail (Salary: Array<any>) {
+  buildSalaryDetail(Salary: Array<any>) {
     let salaryBreakup = [];
     if (Salary.length > 0) {
       this.salaryComponents.forEach(x => {
@@ -217,13 +219,13 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   globalFilter() {
     let searchQuery = "";
     // this.employeeData.reset();
-    searchQuery= `emp.FirstName like '%${this.anyFilter}%' OR emp.Email like '%${this.anyFilter}%' OR emp.Mobile like '%${this.anyFilter}%'`;
+    searchQuery = `emp.FirstName like '%${this.anyFilter}%' OR emp.Email like '%${this.anyFilter}%' OR emp.Mobile like '%${this.anyFilter}%'`;
     // this.employeeData.SearchString = `1=1 And ${searchQuery}`;
     // this.LoadData();
   }
 
   GetFilterResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.employeeData = e;
       this.LoadData();
     }
@@ -239,10 +241,10 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       this.employeeSalaries = [];
       this.employeeDetail.forEach(x => {
         let data = JSON.parse(x.CompleteSalaryDetail)
-        let prsentMonth = data.find(x => x.MonthNumber == item.Month+1);
+        let prsentMonth = data.find(x => x.MonthNumber == item.Month + 1);
         let prevMonthNumber = item.Month;
         if (item.Month == 0)
-            prevMonthNumber = 12;
+          prevMonthNumber = 12;
 
         let prevMonth = null;
         if (prevMonthNumber != 3)
@@ -295,7 +297,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   }
 
   async serverFilter(query: string) {
-    if(query == null) {
+    if (query == null) {
       query = "";
     }
 
@@ -305,11 +307,11 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     filter.PageSize = 100;
     filter.CompanyId = 1;
 
-    let result: Array<pairData> = await this.http.getFilterEmployee(filter);
+    let result: Array<pairData> = await this.filterHttp.filter(filter);
     this.autoCompleteModal = {
-        data: result,
-        placeholder: "Select Employee",
-        className: "normal"
+      data: result,
+      placeholder: "Select Employee",
+      className: "normal"
     };
   }
 }

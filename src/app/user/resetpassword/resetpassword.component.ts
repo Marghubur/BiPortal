@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import { confirmPasswordValidator } from './confirmedpassword.validator'
+import { AuthHttpService } from 'src/providers/AjaxServices/auth-http.service';
 @Component({
   selector: 'app-resetpassword',
   templateUrl: './resetpassword.component.html',
@@ -22,7 +23,7 @@ export class ResetpasswordComponent implements OnInit {
   userDetail: UserDetail = new UserDetail();
 
   constructor(private fb: FormBuilder,
-              private http: AjaxService,
+              private http: AuthHttpService,
               private local: ApplicationStorage,
               private user: UserService,
               private nav: iNavigation) { }
@@ -69,7 +70,7 @@ export class ResetpasswordComponent implements OnInit {
       Mobile: this.userDetail.Mobile,
       UserId: this.userDetail.UserId
     }
-    this.http.post("login/ResetEmployeePassword", password, SERVICE.AUTH)
+    this.http.post("login/ResetEmployeePassword", password)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         Toast(response.ResponseBody);

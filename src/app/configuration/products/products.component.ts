@@ -5,7 +5,7 @@ import { Catagory, Product } from 'src/app/adminmodal/admin-modals';
 import { Files } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { AImage, Doc, Docx, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
@@ -55,7 +55,7 @@ export class ProductsComponent implements OnInit, AfterViewChecked {
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
-              private http: AjaxService,
+              private http: CoreHttpService,
               private sanitizer: DomSanitizer) { }
 
   ngAfterViewChecked(): void {

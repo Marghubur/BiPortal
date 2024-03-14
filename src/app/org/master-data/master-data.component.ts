@@ -1,5 +1,5 @@
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 declare var $: any;
 import { Component, OnInit } from '@angular/core';
@@ -24,7 +24,7 @@ export class MasterDataComponent implements OnInit {
   basePath:string = null;
   sampleFilePath: string = null;
 
-  constructor(private http: AjaxService) { }
+  constructor(private http: CoreHttpService) { }
 
   ngOnInit(): void {
     this.basePath =  this.http.GetImageBasePath();

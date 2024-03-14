@@ -4,12 +4,9 @@ import {
   HttpErrorResponse
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
 import { environment } from "src/environments/environment";
-import { Filter } from "./userService";
-import { pairData } from "src/app/util/iautocomplete/iautocomplete.component";
-import { SERVICE } from "./constants";
+import { SERVICE } from "../constants";
 
 @Injectable()
 export class AjaxService {
@@ -32,42 +29,11 @@ export class AjaxService {
     return ImageBaseUrl;
   }
 
-  LoadStaticJson(StaticUrl: string): Observable<any> {
-    let JsonData = this.http.get(StaticUrl);
-    return JsonData;
-  }
-
-  private GetBaseUrl(Service: SERVICE, Url: string) {
-    let baseUrl = environment.baseDotNetUrl;
-    switch (Service) {
-      case SERVICE.PROJECT:
-      case SERVICE.PERFORMANCE:
-      case SERVICE.FILTER:
-      case SERVICE.JOBS:
-        baseUrl = environment.baseSpringUrl;
-        break;
-    }
-
-    baseUrl += "api/" + Service + `/${Url}`;
-    return baseUrl;
-  }
-
-  async getFilterEmployee(filter: Filter) {
-    let result: Array<pairData> = [];
-    let response: ResponseModel = await this.post(`filter/employeeFilterByName`, filter, SERVICE.FILTER);
-    if (response.ResponseBody && response.ResponseBody instanceof Array) {
-      result = response.ResponseBody;
-    }
-
-    return result;
-  }
-
-  async login(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
-    let url = this.GetBaseUrl(ServiceName, Url);
+  async login(Url: string, Param: any): Promise<ResponseModel> {
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
       this.http
-        .post(url, Param, {
+        .post(Url, Param, {
           observe: "response"
         }).subscribe({
           next: (res: HttpResponse<any>) => {
@@ -94,11 +60,10 @@ export class AjaxService {
     });
   }
 
-  async get(Url: string, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
+  async get(Url: string): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
-      let url = this.GetBaseUrl(ServiceName, Url);
       return this.http
-        .get(url, {
+        .get(Url, {
           observe: "response"
         })
         .subscribe({
@@ -117,11 +82,10 @@ export class AjaxService {
     });
   }
 
-  async post(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
-    let url = this.GetBaseUrl(ServiceName, Url);
+  async post(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .post(url, Param, {
+        .post(Url, Param, {
           observe: "response"
         }).subscribe({
           next: (res: HttpResponse<any>) => {
@@ -142,11 +106,10 @@ export class AjaxService {
     });
   }
 
-  async put(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
-    let url = this.GetBaseUrl(ServiceName, Url);
+  async put(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .put(url, Param, {
+        .put(Url, Param, {
           observe: "response"
         })
         .subscribe({
@@ -169,9 +132,8 @@ export class AjaxService {
   }
 
   async delete(Url: string, Param?: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
-    let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
-      this.http.delete(url, {
+      this.http.delete(Url, {
         headers: {
           observe: "response",
         },
@@ -196,10 +158,9 @@ export class AjaxService {
   }
 
   async upload(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
-    let url = this.GetBaseUrl(ServiceName, Url);
     return new Promise((resolve, reject) => {
       this.http
-        .post(url, Param, {
+        .post(Url, Param, {
           observe: "response"
         })
         .subscribe({
@@ -221,54 +182,13 @@ export class AjaxService {
     });
   }
 
-  async forgotPassword(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<ResponseModel> {
-    let url = this.GetBaseUrl(ServiceName, Url);
+  async forgotPassword(Url: string, Param: any): Promise<ResponseModel> {
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(url, Param, {
-          observe: "response"
-        }).subscribe({
-          next: (res: HttpResponse<any>) => {
-            try {
-              if (!this.tokenHelper.IsValidResponse(res.body)) {
-                reject(null);
-              }
-            } catch (e) {
-              reject(e);
-            }
-            resolve(res.body);
-          },
-          error: (e: HttpErrorResponse) => {
-            this.tokenHelper.HandleResponseStatus(e);
-            reject(e.error);
-          }
-        });
-    });
+    return this.post(Url, Param);
   }
-}
-
-
-export class ColumnMapping {
-  ClassName?: string = null;
-  ColumnName: string = null;
-  DisplayName: string = null;
-  IsHidden?: boolean = false;
-  PageName?: string = null;
-  Style?: string = null;
 }
 
 export interface iconConfig {
   iconName: string;
   fn?: Function
-}
-
-export class tableConfig {
-  header: Array<ColumnMapping> = [];
-  data: Array<any> = [];
-  sampleData: Array<any> = [];
-  link: Array<iconConfig> = [];
-  templates: Array<any> = [];
-  totalRecords?: number = null;
-  isEnableAction?: boolean = false;
 }

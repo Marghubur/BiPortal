@@ -3,10 +3,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { ProjectHttpService } from 'src/providers/AjaxServices/project-http.service';
+import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -40,7 +40,9 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   constructor(private fb: FormBuilder,
               private nav:iNavigation,
               private local: ApplicationStorage,
-              private http: AjaxService) { }
+              private http: ProjectHttpService,
+              private employeeFilterHttp: EmployeeFilterHttpService
+              ) { }
 
   ngDoCheck(): void {
     this.onChnages();
@@ -84,7 +86,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
 
   loadData() {
     this.isReady = false;
-    this.http.get(`projects/getProjectDetail/${this.projectId}`, SERVICE.PROJECT).then((response: ResponseModel) => {
+    this.http.get(`projects/getProjectDetail/${this.projectId}`).then((response: ResponseModel) => {
       if(response.ResponseBody) {
         this.employees = GetEmployees();
         this.employeesList.data = this.employees;
@@ -194,7 +196,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
           allmembers.push(x);
       })
       value.TeamMembers = allmembers;
-      this.http.put(`projects/addUpdateProject/${value.ProjectId}`, value, SERVICE.PROJECT).then((res:ResponseModel) => {
+      this.http.put(`projects/addUpdateProject/${value.ProjectId}`, value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.bindProjectData(res.ResponseBody);
           Toast("Project created/updated successfully.");
@@ -302,7 +304,7 @@ export class ManageProjectComponent implements OnInit, DoCheck {
     filter.PageSize = 100;
     filter.CompanyId = 1;
 
-    let result: Array<pairData> = await this.http.getFilterEmployee(filter);
+    let result: Array<pairData> = await this.employeeFilterHttp.filter(filter);
     this.employeesList = {
         data: result,
         placeholder: "Select Employee",

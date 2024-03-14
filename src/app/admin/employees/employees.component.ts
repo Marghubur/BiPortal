@@ -1,8 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { tableConfig } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { CommonService, ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { Attendance, Documents, DocumentsPage, Performance, Employees, Files, ManageEmployee, Profile, UserType, UserImage, ManageActivity } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -21,7 +20,6 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   documentForm: FormGroup = null;
   user: UserDetail = null;
   documents: Array<OnlineDocModel> = [];
-  tableConfiguration: tableConfig = null;
   openModal: string = 'hide';
   manageEmployeeRouteName: string = ManageEmployee;
   isLoading: boolean = false;
@@ -49,7 +47,7 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
   }
 
   constructor(private fb: FormBuilder,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private local: ApplicationStorage,
     private userService: UserService,
     private nav: iNavigation,

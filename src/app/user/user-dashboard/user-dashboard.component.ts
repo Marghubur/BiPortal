@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
 import { ResponseModel } from "src/auth/jwtService";
-import { AjaxService } from "src/providers/ajax.service";
+import { CoreHttpService } from "src/providers/AjaxServices/core-http.service";
 import { ApplicationStorage } from "src/providers/ApplicationStorage";
 import { Toast, UserDetail } from "src/providers/common-service/common.service";
 import { AccessTokenExpiredOn, AdminDeclaration, AdminIncomeTax } from "src/providers/constants";
@@ -29,7 +29,7 @@ export class UserDashboardComponent implements OnInit {
   taxDetails: Array<any> = [];
   employeeTaxDetail: any = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private local: ApplicationStorage,
               private nav: iNavigation,
               private user: UserService) { }

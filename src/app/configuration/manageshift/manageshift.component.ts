@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Shift } from 'src/app/adminmodal/admin-modals';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { AdminNotification } from 'src/providers/constants';
@@ -46,7 +46,7 @@ export class ManageshiftComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
-              private http: AjaxService,
+              private http: CoreHttpService,
               private nav: iNavigation) { }
 
   ngOnInit(): void {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { PayrollComponents } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -50,7 +50,7 @@ export class CustomsalaryStructureComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private nav:iNavigation
   ) { }
 

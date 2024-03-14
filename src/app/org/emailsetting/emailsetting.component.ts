@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { EmailSettings } from 'src/app/adminmodal/admin-modals';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { EmailSetting, OrgLogo } from 'src/providers/constants';
@@ -24,7 +24,7 @@ export class EmailsettingComponent implements OnInit {
   companyId: number = 0;
   isLoading: boolean = false;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private local: ApplicationStorage,
               private nav: iNavigation,
               private fb: FormBuilder) { }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminSalary, AdminSummary } from 'src/providers/constants';
@@ -25,7 +25,7 @@ export class PreferencesComponent implements OnInit {
   constructor(private nav: iNavigation,
               private user: UserService,
               private local: ApplicationStorage,
-              private http: AjaxService) { }
+              private http: CoreHttpService) { }
 
   ngOnInit(): void {
     this.userDetail = this.user.getInstance();

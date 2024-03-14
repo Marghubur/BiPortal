@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, GetWeekNumber, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
@@ -29,7 +29,7 @@ export class ManagetimesheetComponent implements OnInit {
   currentWeekTimesheet: any = {};
 
   constructor(private fb: FormBuilder,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private nav: iNavigation,
     private user: UserService
   ) {

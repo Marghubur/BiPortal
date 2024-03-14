@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GetRoles } from 'src/providers/ApplicationStorage';
-import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
@@ -10,6 +9,8 @@ declare var bootstrap: any;
 import 'bootstrap';
 import { ItemStatus, SERVICE } from 'src/providers/constants';
 import { ResponseModel } from 'src/auth/jwtService';
+import { ProjectHttpService } from 'src/providers/AjaxServices/project-http.service';
+import { PerformanceHttpService } from 'src/providers/AjaxServices/performance-http.service';
 
 @Component({
   selector: 'app-manage-review',
@@ -39,7 +40,8 @@ export class ManageReviewComponent implements OnInit {
   revisedAppraisalComment: string = null;
 
   constructor(private nav:iNavigation,
-              private http: AjaxService,
+              private projectHttp: ProjectHttpService,
+              private performanceHttp: PerformanceHttpService,
               private fb: FormBuilder,
               private user: UserService) {}
 
@@ -51,7 +53,7 @@ export class ManageReviewComponent implements OnInit {
   }
 
   getProjectsMembers() {
-    this.http.get(`projects/memberdetail/${this.userDetail.UserId}/${this.project.ProjectId}`, SERVICE.PROJECT).then(res => {
+    this.projectHttp.get(`projects/memberdetail/${this.userDetail.UserId}/${this.project.ProjectId}`).then(res => {
       if (res.ResponseBody) {
         this.submittedEmpObj = res.ResponseBody.Project;
         if (res.ResponseBody.ProjectAppraisal && res.ResponseBody.ProjectAppraisal.length > 0)
@@ -245,7 +247,7 @@ export class ManageReviewComponent implements OnInit {
       }
     });
     if (errorCount == 0) {
-      this.http.post("promotion/addPromotionAndHike", value, SERVICE.PERFORMANCE).then(res => {
+      this.performanceHttp.post("promotion/addPromotionAndHike", value).then(res => {
         if (res.ResponseBody) {
           this.appraisalReviewDetail = res.ResponseBody;
           if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0)
@@ -278,7 +280,7 @@ export class ManageReviewComponent implements OnInit {
   loadReviewDetail() {
     this.isObjectivesReady = false;
     let DesignationId = 0;
-    this.http.get(`performance/getEmployeeObjective/${DesignationId}/${this.userDetail.CompanyId}/${this.selectedEmploye.EmployeeId}`, SERVICE.PERFORMANCE).then(res => {
+    this.performanceHttp.get(`performance/getEmployeeObjective/${DesignationId}/${this.userDetail.CompanyId}/${this.selectedEmploye.EmployeeId}`).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.objectives = res.ResponseBody;
         this.getUserNameIcon(this.selectedEmploye.FullName);
@@ -304,7 +306,7 @@ export class ManageReviewComponent implements OnInit {
 
   rejectObjective() {
     this.isLoading = true;
-    this.http.get(`performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Rejected}`, SERVICE.PERFORMANCE).then(res => {
+    this.performanceHttp.get(`performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Rejected}`).then(res => {
       if (res.ResponseBody) {
         Toast("Objective rejected");
         this.isLoading = false;
@@ -317,7 +319,7 @@ export class ManageReviewComponent implements OnInit {
 
   approveObjective() {
     this.isLoading = true;
-    this.http.get(`performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Approved}`, SERVICE.PERFORMANCE).then(res => {
+    this.performanceHttp.get(`performance/changeEmployeeObjectiveStatus/${this.selectedEmploye.EmployeeId}/${ItemStatus.Approved}`).then(res => {
       if (res.ResponseBody) {
         Toast("Objective approved successfully");
         this.isLoading = false;
@@ -366,7 +368,7 @@ export class ManageReviewComponent implements OnInit {
     if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
       this.isLoading =true;
       let value = this.appraisalReviewDetail.map(x => x.AppraisalReviewId)
-      this.http.put(`promotion/reOpenAppraisalObjective/${this.userDetail.UserId}`, value, SERVICE.PERFORMANCE)
+      this.performanceHttp.put(`promotion/reOpenAppraisalObjective/${this.userDetail.UserId}`, value)
       .then((response: ResponseModel) => {
         if (response) {
           this.isSubmitted = false;
@@ -387,7 +389,7 @@ export class ManageReviewComponent implements OnInit {
     if (value) {
       console.log(value)
       this.isLoading =true;
-      this.http.get(`promotion/reOpenEmployeeObjective/${value.EmployeeId}/${value.AppraisalDetailId}`, SERVICE.PERFORMANCE)
+      this.performanceHttp.get(`promotion/reOpenEmployeeObjective/${value.EmployeeId}/${value.AppraisalDetailId}`)
       .then((response: ResponseModel) => {
         if (response) {
           this.isLoading = false;
@@ -424,7 +426,7 @@ export class ManageReviewComponent implements OnInit {
     }
     if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
       this.isLoading =true;
-      this.http.post("promotion/revisedAppraisal", this.appraisalReviewDetail, SERVICE.PERFORMANCE)
+      this.performanceHttp.post("promotion/revisedAppraisal", this.appraisalReviewDetail)
       .then((response: ResponseModel) => {
         if (response) {
           this.isSubmitted = false;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { CronJobType, SERVICE } from 'src/providers/constants';
 
@@ -26,7 +26,7 @@ export class CronjobSettingComponent implements OnInit {
   };
   isPageReady: boolean = false;
 
-  constructor (private http: AjaxService,
+  constructor (private http: CoreHttpService,
               private fb: FormBuilder){}
 
   ngOnInit(): void {
@@ -35,7 +35,7 @@ export class CronjobSettingComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.get("CronJobSetting/GetCronJobSetting", SERVICE.CORE).then((res: ResponseModel) => {
+    this.http.get("CronJobSetting/GetCronJobSetting").then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.bindData(res.ResponseBody);
         this.isPageReady = true;

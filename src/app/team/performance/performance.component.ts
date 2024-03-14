@@ -1,5 +1,4 @@
 import { AfterViewChecked, Component, DoCheck, OnInit } from '@angular/core';
-import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { UserService } from 'src/providers/userService';
 import 'bootstrap';
@@ -10,6 +9,7 @@ import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Subject } from 'rxjs';
 import { ItemStatus, SERVICE } from 'src/providers/constants';
+import { PerformanceHttpService } from 'src/providers/AjaxServices/performance-http.service';
 declare var $: any;
 
 @Component({
@@ -56,7 +56,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   currentRate = 0;
 
   constructor(private user: UserService,
-              private http: AjaxService,
+              private http: PerformanceHttpService,
               private nav:iNavigation,
               private fb: FormBuilder) { }
 
@@ -106,7 +106,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   loadData() {
     this.isPageReady = false;
     this.isPageLoading = true;
-    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, SERVICE.PERFORMANCE).then(res => {
+    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         let date = new Date();
         this.minDate = {year: date.getFullYear(), month: date.getMonth()+1, day: date.getDate()};
@@ -221,7 +221,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
       ErrorToast("New value is greater than targeted value");
       return;
     }
-    this.http.post("performance/updateEmployeeObjective", performvalue, SERVICE.PERFORMANCE).then(res => {
+    this.http.post("performance/updateEmployeeObjective", performvalue).then(res => {
       if (res.ResponseBody) {
         let value = res.ResponseBody;
         this.selectedObjective.EmployeePerformanceId = value.EmployeePerformanceId;
@@ -327,7 +327,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
     if (this.selectedEmployee.length > 0)
       value.EmployeesMeeting = this.selectedEmployee.map(x => x.value);
 
-    this.http.post("meeting/manageMeeting", value, SERVICE.PERFORMANCE).then(res => {
+    this.http.post("meeting/manageMeeting", value).then(res => {
       if (res.ResponseBody) {
         this.allMeetings = res.ResponseBody;
         this.bindMeetingData();
@@ -350,7 +350,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   getEmployeesMeeting() {
     this.isPageReady = false;
     this.isPageLoading = true;
-    this.http.get(`meeting/getMeetingByEmpId/${this.employeeId}`, SERVICE.PERFORMANCE).then(res => {
+    this.http.get(`meeting/getMeetingByEmpId/${this.employeeId}`).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.allMeetings = res.ResponseBody;
         this.bindMeetingData();
@@ -520,7 +520,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   completeMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/${ItemStatus.Completed}`, SERVICE.PERFORMANCE).then(res => {
+      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/${ItemStatus.Completed}`).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -542,7 +542,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   cancelMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/${ItemStatus.Canceled}`, SERVICE.PERFORMANCE).then(res => {
+      this.http.get(`meeting/updateMeetingStatus/${this.selectedMeeting.MeetingId}/${ItemStatus.Canceled}`).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -564,7 +564,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
   deleteMeeting() {
     if (this.selectedMeeting) {
       this.isLoading = true;
-      this.http.delete(`meeting/deleteMeeting/${this.selectedMeeting.MeetingId}`,null, SERVICE.PERFORMANCE).then(res => {
+      this.http.delete(`meeting/deleteMeeting/${this.selectedMeeting.MeetingId}`).then(res => {
         if (res.ResponseBody) {
           this.allMeetings = res.ResponseBody;
           this.bindMeetingData();
@@ -615,7 +615,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
         }
       })
       if (errorCount === 0) {
-        this.http.get(`performance/submitEmployeeObjective/${this.employeeId}`, SERVICE.PERFORMANCE).then(res => {
+        this.http.get(`performance/submitEmployeeObjective/${this.employeeId}`).then(res => {
           if (res.ResponseBody) {
             this.objectives = res.ResponseBody;
             Toast("Objective submitted successfully");
@@ -635,7 +635,7 @@ export class PerformanceComponent implements OnInit, AfterViewChecked, DoCheck {
 
   loadReviewDetail() {
     this.isPageLoading = true;
-    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`, SERVICE.PERFORMANCE).then(res => {
+    this.http.get(`performance/getEmployeeObjective/${this.designationId}/${this.userDetail.CompanyId}/${this.employeeId}`).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.objectives = res.ResponseBody;
         this.getUserNameIcon(null);

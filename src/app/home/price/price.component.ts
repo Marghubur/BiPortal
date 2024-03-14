@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 
 @Component({
   selector: 'app-price',
@@ -11,7 +11,7 @@ export class PriceComponent implements OnInit {
   isLoading: boolean = false;
   priceDetail: Array<PriceDetail>;
 
-  constructor(private http: AjaxService) {}
+  constructor(private http: CoreHttpService) {}
 
   ngOnInit(): void {
     this.loadData();

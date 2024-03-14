@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { Toast } from 'src/providers/common-service/common.service';
 import { LeaveAttendanceDailywages, SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
+import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 declare var $: any;
 
 @Component({
@@ -69,13 +70,14 @@ export class ProcessingPayrollComponent implements OnInit {
   userName: string = null;
   allRunPayroll: RunPayroll = null
   employeeId: number = 0;
-  employeeData: autoCompleteModal= new autoCompleteModal();
+  employeeData: autoCompleteModal = new autoCompleteModal();
   processingPayrollDetail: Array<any> = [];
   selectedPayrollDetail: any = null;
 
-  constructor(private http: AjaxService,
-              private user: UserService,
-              private nav: iNavigation) {}
+  constructor(private http: CoreHttpService,
+    private filterHttp: EmployeeFilterHttpService,
+    private user: UserService,
+    private nav: iNavigation) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -85,7 +87,7 @@ export class ProcessingPayrollComponent implements OnInit {
       value: 0,
       text: "All"
     });
-    this.employeeData.className="normal";
+    this.employeeData.className = "normal";
     let data = GetEmployees();
     data.forEach(x => {
       this.employeeData.data.push({
@@ -96,22 +98,22 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   callApiLoadData() {
-    this.http.get(`runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Year}`, SERVICE.FILTER)
-    .then((response: ResponseModel) => {
-      if(response.ResponseBody) {
-        if (response.ResponseBody.length > 0) {
-          this.processingPayrollDetail = response.ResponseBody;
-          this.processingPayrollDetail.forEach(i => {
-            let value = this.payrollCalendar.find( x=> x.Month == (i.ForMonth-1) && x.Year == i.ForYear);
-            if (value)
-              value.Status = i.PayrollStatus;
-          });
-          this.selectedPayrollDetail = this.processingPayrollDetail.find( x=> x.ForMonth == this.selectedPayrollCalendar.Month+1 && x.ForYear == this.selectedPayrollCalendar.Year);
-          console.log(this.selectedPayrollDetail)
+    this.filterHttp.get(`runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Year}`)
+      .then((response: ResponseModel) => {
+        if (response.ResponseBody) {
+          if (response.ResponseBody.length > 0) {
+            this.processingPayrollDetail = response.ResponseBody;
+            this.processingPayrollDetail.forEach(i => {
+              let value = this.payrollCalendar.find(x => x.Month == (i.ForMonth - 1) && x.Year == i.ForYear);
+              if (value)
+                value.Status = i.PayrollStatus;
+            });
+            this.selectedPayrollDetail = this.processingPayrollDetail.find(x => x.ForMonth == this.selectedPayrollCalendar.Month + 1 && x.ForYear == this.selectedPayrollCalendar.Year);
+            console.log(this.selectedPayrollDetail)
+          }
+          Toast("Page data loaded successfully.");
         }
-        Toast("Page data loaded successfully.");
-      }
-    });
+      });
   }
 
   loadData() {
@@ -128,14 +130,14 @@ export class ProcessingPayrollComponent implements OnInit {
         year = year + 1;
       }
       this.payrollCalendar.push({
-        MonthName: new Date(2022, startMonth-1, 1).toLocaleString('default', { month: 'short' }),
-        Month: startMonth-1,
+        MonthName: new Date(2022, startMonth - 1, 1).toLocaleString('default', { month: 'short' }),
+        Month: startMonth - 1,
         Year: year,
-        StartDate: new Date(2024, startMonth-1, 1).getDate(),
-        EndDate: new Date(2024, startMonth , 0).getDate(),
+        StartDate: new Date(2024, startMonth - 1, 1).getDate(),
+        EndDate: new Date(2024, startMonth, 0).getDate(),
         Status: 16
       });
-      startMonth = startMonth +1;
+      startMonth = startMonth + 1;
     }
 
     this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == new Date().getMonth());
@@ -148,7 +150,7 @@ export class ProcessingPayrollComponent implements OnInit {
     runPayroll.EmployeeExit = new EmployeeExit();
     runPayroll.FinalSettlement = new FinalSettlement();
     runPayroll.Bonus = new Bonus();
-    runPayroll.SalaryRevision = new SalaryRevision ();
+    runPayroll.SalaryRevision = new SalaryRevision();
     runPayroll.OverTime = new OverTime();
     runPayroll.ShiftAllowance = new ShiftAllowance();
     runPayroll.SalaryComponents = new SalaryComponents();
@@ -201,21 +203,21 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   GetFilterLeaveResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.leaveData = e;
       this.loadData();
     }
   }
 
   GetFilterLosspayResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.lossPayData = e;
       this.loadData();
     }
   }
 
   GetFilterReversepayResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.reverseLossPayData = e;
       this.loadData();
     }
@@ -270,21 +272,21 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   GetFilterNewJoineeResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.newJoineeData = e;
       this.loadData();
     }
   }
 
   GetFilterExitEmpResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.exitEmpData = e;
       this.loadData();
     }
   }
 
   GetFilterSettlementResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.settlementData = e;
       this.loadData();
     }
@@ -316,28 +318,28 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   GetFilterBonusResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.bonusData = e;
       this.loadData();
     }
   }
 
   GetFilterSalaryRevisionResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.salaryRevisionData = e;
       this.loadData();
     }
   }
 
   GetFilterOvertimeResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.overTimePaymentData = e;
       this.loadData();
     }
   }
 
   GetFilterShiftResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.shiftAllowanceData = e;
       this.loadData();
     }
@@ -367,28 +369,28 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   GetFilterSalaryCompResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.salaryComponentsData = e;
       this.loadData();
     }
   }
 
   GetFilterExpenseResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.expensesData = e;
       this.loadData();
     }
   }
 
   GetFilterAdhocPaymentResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.adhocPaymentData = e;
       this.loadData();
     }
   }
 
   GetFilterAdhocDeductionResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.adhocDeductionData = e;
       this.loadData();
     }
@@ -418,21 +420,21 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   GetFilterSalaryProcessingResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.salaryProcessingData = e;
       this.loadData();
     }
   }
 
   GetFilterSalaryPayoutResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.salaryPayoutData = e;
       this.loadData();
     }
   }
 
   GetFilterArraersResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.arraersData = e;
       this.loadData();
     }
@@ -462,28 +464,28 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   GetFilterPTOverideResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.ptOverrideData = e;
       this.loadData();
     }
   }
 
   GetFilterESIOverideResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.esiOverrideData = e;
       this.loadData();
     }
   }
 
   GetFilterTDSOverideResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.tdsOverrideData = e;
       this.loadData();
     }
   }
 
   GetFilterLWFOverideResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.lwfOverrideData = e;
       this.loadData();
     }
@@ -519,15 +521,15 @@ export class ProcessingPayrollComponent implements OnInit {
   runPayrollCalculation(flagId: number) {
     this.isLoading = true;
     this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month}/${flagId}`)
-    .then((res:ResponseModel) => {
-      if (res.ResponseBody) {
-        $('#confirmPayrollFinalize').modal('hide');
-        Toast(res.ResponseBody);
+      .then((res: ResponseModel) => {
+        if (res.ResponseBody) {
+          $('#confirmPayrollFinalize').modal('hide');
+          Toast(res.ResponseBody);
+          this.isLoading = false;
+        }
+      }).catch(e => {
         this.isLoading = false;
-      }
-    }).catch(e => {
-      this.isLoading = false;
-    });
+      });
   }
 
   finalizePayrollPopUp() {
@@ -537,7 +539,7 @@ export class ProcessingPayrollComponent implements OnInit {
   selectPayrollMonth(item: any) {
     if (item) {
       this.selectedPayrollCalendar = item;
-      this.selectedPayrollDetail = this.processingPayrollDetail.find( x=> x.ForMonth == this.selectedPayrollCalendar.Month+1 && x.ForYear == this.selectedPayrollCalendar.Year);
+      this.selectedPayrollDetail = this.processingPayrollDetail.find(x => x.ForMonth == this.selectedPayrollCalendar.Month + 1 && x.ForYear == this.selectedPayrollCalendar.Year);
       console.log(this.selectedPayrollDetail)
     }
   }
@@ -559,7 +561,7 @@ export class ProcessingPayrollComponent implements OnInit {
 }
 
 
-class NewJoinee{
+class NewJoinee {
   JoineeId: number = 1;
   EmployeeName: string = "Sarfaraz Nawaz";
   Date: Date = new Date(2023, 4, 4);
@@ -569,7 +571,7 @@ class NewJoinee{
   Comment: string = null;
 }
 
-class EmployeeExit{
+class EmployeeExit {
   ExitId: number = 1;
   EmployeeName: string = "Sarfaraz Nawaz";
   DOJ: Date = new Date(2023, 4, 4);
@@ -579,7 +581,7 @@ class EmployeeExit{
   WaitingOn: Date = new Date();
 }
 
-class FinalSettlement{
+class FinalSettlement {
   SettlementId: number = 1;
   EmployeeName: string = "Sarfaraz Nawaz";
   Reason: string = null;

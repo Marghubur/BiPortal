@@ -4,7 +4,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Service } from 'src/app/adminmodal/admin-modals';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { Filter, UserService } from 'src/providers/userService';
@@ -34,7 +34,7 @@ export class ServiceRequestComponent implements OnInit {
   apiURL: string = "";
   userDetail: any = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private fb: FormBuilder,
               private user: UserService
             ) { }

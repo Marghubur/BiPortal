@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { Toast } from 'src/providers/common-service/common.service';
 import { Login } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -22,7 +22,7 @@ export class RegisterNewOrgComponent implements OnInit {
   openingmodel: NgbDateStruct;
 
   constructor(private fb: FormBuilder,
-              private http: AjaxService,
+              private http: CoreHttpService,
               private nav: iNavigation) { }
 
   ngOnInit(): void {

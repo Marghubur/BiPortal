@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddNumbers, CommonService, ErrorToast, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
@@ -72,7 +72,7 @@ export class BuildPdfComponent implements OnInit, AfterViewChecked {
   maxDate: any = null;
   billYears: Array<number> = [];
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
     private fb: FormBuilder,
     private common: CommonService,
     private calendar: NgbCalendar,

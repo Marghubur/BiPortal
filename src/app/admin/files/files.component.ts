@@ -1,10 +1,9 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { tableConfig } from 'src/providers/ajax.service';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { MonthName, Toast, ErrorToast, AddNumbers, ToFixed } from 'src/providers/common-service/common.service';
 import { BuildPdf, ManageEmployee, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -26,7 +25,6 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   currentEmployeeDetail: EmployeeDetail = null;
   userFiles: Array<any> = [];
   fileLoaded: boolean = false;
-  tableConfiguration: tableConfig = null;
   basePath: string = "";
   viewer: any = null;
   employee: any = null;
@@ -79,7 +77,7 @@ export class FilesComponent implements OnInit, AfterViewChecked {
   orderByYearAsc: boolean = null;
 
   constructor(private fb: FormBuilder,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private nav: iNavigation,
     private calendar: NgbCalendar,
   ) {

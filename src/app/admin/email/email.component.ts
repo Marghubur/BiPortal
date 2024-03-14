@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { DomSanitizer } from '@angular/platform-browser';
 import { Files } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
@@ -36,7 +36,7 @@ export class EmailComponent implements OnInit {
   sendFormIsReady: boolean = false;
 
   constructor(private fb:FormBuilder,
-              private http:AjaxService,
+              private http: CoreHttpService,
               private sanitizer: DomSanitizer,
               private nav:iNavigation) { }
 

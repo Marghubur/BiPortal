@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { Filter } from 'src/providers/userService';
@@ -21,7 +21,7 @@ export class HolidayComponent implements OnInit {
   orderByStartDateAsc: boolean = null;
   orderByEndDateAsc: boolean = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private local: ApplicationStorage) { }
 
   ngOnInit(): void {

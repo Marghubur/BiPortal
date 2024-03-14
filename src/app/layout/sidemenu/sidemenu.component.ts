@@ -8,7 +8,7 @@ import { ResponseModel } from "src/auth/jwtService";
 import packageJson from '../../../../package.json';
 import { CommonService, ErrorToast, Toast, UserDetail } from "src/providers/common-service/common.service";
 import { ApplicationStorage } from "src/providers/ApplicationStorage";
-import { AjaxService } from "src/providers/ajax.service";
+import { CoreHttpService } from "src/providers/AjaxServices/core-http.service";
 
 @Component({
   selector: 'app-sidemenu',
@@ -51,7 +51,7 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
     private commonService: CommonService,
     private local: ApplicationStorage,
     private user: UserService,
-    private http: AjaxService
+    private http: CoreHttpService
   ) {
     this.commonService.isLoading.subscribe(res => {
       this.isLoading = res;

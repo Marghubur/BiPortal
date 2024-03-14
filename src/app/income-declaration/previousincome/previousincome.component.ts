@@ -3,7 +3,7 @@ import { AdminDeclaration, AdminForm12B, AdminPreferences, AdminSalary, AdminSum
 import { iNavigation } from 'src/providers/iNavigation';
 import 'bootstrap';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { UserService } from 'src/providers/userService';
@@ -33,7 +33,7 @@ export class PreviousincomeComponent implements OnInit {
   constructor(private nav: iNavigation,
               private user: UserService,
               private local: ApplicationStorage,
-              private http: AjaxService,
+              private http: CoreHttpService,
               private fb: FormBuilder) { }
 
   ngAfterViewChecked(): void {

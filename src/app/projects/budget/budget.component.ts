@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { AjaxService } from 'src/providers/ajax.service';
+import { ProjectHttpService } from '../../../providers/AjaxServices/project-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -24,7 +24,7 @@ export class BudgetComponent implements OnInit {
   toModel: NgbDateStruct;
 
   constructor(private nav: iNavigation,
-              private http: AjaxService,
+              private http: ProjectHttpService,
               private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class BudgetComponent implements OnInit {
 
   loadData() {
     this.isLoaded = false;
-    this.http.get(`projectsAppraisal/getProjectAppraisal/${this.project.ProjectId}`, SERVICE.PROJECT).then(res => {
+    this.http.get(`projectsAppraisal/getProjectAppraisal/${this.project.ProjectId}`).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectAppraisal = res.ResponseBody;
         Toast("Record found");
@@ -97,7 +97,7 @@ export class BudgetComponent implements OnInit {
       return;
     }
     let value = this.projectAppraisalForm.value;
-    this.http.post("projectsAppraisal/addProjectAppraisal", value, SERVICE.PROJECT).then(res => {
+    this.http.post("projectsAppraisal/addProjectAppraisal", value).then(res => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectAppraisal = res.ResponseBody;
         $('#manageProjectAppraisal').modal('hide');
@@ -120,7 +120,7 @@ export class BudgetComponent implements OnInit {
     }
     let value = this.projectAppraisalForm.value;
     if (value.ProjectAppraisalId > 0) {
-      this.http.put(`projectsAppraisal/updateProjectAppraisal/${value.ProjectAppraisalId}`, value, SERVICE.PROJECT).then(res => {
+      this.http.put(`projectsAppraisal/updateProjectAppraisal/${value.ProjectAppraisalId}`, value).then(res => {
         if (res.ResponseBody && res.ResponseBody.length > 0) {
           this.projectAppraisal = res.ResponseBody;
           $('#manageProjectAppraisal').modal('hide');

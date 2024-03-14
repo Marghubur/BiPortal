@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import 'bootstrap';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -24,7 +24,7 @@ export class PfEsiSetupComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private fb: FormBuilder,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private nav: iNavigation
   ) { }
 

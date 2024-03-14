@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AdminManageTimesheet, ItemStatus, UserType} from 'src/providers/constants';
@@ -44,7 +44,7 @@ export class TimesheetComponent implements OnInit {
   isLoading: boolean = false;
   clientName: string = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
     private nav: iNavigation,
     private user: UserService,
   ) {

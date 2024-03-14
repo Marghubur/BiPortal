@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonService, ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -29,7 +29,7 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
   shiftDetail: autoCompleteModal = null;
 
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private fb: FormBuilder,
               private nav: iNavigation
   ) { }

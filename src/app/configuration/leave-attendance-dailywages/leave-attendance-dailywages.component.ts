@@ -1,6 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -34,7 +35,8 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
   currentUser: any = null;
 
   constructor(private nav:iNavigation,
-              private http: AjaxService,
+              private http: CoreHttpService,
+              private filterHttp: EmployeeFilterHttpService,
               private userService: UserService) {}
 
   ngAfterViewChecked(): void {
@@ -86,7 +88,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   loadData() {
     this.isLoading = true;
-    this.http.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`, SERVICE.FILTER).then(res => {
+    this.filterHttp.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`).then(res => {
       if (res.ResponseBody) {
         if (res.ResponseBody[0].length > 0)
           this.appliedLeaveDetail = res.ResponseBody[0];
@@ -160,7 +162,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   getAttendanceDetail() {
     this.isLoading = true;
-    this.http.post("runpayroll/getAttendancePage", this.attendanceData, SERVICE.FILTER).then((res:ResponseModel) => {
+    this.filterHttp.post("runpayroll/getAttendancePage", this.attendanceData).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
         this.attendanceDetail = res.ResponseBody;

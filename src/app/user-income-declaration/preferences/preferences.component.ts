@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeDetail } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, Declaration, Salary, Summary, UserAccountsBaseRoute } from 'src/providers/constants';
@@ -27,7 +27,7 @@ export class PreferencesComponent implements OnInit {
   SectionIsReady: boolean = false;
   isEmployeeSelect: boolean = false;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private user: UserService,
               private nav: iNavigation) { }
 
