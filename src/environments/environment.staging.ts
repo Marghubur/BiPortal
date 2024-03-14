@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   env: "staging",
 
   baseDotNetUrl: "http://bot.io/bot/dn/",

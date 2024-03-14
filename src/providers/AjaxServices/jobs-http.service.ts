@@ -11,8 +11,12 @@ export class JobsHttpService {
   constructor(private http: AjaxService) { }
 
   private GetUrl(Url: string) {
-    return `https://www.emstum.com/bot/sb/api/${SERVICE.JOBS}/${Url}`;
-    // return `${environment.baseSpringUrl}api/${SERVICE.JOBS}/${Url}`;
+    if (environment.production) {
+      return `${environment.baseSpringUrl}api/${SERVICE.JOBS}/${Url}`;
+    } else {
+      return `https://www.emstum.com/bot/sb/api/${SERVICE.JOBS}/${Url}`;
+      // return `${environment.baseSpringUrl}api/${SERVICE.JOBS}/${Url}`;
+    }
   }
 
   async login(Url: string, Param: any): Promise<ResponseModel> {

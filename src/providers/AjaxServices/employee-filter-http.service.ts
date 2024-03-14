@@ -12,8 +12,12 @@ export class EmployeeFilterHttpService {
   constructor(private http: AjaxService) { }
 
   private GetUrl(Url: string) {
-    return `https://www.emstum.com/bot/sb/api/${SERVICE.FILTER}/${Url}`;
-    // return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
+    if (environment.production) {
+      return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
+    } else {
+      return `https://www.emstum.com/bot/sb/api/${SERVICE.FILTER}/${Url}`;
+      // return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
+    }
   }
 
   async login(Url: string, Param: any): Promise<ResponseModel> {
@@ -25,7 +29,7 @@ export class EmployeeFilterHttpService {
   }
 
   async filter(Param: any) {
-    let result: Array<pairData> = [];    
+    let result: Array<pairData> = [];
     let response: ResponseModel = await this.post(this.GetUrl(`filter/employeeFilterByName`), Param);
     if (response.ResponseBody && response.ResponseBody instanceof Array) {
       result = response.ResponseBody;

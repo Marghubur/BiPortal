@@ -11,8 +11,12 @@ export class PerformanceHttpService {
   constructor(private http: AjaxService) { }
 
   private GetUrl(Url: string) {
-    return `https://www.emstum.com/bot/sb/api/${SERVICE.PERFORMANCE}/${Url}`;
-    // return `${environment.baseSpringUrl}api/${SERVICE.PERFORMANCE}/${Url}`;
+    if (environment.production) {
+      return `${environment.baseSpringUrl}api/${SERVICE.PERFORMANCE}/${Url}`;
+    } else {
+      return `https://www.emstum.com/bot/sb/api/${SERVICE.PERFORMANCE}/${Url}`;
+      // return `${environment.baseSpringUrl}api/${SERVICE.PERFORMANCE}/${Url}`;
+    }
   }
 
   async login(Url: string, Param: any): Promise<ResponseModel> {

@@ -11,8 +11,12 @@ export class CoreHttpService {
   constructor(private http: AjaxService) { }
 
   private GetUrl(Url: string) {
-    return `https://www.emstum.com/bot/dn/api/${SERVICE.CORE}/${Url}`;
-    // return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
+    if (environment.production) {
+      return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
+    } else {
+      // return `https://www.emstum.com/bot/dn/api/${SERVICE.CORE}/${Url}`;
+      return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
+    }
   }
 
   async login(Url: string, Param: any): Promise<ResponseModel> {

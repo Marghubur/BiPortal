@@ -12,8 +12,12 @@ export class AuthHttpService {
     constructor(private http: AjaxService) { }
 
     private GetUrl(Url: string) {
-        return `https://www.emstum.com/bot/dn/api/${SERVICE.AUTH}/${Url}`;
-        // return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
+        if (environment.production) {
+            return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
+        } else {
+            return `https://www.emstum.com/bot/dn/api/${SERVICE.AUTH}/${Url}`;
+            // return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
+        }
     }
 
     async login(Url: string, Param: any): Promise<ResponseModel> {

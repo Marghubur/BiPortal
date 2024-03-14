@@ -11,8 +11,12 @@ export class ProjectHttpService {
   constructor(private http: AjaxService) { }
 
   private GetUrl(Url: string) {
-    return `https://www.emstum.com/bot/sb/api/${SERVICE.PROJECT}/${Url}`;
-    // return `${environment.baseSpringUrl}api/${SERVICE.PROJECT}/${Url}`;
+    if (environment.production) {
+      return `${environment.baseSpringUrl}api/${SERVICE.PROJECT}/${Url}`;
+    } else {
+      return `https://www.emstum.com/bot/sb/api/${SERVICE.PROJECT}/${Url}`;
+      // return `${environment.baseSpringUrl}api/${SERVICE.PROJECT}/${Url}`;
+    }
   }
 
   async login(Url: string, Param: any): Promise<ResponseModel> {
