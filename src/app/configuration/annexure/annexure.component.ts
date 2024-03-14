@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Annexure } from 'src/providers/constants';
@@ -29,7 +29,7 @@ export class AnnexureComponent implements OnInit {
   submitted: boolean = false;
   annexureData: Array<AnnexureOfferLeter> = [];
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private fb: FormBuilder,
               private nav: iNavigation,
               private local: ApplicationStorage) { }

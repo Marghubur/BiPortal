@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
-import { AjaxService } from "src/providers/ajax.service";
+import { CoreHttpService } from "src/providers/AjaxServices/core-http.service";
 import { Toast } from "src/providers/common-service/common.service";
 import { BillDetail } from "src/providers/constants";
 import { iNavigation } from "src/providers/iNavigation";
@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
   months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   isPaymenyPending: boolean = false;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private nav:iNavigation) { }
 
   ngOnInit() {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ProjectWiki, ProjectBudget, ManageProject, ManageReview, SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -9,6 +9,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { ProjectModal } from 'src/app/projects/manage-project/manage-project.component';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GetRoles } from 'src/providers/ApplicationStorage';
+import { ProjectHttpService } from 'src/providers/AjaxServices/project-http.service';
 declare var $: any;
 declare var bootstrap: any;
 
@@ -36,7 +37,7 @@ export class ApprisalReviewComponent implements OnInit{
   roles: Array<any> = [];
 
   constructor(private nav: iNavigation,
-              private http: AjaxService,
+              private http: ProjectHttpService,
               private user: UserService,
               private fb: FormBuilder) { }
 
@@ -58,7 +59,7 @@ export class ApprisalReviewComponent implements OnInit{
   loadData() {
     this.isFileFound= false;
     this.isLoaded = false;
-    this.http.get(`projects/get/${this.userDetail.UserId}`, SERVICE.PROJECT).then((res:ResponseModel) => {
+    this.http.get(`projects/get/${this.userDetail.UserId}`).then((res:ResponseModel) => {
       if (res.ResponseBody && res.ResponseBody.length > 0) {
         this.projectDetail = res.ResponseBody;
         if (this.projectDetail && this.projectDetail.length > 0) {
@@ -104,7 +105,7 @@ export class ApprisalReviewComponent implements OnInit{
   getProjectsMembers() {
     this.selectedProject = null;
     this.projectDetails = [];
-    this.http.get(`projects/memberdetail/${this.userDetail.UserId}`, SERVICE.PROJECT).then(res => {
+    this.http.get(`projects/memberdetail/${this.userDetail.UserId}`).then(res => {
       if (res.ResponseBody) {
         let project = res.ResponseBody.Project;
         this.allProjectAppraisal = res.ResponseBody.ProjectAppraisal;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WorkFlow } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { Toast } from 'src/providers/common-service/common.service';
 import { ManageWorkFlow } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -22,7 +22,7 @@ export class WorkflowComponent implements OnInit {
   orderByTitleAsc: boolean = null;
   orderByTitleDescAsc: boolean = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private nav: iNavigation) { }
 
   ngOnInit(): void {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CompanySetting } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -26,7 +26,7 @@ export class CompanySettingsComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
               private nav: iNavigation,
-              private http: AjaxService) { }
+              private http: CoreHttpService) { }
 
   ngOnInit(): void {
     let data = this.nav.getValue();

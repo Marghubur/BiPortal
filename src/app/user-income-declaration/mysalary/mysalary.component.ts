@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
 import { AccessTokenExpiredOn, AdminSalary, Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation, UserAccountsBaseRoute } from 'src/providers/constants';
@@ -35,7 +35,7 @@ export class MysalaryComponent implements OnInit {
 
   constructor(private nav: iNavigation,
               private user: UserService,
-              private http: AjaxService,
+              private http: CoreHttpService,
               private fb: FormBuilder) { }
 
   ngOnInit(): void {

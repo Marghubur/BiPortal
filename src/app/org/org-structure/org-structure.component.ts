@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { SERVICE } from 'src/providers/constants';
+import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 declare var $: any;
 
 @Component({
@@ -17,7 +17,7 @@ export class OrgStructureComponent implements OnInit {
   company: any = null;
 
   constructor(
-    private http: AjaxService,
+    private http: EmployeeFilterHttpService,
     private local: ApplicationStorage
   ) { }
 
@@ -29,7 +29,7 @@ export class OrgStructureComponent implements OnInit {
   }
 
   loadTree() {
-    this.http.get(`orgtree/getOrganizationHierarchy/${this.company.CompanyId}`, SERVICE.FILTER)
+    this.http.get(`orgtree/getOrganizationHierarchy/${this.company.CompanyId}`)
       .then((respone: ResponseModel) => {
         if (respone) {
           this.orgTree = respone.ResponseBody;
@@ -55,7 +55,7 @@ export class OrgStructureComponent implements OnInit {
 
   saveTree(result: Array<any>) {
     if (result && result.length > 0) {
-      this.http.post("orgtree/addOrganizationHierarchy", result, SERVICE.FILTER)
+      this.http.post("orgtree/addOrganizationHierarchy", result)
         .then((respone: ResponseModel) => {
           if (respone) {
             Toast(respone.ResponseBody);

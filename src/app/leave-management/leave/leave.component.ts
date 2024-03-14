@@ -6,7 +6,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { Filter } from 'src/providers/userService';
 import { Files } from 'src/app/commonmodal/common-modals'
@@ -47,7 +47,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked{
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
-              private http: AjaxService
+              private http: CoreHttpService
               ) { }
 
   ngAfterViewChecked(): void {

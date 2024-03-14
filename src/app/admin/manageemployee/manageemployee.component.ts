@@ -5,7 +5,7 @@ import { AssignedClients, EmployeeDetail } from 'src/app/adminmodal/admin-modals
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { GetRoles } from 'src/providers/ApplicationStorage';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, PlaceEmpty, Toast, ToFixed, ToLocateDate } from 'src/providers/common-service/common.service';
 import { Employees, OrganizationSetting, ProfileImage, SERVICE, UserImage } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -77,7 +77,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     return data;
   }
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
     private fb: FormBuilder,
     private calendar: NgbCalendar,
     private nav: iNavigation
@@ -806,7 +806,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
 
   loadEmpExistData() {
     this.isLoading = true;
-    this.http.get(`Employee/GetEmployeeResignationById/${this.employeeModal.EmployeeUid}`, SERVICE.CORE).then((res: ResponseModel) => {
+    this.http.get(`Employee/GetEmployeeResignationById/${this.employeeModal.EmployeeUid}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         let companyNoticePeriodDays = res.ResponseBody.CompanySetting.NoticePeriodInDays;
         if (res.ResponseBody.EmployeeNoticePeriod) {
@@ -869,7 +869,7 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
     if (!value.IsRecommendLastDay) {
       value.OfficialLastWorkingDay = this.noticePeriodDate;
     }
-    this.http.post("Employee/ManageInitiateExist", value, SERVICE.CORE).then((res:ResponseModel) => {
+    this.http.post("Employee/ManageInitiateExist", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         Toast("Initatie exist submitted successfully");
         this.isLoading = false;

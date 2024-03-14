@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { ADocx, AImage, APdf, Clients, Doc, DocImg, DocumentPath, DocumentPathName, Documents, Docx, Employees, Excel, ExcelImg, FileSystemType, Images, JImage, Pdf, PdfImg, PImage, Resume, Txt, TxtImg, UserPath, UserPathName, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -53,7 +53,7 @@ export class documentsComponent implements OnInit, OnDestroy {
   isPageReady: boolean = false;
 
   constructor(private fb: FormBuilder,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private nav: iNavigation,
     private user: UserService,
     private route: ActivatedRoute,

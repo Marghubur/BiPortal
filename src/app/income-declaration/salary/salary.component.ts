@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
@@ -36,7 +36,7 @@ export class SalaryComponent implements OnInit {
   userDetail: UserDetail = new UserDetail();
 
   constructor(private nav: iNavigation,
-              private http: AjaxService,
+              private http: CoreHttpService,
               private user: UserService,
               private local: ApplicationStorage,
               private fb:FormBuilder) { }

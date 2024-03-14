@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { tableConfig } from 'src/providers/ajax.service';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { CommonService, UserDetail } from 'src/providers/common-service/common.service';
 import { BillDetail, Clients, Documents, DocumentsPage, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -19,7 +18,6 @@ export class ClientsComponent implements OnInit {
   documentForm: FormGroup = null;
   user: UserDetail = null;
   documents: Array<OnlineDocModel> = [];
-  tableConfiguration: tableConfig = null;
   openModal: string = 'hide';
   isLoading: boolean = false;
   RegisterNewClient: string = RegisterClient;
@@ -43,7 +41,7 @@ export class ClientsComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private userService: UserService,
     private nav: iNavigation,
     private common: CommonService

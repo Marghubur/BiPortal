@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { Toast } from 'src/providers/common-service/common.service';
 import { ManageProject, ProjectBudget, ProjectWiki } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -20,7 +20,7 @@ export class ProjectsComponent implements OnInit {
   isPageReady: boolean = false;
 
   constructor(private nav: iNavigation,
-              private http: AjaxService) { }
+              private http: CoreHttpService) { }
 
   ngOnInit(): void {
     this.projectData = new Filter();

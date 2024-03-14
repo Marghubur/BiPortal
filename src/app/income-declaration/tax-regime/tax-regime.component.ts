@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 declare var $: any;
 
@@ -35,7 +35,7 @@ export class TaxRegimeComponent implements OnInit {
   allSurchargeSlabs: Array<Surcharge> = [];
 
   constructor(private fb: FormBuilder,
-              private http: AjaxService) { }
+              private http: CoreHttpService) { }
 
   ngOnInit(): void {
     this.loadData();

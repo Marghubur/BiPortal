@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage, GetRoles } from 'src/providers/ApplicationStorage';
-import { AjaxService } from 'src/providers/ajax.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { ConfigPerformance, ManageAppraisalCategory, SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import { ApprisalCycle } from '../manage-appraisal-category/manage-appraisal-category.component';
+import { PerformanceHttpService } from 'src/providers/AjaxServices/performance-http.service';
 declare var $: any;
 declare var bootstrap: any;
 
@@ -46,7 +46,7 @@ export class AppraisalSettingComponent implements OnInit {
   currentApprisalCycle:ApprisalCycle = new ApprisalCycle();
   selectedAppraisalCycle:any = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: PerformanceHttpService,
               private fb: FormBuilder,
               private nav: iNavigation,
               private local: ApplicationStorage,
@@ -89,7 +89,7 @@ export class AppraisalSettingComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.post("apprisalcatagory/get", this.apprisalData, SERVICE.PERFORMANCE).then((response: ResponseModel) => {
+    this.http.post("apprisalcatagory/get", this.apprisalData).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.buildAppraisalCategory(response.ResponseBody);
         this.isPageReady = true;
@@ -193,7 +193,7 @@ export class AppraisalSettingComponent implements OnInit {
 
   getObjectiveByObjtiveId() {
     this.isObjectiveFound = false;
-    this.http.get(`apprisalcatagory/getObjectiveByCategoryId/${this.currentApprisalCycle.ObjectiveCatagoryId}`, SERVICE.PERFORMANCE).then(res => {
+    this.http.get(`apprisalcatagory/getObjectiveByCategoryId/${this.currentApprisalCycle.ObjectiveCatagoryId}`).then(res => {
       if (res.ResponseBody) {
         this.currentAppraisalObjective = res.ResponseBody;
         this.isObjectiveFound = true;
@@ -209,7 +209,7 @@ export class AppraisalSettingComponent implements OnInit {
   getAllPerformanceObjective() {
     this.objectiveDetails = [];
     if (this.currentCompny.CompanyId > 0) {
-      this.http.post("performance/getPerformanceObjective", this.objectiveData, SERVICE.PERFORMANCE)
+      this.http.post("performance/getPerformanceObjective", this.objectiveData)
       .then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
@@ -290,7 +290,7 @@ export class AppraisalSettingComponent implements OnInit {
         value.Description = data;
 
       value.CanManagerSee = value.CanManagerSee == "true" ? true : false;
-      this.http.post("performance/objectiveInsertUpdate", value, SERVICE.PERFORMANCE).then(res => {
+      this.http.post("performance/objectiveInsertUpdate", value).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
           $('#addObjectiveModal').modal('hide');
@@ -406,7 +406,7 @@ export class AppraisalSettingComponent implements OnInit {
     this.isLoading = true;
     if (this.selectedObjective && this.selectedObjective.length > 0 && this.currentApprisalCycle && this.currentApprisalCycle.ObjectiveCatagoryId > 0) {
       this.currentApprisalCycle.ObjectiveIds = this.selectedObjective.map(x => x.ObjectiveId);
-      this.http.put(`apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,this.currentApprisalCycle, SERVICE.PERFORMANCE).then(res => {
+      this.http.put(`apprisalcatagory/manageAppraisalCycle/${this.currentApprisalCycle.ObjectiveCatagoryId}`,this.currentApprisalCycle).then(res => {
         if (res.ResponseBody) {
           this.getObjectiveByObjtiveId();
           Toast("Objective added/updated in appraisal category successfully");
@@ -445,7 +445,7 @@ export class AppraisalSettingComponent implements OnInit {
         AppraisalDetailId: this.selectedAppraisalCycle.AppraisalDetailId,
         IsActiveCycle: !this.selectedAppraisalCycle.IsActiveCycle
       }
-      this.http.post("apprisalcatagory/manageAppraisalCategory", value, SERVICE.PERFORMANCE).then((res:ResponseModel) => {
+      this.http.post("apprisalcatagory/manageAppraisalCategory", value).then((res:ResponseModel) => {
         if (res.ResponseBody) {
           this.buildAppraisalCategory(res.ResponseBody);
           if (value.IsActiveCycle)

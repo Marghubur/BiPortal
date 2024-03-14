@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, ToLocateDate, UserDetail } from 'src/providers/common-service/common.service';
 import { ProfileImage, SERVICE, UserImage, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -109,7 +109,7 @@ export class ManageComponent implements OnInit {
   companyNoticePeriodDays: number = 0;
   noticePeriodEndOn: Date = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
   private fb: FormBuilder,
   private calendar: NgbCalendar,
   private user: UserService,
@@ -1873,7 +1873,7 @@ export class ManageComponent implements OnInit {
 
   loadEmpExistData() {
     this.isLoading = true;
-    this.http.get(`Employee/GetEmployeeResignationById/${this.userModal.EmployeeId}`, SERVICE.CORE).then((res: ResponseModel) => {
+    this.http.get(`Employee/GetEmployeeResignationById/${this.userModal.EmployeeId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         if (res.ResponseBody.EmployeeNoticePeriod)
           this.employeeExistDetail = res.ResponseBody.EmployeeNoticePeriod;
@@ -1912,7 +1912,7 @@ export class ManageComponent implements OnInit {
     }
 
     let value = this.existOrgForm.value;
-    this.http.post("Employee/SubmitResignation", value, SERVICE.CORE).then((res: ResponseModel) => {
+    this.http.post("Employee/SubmitResignation", value).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         Toast(res.ResponseBody);
         this.isLoading = false;

@@ -38,7 +38,6 @@ import { ManageCronjobComponent } from './manage-cronjob/manage-cronjob.componen
     FilesComponent,
     BilldetailsComponent,
     HomeComponent,
-    HomeComponent,
     EmailComponent,
     EmailTemplateComponent,
     ManageEmailtemplateComponent,

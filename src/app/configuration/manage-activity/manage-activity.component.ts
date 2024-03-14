@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -27,7 +27,7 @@ export class ManageActivityComponent implements OnInit {
 	timesheetToDate: NgbDate | null;
   employeeName: string = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private nav: iNavigation,
               private calendar: NgbCalendar,
               public formatter : NgbDateParserFormatter) {

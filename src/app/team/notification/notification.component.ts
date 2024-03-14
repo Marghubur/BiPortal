@@ -6,7 +6,7 @@ import { Notification } from 'src/app/adminmodal/admin-modals';
 import { Files } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { AdminNotification, AImage, Doc, Docx, JImage, Pdf, PImage, Txt, UserType } from 'src/providers/constants';
@@ -49,7 +49,7 @@ export class NotificationComponent implements OnInit {
   renderedDocxFile: any = null;
   isAdmin: boolean = false;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private fb: FormBuilder,
               private local: ApplicationStorage,
               private sanitizer: DomSanitizer,

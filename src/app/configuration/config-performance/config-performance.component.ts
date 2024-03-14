@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
-import { AjaxService } from 'src/providers/ajax.service';
+import { PerformanceHttpService } from 'src/providers/AjaxServices/performance-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { SERVICE } from 'src/providers/constants';
@@ -34,7 +33,7 @@ export class ConfigPerformanceComponent implements OnInit {
   tagsRole: Array<any> = [];
   selectedAppraisalCycle: any = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: PerformanceHttpService,
               private fb: FormBuilder,
               private local: ApplicationStorage,
               private nav: iNavigation) { }
@@ -50,7 +49,7 @@ export class ConfigPerformanceComponent implements OnInit {
   loadData() {
     this.isPageReady = false;
     if (this.currentCompny.CompanyId > 0) {
-      this.http.post("performance/getPerformanceObjective", this.objectiveData, SERVICE.PERFORMANCE)
+      this.http.post("performance/getPerformanceObjective", this.objectiveData)
       .then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
@@ -123,7 +122,7 @@ export class ConfigPerformanceComponent implements OnInit {
         value.Description = data;
 
       value.CanManagerSee = value.CanManagerSee == "true" ? true : false;
-      this.http.post("performance/objectiveInsertUpdate", value, SERVICE.PERFORMANCE).then(res => {
+      this.http.post("performance/objectiveInsertUpdate", value).then(res => {
         if (res.ResponseBody) {
           this.bindData(res);
           $('#addObjectiveModal').modal('hide');

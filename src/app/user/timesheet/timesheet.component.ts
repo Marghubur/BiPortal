@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Timesheet } from 'src/app/manage/timesheet/timesheet.component';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus, ManageTimesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -34,7 +34,7 @@ export class TimesheetComponent implements OnInit {
   NoClient: boolean = false;
   viewTimesheetWeek: any = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
     private nav: iNavigation,
     private user: UserService
   ) {

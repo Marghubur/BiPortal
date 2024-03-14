@@ -8,7 +8,7 @@ import {
   FlatFile,
 } from "src/providers/constants";
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Filter, UserService } from 'src/providers/userService';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -50,7 +50,7 @@ export class documentspageComponent implements OnDestroy, OnInit, AfterViewInit 
 
   constructor(private common: CommonService,
     private nav: iNavigation,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private fb: FormBuilder,
     private userService: UserService
   ) { }

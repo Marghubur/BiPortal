@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { Toast } from 'src/providers/common-service/common.service';
 import { Roles } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -30,7 +30,7 @@ export class RolesComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private nav: iNavigation,
-              private http: AjaxService) { }
+              private http: CoreHttpService) { }
 
   ngOnInit(): void {
     this.initData();

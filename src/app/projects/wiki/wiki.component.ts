@@ -2,7 +2,7 @@ import { AfterViewChecked, Component, OnInit} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
@@ -39,7 +39,7 @@ export class WikiComponent implements OnInit, AfterViewChecked {
               private nav:iNavigation,
               private sanitize: DomSanitizer,
               private common: CommonService,
-              private http: AjaxService
+              private http: CoreHttpService
               ) { }
 
   ngAfterViewChecked(): void {

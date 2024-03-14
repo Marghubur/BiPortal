@@ -5,7 +5,7 @@ import 'bootstrap';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UserService } from 'src/providers/userService';
 import { ErrorToast, UserDetail } from 'src/providers/common-service/common.service';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 declare var $: any;
 
 @Component({
@@ -27,7 +27,7 @@ export class PreviousincomeComponent implements OnInit, AfterViewChecked {
 
   constructor(private nav: iNavigation,
               private user: UserService,
-              private http: AjaxService,
+              private http: CoreHttpService,
               private fb: FormBuilder) { }
 
   ngAfterViewChecked(): void {

@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Subject } from 'rxjs';
 import { EmailTemplate } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ManageEmailTemplate } from 'src/providers/constants';
@@ -31,7 +31,7 @@ export class ManageEmailtemplateComponent implements OnInit {
   defaultLogoId: string = null;
   eventsSubject: Subject<void> = new Subject<void>();
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private local: ApplicationStorage,
               private nav: iNavigation,
               private fb: FormBuilder) { }

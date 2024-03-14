@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { AnnexureOfferLeter } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { OfferLetter } from 'src/providers/constants';
@@ -28,7 +28,7 @@ export class OfferletterComponent implements OnInit {
   submitted: boolean = false;
   minDate: any = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private fb: FormBuilder,
               private nav: iNavigation,
               private local: ApplicationStorage) { }

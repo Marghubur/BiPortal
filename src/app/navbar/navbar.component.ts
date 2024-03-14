@@ -1,5 +1,5 @@
 import { ApplicationStorage } from "./../../providers/ApplicationStorage";
-import { AjaxService } from "./../../providers/ajax.service";
+import { CoreHttpService } from "../../providers/AjaxServices/core-http.service";
 import { CommonService, Toast, UserDetail } from "./../../providers/common-service/common.service";
 import { AccessTokenExpiredOn, AdminNotification, AdminResetPassword, Blogs, BuildPdf, CompanyLogo, CompanySettings, Documents, EmailService, Employees, Login, OrganizationStruct, Profile } from "./../../providers/constants";
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from "@angular/core";
@@ -47,7 +47,7 @@ export class NavbarComponent implements OnInit, DoCheck {
   constructor(
     private nav: iNavigation,
     private commonService: CommonService,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private local: ApplicationStorage,
     private tokenHelper: JwtService,
     private user: UserService

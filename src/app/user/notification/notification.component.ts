@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { AImage, Doc, Docx, JImage, Pdf, PImage, Txt } from 'src/providers/constants';
@@ -42,7 +42,7 @@ export class NotificationComponent implements OnInit {
   viewer: any = null;
   renderedDocxFile: any = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private local: ApplicationStorage,
               private sanitizer: DomSanitizer,
               private nav: iNavigation) { }

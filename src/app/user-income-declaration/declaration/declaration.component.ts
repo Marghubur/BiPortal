@@ -1,6 +1,6 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { Form12B, FreeTaxFilling, IncomeTax, Preferences, PreviousIncome, Salary, Summary, TaxSavingInvestment, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -66,7 +66,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   constructor(private user: UserService,
     private fb: FormBuilder,
     private nav: iNavigation,
-    private http: AjaxService
+    private http: CoreHttpService
   ) { }
 
   ngOnInit(): void {

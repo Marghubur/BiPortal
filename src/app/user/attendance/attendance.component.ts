@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { UserType } from 'src/providers/constants';
@@ -59,7 +59,7 @@ export class AttendanceComponent implements OnInit {
   shiftDetail: any = null;
   activeMonth: number = 0;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService

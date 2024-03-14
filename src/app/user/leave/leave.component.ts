@@ -5,7 +5,7 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { FileSystemType, UserType } from 'src/providers/constants';
@@ -81,7 +81,7 @@ export class LeaveComponent implements OnInit, AfterViewChecked {
   @ViewChildren('leaveChart') entireChart: QueryList<any>;
 
   constructor(private nav: iNavigation,
-              private http: AjaxService,
+              private http: CoreHttpService,
               private user: UserService,
               private config: NgbDatepickerConfig,
               private fb: FormBuilder,

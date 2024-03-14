@@ -3,7 +3,7 @@ import { Attendance, Leave, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
 import 'bootstrap'
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ResponseModel } from 'src/auth/jwtService';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
@@ -52,7 +52,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
-              private http: AjaxService) { }
+              private http: CoreHttpService) { }
 
   ngAfterViewChecked(): void {
     $('[data-bs-toggle="tooltip"]').tooltip({

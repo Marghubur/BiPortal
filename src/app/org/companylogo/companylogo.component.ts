@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Files } from 'src/app/commonmodal/common-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 declare var $: any;
@@ -25,7 +25,7 @@ export class CompanylogoComponent implements OnInit {
   fileId: number = 0;
   isPageReady: boolean = false;
   constructor(
-    private http: AjaxService,
+    private http: CoreHttpService,
     private local: ApplicationStorage
   ) { }
 

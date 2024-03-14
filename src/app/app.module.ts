@@ -1,5 +1,4 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AjaxService } from 'src/providers/ajax.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +14,7 @@ import { HomeModule } from './home/home.module';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { RegisterNewOrgComponent } from './register-new-org/register-new-org.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AjaxService } from 'src/providers/AjaxServices/ajax.service';
 
 @NgModule({
   declarations: [

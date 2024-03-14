@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { organizationAccountModal } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { CommonService, ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Company, UserImage } from 'src/providers/constants';
@@ -40,7 +40,7 @@ export class CompanyComponent implements OnInit {
   profileURL: string = UserImage;
   maxdate: any = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
     private fb: FormBuilder,
     private nav: iNavigation,
     private local: ApplicationStorage,

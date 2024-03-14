@@ -1,5 +1,5 @@
 import { ApplicationStorage } from "./../../providers/ApplicationStorage";
-import { AjaxService } from "src/providers/ajax.service";
+import { AjaxService } from "src/providers/AjaxServices/ajax.service";
 import { CommonService, UserDetail } from "./../../providers/common-service/common.service";
 import { FormControl } from "@angular/forms";
 import { FormGroup } from "@angular/forms";
@@ -20,7 +20,7 @@ export class FeedbacksComponent implements OnInit {
   constructor(
     private userService: UserService,
     private commonService: CommonService,
-    private http: AjaxService,
+    private http: CoreHttpService,
     private storage: ApplicationStorage
   ) {
     this.GetRecentComments();

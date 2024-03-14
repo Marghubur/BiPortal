@@ -1,10 +1,11 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { ItemStatus, SERVICE, UserType } from 'src/providers/constants';
+import { ItemStatus, UserType } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 
@@ -63,33 +64,34 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   selectedAttendance: any = null;
   filterYears: Array<number> = [];
 
-  constructor(private http: AjaxService,
-              private local : ApplicationStorage,
-              private userService: UserService) { }
+  constructor(private http: CoreHttpService,
+    private filterHttp: EmployeeFilterHttpService,
+    private local: ApplicationStorage,
+    private userService: UserService) { }
 
-    ngAfterViewChecked(): void {
-      if(this.scrollDiv == null) {
-        this.scrollDiv = document.getElementById("scroll-dv");
+  ngAfterViewChecked(): void {
+    if (this.scrollDiv == null) {
+      this.scrollDiv = document.getElementById("scroll-dv");
 
-        if(this.scrollDiv != null) {
-          this.initHandler();
-        }
+      if (this.scrollDiv != null) {
+        this.initHandler();
       }
     }
+  }
 
-    initHandler() {
-      this.scrollDiv.addEventListener('scroll', function(e) {
-        var elem = document.getElementById("excel-table");
-        var innerElem = document.getElementById("inner-scroller");
-        var left = ((elem.clientWidth) / (innerElem.clientWidth)) * e.currentTarget.scrollLeft;
-        if (e.currentTarget.scrollLeft > 0)
-          elem.scrollLeft = left;
-        else {
-          elem.scrollLeft = left;
-        }
-        // console.log('Excel: ' + left + ', Inner: ' + e.currentTarget.scrollLeft);
-      });
-    }
+  initHandler() {
+    this.scrollDiv.addEventListener('scroll', function (e) {
+      var elem = document.getElementById("excel-table");
+      var innerElem = document.getElementById("inner-scroller");
+      var left = ((elem.clientWidth) / (innerElem.clientWidth)) * e.currentTarget.scrollLeft;
+      if (e.currentTarget.scrollLeft > 0)
+        elem.scrollLeft = left;
+      else {
+        elem.scrollLeft = left;
+      }
+      // console.log('Excel: ' + left + ', Inner: ' + e.currentTarget.scrollLeft);
+    });
+  }
 
   ngOnInit(): void {
     this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
@@ -125,10 +127,10 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.itemStatus = 2;
     this.attendanceRecord = {
       EmployeeId: 0,
-      ForMonth :date.getMonth() + 1,
-      ForYear:date.getFullYear(),
+      ForMonth: date.getMonth() + 1,
+      ForYear: date.getFullYear(),
       PageIndex: 1,
-      ReportingManagerId : this.currentUser.UserId,
+      ReportingManagerId: this.currentUser.UserId,
       PresentDayStatus: 2,
       TotalDays: 0
     };
@@ -136,13 +138,13 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       EmployeeId: 0,
       FromDate: date,
       ToDate: date,
-      ReportingManagerId : this.currentUser.UserId,
+      ReportingManagerId: this.currentUser.UserId,
       RequestStatusId: 2,
       PageIndex: 1
     }
     this.timesheetRecord = {
       EmployeeId: 0,
-      ReportingManagerId : this.currentUser.UserId,
+      ReportingManagerId: this.currentUser.UserId,
       ForYear: date.getFullYear(),
       TimesheetStatus: 8,
       PageIndex: 1,
@@ -157,7 +159,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   }
 
   updatePage(index: number) {
-    if(index == 1) {
+    if (index == 1) {
       this.requestUrl = `${this.attendanceController}/GetManagerRequestedData`;
       this.filterText = "Assigned to me";
     } else {
@@ -192,19 +194,19 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   }
 
   submitRequest() {
-    switch(this.requestModal) {
+    switch (this.requestModal) {
       case 1: // leave
         this.submitActionForLeave();
-      break;
+        break;
       case 3: // attendance
         this.submitActionForAttendance();
-      break;
+        break;
     }
   }
 
   getFilterType() {
     this.filterId = 0;
-    switch(this.filterText) {
+    switch (this.filterText) {
       case 'Assigned to me':
         this.filterId = 1;
         break;
@@ -215,7 +217,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.isLoading = true;
     let endPoint = '';
 
-    switch(this.requestState) {
+    switch (this.requestState) {
       case 'Approved':
         endPoint = `${this.leaveController}/ApproveLeaveRequest`;
         break;
@@ -231,13 +233,13 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       LeaveFromDay: this.currentRequest.FromDate,
       LeaveToDay: this.currentRequest.ToDate,
       EmployeeId: this.currentRequest.EmployeeId,
-      LeaveRequestNotificationId : this.currentRequest.LeaveRequestNotificationId,
+      LeaveRequestNotificationId: this.currentRequest.LeaveRequestNotificationId,
       RecordId: this.currentRequest.RecordId,
       LeaveTypeId: this.currentRequest.LeaveTypeId,
       RequestStatusId: this.leaveRecord.RequestStatusId
     }
 
-    this.http.put(`${endPoint}/${this.filterId}`, currentResponse).then((response:ResponseModel) => {
+    this.http.put(`${endPoint}/${this.filterId}`, currentResponse).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.leaveRequestDetail = response.ResponseBody;
         if (this.leaveRequestDetail.length > 0)
@@ -262,7 +264,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.isLoading = true;
     let endPoint = '';
 
-    switch(this.requestState) {
+    switch (this.requestState) {
       case 'Approved':
         endPoint = `${this.timesheetController}/ApproveTimesheetRequest`;
         break;
@@ -277,7 +279,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
         break;
     }
 
-    this.http.put(`${endPoint}/${this.currentTimesheet.TimesheetId}/${this.filterId}`, this.timesheetRecord).then((response:ResponseModel) => {
+    this.http.put(`${endPoint}/${this.currentTimesheet.TimesheetId}/${this.filterId}`, this.timesheetRecord).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         this.timesheetDetail = response.ResponseBody;
         if (this.timesheetDetail && this.timesheetDetail.length > 0) {
@@ -298,7 +300,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.isLoading = true;
     if (this.currentRequest) {
       let endPoint = "";
-      switch(this.requestState) {
+      switch (this.requestState) {
         case 'Approved':
           endPoint = `${this.attendanceController}/ApproveAttendanceRequest`;
           break;
@@ -314,8 +316,8 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       this.currentRequest.PresentDayStatus = this.attendanceRecord.PresentDayStatus;
       this.currentRequest.TotalDays = this.attendanceRecord.TotalDays;
 
-      this.http.put(`${endPoint}/${this.filterId}`, this.currentRequest).then((response:ResponseModel) => {
-        if(response.ResponseBody) {
+      this.http.put(`${endPoint}/${this.filterId}`, this.currentRequest).then((response: ResponseModel) => {
+        if (response.ResponseBody) {
           this.attendanceDetail = response.ResponseBody.FilteredAttendance;
           if (this.attendanceDetail.length > 0)
             this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
@@ -446,21 +448,21 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   viewLeaveAttachmentModal(item: any) {
     if (item) {
-     this.isLoading = true;
-     this.http.post("Leave/GetLeaveAttachByManger", item).then(res => {
-       if (res.ResponseBody) {
-         this.leaveAttachment = res.ResponseBody.Table;
-         $("#managerleaveFileModal").modal('show');
-         this.isLoading = false;
-       } else {
+      this.isLoading = true;
+      this.http.post("Leave/GetLeaveAttachByManger", item).then(res => {
+        if (res.ResponseBody) {
+          this.leaveAttachment = res.ResponseBody.Table;
+          $("#managerleaveFileModal").modal('show');
+          this.isLoading = false;
+        } else {
+          this.isLoading = false;
+          WarningToast("No record found");
+        }
+      }).catch(e => {
         this.isLoading = false;
         WarningToast("No record found");
-       }
-     }).catch(e => {
-       this.isLoading = false;
-       WarningToast("No record found");
-     })
-   }
+      })
+    }
   }
 
   viewFile(userFile: any) {
@@ -473,7 +475,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   arrangeDetails(flag: any, FieldName: string) {
     let Order = '';
-    if(flag || flag == null) {
+    if (flag || flag == null) {
       Order = 'Asc';
     } else {
       Order = 'Desc';
@@ -481,16 +483,16 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     if (FieldName == 'AttendanceDate') {
       this.orderByAttendanceDateAsc = !flag;
       this.orderByRequestedOnAsc = null;
-    }else if (FieldName == 'RequestedOn') {
+    } else if (FieldName == 'RequestedOn') {
       this.orderByAttendanceDateAsc = null;
       this.orderByRequestedOnAsc = !flag;
     }
-    this.requestFilter.SortBy = FieldName +" "+ Order;
+    this.requestFilter.SortBy = FieldName + " " + Order;
     this.loadAttendanceRequestDetail()
   }
 
   GetFilterResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.requestFilter = e;
       this.loadAttendanceRequestDetail();
     }
@@ -508,8 +510,8 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       if (type == 'requestedon') {
         let startdate = new Date();
         let enddate = new Date();
-        enddate.setDate(enddate.getDate()- value);
-        this.requestFilter.SearchString = `1=1 and RequestedOn between "${enddate.getFullYear()}-${enddate.getMonth()+1}-${enddate.getDate()} 00:00:00" and "${startdate.getFullYear()}-${startdate.getMonth()+1}-${startdate.getDate()} 23:59:59"`;
+        enddate.setDate(enddate.getDate() - value);
+        this.requestFilter.SearchString = `1=1 and RequestedOn between "${enddate.getFullYear()}-${enddate.getMonth() + 1}-${enddate.getDate()} 00:00:00" and "${startdate.getFullYear()}-${startdate.getMonth() + 1}-${startdate.getDate()} 23:59:59"`;
       } else if (type == 'status') {
         this.requestFilter.SearchString = `1=1 and RequestTypeId = ${4} and ManagerId = ${this.currentUser.UserId} and CurrentStatus = ${value}`;
       }
@@ -526,7 +528,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   getLeaveRequest() {
     this.isPageLoading = true;
     this.http.post("LeaveRequest/GetLeaveRequestNotification", this.leaveRecord).then(response => {
-      if(response.ResponseBody) {
+      if (response.ResponseBody) {
         this.leaveRequestDetail = response.ResponseBody;
         if (this.leaveRequestDetail && this.leaveRequestDetail.length > 0) {
           let today = new Date().toDateString();
@@ -562,7 +564,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   }
 
   GeLeaveFilterResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.attendanceRecord.PageIndex = e.ActivePageNumber;
       this.getLeaveRequest();
     }
@@ -581,7 +583,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.attendanceDetail = []
     this.attendanceData = new Filter();
     this.http.post("AttendanceRequest/GetAttendenceRequestData", this.attendanceRecord).then(response => {
-      if(response.ResponseBody) {
+      if (response.ResponseBody) {
         this.attendanceDetail = response.ResponseBody.FilteredAttendance;
         if (this.attendanceDetail && this.attendanceDetail.length > 0) {
           this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
@@ -602,7 +604,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   }
 
   GetAttendanceFilterResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.attendanceRecord.PageIndex = e.ActivePageNumber;
       this.getAttendanceRequest();
     }
@@ -620,7 +622,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   getTimesheetRequest() {
     this.isPageLoading = true;
     this.http.post("TimesheetRequest/GetTimesheetRequestData", this.timesheetRecord).then(response => {
-      if(response.ResponseBody) {
+      if (response.ResponseBody) {
         this.timesheetDetail = response.ResponseBody;
         if (this.timesheetDetail && this.timesheetDetail.length > 0) {
           this.timesheetData.TotalRecords = this.timesheetDetail[0].Total;
@@ -639,7 +641,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   }
 
   GetTimesheetFilterResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.timesheetRecord.PageIndex = e.ActivePageNumber;
       this.getTimesheetRequest();
     }
@@ -692,7 +694,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   }
 
   resetFilter() {
-    this.employeeId =0;
+    this.employeeId = 0;
     this.missAttendanceStatus = 0;
     this.requestedOn = 0;
     this.requestFilter.SearchString = "";
@@ -701,7 +703,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   getReviewAttendanceDetail() {
     this.isPageLoading = true;
-    this.http.post("runpayroll/getAttendancePage", this.attendanceReviewData, SERVICE.FILTER).then((res:ResponseModel) => {
+    this.filterHttp.post("runpayroll/getAttendancePage", this.attendanceReviewData).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
         this.attendanceDetail = res.ResponseBody;
@@ -731,26 +733,26 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.attendanceReviewData.SearchString = ""
     this.attendanceReviewData.reset();
     this.monthDays = [];
-    let days = new Date(this.attendance.ForYear,this.attendance.ForMonth, 0).getDate();
+    let days = new Date(this.attendance.ForYear, this.attendance.ForMonth, 0).getDate();
     for (let i = 1; i <= days; i++) {
       this.monthDays.push(i);
     }
-    if(this.attendance.EmployeeName !== null && this.attendance.EmployeeName !== "") {
+    if (this.attendance.EmployeeName !== null && this.attendance.EmployeeName !== "") {
       searchString += ` EmployeeName like '%${this.attendance.EmployeeName.toUpperCase()}%'`;
       delimiter = "and";
     }
 
-    if(this.attendance.ForMonth !== null && this.attendance.ForMonth > 0) {
+    if (this.attendance.ForMonth !== null && this.attendance.ForMonth > 0) {
       searchString += ` ${delimiter} ForMonth = ${this.attendance.ForMonth}`;
       delimiter = "and";
     }
 
-    if(this.attendance.ForYear !== null && this.attendance.ForYear> 0) {
+    if (this.attendance.ForYear !== null && this.attendance.ForYear > 0) {
       searchString += ` ${delimiter} ForYear = ${this.attendance.ForYear}`;
       delimiter = "and";
     }
 
-    if(searchString != "") {
+    if (searchString != "") {
       this.attendanceReviewData.SearchString = ` 1=1 and ${searchString}`;
     } else {
       this.attendanceReviewData.SearchString = "1=1";
@@ -798,7 +800,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then ((res:ResponseModel) => {
+    this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
         if (attendance) {

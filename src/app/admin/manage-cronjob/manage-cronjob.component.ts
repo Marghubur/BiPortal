@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { JobsHttpService } from 'src/providers/AjaxServices/jobs-http.service';
 import { ErrorToast, ToLocateDate, Toast } from 'src/providers/common-service/common.service';
 import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -42,7 +42,7 @@ export class ManageCronjobComponent implements OnInit {
 
   constructor(private calendar: NgbCalendar,
               private fb: FormBuilder,
-              private http: AjaxService,
+              private http: JobsHttpService,
               private nav: iNavigation) {}
 
   ngOnInit(): void {
@@ -57,7 +57,7 @@ export class ManageCronjobComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.get(`manager/getJobsById/${this.cronJobId}`, SERVICE.JOBS).then((res: ResponseModel) => {
+    this.http.get(`manager/getJobsById/${this.cronJobId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.jobDetail = res.ResponseBody["Job"];
         this.serviceTypes = res.ResponseBody["ServiceType"];
@@ -130,7 +130,7 @@ export class ManageCronjobComponent implements OnInit {
 
     let value = this.jobsForm.value;
     value.JobTypeName = this.serviceTypes.find(x => x.ServiceTypeId == value.KafkaServiceNameId).ServiceName;
-    this.http.post("manager/manageJobs", value, SERVICE.JOBS).then((res:ResponseModel) => {
+    this.http.post("manager/manageJobs", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         Toast("Job detail insert/updated successfully");
         this.isLoading = false;

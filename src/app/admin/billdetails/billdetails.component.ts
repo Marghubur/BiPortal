@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { AddNumbers, ErrorToast, MonthName, Toast, ToFixed, WarningToast } from 'src/providers/common-service/common.service';
 import { BuildPdf, Employees, ManageEmployee, RegisterClient, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -13,6 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ApplicationData, DocumentUser, EmployeeDetail } from 'src/app/adminmodal/admin-modals';
 import { BillDetails, Files } from 'src/app/commonmodal/common-modals';
+import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 declare var $: any;
 
 @Component({
@@ -88,7 +89,8 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
   companyId: number = 0;
 
   constructor(private fb: FormBuilder,
-    private http: AjaxService,
+    private http: CoreHttpService,
+    private filterHttp: EmployeeFilterHttpService,
     private nav: iNavigation,
     private calendar: NgbCalendar,
     private local: ApplicationStorage,
@@ -218,7 +220,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
     filter.PageSize = 100;
     filter.CompanyId = 1;
 
-    let result: Array<pairData> = await this.http.getFilterEmployee(filter);
+    let result: Array<pairData> = await this.filterHttp.filter(filter);
     this.autoCompleteModal = {
         data: result,
         placeholder: "Select Employee",

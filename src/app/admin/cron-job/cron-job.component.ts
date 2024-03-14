@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { JobsHttpService } from 'src/providers/AjaxServices/jobs-http.service';
 import { ManageCronJob, SERVICE } from 'src/providers/constants';
 import { Jobs } from '../manage-cronjob/manage-cronjob.component';
 import { Filter } from 'src/providers/userService';
@@ -35,7 +35,7 @@ export class CronJobComponent implements OnInit {
     TopicName : "",
     JobTypeName: ""
   }
-  constructor(private http: AjaxService,
+  constructor(private http: JobsHttpService,
               private nav: iNavigation) {}
 
   ngOnInit(): void {
@@ -45,7 +45,7 @@ export class CronJobComponent implements OnInit {
   loadData() {
     this.isEmpPageReady = false;
     this.allJobs = [];
-    this.http.get(`manager/getAllJobs`, SERVICE.JOBS).then((res: ResponseModel) => {
+    this.http.get(`manager/getAllJobs`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.allJobs = res.ResponseBody;
         this.isEmpPageReady = true;

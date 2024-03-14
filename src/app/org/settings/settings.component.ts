@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyGroup, PTax } from 'src/app/adminmodal/admin-modals';
 import { ResponseModel } from 'src/auth/jwtService';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { CompanyInfo, CompanySettings, CustomSalaryStructure, OrganizationSetting, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -43,7 +43,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
-              private http: AjaxService
+              private http: CoreHttpService
   ) { }
 
   ngOnInit(): void {

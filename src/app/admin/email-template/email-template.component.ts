@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EmailTemplate } from 'src/app/adminmodal/admin-modals';
 import { IModalData } from 'src/app/util/message-modal/message-modal.component';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { ManageEmailTemplate } from 'src/providers/constants';
@@ -27,7 +27,7 @@ export class EmailTemplateComponent implements OnInit {
   orderBySignatureDetailAsc: boolean = null;
   orderByContactNoAsc: boolean = null;
 
-  constructor(private http: AjaxService,
+  constructor(private http: CoreHttpService,
               private local: ApplicationStorage,
               private nav:iNavigation) { }
 

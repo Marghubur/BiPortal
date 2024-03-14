@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AjaxService } from 'src/providers/ajax.service';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminIncomeTax, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
@@ -32,7 +32,7 @@ export class PayslipComponent implements OnInit {
   constructor(private nav: iNavigation,
               private local: ApplicationStorage,
               private user: UserService,
-              private http: AjaxService) { }
+              private http: CoreHttpService) { }
 
   ngOnInit(): void {
     var dt = new Date();
