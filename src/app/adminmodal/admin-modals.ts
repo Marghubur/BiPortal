@@ -420,7 +420,7 @@ export class DocumentUser {
     LunchDuration: number = null;
     Status: number = 0;
     LastUpdatedOn: Date = null;
-    Index: number = 0;
+    RowIndex: number = 0;
     Total: number = 0;
   }
 
@@ -431,7 +431,7 @@ export class DocumentUser {
     BriefDetail: string = null;
     CompleteDetail: string = null;
     Total: number = 0;
-    Index: number = 0;
+    RowIndex: number = 0;
     CreatedOn: Date = null;
     UpdatedOn: Date = null;
     StartDate: Date = null;

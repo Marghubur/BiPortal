@@ -167,6 +167,6 @@ export class CompanyHoliday {
   TotalDays: number = 0;
   IsCompanyCustomHoliday: boolean = false;
   Total: number = 0;
-  Index: number = 0;
+  RowIndex: number = 0;
   HolidayType: number = 2;
 }

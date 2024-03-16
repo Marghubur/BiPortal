@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { Toast } from 'src/providers/common-service/common.service';
-import { LeaveAttendanceDailywages, SERVICE } from 'src/providers/constants';
+import { LeaveAttendanceDailywages } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
@@ -109,7 +109,6 @@ export class ProcessingPayrollComponent implements OnInit {
                 value.Status = i.PayrollStatus;
             });
             this.selectedPayrollDetail = this.processingPayrollDetail.find(x => x.ForMonth == this.selectedPayrollCalendar.Month + 1 && x.ForYear == this.selectedPayrollCalendar.Year);
-            console.log(this.selectedPayrollDetail)
           }
           Toast("Page data loaded successfully.");
         }
@@ -536,12 +535,10 @@ export class ProcessingPayrollComponent implements OnInit {
     $('#confirmPayrollFinalize').modal('show');
   }
 
-  selectPayrollMonth(item: any) {
-    if (item) {
-      this.selectedPayrollCalendar = item;
-      this.selectedPayrollDetail = this.processingPayrollDetail.find(x => x.ForMonth == this.selectedPayrollCalendar.Month + 1 && x.ForYear == this.selectedPayrollCalendar.Year);
-      console.log(this.selectedPayrollDetail)
-    }
+  selectPayrollMonth(e: any) {
+    let item = Number(e.target.value);
+    this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == item);;
+    this.selectedPayrollDetail = this.processingPayrollDetail.find(x => x.ForMonth == this.selectedPayrollCalendar.Month + 1 && x.ForYear == this.selectedPayrollCalendar.Year);
   }
 
   setLocalStoreValue() {
