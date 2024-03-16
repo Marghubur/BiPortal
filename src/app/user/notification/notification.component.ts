@@ -328,7 +328,7 @@ export class Notification {
   BriefDetail: string = null;
   CompleteDetail: string = null;
   Total: number = 0;
-  Index: number = 0;
+  RowIndex: number = 0;
   CreatedOn: Date = null;
   UpdatedOn: Date = null;
   StartDate: Date = null;
