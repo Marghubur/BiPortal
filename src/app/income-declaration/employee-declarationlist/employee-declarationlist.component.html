@@ -8,7 +8,7 @@
     <div class="col-4">
       <bot-autocomplete [data]="autoCompleteModal" [(ngModel)]="employeeId"
         (OnSelect)="onEmloyeeChanged($event)" (OnServerFilter)="serverFilter($event)"
-         (keydown.esc)="resetFilter()">
+         (keyup.esc)="resetFilter()">
       </bot-autocomplete>
     </div>
     <!-- <div class="col-4 text-end row">

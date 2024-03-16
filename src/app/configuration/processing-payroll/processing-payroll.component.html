@@ -5,15 +5,31 @@
         <app-breadcrums [title]="'Processing Payroll'"></app-breadcrums>
       </div>
     </div>
-    <div class="col-3">
+    <!-- <div class="col-3">
       <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
       </bot-autocomplete>
-    </div>
+    </div> -->
   </div>
   <div class="x_panel">
     <div class="x_content mt-0">
       <ng-container *ngIf="isPageReady">
-        <div class="row align-items-center justify-content-start mb-3">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <select class="form-select" (change)="selectPayrollMonth($event)">
+              <option [value]="item.Month" *ngFor="let item of payrollCalendar; let i=index;" [selected]="selectedPayrollCalendar.Month == item.Month">{{item.MonthName}} {{item.Year}}</option>
+            </select>
+          </div>
+          <div class="col-auto blink fw-semibold">
+            {{selectedPayrollCalendar.Status == 15 ? 'PROCESSING' : selectedPayrollCalendar.Status == 14 ? 'COMPLETED' : selectedPayrollCalendar.Status == 16 ? 'PENDING' : selectedPayrollCalendar.Status == 4 ? 'CURRENT' : selectedPayrollCalendar.Status == 17 ? 'HOLD': selectedPayrollCalendar.Status == 18 ? 'CANCELED' : 'FAILED'}}
+          </div>
+          <div class="col-auto">
+            <div class="d-flex align-items-center py-2">
+              <h5 class="fw-bold text-dark pe-2 mb-0">{{selectedPayrollCalendar.MonthName}} {{selectedPayrollCalendar.Year}}</h5>
+              <small class="text-muted">({{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.StartDate}} - {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.EndDate}}, {{selectedPayrollCalendar.EndDate}} days)</small>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row align-items-center justify-content-start mb-3">
           <div class="col-auto mt-3" *ngFor="let item of payrollCalendar; let i=index;">
             <a href="javascript:void(0)" class="text-decoration-none" (click)="selectPayrollMonth(item)">
               <div class="card text-center pt-2 active-payroll" [ngClass]="{'active-payroll': selectedPayrollCalendar.Month == item.Month}" data-name="payroll-tab">
@@ -30,52 +46,50 @@
               </div>
             </a>
           </div>
-        </div>
-        <div class="d-flex align-items-center py-2">
-          <h5 class="fw-bold text-dark pe-2 mb-0">{{selectedPayrollCalendar.MonthName}} {{selectedPayrollCalendar.Year}}</h5>
-          <small class="text-muted">({{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.StartDate}} - {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.EndDate}}, {{selectedPayrollCalendar.EndDate}} days)</small>
-        </div>
-        <div class="row">
-          <div class="col-md-4 my-3">
-            <div class="card p-3">
+        </div> -->
+        
+        <div class="row align-items-center my-3">
+          <div class="col-md-12">
+            <div class="card p-4">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-3">
                   <p class="mb-0 text-muted">TOTAL EMPLOYEES</p>
                   <h5>{{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}}</h5>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                   <p class="mb-0 text-muted">CALENDAR DAYS</p>
                   <h5>{{selectedPayrollCalendar.EndDate}}</h5>
                 </div>
-              </div>
-              <div>
-                <p class="mb-0 text-muted">PAYROLL PROCESSED</p>
-                <div class="d-flex align-items-center">
-                  <h5 class="mb-0">{{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}} / {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}}</h5>
-                  <small class="text-muted ps-2">EMPLOYEES</small>
+                <div class="col-md-3">
+                  <p class="mb-0 text-muted">PAYROLL PROCESSED</p>
+                  <div class="d-flex align-items-center">
+                    <h5 class="mb-0">{{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}} / {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}}</h5>
+                    <small class="text-muted ps-2">EMPLOYEES</small>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-6 my-3 d-flex align-items-center justify-content-between">
-            <div class="col-auto">
-              <p class="mb-0 text-muted">TOTAL PAYROLL COST</p>
-              <h5>INR {{selectedPayrollDetail != null ? (selectedPayrollDetail.TotalPayableToEmployees + selectedPayrollDetail.TotalPFByEmployer +  selectedPayrollDetail.TotalProfessionalTax) : "0.00"}}</h5>
-            </div>
-            <span>=</span>
-            <div class="col-auto">
-              <p class="mb-0 text-muted">EMPLOYEE DEPOSIT</p>
-              <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPayableToEmployees : "0.00"}}</h5>
-            </div>
-            <span>+</span>
-            <div class="col-auto">
-              <p class="mb-0 text-muted">TOTAL DEDUCTIONS</p>
-              <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPFByEmployer : "0.00"}}</h5>
-            </div>
-            <span>+</span>
-            <div class="col-auto">
-              <p class="mb-0 text-muted">Total CONTRIBUTIONS</p>
-              <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalProfessionalTax : "0.00"}}</h5>
+              <hr>
+              <div class="col-md-12 my-3 d-flex align-items-center justify-content-between">
+                <div class="col-auto">
+                  <p class="mb-0 text-muted">TOTAL PAYROLL COST</p>
+                  <h5>INR {{selectedPayrollDetail != null ? (selectedPayrollDetail.TotalPayableToEmployees + selectedPayrollDetail.TotalPFByEmployer +  selectedPayrollDetail.TotalProfessionalTax) : "0.00"}}</h5>
+                </div>
+                <span>=</span>
+                <div class="col-auto">
+                  <p class="mb-0 text-muted">EMPLOYEE DEPOSIT</p>
+                  <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPayableToEmployees : "0.00"}}</h5>
+                </div>
+                <span>+</span>
+                <div class="col-auto">
+                  <p class="mb-0 text-muted">TOTAL DEDUCTIONS</p>
+                  <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPFByEmployer : "0.00"}}</h5>
+                </div>
+                <span>+</span>
+                <div class="col-auto">
+                  <p class="mb-0 text-muted">Total CONTRIBUTIONS</p>
+                  <h5>INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalProfessionalTax : "0.00"}}</h5>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -217,82 +231,95 @@
               </button>
           </div>
         </div>
-        <h5>Payroll Outcome</h5>
-        <div class="row mb-2">
-          <div class="col-md-2 py-2">
-            <a href="javascript:void(0)" class="text-decoration-none">
-              <i class="fa-regular fa-rectangle-list"></i> View Pay Register
-            </a>
+        <div class="col-md-12">
+          <div class="x_panel_body pb-0 mt-4 border-bottom-0">
+            <h5>Payroll Outcome</h5>
+            <div class="row mb-2">
+              <div class="col-md-2 py-2">
+                <a href="javascript:void(0)" class="text-decoration-none">
+                  <i class="fa-regular fa-rectangle-list"></i> View Pay Register
+                </a>
+              </div>
+              <div class="col-md-2 py-2">
+                <a href="javascript:void(0)" class="text-decoration-none">
+                  <i class="fa-solid fa-list"></i> Manage PaySlip
+                </a>
+              </div>
+            </div>
+            <p class="border-top pt-2">Employee Payables
+              <a href="javascript:void(0)" class="text-decoration-none float-end">Manage Payment</a>
+            </p>
+            <div class="row border-bottom pb-2">
+              <div class="col-auto">
+                <small>BANK TRANSFER</small>
+                <h5>INR 120533</h5>
+              </div>
+              <div class="col-auto">
+                <small>CHEQUES</small>
+                <h5>INR 0</h5>
+              </div>
+              <div class="col-auto">
+                <small>CASH</small>
+                <h5>INR 0</h5>
+              </div>
+              <div class="col-auto">
+                <small>TOTAL</small>
+                <h5>INR 120533</h5>
+              </div>
+            </div>
           </div>
-          <div class="col-md-2 py-2">
-            <a href="javascript:void(0)" class="text-decoration-none">
-              <i class="fa-solid fa-list"></i> Manage PaySlip
-            </a>
+          <div class="x_panel_body pb-0 mt-4 border-bottom-0">
+            <p class="pt-2">Income Tax TDS</p>
+            <hr>
+            <div class="row border-bottom pb-2">
+              <div class="col-auto">
+                <small>TDS PAYABLE</small>
+                <h5>INR 0</h5>
+              </div>
+              <div class="col-md-2">
+                <small>NUMBER OF EMPLOYEES</small>
+                <h5>0 Employees</h5>
+              </div>
+            </div>
           </div>
-        </div>
-        <p class="border-top pt-2">Employee Payables
-          <a href="javascript:void(0)" class="text-decoration-none float-end">Manage Payment</a>
-        </p>
-        <div class="row border-bottom pb-2">
-          <div class="col-auto">
-            <small>BANK TRANSFER</small>
-            <h5>INR 120533</h5>
+          <div class="x_panel_body pb-0 mt-4 border-bottom-0">
+            <p class="pt-2">PF
+              <a href="javascript:void(0)" class="text-decoration-none float-end">View Summary</a>
+            </p>
+            <hr>
+            <div class="row border-bottom pb-2">
+              <div class="col-auto">
+                <small>EMPLOYEE SHARE</small>
+                <h5>INR 1800</h5>
+              </div>
+              <div class="col-auto">
+                <small>EMPLOYER SHARE</small>
+                <h5>INR 1800</h5>
+              </div>
+              <div class="col-auto">
+                <small>OTHER CHARGES</small>
+                <h5>INR 150</h5>
+              </div>
+            </div>
           </div>
-          <div class="col-auto">
-            <small>CHEQUES</small>
-            <h5>INR 0</h5>
-          </div>
-          <div class="col-auto">
-            <small>CASH</small>
-            <h5>INR 0</h5>
-          </div>
-          <div class="col-auto">
-            <small>TOTAL</small>
-            <h5>INR 120533</h5>
-          </div>
-        </div>
-        <p class="border-top pt-2">Income Tax TDS</p>
-        <div class="row border-bottom pb-2">
-          <div class="col-auto">
-            <small>TDS PAYABLE</small>
-            <h5>INR 0</h5>
-          </div>
-          <div class="col-md-2">
-            <small>NUMBER OF EMPLOYEES</small>
-            <h5>0 Employees</h5>
-          </div>
-        </div>
-        <p class="border-top pt-2">PF
-          <a href="javascript:void(0)" class="text-decoration-none float-end">View Summary</a>
-        </p>
-        <div class="row border-bottom pb-2">
-          <div class="col-auto">
-            <small>EMPLOYEE SHARE</small>
-            <h5>INR 1800</h5>
-          </div>
-          <div class="col-auto">
-            <small>EMPLOYER SHARE</small>
-            <h5>INR 1800</h5>
-          </div>
-          <div class="col-auto">
-            <small>OTHER CHARGES</small>
-            <h5>INR 150</h5>
-          </div>
-        </div>
-        <p class="border-top pt-2">Professional Tax
-          <a href="javascript:void(0)" class="text-decoration-none float-end">View Summary</a>
-        </p>
-        <div class="row border-bottom pb-2">
-          <div class="col-auto">
-            <small>TAX PAYABLE</small>
-            <h5>INR 0</h5>
-          </div>
-          <div class="col-auto">
-            <small>NUMBER OF EMPLOYEES</small>
-            <h5>0 Employees</h5>
-          </div>
-          <div class="col-auto">
-            <small>STATES</small>
+          <div class="x_panel_body pb-0 mt-4 border-bottom-0">
+            <p class="pt-2">Professional Tax
+              <a href="javascript:void(0)" class="text-decoration-none float-end">View Summary</a>
+            </p>
+            <hr>
+            <div class="row border-bottom pb-2">
+              <div class="col-auto">
+                <small>TAX PAYABLE</small>
+                <h5>INR 0</h5>
+              </div>
+              <div class="col-auto">
+                <small>NUMBER OF EMPLOYEES</small>
+                <h5>0 Employees</h5>
+              </div>
+              <div class="col-auto">
+                <small>STATES</small>
+              </div>
+            </div>
           </div>
         </div>
       </ng-container>

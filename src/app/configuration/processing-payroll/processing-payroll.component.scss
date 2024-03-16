@@ -70,3 +70,17 @@
 textarea {
   resize: none;
 }
+
+.blink {
+  animation: blink 1s alternate infinite;
+  color: black; /* Initial color */
+}
+
+@keyframes blink {
+  0% {
+    color: rgb(188, 41, 41);
+  }
+  100% {
+    color: black;
+  }
+}

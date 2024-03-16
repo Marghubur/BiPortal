@@ -36,7 +36,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   salaryComponents: Array<any> = [];
   isEmployeeSelected: boolean = false;
   autoCompleteModal: autoCompleteModal = null;
-  employeeId: number = 0;
+  employeeId: number = null;
 
   constructor(private http: CoreHttpService,
     private filterHttp: EmployeeFilterHttpService,
@@ -45,19 +45,25 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
 
   ngOnInit(): void {
     this.basePath = this.http.GetImageBasePath();
-    this.salaryComponents = [{ "ComponentId": "BS", "ComponentName": "BASIC SALARY" },
-    { "ComponentId": "CA", "ComponentName": "CONVEYANCE ALLOWANCE" },
-    { "ComponentId": "EPER-PF", "ComponentName": "EMPLOYER CONTRIBUTION TOWARDS PF" },
-    { "ComponentId": "HRA", "ComponentName": "HOUSE RENT ALLOWANCE" },
-    { "ComponentId": "MA", "ComponentName": "MEDICAL ALLOWANCE" },
-    { "ComponentId": "SHA", "ComponentName": "SHIFT ALLOWANCE" },
-    { "ComponentId": "LTA", "ComponentName": "TRAVEL REIMBURSSEMENT" },
-    { "ComponentId": "CRA", "ComponentName": "CAR RUNNING ALLOWANCE" },
-    { "ComponentId": "TIA", "ComponentName": "TELEPHONE AND INTERNET ALLOWANCE" },
-    { "ComponentId": "SPA", "ComponentName": "SPECIAL ALLOWANCE" }
-    ]
+    this.salaryComponents = [
+      { "ComponentId": "BS", "ComponentName": "BASIC SALARY" },
+      { "ComponentId": "CA", "ComponentName": "CONVEYANCE ALLOWANCE" },
+      { "ComponentId": "EPER-PF", "ComponentName": "EMPLOYER CONTRIBUTION TOWARDS PF" },
+      { "ComponentId": "HRA", "ComponentName": "HOUSE RENT ALLOWANCE" },
+      { "ComponentId": "MA", "ComponentName": "MEDICAL ALLOWANCE" },
+      { "ComponentId": "SHA", "ComponentName": "SHIFT ALLOWANCE" },
+      { "ComponentId": "LTA", "ComponentName": "TRAVEL REIMBURSSEMENT" },
+      { "ComponentId": "CRA", "ComponentName": "CAR RUNNING ALLOWANCE" },
+      { "ComponentId": "TIA", "ComponentName": "TELEPHONE AND INTERNET ALLOWANCE" },
+      { "ComponentId": "SPA", "ComponentName": "SPECIAL ALLOWANCE" }
+    ];
+    this.autoCompleteModal = new autoCompleteModal();
+    this.autoCompleteModal.data.push({
+      text: 'All',
+      value: 0
+    });
     this.autoCompleteModal = {
-      data: GetEmployees(),
+      data: this.autoCompleteModal.data.concat(GetEmployees()),
       placeholder: "Select Employee",
       className: "normal"
     };
@@ -117,11 +123,21 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   }
 
   resetFilter() {
+    this.employeeId = null;
     this.autoCompleteModal = {
       data: [],
       placeholder: "All result"
     };
-    this.autoCompleteModal.data = GetEmployees();
+    this.autoCompleteModal.data.push({
+      text: 'All',
+      value: 0
+    });
+    this.autoCompleteModal = {
+      data: this.autoCompleteModal.data.concat(GetEmployees()),
+      placeholder: "Select Employee",
+      className: "normal"
+    };
+    this.employeeSalaries = [];
   }
 
   bindData() {
@@ -291,7 +307,11 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
 
   onEmloyeeChanged(_: any) {
     this.employeeData.SearchString = "";
-    this.employeeData.SearchString = `1=1 and EmployeeId = ${this.employeeId}`;
+    if (this.employeeId != null && this.employeeId > 0)
+      this.employeeData.SearchString = `1=1 and EmployeeId = ${this.employeeId}`;
+    else
+      this.employeeData.SearchString = "1=1";
+
     this.isEmployeeSelected = true;
     this.LoadData();
   }

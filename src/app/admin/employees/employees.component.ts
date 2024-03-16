@@ -422,6 +422,14 @@ export class EmployeesComponent implements OnInit, AfterViewChecked {
     this.nav.navigate(ManageActivity, item);
   }
 
+  generateSalaryBreakup() {
+    this.http.get("SalaryComponent/ResetSalaryBreakup").then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        Toast("Generated");
+      }
+    })
+  }
+
   // empDeclaration() {
   //   this.http.get("Declaration/EmptyEmpDeclaration").then(res => {
   //     if (res.ResponseBody)
