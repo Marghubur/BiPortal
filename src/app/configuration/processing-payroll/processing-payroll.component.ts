@@ -520,7 +520,7 @@ export class ProcessingPayrollComponent implements OnInit {
 
   runPayrollCalculation(flagId: number) {
     this.isLoading = true;
-    this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month}/${flagId}`)
+    this.http.get(`Company/RunPayroll/${this.selectedPayrollCalendar.Month + 1}/${this.selectedPayrollCalendar.Year}/${flagId}`)
       .then((res: ResponseModel) => {
         if (res.ResponseBody) {
           $('#confirmPayrollFinalize').modal('hide');

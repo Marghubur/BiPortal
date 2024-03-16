@@ -172,7 +172,7 @@
                       </div>
                       <div class="t-body overflow-hidden">
                         <ng-container *ngFor="let item of salaryBreakup">
-                          <ng-container *ngIf="item.isIncludeInPayslip">
+                          <ng-container *ngIf="item.isIncludeInPayslip || item.key == 'Total'">
                             <div class="tr text-dark py-3">
                               <div class="td ps-2 fe-3">
                                 <div class="cell-wrapper">
