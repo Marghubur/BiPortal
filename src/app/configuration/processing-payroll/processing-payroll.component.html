@@ -5,28 +5,28 @@
         <app-breadcrums [title]="'Processing Payroll'"></app-breadcrums>
       </div>
     </div>
-    <!-- <div class="col-3">
-      <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
-      </bot-autocomplete>
-    </div> -->
+    <div class="col-3 d-flex align-items-center me-2" *ngIf="isPageReady">
+      <!-- <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
+      </bot-autocomplete> -->
+      <div class="col-auto blink fw-semibold me-3">
+        {{selectedPayrollCalendar.Status == 15 ? 'PROCESSING' : selectedPayrollCalendar.Status == 14 ? 'COMPLETED' : selectedPayrollCalendar.Status == 16 ? 'PENDING' : selectedPayrollCalendar.Status == 4 ? 'CURRENT' : selectedPayrollCalendar.Status == 17 ? 'HOLD': selectedPayrollCalendar.Status == 18 ? 'CANCELED' : 'FAILED'}}
+      </div>
+      <div class="col-auto">
+        <div class="d-flex align-items-center py-2">
+          <h5 class="fw-bold text-dark pe-2 mb-0">{{selectedPayrollCalendar.MonthName}} {{selectedPayrollCalendar.Year}}</h5>
+          <small class="text-muted">({{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.StartDate}} - {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.EndDate}}, {{selectedPayrollCalendar.EndDate}} days)</small>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="x_panel">
     <div class="x_content mt-0">
       <ng-container *ngIf="isPageReady">
-        <div class="row align-items-center">
+        <div class="row align-items-center justify-content-end">
           <div class="col-md-3">
             <select class="form-select" (change)="selectPayrollMonth($event)">
               <option [value]="item.Month" *ngFor="let item of payrollCalendar; let i=index;" [selected]="selectedPayrollCalendar.Month == item.Month">{{item.MonthName}} {{item.Year}}</option>
             </select>
-          </div>
-          <div class="col-auto blink fw-semibold">
-            {{selectedPayrollCalendar.Status == 15 ? 'PROCESSING' : selectedPayrollCalendar.Status == 14 ? 'COMPLETED' : selectedPayrollCalendar.Status == 16 ? 'PENDING' : selectedPayrollCalendar.Status == 4 ? 'CURRENT' : selectedPayrollCalendar.Status == 17 ? 'HOLD': selectedPayrollCalendar.Status == 18 ? 'CANCELED' : 'FAILED'}}
-          </div>
-          <div class="col-auto">
-            <div class="d-flex align-items-center py-2">
-              <h5 class="fw-bold text-dark pe-2 mb-0">{{selectedPayrollCalendar.MonthName}} {{selectedPayrollCalendar.Year}}</h5>
-              <small class="text-muted">({{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.StartDate}} - {{selectedPayrollCalendar.MonthName | uppercase}} {{selectedPayrollCalendar.EndDate}}, {{selectedPayrollCalendar.EndDate}} days)</small>
-            </div>
           </div>
         </div>
         <!-- <div class="row align-items-center justify-content-start mb-3">

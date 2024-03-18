@@ -17,13 +17,13 @@
             </a> -->
         </div>
       </div>
-      <!-- <div class="col-md-2 ms-3">
+      <div class="col-md-2 ms-3">
         <select class="form-select" (change)="filterRecords()" (keydown.esc)="resetFilter()" [(ngModel)]="companyId">
           <option value=0 selected>All</option>
           <option [value]="item.CompanyId" *ngFor="let item of companies">{{item.CompanyName}}</option>
         </select>
-      </div> -->
-      <button class="btn btn-primary" (click)="generateSalaryBreakup()">Reset Salary Breakup</button>
+      </div>
+      <!-- <button class="btn btn-primary" (click)="generateSalaryBreakup()">Reset Salary Breakup</button> -->
     </div>
     <div class="col-6 d-fex text-end">
       <!-- <a href="javascript:void(0)" class="text-primary" data-bs-toggle="tooltip" data-bs-placement="right" title="export as pdf">
