@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ErrorToast, Toast } from "src/providers/common-service/common.service";
-import { AccessToken, AccessTokenExpiredOn, BadRequest, Forbidden, Login, Master, NotFound, ServerError, String, Success, UnAuthorize } from "src/providers/constants";
+import { AccessToken, AccessTokenExpiredOn, BadRequest, Forbidden, Login, Master, NotFound, ServerError, ServerNotAvailable, String, Success, UnAuthorize } from "src/providers/constants";
 import { iNavigation } from "src/providers/iNavigation";
 
 @Injectable()
@@ -110,6 +110,8 @@ export class JwtService {
                     }
                 }
                 break;
+            case ServerNotAvailable:
+                ErrorToast("Requested service is not available. Please re-try after some time.");
             default:
                 ErrorToast("Unknown error occured. Please contact to admin.");
                 break;
