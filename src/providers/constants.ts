@@ -20,6 +20,7 @@ export const ApiKey = "AIzaSyAkFANPvmh1x_ajxADulhWiPcsNJHqw1Hs";
 export const AccessTokenExpiredOn = "access_token_expired_on";
 export const ProjectName = "onlinedatabuilder";
 export const ServerError = 500;
+export const ServerNotAvailable = 503;
 export const BadRequest = 400;
 export const Success = 200;
 export const UnAuthorize = 401;
