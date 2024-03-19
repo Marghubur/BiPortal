@@ -1,24 +1,24 @@
 .progress {
-    height: 0.65rem !important;
+  height: 0.65rem !important;
 }
 
 .rounded-items {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .t-body {
-    max-height: 49vh !important;
+  max-height: 49vh !important;
 }
 
 .cell-wrapper {
-    padding-left: .6rem;
-    padding-right: .6rem;
+  padding-left: .6rem;
+  padding-right: .6rem;
 }
 
 // .hide-bar {
@@ -26,27 +26,27 @@
 // }
 
 .t-filter {
-    justify-content: flex-start !important;
+  justify-content: flex-start !important;
 }
 
 .custom-height {
-    height: 38vh !important;
+  height: 38vh !important;
 }
 
 .has-search .form-control {
-    padding-left: 2.375rem;
+  padding-left: 2.375rem;
 }
 
 .has-search .form-control-feedback {
-    position: absolute;
-    z-index: 2;
-    display: block;
-    width: 2.375rem;
-    height: 2.375rem;
-    line-height: 2.375rem;
-    text-align: center;
-    pointer-events: none;
-    color: #aaa;
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 2.375rem;
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
 }
 
 .active-index {
@@ -58,7 +58,9 @@
 .active-payroll {
   background-color: var(--primary) !important;
   border: var(--primary) !important;
-  h5, small {
+
+  h5,
+  small {
     color: #fff !important;
   }
 }
@@ -73,13 +75,15 @@ textarea {
 
 .blink {
   animation: blink 1s alternate infinite;
-  color: black; /* Initial color */
+  color: black;
+  /* Initial color */
 }
 
 @keyframes blink {
   0% {
     color: rgb(188, 41, 41);
   }
+
   100% {
     color: black;
   }
@@ -92,39 +96,41 @@ textarea {
   max-height: 55vh;
   border: 1px solid #ccc;
 
-  table th, table td {
+  table th,
+  table td {
     white-space: nowrap;
     padding: 10px 12px;
     font-family: Arial;
   }
 
   table tr th:first-child {
-      position: sticky;
-      left: 0;
-      z-index: 10;
-      border-left: none;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    border-left: none;
   }
 
   table td:first-child {
-      position: sticky;
-      left: 0;
-      z-index: 10;
-      background: #eee;
-      border-left: none;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: #eee;
+    border-left: none;
   }
 
   table tr th:first-child {
-      z-index: 11;
+    z-index: 11;
   }
 
-  table tr th{
-      position: sticky;
-      top: 0;
-      z-index: 9;
+  table tr th {
+    position: sticky;
+    top: 0;
+    z-index: 9;
   }
 
   table {
-    border-collapse: collapse; /* make the table borders collapse to each other */
+    border-collapse: collapse;
+    /* make the table borders collapse to each other */
     width: 100%;
     z-index: 2;
   }
@@ -153,4 +159,19 @@ textarea {
 .c-title {
   margin-bottom: -6px;
   display: block;
+}
+
+.card-box {
+  text-align: center;
+  font-size: 1.5rem;
+  color: deepskyblue;
+}
+
+.bt-card {
+  background-image: url(../../../assets/card-bg.jpg) !important;
+  background-position: center;
+}
+
+.bt-card-hight {
+  height: 10rem !important;
 }
