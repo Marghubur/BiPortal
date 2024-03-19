@@ -18,7 +18,6 @@ export class ProcessingPayrollComponent implements OnInit {
   isCollapsed: boolean = false;
   isLoading: boolean = false;
   submittedPayrollDate: Date = new Date();
-
   newJoineeDetail: Array<any> = [];
   exitEmpDetail: Array<any> = [];
   settlementDetail: Array<any> = [];
@@ -39,27 +38,6 @@ export class ProcessingPayrollComponent implements OnInit {
   lwfOverrideDetail: Array<any> = [];
   isPageReady: boolean = false;
   leaveData: Filter = new Filter();
-  lossPayData: Filter = new Filter();
-  reverseLossPayData: Filter = new Filter();
-  newJoineeData: Filter = new Filter();
-  exitEmpData: Filter = new Filter();
-  settlementData: Filter = new Filter();
-  bonusData: Filter = new Filter();
-  salaryRevisionData: Filter = new Filter();
-  overTimePaymentData: Filter = new Filter();
-  shiftAllowanceData: Filter = new Filter();
-  salaryComponentsData: Filter = new Filter();
-  adhocPaymentData: Filter = new Filter();
-  expensesData: Filter = new Filter();
-  adhocDeductionData: Filter = new Filter();
-  salaryProcessingData: Filter = new Filter();
-  salaryPayoutData: Filter = new Filter();
-  arraersData: Filter = new Filter();
-  ptOverrideData: Filter = new Filter();
-  esiOverrideData: Filter = new Filter();
-  tdsOverrideData: Filter = new Filter();
-  lwfOverrideData: Filter = new Filter();
-  activeIndex: number = 1;
   payrollCalendar: Array<any> = [];
   selectedPayrollCalendar: any = null;
   selectedLOP: any = null;
@@ -109,7 +87,7 @@ export class ProcessingPayrollComponent implements OnInit {
         text: x.text
       });
     })
-    this.runPayrollPopup();
+    // this.runPayrollPopup();
   }
 
   callApiLoadData() {
@@ -202,20 +180,6 @@ export class ProcessingPayrollComponent implements OnInit {
     this.isPageReady = true;
   }
 
-  // navleaveAttendanceWages() {
-  //   let data = {
-  //     EndDate: this.selectedPayrollCalendar.EndDate,
-  //     Month: this.selectedPayrollCalendar.Month + 1,
-  //     MonthName: this.selectedPayrollCalendar.MonthName,
-  //     StartDate: this.selectedPayrollCalendar.StartDate,
-  //     Status: this.selectedPayrollCalendar.Status,
-  //     Year: this.selectedPayrollCalendar.Year,
-  //     EmployeeId: this.employeeId
-  //   }
-
-  //   this.nav.navigate(LeaveAttendanceDailywages, data);
-  // }
-
   GetFilterLeaveResult(e: Filter) {
     if (e != null) {
       this.leaveData = e;
@@ -223,303 +187,84 @@ export class ProcessingPayrollComponent implements OnInit {
     }
   }
 
-  // GetFilterLosspayResult(e: Filter) {
-  //   if (e != null) {
-  //     this.lossPayData = e;
-  //     this.loadData();
-  //   }
-  // }
-
-  GetFilterReversepayResult(e: Filter) {
-    if (e != null) {
-      this.reverseLossPayData = e;
-      this.loadData();
-    }
-  }
-
-  chnageActiveIndex(index: number) {
-    this.activeIndex = index;
-  }
-
   backActivePages() {
-    if (this.activeIndex > 1)
-      this.activeIndex = this.activeIndex - 1;
+    if (this.activePayrollTab > 1)
+      this.activePayrollTab = this.activePayrollTab - 1;
   }
-
-  saveLeaveAttendaceWage() {
-    if (this.activeIndex > 0 && this.activeIndex < 3) {
-      this.setLocalStoreValue();
-      this.activeIndex = this.activeIndex + 1;
-    } else {
-      this.activeIndex = 1;
-      this.setLocalStoreValue();
-      $('#leaveAttendanceWages').modal('hide');
-    }
-  }
-
-  markLeaveAttendaceWageComplete() {
-    this.activeIndex = 1;
-    this.allRunPayroll.LeaveAttendanceCompleted = true;
-    this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
-    this.setLocalStoreValue();
-    $('#leaveAttendanceWages').modal('hide');
-  }
-
-
-
-  adjustMoreLOP(e: any) {
-    let value = e.target.checked;
-    let elem = document.querySelector('div[data-name="deducetedLeaveContainer"]');
-    if (value == true) {
-      elem.classList.remove('d-none');
-    } else {
-      elem.classList.add('d-none');
-    }
-  }
-
-
 
   // ------------------------------Employee Changes
-  employeeChangesPopUp() {
-    this.activeIndex = 1;
-    $('#employeeChanges').modal('show');
-  }
-
-  GetFilterNewJoineeResult(e: Filter) {
-    if (e != null) {
-      this.newJoineeData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterExitEmpResult(e: Filter) {
-    if (e != null) {
-      this.exitEmpData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterSettlementResult(e: Filter) {
-    if (e != null) {
-      this.settlementData = e;
-      this.loadData();
-    }
-  }
-
-  saveEmpChange() {
-    if (this.activeIndex > 0 && this.activeIndex < 3) {
-      this.activeIndex = this.activeIndex + 1;
-      this.setLocalStoreValue();
+    saveEmpChange() {
+    if (this.activePayrollTab > 0 && this.activePayrollTab < 3) {
+      this.activePayrollTab = this.activePayrollTab + 1;
     } else {
-      this.activeIndex = 1;
-      this.setLocalStoreValue();
-      $('#employeeChanges').modal('hide');
+      this.activePayrollTab = 1;
     }
   }
 
   markEmpChangeComplete() {
-    this.activeIndex = 1;
+    this.activePayrollTab = 1;
     this.allRunPayroll.EmployeeChangeseCompleted = true;
     this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
-    this.setLocalStoreValue();
-    $('#employeeChanges').modal('hide');
   }
 
   // ------------------------------Bonus, Salary Revision and Overtime
-  bonusSalryOvertimePopUp() {
-    this.activeIndex = 1;
-    $('#bonusSalaryOvertime').modal('show');
-  }
-
-  GetFilterBonusResult(e: Filter) {
-    if (e != null) {
-      this.bonusData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterSalaryRevisionResult(e: Filter) {
-    if (e != null) {
-      this.salaryRevisionData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterOvertimeResult(e: Filter) {
-    if (e != null) {
-      this.overTimePaymentData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterShiftResult(e: Filter) {
-    if (e != null) {
-      this.shiftAllowanceData = e;
-      this.loadData();
-    }
-  }
-
   saveBonusAlaryOvertime() {
-    if (this.activeIndex > 0 && this.activeIndex < 4) {
-      this.activeIndex = this.activeIndex + 1;
+    if (this.activePayrollTab > 0 && this.activePayrollTab < 4) {
+      this.activePayrollTab = this.activePayrollTab + 1;
     } else {
-      this.activeIndex = 1;
-      $('#bonusSalaryOvertime').modal('hide');
+      this.activePayrollTab = 1;
     }
   }
 
   markBonusAlaryOvertimeComplete() {
-    this.activeIndex = 1;
+    this.activePayrollTab = 1;
     this.allRunPayroll.BonusSalaryOvertimeCompleted = true;
     this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
-    this.setLocalStoreValue();
-    $('#bonusSalaryOvertime').modal('hide');
   }
 
   // ------------------------------Reimbursement, Adhoc Payment and Deduction
-  reimbursementAdhocDeductPopUp() {
-    this.activeIndex = 1;
-    $('#reimbursementAdhicDeduction').modal('show');
-  }
-
-  GetFilterSalaryCompResult(e: Filter) {
-    if (e != null) {
-      this.salaryComponentsData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterExpenseResult(e: Filter) {
-    if (e != null) {
-      this.expensesData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterAdhocPaymentResult(e: Filter) {
-    if (e != null) {
-      this.adhocPaymentData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterAdhocDeductionResult(e: Filter) {
-    if (e != null) {
-      this.adhocDeductionData = e;
-      this.loadData();
-    }
-  }
-
   saveReimbursementAdhocDeduction() {
-    if (this.activeIndex > 0 && this.activeIndex < 4) {
-      this.activeIndex = this.activeIndex + 1;
+    if (this.activePayrollTab > 0 && this.activePayrollTab < 4) {
+      this.activePayrollTab = this.activePayrollTab + 1;
     } else {
-      this.activeIndex = 1;
-      $('#reimbursementAdhicDeduction').modal('hide');
+      this.activePayrollTab = 1;
     }
   }
 
   markReimburseAdhocDeductionComplete() {
-    this.activeIndex = 1;
+    this.activePayrollTab = 1;
     this.allRunPayroll.ReimbursementAdhicDeductCompleted = true;
     this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
-    this.setLocalStoreValue();
-    $('#reimbursementAdhicDeduction').modal('hide');
   }
 
   // ------------------------------Salaries and Arreaars
-  salariesArrearsPopUp() {
-    this.activeIndex = 1;
-    $('#salariesArrears').modal('show');
-  }
-
-  GetFilterSalaryProcessingResult(e: Filter) {
-    if (e != null) {
-      this.salaryProcessingData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterSalaryPayoutResult(e: Filter) {
-    if (e != null) {
-      this.salaryPayoutData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterArraersResult(e: Filter) {
-    if (e != null) {
-      this.arraersData = e;
-      this.loadData();
-    }
-  }
-
   saveSalariesArrears() {
-    if (this.activeIndex > 0 && this.activeIndex < 3) {
-      this.activeIndex = this.activeIndex + 1;
+    if (this.activePayrollTab > 0 && this.activePayrollTab < 3) {
+      this.activePayrollTab = this.activePayrollTab + 1;
     } else {
-      this.activeIndex = 1;
-      $('#salariesArrears').modal('hide');
+      this.activePayrollTab = 1;
     }
   }
 
   markSalariesArrearsComplete() {
-    this.activeIndex = 1;
+    this.activePayrollTab = 1;
     this.allRunPayroll.SalaryHoldArrearsCompleted = true;
     this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
-    this.setLocalStoreValue();
-    $('#salariesArrears').modal('hide');
   }
 
   // ------------------------------Override (PT, TDS, ESI, LWF)
-  overridePopUp() {
-    this.activeIndex = 1;
-    $('#override').modal('show');
-  }
-
-  GetFilterPTOverideResult(e: Filter) {
-    if (e != null) {
-      this.ptOverrideData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterESIOverideResult(e: Filter) {
-    if (e != null) {
-      this.esiOverrideData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterTDSOverideResult(e: Filter) {
-    if (e != null) {
-      this.tdsOverrideData = e;
-      this.loadData();
-    }
-  }
-
-  GetFilterLWFOverideResult(e: Filter) {
-    if (e != null) {
-      this.lwfOverrideData = e;
-      this.loadData();
-    }
-  }
-
   saveOverride() {
-    if (this.activeIndex > 0 && this.activeIndex < 4) {
-      this.activeIndex = this.activeIndex + 1;
+    if (this.activePayrollTab > 0 && this.activePayrollTab < 4) {
+      this.activePayrollTab = this.activePayrollTab + 1;
     } else {
-      this.activeIndex = 1;
-      $('#override').modal('hide');
+      this.activePayrollTab = 1;
     }
   }
 
   markOverrideComplete() {
-    this.activeIndex = 1;
+    this.activePayrollTab = 1;
     this.allRunPayroll.OverrideCompleted = true;
     this.allRunPayroll.completedValue = 100;
-    this.setLocalStoreValue();
-    $('#override').modal('hide');
   }
 
   // ----------------------End
@@ -554,10 +299,6 @@ export class ProcessingPayrollComponent implements OnInit {
     let item = Number(e.target.value);
     this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == item);;
     this.selectedPayrollDetail = this.processingPayrollDetail.find(x => x.ForMonth == this.selectedPayrollCalendar.Month + 1 && x.ForYear == this.selectedPayrollCalendar.Year);
-  }
-
-  setLocalStoreValue() {
-    localStorage.setItem(this.runpayroll, JSON.stringify(this.allRunPayroll));
   }
 
 
