@@ -245,11 +245,6 @@
   border-radius: 0px 4px 4px 0px;
 }
 
-.custom-height {
-  height: 48vh !important;
-}
-
-
 .cell-wrapper {
   padding-left: .6rem;
   padding-right: .6rem;
@@ -320,4 +315,8 @@ textarea {
 
 .default-cursor {
   cursor: default !important;
+}
+
+.t-body {
+  max-height: 100% !important;
 }

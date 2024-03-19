@@ -445,7 +445,7 @@ export class BilldetailsComponent implements OnInit, AfterViewChecked {
         if(response.ResponseBody.EmployeeDetail !== null &&
           response.ResponseBody.EmailTemplate !== null) {
           this.isBillGenerated = true;
-          this.Bindtemplate(response.ResponseBody.EmailTemplate[0], response.ResponseBody.EmployeeDetail[0]);
+          this.Bindtemplate(response.ResponseBody.EmailTemplate, response.ResponseBody.EmployeeDetail[0]);
           let senderEmails = response.ResponseBody.Sender[0];
           let receiverEmails = response.ResponseBody.Receiver[0];
           for(const value in receiverEmails) {
