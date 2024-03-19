@@ -3,8 +3,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import { Toast } from 'src/providers/common-service/common.service';
-import { LeaveAttendanceDailywages } from 'src/providers/constants';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
@@ -74,6 +73,21 @@ export class ProcessingPayrollComponent implements OnInit {
   processingPayrollDetail: Array<any> = [];
   selectedPayrollDetail: any = null;
 
+  // runpayroll-----------------------------------------
+  activePayrollTab: number = 1;
+  attendanceData: Filter = new Filter();
+  attendance: Attendance;
+  daysInMonth: Array<number> = [];
+  appliedLeaveDetail: Array<any> = [];
+  lossPayDetail: Array<any> = [];
+  leaveQuota: Array<any> = [];
+  selectedLeaveType: any = null;
+  attendanceDetail: Array<any> = [];
+  selectedAttendance: any = null;
+  selectedLeave: any = null;
+  availLopAdjusmentDay: Array<number> = [];
+  active = 1;
+
   constructor(private http: CoreHttpService,
     private filterHttp: EmployeeFilterHttpService,
     private user: UserService,
@@ -95,6 +109,7 @@ export class ProcessingPayrollComponent implements OnInit {
         text: x.text
       });
     })
+    this.runPayrollPopup();
   }
 
   callApiLoadData() {
@@ -187,19 +202,19 @@ export class ProcessingPayrollComponent implements OnInit {
     this.isPageReady = true;
   }
 
-  navleaveAttendanceWages() {
-    let data = {
-      EndDate: this.selectedPayrollCalendar.EndDate,
-      Month: this.selectedPayrollCalendar.Month + 1,
-      MonthName: this.selectedPayrollCalendar.MonthName,
-      StartDate: this.selectedPayrollCalendar.StartDate,
-      Status: this.selectedPayrollCalendar.Status,
-      Year: this.selectedPayrollCalendar.Year,
-      EmployeeId: this.employeeId
-    }
+  // navleaveAttendanceWages() {
+  //   let data = {
+  //     EndDate: this.selectedPayrollCalendar.EndDate,
+  //     Month: this.selectedPayrollCalendar.Month + 1,
+  //     MonthName: this.selectedPayrollCalendar.MonthName,
+  //     StartDate: this.selectedPayrollCalendar.StartDate,
+  //     Status: this.selectedPayrollCalendar.Status,
+  //     Year: this.selectedPayrollCalendar.Year,
+  //     EmployeeId: this.employeeId
+  //   }
 
-    this.nav.navigate(LeaveAttendanceDailywages, data);
-  }
+  //   this.nav.navigate(LeaveAttendanceDailywages, data);
+  // }
 
   GetFilterLeaveResult(e: Filter) {
     if (e != null) {
@@ -208,12 +223,12 @@ export class ProcessingPayrollComponent implements OnInit {
     }
   }
 
-  GetFilterLosspayResult(e: Filter) {
-    if (e != null) {
-      this.lossPayData = e;
-      this.loadData();
-    }
-  }
+  // GetFilterLosspayResult(e: Filter) {
+  //   if (e != null) {
+  //     this.lossPayData = e;
+  //     this.loadData();
+  //   }
+  // }
 
   GetFilterReversepayResult(e: Filter) {
     if (e != null) {
@@ -546,13 +561,325 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
 
+  // -------------- Run Payroll 6 Step ----------------------------
 
-  onEmloyeeChanged(e: any) {
+  viewleaveAttendanceWages() {
+    let days = new Date(this.selectedPayrollCalendar.Year, this.selectedPayrollCalendar.Month, 0).getDate();
+    for (let i = 1; i <= days; i++) {
+      this.daysInMonth.push(i);
+    }
 
+    this.attendance = {
+      EmployeeName: "",
+      ForMonth: this.selectedPayrollCalendar.Month,
+      ForYear: this.selectedPayrollCalendar.Year
+    }
+
+    this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
+    this.loadLeaveData();
+    this.active = 1;
+    this.activePayrollTab = 1;
+  }
+
+  viewNewJoineeExist() {
+    this.active = 1;
+    this.activePayrollTab = 2;
+  }
+
+  viewBonusSalaryRevisionOT() {
+    this.active = 1;
+    this.activePayrollTab = 3;
+  }
+
+  viewReimbursementAdhocDeduction() {
+    this.active = 1;
+    this.activePayrollTab = 4;
+  }
+
+  viewSalaryOnHoldArrear() {
+    this.active = 1;
+    this.activePayrollTab = 5;
+  }
+
+  viewOveridePTESI() {
+    this.active = 1;
+    this.activePayrollTab = 6;
+  }
+
+  runPayrollPopup(): void {
+    this.viewleaveAttendanceWages();
+    $("#runPayrollSteopModal").modal('show');
+  }
+
+  loadLeaveData() {
+    this.isLoading = true;
+    this.filterHttp.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`).then(res => {
+      if (res.ResponseBody) {
+        if (res.ResponseBody[0].length > 0)
+          this.appliedLeaveDetail = res.ResponseBody[0];
+        else if (res.ResponseBody[0].length == 1)  {
+          let data = res.ResponseBody[0];
+          if (data && data.employeeId) {
+            this.appliedLeaveDetail = data;
+          }
+        }
+        Toast("Record found");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  submitActionForLeave(requestState: string) {
+    this.isLoading = true;
+    let endPoint = '';
+
+    switch(requestState) {
+      case 'Approved':
+        endPoint = `LeaveRequest/ApproveLeaveRequest`;
+        break;
+      case 'Rejected':
+        endPoint = `LeaveRequest/RejectLeaveRequest`;
+        break;
+    }
+
+    let currentResponse = {
+      LeaveFromDay: this.selectedLeave.FromDate,
+      LeaveToDay: this.selectedLeave.ToDate,
+      EmployeeId: this.selectedLeave.EmployeeId,
+      LeaveRequestNotificationId : this.selectedLeave.LeaveRequestNotificationId,
+      RecordId: this.selectedLeave.RecordId,
+      LeaveTypeId: this.selectedLeave.LeaveTypeId,
+      Reason: this.selectedLeave.Reason
+    }
+    let filterId = 0;
+    this.http.post(`${endPoint}/${filterId}`, currentResponse).then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        $('#leaveActionModal').modal('hide');
+        Toast("Submitted Successfully");
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  lopAdjustmentPopUp(item: any) {
+    this.selectedLOP = item;
+    this.http.get(`Leave/GetLeaveDetailByEmpId/${item.EmployeeId}`).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.leaveQuota = JSON.parse(res.ResponseBody.LeaveQuotaDetail);
+        $('#lopAdjustment').modal('show');
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  getAttendanceDetail() {
+    this.isLoading = true;
+    this.filterHttp.post("runpayroll/getAttendancePage", this.attendanceData).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.attendanceDetail = [];
+        this.attendanceDetail = res.ResponseBody;
+        if (this.attendanceDetail.length > 0) {
+          this.attendanceDetail.forEach(x => {
+            x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
+            if (this.appliedLeaveDetail && this.appliedLeaveDetail.length > 0) {
+              x.AttendanceDetail.forEach(i => {
+                var item = this.appliedLeaveDetail.find(z => (new Date(z.FromDate).getTime() - new Date(i.AttendanceDay).getTime())/(1000 * 60 * 60 * 24) <=0 &&
+                  ((new Date(z.ToDate).getTime() - new Date(i.AttendanceDay).getTime()))/(1000 * 60 * 60 * 24)  >= 0 && z.EmployeeId == x.EmployeeId);
+                if (item)
+                  i.IsOnLeave = true;
+              });
+            }
+          });
+
+          this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
+        } else {
+          this.attendanceData.TotalRecords = 0;
+        }
+
+        console.log(this.attendanceDetail);
+        this.isLoading = false;
+        Toast("Attendance detail loaded");
+      }
+    })
+  }
+
+  GetFilterLosspayResult(e: Filter) {
+    if(e != null) {
+      this.attendanceData = e;
+      this.getAttendanceDetail();
+    }
+  }
+
+  filterRecords() {
+    let delimiter = "";
+    let searchString = "";
+    this.attendanceData.SearchString = ""
+    this.attendanceData.reset();
+
+    if(this.attendance.EmployeeName !== null && this.attendance.EmployeeName !== "") {
+      searchString += ` EmployeeName like '%${this.attendance.EmployeeName.toUpperCase()}%'`;
+      delimiter = "and";
+    }
+
+    if(this.attendance.ForMonth !== null && this.attendance.ForMonth > 0) {
+      searchString += ` ${delimiter} ForMonth = ${this.attendance.ForMonth}`;
+      delimiter = "and";
+    }
+
+    if(this.attendance.ForYear !== null && this.attendance.ForYear> 0) {
+      searchString += ` ${delimiter} ForYear = ${this.attendance.ForYear}`;
+      delimiter = "and";
+    }
+
+    if(searchString != "") {
+      this.attendanceData.SearchString = ` 1=1 and ${searchString}`;
+    } else {
+      this.attendanceData.SearchString = "1=1";
+    }
+
+    this.getAttendanceDetail();
   }
 
   resetFilter() {
+    this.attendanceData.reset();
+    this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
+    this.attendance = {
+      EmployeeName: "",
+      ForMonth: this.selectedPayrollCalendar.Month,
+      ForYear: this.selectedPayrollCalendar.Year
+    }
+    this.getAttendanceDetail()
+  }
 
+  showAttendanceHandler(item: any, id: number, name: string) {
+    if (id <= 0) {
+      ErrorToast("Invalid employee selected");
+      return;
+    }
+    if (item) {
+      this.selectedAttendance = null;
+      this.selectedAttendance = item;
+      this.selectedAttendance.EmployeeName = name;
+      this.selectedAttendance.AttendanceId = id;
+      $('#attendanceAdjustment').modal('show');
+    }
+  }
+
+  saveAttedanceAjustment() {
+    this.isLoading = true;
+    if (!this.selectedAttendance) {
+      this.isLoading = false;
+      ErrorToast("Please select attendance first");
+      return;
+    }
+
+    if (this.selectedAttendance.AttendanceId <= 0 || this.selectedAttendance.AttendanceDay == null) {
+      this.isLoading = false;
+      return;
+    }
+
+    this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then ((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
+        if (attendance) {
+          attendance.AttendanceDetail = [];
+          attendance.AttendanceDetail = res.ResponseBody;
+        }
+        $('#attendanceAdjustment').modal('hide');
+        Toast("Attendace apply successfully.");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    });
+  }
+
+  saveLOPAjustment() {
+    this.isLoading = true;
+    if (this.selectedLOP.EmployeeId <= 0) {
+      WarningToast("Employee is not selected properly.");
+      this.isLoading = false;
+      return;
+    }
+
+    if (this.selectedLeaveType!= null && this.selectedLeaveType.LeavePlanTypeId <=0) {
+      WarningToast("Please select Leave Type first.");
+      this.isLoading = false;
+      return;
+    }
+
+    if (this.selectedLeaveType!= null && this.selectedLeaveType.AvailableLeaves <=0) {
+      WarningToast("You don't have leave balance of selected leave");
+      this.isLoading = false;
+      return;
+    }
+
+    this.selectedLOP.LeaveTypeId= this.selectedLeaveType.LeavePlanTypeId;
+    this.selectedLOP.LeavePlanName= this.selectedLeaveType.LeavePlanTypeName
+    this.http.post('Leave/AdjustLOPAsLeave', this.selectedLOP).then ((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        $('#lopAdjustment').modal('hide');
+        Toast("Leave apply successfully.");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    });
+  }
+
+  validateLeaveStatus(e: any) {
+    let value = e.target.value;
+    if (Number(value) > 0) {
+      this.selectedLeaveType = this.leaveQuota.find(x => x.LeavePlanTypeId == value);
+      this.availLopAdjusmentDay = [];
+      if (this.selectedLeaveType && this.selectedLeaveType.AvailableLeaves > 0) {
+        let day = 0;
+        if (this.selectedLOP.ActualLOP < this.selectedLeaveType.AvailableLeaves)
+          day = this.selectedLOP.ActualLOP;
+        else
+          day = this.selectedLeaveType.AvailableLeaves;
+        for (let i = 1; i <= day; i++) {
+          this.availLopAdjusmentDay.push(i);
+        }
+      }
+    }
+  }
+
+  leaveActionPopUp(item: any) {
+    if (item) {
+      this.selectedLeave = item;
+      this.selectedLeave.Reason = "";
+      $('#leaveActionModal').modal('show');
+    }
+  }
+
+  getLopAdjustment() {
+    this.isLoading = true;
+    this.http.get(`Attendance/GetLOPAdjustment/${this.selectedPayrollCalendar.Month}/${this.selectedPayrollCalendar.Year}`)
+    .then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        this.lossPayDetail = res.ResponseBody;
+        console.log(res.ResponseBody);
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  previousMonthyPayroll(e: any) {
+    let elem = document.querySelector("select[data-name='payroll-month']");
+    if (e.target.checked) {
+      elem.removeAttribute('disabled');
+    } else {
+      elem.setAttribute('disabled', '');
+      this.selectedPayrollCalendar = this.payrollCalendar.find(x => x.Month == new Date().getMonth());
+    }
   }
 
 }
@@ -766,4 +1093,10 @@ class RunPayroll {
   OverrideCompleted: boolean = false;
   completedValue: number = 0;
   RunPayrollFinalize: boolean = false;
+}
+
+interface Attendance {
+  EmployeeName: string,
+  ForYear: number,
+  ForMonth: number
 }
