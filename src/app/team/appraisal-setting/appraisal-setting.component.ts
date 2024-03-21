@@ -283,11 +283,17 @@ export class AppraisalSettingComponent implements OnInit {
       errroCounter++;
 
     let value = this.objectForm.value;
+    let data = document.getElementById("editor").innerHTML;
+    if (data && data.length <= 800) {
+      value.Description = data;
+    } else if(data.length > 800) {
+      ErrorToast("Objective description is too large. Description must be less than 800 character.");
+      this.isLoading = false;
+      return;
+    }
     if (errroCounter === 0 && value.CompanyId > 0) {
       //let data = (document.getElementById("richTextField") as HTMLIFrameElement).contentWindow.document.body.innerHTML;
-      let data = document.getElementById("editor").innerHTML;
-      if (data)
-        value.Description = data;
+
 
       value.CanManagerSee = value.CanManagerSee == "true" ? true : false;
       this.http.post("performance/objectiveInsertUpdate", value).then(res => {

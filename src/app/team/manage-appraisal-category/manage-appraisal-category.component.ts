@@ -656,7 +656,7 @@ export class ApprisalCycle {
   AppraisalCycleEndDate: Date = null;
   Total: number = 0;
   ObjectiveCatagoryId: number = 0;
-  Index: number = 0;
+  RowIndex: number = 0;
   Status: String = null;
   ObjectiveIds: Array<number> = [];
   IsSelfAppraisal: boolean = false;

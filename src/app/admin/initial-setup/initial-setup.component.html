@@ -1,0 +1,245 @@
+<div class="bg-white vh-100 d-flex align-items-center justify-content-center">
+    <div class="col-md-4">
+        <div class="col-md-12" *ngIf="activeIndex == 1">
+            <div class="custom-card p-4">
+                <div class="x_header">
+                    <div class="x_header_title">
+                        <h2>
+                            Declaration Setting<small>Declaration start month, financial year etc setting.</small>
+                        </h2>
+                    </div>
+                </div>
+                <form [formGroup]="declarationForm">
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Declaration Start Month</label>
+                            <select formControlName="DeclarationStartMonth" class="form-select"
+                                (change)="selectDeclartionStartMonth($event)">
+                                <option value="1">Jan</option>
+                                <option value="2">Feb</option>
+                                <option value="3">Mar</option>
+                                <option value="4">Apr</option>
+                                <option value="5">May</option>
+                                <option value="6">Jun</option>
+                                <option value="7">Jul</option>
+                                <option value="8">Aug</option>
+                                <option value="9">Sep</option>
+                                <option value="10">Oct</option>
+                                <option value="11">Nov</option>
+                                <option value="12">Dec</option>
+                            </select>
+                            <!-- <input maxlength="2" type="text" class="form-control" formControlName="DeclarationStartMonth" placeholder="Enter declaration start month" onkeypress="return event.charCode >= 48 && event.charCode <= 57"> -->
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Declaration End Month</label>
+                            <select formControlName="DeclarationEndMonth" class="form-select">
+                                <option value="1">Jan</option>
+                                <option value="2">Feb</option>
+                                <option value="3">Mar</option>
+                                <option value="4">Apr</option>
+                                <option value="5">May</option>
+                                <option value="6">Jun</option>
+                                <option value="7">Jul</option>
+                                <option value="8">Aug</option>
+                                <option value="9">Sep</option>
+                                <option value="10">Oct</option>
+                                <option value="11">Nov</option>
+                                <option value="12">Dec</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Financial Year</label>
+                            <input maxlength="4" type="text" class="form-control" formControlName="FinancialYear"
+                                placeholder="Enter financial year"
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Last Day of Declaration</label>
+                            <input maxlength="4" type="text" class="form-control"
+                            formControlName="EveryMonthLastDayOfDeclaration"
+                            placeholder="Enter last day of declaration"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                        </div>
+                    </div>
+                </form>
+                <p class="mb-0 mt-3"><span class="fw-bold text-dark">Note:</span> "To alter the default settings, please adjust the values as needed. Otherwise, click 'Save and Continue' to proceed with the current declaration details."</p>
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-primary-c" (click)="saveDeclarationSetting()" [disabled]="isLoading">
+                        <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
+                        <span class="ps-2">{{ isLoading ? "Wait" : "Save and Next" }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" *ngIf="activeIndex == 2">
+            <div class="custom-card p-4">
+                <div class="x_header">
+                    <div class="x_header_title">
+                        <h2>
+                            Payroll Cycle Setting<small>Payroll period calculation.</small>
+                        </h2>
+                    </div>
+                </div>
+                <form [formGroup]="payrollSettingForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Pay Frequency</label>
+                            <select class="form-select" formControlName="PayFrequency">
+                                <option value="null" disabled>Select</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="daily">Daily</option>
+                                <option value="hourly">Hourly</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Payment type</label>
+                            <select class="form-select" formControlName="PayCalculationId" >
+                                <option value="null" disabled>Select payment type</option>
+                                <option value="1">Actual Days in month</option>
+                                <option value="2">Weekday only</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label class="form-label">Which pay cycle do you want to start using EMSTUM for Payroll</label>
+                            <select class="form-select" (change)="onPayCycleChanged($event)" formControlName="PayCycleMonth">
+                                <option value="null" disabled>Select</option>
+                                <option *ngFor="let mon of months; let i = index" [value]="i + 1">
+                                    {{ mon }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Pay cycle date in every month</label>
+                            <select class="form-select" formControlName="PayCycleDayOfMonth">
+                                <option value="null" disabled>Select date</option>
+                                <option value="0">Last day of month</option>
+                                <option *ngFor="let day of days" [value]="day.value">
+                                    {{ day.text }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mt-3">
+                            <label class="form-label">Exclude Holidays</label>
+                            <div class="col-md-12">
+                                <input class="form-check-input" [value]="true" formControlName="IsExcludeHolidays"
+                                    type="radio" name="IsExcludeHolidays" />
+                                <label class="form-check-label ps-2" for="IsExcludeHolidays">
+                                    Yes
+                                </label>
+                                <input class="form-check-input ms-4" [value]="false"
+                                    formControlName="IsExcludeHolidays" type="radio" name="IsExcludeHolidays" />
+                                <label class="form-check-label ps-2" for="IsExcludeHolidays">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <p class="mb-0 mt-3"><span class="fw-bold text-dark">Note:</span> "You can customize the default payroll settings in this section. To make changes, simply update the relevant fields. Click "Save and Next" to proceed with saving your declaration details, or leave the defaults unchanged."</p>
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-primary-c" (click)="savePayRollSetting()" [disabled]="isLoading">
+                        <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
+                        <span class="ps-2">{{ isLoading ? "Wait" : "Save and Next" }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" *ngIf="activeIndex == 3">
+            <div class="custom-card p-4">
+                <div class="x_header">
+                    <div class="x_header_title">
+                        <h2>
+                            Leave Plan<small>Configure default leave plan.</small>
+                        </h2>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Leave Plan Naame</label>
+                    <input type="text" placeholder="Leave Plan Name" class="form-control" [(ngModel)]="planName" maxlength="50"
+                        oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="text-end mt-3">
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="addLeaveTypePopup()"><i class="fa-solid fa-plus pe-1"></i> Add Leave Type</a>
+                </div>
+                <ng-container *ngIf="planLeaveTypes.length > 0">
+                    <div class="d-flex align-items-center">
+                        <ng-container *ngFor="let item of planLeaveTypes">
+                            <span class="badge text-bg-success m-2 p-2">{{item.PlanName}}</span>
+                        </ng-container>
+                    </div>
+                  </ng-container>
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-primary-c" (click)="saveLeavePlan()" [disabled]="isLoading">
+                        <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
+                        <span class="ps-2">{{ isLoading ? "Wait" : "Save and Next" }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Leave Plan Type Modal -->
+<div class="modal fade" id="leavePlanTypeModal" tabindex="-1" aria-labelledby="leavePlanTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content px-4">
+        <div class="modal-header border-bottom-0">
+          <h1 class="modal-title fs-5" id="leavePlanTypeModalLabel">Leave Plan Type</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="t-table t-list col-md-12 mt-2">
+                <div class="hide-bar"></div>
+                <div class="t-head">
+                  <div class="tr py-2 fw-bold ps-2">
+                    <div class="td fe-2">
+                      <div class="cell-wrapper">LEAVE TYPE</div>
+                    </div>
+                    <div class="td fe-1">
+                      <div class="cell-wrapper">CODE</div>
+                    </div>
+                    <div class="td fe-3">
+                      <div class="cell-wrapper">DESCRIPTION</div>
+                    </div>
+                    <div class="td">
+                      <div class="cell-wrapper text-center">ACTIONS</div>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="t-body custom-height">
+                <ng-container *ngIf="leaveTypes != null && leaveTypes.length > 0">
+                    <div *ngFor="let item of leaveTypes" class="tr align-items-center py-2 ps-2">
+                    <div class="td fe-2">
+                        <div class="cell-wrapper">
+                        {{ item.PlanName }}
+                        </div>
+                    </div>
+                    <div class="td fe-1">
+                        <div class="cell-wrapper">
+                        {{ item.LeavePlanCode }}
+                        </div>
+                    </div>
+                    <div class="td fe-3">
+                        <div class="cell-wrapper">
+                        {{ item.PlanDescription }}
+                        </div>
+                    </div>
+                    <div class="td">
+                        <div class="cell-wrapper text-center">
+                        <input type="checkbox" [checked]="item.IsActive" class="form-check-input"
+                            (click)="assignLeaveType($event, item)" />
+                        </div>
+                    </div>
+                    </div>
+                </ng-container>
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cleanLeaveType()">Close</button>
+          <button type="button" class="btn btn-primary-c" data-bs-dismiss="modal"><i class="fa-solid fa-plus pe-1"></i>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>

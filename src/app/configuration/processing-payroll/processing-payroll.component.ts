@@ -7,6 +7,7 @@ import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/co
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 declare var $: any;
 
 @Component({
@@ -65,11 +66,48 @@ export class ProcessingPayrollComponent implements OnInit {
   selectedLeave: any = null;
   availLopAdjusmentDay: Array<number> = [];
   active = 1;
+  runPayrollForm: FormGroup;
+  payrollDetail: PayrollDetail = {
+    SalaryAdhocId: 0,
+    FirstName: "",
+    LastName: "",
+    EmployeeId: 0,
+    FinancialYear: 0,
+    OrganizationId: 0,
+    CompanyId: 0,
+    IsPaidByCompany: false,
+    IsPaidByEmployee: false,
+    IsFine: false,
+    IsHikeInSalary: false,
+    IsBonus: false,
+    IsReimbursment: false,
+    IsSalaryOnHold: false,
+    IsArrear: false,
+    Description: "",
+    Amount: 0,
+    ApprovedBy: 0,
+    StartDate: null,
+    EndDate: null,
+    IsActive: false,
+    DOJ: null,
+    LWD: null,
+    DOR: null,
+    NoOfDays: 0,
+    PaymentActionType: "",
+    Reason: "",
+    Comments: "",
+    Status: 0,
+    ForYear: 0,
+    ForMonth: 0,
+    WorkedMinutes: 0,
+    CTC: 0
+  }
 
   constructor(private http: CoreHttpService,
-    private filterHttp: EmployeeFilterHttpService,
-    private user: UserService,
-    private nav: iNavigation) { }
+              private filterHttp: EmployeeFilterHttpService,
+              private user: UserService,
+              private nav: iNavigation,
+              private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -180,6 +218,105 @@ export class ProcessingPayrollComponent implements OnInit {
     this.isPageReady = true;
   }
 
+  initPayrollForm(data: Array<PayrollDetail>) {
+    this.runPayrollForm = this.fb.group({
+      RunPayroll: this.buildRunPayroll(data)
+    })
+  }
+
+  buildRunPayroll(data: Array<PayrollDetail>): FormArray {
+    let dataArray: FormArray = this.fb.array([]);
+
+    if (data.length > 0) {
+      let i = 0;
+      while (i < data.length) {
+        dataArray.push(this.fb.group({
+          RowIndex: new FormControl(i+1),
+          SalaryAdhocId: new FormControl(data[i].SalaryAdhocId != null ? data[i].SalaryAdhocId : 0),
+          EmployeeId: new FormControl(data[i].EmployeeId != null ? data[i].EmployeeId : 0),
+          FinancialYear: new FormControl(data[i].FinancialYear != null ? data[i].FinancialYear : 0),
+          OrganizationId: new FormControl(data[i].OrganizationId != null ? data[i].OrganizationId : 0),
+          CompanyId: new FormControl(data[i].CompanyId != null ? data[i].CompanyId : 0),
+          IsPaidByCompany: new FormControl(data[i].IsPaidByCompany != null ? data[i].IsPaidByCompany : false),
+          IsPaidByEmployee: new FormControl(data[i].IsPaidByEmployee != null ? data[i].IsPaidByEmployee : false),
+          IsFine: new FormControl(data[i].IsFine != null ? data[i].IsFine : false),
+          IsHikeInSalary: new FormControl(data[i].IsHikeInSalary != null ? data[i].IsHikeInSalary : false),
+          IsBonus: new FormControl(data[i].IsBonus != null ? data[i].IsBonus : false),
+          IsReimbursment: new FormControl(data[i].IsReimbursment != null ? data[i].IsReimbursment : false),
+          IsSalaryOnHold: new FormControl(data[i].IsSalaryOnHold != null ? data[i].IsSalaryOnHold : false),
+          IsArrear: new FormControl(data[i].IsArrear != null ? data[i].IsArrear : false),
+          Description: new FormControl(data[i].Description != null ? data[i].Description : ""),
+          Amount: new FormControl(data[i].Amount != null ? data[i].Amount : 0),
+          ApprovedBy: new FormControl(data[i].ApprovedBy != null ? data[i].ApprovedBy : 0),
+          StartDate: new FormControl(data[i].StartDate),
+          EndDate: new FormControl(data[i].EndDate),
+          IsActive: new FormControl(data[i].IsActive != null ? data[i].IsActive : true),
+          DOJ: new FormControl(data[i].DOJ),
+          LWD: new FormControl(data[i].LWD),
+          DOR: new FormControl(data[i].DOR),
+          NoOfDays: new FormControl(data[i].NoOfDays != null ? data[i].NoOfDays : 0),
+          PaymentActionType: new FormControl(data[i].PaymentActionType),
+          Reason: new FormControl(data[i].Reason),
+          Comments: new FormControl(data[i].Comments),
+          Status: new FormControl(data[i].Status != null ? data[i].Status : 0),
+          ForYear: new FormControl(data[i].ForYear != null ? data[i].ForYear : 0),
+          ForMonth: new FormControl(data[i].ForMonth != null ? data[i].ForMonth : 0),
+          WorkedMinutes: new FormControl(data[i].WorkedMinutes != null ? data[i].WorkedMinutes : 0),
+          FirstName: new FormControl(data[i].FirstName),
+          LastName: new FormControl(data[i].LastName),
+          CTC: new FormControl(data[i].CTC)
+        }))
+        i++;
+      }
+    } else {
+      dataArray.push(this.createRunPayroll());
+    }
+
+    return dataArray;
+  }
+
+  createRunPayroll() {
+    return this.fb.group({
+      SalaryAdhocId: new FormControl(this.payrollDetail.SalaryAdhocId),
+      EmployeeId: new FormControl(this.payrollDetail.EmployeeId),
+      FinancialYear: new FormControl(this.payrollDetail.FinancialYear),
+      OrganizationId: new FormControl(this.payrollDetail.OrganizationId),
+      CompanyId: new FormControl(this.payrollDetail.CompanyId),
+      IsPaidByCompany: new FormControl(this.payrollDetail.IsPaidByCompany),
+      IsPaidByEmployee: new FormControl(this.payrollDetail.IsPaidByEmployee),
+      IsFine: new FormControl(this.payrollDetail.IsFine),
+      IsHikeInSalary: new FormControl(this.payrollDetail.IsHikeInSalary),
+      IsBonus: new FormControl(this.payrollDetail.IsBonus),
+      IsReimbursment: new FormControl(this.payrollDetail.IsReimbursment),
+      IsSalaryOnHold: new FormControl(this.payrollDetail.IsSalaryOnHold),
+      IsArrear: new FormControl(this.payrollDetail.IsArrear),
+      Description: new FormControl(this.payrollDetail.Description),
+      Amount: new FormControl(this.payrollDetail.Amount),
+      ApprovedBy: new FormControl(this.payrollDetail.ApprovedBy),
+      StartDate: new FormControl(this.payrollDetail.StartDate),
+      EndDate: new FormControl(this.payrollDetail.EndDate),
+      IsActive: new FormControl(this.payrollDetail.IsActive),
+      DOJ: new FormControl(this.payrollDetail.DOJ),
+      LWD: new FormControl(this.payrollDetail.LWD),
+      DOR: new FormControl(this.payrollDetail.DOR),
+      NoOfDays: new FormControl(this.payrollDetail.NoOfDays),
+      PaymentActionType: new FormControl(this.payrollDetail.PaymentActionType),
+      Reason: new FormControl(this.payrollDetail.Reason),
+      Comments: new FormControl(this.payrollDetail.Comments),
+      Status: new FormControl(this.payrollDetail.Status),
+      ForYear: new FormControl(this.payrollDetail.ForYear),
+      ForMonth: new FormControl(this.payrollDetail.ForMonth),
+      WorkedMinutes: new FormControl(this.payrollDetail.WorkedMinutes),
+      FirstName: new FormControl(this.payrollDetail.FirstName),
+      LastName: new FormControl(this.payrollDetail.LastName),
+      CTC: new FormControl(this.payrollDetail.CTC)
+    });
+  }
+
+  get RunPayroll(): FormArray {
+    return this.runPayrollForm.get("RunPayroll") as FormArray
+  }
+
   GetFilterLeaveResult(e: Filter) {
     if (e != null) {
       this.leaveData = e;
@@ -199,7 +336,7 @@ export class ProcessingPayrollComponent implements OnInit {
       case 2:
         break;
     }
-
+    requestPayload = this.runPayrollForm.value.RunPayroll;
     this.saveAndLoadNextComponent(requestPayload);
   }
 
@@ -357,12 +494,42 @@ export class ProcessingPayrollComponent implements OnInit {
         let records = res.ResponseBody;
         this.exitEmpDetail = records.filter(x => x.IsServingNotice == true || x.IsServingNotice == 1);
         this.newJoineeDetail = records.filter(x => x.InProbation == true || x.InProbation == 1);
+        if (this.active == 1)
+          this.getNewJoineeRecord();
+        else if (this.active == 2)
+          this.getExistEmpRecord();
+
         Toast("Record found");
         this.isLoading = false;
       }
     }).catch(e => {
       this.isLoading = false;
     })
+  }
+
+  getNewJoineeRecord() {
+    let newJoineeData = this.newJoineeDetail;
+    if (newJoineeData && newJoineeData.length > 0) {
+      newJoineeData.forEach(x => {
+        x.DOJ = x.CreatedOn,
+        x.NoOfDays = x.InDays
+      })
+    }
+    this.initPayrollForm(newJoineeData);
+  }
+
+  getExistEmpRecord() {
+    let existEmpData = this.exitEmpDetail;
+    if (existEmpData && existEmpData.length > 0) {
+      existEmpData.forEach(x => {
+        x.DOR = x.CreatedOn,
+        x.NoOfDays = x.InDays,
+        x.LWD = x.DOL,
+        x.Status = x.ResignationStatus
+      })
+    }
+
+    this.initPayrollForm(existEmpData);
   }
 
   viewBonusSalaryRevisionOT() {
@@ -878,4 +1045,40 @@ interface Attendance {
   EmployeeName: string,
   ForYear: number,
   ForMonth: number
+}
+
+interface PayrollDetail {
+  SalaryAdhocId: number,
+  EmployeeId: number,
+  FinancialYear: number,
+  OrganizationId: number,
+  CompanyId: number,
+  IsPaidByCompany: boolean,
+  IsPaidByEmployee: boolean,
+  IsFine: boolean,
+  IsHikeInSalary: boolean,
+  IsBonus: boolean,
+  IsReimbursment: boolean,
+  IsSalaryOnHold: boolean,
+  IsArrear: boolean,
+  Description: string,
+  Amount: number,
+  ApprovedBy: number,
+  StartDate: Date,
+  EndDate: Date,
+  IsActive: boolean,
+  DOJ: Date,
+  LWD: Date,
+  DOR: Date,
+  NoOfDays: number,
+  PaymentActionType: string,
+  Reason: string,
+  Comments: string,
+  Status: number,
+  ForYear: number,
+  ForMonth: number,
+  WorkedMinutes: number,
+  FirstName: string,
+  LastName: string,
+  CTC: number
 }

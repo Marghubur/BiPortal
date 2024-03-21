@@ -1,5 +1,5 @@
 .t-body {
-  max-height: 49vh !important;
+  max-height: 100% !important;
 }
 
 .cell-wrapper {
@@ -15,9 +15,6 @@
   justify-content: flex-start !important;
 }
 
-.custom-height {
-  height: 43vh !important;
-}
 
 textarea {
   resize: none;
