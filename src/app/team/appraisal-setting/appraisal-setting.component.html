@@ -28,11 +28,12 @@
                       class="fa-solid fa-plus pe-1"></i> Add Aprisal Cycle</button>
                 </div>
                 <div>
-                  <span class="fw-bold px-2">Click to add objective</span>
                   <a href="javascript:void(0)" *ngIf="!isViewInList" class="text-decoration-none" (click)="listview()">
+                    <span class="fw-bold px-2">Click to add objective</span>
                     <i class="fa-solid fa-object-ungroup"></i>
                   </a>
                   <a href="javascript:void(0)" *ngIf="isViewInList" class="text-decoration-none" (click)="listview()">
+                    <span class="fw-bold px-2">Click to add objective</span>
                     <i class="fa-regular fa-object-ungroup"></i>
                   </a>
                 </div>
@@ -123,7 +124,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="t-body custom-height">
+                        <div class="t-body">
                           <ng-container *ngIf="currentAppraisalObjective.length > 0">
                             <div *ngFor="let item of currentAppraisalObjective; let i=index;"
                               class="tr align-items-center py-2 ps-2">
@@ -296,7 +297,7 @@
                     <div class="t-body">
                       <ng-container *ngIf="apprisalCycleDetail.length > 0">
                         <div class="tr py-2" *ngFor="let item of apprisalCycleDetail;">
-                          <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
+                          <div class="td align-middle ps-3 fe-index">{{item.RowIndex}}</div>
                           <div class="td align-middle d-flex justify-content-between fe-2">
                             <div class="text-truncate">
                               {{item.AppraisalName}}
@@ -354,8 +355,7 @@
                       </ng-container>
                     </div>
                     <ng-container *ngIf="apprisalCycleDetail.length == 0">
-                      <div
-                        class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <div class="my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                         <p class="my-5 py-5">Record Not Found</p>
                       </div>
                     </ng-container>
@@ -443,7 +443,7 @@
                     <div class="t-body">
                       <ng-container *ngIf="objectiveDetails.length > 0">
                         <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
-                          <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
+                          <div class="td align-middle ps-3 fe-index">{{item.RowIndex}}</div>
                           <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
                             <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
                             <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right"
@@ -466,9 +466,8 @@
                           </div>
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="objectiveDetails.length == 0 && !isPageReady">
-                        <div
-                          class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <ng-container *ngIf="objectiveDetails.length == 0 && isPageReady">
+                        <div class="my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                           <p class="my-5 py-5">Record Not Found</p>
                         </div>
                       </ng-container>
@@ -637,7 +636,7 @@
               <div class="t-body">
                 <ng-container *ngIf="objectiveDetails.length > 0">
                   <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
-                    <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
+                    <div class="td align-middle ps-3 fe-index">{{item.RowIndex}}</div>
                     <div class="td align-middle fe-3 text-truncate d-flex align-items-center">
                       <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
                       <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right"

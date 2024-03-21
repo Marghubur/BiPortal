@@ -72,7 +72,7 @@
               <div class="t-body">
                 <ng-container *ngIf="objectiveDetails.length > 0">
                   <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
-                    <div class="td align-middle ps-3 fe-index">{{item.Index}}</div>
+                    <div class="td align-middle ps-3 fe-index">{{item.RowIndex}}</div>
                     <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
                       <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
                       <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right" title="{{item.Description}}"></i>

@@ -168,6 +168,7 @@ export const EmailTemplate = `${BaseSubUrlPath}/ems/administration/emailtemplate
 export const ManageEmailTemplate = `${BaseSubUrlPath}/ems/administration/emailtemplate/manageemailtemplate`;
 export const ManageCronJob = `${BaseSubUrlPath}/ems/administration/cronjob/managecronjob`;
 export const CronJob = `${BaseSubUrlPath}/ems/administration/cronjob`;
+export const InitialSetup = `${BaseSubUrlPath}/ems/administration/initialsetup`;
 
 // ********************** Admin route pages  *******************
 

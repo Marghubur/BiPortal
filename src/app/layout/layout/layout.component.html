@@ -1,14 +1,19 @@
 <div class="vh-100 overflow-hidden header_bg">
   <app-loader></app-loader>
-  <app-navbar></app-navbar>
-  <div class="d-flex container-scroller h-100">
-    <div class="" [ngClass]="{'l-panel': !isMinimize, 'mini-l-panel': isMinimize}" data-name="l-panel">
-      <app-sidemenu></app-sidemenu>
-    </div>
-    <div class="" [ngClass]="{'r-panel': !isMinimize, 'mini-r-panel': isMinimize}" data-name="r-panel">
-      <div class="content-wrapper body-curve">
-        <router-outlet></router-outlet>
+  <ng-container *ngIf="!isInitialPage">
+    <app-navbar></app-navbar>
+    <div class="d-flex container-scroller h-100">
+      <div class="" [ngClass]="{'l-panel': !isMinimize, 'mini-l-panel': isMinimize}" data-name="l-panel">
+        <app-sidemenu></app-sidemenu>
+      </div>
+      <div class="" [ngClass]="{'r-panel': !isMinimize, 'mini-r-panel': isMinimize}" data-name="r-panel">
+        <div class="content-wrapper body-curve">
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
+  <ng-container *ngIf="isInitialPage">
+    <router-outlet></router-outlet>
+  </ng-container>
 </div>

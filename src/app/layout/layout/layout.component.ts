@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
 import {
   Router,
   Event,
   NavigationStart,
 } from "@angular/router";
 import { CommonService } from 'src/providers/common-service/common.service';
-import { Login } from 'src/providers/constants';
+import { InitialSetup, Login } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -13,12 +13,13 @@ import { iNavigation } from 'src/providers/iNavigation';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit, DoCheck {
   title = "star-admin-angular";
   enableAuth: boolean = false;
   pageName: string = "";
   activePage:number = 0;
   isMinimize: boolean = false;
+  isInitialPage: boolean = false;
 
   displayActivePage(activePageNumber:number){
     this.activePage = activePageNumber
@@ -47,6 +48,14 @@ export class LayoutComponent implements OnInit {
         }
       }
     });
+  }
+
+  ngDoCheck(): void {
+    let route = this.router.url;
+    if (route.includes(InitialSetup))
+      this.isInitialPage = true;
+    else
+      this.isInitialPage = false;
   }
 
   doAuthentication() {
