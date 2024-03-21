@@ -962,21 +962,22 @@
                         <div class="tr py-2" *ngFor="let item of newJoineeDetail; let i=index;">
                           <div class="td align-middle text-center fe-index">{{i+1}}</div>
                           <div class="td align-middle fe-1 text-truncate">
-                            {{item.EmployeeName}}
+                            {{item.FirstName}} {{item.LastName}}
                           </div>
                           <div class="td align-middle fe-1">
                             <div class="cell-wrapper">
-                              {{item.Date | date}}
+                              {{item.CreatedOn | date}}
                             </div>
                           </div>
                           <div class="td align-middle fe-1">
                             <div class="cell-wrapper">
-                              {{item.WorkingDays}}
+                              {{item.InDays}}
                             </div>
                           </div>
                           <div class="td align-middle fe-1">
                             <div class="cell-wrapper">
-                              {{item.Salary}}
+                              <i class="fa-solid fa-indian-rupee-sign pe-2"></i>
+                              {{item.CTC}}
                             </div>
                           </div>
                           <div class="td align-middle fe-1">
@@ -1044,7 +1045,7 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <div class="t-head">
+                    <!-- <div class="t-head">
                       <div class="tr">
                         <div class="th fe-index">
                           <div class="t-filter t-index">
@@ -1064,6 +1065,13 @@
                               <a href="javascript:void(0)" class="pe-2">Date of Registration</a>
                             </div>
                           </div>
+                        </div>                        
+                        <div class="th fe-1">
+                          <div class="cell-wrapper">
+                            <div class="t-filter">
+                              <a href="javascript:void(0)" class="pe-2">Last Working Day</a>
+                            </div>
+                          </div>
                         </div>
                         <div class="th fe-1">
                           <div class="cell-wrapper">
@@ -1075,14 +1083,7 @@
                         <div class="th fe-1">
                           <div class="cell-wrapper">
                             <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Last Working Day</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Exit Request Status</a>
+                              <a href="javascript:void(0)" class="pe-2">Request Status</a>
                             </div>
                           </div>
                         </div>
@@ -1094,39 +1095,53 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     <div class="t-body">
                       <ng-container *ngIf="exitEmpDetail.length > 0">
-                        <div class="tr py-2" *ngFor="let item of exitEmpDetail; let i=index;">
-                          <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                          <div class="td align-middle fe-1 text-truncate">
-                            {{item.EmployeeName}}
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.DOJ | date}}
+                        <div class="tr p-4 d-flex justify-content-between"
+                          *ngFor="let item of exitEmpDetail; let i=index;">
+                          <div class="td d-flex flex-column justify-content-end">
+                            <div class="td align-middle fe-1 text-truncate">
+                              <a href="javascript:void(0)">
+                                <i class="fa-regular fa-circle-user pe-2" style="color: #63E6BE;"></i>
+                                {{item.FirstName}} {{item.LastName}}
+                              </a>
+                            </div>
+                            <div class="td align-middle fe-1 mt-2">
+                              <b>Resigned on:</b>
+                              {{item.CreatedOn | date}}
+                            </div>
+                            <div class="td align-middle fe-1">
+                              <b>Last working day:</b>
+                              {{item.DOL | date}}
                             </div>
                           </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="item.Reason">
+                          <div class="td d-flex flex-column justify-content-end">
+                            <b>User Reason</b>
+                            <div class="cell-wrapper pt-2">
+                              {{item.Reason}}
                             </div>
                           </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" placeholder="Reason" class="form-control"
-                                [(ngModel)]="item.LastWorkingDay">
+                          <div class="td d-flex justify-content-end">
+                            <div>
+                              <div class="cell-wrapper">
+                                <select class="form-select w-auto border-0" [(ngModel)]="item.ResignationStatus">
+                                  <option value="2">Pending</option>
+                                  <option value="9">Approved</option>
+                                  <option value="5">Rejected</option>
+                                </select>
+                              </div>
+                              <div class="cell-wrapper">
+                                <select class="form-select w-auto border-0">
+                                  <option value="1">Hold salary processing this month</option>
+                                  <option value="2">Process as salary</option>
+                                  <option value="3">Void salary processing</option>
+                                  <option value="4">Hold salary payout this month</option>
+                                  <option value="5">Void salary payout</option>
+                                  <option value="6">Already Paid</option>
+                                </select>
+                              </div>
                             </div>
-                          </div>
-                          <div class="td align-middle text-center fe-1">
-                            <select class="form-select" [(ngModel)]="item.ExitRequestStatus">
-                              <option value="1">Pending</option>
-                              <option value="2">Approved</option>
-                              <option value="3">Rejected</option>
-                            </select>
-                          </div>
-                          <div class="td align-middle text-center fe-1">
-                            {{item.WaitingOn | date}}
                           </div>
                         </div>
                       </ng-container>

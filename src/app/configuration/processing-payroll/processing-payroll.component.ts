@@ -192,13 +192,35 @@ export class ProcessingPayrollComponent implements OnInit {
       this.activePayrollTab = this.activePayrollTab - 1;
   }
 
-  // ------------------------------Employee Changes
-    saveEmpChange() {
+  // ------------------------------Employee Changes --------------------------
+  saveEmpChange() {
+    let requestPayload = {};
+    switch (this.activePayrollTab) {
+      case 2:
+        break;
+    }
+
+    this.saveAndLoadNextComponent(requestPayload);
+  }
+
+  moveNextComponent() {
     if (this.activePayrollTab > 0 && this.activePayrollTab < 3) {
       this.activePayrollTab = this.activePayrollTab + 1;
     } else {
       this.activePayrollTab = 1;
     }
+  }
+
+  saveAndLoadNextComponent(requestPayload: any) {
+    this.filterHttp.post("promotionoradhocs/updateHikePromotionAndAdhocs", requestPayload)
+      .then((response: ResponseModel) => {
+        if (response.ResponseBody == "updated") {
+          Toast("Record updated successfully");
+          this.moveNextComponent();
+        } else {
+          Toast("Fail to updated record");
+        }
+      });
   }
 
   markEmpChangeComplete() {
@@ -325,6 +347,22 @@ export class ProcessingPayrollComponent implements OnInit {
   viewNewJoineeExist() {
     this.active = 1;
     this.activePayrollTab = 2;
+    this.loadNewJoineeExistEmployeeData();
+  }
+
+  loadNewJoineeExistEmployeeData() {
+    this.isLoading = true;
+    this.filterHttp.get(`runpayroll/getJoineeAndExitingEmployees`).then(res => {
+      if (res.ResponseBody) {
+        let records = res.ResponseBody;
+        this.exitEmpDetail = records.filter(x => x.IsServingNotice == true || x.IsServingNotice == 1);
+        this.newJoineeDetail = records.filter(x => x.InProbation == true || x.InProbation == 1);
+        Toast("Record found");
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
   }
 
   viewBonusSalaryRevisionOT() {
@@ -358,7 +396,7 @@ export class ProcessingPayrollComponent implements OnInit {
       if (res.ResponseBody) {
         if (res.ResponseBody[0].length > 0)
           this.appliedLeaveDetail = res.ResponseBody[0];
-        else if (res.ResponseBody[0].length == 1)  {
+        else if (res.ResponseBody[0].length == 1) {
           let data = res.ResponseBody[0];
           if (data && data.employeeId) {
             this.appliedLeaveDetail = data;
@@ -376,7 +414,7 @@ export class ProcessingPayrollComponent implements OnInit {
     this.isLoading = true;
     let endPoint = '';
 
-    switch(requestState) {
+    switch (requestState) {
       case 'Approved':
         endPoint = `LeaveRequest/ApproveLeaveRequest`;
         break;
@@ -389,13 +427,13 @@ export class ProcessingPayrollComponent implements OnInit {
       LeaveFromDay: this.selectedLeave.FromDate,
       LeaveToDay: this.selectedLeave.ToDate,
       EmployeeId: this.selectedLeave.EmployeeId,
-      LeaveRequestNotificationId : this.selectedLeave.LeaveRequestNotificationId,
+      LeaveRequestNotificationId: this.selectedLeave.LeaveRequestNotificationId,
       RecordId: this.selectedLeave.RecordId,
       LeaveTypeId: this.selectedLeave.LeaveTypeId,
       Reason: this.selectedLeave.Reason
     }
     let filterId = 0;
-    this.http.post(`${endPoint}/${filterId}`, currentResponse).then((response:ResponseModel) => {
+    this.http.post(`${endPoint}/${filterId}`, currentResponse).then((response: ResponseModel) => {
       if (response.ResponseBody) {
         $('#leaveActionModal').modal('hide');
         Toast("Submitted Successfully");
@@ -407,7 +445,7 @@ export class ProcessingPayrollComponent implements OnInit {
 
   lopAdjustmentPopUp(item: any) {
     this.selectedLOP = item;
-    this.http.get(`Leave/GetLeaveDetailByEmpId/${item.EmployeeId}`).then((res:ResponseModel) => {
+    this.http.get(`Leave/GetLeaveDetailByEmpId/${item.EmployeeId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.leaveQuota = JSON.parse(res.ResponseBody.LeaveQuotaDetail);
         $('#lopAdjustment').modal('show');
@@ -420,7 +458,7 @@ export class ProcessingPayrollComponent implements OnInit {
 
   getAttendanceDetail() {
     this.isLoading = true;
-    this.filterHttp.post("runpayroll/getAttendancePage", this.attendanceData).then((res:ResponseModel) => {
+    this.filterHttp.post("runpayroll/getAttendancePage", this.attendanceData).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
         this.attendanceDetail = res.ResponseBody;
@@ -429,8 +467,8 @@ export class ProcessingPayrollComponent implements OnInit {
             x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
             if (this.appliedLeaveDetail && this.appliedLeaveDetail.length > 0) {
               x.AttendanceDetail.forEach(i => {
-                var item = this.appliedLeaveDetail.find(z => (new Date(z.FromDate).getTime() - new Date(i.AttendanceDay).getTime())/(1000 * 60 * 60 * 24) <=0 &&
-                  ((new Date(z.ToDate).getTime() - new Date(i.AttendanceDay).getTime()))/(1000 * 60 * 60 * 24)  >= 0 && z.EmployeeId == x.EmployeeId);
+                var item = this.appliedLeaveDetail.find(z => (new Date(z.FromDate).getTime() - new Date(i.AttendanceDay).getTime()) / (1000 * 60 * 60 * 24) <= 0 &&
+                  ((new Date(z.ToDate).getTime() - new Date(i.AttendanceDay).getTime())) / (1000 * 60 * 60 * 24) >= 0 && z.EmployeeId == x.EmployeeId);
                 if (item)
                   i.IsOnLeave = true;
               });
@@ -450,7 +488,7 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   GetFilterLosspayResult(e: Filter) {
-    if(e != null) {
+    if (e != null) {
       this.attendanceData = e;
       this.getAttendanceDetail();
     }
@@ -462,22 +500,22 @@ export class ProcessingPayrollComponent implements OnInit {
     this.attendanceData.SearchString = ""
     this.attendanceData.reset();
 
-    if(this.attendance.EmployeeName !== null && this.attendance.EmployeeName !== "") {
+    if (this.attendance.EmployeeName !== null && this.attendance.EmployeeName !== "") {
       searchString += ` EmployeeName like '%${this.attendance.EmployeeName.toUpperCase()}%'`;
       delimiter = "and";
     }
 
-    if(this.attendance.ForMonth !== null && this.attendance.ForMonth > 0) {
+    if (this.attendance.ForMonth !== null && this.attendance.ForMonth > 0) {
       searchString += ` ${delimiter} ForMonth = ${this.attendance.ForMonth}`;
       delimiter = "and";
     }
 
-    if(this.attendance.ForYear !== null && this.attendance.ForYear> 0) {
+    if (this.attendance.ForYear !== null && this.attendance.ForYear > 0) {
       searchString += ` ${delimiter} ForYear = ${this.attendance.ForYear}`;
       delimiter = "and";
     }
 
-    if(searchString != "") {
+    if (searchString != "") {
       this.attendanceData.SearchString = ` 1=1 and ${searchString}`;
     } else {
       this.attendanceData.SearchString = "1=1";
@@ -524,7 +562,7 @@ export class ProcessingPayrollComponent implements OnInit {
       return;
     }
 
-    this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then ((res:ResponseModel) => {
+    this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
         if (attendance) {
@@ -548,21 +586,21 @@ export class ProcessingPayrollComponent implements OnInit {
       return;
     }
 
-    if (this.selectedLeaveType!= null && this.selectedLeaveType.LeavePlanTypeId <=0) {
+    if (this.selectedLeaveType != null && this.selectedLeaveType.LeavePlanTypeId <= 0) {
       WarningToast("Please select Leave Type first.");
       this.isLoading = false;
       return;
     }
 
-    if (this.selectedLeaveType!= null && this.selectedLeaveType.AvailableLeaves <=0) {
+    if (this.selectedLeaveType != null && this.selectedLeaveType.AvailableLeaves <= 0) {
       WarningToast("You don't have leave balance of selected leave");
       this.isLoading = false;
       return;
     }
 
-    this.selectedLOP.LeaveTypeId= this.selectedLeaveType.LeavePlanTypeId;
-    this.selectedLOP.LeavePlanName= this.selectedLeaveType.LeavePlanTypeName
-    this.http.post('Leave/AdjustLOPAsLeave', this.selectedLOP).then ((res:ResponseModel) => {
+    this.selectedLOP.LeaveTypeId = this.selectedLeaveType.LeavePlanTypeId;
+    this.selectedLOP.LeavePlanName = this.selectedLeaveType.LeavePlanTypeName
+    this.http.post('Leave/AdjustLOPAsLeave', this.selectedLOP).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         $('#lopAdjustment').modal('hide');
         Toast("Leave apply successfully.");
@@ -602,15 +640,15 @@ export class ProcessingPayrollComponent implements OnInit {
   getLopAdjustment() {
     this.isLoading = true;
     this.http.get(`Attendance/GetLOPAdjustment/${this.selectedPayrollCalendar.Month}/${this.selectedPayrollCalendar.Year}`)
-    .then((res:ResponseModel) => {
-      if (res.ResponseBody) {
-        this.lossPayDetail = res.ResponseBody;
-        console.log(res.ResponseBody);
+      .then((res: ResponseModel) => {
+        if (res.ResponseBody) {
+          this.lossPayDetail = res.ResponseBody;
+          console.log(res.ResponseBody);
+          this.isLoading = false;
+        }
+      }).catch(e => {
         this.isLoading = false;
-      }
-    }).catch(e => {
-      this.isLoading = false;
-    })
+      })
   }
 
   previousMonthyPayroll(e: any) {
