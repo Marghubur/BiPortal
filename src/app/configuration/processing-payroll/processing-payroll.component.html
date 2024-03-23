@@ -906,7 +906,7 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <div class="t-head">
+                    <!-- <div class="t-head">
                       <div class="tr">
                         <div class="th fe-index">
                           <div class="t-filter t-index">
@@ -1001,7 +1001,57 @@
                           </div>
                         </div>
                       </ng-container>
-                    </form>
+                    </form> -->
+                    <ng-container *ngIf="newJoineeDetail.length > 0">
+                      <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
+                        <ng-container formArrayName="RunPayroll">
+                          <div class="t-body">
+                            <div class="tr p-4 d-flex justify-content-between" *ngFor="let item of RunPayroll.controls; let i=index;" [formGroupName]="i">
+                              <div class="td d-flex flex-column justify-content-end">
+                                <div class="td align-middle fe-1 text-truncate">
+                                  <a href="javascript:void(0)">
+                                    <i class="fa-regular fa-circle-user pe-2" style="color: #63E6BE;"></i>
+                                    {{item.get('FirstName').value}} {{item.get('LastName').value}}
+                                  </a>
+                                </div>
+                                <div class="td align-middle fe-1 mt-2">
+                                  <b>Date of Joining:</b>
+                                  {{item.get('DOJ').value | date}}
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <b>No working day:</b>
+                                  {{item.get('NoOfDays').value | date}}
+                                </div>
+                              </div>
+                              <div class="td d-flex flex-column justify-content-end">
+                                <b>Salary</b>
+                                <div class="cell-wrapper pt-2">
+                                  <i class="fa-solid fa-indian-rupee-sign pe-2"></i>
+                                  {{item.get('CTC').value}}
+                                </div>
+                              </div>
+                              <div class="td d-flex justify-content-end">
+                                <div>
+                                  <div class="cell-wrapper">
+                                    <select class="form-select" formControlName="PaymentActionType">
+                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
+                                      <option value="Process as salary">Process as salary</option>
+                                      <option value="Void salary processing">Void salary processing</option>
+                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
+                                      <option value="Void salary payout">Void salary payout</option>
+                                      <option value="Already Paid">Already Paid</option>
+                                    </select>
+                                  </div>
+                                  <div class="cell-wrapper mt-2">
+                                    <input type="text" class="form-control" formControlName="Comments" placeholder="Comments">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </form>
+                    </ng-container>
                     <ng-container *ngIf="newJoineeDetail.length == 0">
                       <div
                         class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
@@ -1011,28 +1061,9 @@
                   </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active > 1"
-                    (click)="backActivePages()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 3"
-                    (click)="saveEmpChange()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 3"
-                    (click)="saveEmpChange()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 3"
-                    (click)="markEmpChangeComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
                   </button>
                 </div>
               </ng-template>
@@ -1098,57 +1129,59 @@
                         </div>
                       </div>
                     </div> -->
-                    <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
-                      <ng-container formArrayName="RunPayroll">
-                        <div class="t-body">
-                          <div class="tr p-4 d-flex justify-content-between" *ngFor="let item of RunPayroll.controls; let i=index;" [formGroupName]="i">
-                            <div class="td d-flex flex-column justify-content-end">
-                              <div class="td align-middle fe-1 text-truncate">
-                                <a href="javascript:void(0)">
-                                  <i class="fa-regular fa-circle-user pe-2" style="color: #63E6BE;"></i>
-                                  {{item.get('FirstName').value}} {{item.get('LastName').value}}
-                                </a>
-                              </div>
-                              <div class="td align-middle fe-1 mt-2">
-                                <b>Resigned on:</b>
-                                {{item.get('DOR').value | date}}
-                              </div>
-                              <div class="td align-middle fe-1">
-                                <b>Last working day:</b>
-                                {{item.get('LWD').value | date}}
-                              </div>
-                            </div>
-                            <div class="td d-flex flex-column justify-content-end">
-                              <b>User Reason</b>
-                              <div class="cell-wrapper pt-2">
-                                {{item.get('Reason').value}}
-                              </div>
-                            </div>
-                            <div class="td d-flex justify-content-end">
-                              <div>
-                                <div class="cell-wrapper">
-                                  <select class="form-select w-auto border-0" formControlName="Status">
-                                    <option value="2">Pending</option>
-                                    <option value="9">Approved</option>
-                                    <option value="5">Rejected</option>
-                                  </select>
+                    <ng-container *ngIf="exitEmpDetail.length > 0">
+                      <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
+                        <ng-container formArrayName="RunPayroll">
+                          <div class="t-body">
+                            <div class="tr p-4 d-flex justify-content-between" *ngFor="let item of RunPayroll.controls; let i=index;" [formGroupName]="i">
+                              <div class="td d-flex flex-column justify-content-end">
+                                <div class="td align-middle fe-1 text-truncate">
+                                  <a href="javascript:void(0)">
+                                    <i class="fa-regular fa-circle-user pe-2" style="color: #63E6BE;"></i>
+                                    {{item.get('FirstName').value}} {{item.get('LastName').value}}
+                                  </a>
                                 </div>
-                                <div class="cell-wrapper">
-                                  <select class="form-select" formControlName="PaymentActionType">
-                                    <option value="Hold salary processing this month">Hold salary processing this month</option>
-                                    <option value="Process as salary">Process as salary</option>
-                                    <option value="Void salary processing">Void salary processing</option>
-                                    <option value="Hold salary payout this month">Hold salary payout this month</option>
-                                    <option value="Void salary payout">Void salary payout</option>
-                                    <option value="Already Paid">Already Paid</option>
-                                  </select>
+                                <div class="td align-middle fe-1 mt-2">
+                                  <b>Resigned on:</b>
+                                  {{item.get('DOR').value | date}}
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <b>Last working day:</b>
+                                  {{item.get('LWD').value | date}}
+                                </div>
+                              </div>
+                              <div class="td d-flex flex-column justify-content-end">
+                                <b>User Reason</b>
+                                <div class="cell-wrapper pt-2">
+                                  {{item.get('Reason').value}}
+                                </div>
+                              </div>
+                              <div class="td d-flex justify-content-end">
+                                <div>
+                                  <div class="cell-wrapper">
+                                    <select class="form-select w-auto border-0" formControlName="Status">
+                                      <option value="2">Pending</option>
+                                      <option value="9">Approved</option>
+                                      <option value="5">Rejected</option>
+                                    </select>
+                                  </div>
+                                  <div class="cell-wrapper">
+                                    <select class="form-select" formControlName="PaymentActionType">
+                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
+                                      <option value="Process as salary">Process as salary</option>
+                                      <option value="Void salary processing">Void salary processing</option>
+                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
+                                      <option value="Void salary payout">Void salary payout</option>
+                                      <option value="Already Paid">Already Paid</option>
+                                    </select>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </ng-container>
-                    </form>
+                        </ng-container>
+                      </form>
+                    </ng-container>
                     <ng-container *ngIf="exitEmpDetail.length == 0">
                       <div
                         class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
@@ -1158,28 +1191,13 @@
                   </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active > 1"
-                    (click)="backActivePages()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="backActivePages()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                     <span class="ps-2">Back</span>
                   </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 3"
-                    (click)="saveEmpChange()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 3"
-                    (click)="saveEmpChange()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 3"
-                    (click)="markEmpChangeComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
                   </button>
                 </div>
               </ng-template>
@@ -1192,7 +1210,7 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <div class="t-head">
+                    <!-- <div class="t-head">
                       <div class="tr">
                         <div class="th fe-index">
                           <div class="t-filter t-index">
@@ -1299,7 +1317,65 @@
                           </div>
                         </div>
                       </ng-container>
-                    </form>
+                    </form> -->
+                    <ng-container *ngIf="settlementDetail.length > 0">
+                      <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
+                        <ng-container formArrayName="RunPayroll">
+                          <div class="t-body">
+                            <div class="tr p-4 d-flex justify-content-between" *ngFor="let item of RunPayroll.controls; let i=index;" [formGroupName]="i">
+                              <div class="td d-flex flex-column justify-content-end">
+                                <div class="td align-middle fe-1 text-truncate">
+                                  <a href="javascript:void(0)">
+                                    <i class="fa-regular fa-circle-user pe-2" style="color: #63E6BE;"></i>
+                                    {{item.get('FirstName').value}} {{item.get('LastName').value}}
+                                  </a>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <b>Last working day:</b>
+                                  {{item.get('LWD').value | date}}
+                                </div>
+                              </div>
+                              <div class="td d-flex flex-column justify-content-end">
+                                <b>User Reason</b>
+                                <div class="cell-wrapper pt-2 ps-0">
+                                  {{item.get('Reason').value}}
+                                </div>
+                              </div>
+                              <div class="td d-flex flex-column justify-content-end">
+                                <b>Status</b>
+                                <div class="cell-wrapper pt-2 ps-0">
+                                  <select class="form-select  w-auto" formControlName="Status">
+                                    <option value="2">Pending</option>
+                                    <option value="9">Approved</option>
+                                    <option value="5">Rejected</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="td d-flex flex-column justify-content-end">
+                                <b>Settled Amount</b>
+                                <div class="cell-wrapper pt-2 ps-0">
+                                  <input type="text" placeholder="Settle Amount" formControlName="Amount" class="form-control w-50">
+                                </div>
+                              </div>
+                              <div class="td d-flex justify-content-end">
+                                <div>
+                                  <div class="cell-wrapper">
+                                    <select class="form-select" formControlName="Status">
+                                      <option value="2">Pending</option>
+                                      <option value="9">Approved</option>
+                                      <option value="5">Rejected</option>
+                                    </select>
+                                  </div>
+                                  <div class="cell-wrapper mt-2">
+                                    <input type="text" placeholder="Comment" formControlName="Comments" class="form-control" placeholder="Comment">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </form>
+                    </ng-container>
                     <ng-container *ngIf="settlementDetail.length == 0">
                       <div
                         class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
@@ -1309,27 +1385,16 @@
                   </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active > 1"
-                    (click)="backActivePages()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="backActivePages()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                     <span class="ps-2">Back</span>
                   </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 3"
-                    (click)="saveEmpChange()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                    <span class="ps-2">Save & Next</span>
                   </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 3"
-                    (click)="saveEmpChange()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 3"
-                    (click)="markEmpChangeComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="markEmpChangeComplete()">
+                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
                     <span class="ps-2">Mark as Completed</span>
                   </button>
                 </div>
@@ -1343,14 +1408,14 @@
         <ng-container *ngIf="activePayrollTab == 3">
           <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
             <li [ngbNavItem]="1">
-              <button ngbNavLink>BONUS</button>
+              <button ngbNavLink (click)="getBonusEmpRecord()">BONUS</button>
               <ng-template ngbNavContent>
                 <div class="alert alert-info">All pending bonuses to be paid (including any pasy unpaid bonuses) will be
                   shown here. New bonuses can also be added using 'Import Bonus'.</div>
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <div class="t-head">
+                    <!-- <div class="t-head">
                       <div class="tr">
                         <div class="th fe-index">
                           <div class="t-filter t-index">
@@ -1435,7 +1500,57 @@
                           </div>
                         </div>
                       </ng-container>
-                    </div>
+                    </div> -->
+                    <ng-container *ngIf="bonusDetail.length > 0">
+                      <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
+                        <ng-container formArrayName="RunPayroll">
+                          <div class="t-body">
+                            <div class="tr p-4 d-flex justify-content-between" *ngFor="let item of RunPayroll.controls; let i=index;" [formGroupName]="i">
+                              <div class="td d-flex flex-column justify-content-end">
+                                <div class="td align-middle fe-1 text-truncate">
+                                  <a href="javascript:void(0)">
+                                    <i class="fa-regular fa-circle-user pe-2" style="color: #63E6BE;"></i>
+                                    {{item.get('FirstName').value}} {{item.get('LastName').value}}
+                                  </a>
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <b>Bonus Type:</b>
+                                  {{item.get('ComponentFullName').value}}
+                                </div>
+                                <div class="td align-middle fe-1">
+                                  <b>Payout Month & Year:</b>
+                                  {{item.get('ForMonth').value}} {{item.get('ForYear').value}}
+                                </div>
+                              </div>
+                              <div class="td d-flex flex-column justify-content-end">
+                                <b>Amount</b>
+                                <div class="cell-wrapper pt-2 ps-0">
+                                  <i class="fa-solid fa-indian-rupee-sign pe-1"></i>
+                                  {{item.get('Amount').value | number: '1.2-2'}}
+                                </div>
+                              </div>
+                              <div class="td d-flex justify-content-end">
+                                <div>
+                                  <div class="cell-wrapper">
+                                    <select class="form-select" formControlName="PaymentActionType">
+                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
+                                      <option value="Process as salary">Process as salary</option>
+                                      <option value="Void salary processing">Void salary processing</option>
+                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
+                                      <option value="Void salary payout">Void salary payout</option>
+                                      <option value="Already Paid">Already Paid</option>
+                                    </select>
+                                  </div>
+                                  <div class="cell-wrapper mt-2">
+                                    <input type="text" class="form-control" formControlName="Comments" placeholder="Comments">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </form>
+                    </ng-container>
                     <ng-container *ngIf="bonusDetail.length == 0">
                       <div
                         class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
@@ -1445,28 +1560,9 @@
                   </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active > 1"
-                    (click)="backActivePages()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 4"
-                    (click)="saveBonusAlaryOvertime()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 4"
-                    (click)="saveBonusAlaryOvertime()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 4"
-                    (click)="markBonusAlaryOvertimeComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
                   </button>
                 </div>
               </ng-template>
