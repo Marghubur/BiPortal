@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
-import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation } from 'src/providers/constants';
+import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation, ItemStatus } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -39,7 +40,8 @@ export class SalaryComponent implements OnInit {
               private http: CoreHttpService,
               private user: UserService,
               private local: ApplicationStorage,
-              private fb:FormBuilder) { }
+              private fb:FormBuilder,
+              private employeeFilterHttp: EmployeeFilterHttpService) { }
 
   ngOnInit(): void {
     let empid = this.local.getByKey("EmployeeId");
@@ -229,17 +231,23 @@ export class SalaryComponent implements OnInit {
 
   onDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.bonusForm.controls["PayOutDate"].setValue(date);
+    this.bonusForm.controls["StartDate"].setValue(date);
+    this.bonusForm.controls["ForMonth"].setValue(e.month);
+    this.bonusForm.controls["ForYear"].setValue(e.year);
   }
 
   initBonusForm() {
     this.bonusForm = this.fb.group({
-      BonusId: new FormControl(1),
+      BonusShiftOvertimeId: new FormControl(0),
       ComponentId: new FormControl(null, [Validators.required]),
       Amount: new FormControl(null, [Validators.required]),
-      PayOutDate: new FormControl(null, [Validators.required]),
-      Status: new FormControl(2, [Validators.required]),
-      Note: new FormControl('')
+      StartDate: new FormControl(null, [Validators.required]),
+      Status: new FormControl(ItemStatus.Pending, [Validators.required]),
+      Comments: new FormControl(null),
+      IsBonus: new FormControl(true),
+      EmployeeId: new FormControl(this.EmployeeId),
+      ForYear: new FormControl(null, [Validators.required]),
+      ForMonth: new FormControl(null, [Validators.required])
     })
   }
 
@@ -256,9 +264,10 @@ export class SalaryComponent implements OnInit {
       return;
     }
     let value = this.bonusForm.value;
-    this.http.post("", value).then(res => {
+    this.employeeFilterHttp.post("promotionoradhocs/manageBonusShiftOvertime", value).then(res => {
       if (res.ResponseBody) {
         Toast("Bonus added successfully");
+        $('#addBonus').modal('hide');
         this.isLoading = false;
       }
     }).catch(e => {
@@ -279,9 +288,12 @@ export class SalaryComponent implements OnInit {
   }
 
   addBonusPopUp() {
+    this.submitted = false;
     let user = this.currentEmployee;
     this.employeeName = user.FirstName + " " + user.LastName;
     this.getBonusComponent();
+    this.bonusForm.reset();
+    this.initBonusForm();
     $('#addBonus').modal('show');
   }
 

@@ -8,6 +8,7 @@ import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ItemStatus } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -100,7 +101,9 @@ export class ProcessingPayrollComponent implements OnInit {
     ForYear: 0,
     ForMonth: 0,
     WorkedMinutes: 0,
-    CTC: 0
+    CTC: 0,
+    ComponentFullName: "",
+    TotalMinutes: 0
   }
 
   constructor(private http: CoreHttpService,
@@ -264,7 +267,9 @@ export class ProcessingPayrollComponent implements OnInit {
           WorkedMinutes: new FormControl(data[i].WorkedMinutes != null ? data[i].WorkedMinutes : 0),
           FirstName: new FormControl(data[i].FirstName),
           LastName: new FormControl(data[i].LastName),
-          CTC: new FormControl(data[i].CTC)
+          CTC: new FormControl(data[i].CTC),
+          ComponentFullName: new FormControl(data[i].ComponentFullName),
+          TotalMinutes: new FormControl(data[i].TotalMinutes)
         }))
         i++;
       }
@@ -309,7 +314,9 @@ export class ProcessingPayrollComponent implements OnInit {
       WorkedMinutes: new FormControl(this.payrollDetail.WorkedMinutes),
       FirstName: new FormControl(this.payrollDetail.FirstName),
       LastName: new FormControl(this.payrollDetail.LastName),
-      CTC: new FormControl(this.payrollDetail.CTC)
+      CTC: new FormControl(this.payrollDetail.CTC),
+      ComponentFullName: new FormControl(this.payrollDetail.ComponentFullName),
+      TotalMinutes: new FormControl(this.payrollDetail.TotalMinutes)
     });
   }
 
@@ -325,27 +332,54 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   backActivePages() {
-    if (this.activePayrollTab > 1)
-      this.activePayrollTab = this.activePayrollTab - 1;
+    if (this.active > 1)
+      this.active = this.active - 1;
   }
 
   // ------------------------------Employee Changes --------------------------
-  saveEmpChange() {
-    let requestPayload = {};
+  saveEmpChange() {}
+  savePayrollData() {
+    let requestPayload = this.runPayrollForm.value.RunPayroll;
+    requestPayload.forEach(x => {
+      x.ForMonth = this.selectedPayrollCalendar.Month + 1,
+      x.ForYear = this.selectedPayrollCalendar.Year,
+      x.Status = ItemStatus.Pending,
+      x.FinancialYear = 0
+    });
+    this.saveAndLoadNextComponent(requestPayload);
     switch (this.activePayrollTab) {
       case 2:
-        break;
+        if (this.active < 3) {
+          this.active = this.active + 1;
+          this.getExistEmpRecord();
+        }
+        else
+          this.moveNextComponent();
+      break;
+      case 3:
+        if (this.active == 1) {
+          this.active = this.active + 1;
+          this.getSalaryRevisionEmpRecord();
+        } else if (this.active == 2) {
+          this.active = this.active + 1;
+          this.getOverTimeEmpRecord();
+        } else if (this.active == 3) {
+          this.active = this.active + 1;
+          this.getShiftAllowanceEmpRecord();
+        } else {
+          this.moveNextComponent();
+        }
+      break;
     }
-    requestPayload = this.runPayrollForm.value.RunPayroll;
-    this.saveAndLoadNextComponent(requestPayload);
   }
 
   moveNextComponent() {
-    if (this.activePayrollTab > 0 && this.activePayrollTab < 3) {
+    if (this.activePayrollTab > 0 && this.activePayrollTab < 6) {
       this.activePayrollTab = this.activePayrollTab + 1;
     } else {
       this.activePayrollTab = 1;
     }
+    this.active = 1;
   }
 
   saveAndLoadNextComponent(requestPayload: any) {
@@ -353,7 +387,6 @@ export class ProcessingPayrollComponent implements OnInit {
       .then((response: ResponseModel) => {
         if (response.ResponseBody == "updated") {
           Toast("Record updated successfully");
-          this.moveNextComponent();
         } else {
           Toast("Fail to updated record");
         }
@@ -382,13 +415,7 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   // ------------------------------Reimbursement, Adhoc Payment and Deduction
-  saveReimbursementAdhocDeduction() {
-    if (this.activePayrollTab > 0 && this.activePayrollTab < 4) {
-      this.activePayrollTab = this.activePayrollTab + 1;
-    } else {
-      this.activePayrollTab = 1;
-    }
-  }
+  saveReimbursementAdhocDeduction() {  }
 
   markReimburseAdhocDeductionComplete() {
     this.activePayrollTab = 1;
@@ -490,7 +517,7 @@ export class ProcessingPayrollComponent implements OnInit {
   loadNewJoineeExistEmployeeData() {
     this.isLoading = true;
     this.filterHttp.get(`runpayroll/getJoineeAndExitingEmployees`).then(res => {
-      if (res.ResponseBody) {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
         let records = res.ResponseBody;
         this.exitEmpDetail = records.filter(x => x.IsServingNotice == true || x.IsServingNotice == 1);
         this.newJoineeDetail = records.filter(x => x.InProbation == true || x.InProbation == 1);
@@ -500,6 +527,8 @@ export class ProcessingPayrollComponent implements OnInit {
           this.getExistEmpRecord();
 
         Toast("Record found");
+        this.isLoading = false;
+      } else {
         this.isLoading = false;
       }
     }).catch(e => {
@@ -535,6 +564,91 @@ export class ProcessingPayrollComponent implements OnInit {
   viewBonusSalaryRevisionOT() {
     this.active = 1;
     this.activePayrollTab = 3;
+    this.loadBonusShiftOTEmployeeData();
+  }
+
+  loadBonusShiftOTEmployeeData() {
+    this.isLoading = true;
+    this.filterHttp.get(`runpayroll/getBonusShiftOT/${this.selectedPayrollCalendar.Month+1}/${this.selectedPayrollCalendar.Year}`).then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        let records = res.ResponseBody;
+        this.bonusDetail = records.filter(x => x.IsBonus == true || x.IsBonus == 1);
+        this.salaryRevisionDetail = records.filter(x => x.IsBonus == true || x.IsBonus == 1);
+        this.overTimePaymentDetail = records.filter(x => x.IsOvertime == true || x.IsOvertime == 1);
+        this.shiftAllowanceDetail = records.filter(x => x.IsShift == true || x.IsShift == 1);
+        if (this.active == 1)
+          this.getBonusEmpRecord();
+        else if (this.active == 2)
+          this.getSalaryRevisionEmpRecord();
+        else if (this.active == 3)
+          this.getOverTimeEmpRecord();
+        else
+          this.getShiftAllowanceEmpRecord();
+
+        Toast("Record found");
+        this.isLoading = false;
+      } else {
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  getBonusEmpRecord() {
+    let bonusData = this.bonusDetail;
+    if (bonusData && bonusData.length > 0) {
+      bonusData.forEach(x => {
+        x.DOR = x.CreatedOn,
+        x.NoOfDays = x.InDays,
+        x.LWD = x.DOL,
+        x.Status = x.ResignationStatus
+      })
+    }
+
+    this.initPayrollForm(bonusData);
+  }
+
+  getSalaryRevisionEmpRecord() {
+    let existEmpData = this.salaryRevisionDetail;
+    if (existEmpData && existEmpData.length > 0) {
+      existEmpData.forEach(x => {
+        x.DOR = x.CreatedOn,
+        x.NoOfDays = x.InDays,
+        x.LWD = x.DOL,
+        x.Status = x.ResignationStatus
+      })
+    }
+
+    this.initPayrollForm(existEmpData);
+  }
+
+  getOverTimeEmpRecord() {
+    let existEmpData = this.overTimePaymentDetail;
+    if (existEmpData && existEmpData.length > 0) {
+      existEmpData.forEach(x => {
+        x.DOR = x.CreatedOn,
+        x.NoOfDays = x.InDays,
+        x.LWD = x.DOL,
+        x.Status = x.ResignationStatus
+      })
+    }
+
+    this.initPayrollForm(existEmpData);
+  }
+
+  getShiftAllowanceEmpRecord() {
+    let existEmpData = this.shiftAllowanceDetail;
+    if (existEmpData && existEmpData.length > 0) {
+      existEmpData.forEach(x => {
+        x.DOR = x.CreatedOn,
+        x.NoOfDays = x.InDays,
+        x.LWD = x.DOL,
+        x.Status = x.ResignationStatus
+      })
+    }
+
+    this.initPayrollForm(existEmpData);
   }
 
   viewReimbursementAdhocDeduction() {
@@ -559,7 +673,7 @@ export class ProcessingPayrollComponent implements OnInit {
 
   loadLeaveData() {
     this.isLoading = true;
-    this.filterHttp.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month}`).then(res => {
+    this.filterHttp.get(`runpayroll/getLeaveAndLOP/${this.selectedPayrollCalendar.Year}/${this.selectedPayrollCalendar.Month+1}`).then(res => {
       if (res.ResponseBody) {
         if (res.ResponseBody[0].length > 0)
           this.appliedLeaveDetail = res.ResponseBody[0];
@@ -1080,5 +1194,7 @@ interface PayrollDetail {
   WorkedMinutes: number,
   FirstName: string,
   LastName: string,
-  CTC: number
+  CTC: number,
+  ComponentFullName: string,
+  TotalMinutes: number
 }
