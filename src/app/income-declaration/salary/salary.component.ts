@@ -264,7 +264,7 @@ export class SalaryComponent implements OnInit {
       return;
     }
     let value = this.bonusForm.value;
-    this.employeeFilterHttp.post("promotionoradhocs/manageBonusShiftOvertime", value).then(res => {
+    this.employeeFilterHttp.post("promotionoradhocs/manageBonus", value).then(res => {
       if (res.ResponseBody) {
         Toast("Bonus added successfully");
         $('#addBonus').modal('hide');
