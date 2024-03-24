@@ -29,7 +29,6 @@ export class ProcessingPayrollComponent implements OnInit {
   shiftAllowanceDetail: Array<any> = [];
   salaryComponentsDetail: Array<any> = [];
   adhocPaymentDetail: Array<any> = [];
-  expensesDetail: Array<any> = [];
   adhocDeductionDetail: Array<any> = [];
   salaryProcessingDetail: Array<any> = [];
   salaryPayoutDetail: Array<any> = [];
@@ -179,15 +178,6 @@ export class ProcessingPayrollComponent implements OnInit {
     this.userDetail = this.user.getInstance();
     this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
     let runPayroll = new RunPayroll();
-    runPayroll.NewJoinee = new NewJoinee();
-    runPayroll.EmployeeExit = new EmployeeExit();
-    runPayroll.FinalSettlement = new FinalSettlement();
-    runPayroll.Bonus = new Bonus();
-    runPayroll.SalaryRevision = new SalaryRevision();
-    runPayroll.OverTime = new OverTime();
-    runPayroll.ShiftAllowance = new ShiftAllowance();
-    runPayroll.SalaryComponents = new SalaryComponents();
-    runPayroll.Expense = new Expense();
     runPayroll.AdhocPayment = new AdhocPayment();
     runPayroll.AdhocDeduction = new AdhocDeduction();
     runPayroll.SalaryProcessing = new SalaryProcessing();
@@ -199,15 +189,6 @@ export class ProcessingPayrollComponent implements OnInit {
     runPayroll.LWFOverRide = new LWFOverRide();
     localStorage.setItem(this.runpayroll, JSON.stringify(runPayroll));
     this.allRunPayroll = JSON.parse(localStorage.getItem(this.runpayroll));
-    this.newJoineeDetail.push(this.allRunPayroll.NewJoinee);
-    this.exitEmpDetail.push(this.allRunPayroll.EmployeeExit);
-    this.settlementDetail.push(this.allRunPayroll.FinalSettlement);
-    this.bonusDetail.push(this.allRunPayroll.Bonus);
-    this.salaryRevisionDetail.push(this.allRunPayroll.SalaryRevision);
-    this.overTimePaymentDetail.push(this.allRunPayroll.OverTime);
-    this.shiftAllowanceDetail.push(this.allRunPayroll.ShiftAllowance);
-    this.salaryComponentsDetail.push(this.allRunPayroll.SalaryComponents);
-    this.expensesDetail.push(this.allRunPayroll.Expense);
     this.adhocPaymentDetail.push(this.allRunPayroll.AdhocPayment);
     this.adhocDeductionDetail.push(this.allRunPayroll.AdhocDeduction);
     this.salaryProcessingDetail.push(this.allRunPayroll.SalaryProcessing);
@@ -242,6 +223,7 @@ export class ProcessingPayrollComponent implements OnInit {
           CompanyId: new FormControl(data[i].CompanyId != null ? data[i].CompanyId : 0),
           IsPaidByCompany: new FormControl(data[i].IsPaidByCompany != null ? data[i].IsPaidByCompany : false),
           IsPaidByEmployee: new FormControl(data[i].IsPaidByEmployee != null ? data[i].IsPaidByEmployee : false),
+          IsOvertime: new FormControl(data[i].IsOvertime != null ? data[i].IsOvertime : false),
           IsFine: new FormControl(data[i].IsFine != null ? data[i].IsFine : false),
           IsHikeInSalary: new FormControl(data[i].IsHikeInSalary != null ? data[i].IsHikeInSalary : false),
           IsBonus: new FormControl(data[i].IsBonus != null ? data[i].IsBonus : false),
@@ -269,7 +251,16 @@ export class ProcessingPayrollComponent implements OnInit {
           LastName: new FormControl(data[i].LastName),
           CTC: new FormControl(data[i].CTC),
           ComponentFullName: new FormControl(data[i].ComponentFullName),
-          TotalMinutes: new FormControl(data[i].TotalMinutes)
+          TotalMinutes: new FormControl(data[i].TotalMinutes),
+          GrossSalary: new FormControl(data[i].GrossSalary),
+          BasicSalary: new FormControl(data[i].BasicSalary),
+          OTCalculatedOn: new FormControl(data[i].OTCalculatedOn),
+          IsCompOff: new FormControl(data[i].IsCompOff != null ? data[i].IsCompOff : false),
+          IsReimburs: new FormControl(data[i].IsReimburs != null ? data[i].IsReimburs : false),
+          IsAdhoc: new FormControl(data[i].IsAdhoc != null ? data[i].IsAdhoc : false),
+          IsDeduction: new FormControl(data[i].IsDeduction != null ? data[i].IsDeduction : false),
+          ClaimAmount: new FormControl(data[i].ClaimAmount != null ? data[i].ClaimAmount : 0),
+          ComponentType: new FormControl(data[i].ComponentType)
         }))
         i++;
       }
@@ -316,7 +307,11 @@ export class ProcessingPayrollComponent implements OnInit {
       LastName: new FormControl(this.payrollDetail.LastName),
       CTC: new FormControl(this.payrollDetail.CTC),
       ComponentFullName: new FormControl(this.payrollDetail.ComponentFullName),
-      TotalMinutes: new FormControl(this.payrollDetail.TotalMinutes)
+      TotalMinutes: new FormControl(this.payrollDetail.TotalMinutes),
+      GrossSalary: new FormControl(this.payrollDetail.GrossSalary),
+      BasicSalary: new FormControl(this.payrollDetail.BasicSalary),
+      OTCalculatedOn: new FormControl(this.payrollDetail.OTCalculatedOn),
+      IsCompOff: new FormControl(this.payrollDetail.IsCompOff != null ? this.payrollDetail.IsCompOff : 0)
     });
   }
 
@@ -338,6 +333,7 @@ export class ProcessingPayrollComponent implements OnInit {
 
   // ------------------------------Employee Changes --------------------------
   saveEmpChange() {}
+
   savePayrollData() {
     let requestPayload = this.runPayrollForm.value.RunPayroll;
     requestPayload.forEach(x => {
@@ -346,7 +342,7 @@ export class ProcessingPayrollComponent implements OnInit {
       x.Status = ItemStatus.Pending,
       x.FinancialYear = 0
     });
-    this.saveAndLoadNextComponent(requestPayload);
+    // this.saveAndLoadNextComponent(requestPayload);
     switch (this.activePayrollTab) {
       case 2:
         if (this.active < 3) {
@@ -363,12 +359,18 @@ export class ProcessingPayrollComponent implements OnInit {
         } else if (this.active == 2) {
           this.active = this.active + 1;
           this.getOverTimeEmpRecord();
-        } else if (this.active == 3) {
-          this.active = this.active + 1;
-          this.getShiftAllowanceEmpRecord();
         } else {
           this.moveNextComponent();
         }
+      break;
+      case 4:
+        if (this.active == 1) {
+          this.active = this.active + 1;
+          this.getAdhocPaymentRecord();
+        } else {
+          this.active = this.active + 1;
+          this.getAdhocDeductionRecord();
+        } 
       break;
     }
   }
@@ -575,15 +577,12 @@ export class ProcessingPayrollComponent implements OnInit {
         this.bonusDetail = records.filter(x => x.IsBonus == true || x.IsBonus == 1);
         this.salaryRevisionDetail = records.filter(x => x.IsBonus == true || x.IsBonus == 1);
         this.overTimePaymentDetail = records.filter(x => x.IsOvertime == true || x.IsOvertime == 1);
-        this.shiftAllowanceDetail = records.filter(x => x.IsShift == true || x.IsShift == 1);
         if (this.active == 1)
           this.getBonusEmpRecord();
         else if (this.active == 2)
           this.getSalaryRevisionEmpRecord();
-        else if (this.active == 3)
-          this.getOverTimeEmpRecord();
         else
-          this.getShiftAllowanceEmpRecord();
+          this.getOverTimeEmpRecord();
 
         Toast("Record found");
         this.isLoading = false;
@@ -599,61 +598,125 @@ export class ProcessingPayrollComponent implements OnInit {
     let bonusData = this.bonusDetail;
     if (bonusData && bonusData.length > 0) {
       bonusData.forEach(x => {
-        x.DOR = x.CreatedOn,
-        x.NoOfDays = x.InDays,
-        x.LWD = x.DOL,
-        x.Status = x.ResignationStatus
+        x.IsBonus = true;
       })
     }
-
     this.initPayrollForm(bonusData);
   }
 
   getSalaryRevisionEmpRecord() {
     let existEmpData = this.salaryRevisionDetail;
-    if (existEmpData && existEmpData.length > 0) {
-      existEmpData.forEach(x => {
-        x.DOR = x.CreatedOn,
-        x.NoOfDays = x.InDays,
-        x.LWD = x.DOL,
-        x.Status = x.ResignationStatus
-      })
-    }
-
     this.initPayrollForm(existEmpData);
   }
 
   getOverTimeEmpRecord() {
-    let existEmpData = this.overTimePaymentDetail;
-    if (existEmpData && existEmpData.length > 0) {
-      existEmpData.forEach(x => {
-        x.DOR = x.CreatedOn,
-        x.NoOfDays = x.InDays,
-        x.LWD = x.DOL,
-        x.Status = x.ResignationStatus
+    let overtimeData = this.overTimePaymentDetail;
+    if (overtimeData && overtimeData.length > 0) {
+      overtimeData.forEach(x => {
+        x.Amount = x.SalaryAdhocId > 0 ? x.Amount : 0;
+        x.IsOvertime = true;
+        let salaryDetail = JSON.parse(x.CompleteSalaryDetail);
+        let salaryBreakup = salaryDetail.find(x => x.MonthNumber == this.selectedPayrollCalendar.Month + 1);
+        if (salaryBreakup) {
+          x.GrossSalary = salaryBreakup.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount;
+          x.BasicSalary = salaryBreakup.SalaryBreakupDetails.find(x => x.ComponentId == "BS").FinalAmount
+        }
       })
     }
 
-    this.initPayrollForm(existEmpData);
+    this.initPayrollForm(overtimeData);
   }
 
-  getShiftAllowanceEmpRecord() {
-    let existEmpData = this.shiftAllowanceDetail;
-    if (existEmpData && existEmpData.length > 0) {
-      existEmpData.forEach(x => {
-        x.DOR = x.CreatedOn,
-        x.NoOfDays = x.InDays,
-        x.LWD = x.DOL,
-        x.Status = x.ResignationStatus
+  selectOvertimeAction(e: any) {
+    let value = e.target.value;
+    let elem = e.currentTarget.parentElement.nextElementSibling;
+    if (value == 'false') {
+      if (elem.classList.contains('d-none'))
+        elem.classList.remove('d-none');
+    } else {
+      if (!elem.classList.contains('d-none'))
+        elem.classList.add('d-none');
+    }
+  }
+
+  selectOvertimeCalculationOn(e: any, item: any) {
+    let value = e.target.value;
+    let selectedValue = item.value;
+    let amount = 0;
+    let daysInMonth = new Date(selectedValue.ForYear, selectedValue.ForMonth, 0).getDate();
+    if (value.toUpperCase() == "GROSS") {
+      amount = (selectedValue.GrossSalary / (daysInMonth * 24 * 60)) * selectedValue.TotalMinutes;
+    } else {
+      amount = (selectedValue.BasicSalary / (daysInMonth * 24 * 60)) * selectedValue.TotalMinutes;
+    }
+    item.controls["Amount"].setValue(amount);
+  }
+
+  loadReimbursementAdhocDeductionEmpData() {
+    this.isLoading = true;
+    this.filterHttp.get(`runpayroll/getReimbursementAdhocDeduction/${this.selectedPayrollCalendar.Month+1}/${this.selectedPayrollCalendar.Year}`).then(res => {
+      if (res.ResponseBody && res.ResponseBody.length > 0) {
+        let records = res.ResponseBody;
+        this.salaryComponentsDetail = records.filter(x => x.IsReimburs == true || x.IsReimburs == 1);
+        this.adhocPaymentDetail = records.filter(x => x.IsAdhoc == true || x.IsAdhoc == 1);
+        this.adhocDeductionDetail = records.filter(x => x.IsDeduction == true || x.IsDeduction == 1);
+        if (this.active == 1)
+          this.getSalaryCompClaimRecord();
+        else if (this.active == 2)
+          this.getAdhocPaymentRecord();
+        else
+          this.getAdhocDeductionRecord();
+
+        Toast("Record found");
+        this.isLoading = false;
+      } else {
+        this.isLoading = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  getSalaryCompClaimRecord() {
+    let data = this.salaryComponentsDetail;
+    if (data && data.length > 0) {
+      data.forEach(x => {
+        x.IsIsReimburs = true;
+        x.IsAdhoc = false;
+        x.IsDeduction = false;
       })
     }
+    this.initPayrollForm(data);
+  }
 
-    this.initPayrollForm(existEmpData);
+  getAdhocPaymentRecord() {
+    let data = this.adhocPaymentDetail;
+    if (data && data.length > 0) {
+      data.forEach(x => {
+        x.IsIsReimburs = false;
+        x.IsAdhoc = true;
+        x.IsDeduction = false;
+      })
+    }
+    this.initPayrollForm(data);
+  }
+
+  getAdhocDeductionRecord() {
+    let data = this.adhocDeductionDetail;
+    if (data && data.length > 0) {
+      data.forEach(x => {
+        x.IsIsReimburs = false;
+        x.IsAdhoc = false;
+        x.IsDeduction = true;
+      })
+    }
+    this.initPayrollForm(data);
   }
 
   viewReimbursementAdhocDeduction() {
     this.active = 1;
     this.activePayrollTab = 4;
+    this.loadReimbursementAdhocDeductionEmpData();
   }
 
   viewSalaryOnHoldArrear() {
@@ -944,103 +1007,6 @@ export class ProcessingPayrollComponent implements OnInit {
 
 }
 
-
-class NewJoinee {
-  JoineeId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  Date: Date = new Date(2023, 4, 4);
-  WorkingDays: number = 4;
-  Salary: number = 30000;
-  PayAction: number = 1;
-  Comment: string = null;
-}
-
-class EmployeeExit {
-  ExitId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  DOJ: Date = new Date(2023, 4, 4);
-  Reason: string = null;
-  LastWorkingDay: Date = new Date();
-  ExitRequestStatus: number = 1;
-  WaitingOn: Date = new Date();
-}
-
-class FinalSettlement {
-  SettlementId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  Reason: string = null;
-  LastWorkingDay: Date = new Date();
-  Status: number = 1;
-  SettledAmount: number = 0;
-  Action: number = 1;
-  Comment: string = null;
-}
-
-class Bonus {
-  BonusId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  PayoutDate: Date = new Date();
-  BonusType: string = null;
-  Amount: number = 0;
-  PayAction: number = 1;
-  Comment: string = null;
-}
-
-class SalaryRevision {
-  SalaryRevisionId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  OldSalary: number = 0;
-  NewSalary: number = 0;
-  Changes: number = 0;
-  GrossPayMonth: number = 0;
-  RevisionAction: number = 1;
-  Comment: string = null;
-}
-
-class OverTime {
-  SalaryRevisionId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  Month: number = 0;
-  CalculatedAmount: number = 0;
-  AdjustedAmount: number = 0;
-  PayAction: number = 1;
-  PayableAmount: number = 0;
-}
-
-class ShiftAllowance {
-  SalaryRevisionId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  Month: number = 0;
-  CalculatedAmount: number = 0;
-  AdjustedAmount: number = 0;
-  PayableAmount: number = 0;
-  PayAction: number = 1;
-  Comment: string = null;
-}
-
-class SalaryComponents {
-  SalaryRevisionId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  ComponentName: number = 0;
-  ComponentType: number = 0;
-  ClaimAmount: number = 0;
-  Status: number = 0;
-  PayableAmount: number = 1;
-  ApprovedOn: Date = new Date();
-}
-
-class Expense {
-  ExpenseId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  ClaimNumber: number = 0;
-  ClaimTitleType: string = null;
-  ExpenseCount: number = 0;
-  Amount: number = 0;
-  Status: number = 1;
-  PayableAmount: number = 0;
-  ApprovedOn: Date = new Date();
-}
-
 class AdhocPayment {
   AdhocPaymentId: number = 1;
   EmployeeName: string = "Sarfaraz Nawaz";
@@ -1127,15 +1093,6 @@ class LWFOverRide {
 }
 
 class RunPayroll {
-  NewJoinee: NewJoinee;
-  EmployeeExit: EmployeeExit;
-  FinalSettlement: FinalSettlement;
-  Bonus: Bonus;
-  SalaryRevision: SalaryRevision;
-  OverTime: OverTime;
-  ShiftAllowance: ShiftAllowance;
-  SalaryComponents: SalaryComponents;
-  Expense: Expense;
   AdhocPayment: AdhocPayment;
   AdhocDeduction: AdhocDeduction;
   SalaryProcessing: SalaryProcessing;
@@ -1196,5 +1153,15 @@ interface PayrollDetail {
   LastName: string,
   CTC: number,
   ComponentFullName: string,
-  TotalMinutes: number
+  TotalMinutes: number,
+  GrossSalary?: number,
+  BasicSalary?: number,
+  OTCalculatedOn?: string,
+  IsCompOff?: boolean,
+  IsOvertime?: boolean,
+  IsReimburs?: boolean,
+  IsAdhoc?: boolean,
+  IsDeduction?: boolean,
+  ClaimAmount?: number,
+  ComponentType?: string
 }
