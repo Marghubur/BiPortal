@@ -1,5 +1,5 @@
 import { iNavigation } from "src/providers/iNavigation";
-import { Dashboard, SERVICE, UserDashboard, UserType } from "src/providers/constants";
+import { Dashboard, InitialSetup, SERVICE, UserDashboard, UserType } from "src/providers/constants";
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { JwtService, ResponseModel } from "src/auth/jwtService";
@@ -125,11 +125,16 @@ export class LoginComponent implements OnInit {
           if (result.ResponseBody) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
-            Toast("Please wait loading dashboard ...", 15);
-            if(Data.UserTypeId == 1)
-              this.nav.navigate(Dashboard, null);
-            else
-              this.nav.navigate(UserDashboard, null);
+            
+            if(!Data.SetupStatus) {
+              this.nav.navigate(InitialSetup, null);
+            } else {
+              Toast("Please wait loading dashboard ...", 15);
+              if(Data.UserTypeId == 1)
+                this.nav.navigate(Dashboard, null);
+              else
+                this.nav.navigate(UserDashboard, null);
+            }
           } else {
             ErrorToast("Incorrect username or password. Please try again.");
           }
