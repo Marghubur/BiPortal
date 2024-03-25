@@ -7,7 +7,7 @@ import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/co
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ItemStatus } from 'src/providers/constants';
 declare var $: any;
 
@@ -127,7 +127,6 @@ export class ProcessingPayrollComponent implements OnInit {
         text: x.text
       });
     })
-    // this.runPayrollPopup();
   }
 
   callApiLoadData() {
@@ -178,8 +177,6 @@ export class ProcessingPayrollComponent implements OnInit {
     this.userDetail = this.user.getInstance();
     this.userName = this.userDetail.FirstName + " " + this.userDetail.LastName;
     let runPayroll = new RunPayroll();
-    runPayroll.AdhocPayment = new AdhocPayment();
-    runPayroll.AdhocDeduction = new AdhocDeduction();
     runPayroll.SalaryProcessing = new SalaryProcessing();
     runPayroll.SalaryPayout = new Salaryout();
     runPayroll.Arrear = new Arrear();
@@ -189,8 +186,6 @@ export class ProcessingPayrollComponent implements OnInit {
     runPayroll.LWFOverRide = new LWFOverRide();
     localStorage.setItem(this.runpayroll, JSON.stringify(runPayroll));
     this.allRunPayroll = JSON.parse(localStorage.getItem(this.runpayroll));
-    this.adhocPaymentDetail.push(this.allRunPayroll.AdhocPayment);
-    this.adhocDeductionDetail.push(this.allRunPayroll.AdhocDeduction);
     this.salaryProcessingDetail.push(this.allRunPayroll.SalaryProcessing);
     this.salaryPayoutDetail.push(this.allRunPayroll.SalaryPayout);
     this.arraersDetail.push(this.allRunPayroll.Arrear);
@@ -217,6 +212,7 @@ export class ProcessingPayrollComponent implements OnInit {
         dataArray.push(this.fb.group({
           RowIndex: new FormControl(i+1),
           SalaryAdhocId: new FormControl(data[i].SalaryAdhocId != null ? data[i].SalaryAdhocId : 0),
+          ProcessStepId: new FormControl(this.activePayrollTab),
           EmployeeId: new FormControl(data[i].EmployeeId != null ? data[i].EmployeeId : 0),
           FinancialYear: new FormControl(data[i].FinancialYear != null ? data[i].FinancialYear : 0),
           OrganizationId: new FormControl(data[i].OrganizationId != null ? data[i].OrganizationId : 0),
@@ -332,82 +328,36 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   // ------------------------------Employee Changes --------------------------
-  saveEmpChange() {}
-
-  savePayrollData() {
-    let requestPayload = this.runPayrollForm.value.RunPayroll;
-    requestPayload.forEach(x => {
-      x.ForMonth = this.selectedPayrollCalendar.Month + 1,
-      x.ForYear = this.selectedPayrollCalendar.Year,
-      x.Status = ItemStatus.Pending,
-      x.FinancialYear = 0
-    });
-    // this.saveAndLoadNextComponent(requestPayload);
-    switch (this.activePayrollTab) {
-      case 2:
-        if (this.active < 3) {
-          this.active = this.active + 1;
-          this.getExistEmpRecord();
-        }
-        else
-          this.moveNextComponent();
-      break;
-      case 3:
-        if (this.active == 1) {
-          this.active = this.active + 1;
-          this.getSalaryRevisionEmpRecord();
-        } else if (this.active == 2) {
-          this.active = this.active + 1;
-          this.getOverTimeEmpRecord();
-        } else {
-          this.moveNextComponent();
-        }
-      break;
-      case 4:
-        if (this.active == 1) {
-          this.active = this.active + 1;
-          this.getAdhocPaymentRecord();
-        } else {
-          this.active = this.active + 1;
-          this.getAdhocDeductionRecord();
-        } 
-      break;
-    }
-  }
-
   moveNextComponent() {
-    if (this.activePayrollTab > 0 && this.activePayrollTab < 6) {
-      this.activePayrollTab = this.activePayrollTab + 1;
-    } else {
-      this.activePayrollTab = 1;
+    switch (this.activePayrollTab) {
+      case 1:
+        this.viewNewJoineeExist();
+        break;
+      case 2:
+        this.viewBonusSalaryRevisionOT();
+        break;
+      case 3:
+        this.viewReimbursementAdhocDeduction();
+        break;
+      case 4:
+        // this.viewNewJoineeExist();
+        this.activePayrollTab = this.activePayrollTab + 1;
+        break;
+      case 5:
+        //this.viewNewJoineeExist();
+        this.activePayrollTab = this.activePayrollTab + 1;
+        break;
+      default:
+        this.activePayrollTab = 1;
+        break;
     }
     this.active = 1;
-  }
-
-  saveAndLoadNextComponent(requestPayload: any) {
-    this.filterHttp.post("promotionoradhocs/updateHikePromotionAndAdhocs", requestPayload)
-      .then((response: ResponseModel) => {
-        if (response.ResponseBody == "updated") {
-          Toast("Record updated successfully");
-        } else {
-          Toast("Fail to updated record");
-        }
-      });
   }
 
   markEmpChangeComplete() {
     this.activePayrollTab = 1;
     this.allRunPayroll.EmployeeChangeseCompleted = true;
     this.allRunPayroll.completedValue = this.allRunPayroll.completedValue + 16.66;
-  }
-
-  // ------------------------------Bonus, Salary Revision and Overtime
-  saveBonusAlaryOvertime() {
-    if (this.activePayrollTab > 0 && this.activePayrollTab < 4) {
-      this.activePayrollTab = this.activePayrollTab + 1;
-    } else {
-      this.activePayrollTab = 1;
-    }
   }
 
   markBonusAlaryOvertimeComplete() {
@@ -417,8 +367,6 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   // ------------------------------Reimbursement, Adhoc Payment and Deduction
-  saveReimbursementAdhocDeduction() {  }
-
   markReimburseAdhocDeductionComplete() {
     this.activePayrollTab = 1;
     this.allRunPayroll.ReimbursementAdhicDeductCompleted = true;
@@ -547,6 +495,13 @@ export class ProcessingPayrollComponent implements OnInit {
       })
     }
     this.initPayrollForm(newJoineeData);
+    this.RunPayroll.controls.forEach(control => {
+      const nameControl = control.get('PaymentActionType');
+      if (!nameControl.validator) {
+        nameControl.setValidators(Validators.required); // Add specific validation
+      }
+      nameControl.updateValueAndValidity(); // Trigger validation check
+    });
   }
 
   getExistEmpRecord() {
@@ -561,6 +516,13 @@ export class ProcessingPayrollComponent implements OnInit {
     }
 
     this.initPayrollForm(existEmpData);
+    this.RunPayroll.controls.forEach(control => {
+      const nameControl = control.get('PaymentActionType');
+      if (!nameControl.validator) {
+        nameControl.setValidators(Validators.required); // Add specific validation
+      }
+      nameControl.updateValueAndValidity(); // Trigger validation check
+    });
   }
 
   viewBonusSalaryRevisionOT() {
@@ -602,11 +564,25 @@ export class ProcessingPayrollComponent implements OnInit {
       })
     }
     this.initPayrollForm(bonusData);
+    this.RunPayroll.controls.forEach(control => {
+      const nameControl = control.get('PaymentActionType');
+      if (!nameControl.validator) {
+        nameControl.setValidators(Validators.required); // Add specific validation
+      }
+      nameControl.updateValueAndValidity(); // Trigger validation check
+    });
   }
 
   getSalaryRevisionEmpRecord() {
     let existEmpData = this.salaryRevisionDetail;
     this.initPayrollForm(existEmpData);
+    this.RunPayroll.controls.forEach(control => {
+      const nameControl = control.get('PaymentActionType');
+      if (!nameControl.validator) {
+        nameControl.setValidators(Validators.required); // Add specific validation
+      }
+      nameControl.updateValueAndValidity(); // Trigger validation check
+    });
   }
 
   getOverTimeEmpRecord() {
@@ -652,6 +628,12 @@ export class ProcessingPayrollComponent implements OnInit {
     item.controls["Amount"].setValue(amount);
   }
 
+  viewReimbursementAdhocDeduction() {
+    this.active = 1;
+    this.activePayrollTab = 4;
+    this.loadReimbursementAdhocDeductionEmpData();
+  }
+
   loadReimbursementAdhocDeductionEmpData() {
     this.isLoading = true;
     this.filterHttp.get(`runpayroll/getReimbursementAdhocDeduction/${this.selectedPayrollCalendar.Month+1}/${this.selectedPayrollCalendar.Year}`).then(res => {
@@ -687,6 +669,13 @@ export class ProcessingPayrollComponent implements OnInit {
       })
     }
     this.initPayrollForm(data);
+    this.RunPayroll.controls.forEach(control => {
+      const nameControl = control.get('PaymentActionType');
+      if (!nameControl.validator) {
+        nameControl.setValidators(Validators.required); // Add specific validation
+      }
+      nameControl.updateValueAndValidity(); // Trigger validation check
+    });
   }
 
   getAdhocPaymentRecord() {
@@ -699,6 +688,13 @@ export class ProcessingPayrollComponent implements OnInit {
       })
     }
     this.initPayrollForm(data);
+    this.RunPayroll.controls.forEach(control => {
+      const nameControl = control.get('PaymentActionType');
+      if (!nameControl.validator) {
+        nameControl.setValidators(Validators.required); // Add specific validation
+      }
+      nameControl.updateValueAndValidity(); // Trigger validation check
+    });
   }
 
   getAdhocDeductionRecord() {
@@ -711,17 +707,94 @@ export class ProcessingPayrollComponent implements OnInit {
       })
     }
     this.initPayrollForm(data);
-  }
-
-  viewReimbursementAdhocDeduction() {
-    this.active = 1;
-    this.activePayrollTab = 4;
-    this.loadReimbursementAdhocDeductionEmpData();
+    this.RunPayroll.controls.forEach(control => {
+      const nameControl = control.get('PaymentActionType');
+      if (!nameControl.validator) {
+        nameControl.setValidators(Validators.required); // Add specific validation
+      }
+      nameControl.updateValueAndValidity(); // Trigger validation check
+    });
   }
 
   viewSalaryOnHoldArrear() {
     this.active = 1;
     this.activePayrollTab = 5;
+  }
+
+  saveNewJoineeExitsFinalSattlement() {
+    let requestPayload = this.runPayrollForm.value.RunPayroll;
+    requestPayload.forEach(x => {
+      x.ForMonth = this.selectedPayrollCalendar.Month + 1,
+      x.ForYear = this.selectedPayrollCalendar.Year,
+      x.Status = ItemStatus.Pending,
+      x.FinancialYear = 0
+    });
+    this.filterHttp.post("promotionoradhocs/manageNewJoineeExitsFinalSattlement", requestPayload)
+    .then((response: ResponseModel) => {
+      if (response.ResponseBody == "updated") {
+        if (this.active < 3) {
+          this.active = this.active + 1;
+          this.getExistEmpRecord();
+        }
+        else
+          this.moveNextComponent();
+        Toast("Record updated successfully");
+      } else {
+        Toast("Fail to updated record");
+      }
+    });
+  }
+
+  saveBonusSalaryRevisionOvertime() {
+    let requestPayload = this.runPayrollForm.value.RunPayroll;
+    requestPayload.forEach(x => {
+      x.ForMonth = this.selectedPayrollCalendar.Month + 1,
+      x.ForYear = this.selectedPayrollCalendar.Year,
+      x.Status = ItemStatus.Pending,
+      x.FinancialYear = 0
+    });
+    this.filterHttp.post("promotionoradhocs/manageBonusSalaryRevisionOvertime", requestPayload)
+    .then((response: ResponseModel) => {
+      if (response.ResponseBody == "updated") {
+        if (this.active == 1) {
+          this.active = this.active + 1;
+          this.getSalaryRevisionEmpRecord();
+        } else if (this.active == 2) {
+          this.active = this.active + 1;
+          this.getOverTimeEmpRecord();
+        } else {
+          this.moveNextComponent();
+        }
+        Toast("Record updated successfully");
+      } else {
+        Toast("Fail to updated record");
+      }
+    });
+  }
+
+  saveReimbursementAdhocPaymentDeduction() {
+    let requestPayload = this.runPayrollForm.value.RunPayroll;
+    requestPayload.forEach(x => {
+      x.ForMonth = this.selectedPayrollCalendar.Month + 1,
+      x.ForYear = this.selectedPayrollCalendar.Year,
+      x.Status = ItemStatus.Pending,
+      x.FinancialYear = 0
+    });
+    this.filterHttp.post("promotionoradhocs/manageReimbursementAdhocPaymentDeduction", requestPayload)
+    .then((response: ResponseModel) => {
+      if (response.ResponseBody == "updated") {
+        if (this.active == 1) {
+          this.active = this.active + 1;
+          this.getAdhocPaymentRecord();
+        } else {
+          this.active = this.active + 1;
+          this.getAdhocDeductionRecord();
+        } 
+        Toast("Record updated successfully");
+      } else {
+        Toast("Fail to updated record");
+      }
+    });
   }
 
   viewOveridePTESI() {
@@ -1007,22 +1080,6 @@ export class ProcessingPayrollComponent implements OnInit {
 
 }
 
-class AdhocPayment {
-  AdhocPaymentId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  AdhocPaymentType: string = null;
-  Amount: number = 0;
-  Comment: string = null;
-}
-
-class AdhocDeduction {
-  AdhocDeductionId: number = 1;
-  EmployeeName: string = "Sarfaraz Nawaz";
-  AdhocDeductionType: string = null;
-  Amount: number = 0;
-  Comment: string = null;
-}
-
 class SalaryProcessing {
   SalaryProcessingId: number = 1;
   EmployeeName: string = "Sarfaraz Nawaz";
@@ -1093,8 +1150,6 @@ class LWFOverRide {
 }
 
 class RunPayroll {
-  AdhocPayment: AdhocPayment;
-  AdhocDeduction: AdhocDeduction;
   SalaryProcessing: SalaryProcessing;
   SalaryPayout: Salaryout;
   Arrear: Arrear;

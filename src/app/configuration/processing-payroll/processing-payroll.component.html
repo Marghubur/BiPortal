@@ -906,102 +906,6 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <!-- <div class="t-head">
-                      <div class="tr">
-                        <div class="th fe-index">
-                          <div class="t-filter t-index">
-                            <a href="javascript:void(0)" class="ps-3">#</a>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Employee</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Date of Joining</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">No of Working Days</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Salary</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Pay Action</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Comments</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
-                      <ng-container formArrayName="RunPayroll">
-                        <div class="t-body">
-                          <div class="tr py-2" *ngFor="let item of RunPayroll.controls; let i=index;" [formGroupName]="i">
-                            <div class="td align-middle fe-index">{{item.get('RowIndex').value}}</div>
-                            <div class="td align-middle fe-1 text-truncate">
-                              {{item.get('FirstName').value}} {{item.get('LastName').value}}
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{item.get('DOJ').value | date}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                {{item.get('NoOfDays').value}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <i class="fa-solid fa-indian-rupee-sign pe-2"></i>
-                                {{item.get('CTC').value}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <select class="form-select" formControlName="PaymentActionType">
-                                  <option value="Hold salary processing this month">Hold salary processing this month</option>
-                                  <option value="Process as salary">Process as salary</option>
-                                  <option value="Void salary processing">Void salary processing</option>
-                                  <option value="Hold salary payout this month">Hold salary payout this month</option>
-                                  <option value="Void salary payout">Void salary payout</option>
-                                  <option value="Already Paid">Already Paid</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper">
-                                <input type="text" class="form-control" formControlName="Comments">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </form> -->
                     <ng-container *ngIf="newJoineeDetail.length > 0">
                       <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                         <ng-container formArrayName="RunPayroll">
@@ -1061,7 +965,7 @@
                   </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveNewJoineeExitsFinalSattlement()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
                   </button>
@@ -1078,57 +982,6 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <!-- <div class="t-head">
-                      <div class="tr">
-                        <div class="th fe-index">
-                          <div class="t-filter t-index">
-                            <a href="javascript:void(0)" class="ps-3">#</a>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Employee</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Date of Registration</a>
-                            </div>
-                          </div>
-                        </div>                        
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Last Working Day</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Exit Action & Reason</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Request Status</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Waiting On</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
                     <ng-container *ngIf="exitEmpDetail.length > 0">
                       <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                         <ng-container formArrayName="RunPayroll">
@@ -1195,7 +1048,7 @@
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                     <span class="ps-2">Back</span>
                   </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveNewJoineeExitsFinalSattlement()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
                   </button>
@@ -1389,7 +1242,7 @@
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                     <span class="ps-2">Back</span>
                   </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveNewJoineeExitsFinalSattlement()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Next</span>
                   </button>
@@ -1415,92 +1268,6 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <!-- <div class="t-head">
-                      <div class="tr">
-                        <div class="th fe-index">
-                          <div class="t-filter t-index">
-                            <a href="javascript:void(0)" class="ps-3">#</a>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Employee</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Payout Date</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Bonus Type</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Amount</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Pay Action</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Comment</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="t-body">
-                      <ng-container *ngIf="bonusDetail.length > 0">
-                        <div class="tr py-2" *ngFor="let item of bonusDetail; let i=index;">
-                          <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                          <div class="td align-middle fe-1 text-truncate">
-                            {{item.EmployeeName}}
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.PayoutDate | date}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.BonusType}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.Amount}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.PayAction}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" placeholder="Comment" class="form-control" [(ngModel)]="item.Comment">
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div> -->
                     <ng-container *ngIf="bonusDetail.length > 0">
                       <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                         <ng-container formArrayName="RunPayroll">
@@ -1533,12 +1300,9 @@
                                 <div>
                                   <div class="cell-wrapper">
                                     <select class="form-select" formControlName="PaymentActionType">
-                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
-                                      <option value="Process as salary">Process as salary</option>
-                                      <option value="Void salary processing">Void salary processing</option>
-                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
-                                      <option value="Void salary payout">Void salary payout</option>
-                                      <option value="Already Paid">Already Paid</option>
+                                      <option [value]="null" disabled>Select Payment Action Type</option>
+                                      <option value="Hold bonus processing this month">Hold bonus processing this month</option>
+                                      <option value="Process bonus this month">Process bonus this month</option>
                                     </select>
                                   </div>
                                   <div class="cell-wrapper mt-2">
@@ -1560,7 +1324,7 @@
                   </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveBonusSalaryRevisionOvertime()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
                   </button>
@@ -1575,109 +1339,6 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <!-- <div class="t-head">
-                      <div class="tr">
-                        <div class="th fe-index">
-                          <div class="t-filter t-index">
-                            <a href="javascript:void(0)" class="ps-3">#</a>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Employee</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Old Salary</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">New Salary</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Chnages %</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Gross Pay this month</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Revision Action</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Comment</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="t-body">
-                      <ng-container *ngIf="salaryRevisionDetail.length > 0">
-                        <div class="tr py-2" *ngFor="let item of salaryRevisionDetail; let i=index;">
-                          <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                          <div class="td align-middle fe-1 text-truncate">
-                            {{item.EmployeeName}}
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.OldSalary}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" placeholder="New Salary"
-                                [(ngModel)]="item.NewSalary">
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.Changes}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <select class="form-select" [(ngModel)]="item.RevisionAction">
-                                <option value="1">Option</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" placeholder="New Salary"
-                                [(ngModel)]="item.Comment">
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" placeholder="New Salary"
-                                [(ngModel)]="item.Comment">
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div> -->
                     <ng-container *ngIf="salaryRevisionDetail.length > 0">
                       <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                         <ng-container formArrayName="RunPayroll">
@@ -1710,12 +1371,9 @@
                                 <div>
                                   <div class="cell-wrapper">
                                     <select class="form-select" formControlName="PaymentActionType">
-                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
-                                      <option value="Process as salary">Process as salary</option>
-                                      <option value="Void salary processing">Void salary processing</option>
-                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
-                                      <option value="Void salary payout">Void salary payout</option>
-                                      <option value="Already Paid">Already Paid</option>
+                                      <option [value]="null" disabled>Select Payment Action Type</option>
+                                      <option value="Hold salary revision processing this month">Hold salary revision processing this month</option>
+                                      <option value="Process salary revision this month">Process salary revision this month</option>
                                     </select>
                                   </div>
                                   <div class="cell-wrapper mt-2">
@@ -1741,8 +1399,7 @@
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                     <span class="ps-2">Back</span>
                   </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 4"
-                    (click)="saveBonusAlaryOvertime()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveBonusSalaryRevisionOvertime()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
                   </button>
@@ -1759,95 +1416,6 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <!-- <div class="t-head">
-                      <div class="tr">
-                        <div class="th fe-index">
-                          <div class="t-filter t-index">
-                            <a href="javascript:void(0)" class="ps-3">#</a>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Employee</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Month</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Calculated Amount</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Adjusted Amount</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Pay Action</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Payable Amount</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="t-body">
-                      <ng-container *ngIf="overTimePaymentDetail.length > 0">
-                        <div class="tr py-2" *ngFor="let item of overTimePaymentDetail; let i=index;">
-                          <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                          <div class="td align-middle fe-1 text-truncate">
-                            {{item.EmployeeName}}
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.Month}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.CalculatedAmount | number: '1.2-2'}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" placeholder="Adjust Amount"
-                                [(ngModel)]="item.AdjustedAmount">
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <select class="form-select" [(ngModel)]="item.PayAction">
-                                <option value="1">Action</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.PayableAmount}}
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div> -->
                     <ng-container *ngIf="overTimePaymentDetail.length > 0">
                       <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                         <ng-container formArrayName="RunPayroll">
@@ -1880,14 +1448,13 @@
                                 <div>
                                   <div class="cell-wrapper mb-2">
                                     <select class="form-select" (change)="selectOvertimeAction($event)" formControlName="IsCompOff">
-                                      <option value="0" disabled selected>Select Action</option>
                                       <option [value]="false">Pay as Amount</option>
-                                      <option [value]="true">Convert as comp-off</option>
+                                      <option [value]="true">Convert as Comp Off</option>
                                     </select>
                                   </div>
-                                  <div class="cell-wrapper" [ngClass]="{'d-none': (item.get('OTCalculatedOn').value == null || item.get('OTCalculatedOn').value == '')}">
+                                  <div class="cell-wrapper" [ngClass]="{'d-none': item.get('IsCompOff').value == true }">
                                     <select class="form-select" (change)="selectOvertimeCalculationOn($event, item)"  formControlName="OTCalculatedOn">
-                                      <option value="0" disabled selected>Select Calculation On</option>
+                                      <option [value]="null" disabled>Select Calculation On</option>
                                       <option value='GROSS'>Calculated on Gross</option>
                                       <option value="BASIC">Calculated on Basic</option>
                                     </select>
@@ -1898,12 +1465,9 @@
                                 <div>
                                   <div class="cell-wrapper">
                                     <select class="form-select" formControlName="PaymentActionType">
-                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
-                                      <option value="Process as salary">Process as salary</option>
-                                      <option value="Void salary processing">Void salary processing</option>
-                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
-                                      <option value="Void salary payout">Void salary payout</option>
-                                      <option value="Already Paid">Already Paid</option>
+                                      <option [value]="null" selected>Select Payment Action Type</option>
+                                      <option value="Hold over time processing this month">Hold over time processing this month</option>
+                                      <option value="Process over time this month">Process over time this month</option>
                                     </select>
                                   </div>
                                   <div class="cell-wrapper mt-2">
@@ -1929,7 +1493,7 @@
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                     <span class="ps-2">Back</span>
                   </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveBonusSalaryRevisionOvertime()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
                   </button>
@@ -1955,118 +1519,6 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <!-- <div class="t-head">
-                      <div class="tr">
-                        <div class="th fe-index">
-                          <div class="t-filter t-index">
-                            <a href="javascript:void(0)" class="ps-3">#</a>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Employee</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Component Name</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Component Type</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Claim Amount</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Status</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Approved/ Payable Amount</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Approved On</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-index">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Action</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="t-body">
-                      <ng-container *ngIf="salaryComponentsDetail.length > 0">
-                        <div class="tr py-2" *ngFor="let item of salaryComponentsDetail; let i=index;">
-                          <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                          <div class="td align-middle fe-1 text-truncate">
-                            {{item.EmployeeName}}
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.ComponentName | date}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.ComponentType}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.ClaimAmount}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.Status}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" placeholder="Payable Amount"
-                                [(ngModel)]="item.PayableAmount">
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.ApprovedOn | date}}
-                            </div>
-                          </div>
-                          <div class="td align-middle text-center fe-index">
-                            <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                              title="Delete Component">
-                              <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div> -->
                     <ng-container *ngIf="salaryComponentsDetail.length > 0">
                       <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                         <ng-container formArrayName="RunPayroll">
@@ -2099,12 +1551,9 @@
                                 <div>
                                   <div class="cell-wrapper">
                                     <select class="form-select" formControlName="PaymentActionType">
-                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
-                                      <option value="Process as salary">Process as salary</option>
-                                      <option value="Void salary processing">Void salary processing</option>
-                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
-                                      <option value="Void salary payout">Void salary payout</option>
-                                      <option value="Already Paid">Already Paid</option>
+                                      <option [value]="null" disabled>Select Payment Action Type</option>
+                                      <option value="Hold salary component claim processing this month">Hold salary component claim processing this month</option>
+                                      <option value="Process salary component claim this month">Process salary component claim this month</option>
                                     </select>
                                   </div>
                                   <div class="cell-wrapper mt-2">
@@ -2126,7 +1575,7 @@
                   </div>
                 </div>
                 <div class="modal-footer border-top-0">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveReimbursementAdhocPaymentDeduction()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
                   </button>
@@ -2141,81 +1590,6 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <!-- <div class="t-head">
-                      <div class="tr">
-                        <div class="th fe-index">
-                          <div class="t-filter t-index">
-                            <a href="javascript:void(0)" class="ps-3">#</a>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Employee</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Adhoc Payment Type</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Amount</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Comment</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-index">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Action</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="t-body">
-                      <ng-container *ngIf="adhocPaymentDetail.length > 0">
-                        <div class="tr py-2" *ngFor="let item of adhocPaymentDetail; let i=index;">
-                          <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                          <div class="td align-middle fe-1 text-truncate">
-                            {{item.EmployeeName}}
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.AdhocPaymentType}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" [(ngModel)]="item.Amount" placeholder="Amount">
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" [(ngModel)]="item.Comment" placeholder="Comment">
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-index text-center ">
-                            <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                              title="Delete Adhoc Payment">
-                              <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div> -->
                     <ng-container *ngIf="adhocPaymentDetail.length > 0">
                       <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                         <ng-container formArrayName="RunPayroll">
@@ -2248,12 +1622,9 @@
                                 <div>
                                   <div class="cell-wrapper">
                                     <select class="form-select" formControlName="PaymentActionType">
-                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
-                                      <option value="Process as salary">Process as salary</option>
-                                      <option value="Void salary processing">Void salary processing</option>
-                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
-                                      <option value="Void salary payout">Void salary payout</option>
-                                      <option value="Already Paid">Already Paid</option>
+                                      <option [value]="null" disabled>Select Payment Action Type</option>
+                                      <option value="Hold adhoc payment processing this month">Hold adhoc payment processing this month</option>
+                                      <option value="Process adhoc payment this month">Process adhoc payment this month</option>
                                     </select>
                                   </div>
                                   <div class="cell-wrapper mt-2">
@@ -2279,7 +1650,7 @@
                   <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                   <span class="ps-2">Back</span>
                 </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveReimbursementAdhocPaymentDeduction()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
                   </button>
@@ -2294,81 +1665,6 @@
                 <div class="x_content">
                   <div class="t-table t-list  col-md-12">
                     <div class="hide-bar"></div>
-                    <!-- <div class="t-head">
-                      <div class="tr">
-                        <div class="th fe-index">
-                          <div class="t-filter t-index">
-                            <a href="javascript:void(0)" class="ps-3">#</a>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Employee</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Adhoc Deduction Type</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Amount</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-1">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Comment</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="th fe-index">
-                          <div class="cell-wrapper">
-                            <div class="t-filter">
-                              <a href="javascript:void(0)" class="pe-2">Action</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="t-body">
-                      <ng-container *ngIf="adhocDeductionDetail.length > 0">
-                        <div class="tr py-2" *ngFor="let item of adhocDeductionDetail; let i=index;">
-                          <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                          <div class="td align-middle fe-1 text-truncate">
-                            {{item.EmployeeName}}
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              {{item.AdhocDeductionType}}
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" [(ngModel)]="item.Amount" placeholder="Amount">
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-1">
-                            <div class="cell-wrapper">
-                              <input type="text" class="form-control" [(ngModel)]="item.Comment" placeholder="Comment">
-                            </div>
-                          </div>
-                          <div class="td align-middle fe-index text-center ">
-                            <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                              title="Delete Adhoc Deduction">
-                              <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div> -->
                     <ng-container *ngIf="adhocDeductionDetail.length > 0">
                       <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                         <ng-container formArrayName="RunPayroll">
@@ -2401,12 +1697,9 @@
                                 <div>
                                   <div class="cell-wrapper">
                                     <select class="form-select" formControlName="PaymentActionType">
-                                      <option value="Hold salary processing this month">Hold salary processing this month</option>
-                                      <option value="Process as salary">Process as salary</option>
-                                      <option value="Void salary processing">Void salary processing</option>
-                                      <option value="Hold salary payout this month">Hold salary payout this month</option>
-                                      <option value="Void salary payout">Void salary payout</option>
-                                      <option value="Already Paid">Already Paid</option>
+                                      <option [value]="null" disabled>Select Payment Action Type</option>
+                                      <option value="Hold adhoc deduction processing this month">Hold adhoc deduction processing this month</option>
+                                      <option value="Process adhoc deduction this month">Process adhoc deduction this month</option>
                                     </select>
                                   </div>
                                   <div class="cell-wrapper mt-2">
@@ -2432,7 +1725,7 @@
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-arrow-left': !isLoading}"></i>
                     <span class="ps-2">Back</span>
                   </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="savePayrollData()">
+                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveReimbursementAdhocPaymentDeduction()">
                     <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
                     <span class="ps-2">Save & Continue</span>
                   </button>
