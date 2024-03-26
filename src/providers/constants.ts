@@ -45,6 +45,17 @@ export const Support = "support";
 export const Contact = "contact";
 export const FreeTrail = "freetrial";
 export const AboutUs = "aboutus";
+export const PayrollSoftware = "payrollsoftware";
+export const HRManagement = "hrmanagement";
+export const EmployeeProfile = "employeeprofile";
+export const TimesheetManagement = "timesheetmanagement";
+export const AttendanceManagement = "attendancemanagement";
+export const LeaveManagement = "leavemanagement";
+export const ShiftManagement = "shiftmanagement";
+export const ExpenseManagement = "expensemanagement";
+export const EmployeeFinance = "employeefinance";
+export const PerformanceManagement = "perofrmancemanagement";
+export const DocumentManagement = "documentmanagement";
 
 // ********************** API route pages  *******************
 

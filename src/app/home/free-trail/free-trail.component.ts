@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-free-trail',
@@ -8,6 +8,8 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 })
 export class FreeTrailComponent implements OnInit {
   trailForm: FormGroup;
+  submitted: boolean = false;
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder) {}
 
@@ -17,15 +19,25 @@ export class FreeTrailComponent implements OnInit {
 
   initForm() {
     this.trailForm = this.fb.group({
-      FullName: new FormControl(""),
-      Email: new FormControl(""),
-      PhoneNumber: new FormControl(""),
-      CompanyName: new FormControl(""),
-      HeadCount: new FormControl("")
+      FullName: new FormControl(null, [Validators.required]),
+      Email: new FormControl(null, [Validators.required, Validators.email]),
+      PhoneNumber: new FormControl(null, [Validators.required]),
+      CompanyName: new FormControl(null, [Validators.required]),
+      HeadCount: new FormControl(null, [Validators.required]),
     })
   }
 
+  get f() {
+    return this.trailForm.controls;
+  }
+
   save() {
+    this.submitted = true;
+    this.isLoading = true;
+    if (this.trailForm.invalid) {
+      this.isLoading = false;
+      return;
+    }
     let value = this.trailForm.value;
     console.log(value);
   }

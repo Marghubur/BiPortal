@@ -22,9 +22,7 @@ export class PriceComponent implements OnInit {
     this.http.get("Price/GetPriceDetail").then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.priceDetail = [];
-        for (let index = 0; index < 4; index++) {
-          this.priceDetail.push(res.ResponseBody[0]);
-        }
+        this.priceDetail = res.ResponseBody;
         this.isLoading = false;
       }
     }).catch(e => {
