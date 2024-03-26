@@ -43,6 +43,7 @@ export class InitialSetupComponent implements OnInit {
 
     this.initDeclaration();
     this.initPayrollSetting();
+    this.getLeaveType();
   }
 
   initDeclaration() {
@@ -89,9 +90,8 @@ export class InitialSetupComponent implements OnInit {
   saveDeclarationSetting() {
     this.isLoading = true;
     let value = this.declarationForm.value;
-    value.IsRunLeaveAccrual = false;
     this.isLoading = true;
-    this.http.put(`company/UpdateSetting/${value.CompanyId}/${value.IsRunLeaveAccrual}`, value).then((res:ResponseModel) => {
+    this.http.put(`company/UpdateCompanyInitialSetting/${value.CompanyId}`, value).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.isLoading = false;
         Toast("Declaration setting save successfully");
@@ -169,12 +169,12 @@ export class InitialSetupComponent implements OnInit {
     }
   }
   
-  addLeaveTypePopup() {
+  getLeaveType() {
     this.isLoading = true;
     this.http.get("leave/GetLeaveTypeFilter").then(response => {
       if(response.ResponseBody) {
         this.leaveTypes = response.ResponseBody;
-        $("#leavePlanTypeModal").modal('show');
+        //$("#leavePlanTypeModal").modal('show');
         this.isLoading = false;
       } 
     });

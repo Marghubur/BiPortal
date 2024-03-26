@@ -15,8 +15,8 @@ export class AuthHttpService {
         if (environment.production) {
             return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
         } else {
-            // return `https://www.emstum.com/bot/dn/api/${SERVICE.AUTH}/${Url}`;
-            return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
+            return `https://www.emstum.com/bot/dn/api/${SERVICE.AUTH}/${Url}`;
+            // return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
         }
     }
 

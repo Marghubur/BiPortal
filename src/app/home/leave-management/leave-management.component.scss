@@ -1,0 +1,12 @@
+ul li::marker {
+    content: '✓';
+    color: green;
+    font-weight: bold;
+}
+li {
+    padding-left: 10px;
+}
+
+.ch-100 {
+    height: calc(100vh - 4.5rem) !important;
+}

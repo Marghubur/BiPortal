@@ -61,37 +61,39 @@
     <div class="col-md-5 sidebar">
       <div class="card p-4 content-wrapper">
         <h3 class="fw-bold text-dark">Let's Talk</h3>
-        <div class="mt-3">
-          <label class="form-label">Name</label>
-          <input type="text" placeholder="Name" class="form-control">
-        </div>
-        <div class="mt-3">
-          <label class="form-label">Email</label>
-          <input type="email" placeholder="Email" class="form-control">
-        </div>
-        <div class="row">
-          <div class="mt-3 col-md-6">
-            <label class="form-label">Phone Number</label>
-            <input type="number" placeholder="Phone Number" class="form-control" onkeypress="return event.charCode >=48 && event.charCode <=57">
+        <form [formGroup]="contactUsForm">
+          <div class="mt-3">
+            <label class="form-label">Name</label>
+            <input type="text" formControlName="Name" placeholder="Name" class="form-control" [ngClass]="{'error-field': submitted && f.Name.errors !== null && f.Name.errors.required}">
           </div>
-          <div class="mt-3 col-md-6">
-            <label class="form-label">Company Name</label>
-            <input type="text" placeholder="COmpany Name" class="form-control">
+          <div class="mt-3">
+            <label class="form-label">Email</label>
+            <input type="email" placeholder="Email" formControlName="Email" class="form-control" [ngClass]="{'error-field': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}">
           </div>
-        </div>
-        <div class="mt-3">
-          <label class="form-label">Message</label>
-          <textarea placeholder="Message" class="form-control" cols="30" rows="3"></textarea>
-        </div>
-        <div class="form-check mt-3">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
-          <label class="form-check-label" for="flexCheckChecked">
-            <small>
-              I consent to Emstum processing the data I submit and sending me appropriate business communications by checking this box. I understand that my information will be handled in accordance with Emstum's <a href="javascript;void(0)" class="text-decoration-none">privacy policy</a>.
-            </small>
-          </label>
-        </div>
-        <button class="btn btn-primary-c mt-3">Submit</button>
+          <div class="row">
+            <div class="mt-3 col-md-6">
+              <label class="form-label">Phone Number</label>
+              <input type="number" OnlyNumber="10" placeholder="Phone Number" formControlName="PhoneNumber" class="form-control" onkeypress="return event.charCode >=48 && event.charCode <=57" [ngClass]="{'error-field': submitted && f.PhoneNumber.errors !== null && f.PhoneNumber.errors.required}">
+            </div>
+            <div class="mt-3 col-md-6">
+              <label class="form-label">Company Name</label>
+              <input type="text" placeholder="Company Name" formControlName="CompanyName" class="form-control" [ngClass]="{'error-field': submitted && f.CompanyName.errors !== null && f.CompanyName.errors.required}">
+            </div>
+          </div>
+          <div class="mt-3">
+            <label class="form-label">Message</label>
+            <textarea placeholder="Message" class="form-control" cols="30" rows="3" formControlName="Message" [ngClass]="{'error-field': submitted && f.Message.errors !== null && f.Message.errors.required}"></textarea>
+          </div>
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" formControlName="AgreeTermCondition" [ngClass]="{'error-field': submitted && f.AgreeTermCondition.errors !== null && f.AgreeTermCondition.errors.required}">
+            <label class="form-check-label" for="flexCheckChecked">
+              <small>
+                I consent to Emstum processing the data I submit and sending me appropriate business communications by checking this box. I understand that my information will be handled in accordance with Emstum's <a href="javascript;void(0)" class="text-decoration-none">privacy policy</a>.
+              </small>
+            </label>
+          </div>
+        </form>
+        <button class="btn btn-primary-c mt-3" (click)="save()" [disabled]="isLoading">Submit</button>
       </div>
     </div>
   </div>

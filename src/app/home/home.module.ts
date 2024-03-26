@@ -14,6 +14,18 @@ import { ContactComponent } from './contact/contact.component';
 import { FreeTrailComponent } from './free-trail/free-trail.component';
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UtilModule } from '../util/util.module';
+import { HRManagementComponent } from './hrmanagement/hrmanagement.component';
+import { EmployeeProfilesComponent } from './employee-profiles/employee-profiles.component';
+import { PayrollSoftwareComponent } from './payroll-software/payroll-software.component';
+import { TimesheetManagementComponent } from './timesheet-management/timesheet-management.component';
+import { AttendanceManagementComponent } from './attendance-management/attendance-management.component';
+import { LeaveManagementComponent } from './leave-management/leave-management.component';
+import { ExpenseManagementComponent } from './expense-management/expense-management.component';
+import { ShiftManagementComponent } from './shift-management/shift-management.component';
+import { EmployeefinanceComponent } from './employeefinance/employeefinance.component';
+import { PerformancemanagementComponent } from './performancemanagement/performancemanagement.component';
+import { DocumentmanagementComponent } from './documentmanagement/documentmanagement.component';
 
 
 @NgModule({
@@ -27,14 +39,26 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FooterComponent,
     ContactComponent,
     FreeTrailComponent,
-    AboutusComponent
+    AboutusComponent,
+    HRManagementComponent,
+    EmployeeProfilesComponent,
+    PayrollSoftwareComponent,
+    TimesheetManagementComponent,
+    AttendanceManagementComponent,
+    LeaveManagementComponent,
+    ExpenseManagementComponent,
+    ShiftManagementComponent,
+    EmployeefinanceComponent,
+    PerformancemanagementComponent,
+    DocumentmanagementComponent
   ],
   imports: [
     CommonModule,
     HomeRoutingModule,
     NgbModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UtilModule
   ],
 })
 export class HomeModule {
