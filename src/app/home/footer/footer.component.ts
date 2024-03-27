@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { PayrollSettings } from 'src/providers/constants';
 
 @Component({
   selector: 'app-footer',
@@ -6,5 +8,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
+
+  constructor(private router: Router) { }
+
+  navToPayroll() {
+    window.scrollTo(0, 0);
+  }
+
 
 }

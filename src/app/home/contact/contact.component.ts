@@ -1,5 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { Toast } from 'src/providers/common-service/common.service';
 
 @Component({
   selector: 'app-contact',
@@ -11,7 +14,8 @@ export class ContactComponent implements OnInit {
   submitted: boolean = false;
   isLoading: boolean = false;
   
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,
+              private http: CoreHttpService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -19,7 +23,7 @@ export class ContactComponent implements OnInit {
 
   initForm() {
     this.contactUsForm = this.fb.group({
-      Name: new FormControl(null, [Validators.required]),
+      FullName: new FormControl(null, [Validators.required]),
       Email: new FormControl(null, [Validators.required, Validators.email]),
       PhoneNumber: new FormControl(null, [Validators.required]),
       CompanyName: new FormControl(null, [Validators.required]),
@@ -40,7 +44,17 @@ export class ContactComponent implements OnInit {
       return;
     }
     let value = this.contactUsForm.value;
-    console.log(value);
+    this.http.post("Price/AddContactus", value).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        Toast("Request submiited successfully");
+        this.contactUsForm.reset();
+        this.isLoading = false;
+        this.submitted = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+      this.submitted = false;
+    })
   }
 
 }

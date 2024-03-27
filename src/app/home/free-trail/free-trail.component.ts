@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ResponseModel } from 'src/auth/jwtService';
+import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { Toast } from 'src/providers/common-service/common.service';
 
 @Component({
   selector: 'app-free-trail',
@@ -11,7 +14,8 @@ export class FreeTrailComponent implements OnInit {
   submitted: boolean = false;
   isLoading: boolean = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,
+              private http: CoreHttpService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -39,6 +43,16 @@ export class FreeTrailComponent implements OnInit {
       return;
     }
     let value = this.trailForm.value;
-    console.log(value);
+    this.http.post("Price/AddFreeTrial", value).then((res:ResponseModel) => {
+      if (res.ResponseBody) {
+        Toast("Request submiited successfully");
+        this.trailForm.reset();
+        this.isLoading = false;
+        this.submitted = false;
+      }
+    }).catch(e => {
+      this.isLoading = false;
+      this.submitted = false;
+    })
   }
 }
