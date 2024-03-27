@@ -9,11 +9,5 @@ import { PayrollSettings } from 'src/providers/constants';
 })
 export class FooterComponent {
 
-  constructor(private router: Router) { }
-
-  navToPayroll() {
-    window.scrollTo(0, 0);
-  }
-
 
 }

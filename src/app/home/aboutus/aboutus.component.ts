@@ -8,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 export class AboutusComponent implements OnInit {
 
   ngOnInit(): void {
-    document.body.scrollTop = 0;
+    document.body.scroll({
+      top: 0,
+      behavior: 'smooth' // Enable smooth scrolling animation
+    });
   }
   
 }
