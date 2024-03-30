@@ -1,19 +1,33 @@
 <div class="main-container">
-
   <div class="content-header">
     <div class="col-8">
       <div class="px-1">
-        <app-breadcrums [title]="'Email Template'" [subtitle]="'Template list'"></app-breadcrums>
+        <app-breadcrums
+          [title]="'Email Template'"
+          [subtitle]="'Template list'"
+        ></app-breadcrums>
       </div>
     </div>
     <div class="col-4">
       <div class="x_header_title d-flex align-items-center justify-content-end">
-        <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-          <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
-            title="Reload this page"></i>
+        <a
+          href="javascript:void(0)"
+          class="text-decoration-none fw-bold pe-4"
+          (click)="pageReload()"
+        >
+          <i
+            class="fa-solid fa-arrows-rotate"
+            data-bs-toggle="tooltip"
+            data-bs-placement="right"
+            title="Reload this page"
+          ></i>
         </a>
-        <button class="btn btn-primary-c float-end" (click)="addeditTemplate(0)"><i class="fa-solid fa-plus pe-2"></i>
-          Add Template</button>
+        <button
+          class="btn btn-primary-c float-end"
+          (click)="addeditTemplate(0)"
+        >
+          <i class="fa-solid fa-plus pe-2"></i> Add Template
+        </button>
       </div>
     </div>
   </div>
@@ -29,63 +43,152 @@
               </div>
               <div class="th fe-2">
                 <div class="cell-wrapper">
-                  <input class="form-control form-control-sm" autofocus placeholder="Search by Template Name"
-                    [(ngModel)]="templateDetail.TemplateName" (keyup.esc)="resetFilter()"
-                    (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
-                  <div class="t-filter" (click)="arrangeDetails(orderByTempNameAsc, 'TemplateName')">
+                  <input
+                    class="form-control form-control-sm"
+                    autofocus
+                    placeholder="Search by Template Name"
+                    [(ngModel)]="templateDetail.TemplateName"
+                    (keyup.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()"
+                    oninput="this.value = this.value.toUpperCase()"
+                  />
+                  <div
+                    class="t-filter"
+                    (click)="arrangeDetails(orderByTempNameAsc, 'TemplateName')"
+                  >
                     <a href="javascript:void(0)">Template Name</a>
-                    <i class="fa-solid fa-arrow-down-wide-short"
-                      [ngClass]="{'d-none': orderByTempNameAsc == null || !orderByTempNameAsc }" aria-hidden="true"></i>
-                    <i class="fa-solid fa-arrow-down-short-wide"
-                      [ngClass]="{'d-none': orderByTempNameAsc == null || orderByTempNameAsc }" aria-hidden="true"></i>
+                    <i
+                      class="fa-solid fa-arrow-down-wide-short"
+                      [ngClass]="{
+                        'd-none':
+                          orderByTempNameAsc == null || !orderByTempNameAsc
+                      }"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      class="fa-solid fa-arrow-down-short-wide"
+                      [ngClass]="{
+                        'd-none':
+                          orderByTempNameAsc == null || orderByTempNameAsc
+                      }"
+                      aria-hidden="true"
+                    ></i>
                   </div>
                 </div>
               </div>
               <div class="th fe-2">
                 <div class="cell-wrapper">
-                  <input class="form-control form-control-sm" autofocus placeholder="Search by Subject Title"
-                    [(ngModel)]="templateDetail.SubjectLine" (keyup.esc)="resetFilter()" (keyup.enter)="filterRecords()"
-                    oninput="this.value = this.value.toUpperCase()">
-                  <div class="t-filter" (click)="arrangeDetails(orderBySubjectTitleAsc, 'SubjectLine')">
+                  <input
+                    class="form-control form-control-sm"
+                    autofocus
+                    placeholder="Search by Subject Title"
+                    [(ngModel)]="templateDetail.SubjectLine"
+                    (keyup.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()"
+                    oninput="this.value = this.value.toUpperCase()"
+                  />
+                  <div
+                    class="t-filter"
+                    (click)="
+                      arrangeDetails(orderBySubjectTitleAsc, 'SubjectLine')
+                    "
+                  >
                     <a href="javascript:void(0)">Subject Title</a>
-                    <i class="fa-solid fa-arrow-down-wide-short"
-                      [ngClass]="{'d-none': orderBySubjectTitleAsc == null || !orderBySubjectTitleAsc }"
-                      aria-hidden="true"></i>
-                    <i class="fa-solid fa-arrow-down-short-wide"
-                      [ngClass]="{'d-none': orderBySubjectTitleAsc == null || orderBySubjectTitleAsc }"
-                      aria-hidden="true"></i>
+                    <i
+                      class="fa-solid fa-arrow-down-wide-short"
+                      [ngClass]="{
+                        'd-none':
+                          orderBySubjectTitleAsc == null ||
+                          !orderBySubjectTitleAsc
+                      }"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      class="fa-solid fa-arrow-down-short-wide"
+                      [ngClass]="{
+                        'd-none':
+                          orderBySubjectTitleAsc == null ||
+                          orderBySubjectTitleAsc
+                      }"
+                      aria-hidden="true"
+                    ></i>
                   </div>
                 </div>
               </div>
               <div class="th fe-2">
                 <div class="cell-wrapper">
-                  <input class="form-control form-control-sm" autofocus placeholder="Search by Signature Detail"
-                    [(ngModel)]="templateDetail.SignatureDetail" (keyup.esc)="resetFilter()"
-                    (keyup.enter)="filterRecords()" oninput="this.value = this.value.toUpperCase()">
-                  <div class="t-filter" (click)="arrangeDetails(orderBySignatureDetailAsc, 'SignatureDetail')">
+                  <input
+                    class="form-control form-control-sm"
+                    autofocus
+                    placeholder="Search by Signature Detail"
+                    [(ngModel)]="templateDetail.SignatureDetail"
+                    (keyup.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()"
+                    oninput="this.value = this.value.toUpperCase()"
+                  />
+                  <div
+                    class="t-filter"
+                    (click)="
+                      arrangeDetails(
+                        orderBySignatureDetailAsc,
+                        'SignatureDetail'
+                      )
+                    "
+                  >
                     <a href="javascript:void(0)">Signature Detail</a>
-                    <i class="fa-solid fa-arrow-down-wide-short"
-                      [ngClass]="{'d-none': orderBySignatureDetailAsc == null || !orderBySignatureDetailAsc }"
-                      aria-hidden="true"></i>
-                    <i class="fa-solid fa-arrow-down-short-wide"
-                      [ngClass]="{'d-none': orderBySignatureDetailAsc == null || orderBySignatureDetailAsc }"
-                      aria-hidden="true"></i>
+                    <i
+                      class="fa-solid fa-arrow-down-wide-short"
+                      [ngClass]="{
+                        'd-none':
+                          orderBySignatureDetailAsc == null ||
+                          !orderBySignatureDetailAsc
+                      }"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      class="fa-solid fa-arrow-down-short-wide"
+                      [ngClass]="{
+                        'd-none':
+                          orderBySignatureDetailAsc == null ||
+                          orderBySignatureDetailAsc
+                      }"
+                      aria-hidden="true"
+                    ></i>
                   </div>
                 </div>
               </div>
               <div class="th fe-2">
                 <div class="cell-wrapper">
-                  <input class="form-control form-control-sm" autofocus placeholder="Search by Contact No"
-                    [(ngModel)]="templateDetail.ContactNo" (keyup.esc)="resetFilter()" (keyup.enter)="filterRecords()"
-                    oninput="this.value = this.value.toUpperCase()">
-                  <div class="t-filter" (click)="arrangeDetails(orderByContactNoAsc, 'ContactNo')">
+                  <input
+                    class="form-control form-control-sm"
+                    autofocus
+                    placeholder="Search by Contact No"
+                    [(ngModel)]="templateDetail.ContactNo"
+                    (keyup.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()"
+                    oninput="this.value = this.value.toUpperCase()"
+                  />
+                  <div
+                    class="t-filter"
+                    (click)="arrangeDetails(orderByContactNoAsc, 'ContactNo')"
+                  >
                     <a href="javascript:void(0)">Contact No</a>
-                    <i class="fa-solid fa-arrow-down-wide-short"
-                      [ngClass]="{'d-none': orderByContactNoAsc == null || !orderByContactNoAsc }"
-                      aria-hidden="true"></i>
-                    <i class="fa-solid fa-arrow-down-short-wide"
-                      [ngClass]="{'d-none': orderByContactNoAsc == null || orderByContactNoAsc }"
-                      aria-hidden="true"></i>
+                    <i
+                      class="fa-solid fa-arrow-down-wide-short"
+                      [ngClass]="{
+                        'd-none':
+                          orderByContactNoAsc == null || !orderByContactNoAsc
+                      }"
+                      aria-hidden="true"
+                    ></i>
+                    <i
+                      class="fa-solid fa-arrow-down-short-wide"
+                      [ngClass]="{
+                        'd-none':
+                          orderByContactNoAsc == null || orderByContactNoAsc
+                      }"
+                      aria-hidden="true"
+                    ></i>
                   </div>
                 </div>
               </div>
@@ -94,29 +197,44 @@
           </div>
           <div class="t-body">
             <ng-container *ngIf="isRecordFound">
-              <div class="tr py-2" *ngFor="let template of allEmailtemplate; let i = index;">
+              <div
+                class="tr py-2"
+                *ngFor="let template of allEmailtemplate; let i = index"
+              >
                 <div class="td align-middle text-center fe-index">
-                  {{template.Index}}
+                  {{ template.Index }}
                 </div>
                 <div class="td align-middle fe-2">
-                  {{template.TemplateName}}
+                  {{ template.TemplateName }}
                 </div>
                 <div class="td align-middle fe-2">
-                  {{template.SubjectLine}}
+                  {{ template.SubjectLine }}
                 </div>
                 <div class="td align-middle fe-2">
-                  {{template.SignatureDetail}}
+                  {{ template.SignatureDetail }}
                 </div>
                 <div class="td align-middle fe-2">
-                  {{template.ContactNo}}
+                  {{ template.ContactNo }}
                 </div>
                 <div class="td align-middle fe-1">
                   <div class="d-flex flex-row justify-content-center">
-                    <a href="javascript:void(0)" class="px-2" (click)="addeditTemplate(template)">
-                      <span class="badge bg-primary"><i class="fa-solid fa-pencil" aria-hidden="true"></i></span>
+                    <a
+                      href="javascript:void(0)"
+                      class="px-2"
+                      (click)="addeditTemplate(template)"
+                    >
+                      <span class="badge bg-primary"
+                        ><i class="fa-solid fa-pencil" aria-hidden="true"></i
+                      ></span>
                     </a>
-                    <a href="javascript:void(0)" class="px-2" (click)="getMessageModal(template.EmailTemplateId)">
-                      <span class="badge bg-dark"><i class="fa-regular fa-eye" aria-hidden="true"></i></span>
+                    <a
+                      href="javascript:void(0)"
+                      class="px-2"
+                      (click)="getMessageModal(template.EmailTemplateId)"
+                    >
+                      <span class="badge bg-dark"
+                        ><i class="fa-regular fa-eye" aria-hidden="true"></i
+                      ></span>
                     </a>
                   </div>
                 </div>
@@ -124,7 +242,8 @@
             </ng-container>
             <ng-container *ngIf="!isRecordFound">
               <div
-                class="custom-height fw-bold fs-3 my-5 py-5 text-danger d-flex align-items-center justify-content-center">
+                class="custom-height fw-bold fs-3 my-5 py-5 text-danger d-flex align-items-center justify-content-center"
+              >
                 <p class="my-5 py-5">Record Not Found</p>
               </div>
             </ng-container>
@@ -132,22 +251,12 @@
         </div>
       </div>
       <div class="mt-3">
-        <app-pagination [pagination]="templateData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+        <app-pagination
+          [pagination]="templateData"
+          (onPageChange)="GetFilterResult($event)"
+        ></app-pagination>
       </div>
     </ng-container>
-    <!-- <ng-container *ngIf="isPageLoading">
-      <div class="py-5 my-5">
-        <h6 class="fw-bold fs-3 text-center text-dark">Email template are loading</h6>
-        <div class="fs-5 pb-5 py-5 d-flex flex-column justify-content-center align-items-center">
-          <div class="col-md-3 modal-container  text-center cog-wheel">
-            <img src="assets/images/cog.gif" alt="" />
-            <h6 class="modal-title title-message">
-              Please Wait ........
-            </h6>
-          </div>
-        </div>
-      </div>
-    </ng-container> -->
   </div>
 
   <app-message-modal [Data]="modalData"></app-message-modal>

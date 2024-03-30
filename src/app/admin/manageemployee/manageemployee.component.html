@@ -1,5 +1,4 @@
 <div class="col-12 full-v main-container">
-
   <div class="content-header">
     <div class="col-8">
       <div class="px-1">
@@ -10,15 +9,23 @@
 
   <div class="col-12 row p-0 m-0">
     <div class="right-panel container col-md-12 p-0">
-      <div class="x_panel">        
+      <div class="x_panel">
         <ng-container *ngIf="isReady">
           <div class="x_content mt-4">
-            <div [ngClass]="{'blur-section': !isCompaniesDetails}">
-              <div class="blur-section__highlight" [ngClass]="{'d-none': isCompaniesDetails}">
+            <div [ngClass]="{ 'blur-section': !isCompaniesDetails }">
+              <div
+                class="blur-section__highlight"
+                [ngClass]="{ 'd-none': isCompaniesDetails }"
+              >
                 <div class="blur-section__content">
-                  {{'Please add company first'}}
+                  {{ "Please add company first" }}
                   <p class="mb-0 py-3">
-                    <button class="btn btn-primary-c fs-5 fw-bold" (click)="gotoCompany()"><i class="fa-solid fa-gear pe-2"></i> Configure Company</button>
+                    <button
+                      class="btn btn-primary-c fs-5 fw-bold"
+                      (click)="gotoCompany()"
+                    >
+                      <i class="fa-solid fa-gear pe-2"></i> Configure Company
+                    </button>
                   </p>
                 </div>
               </div>
@@ -27,14 +34,27 @@
                   <div class="col-12 row">
                     <div class="col-md-3 ps-4">
                       <div class="x_header_title position-relative">
-                        <div class="img-container-sq" (change)="uploadProfilePicture($event)">
+                        <div
+                          class="img-container-sq"
+                          (change)="uploadProfilePicture($event)"
+                        >
                           <div class="img-container__box">
-                            <img [attr.src]="profileURL" alt="User">
+                            <img [attr.src]="profileURL" alt="User" />
                             <!-- <app-image-loader [autofit]="1" [url]="profileURL"></app-image-loader> -->
-                            <input type="file" id="uploadocument" class="d-none" accept=".jpg, .jpeg, .png"
-                              formControlName="ProfileImgPath" />
+                            <input
+                              type="file"
+                              id="uploadocument"
+                              class="d-none"
+                              accept=".jpg, .jpeg, .png"
+                              formControlName="ProfileImgPath"
+                            />
                             <div class="img-container__btn mt-2">
-                              <button class="btn btn-outline-success form-control" (click)="fireBrowserFile()">Browse</button>
+                              <button
+                                class="btn btn-outline-success form-control"
+                                (click)="fireBrowserFile()"
+                              >
+                                Browse
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -44,45 +64,122 @@
                       <div class="col-md-12 m-0 row">
                         <div class="col-md-4 mb-3">
                           <label class="form-label">First Name *</label>
-                          <input inputtype="mandatory" class="form-control" placeholder="First Name" maxlength="40" oninput="this.value = this.value.toUpperCase()"
-                            [ngClass]="{'error-field': submitted && f.FirstName.errors !== null && f.FirstName.errors.required}"
-                            name="FirstName" formControlName="FirstName" />
+                          <input
+                            inputtype="mandatory"
+                            class="form-control"
+                            placeholder="First Name"
+                            maxlength="40"
+                            oninput="this.value = this.value.toUpperCase()"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.FirstName.errors !== null &&
+                                f.FirstName.errors.required
+                            }"
+                            name="FirstName"
+                            formControlName="FirstName"
+                          />
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Last Name *</label>
-                          <input class="form-control" placeholder="Last Name" name="LastName" formControlName="LastName"
-                            oninput="this.value = this.value.toUpperCase()" maxlength="40"
-                            [ngClass]="{'error-field': submitted && f.LastName.errors !== null && f.LastName.errors.required}" />
+                          <input
+                            class="form-control"
+                            placeholder="Last Name"
+                            name="LastName"
+                            formControlName="LastName"
+                            oninput="this.value = this.value.toUpperCase()"
+                            maxlength="40"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.LastName.errors !== null &&
+                                f.LastName.errors.required
+                            }"
+                          />
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Mobile Number *</label>
-                          <input inputtype="mandatory" class="form-control" placeholder="Mobile No.#" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                            [ngClass]="{'error-field': submitted && f.Mobile.errors !== null && f.Mobile.errors.required}"
-                            OnlyNumber="10" name="Mobile" formControlName="Mobile" />
+                          <input
+                            inputtype="mandatory"
+                            class="form-control"
+                            placeholder="Mobile No.#"
+                            onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.Mobile.errors !== null &&
+                                f.Mobile.errors.required
+                            }"
+                            OnlyNumber="10"
+                            name="Mobile"
+                            formControlName="Mobile"
+                          />
                         </div>
                       </div>
 
                       <div class="col-md-12 m-0 row">
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Email Id *</label>
-                          <input class="form-control" placeholder="Email Id" name="Email" formControlName="Email" oninput="this.value = this.value.toLowerCase()"
-                            [ngClass]="{'error-field': submitted && f.Email.errors !== null && (f.Email.errors.required || f.Email.errors.email)}" maxlength="40"/>
+                          <input
+                            class="form-control"
+                            placeholder="Email Id"
+                            name="Email"
+                            formControlName="Email"
+                            oninput="this.value = this.value.toLowerCase()"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.Email.errors !== null &&
+                                (f.Email.errors.required ||
+                                  f.Email.errors.email)
+                            }"
+                            maxlength="40"
+                          />
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Alternet Number</label>
-                          <input class="form-control" placeholder="SecondaryMobile" OnlyNumber="10" name="SecondaryMobile"
-                            formControlName="SecondaryMobile" />
+                          <input
+                            class="form-control"
+                            placeholder="SecondaryMobile"
+                            OnlyNumber="10"
+                            name="SecondaryMobile"
+                            formControlName="SecondaryMobile"
+                          />
                         </div>
                         <div class="col-md-4 pb-3">
                           <label class="form-label">Date of birth *</label>
                           <form class="form-inline">
                             <div class="form-group w-100">
-                              <div class="input-group inline-calendar w-100" [ngClass]="{'error-field': submitted && f.DOB.errors !== null && f.DOB.errors.required}">
-                                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
-                                  (dateSelect)="onDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #d="ngbDatepicker">
+                              <div
+                                class="input-group inline-calendar w-100"
+                                [ngClass]="{
+                                  'error-field':
+                                    submitted &&
+                                    f.DOB.errors !== null &&
+                                    f.DOB.errors.required
+                                }"
+                              >
+                                <input
+                                  class="form-control"
+                                  placeholder="yyyy-mm-dd"
+                                  name="dp"
+                                  [(ngModel)]="model"
+                                  (dateSelect)="onDateSelection($event)"
+                                  ngbDatepicker
+                                  [minDate]="{ year: 1970, month: 1, day: 1 }"
+                                  [maxDate]="minDate"
+                                  #d="ngbDatepicker"
+                                />
                                 <div class="input-group-append">
-                                  <button class="btn calendar" (click)="d.toggle()" type="button"><i
-                                      class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                                  <button
+                                    class="btn calendar"
+                                    (click)="d.toggle()"
+                                    type="button"
+                                  >
+                                    <i
+                                      class="fa-regular fa-calendar-days fa-lg"
+                                      aria-hidden="true"
+                                    ></i>
                                   </button>
                                 </div>
                               </div>
@@ -94,51 +191,118 @@
                       <div class="col-md-12 m-0 row">
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Select Leave Plan</label>
-                          <select class="form-control" formControlName="LeavePlanId">
-                            <option value="0" disabled>Select Leave plan</option>
-                            <option [value]="l.LeavePlanId" *ngFor="let l of leavePlans">
-                              {{l.PlanName}}
+                          <select
+                            class="form-control"
+                            formControlName="LeavePlanId"
+                          >
+                            <option value="0" disabled>
+                              Select Leave plan
+                            </option>
+                            <option
+                              [value]="l.LeavePlanId"
+                              *ngFor="let l of leavePlans"
+                            >
+                              {{ l.PlanName }}
                             </option>
                           </select>
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Payroll Calculate On</label>
-                          <select class="form-select" formControlName="IsPayrollOnCTC" (change)="changePayrollCalculationType($event)">
-                            <option value=true>CTC</option>
-                            <option value=false>Salary Group</option>
+                          <select
+                            class="form-select"
+                            formControlName="IsPayrollOnCTC"
+                            (change)="changePayrollCalculationType($event)"
+                          >
+                            <option value="true">CTC</option>
+                            <option value="false">Salary Group</option>
                           </select>
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Salary Group</label>
-                          <select class="form-select" formControlName="SalaryGroupId"
-                          [ngClass]="{'error-field': submitted && f.SalaryGroupId.errors !== null && f.SalaryGroupId.errors.required}">
-                            <option value=null disabled>Please select salary group</option>
-                            <option [value]="item.SalaryGroupId" *ngFor="let item of salaryGroup">{{item.GroupName}}</option>
+                          <select
+                            class="form-select"
+                            formControlName="SalaryGroupId"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.SalaryGroupId.errors !== null &&
+                                f.SalaryGroupId.errors.required
+                            }"
+                          >
+                            <option value="null" disabled>
+                              Please select salary group
+                            </option>
+                            <option
+                              [value]="item.SalaryGroupId"
+                              *ngFor="let item of salaryGroup"
+                            >
+                              {{ item.GroupName }}
+                            </option>
                           </select>
                         </div>
                       </div>
                       <div class="col-md-12 row m-0 align-items-center">
                         <div class="col-md-4">
                           <label class="form-label">CTC *</label>
-                          <input class="form-control" placeholder="CTC Annually" name="CTC" formControlName="CTC"
-                            OnlyNumber="12" (keyup)="ctcChangeAmount($event)" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                            [ngClass]="{'error-field': submitted && f.CTC.errors !== null && f.CTC.errors.required}" />
+                          <input
+                            class="form-control"
+                            placeholder="CTC Annually"
+                            name="CTC"
+                            formControlName="CTC"
+                            OnlyNumber="12"
+                            (keyup)="ctcChangeAmount($event)"
+                            onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.CTC.errors !== null &&
+                                f.CTC.errors.required
+                            }"
+                          />
                         </div>
                         <div class="col-md-4">
                           <p>Select your gender</p>
-                          <div class="col-6 d-flex flex-row justify-content-between">
+                          <div
+                            class="col-6 d-flex flex-row justify-content-between"
+                          >
                             <div>
-                              <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="true" id="employeeGender1">
-                              <label class="form-check-label" for="employeeGender1">Male</label>
+                              <input
+                                type="radio"
+                                class="me-2"
+                                name="Gender"
+                                formControlName="Gender"
+                                value="true"
+                                id="employeeGender1"
+                              />
+                              <label
+                                class="form-check-label"
+                                for="employeeGender1"
+                                >Male</label
+                              >
                             </div>
                             <div>
-                              <input type="radio" class="me-2" name="Gender" formControlName="Gender" value="false" id="employeeGender2">
-                              <label class="form-check-label" for="employeeGender2">Female</label>
+                              <input
+                                type="radio"
+                                class="me-2"
+                                name="Gender"
+                                formControlName="Gender"
+                                value="false"
+                                id="employeeGender2"
+                              />
+                              <label
+                                class="form-check-label"
+                                for="employeeGender2"
+                                >Female</label
+                              >
                             </div>
                           </div>
                         </div>
                         <div class="col-md-4 text-end">
-                          <a href="javascript:void(0)" class="text-decoration-none" (click)="initiateExistPopUp()">
+                          <a
+                            href="javascript:void(0)"
+                            class="text-decoration-none"
+                            (click)="initiateExistPopUp()"
+                          >
                             Initiate Exit
                           </a>
                         </div>
@@ -146,46 +310,95 @@
                     </div>
                   </div>
                   <ng-container *ngIf="isUpdate">
-                    <a href="javascript:void(0)" (click)="addUpadteClientPopUp()" class="text-decoration-none ps-3">Add or
-                      Update Associate Clients <i class="fa-solid fa-plus ps-2"></i></a>
+                    <a
+                      href="javascript:void(0)"
+                      (click)="addUpadteClientPopUp()"
+                      class="text-decoration-none ps-3"
+                      >Add or Update Associate Clients
+                      <i class="fa-solid fa-plus ps-2"></i
+                    ></a>
                   </ng-container>
                   <div class="col-12 row m-0 mt-5 px-3">
                     <div class="x_panel_body">
                       <div class="x_header">
                         <div class="x_header_title">
-                          <h2>Roles & Manage<small>add roles and mangers</small></h2>
+                          <h2>
+                            Roles & Manage<small>add roles and mangers</small>
+                          </h2>
                         </div>
                       </div>
                       <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Designation *</label>
-                          <select name="DesignationId" class="form-select" formControlName="DesignationId"
-                            [ngClass]="{'error-field': submitted && (f.DesignationId.errors !== null && f.DesignationId.errors.required)}">
-                            <option value=null disabled>Select Designation</option>
-                            <option [value]="e.RoleId" *ngFor="let e of designations">{{e.RoleName}}</option>
+                          <select
+                            name="DesignationId"
+                            class="form-select"
+                            formControlName="DesignationId"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.DesignationId.errors !== null &&
+                                  f.DesignationId.errors.required
+                            }"
+                          >
+                            <option value="null" disabled>
+                              Select Designation
+                            </option>
+                            <option
+                              [value]="e.RoleId"
+                              *ngFor="let e of designations"
+                            >
+                              {{ e.RoleName }}
+                            </option>
                           </select>
                         </div>
                         <div class="col-md-4 mb-3">
                           <label class="form-label">Reporting Manager *</label>
-                          <bot-autocomplete [data]="managerList" formControlName="ReportingManagerId"
-                            name="ReportingManagerId">
+                          <bot-autocomplete
+                            [data]="managerList"
+                            formControlName="ReportingManagerId"
+                            name="ReportingManagerId"
+                          >
                           </bot-autocomplete>
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Menu Access Role *</label>
-                          <select name="AccessLevelId" class="form-select" formControlName="AccessLevelId"
-                            [ngClass]="{'error-field': submitted && f.AccessLevelId.errors !== null && f.AccessLevelId.errors.required}">
-                            <option value=null disabled>Allocate role</option>
-                            <option *ngFor="let item of userRoles" [value]="item.AccessLevelId">
-                              {{item.RoleName}}
+                          <select
+                            name="AccessLevelId"
+                            class="form-select"
+                            formControlName="AccessLevelId"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.AccessLevelId.errors !== null &&
+                                f.AccessLevelId.errors.required
+                            }"
+                          >
+                            <option value="null" disabled>Allocate role</option>
+                            <option
+                              *ngFor="let item of userRoles"
+                              [value]="item.AccessLevelId"
+                            >
+                              {{ item.RoleName }}
                             </option>
                           </select>
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">User Type *</label>
-                          <select name="UserTypeId" class="form-select" formControlName="UserTypeId"
-                            [ngClass]="{'error-field': submitted && f.UserTypeId.errors !== null && f.UserTypeId.errors.required}">
-                            <option value=null disabled>Select User Type</option>
+                          <select
+                            name="UserTypeId"
+                            class="form-select"
+                            formControlName="UserTypeId"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.UserTypeId.errors !== null &&
+                                f.UserTypeId.errors.required
+                            }"
+                          >
+                            <option value="null" disabled>
+                              Select User Type
+                            </option>
                             <option value="1">Admin</option>
                             <option value="2">Employee</option>
                             <option value="3">Candidate</option>
@@ -195,17 +408,31 @@
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Company *</label>
-                          <select class="form-select" formControlName="CompanyId"
-                            [ngClass]="{'error-field': submitted && f.CompanyId.errors !== null && f.CompanyId.errors.required}">
+                          <select
+                            class="form-select"
+                            formControlName="CompanyId"
+                            [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                f.CompanyId.errors !== null &&
+                                f.CompanyId.errors.required
+                            }"
+                          >
                             <option value="" disabled>Select Company</option>
-                            <option *ngFor="let item of companies" [value]="item.CompanyId">
-                              {{item.CompanyName}}
+                            <option
+                              *ngFor="let item of companies"
+                              [value]="item.CompanyId"
+                            >
+                              {{ item.CompanyName }}
                             </option>
                           </select>
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">Shift Id *</label>
-                          <bot-autocomplete [data]="shiftDetail" formControlName="WorkShiftId">
+                          <bot-autocomplete
+                            [data]="shiftDetail"
+                            formControlName="WorkShiftId"
+                          >
                           </bot-autocomplete>
                         </div>
                       </div>
@@ -216,33 +443,79 @@
                       <div class="x_panel_body">
                         <div class="x_header">
                           <div class="x_header_title">
-                            <h2>Personal Detail<small>Fill employee personal details</small></h2>
+                            <h2>
+                              Personal Detail<small
+                                >Fill employee personal details</small
+                              >
+                            </h2>
                           </div>
                         </div>
                         <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Father Name *</label>
-                            <input class="form-control" placeholder="Father Name" name="FatherName" transform="" oninput="this.value = this.value.toUpperCase()" maxlength="40"
-                            [ngClass]="{'error-field': submitted && f.FatherName.errors !== null && f.FatherName.errors.required}" formControlName="FatherName"/>
+                            <input
+                              class="form-control"
+                              placeholder="Father Name"
+                              name="FatherName"
+                              transform=""
+                              oninput="this.value = this.value.toUpperCase()"
+                              maxlength="40"
+                              [ngClass]="{
+                                'error-field':
+                                  submitted &&
+                                  f.FatherName.errors !== null &&
+                                  f.FatherName.errors.required
+                              }"
+                              formControlName="FatherName"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Mother Name</label>
-                            <input class="form-control" placeholder="Mother Name" name="MotherName" transform="" oninput="this.value = this.value.toUpperCase()" maxlength="40"
-                              formControlName="MotherName" />
+                            <input
+                              class="form-control"
+                              placeholder="Mother Name"
+                              name="MotherName"
+                              transform=""
+                              oninput="this.value = this.value.toUpperCase()"
+                              maxlength="40"
+                              formControlName="MotherName"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
-                            <label class="form-label">Spouse Name (if maried)</label>
-                            <input class="form-control" placeholder="Spouse Name" name="SpouseName" transform="" oninput="this.value = this.value.toUpperCase()" maxlength="40"
-                              formControlName="SpouseName" />
+                            <label class="form-label"
+                              >Spouse Name (if maried)</label
+                            >
+                            <input
+                              class="form-control"
+                              placeholder="Spouse Name"
+                              name="SpouseName"
+                              transform=""
+                              oninput="this.value = this.value.toUpperCase()"
+                              maxlength="40"
+                              formControlName="SpouseName"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Domain</label>
-                            <input class="form-control" placeholder="Domain" name="Domain" formControlName="Domain" oninput="this.value = this.value.toUpperCase()" maxlength="40"/>
+                            <input
+                              class="form-control"
+                              placeholder="Domain"
+                              name="Domain"
+                              formControlName="Domain"
+                              oninput="this.value = this.value.toUpperCase()"
+                              maxlength="40"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Specification</label>
-                            <input class="form-control" placeholder="Specification" name="Specification" oninput="this.value = this.value.toUpperCase()" maxlength="40"
-                              formControlName="Specification" />
+                            <input
+                              class="form-control"
+                              placeholder="Specification"
+                              name="Specification"
+                              oninput="this.value = this.value.toUpperCase()"
+                              maxlength="40"
+                              formControlName="Specification"
+                            />
                           </div>
                           <!-- <div class="col-md-6 mb-3">
                             <label class="form-label">Last Company Name</label>
@@ -251,21 +524,51 @@
                           </div> -->
                           <div class="col-md-6 mb-3">
                             <label class="form-label">State</label>
-                            <input class="form-control" placeholder="State" name="State" formControlName="State" oninput="this.value = this.value.toUpperCase()" maxlength="40" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
+                            <input
+                              class="form-control"
+                              placeholder="State"
+                              name="State"
+                              formControlName="State"
+                              oninput="this.value = this.value.toUpperCase()"
+                              maxlength="40"
+                              onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">City</label>
-                            <input class="form-control" placeholder="City" name="City" formControlName="City" oninput="this.value = this.value.toUpperCase()" maxlength="40" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"/>
+                            <input
+                              class="form-control"
+                              placeholder="City"
+                              name="City"
+                              formControlName="City"
+                              oninput="this.value = this.value.toUpperCase()"
+                              maxlength="40"
+                              onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Pincode</label>
-                            <input class="form-control" placeholder="Pincode" OnlyNumber="6" name="Pincode" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                              formControlName="Pincode" />
+                            <input
+                              class="form-control"
+                              placeholder="Pincode"
+                              OnlyNumber="6"
+                              name="Pincode"
+                              onkeypress="return event.charCode >=48 && event.charCode <=57"
+                              formControlName="Pincode"
+                            />
                           </div>
                           <div class="col-md-12 mb-3">
                             <label class="form-label">Address</label>
-                            <textarea rows="5" class="form-control address-box" placeholder="Address" name="Address" oninput="this.value = this.value.toUpperCase()" [rows]="3"
-                              formControlName="Address" maxlength="100"></textarea>
+                            <textarea
+                              rows="5"
+                              class="form-control address-box"
+                              placeholder="Address"
+                              name="Address"
+                              oninput="this.value = this.value.toUpperCase()"
+                              [rows]="3"
+                              formControlName="Address"
+                              maxlength="100"
+                            ></textarea>
                           </div>
                         </div>
                       </div>
@@ -275,55 +578,162 @@
                       <div class="x_panel_body">
                         <div class="x_header">
                           <div class="x_header_title">
-                            <h2>Account Detail<small>Fill employee account details</small></h2>
+                            <h2>
+                              Account Detail<small
+                                >Fill employee account details</small
+                              >
+                            </h2>
                           </div>
                         </div>
                         <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                           <div class="col-md-6 mb-3">
                             <label class="form-label">PAN No. # *</label>
-                            <input class="form-control" placeholder="PAN card no.#" name="PANNo" [ngClass]="{'error-field': submitted && f.PANNo.errors !== null && f.PANNo.errors.required}" maxlength="10"
-                              oninput="this.value = this.value.toUpperCase()" formControlName="PANNo" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"/>
+                            <input
+                              class="form-control"
+                              placeholder="PAN card no.#"
+                              name="PANNo"
+                              [ngClass]="{
+                                'error-field':
+                                  submitted &&
+                                  f.PANNo.errors !== null &&
+                                  f.PANNo.errors.required
+                              }"
+                              maxlength="10"
+                              oninput="this.value = this.value.toUpperCase()"
+                              formControlName="PANNo"
+                              onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Aadhar No. #</label>
-                            <input class="form-control" placeholder="Aadhar No. #" name="AadharNo" OnlyNumber="16" formControlName="AadharNo" onkeypress="return event.charCode >=48 && event.charCode <=57"/>
+                            <input
+                              class="form-control"
+                              placeholder="Aadhar No. #"
+                              name="AadharNo"
+                              OnlyNumber="16"
+                              formControlName="AadharNo"
+                              onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            />
                           </div>
                           <div class="col-md-12 mb-3">
-                            <label class="form-label">Bank Account No.# *</label>
-                            <input class="form-control" placeholder="Bank Account No.#" name="AccountNumber" OnlyNumber="34" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                              [ngClass]="{'error-field': submitted && f.AccountNumber.errors !== null && f.AccountNumber.errors.required}" formControlName="AccountNumber" />
+                            <label class="form-label"
+                              >Bank Account No.# *</label
+                            >
+                            <input
+                              class="form-control"
+                              placeholder="Bank Account No.#"
+                              name="AccountNumber"
+                              OnlyNumber="34"
+                              onkeypress="return event.charCode >=48 && event.charCode <=57"
+                              [ngClass]="{
+                                'error-field':
+                                  submitted &&
+                                  f.AccountNumber.errors !== null &&
+                                  f.AccountNumber.errors.required
+                              }"
+                              formControlName="AccountNumber"
+                            />
                           </div>
                           <div class="col-md-12 mb-3">
                             <label class="form-label">Bank Name *</label>
-                            <input class="form-control" placeholder="Bank Name" name="BankName" transform="" oninput="this.value = this.value.toUpperCase()" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
-                              [ngClass]="{'error-field': submitted && f.BankName.errors !== null && f.BankName.errors.required}" formControlName="BankName" maxlength="40"/>
+                            <input
+                              class="form-control"
+                              placeholder="Bank Name"
+                              name="BankName"
+                              transform=""
+                              oninput="this.value = this.value.toUpperCase()"
+                              onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || event.charCode == 32"
+                              [ngClass]="{
+                                'error-field':
+                                  submitted &&
+                                  f.BankName.errors !== null &&
+                                  f.BankName.errors.required
+                              }"
+                              formControlName="BankName"
+                              maxlength="40"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">IFSC Code *</label>
-                            <input class="form-control" placeholder="IFSC Code" name="IFSCCode" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
-                              [ngClass]="{'error-field': submitted && f.IFSCCode.errors !== null && f.IFSCCode.errors.required}" oninput="this.value = this.value.toUpperCase()" formControlName="IFSCCode" maxlength="11"/>
+                            <input
+                              class="form-control"
+                              placeholder="IFSC Code"
+                              name="IFSCCode"
+                              onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
+                              [ngClass]="{
+                                'error-field':
+                                  submitted &&
+                                  f.IFSCCode.errors !== null &&
+                                  f.IFSCCode.errors.required
+                              }"
+                              oninput="this.value = this.value.toUpperCase()"
+                              formControlName="IFSCCode"
+                              maxlength="11"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Branch (Optional)</label>
-                            <input class="form-control" placeholder="Branch name" name="BranchName" onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
-                              oninput="this.value = this.value.toUpperCase()" formControlName="BranchName" maxlength="40"/>
+                            <input
+                              class="form-control"
+                              placeholder="Branch name"
+                              name="BranchName"
+                              onkeypress="return (event.charCode >=48 && event.charCode <=57) || (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
+                              oninput="this.value = this.value.toUpperCase()"
+                              formControlName="BranchName"
+                              maxlength="40"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
-                            <label class="form-label">Work Exprience in month</label>
-                            <input class="form-control" placeholder="Month's of Exprience" OnlyNumber="3" onkeypress="return event.charCode >=48 && event.charCode <=57"
-                              name="ExprienceInYear" formControlName="ExprienceInYear"  [ngClass]="{'error-field': submitted && f.ExprienceInYear.errors !== null && f.ExprienceInYear.errors.required}"/>
+                            <label class="form-label"
+                              >Work Exprience in month</label
+                            >
+                            <input
+                              class="form-control"
+                              placeholder="Month's of Exprience"
+                              OnlyNumber="3"
+                              onkeypress="return event.charCode >=48 && event.charCode <=57"
+                              name="ExprienceInYear"
+                              formControlName="ExprienceInYear"
+                              [ngClass]="{
+                                'error-field':
+                                  submitted &&
+                                  f.ExprienceInYear.errors !== null &&
+                                  f.ExprienceInYear.errors.required
+                              }"
+                            />
                           </div>
                           <div class="col-md-6 mb-3">
                             <label class="form-label">Date of joining</label>
                             <form class="form-inline">
                               <div class="form-group w-100">
                                 <div class="input-group inline-calendar w-100">
-                                  <input class="form-control" placeholder="yyyy-mm-dd" name="joiningDate" [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="{year: 2050, month:1, day: 19}"
-                                    [(ngModel)]="joiningDatemodel" (dateSelect)="onJoiningDateSelection($event)" ngbDatepicker
-                                    #joiningDate="ngbDatepicker">
+                                  <input
+                                    class="form-control"
+                                    placeholder="yyyy-mm-dd"
+                                    name="joiningDate"
+                                    [minDate]="{ year: 1970, month: 1, day: 1 }"
+                                    [maxDate]="{
+                                      year: 2050,
+                                      month: 1,
+                                      day: 19
+                                    }"
+                                    [(ngModel)]="joiningDatemodel"
+                                    (dateSelect)="
+                                      onJoiningDateSelection($event)
+                                    "
+                                    ngbDatepicker
+                                    #joiningDate="ngbDatepicker"
+                                  />
                                   <div class="input-group-append">
-                                    <button class="btn calendar" (click)="joiningDate.toggle()"
-                                      type="button"><i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                                    <button
+                                      class="btn calendar"
+                                      (click)="joiningDate.toggle()"
+                                      type="button"
+                                    >
+                                      <i
+                                        class="fa-regular fa-calendar-days fa-lg"
+                                        aria-hidden="true"
+                                      ></i>
                                     </button>
                                   </div>
                                 </div>
@@ -338,28 +748,60 @@
                     <div class="x_panel_body x-panel-changed">
                       <div class="x_header">
                         <div class="x_header_title">
-                          <h2>Statutory Information <small>add pf details</small></h2>
+                          <h2>
+                            Statutory Information <small>add pf details</small>
+                          </h2>
                         </div>
                       </div>
                       <div class="col-md-12 mb-3 row m-0 p-3 pb-1">
                         <div class="col-md-4">
                           <label class="form-label">PF Number</label>
-                          <input type="text" maxlength="30" class="form-control" placeholder="PF Number" formControlName="PFNumber">
+                          <input
+                            type="text"
+                            maxlength="30"
+                            class="form-control"
+                            placeholder="PF Number"
+                            formControlName="PFNumber"
+                          />
                         </div>
                         <div class="col-md-4">
-                          <label class="form-label">Universal Account Number</label>
-                          <input type="text" class="form-control" placeholder="Universal Account Number" formControlName="UniversalAccountNumber" maxlength="40">
+                          <label class="form-label"
+                            >Universal Account Number</label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Universal Account Number"
+                            formControlName="UniversalAccountNumber"
+                            maxlength="40"
+                          />
                         </div>
                         <div class="col-md-4">
                           <label class="form-label">PF Join Date</label>
                           <form class="form-inline">
                             <div class="form-group w-100">
                               <div class="input-group inline-calendar w-100">
-                                <input class="form-control" placeholder="yyyy-mm-dd" name="pfDatemodel" [(ngModel)]="pfDatemodel"
-                                  (dateSelect)="onPFDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #pfd="ngbDatepicker">
+                                <input
+                                  class="form-control"
+                                  placeholder="yyyy-mm-dd"
+                                  name="pfDatemodel"
+                                  [(ngModel)]="pfDatemodel"
+                                  (dateSelect)="onPFDateSelection($event)"
+                                  ngbDatepicker
+                                  [minDate]="{ year: 1970, month: 1, day: 1 }"
+                                  [maxDate]="minDate"
+                                  #pfd="ngbDatepicker"
+                                />
                                 <div class="input-group-append">
-                                  <button class="btn calendar" (click)="pfd.toggle()" type="button"><i
-                                      class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                                  <button
+                                    class="btn calendar"
+                                    (click)="pfd.toggle()"
+                                    type="button"
+                                  >
+                                    <i
+                                      class="fa-regular fa-calendar-days fa-lg"
+                                      aria-hidden="true"
+                                    ></i>
                                   </button>
                                 </div>
                               </div>
@@ -372,12 +814,27 @@
                   <div class="col-12 row m-0 pt-5">
                     <div class="col-md-12 button groups text-end">
                       <div class="btn-group">
-                        <button class="btn btn-outline-danger" (click)="reset()">Reset</button>
+                        <button
+                          class="btn btn-outline-danger"
+                          (click)="reset()"
+                        >
+                          Reset
+                        </button>
                       </div>
                       <div class="btn-group ms-2">
-                        <button class="btn btn-success" [disabled]="isLoading" (click)="RegisterEmployee()">
-                          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-circle-user': !isLoading}"></i>
-                          {{ isLoading ? 'Wait' : 'Register' }}
+                        <button
+                          class="btn btn-success"
+                          [disabled]="isLoading"
+                          (click)="RegisterEmployee()"
+                        >
+                          <i
+                            class=""
+                            [ngClass]="{
+                              'fa-solid fa-spinner fa-spin': isLoading,
+                              'fa-regular fa-circle-user': !isLoading
+                            }"
+                          ></i>
+                          {{ isLoading ? "Wait" : "Register" }}
                         </button>
                       </div>
                     </div>
@@ -387,83 +844,133 @@
             </div>
           </div>
         </ng-container>
-        <!-- <ng-container *ngIf="!isReady">
-          <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-            <div class="col-md-3 modal-container  text-center cog-wheel">
-              <img src="assets/images/cog.gif" alt="" />
-              <h6 class="modal-title title-message">
-                Please Wait ........
-              </h6>
-            </div>
-          </div>
-        </ng-container> -->
       </div>
     </div>
   </div>
 </div>
 
 <!-- delete assign client modal -->
-<div class="modal fade remoteClient" data-bs-backdrop="static" data-bs-keyboard="false" id="remoteClient"
-  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="remoteClientLabel"
-  aria-hidden="true">
+<div
+  class="modal fade remoteClient"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  id="remoteClient"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="remoteClientLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="remoteClientLabel">Remove client(s)</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body text-center">
         <ng-container *ngIf="activeAssignedClient != null">
           <div class="delete-content">
-            <b>Client Name: </b> <ins class="ps-4 fw-bold">{{activeAssignedClient.ClientName}}</ins>
+            <b>Client Name: </b>
+            <ins class="ps-4 fw-bold">{{
+              activeAssignedClient.ClientName
+            }}</ins>
           </div>
           <div class="mt-4 mark">
-            Please check client name very carefully, as once you de-activate the client,
-            in future you can't see any data or information under your login.
+            Please check client name very carefully, as once you de-activate the
+            client, in future you can't see any data or information under your
+            login.
           </div>
         </ng-container>
       </div>
       <div class="modal-footer">
-        <a href="javascript:void(0)" class="text-decoration-none btn-light pe-3" data-bs-dismiss="modal">Close</a>
-        <a href="javascript:void(0)" (click)="removeClient()"
-          class="text-decoration-none btn-light text-primary">Delete</a>
+        <a
+          href="javascript:void(0)"
+          class="text-decoration-none btn-light pe-3"
+          data-bs-dismiss="modal"
+          >Close</a
+        >
+        <a
+          href="javascript:void(0)"
+          (click)="removeClient()"
+          class="text-decoration-none btn-light text-primary"
+          >Delete</a
+        >
       </div>
     </div>
   </div>
 </div>
 
 <!-- Add or update client Modal -->
-<div class="modal addclinet-modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addUpdateClientModal" aria-labelledby="addUpdateClientModalLabel"
-  aria-hidden="true">
+<div
+  class="modal addclinet-modal fade"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  id="addUpdateClientModal"
+  aria-labelledby="addUpdateClientModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="addUpdateClientModalLabel">Add/Update client allocation detail</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="addUpdateClientModalLabel">
+          Add/Update client allocation detail
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="addUpdateClientForm" *ngIf="addUpdateClientForm">
           <div class="col-md-12 row">
-            <div formArrayName="AllocatedClients" class="border-end col-md-5 m-0">
+            <div
+              formArrayName="AllocatedClients"
+              class="border-end col-md-5 m-0"
+            >
               <div class="pt-2">
                 <div class="col-md-12 p-2 pt-3">
                   <ng-container *ngIf="isAllocated">
-                    <ng-container *ngFor="let client of allocatedClient.controls; let index = index;">
+                    <ng-container
+                      *ngFor="
+                        let client of allocatedClient.controls;
+                        let index = index
+                      "
+                    >
                       <ng-container [formGroupName]="index">
-                        <div class="d-block span-clients pe-2 pb-1 mb-2" *ngIf="client.get('IsActive').value"
-                          [ngClass]="{'inactive-mode': client.get('IsActiveRow').value != 1}">
+                        <div
+                          class="d-block span-clients pe-2 pb-1 mb-2"
+                          *ngIf="client.get('IsActive').value"
+                          [ngClass]="{
+                            'inactive-mode':
+                              client.get('IsActiveRow').value != 1
+                          }"
+                        >
                           <div class="row">
-                            <div class="col" (click)="bindCurrentClientDetail(client)">
-                              <a >
-                                <span class="text-start">{{client.get("ClientName").value}}</span>
+                            <div
+                              class="col"
+                              (click)="bindCurrentClientDetail(client)"
+                            >
+                              <a>
+                                <span class="text-start">{{
+                                  client.get("ClientName").value
+                                }}</span>
                               </a>
                             </div>
                             <div class="col-auto">
-                              <a (click)="bindCurrentClientDetail(client)" >
+                              <a (click)="bindCurrentClientDetail(client)">
                                 <i class="fa-regular fa-pen-to-square"></i>
                               </a>
-                              <a (click)="deleteCurrentClient(client)" >
-                                <i class="ps-2 fa-solid fa-trash-can text-danger"></i>
+                              <a (click)="deleteCurrentClient(client)">
+                                <i
+                                  class="ps-2 fa-solid fa-trash-can text-danger"
+                                ></i>
                               </a>
                             </div>
                           </div>
@@ -474,9 +981,7 @@
 
                   <ng-container *ngIf="!isAllocated">
                     <div class="text-center">
-                      <p class="p-4">
-                        Not allocated to any client
-                      </p>
+                      <p class="p-4">Not allocated to any client</p>
                     </div>
                   </ng-container>
                 </div>
@@ -488,10 +993,23 @@
                 <div class="form-group col-md-8">
                   <label class="form-label">Client (Allocated)</label>
                   <div class="col-md-12">
-                    <select name="AllocatedClientId" class="form-control" formControlName="AllocatedClientId" [ngClass]="{'error-field': isSubmitted && n.AllocatedClientId.errors !== null && n.AllocatedClientId.errors.required}">
+                    <select
+                      name="AllocatedClientId"
+                      class="form-control"
+                      formControlName="AllocatedClientId"
+                      [ngClass]="{
+                        'error-field':
+                          isSubmitted &&
+                          n.AllocatedClientId.errors !== null &&
+                          n.AllocatedClientId.errors.required
+                      }"
+                    >
                       <option value="0" disabled>Clients Name</option>
-                      <option *ngFor="let client of clients" value="{{client.ClientId}}">
-                        {{client.ClientName}}
+                      <option
+                        *ngFor="let client of clients"
+                        value="{{ client.ClientId }}"
+                      >
+                        {{ client.ClientName }}
                       </option>
                     </select>
                   </div>
@@ -500,12 +1018,36 @@
                   <label class="form-label">Assign Date</label>
                   <form class="form-inline">
                     <div class="form-group w-100">
-                      <div class="input-group inline-calendar w-100" [ngClass]="{'error-field': isSubmitted && n.AssigneDate.errors !== null && n.AssigneDate.errors.required}">
-                        <input class="form-control" placeholder="yyyy-mm-dd" name="jp" [(ngModel)]="assignDateModel"
-                          (dateSelect)="onAssignDateSelection($event)" ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="assignMaxDate" #jd="ngbDatepicker">
+                      <div
+                        class="input-group inline-calendar w-100"
+                        [ngClass]="{
+                          'error-field':
+                            isSubmitted &&
+                            n.AssigneDate.errors !== null &&
+                            n.AssigneDate.errors.required
+                        }"
+                      >
+                        <input
+                          class="form-control"
+                          placeholder="yyyy-mm-dd"
+                          name="jp"
+                          [(ngModel)]="assignDateModel"
+                          (dateSelect)="onAssignDateSelection($event)"
+                          ngbDatepicker
+                          [minDate]="{ year: 1970, month: 1, day: 1 }"
+                          [maxDate]="assignMaxDate"
+                          #jd="ngbDatepicker"
+                        />
                         <div class="input-group-append">
-                          <button class="btn calendar" (click)="jd.toggle()" type="button"><i
-                              class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                          <button
+                            class="btn calendar"
+                            (click)="jd.toggle()"
+                            type="button"
+                          >
+                            <i
+                              class="fa-regular fa-calendar-days fa-lg"
+                              aria-hidden="true"
+                            ></i>
                           </button>
                         </div>
                       </div>
@@ -517,18 +1059,51 @@
               <div class="row mt-3">
                 <div class="form-group col-md-4 mb-3">
                   <label class="form-label">Actual / Mon</label>
-                  <input class="form-control" placeholder="Actual Package" OnlyNumber="10" name="ActualPackage"
-                    formControlName="ActualPackage"  [ngClass]="{'error-field': isSubmitted && n.ActualPackage.errors !== null && n.ActualPackage.errors.required}"/>
+                  <input
+                    class="form-control"
+                    placeholder="Actual Package"
+                    OnlyNumber="10"
+                    name="ActualPackage"
+                    formControlName="ActualPackage"
+                    [ngClass]="{
+                      'error-field':
+                        isSubmitted &&
+                        n.ActualPackage.errors !== null &&
+                        n.ActualPackage.errors.required
+                    }"
+                  />
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <label class="form-label">Final / Mon</label>
-                  <input class="form-control" placeholder="Final Package" OnlyNumber="10" name="FinalPackage"
-                    formControlName="FinalPackage"  [ngClass]="{'error-field': isSubmitted && n.FinalPackage.errors !== null && n.FinalPackage.errors.required}"/>
+                  <input
+                    class="form-control"
+                    placeholder="Final Package"
+                    OnlyNumber="10"
+                    name="FinalPackage"
+                    formControlName="FinalPackage"
+                    [ngClass]="{
+                      'error-field':
+                        isSubmitted &&
+                        n.FinalPackage.errors !== null &&
+                        n.FinalPackage.errors.required
+                    }"
+                  />
                 </div>
                 <div class="form-group col-md-4 mb-3">
                   <label class="form-label">Take Home</label>
-                  <input class="form-control" placeholder="Take Home" OnlyNumber="10"
-                    name="TakeHomeByCandidate" formControlName="TakeHomeByCandidate"  [ngClass]="{'error-field': isSubmitted && n.TakeHomeByCandidate.errors !== null && n.TakeHomeByCandidate.errors.required}"/>
+                  <input
+                    class="form-control"
+                    placeholder="Take Home"
+                    OnlyNumber="10"
+                    name="TakeHomeByCandidate"
+                    formControlName="TakeHomeByCandidate"
+                    [ngClass]="{
+                      'error-field':
+                        isSubmitted &&
+                        n.TakeHomeByCandidate.errors !== null &&
+                        n.TakeHomeByCandidate.errors.required
+                    }"
+                  />
                 </div>
               </div>
             </div>
@@ -536,15 +1111,19 @@
         </form>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
         <button class="btn btn-outline-success" (click)="addDetail()">
-          <i class="" [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
-          <span *ngIf="isUpdated" class="ps-2">
-            Update changes
-          </span>
-          <span *ngIf="!isUpdated" class="ps-2">
-            Created
-          </span>
+          <i
+            class=""
+            [ngClass]="{
+              'fa-solid fa-spinner fa-spin': isLoading,
+              'fa-regular fa-square-plus': !isLoading
+            }"
+          ></i>
+          <span *ngIf="isUpdated" class="ps-2"> Update changes </span>
+          <span *ngIf="!isUpdated" class="ps-2"> Created </span>
         </button>
       </div>
     </div>
@@ -552,36 +1131,76 @@
 </div>
 <!-- Close Modal -->
 
-
 <!-- Employee Register or Update message modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  id="messageModal"
+  tabindex="-1"
+  aria-labelledby="messageModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="p-2 modal-content">
       <div class="modal-body text-dark d-flex align-items-center mb-0 pb-0">
         <div class="wrapper-checkmark me-3">
-          <svg class="checkmark-register" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          <svg
+            class="checkmark-register"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 52 52"
+          >
+            <circle
+              class="checkmark__circle"
+              cx="26"
+              cy="26"
+              r="25"
+              fill="none"
+            />
+            <path
+              class="checkmark__check"
+              fill="none"
+              d="M14.1 27.2l7.1 7.2 16.7-16.8"
+            />
           </svg>
         </div>
         Congratulation!! employee detail registered/ updated successfully!
       </div>
       <div class="modal-footer mt-0 pt-0 border-top-0">
-        <a href="javascript:void(0)" class="text-decoration-none text-dark fw-bold" (click)="gotoEmpPage()">OK</a>
+        <a
+          href="javascript:void(0)"
+          class="text-decoration-none text-dark fw-bold"
+          (click)="gotoEmpPage()"
+          >OK</a
+        >
       </div>
     </div>
   </div>
 </div>
 <!-- End -->
 
-
 <!-- Initiate Exist modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="initiateExistModal"
-  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="iinitiateExistModalLabel"
-  aria-hidden="true">
+<div
+  class="modal fade"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  id="initiateExistModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="iinitiateExistModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-3">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="iinitiateExistModalLabel">Initiate Exit</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="alert alert-primary" role="alert">
@@ -589,35 +1208,85 @@
         </div>
         <form [formGroup]="initiateExitForm" *ngIf="initiateExitForm">
           <div class="mt-3">
-            <label class="form-label">What is the reason for initating the exit?</label>
+            <label class="form-label"
+              >What is the reason for initating the exit?</label
+            >
             <div class="col-md-12">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="IsEmpResign" name="IsEmpResign" id="IsEmpResign1" [value]="true">
-                <label class="form-check-label" for="IsEmpResign1">Employee wants to resign</label>
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  formControlName="IsEmpResign"
+                  name="IsEmpResign"
+                  id="IsEmpResign1"
+                  [value]="true"
+                />
+                <label class="form-check-label" for="IsEmpResign1"
+                  >Employee wants to resign</label
+                >
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="IsEmpResign" name="IsEmpResign" id="IsEmpResign2" [value]="false">
-                <label class="form-check-label" for="IsEmpResign2">Company decides to terminate</label>
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  formControlName="IsEmpResign"
+                  name="IsEmpResign"
+                  id="IsEmpResign2"
+                  [value]="false"
+                />
+                <label class="form-check-label" for="IsEmpResign2"
+                  >Company decides to terminate</label
+                >
               </div>
             </div>
           </div>
           <div class="mt-3">
-            <label class="form-label">Did you have discussion with employee on their decision to exit?</label>
+            <label class="form-label"
+              >Did you have discussion with employee on their decision to
+              exit?</label
+            >
             <div class="col-md-12">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="IsDiscussWithEmployee" name="IsDiscussWithEmployee" id="IsDiscussWithEmployee1" [value]="true">
-                <label class="form-check-label" for="IsDiscussWithEmployee1">Yes</label>
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  formControlName="IsDiscussWithEmployee"
+                  name="IsDiscussWithEmployee"
+                  id="IsDiscussWithEmployee1"
+                  [value]="true"
+                />
+                <label class="form-check-label" for="IsDiscussWithEmployee1"
+                  >Yes</label
+                >
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName="IsDiscussWithEmployee" name="IsDiscussWithEmployee" id="IsDiscussWithEmployee2" [value]="false">
-                <label class="form-check-label" for="IsDiscussWithEmployee2">No</label>
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  formControlName="IsDiscussWithEmployee"
+                  name="IsDiscussWithEmployee"
+                  id="IsDiscussWithEmployee2"
+                  [value]="false"
+                />
+                <label class="form-check-label" for="IsDiscussWithEmployee2"
+                  >No</label
+                >
               </div>
             </div>
           </div>
           <div class="mt-3">
             <label class="form-label">Summary</label>
-            <textarea class="form-control exist-comment" formControlName="Summary" rows="3"
-            [ngClass]="{'error-field': submitted && m.Summary.errors !== null && m.Summary.errors.required}"></textarea>
+            <textarea
+              class="form-control exist-comment"
+              formControlName="Summary"
+              rows="3"
+              [ngClass]="{
+                'error-field':
+                  submitted &&
+                  m.Summary.errors !== null &&
+                  m.Summary.errors.required
+              }"
+            ></textarea>
           </div>
           <!-- <div class="mt-3">
             <label class="form-label">Please select a reason for resignation</label>
@@ -631,15 +1300,34 @@
             </select>
           </div> -->
           <div class="mt-3">
-            <label class="form-label">When did employee provide the notice of exit?</label>
+            <label class="form-label"
+              >When did employee provide the notice of exit?</label
+            >
             <form class="form-inline">
               <div class="form-group w-100">
                 <div class="input-group inline-calendar w-100">
-                  <input class="form-control" placeholder="yyyy-mm-dd" name="exdp" [(ngModel)]="appliedtDateModel" readonly
-                   ngbDatepicker [minDate]="{year: 1970, month:1, day: 1}" [maxDate]="minDate" #exd="ngbDatepicker">
+                  <input
+                    class="form-control"
+                    placeholder="yyyy-mm-dd"
+                    name="exdp"
+                    [(ngModel)]="appliedtDateModel"
+                    readonly
+                    ngbDatepicker
+                    [minDate]="{ year: 1970, month: 1, day: 1 }"
+                    [maxDate]="minDate"
+                    #exd="ngbDatepicker"
+                  />
                   <div class="input-group-append">
-                    <button class="btn calendar" disabled (click)="exd.toggle()" type="button"><i
-                        class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                    <button
+                      class="btn calendar"
+                      disabled
+                      (click)="exd.toggle()"
+                      type="button"
+                    >
+                      <i
+                        class="fa-regular fa-calendar-days fa-lg"
+                        aria-hidden="true"
+                      ></i>
                     </button>
                   </div>
                 </div>
@@ -647,25 +1335,61 @@
             </form>
           </div>
           <div class="mt-3">
-            <label class="form-label">Do you want to recommend a Last Working Day?</label>
+            <label class="form-label"
+              >Do you want to recommend a Last Working Day?</label
+            >
             <div class="form-check">
-              <input class="form-check-input" type="radio" formControlName="IsRecommendLastDay" name="IsRecommendLastDay" id="IsRecommendLastDay1" [value]="false">
-              <label class="form-check-label" for="IsRecommendLastDay1">Complete notice period ({{noticePeriodDate | date}})</label>
+              <input
+                class="form-check-input"
+                type="radio"
+                formControlName="IsRecommendLastDay"
+                name="IsRecommendLastDay"
+                id="IsRecommendLastDay1"
+                [value]="false"
+              />
+              <label class="form-check-label" for="IsRecommendLastDay1"
+                >Complete notice period ({{ noticePeriodDate | date }})</label
+              >
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" formControlName="IsRecommendLastDay" name="IsRecommendLastDay" id="IsRecommendLastDay2" [value]="true">
-              <label class="form-check-label" for="IsRecommendLastDay2">Other date</label>
+              <input
+                class="form-check-input"
+                type="radio"
+                formControlName="IsRecommendLastDay"
+                name="IsRecommendLastDay"
+                id="IsRecommendLastDay2"
+                [value]="true"
+              />
+              <label class="form-check-label" for="IsRecommendLastDay2"
+                >Other date</label
+              >
             </div>
             <ng-container *ngIf="m.IsRecommendLastDay.value == true">
               <div class="mt-2">
                 <form class="form-inline">
                   <div class="form-group w-100">
                     <div class="input-group inline-calendar w-100">
-                      <input class="form-control" placeholder="yyyy-mm-dd" name="lwdp" [(ngModel)]="lastWorkingDateModel"
-                        (dateSelect)="onLastWorkingDateSelection($event)" ngbDatepicker [minDate]="minDate" [maxDate]="{year: 2070, month:12, day: 31}" #lwd="ngbDatepicker">
+                      <input
+                        class="form-control"
+                        placeholder="yyyy-mm-dd"
+                        name="lwdp"
+                        [(ngModel)]="lastWorkingDateModel"
+                        (dateSelect)="onLastWorkingDateSelection($event)"
+                        ngbDatepicker
+                        [minDate]="minDate"
+                        [maxDate]="{ year: 2070, month: 12, day: 31 }"
+                        #lwd="ngbDatepicker"
+                      />
                       <div class="input-group-append">
-                        <button class="btn calendar" (click)="lwd.toggle()" type="button"><i
-                            class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                        <button
+                          class="btn calendar"
+                          (click)="lwd.toggle()"
+                          type="button"
+                        >
+                          <i
+                            class="fa-regular fa-calendar-days fa-lg"
+                            aria-hidden="true"
+                          ></i>
                         </button>
                       </div>
                     </div>
@@ -675,13 +1399,28 @@
             </ng-container>
           </div>
           <div class="form-check form-switch mt-3">
-            <input class="form-check-input" type="checkbox" role="switch" id="isRehire" formControlName="IsRehire">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="isRehire"
+              formControlName="IsRehire"
+            />
             <label class="form-check-label" for="isRehire">Ok to Rehire?</label>
           </div>
           <div class="mt-3">
             <label class="form-label">Comments</label>
-            <textarea class="form-control exist-comment" rows="3" formControlName="ManagerComment"
-            [ngClass]="{'error-field': submitted && m.ManagerComment.errors !== null && m.ManagerComment.errors.required}"></textarea>
+            <textarea
+              class="form-control exist-comment"
+              rows="3"
+              formControlName="ManagerComment"
+              [ngClass]="{
+                'error-field':
+                  submitted &&
+                  m.ManagerComment.errors !== null &&
+                  m.ManagerComment.errors.required
+              }"
+            ></textarea>
           </div>
           <div class="mt-3">
             <a href="javascript:voi(0)" class="text-decoration-none">
@@ -692,9 +1431,20 @@
       </div>
       <div class="modal-footer border-top-0">
         <button class="btn btn-dark" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" [disabled]="isLoading" class="btn btn-primary-c" (click)="submitInitiateExist()"><i
-          class="pe-2 fa-solid" [ngClass]="{'fa-spinner fa-pulse fa-fw': isLoading, 'fa-floppy-disk': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Initiate Exist' }}
+        <button
+          type="button"
+          [disabled]="isLoading"
+          class="btn btn-primary-c"
+          (click)="submitInitiateExist()"
+        >
+          <i
+            class="pe-2 fa-solid"
+            [ngClass]="{
+              'fa-spinner fa-pulse fa-fw': isLoading,
+              'fa-floppy-disk': !isLoading
+            }"
+          ></i>
+          {{ isLoading ? "Wait" : "Initiate Exist" }}
         </button>
       </div>
     </div>
