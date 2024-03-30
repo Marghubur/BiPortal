@@ -381,6 +381,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       this.uploadDocument(item);
       //$("#manageDeclarationModal").modal('show');
       item.IsEdit = true;
+      item.SlectedDeclarationnFile = this.slectedDeclarationnFile.length;
       // let elem = e.currentTarget;
       // elem.parentElement.previousElementSibling.querySelector('input').removeAttribute('readonly');
       // elem.previousElementSibling.classList.remove('d-none');
@@ -664,6 +665,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
             this.bindData(response.ResponseBody);
+            this.FileDocumentList = [];
+            this.FilesCollection = [];
             $("#manageDeclarationModal").modal('hide');
             this.isLoading = false;
             Toast("Declaration detail updated successfully");
@@ -671,6 +674,8 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
           this.isLoading = false;
         }).catch(e => {
           this.isLoading = false;
+          this.FileDocumentList = [];
+          this.FilesCollection = [];
         });
       }
     } else {
