@@ -194,9 +194,13 @@
                                 <ng-container *ngIf="item.IsEdit">
                                   <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="addAttechmentModal(item)"><i class="fa-solid fa-paperclip pe-2"></i>Add Attachment</a>
                                 </ng-container>
-                                <ng-container *ngIf="slectedDeclarationnFile.length > 0">
+                                <ng-container *ngIf="slectedDeclarationnFile.length > 0 && item.SlectedDeclarationnFile != null && item.SlectedDeclarationnFile > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <a href="javascript:void(0)" class="text-decoration-none">{{slectedDeclarationnFile.length}} File Attached</a>
+                                  <span>{{item.SlectedDeclarationnFile}} File Attached</span>
+                                </ng-container>
+                                <ng-container *ngIf="FileDocumentList.length > 0">
+                                  <i class="fa-solid fa-grip-lines-vertical px-2"></i>
+                                  <span>{{FileDocumentList.length}} File Selected</span>
                                 </ng-container>
                               </div>
                               <div class="row col-md-4 justify-content-between">
@@ -218,7 +222,7 @@
                                     <i class="fa-regular fa-pen-to-square fa-lg px-2"></i>
                                   </a>
                                   <a href="javascript:void(0)" class="text-decoration-none text-danger" name="delete-declaration" placement="top"
-                                  ngbTooltip="Delete Declaration">
+                                  ngbTooltip="Delete Declaration" (click)="deletePopup(item, 'delete-declaration')">
                                     <i class="fa-regular fa-trash-can fa-lg px-2"></i>
                                   </a>
                                 </div>
@@ -258,9 +262,13 @@
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
                                   <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="addAttechmentModal(item)"><i class="fa-solid fa-paperclip pe-2"></i>Add Attachment</a>
                                 </ng-container>
-                                <ng-container *ngIf="slectedDeclarationnFile.length > 0">
+                                <ng-container *ngIf="slectedDeclarationnFile.length > 0 && item.SlectedDeclarationnFile != null && item.SlectedDeclarationnFile > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <a href="javascript:void(0)" class="text-decoration-none">{{slectedDeclarationnFile.length}} File Attached</a>
+                                  <span>{{item.SlectedDeclarationnFile}} File Attached</span>
+                                </ng-container>
+                                <ng-container *ngIf="FileDocumentList.length > 0">
+                                  <i class="fa-solid fa-grip-lines-vertical px-2"></i>
+                                  <span>{{FileDocumentList.length}} File Selected</span>
                                 </ng-container>
                               </div>
                               <div class="row col-md-4 justify-content-between">
@@ -282,7 +290,7 @@
                                     <i class="fa-regular fa-pen-to-square fa-lg px-2"></i>
                                   </a>
                                   <a href="javascript:void(0)" class="text-decoration-none text-danger" name="delete-declaration" placement="top"
-                                  ngbTooltip="Delete Declaration">
+                                  ngbTooltip="Delete Declaration" (click)="deletePopup(item, 'delete-declaration')">
                                     <i class="fa-regular fa-trash-can fa-lg px-2"></i>
                                   </a>
                                 </div>
@@ -317,9 +325,13 @@
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
                                   <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="addAttechmentModal(item)"><i class="fa-solid fa-paperclip pe-2"></i>Add Attachment</a>
                                 </ng-container>
-                                <ng-container *ngIf="slectedDeclarationnFile.length > 0">
+                                <ng-container *ngIf="slectedDeclarationnFile.length > 0 && item.SlectedDeclarationnFile != null && item.SlectedDeclarationnFile > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <a href="javascript:void(0)" class="text-decoration-none">{{slectedDeclarationnFile.length}} File Attached</a>
+                                  <span>{{item.SlectedDeclarationnFile}} File Attached</span>
+                                </ng-container>
+                                <ng-container *ngIf="FileDocumentList.length > 0">
+                                  <i class="fa-solid fa-grip-lines-vertical px-2"></i>
+                                  <span>{{FileDocumentList.length}} File Selected</span>
                                 </ng-container>
                               </div>
                               <div class="row col-md-4 justify-content-between">
@@ -341,7 +353,7 @@
                                     <i class="fa-regular fa-pen-to-square fa-lg px-2"></i>
                                   </a>
                                   <a href="javascript:void(0)" class="text-decoration-none text-danger" name="delete-declaration" placement="top"
-                                  ngbTooltip="Delete Declaration">
+                                  ngbTooltip="Delete Declaration" (click)="deletePopup(item, 'delete-declaration')">
                                     <i class="fa-regular fa-trash-can fa-lg px-2"></i>
                                   </a>
                                 </div>
@@ -641,7 +653,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeAttachmentModal()">Close</button>
         <button class="btn btn-primary-c ms-2" data-bs-dismiss="modal" [disabled]="isLargeFile">
           <i class="fa-regular fa-floppy-disk"></i>
-          Save
+          Add
         </button>
       </div>
     </div>
