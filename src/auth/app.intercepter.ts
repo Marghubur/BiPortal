@@ -12,10 +12,11 @@ export class AppHttpIntercepter implements HttpInterceptor {
                 private common: CommonService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        this.common.isLoading.next(true);
+        this.common.isLoading.next(this.common.loaderFlag);
         request = this.addToken(request);
         return next.handle(request).pipe(
           finalize(() => {
+            this.common.UnSetLoaderFlag();
             this.common.isLoading.next(false);
           })
         );

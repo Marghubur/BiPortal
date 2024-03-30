@@ -24,10 +24,19 @@ export class CommonService {
 
   DefaultTimeout: number = 8 * 1000;
   $ButtonId: any = "";
+  loaderFlag: boolean = false;
   isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
   isMinimize: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor() { }
+
+  public SetLoaderFlag() {
+    this.loaderFlag = true;
+  }
+
+  public UnSetLoaderFlag() {
+    this.loaderFlag = false;
+  }
 
   public GetDefaultFontSize() {
     return this.DefaultFontSize;
