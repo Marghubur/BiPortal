@@ -2,12 +2,24 @@
   <div class="content-header">
     <div class="col-8">
       <div class="px-1">
-        <app-breadcrums [title]="'Tax Regime'" [subtitle]="'add or update tax regime deatils'"></app-breadcrums>
+        <app-breadcrums
+          [title]="'Tax Regime'"
+          [subtitle]="'add or update tax regime deatils'"
+        ></app-breadcrums>
       </div>
     </div>
     <div class="col-auto">
-      <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
-        <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right" title="Reload this page"></i>
+      <a
+        href="javascript:void(0)"
+        class="text-decoration-none fw-bold pe-4"
+        (click)="pageReload()"
+      >
+        <i
+          class="fa-solid fa-arrows-rotate"
+          data-bs-toggle="tooltip"
+          data-bs-placement="right"
+          title="Reload this page"
+        ></i>
       </a>
     </div>
   </div>
@@ -21,75 +33,203 @@
               <div class="col-md-2">
                 <select class="form-select" (change)="selectRegime($event)">
                   <option value="" selected disabled>Select Tax Regime</option>
-                  <option [value]="item.TaxRegimeDescId" *ngFor="let item of allTaxRegimeDesc">{{item.RegimeName}}</option>
+                  <option
+                    [value]="item.TaxRegimeDescId"
+                    *ngFor="let item of allTaxRegimeDesc"
+                  >
+                    {{ item.RegimeName }}
+                  </option>
                 </select>
               </div>
               <div class="col-md-2 ms-2">
-                <select class="form-select" (change)="selectAgeGroup($event)" [disabled]="currentRegime.TaxRegimeDescId == 0">
-                  <option [value]=null [selected]="currentAgeGroup.AgeGroupId == 0" disabled>Select age group</option>
-                  <option [value]="item.AgeGroupId" *ngFor="let item of allAgeGroup">{{item.StartAgeGroup}} to {{item.EndAgeGroup == 110 ? 'Above' : item.EndAgeGroup}}</option>
+                <select
+                  class="form-select"
+                  (change)="selectAgeGroup($event)"
+                  [disabled]="currentRegime.TaxRegimeDescId == 0"
+                >
+                  <option
+                    [value]="null"
+                    [selected]="currentAgeGroup.AgeGroupId == 0"
+                    disabled
+                  >
+                    Select age group
+                  </option>
+                  <option
+                    [value]="item.AgeGroupId"
+                    *ngFor="let item of allAgeGroup"
+                  >
+                    {{ item.StartAgeGroup }} to
+                    {{ item.EndAgeGroup == 110 ? "Above" : item.EndAgeGroup }}
+                  </option>
                 </select>
               </div>
-              <button class="btn btn-primary-c ms-3" (click)="taxRegimePopUp()"><i class="fa-solid fa-plus circle pe-2"></i> Add/Update Regime</button>
-              <button class="btn btn-primary-c ms-3" (click)="ageGroupPopUp()"><i class="fa-solid fa-plus circle pe-2"></i> Add/Update Age Group</button>
-              <button class="btn btn-primary-c ms-auto" *ngIf="!isEditable && isPageReady" (click)="editSlab()"><i class="fa-solid fa-pencil pe-2"></i> Edit Regime</button>
+              <button class="btn btn-primary-c ms-3" (click)="taxRegimePopUp()">
+                <i class="fa-solid fa-plus circle pe-2"></i> Add/Update Regime
+              </button>
+              <button class="btn btn-primary-c ms-3" (click)="ageGroupPopUp()">
+                <i class="fa-solid fa-plus circle pe-2"></i> Add/Update Age
+                Group
+              </button>
+              <button
+                class="btn btn-primary-c ms-auto"
+                *ngIf="!isEditable && isPageReady"
+                (click)="editSlab()"
+              >
+                <i class="fa-solid fa-pencil pe-2"></i> Edit Regime
+              </button>
             </div>
             <div>
               <ng-container *ngIf="isPageReady">
                 <form [formGroup]="taxRegimeForm" *ngIf="taxRegimeForm">
                   <div class="row mt-3 mx-1">
-                    <div class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark">Income Tax Slab</div>
-                    <div class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark">Income Tax Rate</div>
-                    <div class="col-md-3 border-bottom py-2 fw-bold text-dark border-dark">Tax Amount</div>
-                    <div class="col-md-1 border-bottom py-2 fw-bold text-dark border-dark">Action</div>
+                    <div
+                      class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark"
+                    >
+                      Income Tax Slab
+                    </div>
+                    <div
+                      class="col-md-4 border-bottom py-2 fw-bold text-dark border-dark"
+                    >
+                      Income Tax Rate
+                    </div>
+                    <div
+                      class="col-md-3 border-bottom py-2 fw-bold text-dark border-dark"
+                    >
+                      Tax Amount
+                    </div>
+                    <div
+                      class="col-md-1 border-bottom py-2 fw-bold text-dark border-dark"
+                    >
+                      Action
+                    </div>
                   </div>
                   <ng-container formArrayName="OldTaxSlab">
-                    <div class="row mx-1 mt-3 align-items-center" *ngFor="let item of oldSlab.controls; let i = index" [formGroupName]="i">
-                      <div class="col-md-4 mx-0 ps-0 d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                          <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
-                          <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="From" formControlName="MinTaxSlab" (keyup)="calcTaxAmount()">
+                    <div
+                      class="row mx-1 mt-3 align-items-center"
+                      *ngFor="let item of oldSlab.controls; let i = index"
+                      [formGroupName]="i"
+                    >
+                      <div
+                        class="col-md-4 mx-0 ps-0 d-flex align-items-center justify-content-between"
+                      >
+                        <div
+                          class="d-flex align-items-center form-control p-0 m-0"
+                          [ngClass]="{ 'border-0': !isEditable }"
+                        >
+                          <i
+                            class="fa-solid fa-indian-rupee-sign px-1"
+                            aria-hidden="true"
+                          ></i>
+                          <input
+                            type="number"
+                            [readonly]="!isEditable"
+                            class="form-control w-75 border-0"
+                            onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            placeholder="From"
+                            formControlName="MinTaxSlab"
+                            (keyup)="calcTaxAmount()"
+                          />
                         </div>
-                        <label  class="form-label px-5">to</label>
-                        <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                          <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
-                          <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="To" formControlName="MaxTaxSlab" (keyup)="calcTaxAmount()" (blur)="checkToAmount($event, i)">
+                        <label class="form-label px-5">to</label>
+                        <div
+                          class="d-flex align-items-center form-control p-0 m-0"
+                          [ngClass]="{ 'border-0': !isEditable }"
+                        >
+                          <i
+                            class="fa-solid fa-indian-rupee-sign px-1"
+                            aria-hidden="true"
+                          ></i>
+                          <input
+                            type="number"
+                            [readonly]="!isEditable"
+                            class="form-control w-50 border-0"
+                            onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            placeholder="To"
+                            formControlName="MaxTaxSlab"
+                            (keyup)="calcTaxAmount()"
+                            (blur)="checkToAmount($event, i)"
+                          />
                         </div>
                       </div>
                       <div class="col-md-4 d-flex align-items-center">
-                        <div class="d-flex align-items-center form-control p-0 m-0 w-25" [ngClass]="{'border-0': !isEditable}">
-                          <input type="number" [readonly]="!isEditable" class="form-control border-0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Rate" formControlName="TaxRatePercentage" (keyup)="calcTaxAmount()">
+                        <div
+                          class="d-flex align-items-center form-control p-0 m-0 w-25"
+                          [ngClass]="{ 'border-0': !isEditable }"
+                        >
+                          <input
+                            type="number"
+                            [readonly]="!isEditable"
+                            class="form-control border-0"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            placeholder="Rate"
+                            formControlName="TaxRatePercentage"
+                            (keyup)="calcTaxAmount()"
+                          />
                           <i class="fa-solid fa-percent px-2"></i>
                         </div>
-                        <label  class="form-label ps-3">above &#x20B9; {{item.get("MinTaxSlab").value}}</label>
+                        <label class="form-label ps-3"
+                          >above &#x20B9;
+                          {{ item.get("MinTaxSlab").value }}</label
+                        >
                       </div>
                       <div class="col-md-3">
-                        <label  class="form-label">&#x20B9; {{item.get("TaxAmount").value}}</label>
+                        <label class="form-label"
+                          >&#x20B9; {{ item.get("TaxAmount").value }}</label
+                        >
                       </div>
                       <div class="col-md-1">
-                        <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': !isEditable}">
-                          <i class="fa-solid fa-trash-can-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeOldTaxSlab(i)"></i>
+                        <a
+                          href="javascript:void(0)"
+                          class="text-decoration-none"
+                          [ngClass]="{ 'pe-none': !isEditable }"
+                        >
+                          <i
+                            class="fa-solid fa-trash-can-o text-danger fa-lg"
+                            [ngClass]="{ 'text-muted': !isEditable }"
+                            (click)="removeOldTaxSlab(i)"
+                          ></i>
                         </a>
-                        <a href="javascript:void(0)" class="text-decoration-none" *ngIf="i+1 == oldSlab.controls.length" [ngClass]="{'pe-none': !isEditable}">
-                          <i class="fa-solid fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addOldTaxSlab()"></i>
+                        <a
+                          href="javascript:void(0)"
+                          class="text-decoration-none"
+                          *ngIf="i + 1 == oldSlab.controls.length"
+                          [ngClass]="{ 'pe-none': !isEditable }"
+                        >
+                          <i
+                            class="fa-solid fa-plus-circle text-success fa-lg ps-3"
+                            [ngClass]="{ 'text-muted': !isEditable }"
+                            (click)="addOldTaxSlab()"
+                          ></i>
                         </a>
                       </div>
                     </div>
                   </ng-container>
                   <div class="mt-5 text-end" *ngIf="isEditable">
-                    <button class="btn btn-danger me-2" (click)="cancelEditRegime()"><i class="fa-solid fa-xmark pe-2"></i> Cancel</button>
+                    <button
+                      class="btn btn-danger me-2"
+                      (click)="cancelEditRegime()"
+                    >
+                      <i class="fa-solid fa-xmark pe-2"></i> Cancel
+                    </button>
                     <button class="btn btn-success" (click)="saveRegime()">
-                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
-                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                      <i
+                        [ngClass]="{
+                          'fa-solid fa-spinner fa-spin': isLoading,
+                          'fa-solid fa-plus': !isLoading
+                        }"
+                      ></i>
+                      <span class="ps-2">{{
+                        isLoading ? "Wait" : "Save"
+                      }}</span>
                     </button>
                   </div>
                 </form>
               </ng-container>
               <ng-container *ngIf="!isPageReady">
                 <div class="fs-5 my-5 py-5">
-                    <h6 class="modal-title title-message text-center my-5 py-5">
-                      Please select Tax Regime and Age Group first.
-                    </h6>
+                  <h6 class="modal-title title-message text-center my-5 py-5">
+                    Please select Tax Regime and Age Group first.
+                  </h6>
                 </div>
               </ng-container>
             </div>
@@ -101,50 +241,140 @@
         <ng-template ngbNavContent>
           <div class="m-3 px-2" *ngIf="isRecordFound">
             <div class="text-end">
-              <button class="btn btn-primary-c" *ngIf="!isEditable"  (click)="editSlab()"><i class="fa-solid fa-pencil pe-2"></i> Edit Surcharge</button>
+              <button
+                class="btn btn-primary-c"
+                *ngIf="!isEditable"
+                (click)="editSlab()"
+              >
+                <i class="fa-solid fa-pencil pe-2"></i> Edit Surcharge
+              </button>
             </div>
             <div>
               <ng-container>
                 <form [formGroup]="surchargeForm" *ngIf="surchargeForm">
                   <div class="row mt-3 mx-1">
-                    <div class="col-md-6 border-bottom py-2 fw-bold text-dark border-dark">Surcharge Slab</div>
-                    <div class="col-md-5 border-bottom py-2 fw-bold text-dark border-dark">Surcharge Rate</div>
-                    <div class="col-md-1 border-bottom py-2 fw-bold text-dark border-dark">Action</div>
+                    <div
+                      class="col-md-6 border-bottom py-2 fw-bold text-dark border-dark"
+                    >
+                      Surcharge Slab
+                    </div>
+                    <div
+                      class="col-md-5 border-bottom py-2 fw-bold text-dark border-dark"
+                    >
+                      Surcharge Rate
+                    </div>
+                    <div
+                      class="col-md-1 border-bottom py-2 fw-bold text-dark border-dark"
+                    >
+                      Action
+                    </div>
                   </div>
                   <ng-container formArrayName="SurchargeSlab">
-                    <div class="row mx-1 mt-3 align-items-center" *ngFor="let item of surchargeSlab.controls; let i = index" [formGroupName]="i">
-                      <div class="col-md-6 mx-0 ps-0 d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                          <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
-                          <input type="number" [readonly]="!isEditable" class="form-control w-75 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="From" formControlName="MinSurcahrgeSlab">
+                    <div
+                      class="row mx-1 mt-3 align-items-center"
+                      *ngFor="let item of surchargeSlab.controls; let i = index"
+                      [formGroupName]="i"
+                    >
+                      <div
+                        class="col-md-6 mx-0 ps-0 d-flex align-items-center justify-content-between"
+                      >
+                        <div
+                          class="d-flex align-items-center form-control p-0 m-0"
+                          [ngClass]="{ 'border-0': !isEditable }"
+                        >
+                          <i
+                            class="fa-solid fa-indian-rupee-sign px-1"
+                            aria-hidden="true"
+                          ></i>
+                          <input
+                            type="number"
+                            [readonly]="!isEditable"
+                            class="form-control w-75 border-0"
+                            onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            placeholder="From"
+                            formControlName="MinSurcahrgeSlab"
+                          />
                         </div>
-                        <label  class="form-label px-5">to</label>
-                        <div class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{'border-0': !isEditable}">
-                          <i class="fa-solid fa-indian-rupee-sign px-1" aria-hidden="true"></i>
-                          <input type="number" [readonly]="!isEditable" class="form-control w-50 border-0" onkeypress="return event.charCode >=48 && event.charCode <=57" placeholder="To" formControlName="MaxSurchargeSlab" (blur)="checkSurchargeToAmount($event, i)">
+                        <label class="form-label px-5">to</label>
+                        <div
+                          class="d-flex align-items-center form-control p-0 m-0"
+                          [ngClass]="{ 'border-0': !isEditable }"
+                        >
+                          <i
+                            class="fa-solid fa-indian-rupee-sign px-1"
+                            aria-hidden="true"
+                          ></i>
+                          <input
+                            type="number"
+                            [readonly]="!isEditable"
+                            class="form-control w-50 border-0"
+                            onkeypress="return event.charCode >=48 && event.charCode <=57"
+                            placeholder="To"
+                            formControlName="MaxSurchargeSlab"
+                            (blur)="checkSurchargeToAmount($event, i)"
+                          />
                         </div>
                       </div>
                       <div class="col-md-5 d-flex align-items-center">
-                        <div class="d-flex align-items-center form-control p-0 m-0 w-25" [ngClass]="{'border-0': !isEditable}">
-                          <input type="number" [readonly]="!isEditable" class="form-control border-0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Rate" formControlName="SurchargeRatePercentage">
+                        <div
+                          class="d-flex align-items-center form-control p-0 m-0 w-25"
+                          [ngClass]="{ 'border-0': !isEditable }"
+                        >
+                          <input
+                            type="number"
+                            [readonly]="!isEditable"
+                            class="form-control border-0"
+                            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                            placeholder="Rate"
+                            formControlName="SurchargeRatePercentage"
+                          />
                           <i class="fa-solid fa-percent px-2"></i>
                         </div>
                       </div>
                       <div class="col-md-1">
-                        <a href="javascript:void(0)" class="text-decoration-none" [ngClass]="{'pe-none': !isEditable}">
-                          <i class="fa-solid fa-trash-can-o text-danger fa-lg" [ngClass]="{'text-muted': !isEditable}" (click)="removeSurchargeSlab(i)"></i>
+                        <a
+                          href="javascript:void(0)"
+                          class="text-decoration-none"
+                          [ngClass]="{ 'pe-none': !isEditable }"
+                        >
+                          <i
+                            class="fa-solid fa-trash-can-o text-danger fa-lg"
+                            [ngClass]="{ 'text-muted': !isEditable }"
+                            (click)="removeSurchargeSlab(i)"
+                          ></i>
                         </a>
-                        <a href="javascript:void(0)" class="text-decoration-none" *ngIf="i+1 == surchargeSlab.controls.length" [ngClass]="{'pe-none': !isEditable}">
-                          <i class="fa-solid fa-plus-circle text-success fa-lg ps-3" [ngClass]="{'text-muted': !isEditable}" (click)="addSurchargeSlab()"></i>
+                        <a
+                          href="javascript:void(0)"
+                          class="text-decoration-none"
+                          *ngIf="i + 1 == surchargeSlab.controls.length"
+                          [ngClass]="{ 'pe-none': !isEditable }"
+                        >
+                          <i
+                            class="fa-solid fa-plus-circle text-success fa-lg ps-3"
+                            [ngClass]="{ 'text-muted': !isEditable }"
+                            (click)="addSurchargeSlab()"
+                          ></i>
                         </a>
                       </div>
                     </div>
                   </ng-container>
                   <div class="mt-5 text-end" *ngIf="isEditable">
-                    <button class="btn btn-danger me-2" (click)="cancelEditSurcharge()"><i class="fa-solid fa-xmark pe-2"></i> Cancel</button>
+                    <button
+                      class="btn btn-danger me-2"
+                      (click)="cancelEditSurcharge()"
+                    >
+                      <i class="fa-solid fa-xmark pe-2"></i> Cancel
+                    </button>
                     <button class="btn btn-success" (click)="saveSurcharge()">
-                      <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
-                      <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span>
+                      <i
+                        [ngClass]="{
+                          'fa-solid fa-spinner fa-spin': isLoading,
+                          'fa-solid fa-plus': !isLoading
+                        }"
+                      ></i>
+                      <span class="ps-2">{{
+                        isLoading ? "Wait" : "Save"
+                      }}</span>
                     </button>
                   </div>
                 </form>
@@ -156,27 +386,31 @@
     </ul>
 
     <div [ngbNavOutlet]="nav" class="mt-2"></div>
-
-    <!-- <ng-container *ngIf="!isRecordFound">
-      <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center align-items-center">
-        <div class="col-md-3 modal-container  text-center cog-wheel">
-          <img src="assets/images/cog.gif" alt="" />
-          <h6 class="modal-title title-message">
-            Please Wait ........
-          </h6>
-        </div>
-      </div>
-    </ng-container> -->
   </div>
 </div>
 
 <!-- Age Group Modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="ageGroupModal" tabindex="-1" aria-labelledby="ageGroupModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  id="ageGroupModal"
+  tabindex="-1"
+  aria-labelledby="ageGroupModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="ageGroupModalLabel">Add/Update Age Group</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="ageGroupModalLabel">
+          Add/Update Age Group
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -192,11 +426,17 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of allAgeGroup; let i = index">
-                  <td>{{i+1}}</td>
-                  <td>{{item.StartAgeGroup}}</td>
-                  <td>{{item.EndAgeGroup == 110 ? 'Above' : item.EndAgeGroup}}</td>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.StartAgeGroup }}</td>
                   <td>
-                    <a href="javascript:void(0)" class="text-decoration-none" (click)="editAgeGroup(item)">
+                    {{ item.EndAgeGroup == 110 ? "Above" : item.EndAgeGroup }}
+                  </td>
+                  <td>
+                    <a
+                      href="javascript:void(0)"
+                      class="text-decoration-none"
+                      (click)="editAgeGroup(item)"
+                    >
                       <i class="fa-regular fa-pen-to-square"></i>
                     </a>
                   </td>
@@ -208,17 +448,42 @@
             <form [formGroup]="ageGroupForm" *ngIf="ageGroupForm">
               <div class="row">
                 <div class="col-md-6">
-                  <label  class="form-label">Start Age Group</label>
-                  <select class="form-select" (change)="fromAgeSelect($event)" formControlName="StartAgeGroup" [ngClass]="{'error-field': isSubmitted && a.StartAgeGroup.errors !== null && a.StartAgeGroup.errors.required}">
-                    <option value=null disabled>Select Start Age Group</option>
-                    <option  [value]="item" *ngFor="let item of fromAgeGroup">{{item}}</option>
+                  <label class="form-label">Start Age Group</label>
+                  <select
+                    class="form-select"
+                    (change)="fromAgeSelect($event)"
+                    formControlName="StartAgeGroup"
+                    [ngClass]="{
+                      'error-field':
+                        isSubmitted &&
+                        a.StartAgeGroup.errors !== null &&
+                        a.StartAgeGroup.errors.required
+                    }"
+                  >
+                    <option value="null" disabled>
+                      Select Start Age Group
+                    </option>
+                    <option [value]="item" *ngFor="let item of fromAgeGroup">
+                      {{ item }}
+                    </option>
                   </select>
                 </div>
                 <div class="col-md-6">
-                  <label  class="form-label">End Age Group</label>
-                  <select class="form-select" formControlName="EndAgeGroup" [ngClass]="{'error-field': isSubmitted && a.EndAgeGroup.errors !== null && a.EndAgeGroup.errors.required}">
-                    <option value=null disabled>Select End Age Group</option>
-                    <option [value]="item" *ngFor="let item of toAgeGroup">{{item == 110 ? 'Above': item}}</option>
+                  <label class="form-label">End Age Group</label>
+                  <select
+                    class="form-select"
+                    formControlName="EndAgeGroup"
+                    [ngClass]="{
+                      'error-field':
+                        isSubmitted &&
+                        a.EndAgeGroup.errors !== null &&
+                        a.EndAgeGroup.errors.required
+                    }"
+                  >
+                    <option value="null" disabled>Select End Age Group</option>
+                    <option [value]="item" *ngFor="let item of toAgeGroup">
+                      {{ item == 110 ? "Above" : item }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -227,10 +492,17 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
         <button class="btn btn-success" (click)="saveAgeGroup()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
-          <span class="ps-2">{{ isLoading ? 'Wait' : 'Add/Update' }}</span>
+          <i
+            [ngClass]="{
+              'fa-solid fa-spinner fa-spin': isLoading,
+              'fa-solid fa-plus': !isLoading
+            }"
+          ></i>
+          <span class="ps-2">{{ isLoading ? "Wait" : "Add/Update" }}</span>
         </button>
       </div>
     </div>
@@ -238,12 +510,27 @@
 </div>
 
 <!-- Tax Regime Modal -->
-<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="taxRegimeModal" tabindex="-1" aria-labelledby="taxRegimeModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  id="taxRegimeModal"
+  tabindex="-1"
+  aria-labelledby="taxRegimeModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
-        <h5 class="modal-title" id="taxRegimeModalLabel">Add/Update Age Group</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="taxRegimeModalLabel">
+          Add/Update Age Group
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -259,11 +546,15 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of allTaxRegimeDesc; let i = index">
-                  <td>{{i+1}}</td>
-                  <td>{{item.RegimeName}}</td>
-                  <td>{{item.Description}}</td>
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.RegimeName }}</td>
+                  <td>{{ item.Description }}</td>
                   <td>
-                    <a href="javascript:void(0)" class="text-decoration-none" (click)="editRegimeDesc(item)">
+                    <a
+                      href="javascript:void(0)"
+                      class="text-decoration-none"
+                      (click)="editRegimeDesc(item)"
+                    >
                       <i class="fa-regular fa-pen-to-square"></i>
                     </a>
                   </td>
@@ -274,22 +565,54 @@
           <div class="col-md-6">
             <form [formGroup]="taxRegimeDescForm" *ngIf="taxRegimeDescForm">
               <div class="col-md-12">
-                <label  class="form-label">Tax Regime Name</label>
-                <input type="text" class="form-control" placeholder="Tax Regime Name" formControlName="RegimeName" [ngClass]="{'error-field': isSubmitted && f.RegimeName.errors !== null && f.RegimeName.errors.required}">
+                <label class="form-label">Tax Regime Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Tax Regime Name"
+                  formControlName="RegimeName"
+                  [ngClass]="{
+                    'error-field':
+                      isSubmitted &&
+                      f.RegimeName.errors !== null &&
+                      f.RegimeName.errors.required
+                  }"
+                />
               </div>
               <div class="col-md-12 mt-3">
-                <label  class="form-label">Tax Regime Description</label>
-                <textarea class="form-control regime-desc-box" placeholder="Tax Regime Description" cols="30" rows="4" formControlName="Description" [ngClass]="{'error-field': isSubmitted && f.Description.errors !== null && f.Description.errors.required}"></textarea>
+                <label class="form-label">Tax Regime Description</label>
+                <textarea
+                  class="form-control regime-desc-box"
+                  placeholder="Tax Regime Description"
+                  cols="30"
+                  rows="4"
+                  formControlName="Description"
+                  [ngClass]="{
+                    'error-field':
+                      isSubmitted &&
+                      f.Description.errors !== null &&
+                      f.Description.errors.required
+                  }"
+                ></textarea>
               </div>
             </form>
           </div>
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
         <button class="btn btn-success" (click)="saveTaxRegimeDesc()">
-          <i  [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
-          <span class="ps-2">{{ isLoading ? 'Wait' : 'Add/ Update Tax Regime' }}</span>
+          <i
+            [ngClass]="{
+              'fa-solid fa-spinner fa-spin': isLoading,
+              'fa-regular fa-square-plus': !isLoading
+            }"
+          ></i>
+          <span class="ps-2">{{
+            isLoading ? "Wait" : "Add/ Update Tax Regime"
+          }}</span>
         </button>
       </div>
     </div>
