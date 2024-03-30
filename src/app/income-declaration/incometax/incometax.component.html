@@ -14,7 +14,7 @@
   <div class="col-12 x_panel p-0 m-0">
     <div class="right-panel col-md-12 p-0 blur-this">
       <div class="container-fluid">
-        <div class="col-md-12 bg-light mb-3 mt-3">
+        <!-- <div class="col-md-12 bg-light mb-3 mt-3">
           <ul class="nav">
             <li class="nav-item">
               <a class="nav-link new-nav-link text-dark" id="attendance-tab" (click)="activeTab('MySalary')"
@@ -29,7 +29,7 @@
                 href="javascript:void(0)">Income Tax</a>
             </li>
           </ul>
-        </div>
+        </div> -->
         <div [ngClass]="{'blur-section': !isPageReady}">
           <div class="blur-section__highlight mt-5 pt-5" [ngClass]="{'d-none': isPageReady}">
             <div class="blur-section__content mt-5 pt-5">
@@ -206,26 +206,34 @@
 
                   <ng-container *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime == 1">
                     <ng-container *ngIf="salaryDetail.GrossIncome > 0">
-                      <div class="d-flex py-3 align-items-center">
-                        <div class="pointable-text ms-2 px-2">B</div>
-                        <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Taxable Income from all Heads</h5>
-                      </div>
-                      <div class="d-flex py-3 align-items-center ps-4">
-                        <div class="pointable-text ms-2 px-2">B1</div>
-                        <h6 class="fw-bold text-dark ps-2 pb-0 mb-0">Taxable Income from all Heads</h6>
-                      </div>
-                      <div class="t-table t-list  bg-white">
-                        <div class="t-head overflow-hidden">
-                          <div class="tr py-3 ">
-                            <div class="th ps-3">Total Salary Received</div>
-                            <div class="th pe-3 text-end">{{salaryDetail.GrossIncome | number:'1.2-2'}}</div>
-                          </div>
-                          <div class="tr py-3 border-bottom-0">
-                            <div class="th fw-bold ps-3">Total</div>
-                            <div class="th fw-bold pe-3 text-end">{{salaryDetail.GrossIncome | number:'1.2-2'}}</div>
-                          </div>
-                        </div>
-                      </div>
+                      <table class="table table-bordered">
+                        <tbody>
+                          <tr>
+                            <td colspan="2" class="c-py-75">
+                              <div class="d-flexalign-items-center">
+                                <div class="pointable-text ms-2 px-2">B</div>
+                                <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Taxable Income from all Heads</h5>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" class="c-py-75">
+                              <div class="d-flex py-3 align-items-center ps-4">
+                                <div class="pointable-text ms-2 px-2">B1</div>
+                                <h6 class="fw-bold text-dark ps-2 pb-0 mb-0">Taxable Income from all Heads</h6>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="c-py-75">Total Salary Received</td>
+                            <td class="text-end c-py-75">{{salaryDetail.GrossIncome | number:'1.2-2'}}</td>
+                          </tr>
+                          <tr>
+                            <th class="c-py-75">Total</th>
+                            <th class="c-py-75 text-end">{{salaryDetail.GrossIncome | number:'1.2-2'}}</th>
+                          </tr>
+                        </tbody>
+                      </table>
                     </ng-container>
 
                     <ng-container *ngIf="totalAllowTaxExemptAmount > 0">
