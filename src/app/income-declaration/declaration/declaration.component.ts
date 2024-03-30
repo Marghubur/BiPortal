@@ -10,6 +10,7 @@ import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Files } from 'src/app/commonmodal/common-modals';
 import 'bootstrap';
+import { NgbOffcanvas, OffcanvasDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 declare var $: any;
 
 @Component({
@@ -77,12 +78,21 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   oldTaxRegimeSlab: Array<any> = [];
   newTaxRegimeSlab: Array<any> = [];
   currentYear: number = 0;
+  activeVerticalPill = 'top';
+  selectedOneHalfExemption: Array<any> = [];
+  selectedOtherExemptions: Array<any> = [];
+  selectedTaxSavingAllowance: Array<any> = [];
+  tempSelectedExemtionAllowance: Array<any> = []
+	closeResult = '';
 
   constructor(private local: ApplicationStorage,
               private user: UserService,
               private fb: FormBuilder,
               private nav: iNavigation,
-              private http: CoreHttpService) { }
+              private http: CoreHttpService,
+              private offcanvasService: NgbOffcanvas) { 
+                
+              }
 
   ngOnInit(): void {
     this.rentalPage = 1;
@@ -218,12 +228,24 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             switch (component) {
               case "1.5 Lac Exemptions":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.ExemptionDeclaration);
+                this.selectedOneHalfExemption = this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0);
+                if (this.selectedOneHalfExemption.length > 0) {
+                  this.selectedOneHalfExemption.map(x => x.IsEdit = false);
+                }
                 break;
               case "Other Exemptions":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.OtherDeclaration);
+                this.selectedOtherExemptions = this.OtherDeclaration.filter(x => x.DeclaredValue > 0);
+                if (this.selectedOtherExemptions.length > 0) {
+                  this.selectedOtherExemptions.map(x => x.IsEdit = false);
+                }
                 break;
               case "Tax Saving Allowance":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.TaxSavingAlloance);
+                this.selectedTaxSavingAllowance = this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0);
+                if (this.selectedTaxSavingAllowance.length > 0) {
+                  this.selectedTaxSavingAllowance.map(x => x.IsEdit = false);
+                }
                 break;
               case "HRA":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(rentDetail);
@@ -351,15 +373,36 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   editDeclaration(item: any, e: any) {
     this.isAmountExceed = false;
-    this.selectDeclaration = null;
+    //this.selectDeclaration = null;
     this.FileDocumentList = [];
     this.FilesCollection = [];
     if (item) {
-      this.selectDeclaration = item;
+      //this.selectDeclaration = item;
       this.uploadDocument(item);
-      $("#manageDeclarationModal").modal('show');
+      //$("#manageDeclarationModal").modal('show');
+      item.IsEdit = true;
+      // let elem = e.currentTarget;
+      // elem.parentElement.previousElementSibling.querySelector('input').removeAttribute('readonly');
+      // elem.previousElementSibling.classList.remove('d-none');
+      // elem.classList.add('d-none');
     }
   }
+
+  addAttechmentModal(item: any) {
+    this.selectDeclaration = null;
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+    this.selectDeclaration = item;
+    this.uploadDocument(item);
+    $("#manageDeclarationModal").modal('show');
+  }
+
+  closeAttachmentModal() {
+    this.selectDeclaration = null;
+    this.FileDocumentList = [];
+    this.FilesCollection = [];
+  }
+
 
   checkMaxLimit(e: any, maxlimit: number) {
     let value = e.target.value;
@@ -592,13 +635,15 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     $("#uploadAttachment").click();
   }
 
-  saveDeclaration(item: any) {
-    let value = (document.querySelector('input[name="DeclaratedValue"]') as HTMLInputElement).value;
-    let declaredValue = Number(value);
-    if (!isNaN(declaredValue) && declaredValue >= 0 && this.isAmountExceed == false) {
+  saveDeclaration(item: any, e: any) {
+    if (item && this.isAmountExceed == false) {
+      // let elem = e.currentTarget;
+      // elem.parentElement.previousElementSibling.querySelector('input').setAttribute('readonly', '');
+      // elem.parentElement.querySelector('a[name="edit-declaration"]').classList.remove('d-none')
+      // elem.classList.add('d-none');
       let value = {
         ComponentId: item.ComponentId,
-        DeclaredValue: declaredValue,
+        DeclaredValue: item.DeclaredValue,
         EmployeeId: this.EmployeeId,
         Email: this.employeeEmail
       }
@@ -615,6 +660,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.isLoading = true;
         formData.append('declaration', JSON.stringify(value));
         formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
+        
         this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
             this.bindData(response.ResponseBody);
@@ -784,7 +830,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   gotoTaxSection() {
-    this.nav.navigateRoot(AdminIncomeTax, this.EmployeeId)
+    this.nav.navigate(AdminIncomeTax, this.EmployeeId)
   }
 
   newIncomeTaxRegimePopUp() {
@@ -806,6 +852,85 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     let dob = this.employeeDeclaration.DOB;
     let age = new Date().getFullYear() - new Date(dob).getFullYear();
     this.taxSlab = this.taxRegimeDetails.taxRegime.filter(x => x.RegimeDescId == this.active && x.StartAgeGroup < age && x.EndAgeGroup >= age);
+  }
+
+  openDeclationComponentOffcanvas(content) {
+    this.tempSelectedExemtionAllowance = [];
+		this.offcanvasService.open(content, { ariaLabelledBy: 'offcanvas-basic-title', position: 'end', panelClass: 'wide-offcanvas' }).result.then(
+			(result) => {
+				this.closeResult = `Closed with: ${result}`;
+			},
+			(reason) => {
+				this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+			},
+		);
+	}
+
+
+  private getDismissReason(reason: any): string {
+		if (reason === OffcanvasDismissReasons.ESC) {
+			return 'by pressing ESC';
+		} else if (reason === OffcanvasDismissReasons.BACKDROP_CLICK) {
+			return 'by clicking on the backdrop';
+		} else {
+			return `with: ${reason}`;
+		}
+	}
+
+  selectOneHalfExemption(e: any, item: any) {
+    let value = e.target.checked;
+    if (value) {
+      item.IsEdit = true;
+      this.tempSelectedExemtionAllowance.push(item);
+    } else {
+      let inddex = this.tempSelectedExemtionAllowance.findIndex(x => x.ComponentId == item.ComponentId);
+      if (inddex >= 0) {
+        this.tempSelectedExemtionAllowance.splice(inddex, 1);
+      }
+    }
+  }
+
+  selectOtherExemption(e: any, item: any) {
+    let value = e.target.checked;
+    if (value) {
+      item.IsEdit = true;
+      this.tempSelectedExemtionAllowance.push(item);
+    } else {
+      let inddex = this.tempSelectedExemtionAllowance.findIndex(x => x.ComponentId == item.ComponentId);
+      if (inddex >= 0) {
+        this.tempSelectedExemtionAllowance.splice(inddex, 1);
+      }
+    }
+  }
+
+  selectTaxSavingAllowance(e: any, item: any) {
+    let value = e.target.checked;
+    if (value) {
+      item.IsEdit = true;
+      this.tempSelectedExemtionAllowance.push(item);
+    } else {
+      let inddex = this.tempSelectedExemtionAllowance.findIndex(x => x.ComponentId == item.ComponentId);
+      if (inddex >= 0) {
+        this.tempSelectedExemtionAllowance.splice(inddex, 1);
+      }
+    }
+  }
+
+  addSelectDeclationComponent(value: string) {
+    if (value && this.tempSelectedExemtionAllowance.length > 0) {
+      switch (value) {
+        case '1.5lac':
+          this.selectedOneHalfExemption = this.selectedOneHalfExemption.concat(this.tempSelectedExemtionAllowance);
+          break;
+        case 'other':
+          this.selectedOtherExemptions = this.selectedOtherExemptions.concat(this.tempSelectedExemtionAllowance);
+          break;
+        case 'taxsaving':
+          this.selectedTaxSavingAllowance = this.selectedTaxSavingAllowance.concat(this.tempSelectedExemtionAllowance);
+          break;
+      }
+      this.offcanvasService.dismiss('save');
+    }
   }
 }
 
