@@ -15,8 +15,8 @@ export class EmployeeFilterHttpService {
     if (environment.production) {
       return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
     } else {
-      return `https://www.emstum.com/bot/sb/api/${SERVICE.FILTER}/${Url}`;
-      // return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
+      // return `https://www.emstum.com/bot/sb/api/${SERVICE.FILTER}/${Url}`;
+      return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
     }
   }
 
