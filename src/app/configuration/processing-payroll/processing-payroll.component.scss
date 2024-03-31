@@ -170,11 +170,11 @@ textarea {
 .bt-card {
   background-image: url(../../../assets/card-bg4.jpg) !important;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
 }
 
 .bt-card-hight {
-  height: 10rem !important;
+  min-height: 10rem !important;
 }
 
 .t-body>.tr:hover {

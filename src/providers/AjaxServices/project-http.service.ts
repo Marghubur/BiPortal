@@ -14,8 +14,8 @@ export class ProjectHttpService {
     if (environment.production) {
       return `${environment.baseSpringUrl}api/${SERVICE.PROJECT}/${Url}`;
     } else {
-      return `https://www.emstum.com/bot/sb/api/${SERVICE.PROJECT}/${Url}`;
-      // return `${environment.baseSpringUrl}api/${SERVICE.PROJECT}/${Url}`;
+      // return `https://www.emstum.com/bot/sb/api/${SERVICE.PROJECT}/${Url}`;
+      return `${environment.baseSpringUrl}api/${SERVICE.PROJECT}/${Url}`;
     }
   }
 
