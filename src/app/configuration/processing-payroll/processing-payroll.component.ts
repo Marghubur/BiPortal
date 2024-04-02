@@ -463,7 +463,7 @@ export class ProcessingPayrollComponent implements OnInit {
       ForYear: this.selectedPayrollCalendar.Year
     }
 
-    this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
+    this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth + 1} `;
     this.loadLeaveData();
     this.active = 1;
     this.activePayrollTab = 1;
