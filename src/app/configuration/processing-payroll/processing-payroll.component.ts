@@ -144,6 +144,12 @@ export class ProcessingPayrollComponent implements OnInit {
           }
           Toast("Page data loaded successfully.");
         }
+      }).catch(err => {
+        if(err.HttpStatusMessage) {
+          ErrorToast(err.HttpStatusMessage)
+        } else {
+          ErrorToast("Got server error");
+        }
       });
   }
 
@@ -423,6 +429,11 @@ export class ProcessingPayrollComponent implements OnInit {
           this.isLoading = false;
         }
       }).catch(e => {
+        if(e.HttpStatusMessage) {
+          ErrorToast(e.HttpStatusMessage)
+        } else {
+          ErrorToast("Got server error");
+        }
         this.isLoading = false;
       });
   }

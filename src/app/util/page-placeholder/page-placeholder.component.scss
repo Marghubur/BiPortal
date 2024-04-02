@@ -1,0 +1,30 @@
+.t-row {
+    height: 1.5rem !important;
+    border-radius: 4px !important;
+  }
+  
+  .t-head {
+    height: 4rem !important;
+    border-radius: 4px !important;
+  }
+  
+  .preload {
+    .skeleton {
+      animation: skeleton-loading 1s linear infinite alternate;
+    }
+  
+    @keyframes skeleton-loading {
+      0% {
+        background-color: hsl(200, 20%, 70%);
+      }
+  
+      100% {
+        background-color: hsl(200, 20%, 95%);
+      }
+    }
+  
+    .vhide {
+      visibility: hidden;
+    }
+  }
+  

@@ -7,7 +7,6 @@ import { TransformDirective } from './directives/transform.directive';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { BreadcrumsComponent } from './breadcrums/breadcrums.component';
 import { IautocompleteComponent } from "./iautocomplete/iautocomplete.component";
-import { PreLoadTableComponent } from './pre-load-table/pre-load-table.component';
 import { EditorComponent } from './editor/editor.component';
 import { MessageModalComponent } from './message-modal/message-modal.component'
 import { FormsModule } from '@angular/forms';
@@ -15,6 +14,7 @@ import { BhTimepickerComponent } from './bh-timepicker/bh-timepicker.component'
 import { NgModule } from '@angular/core';
 import { BotTreeViewComponent } from './bot-tree-view/bot-tree-view.component';
 import { ImageLoaderComponent } from './image-loader/image-loader.component';
+import { PagePlaceholderComponent } from './page-placeholder/page-placeholder.component'
 
 @NgModule({
   declarations: [
@@ -25,12 +25,12 @@ import { ImageLoaderComponent } from './image-loader/image-loader.component';
     PaginationComponent,
     IautocompleteComponent,
     BreadcrumsComponent,
-    PreLoadTableComponent,
     EditorComponent,
     MessageModalComponent,
     BhTimepickerComponent,
     BotTreeViewComponent,
-    ImageLoaderComponent
+    ImageLoaderComponent,
+    PagePlaceholderComponent
   ],
   imports: [
     CommonModule,
@@ -44,12 +44,12 @@ import { ImageLoaderComponent } from './image-loader/image-loader.component';
     PaginationComponent,
     BreadcrumsComponent,
     IautocompleteComponent,
-    PreLoadTableComponent,
     EditorComponent,
     MessageModalComponent,
     BhTimepickerComponent,
     BotTreeViewComponent,
-    ImageLoaderComponent
+    ImageLoaderComponent,
+    PagePlaceholderComponent
   ]
 })
 export class UtilModule {

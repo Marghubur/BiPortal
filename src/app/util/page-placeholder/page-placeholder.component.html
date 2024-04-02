@@ -1,0 +1,27 @@
+<div class="table preload">
+    <ng-container *ngIf="isTableStyle">
+        <div class="t-head skeleton mb-3">
+            <div>
+                <div class="vhide">-</div>
+            </div>
+        </div>
+        <div *ngFor="let row of rows" class="t-row mt-2 skeleton">
+          <div>
+            <div class="vhide">-</div>
+          </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!isTableStyle">
+        <div class="t-head skeleton mb-3">
+            <div>
+                <div class="vhide">-</div>
+            </div>
+        </div>
+        <div *ngFor="let row of rows" class="t-row mt-2 skeleton">
+          <div>
+            <div class="vhide">-</div>
+          </div>
+        </div>
+    </ng-container>
+</div>
+  
