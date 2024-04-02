@@ -4,8 +4,8 @@
             <h2 class="fw-bold text-dark text-center">Welcome to EMSTUM</h2>
             <h3 class="text-dark text-center my-4 fw-bold">This page likely lets you choose the timeframe for the declaration, including the starting month, tax year, and ending date.</h3>
             <div class="row">
-                <div class="col-md-6">
-
+                <div class="col-md-6 overflow-hidden text-center">
+                    <img src="assets/images/declaration.jpg" alt="" width="70%">
                 </div>
                 <div class="col-md-6">
                     <div class="custom-card p-4">
@@ -56,9 +56,15 @@
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <label class="form-label">Financial Year</label>
-                                    <input maxlength="4" type="text" class="form-control" formControlName="FinancialYear"
-                                        placeholder="Enter financial year"
+                                    <div class="d-flex form-control align-items-center justify-content-between">
+                                        <input maxlength="4" type="text" class="form-control border-0 p-0 m-0" formControlName="FinancialYear"
+                                            placeholder="Enter financial year"
+                                            onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                                        <span class="pe-5">-</span>
+                                        <input maxlength="4" type="text" class="form-control border-0 p-0 m-0" [value]="declarationForm.controls.FinancialYear.value + 1"
+                                        placeholder="Enter financial year" readonly
                                         onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mt-3">
                                     <label class="form-label">Last Day of Declaration</label>
@@ -84,8 +90,8 @@
             <h2 class="fw-bold text-dark text-center">Welcome to EMSTUM</h2>
             <h3 class="text-dark text-center my-4 fw-bold">This webpage sets employee pay frequency (weekly/monthly) and pay day. It allows customizing pay period length (actual/fixed days) and excludes holidays from pay dates.</h3>
             <div class="row">
-                <div class="col-md-6">
-
+                <div class="col-md-6 text-center">
+                    <img src="assets/images/payroll.jpg" alt="" width="80%">
                 </div>
                 <div class="col-md-6">
                     <div class="custom-card p-4">
@@ -166,8 +172,8 @@
             <h2 class="fw-bold text-dark text-center">Welcome to EMSTUM</h2>
             <h3 class="text-dark text-center my-4 fw-bold">This webpage lets you set up default leave plans for employees, including sick leave, casual leave, etc. You can add more leave types and save the plan for future use.</h3>
             <div class="row">
-                <div class="col-md-6">
-
+                <div class="col-md-6 text-center">
+                    <img src="assets/images/leave.jpg" alt="" width="80%">
                 </div>
                 <div class="col-md-6">
                     <div class="custom-card p-4">
