@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { PlaceholderMatrix } from 'src/app/util/page-placeholder/page-placeholder.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
@@ -43,6 +44,10 @@ export class TimesheetComponent implements OnInit {
   today: Date = null;
   isLoading: boolean = false;
   clientName: string = null;
+  matrix: PlaceholderMatrix = {
+    columns: 1,
+    rows: 10
+  }
 
   constructor(private http: CoreHttpService,
     private nav: iNavigation,
