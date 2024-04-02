@@ -15,12 +15,12 @@ import { SalaryComponent } from '../income-declaration/salary/salary.component';
 import { IncomeDeclarationRoutingModule } from './income-declaration-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TaxRegimeComponent } from './tax-regime/tax-regime.component';
-import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
 import { AdminmodalModule } from '../adminmodal/adminmodal.module';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { NgModule } from '@angular/core';
 import { EmployeeDeclarationlistComponent } from '../income-declaration/employee-declarationlist/employee-declarationlist.component';
+import { ProfessionalTaxComponent } from './professional-tax/professional-tax.component';
 
 
 @NgModule({
@@ -36,9 +36,9 @@ import { EmployeeDeclarationlistComponent } from '../income-declaration/employee
     PreviousincomeComponent,
     SalaryComponent,
     TaxRegimeComponent,
-    CustomsalaryStructureComponent,
     SalarycomponentStructureComponent,
     EmployeeDeclarationlistComponent,
+    ProfessionalTaxComponent,
   ],
   imports: [
     CommonModule,

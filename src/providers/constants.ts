@@ -136,9 +136,9 @@ export const AdminPaySlip = `${AccountsBaseRoute}/salary/payslip`;
 export const Payroll = `${AccountsBaseRoute}/payrollsettings/payroll`;
 export const PFESISetup = `${AccountsBaseRoute}/payrollsettings/pfesisetup`;
 export const SalaryComponentStructure = `${AccountsBaseRoute}/payrollsettings/salarycomponentstructure`;
-export const CustomSalaryStructure = `${AccountsBaseRoute}/payrollsettings/customsalarystructure`;
 export const PayrollComponents = `${AccountsBaseRoute}/payrollcomponents`;
 export const TaxRegime = `${AccountsBaseRoute}/taxregime`;
+export const ProfesssionalTax = `${AccountsBaseRoute}/professionaltax`;
 
 // ********************** Income Declaration route ends  *******************
 

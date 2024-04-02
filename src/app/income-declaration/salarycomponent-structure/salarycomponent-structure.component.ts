@@ -27,15 +27,462 @@ export class SalarycomponentStructureComponent implements OnInit {
   inactiveComponentDeatil: SalaryComponentFields = new SalaryComponentFields();
   allAdHocComponent: Array<AdHocComponentsModal> = [];
   isPageReady: boolean = true;
+
+// ----------------------------------------
+  groupComponents: Array<any> = [];
+  allComponentFields: Array<any> = [];
+  salaryCompFilterData: string = null;
+  componentFields: UpdateSalaryComponent = new UpdateSalaryComponent();
+  componentsAvailable: boolean = false;
+  selectedComponent: Array<any> = [];
+  activeComponent: Array<any> = [];
+  groupAllComponents: Array<any> = [];
+  submitted: boolean = false;
+  currentGroup: any = null;
+
   constructor(private fb: FormBuilder,
               private http: CoreHttpService) { }
 
   ngOnInit(): void {
     this.ActivatedPage = 1;
     this.currentSalaryComponent = new SalaryComponentFields();
-    this.loadOnChange();
+    // this.loadOnChange();
     this.salaryComponent();
+    this.loadSalaryGroupComponent();
   }
+
+  loadSalaryGroupComponent() {
+    this.isPageReady = false;
+    this.http.get('SalaryComponent/GetSalaryGroupAndComponent').then(res => {
+      if(res.ResponseBody && res.ResponseBody.SalaryComponents != null && res.ResponseBody.SalaryGroup != null) {
+        this.groupComponents = res.ResponseBody.SalaryGroup.GroupComponents;
+        this.currentGroup = res.ResponseBody.SalaryGroup;
+        this.activeComponent = res.ResponseBody.SalaryGroup.GroupComponents;
+        this.groupAllComponents = res.ResponseBody.SalaryGroup.GroupComponents;
+        this.salaryCompFilterData = null;
+        this.allComponentFields = res.ResponseBody.SalaryGroup.GroupComponents;
+        this.buildSalaryComponentDetail(res.ResponseBody.SalaryComponents);
+        this.isPageReady = true;
+        this.isReady = true;
+        Toast("Salary components loaded successfully.");
+      } else {
+        ErrorToast("Salary components loaded successfully.");
+      }
+    }).catch(e => {
+      this.isPageReady = true;
+    });
+  }
+
+  buildSalaryComponentDetail(components: Array<any>) {
+    this.isPageReady = false;
+    //components = components.filter(x => x.IsAdHoc == 0);
+    let i = 0;
+    this.salaryComponentFields = [];
+    while(i < components.length) {
+      this.salaryComponentFields.push({
+        ComponentFullName: components[i]["ComponentFullName"],
+        ComponentDescription: components[i]["ComponentDescription"],
+        ComponentId: components[i]["ComponentId"],
+        Type: components[i]["ComponentTypeId"],
+        TaxExempt: components[i]["TaxExempt"],
+        Formula: components[i]["Formula"],
+        MaxLimit: components[i]["MaxLimit"],
+        RequireDocs: false,
+        IndividualOverride: false,
+        IsAllowtoOverride: false,
+        IsComponentEnable: false,
+        IsActive: components[i]["IsActive"],
+        PercentageValue: components[i]["PercentageValue"],
+        CalculateInPercentage: components[i]["CalculateInPercentage"],
+        EmployerContribution: components[i]["EmployerContribution"],
+        IncludeInPayslip: components[i]["IncludeInPayslip"],
+        IsOpted: components[i]["IsOpted"],
+        EmployeeContribution: components[i]["EmployeeContribution"],
+        Section: components[i]["Section"]
+      });
+      i++;
+    }
+    this.allComponentFields = this.salaryComponentFields;
+  }
+
+  resetSalaryFilter(e: any) {
+    e.target.value = '';
+    this.salaryComponentFields = this.allComponentFields;
+  }
+
+  filterSalaryComponent(event: any) {
+    let value = event.target.value.toUpperCase();
+    if (value && value != '') {
+      this.salaryComponentFields =  this.allComponentFields.filter(x => x.ComponentId.toUpperCase().indexOf(value) != -1 || x.ComponentFullName.toUpperCase().indexOf(value) != -1)
+    } else
+      this.salaryComponentFields = this.allComponentFields;
+  }
+
+  closeAddCompPopUp() {
+    if (this.selectedComponent && this.selectedComponent.length > 0) {
+      this.groupComponents = this.selectedComponent;
+      this.activeComponent = this.selectedComponent;
+    }
+  }
+
+  selectToAddComponent(event: any, item: any) {
+    this.selectedComponent = [...this.activeComponent];
+    if (event.target.checked == true) {
+      let elem = this.activeComponent.find(x => x.ComponentId === item.ComponentId);
+      if (elem != null)
+        ErrorToast("Component already added. Please select another component.");
+      else {
+        if (!item.Formula || item.Formula == null)
+          item.Formula = "0";
+        this.activeComponent.push(item);
+      }
+    } else {
+        let index = this.activeComponent.findIndex(x => x.ComponentId === item.ComponentId);
+        if (index > -1)
+          this.activeComponent.splice(index, 1);
+    }
+  }
+
+  addComponents() {
+    this.componentsAvailable = false;
+    let updateStructure: SalaryStructureType = {
+      GroupComponents: this.activeComponent,
+      CompanyId: this.currentGroup.CompanyId,
+      ComponentId: null,
+      GroupDescription: this.currentGroup.GroupDescription,
+      GroupName: this.currentGroup.GroupName,
+      MaxAmount: this.currentGroup.MaxAmount,
+      MinAmount: this.currentGroup.MinAmount,
+      SalaryGroupId: this.currentGroup.SalaryGroupId
+    };
+
+    this.http.post("SalaryComponent/UpdateSalaryGroupComponents", updateStructure).then ((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        this.groupComponents = response.ResponseBody;
+        this.salaryComponentFields = this.allComponentFields;
+        Toast("Salary Group added suuccessfully.");
+        this.componentsAvailable = true;
+      } else {
+        ErrorToast("Unable to add salary group.")
+      }
+    })
+    $('#addComponentModal').modal('hide');
+  }
+
+  formulaAppliedOn(item: string) {
+    if (item && item != '') {
+      let index = 0;
+      switch (item) {
+        case 'ctc':
+          index = 0;
+          break;
+        case 'basic':
+          index = 1;
+          break;
+        // case 'gross':
+        //   index = 1;
+        //   break;
+        case 'auto':
+          index = 2;
+          break;
+      }
+
+      let elem = document.querySelectorAll('div[name="formulaComponent"] a');
+      let i = 0;
+      while (i < elem.length) {
+        elem[i].classList.remove('active');
+        i++;
+      }
+      elem[index].classList.add('active');
+      let tag = document.getElementById('addedFormula');
+      tag.innerText = `[${item.toLocaleUpperCase()}]`
+      this.componentFields.Formula =`([${item.toLocaleUpperCase()}])`;
+      tag.focus();
+    }
+  }
+
+  addFormula() {
+    let elem = document.querySelector('[name="addedFormula"]') as HTMLInputElement;
+    this.componentFields.Formula = elem.innerText;
+  }
+
+  updateValue() {
+    this.isLoading = true;
+    this.submitted = true;
+    let value = this.componentFields;
+    if (value.Formula.indexOf('%') > -1) {
+      value.CalculateInPercentage = true;
+      this.componentFields.MaxLimit = this.componentFields.PercentageValue;
+    }
+
+    if(this.componentFields.Formula != "([AUTO])") {
+      let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
+      if (isNaN(formula)) {
+        ErrorToast("Invalid formula entered");
+        this.isLoading = false;
+        return;
+      }
+    } else {
+      this.componentFields.Formula = this.componentFields.Formula.replace(/\(/g, '').replace(/\)/g, '');
+    }
+
+    let isincludeInPayslip = (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked;
+    value.IncludeInPayslip = isincludeInPayslip;
+    if (this.currentGroup.SalaryGroupId > 0) {
+        this.http.put(`Settings/UpdateGroupSalaryComponentDetail/
+            ${this.componentFields.ComponentId}/
+            ${this.currentGroup.SalaryGroupId}`, value).then((response:ResponseModel) => {
+          if (response.ResponseBody) {
+            this.isLoading = false;
+            Toast('Updated Successfully')
+          }
+          $('#updateCalculationModal').modal('hide');
+        }).catch(e => {
+          this.isLoading = false;
+        })
+    } else {
+      WarningToast("Group not selected.");
+    }
+    this.submitted = true;
+  }
+
+  calculateExpressionUsingInfixDS(expression: string): number {
+    if (expression.includes('[CTC]'))
+      expression = expression.replace('[CTC]', '100');
+    else if(expression.includes('[BASIC]'))
+      expression = expression.replace('[BASIC]', '100');
+
+    expression = `(${expression})`;
+    let operatorStact = [];
+    let expressionStact = [];
+    let index = 0;
+    let lastOp = '';
+    let ch = '';
+    while(index < expression.length) {
+      ch = expression[index];
+      if(ch.trim() == ''){
+        index++;
+        continue;
+      }
+      if(isNaN(Number(ch))) {
+        switch(ch) {
+          case '+':
+          case '-':
+          case '/':
+          case '%':
+          case '*':
+          case '>':
+          case '<':
+          case '=':
+            if(operatorStact.length > 0) {
+              lastOp = operatorStact[operatorStact.length - 1];
+              if(lastOp == '+' || lastOp == '-' || lastOp == '/' || lastOp == '*' || lastOp == '%' || lastOp == '<' || lastOp == '=' || lastOp == '>') {
+                lastOp = operatorStact.pop();
+                expressionStact.push(lastOp);
+              }
+            }
+            operatorStact.push(ch);
+            break;
+          case ')':
+            while(true) {
+              lastOp = operatorStact.pop();
+              if(lastOp == '(') {
+                //operatorStact.pop();
+                break;
+              }
+              expressionStact.push(lastOp);
+            }
+            break;
+          case '(':
+            operatorStact.push(ch);
+            break;
+          default:
+            ErrorToast("Invalid expression");
+            break;
+        }
+      } else {
+        let value = 0;
+        while(true) {
+          ch = expression[index];
+          if(ch.trim() == '') {
+            expressionStact.push(value);
+            break;
+          }
+
+          if(!isNaN(Number(ch))) {
+            value = Number(`${value}${ch}`);
+            index++;
+          } else {
+            index--;
+            expressionStact.push(value);
+            break;
+          }
+        }
+      }
+
+      index++;
+    }
+
+    return this.calculationUsingInfixExpression(expressionStact);
+  }
+
+  calculationUsingInfixExpression(expressionStact: Array<any>): number {
+    let i = 0;
+    let term = [];
+    while (i < expressionStact.length) {
+      if (!isNaN(expressionStact[i]) && !isNaN(expressionStact[i+1]) && isNaN(Number(expressionStact[i+2]))) {
+        let  finalvalue = 0;
+        switch (expressionStact[i+2]) {
+          case '+':
+            finalvalue = expressionStact[i] + expressionStact[i+1];
+            break;
+          case '*':
+            finalvalue = expressionStact[i] * expressionStact[i+1];
+            break;
+          case '-':
+            finalvalue = expressionStact[i] - expressionStact[i+1];
+            break;
+          case '%':
+            finalvalue = (expressionStact[i] * expressionStact[i+1]) / 100;
+            break;
+          }
+        if (isNaN(finalvalue)) {
+          ErrorToast("Invalid expression");
+          this.isLoading = false;
+          return;
+        }
+        term.push(finalvalue);
+        i = i+3;
+      }
+      else if(!isNaN(expressionStact[i]) && isNaN(Number(expressionStact[i+1]))) {
+        let  finalvalue = 0;
+        let lastterm = term.pop();
+        switch (expressionStact[i+1]) {
+          case '+':
+            finalvalue = lastterm + expressionStact[i];
+            break;
+          case '*':
+            finalvalue = lastterm * expressionStact[i];
+            break;
+          case '-':
+            finalvalue = lastterm - expressionStact[i];
+            break;
+          case '%':
+            finalvalue = (lastterm * expressionStact[i]) / 100;
+            break;
+          }
+          if (isNaN(finalvalue)) {
+            ErrorToast("Invalid expression");
+            this.isLoading = false;
+            return;
+          }
+        term.push(finalvalue);
+        i = i+2;
+      } else {
+        let  finalvalue = 0;
+        let lastterm = term.pop();
+        let previousterm = term.pop();
+        switch (expressionStact[i]) {
+          case '+':
+            finalvalue = previousterm + lastterm;
+            break;
+          case '*':
+            finalvalue = previousterm * lastterm;
+            break;
+          case '-':
+            finalvalue = previousterm - lastterm;
+            break;
+          case '%':
+            finalvalue = (previousterm * lastterm) / 100;
+            break;
+          }
+        if (isNaN(finalvalue)) {
+          ErrorToast("Invalid expression");
+          this.isLoading = false;
+          return;
+        }
+        term.push(finalvalue);
+        i++;
+      }
+    }
+    if (term.length === 1) {
+      return Math.trunc(term[0]);
+    } else {
+      term = [];
+      ErrorToast("Invalid expression");
+    }
+  }
+
+  updateCalcModel(item: UpdateSalaryComponent) {
+    this.componentFields = item;
+    if(this.componentFields.CalculateInPercentage == true) {
+      this.componentFields.MaxLimit = this.componentFields.PercentageValue;
+    }
+    let elem = document.querySelectorAll('div[name="formulaComponent"] a');
+    let i = 0;
+    while (i < elem.length) {
+      elem[i].classList.remove('active');
+      i++;
+    }
+
+    let tag = document.getElementById('addedFormula');
+    if (this.componentFields.Formula){
+      tag.innerText = `${this.componentFields.Formula}`;
+      this.componentFields.Formula =`${this.componentFields.Formula}`;
+    } else {
+      tag.innerText = '';
+      this.componentFields.Formula = '';
+    }
+    if (this.componentFields.IncludeInPayslip)
+      (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked = true;
+    else
+      (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked = false;
+    tag.focus();
+    this.submitted = false;
+    $('#updateCalculationModal').modal('show');
+  }
+
+  openComponentDeleteOrUpdateModel(item: any) {
+    $("#componentDeleteOrUpdateModel").modal('show');
+    this.componentFields = item;
+  }
+
+  removeFromSalaryGroup() {
+    this.isLoading = true;
+    this.http.delete(`SalaryComponent/RemoveAndUpdateSalaryGroup/${this.componentFields.ComponentId}/${this.currentGroup.SalaryGroupId}`)
+    .then((response:ResponseModel) => {
+      if (response.ResponseBody) {
+        this.groupComponents = JSON.parse(response.ResponseBody.SalaryComponents);
+        Toast("Component removed from salary group successfully");
+        $('#componentDeleteOrUpdateModel').modal('hide');
+        this.isLoading = false;
+      } else {
+        ErrorToast("Unable to add salary group.")
+      }
+    }).catch(e => {
+      this.isLoading = false;
+    })
+  }
+
+  filterRecords(e: any) {
+    this.isReady = false;
+    let value = e.target.value.toUpperCase();
+    if (value && value != '') {
+      this.groupComponents =  this.groupAllComponents.filter(x => x.ComponentId.toUpperCase().indexOf(value) != -1 || x.ComponentFullName.toUpperCase().indexOf(value) != -1)
+    } else
+    this.groupComponents =  this.groupAllComponents;
+    this.isReady = true;
+  }
+
+  clearFilter(e: any) {
+    this.isReady = false;
+    e.target.value = '';
+    this.groupComponents = this.groupAllComponents;
+    this.isReady = true;
+  }
+
+
+
 
   loadOnChange() {
     this.isReady = false;
@@ -61,6 +508,8 @@ export class SalarycomponentStructureComponent implements OnInit {
       this.isReady = false;
     });
   }
+
+  
 
   bindData(data: any) {
     if(data) {
@@ -223,6 +672,7 @@ export class SalarycomponentStructureComponent implements OnInit {
       this.isLoading = false;
     });
   }
+  
 
   filterComponent(e: any) {
     let value = e.target.value.toUpperCase();
@@ -303,3 +753,30 @@ export class AdHocComponentsModal {
   ComponentCatagoryId: number = 0;
 }
 
+class UpdateSalaryComponent {
+  CalculateInPercentage: boolean = false;
+  TaxExempt: boolean = false;
+  MaxLimit: number = 0;
+  Formula: string = '';
+  EmployeeContribution: boolean = false;
+  EmployerContribution: boolean = false;
+  IsOpted: boolean = false;
+  IncludeInPayslip: boolean = false;
+  ComponentId: string = '';
+  ComponentDescription: string = '';
+  ComponentFullName: string = '';
+  PercentageValue: number = 0;
+  Operator: string = '';
+  FormulaBasedOn: string = 'CTC';
+}
+
+class SalaryStructureType {
+  SalaryGroupId: number = 0;
+  CompanyId: number = 0;
+  ComponentId: string = null;
+  GroupComponents: Array<any> = [];
+  GroupName: string = null;
+  GroupDescription: string = null;
+  MinAmount: number = 0;
+  MaxAmount: number = 0;
+}
