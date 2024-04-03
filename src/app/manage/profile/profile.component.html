@@ -169,33 +169,8 @@
                               </div>
                             </div>
                           </div>
-                          <!-- <div
-                            class="x_panel my-4 d-flex align-items-center justify-content-between custom-backgrnd-color">
-                            <div class="d-flex align-items-center justify-content-center py-3">
-                              <i class="fa-regular fa-folder-open text-warning f-zoom" aria-hidden="true"></i>
-                              <div class="ps-3 pt-3">
-                                <h5>Don’t have a resume yet?</h5>
-                                <p>Create a job-winning resume with our simple resume builder</p>
-                              </div>
-                            </div>
-                            <a href="javascript:void(0)" class="text-decoration-none text-primary fw-bold pe-3">CREATE
-                              FREE
-                              RESUME</a>
-                          </div> -->
                         </div>
                       </div>
-                      <!-- <div class="card mb-3 ps-3">
-                        <div class="x_header mt-4 border-0">
-                          <div class="x_header_title">
-                            <h2 cl class="fw-bold text-dark"ass="fw-bold">Resume Headline</h2>
-                            <i class="fa-solid fa-pencil text-primary ps-3 fa-lg" (click)="editResumeHeadline()"></i>
-                          </div>
-                        </div>
-                        <div class="col-md-12">
-                          <textarea placeholder="Resume Headline" formControlName="ResumeHeadline" name="ResumeHeadline"
-                            readonly class="w-100 form-control lg-txtarea border-0"></textarea>
-                        </div>
-                      </div> -->
                     </div>
                   </form>
                 </ng-template>
@@ -933,6 +908,9 @@
                       </button>
                     </div>
                   </form>
+                  <ng-container *ngIf="!existOrgForm">
+                    <app-page-placeholder></app-page-placeholder>
+                  </ng-container>
                 </ng-template>
               </li>
             </ul>
@@ -940,6 +918,9 @@
             <div [ngbNavOutlet]="nav" class="mt-5"></div>
           </div>
         </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!isFormReady">
+        <app-page-placeholder></app-page-placeholder>
       </ng-container>
     </div>
   </div>

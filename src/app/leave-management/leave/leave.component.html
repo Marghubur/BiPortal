@@ -2,24 +2,13 @@
   <div class="content-header">
     <div class="col-8">
       <div class="px-1">
-        <app-breadcrums
-          [title]="'Leave plans'"
-          [subtitle]="'create and manage leaves'"
-        ></app-breadcrums>
+        <app-breadcrums [title]="'Leave plans'" [subtitle]="'create and manage leaves'"></app-breadcrums>
       </div>
     </div>
     <div class="col-auto">
-      <a
-        href="javascript:void(0)"
-        class="text-decoration-none fw-bold pe-4"
-        (click)="pageReload()"
-      >
-        <i
-          class="fa-solid fa-arrows-rotate"
-          data-bs-toggle="tooltip"
-          data-bs-placement="right"
-          title="Reload this page"
-        ></i>
+      <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+        <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+          title="Reload this page"></i>
       </a>
     </div>
   </div>
@@ -30,11 +19,8 @@
           <a ngbNavLink (click)="onTabChange(0)">Leave Plans</a>
           <ng-template ngbNavContent>
             <div class="text-end col-md-12 my-3">
-              <button
-                [ngClass]="{ 'd-none': !menuItem.Config }"
-                class="btn btn-primary-c"
-                (click)="bindLeaveTypeModal()"
-              >
+              <button [ngClass]="{ 'd-none': !menuItem.Config }" class="btn btn-primary-c"
+                (click)="bindLeaveTypeModal()">
                 <i class="fa-solid fa-plus pe-2"></i>Assign Leave
               </button>
             </div>
@@ -42,27 +28,15 @@
               <div class="col-md-3">
                 <div class="d-flex align-items-center border">
                   <i class="fa-solid fa-magnifying-glass pe-2 ps-3"></i>
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    class="form-control border-0"
-                  />
+                  <input type="text" placeholder="Search" class="form-control border-0" />
                 </div>
-                <div
-                  class="d-flex align-items-center justify-content-between my-2"
-                >
+                <div class="d-flex align-items-center justify-content-between my-2">
                   <h6 class="pt-3 pb-2 ps-2">LEAVE PLANS</h6>
-                  <button
-                    class="btn btn-primary-c float-end"
-                    (click)="leavePlanPopUp()"
-                  >
-                    <i
-                      class="fa px-2"
-                      [ngClass]="{
+                  <button class="btn btn-primary-c float-end" (click)="leavePlanPopUp()">
+                    <i class="fa px-2" [ngClass]="{
                         'fa-plus': !isLoading,
                         'fa-solid fa-spinner fa-spin': isLoading
-                      }"
-                    ></i>
+                      }"></i>
                     {{ isLoading ? "Wait" : "Create Plan" }}
                   </button>
                 </div>
@@ -75,80 +49,44 @@
                           <p>
                             User below button or above add button to add one.
                           </p>
-                          <button
-                            class="btn btn-success mt-4"
-                            (click)="leavePlanPopUp()"
-                          >
-                            <i
-                              class="fa pe-2"
-                              [ngClass]="{
+                          <button class="btn btn-success mt-4" (click)="leavePlanPopUp()">
+                            <i class="fa pe-2" [ngClass]="{
                                 'fa-solid fa-spinner fa-spin': isLoading,
                                 'fa-plus': !isLoading
-                              }"
-                            ></i>
+                              }"></i>
                             {{ isLoading ? "Wait" : "ADD Leave Plan" }}
                           </button>
                         </div>
                       </li>
                     </ng-container>
                     <ng-container *ngIf="leavePlanList.length > 0">
-                      <ng-container
-                        *ngFor="let item of leavePlanList; let i = index"
-                      >
+                      <ng-container *ngFor="let item of leavePlanList; let i = index">
                         <li
-                          class="list-group-item border-0 border-bottom p-0 d-flex justify-content-between align-items-start"
-                        >
-                          <a
-                            href="javascript:void(0)"
-                            (click)="selectedPlan(i, item)"
+                          class="list-group-item border-0 border-bottom p-0 d-flex justify-content-between align-items-start">
+                          <a href="javascript:void(0)" (click)="selectedPlan(i, item)"
                             class="d-block w-100 px-3 text-decoration-none text-dark"
-                            [ngClass]="{ 'active-tab': i == 0 }"
-                          >
-                            <div
-                              *ngIf="item.IsDefaultPlan == true"
-                              class="mt-2"
-                            >
-                              <a class="rounded text-decoration-none text-light"
-                                ><i
-                                  class="fa-solid fa-check-circle-o fa-lg"
-                                ></i>
-                                Default Plan</a
-                              >
+                            [ngClass]="{ 'active-tab': i == 0 }">
+                            <div *ngIf="item.IsDefaultPlan == true" class="mt-2">
+                              <a class="rounded text-decoration-none text-light"><i
+                                  class="fa-solid fa-check-circle-o fa-lg"></i>
+                                Default Plan</a>
                             </div>
-                            <div
-                              class="d-flex flex-row w-100 justify-content-between mt-4"
-                            >
+                            <div class="d-flex flex-row w-100 justify-content-between mt-4">
                               <div class="ms-2 col-md-8 me-auto">
                                 <div class="fw-bold fs-6">
                                   {{ item.PlanName }}
                                 </div>
-                                <div
-                                  class="mt-2"
-                                  *ngIf="item.IsDefaultPlan == false"
-                                >
-                                  <button
-                                    class="btn btn-light fw-bold btn-sm"
-                                    (click)="defaultPlanPopUp()"
-                                  >
+                                <div class="mt-2" *ngIf="item.IsDefaultPlan == false">
+                                  <button class="btn btn-light fw-bold btn-sm" (click)="defaultPlanPopUp()">
                                     Set Default Plan
                                   </button>
                                 </div>
                               </div>
-                              <div
-                                class="col-md-3 d-flex flex-column align-items-end"
-                              >
-                                <a
-                                  href="javascript:void(0)"
-                                  (click)="editLeavePlan(item)"
-                                  ><i
-                                    class="fa-solid fa-pencil fa-lg text-white"
-                                  ></i
-                                ></a>
-                                <a href="javascript:void(0)"
-                                  ><i
-                                    class="fa-solid fa-trash-can fa-lg text-white pt-3"
-                                  ></i
-                                ></a>
+                              <div class="col-md-3 d-flex flex-column align-items-end">
+                                <a href="javascript:void(0)" (click)="editLeavePlan(item)"><i
+                                    class="fa-solid fa-pencil fa-lg text-white"></i></a>
+                                <a href="javascript:void(0)"><i
+                                    class="fa-solid fa-trash-can fa-lg text-white pt-3"></i></a>
                               </div>
                             </div>
                             <p class="mb-0 text-white ps-2 pb-2 pt-2">
@@ -165,23 +103,11 @@
                 <div class="x_panel_body border-0">
                   <ng-container *ngIf="isPageReady">
                     <div class="x_body">
-                      <ul
-                        ngbNav
-                        #nav="ngbNav"
-                        [(activeId)]="groupActiveId"
-                        class="nav-tabs"
-                      >
+                      <ul ngbNav #nav="ngbNav" [(activeId)]="groupActiveId" class="nav-tabs">
                         <li [ngbNavItem]="1">
-                          <a
-                            ngbNavLink
-                            href="javascript:void(0)"
-                            (click)="changeMenu('Config')"
-                          >
+                          <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('Config')">
                             Configuration
-                            <i
-                              class="fa-solid fa-gear px-2"
-                              aria-hidden="true"
-                            ></i>
+                            <i class="fa-solid fa-gear px-2" aria-hidden="true"></i>
                           </a>
                           <ng-template ngbNavContent>
                             <ng-container>
@@ -209,13 +135,8 @@
                                   </div>
                                 </div>
                                 <div class="t-body custom-height">
-                                  <ng-container
-                                    *ngIf="planLeaveTypes.length > 0"
-                                  >
-                                    <div
-                                      *ngFor="let item of planLeaveTypes"
-                                      class="tr align-items-center py-2 ps-2"
-                                    >
+                                  <ng-container *ngIf="planLeaveTypes.length > 0">
+                                    <div *ngFor="let item of planLeaveTypes" class="tr align-items-center py-2 ps-2">
                                       <div class="td">
                                         <div class="cell-wrapper">
                                           {{ item.PlanName }}
@@ -236,34 +157,21 @@
                                       </div>
                                       <div class="td">
                                         <div class="cell-wrapper">
-                                          <button
-                                            class="btn btn-sm btn-outline-primary px-3"
-                                            (click)="setUpLeaveConfig(item)"
-                                          >
+                                          <button class="btn btn-sm btn-outline-primary px-3"
+                                            (click)="setUpLeaveConfig(item)">
                                             Setup
                                           </button>
-                                          <a
-                                            href="javascript:void(0)"
-                                            class="text-decoration-none text-danger"
-                                            ><i
-                                              class="fa-solid fa-trash-can fa-lg ms-3"
-                                            ></i
-                                          ></a>
+                                          <a href="javascript:void(0)" class="text-decoration-none text-danger"><i
+                                              class="fa-solid fa-trash-can fa-lg ms-3"></i></a>
                                         </div>
                                       </div>
                                     </div>
                                   </ng-container>
-                                  <ng-container
-                                    *ngIf="planLeaveTypes.length == 0"
-                                  >
-                                    <div
-                                      class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center"
-                                    >
+                                  <ng-container *ngIf="planLeaveTypes.length == 0">
+                                    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
                                       No leave type were found. Please add one
                                       by using
-                                      <b class="text-primary-c"
-                                        >Add Leave Type</b
-                                      >
+                                      <b class="text-primary-c">Add Leave Type</b>
                                       button.
                                     </div>
                                   </ng-container>
@@ -273,15 +181,8 @@
                           </ng-template>
                         </li>
                         <li [ngbNavItem]="2">
-                          <a
-                            ngbNavLink
-                            href="javascript:void(0)"
-                            (click)="changeMenu('YearEnding')"
-                            >Year Ending Process
-                            <i
-                              class="fa-regular fa-calendar-days fa-lg px-2"
-                            ></i
-                          ></a>
+                          <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('YearEnding')">Year Ending Process
+                            <i class="fa-regular fa-calendar-days fa-lg px-2"></i></a>
                           <ng-template ngbNavContent>
                             <div class="t-table t-list col-md-12 mt-2">
                               <div class="hide-bar"></div>
@@ -318,10 +219,7 @@
                                   </div>
                                   <div class="td">
                                     <div class="cell-wrapper">
-                                      <button
-                                        class="btn btn-outline-primary px-2"
-                                        (click)="yearEndSetting()"
-                                      >
+                                      <button class="btn btn-outline-primary px-2" (click)="yearEndSetting()">
                                         Begin Year End Process
                                       </button>
                                     </div>
@@ -336,9 +234,7 @@
                     </div>
                   </ng-container>
                   <ng-container *ngIf="!isPageReady">
-                    <div
-                      class="d-flex align-items-center justify-content-center py-5 my-5"
-                    >
+                    <div class="d-flex align-items-center justify-content-center py-5 my-5">
                       <div class="my-5 py-5 text-center fs-4 text-dark">
                         Please select Leave Plan to see their details.
                       </div>
@@ -361,27 +257,17 @@
                 </p>
               </div>
               <div class="col-md-2 mt-3">
-                <button
-                  class="btn btn-primary-c float-end"
-                  (click)="leaveTypePopUp()"
-                >
+                <button class="btn btn-primary-c float-end" (click)="leaveTypePopUp()">
                   <i class="fa-solid fa-plus pe-2"></i> Add Leave Type
                 </button>
               </div>
             </div>
             <div class="col-md-12 d-flex justify-content-end">
-              <div
-                class="d-flex align-items-center border col-md-3 float-end bg-white"
-              >
+              <div class="d-flex align-items-center border col-md-3 float-end bg-white">
                 <i class="fa-solid fa-magnifying-glass pe-2 ps-3"></i>
-                <input
-                  type="text"
-                  placeholder="Search"
-                  class="form-control border-0"
-                  oninput="this.value = this.value.toUpperCase()"
-                  (keyup)="filterLeaveType($event)"
-                  (keyup.esc)="resetFilterLeaveType($event)"
-                />
+                <input type="text" placeholder="Search" class="form-control border-0"
+                  oninput="this.value = this.value.toUpperCase()" (keyup)="filterLeaveType($event)"
+                  (keyup.esc)="resetFilterLeaveType($event)" />
               </div>
             </div>
 
@@ -407,10 +293,7 @@
               <div class="t-body custom-height">
                 <ng-container *ngIf="leaveTypeDateIsReady">
                   <ng-container *ngIf="leaveTypes.length > 0">
-                    <div
-                      *ngFor="let item of leaveTypes"
-                      class="tr align-items-center py-2 ps-2"
-                    >
+                    <div *ngFor="let item of leaveTypes" class="tr align-items-center py-2 ps-2">
                       <div class="td fe-2">
                         <div class="cell-wrapper">
                           {{ item.PlanName }}
@@ -428,24 +311,16 @@
                       </div>
                       <div class="td">
                         <div class="cell-wrapper text-center">
-                          <a
-                            href="javascript:void(0)"
-                            (click)="updateRecord(item)"
-                            class="text-decoration-none text-secondary"
-                          >
-                            <i
-                              class="fa-solid fa-pencil"
-                              aria-hidden="true"
-                            ></i>
+                          <a href="javascript:void(0)" (click)="updateRecord(item)"
+                            class="text-decoration-none text-secondary">
+                            <i class="fa-solid fa-pencil" aria-hidden="true"></i>
                           </a>
                         </div>
                       </div>
                     </div>
                   </ng-container>
                   <ng-container *ngIf="leaveTypes.length == 0">
-                    <div
-                      class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center"
-                    >
+                    <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
                       No leave type were found. Please add one by using
                       <b class="text-primary-c">Add Leave Type</b> button.
                     </div>
@@ -457,111 +332,67 @@
         </li>
       </ul>
       <div [ngbNavOutlet]="nav" class="mt-2"></div>
-    </div>    
+    </div>
+    <ng-container *ngIf="!isLeavePageReady">
+      <app-page-placeholder></app-page-placeholder>
+    </ng-container>
   </div>
 </div>
 
 <!-- Add Leave Plan Modal -->
-<div
-  class="modal fade"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  id="addLeavePlanModal"
-  tabindex="-1"
-  aria-labelledby="addLeavePlanModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addLeavePlanModal" tabindex="-1"
+  aria-labelledby="addLeavePlanModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="addLeavePlanModalLabel">
           {{ leavePlan.LeavePlanId > 0 ? "Update" : "Add" }} Leave Plan
         </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="leavePlanForm">
           <div>
             <label class="form-label fw-bold">Plan Name</label>
-            <input
-              type="text"
-              placeholder="Leave Plan Name"
-              class="form-control"
-              formControlName="PlanName"
-              maxlength="50"
-              oninput="this.value = this.value.toUpperCase()"
-              [ngClass]="{
+            <input type="text" placeholder="Leave Plan Name" class="form-control" formControlName="PlanName"
+              maxlength="50" oninput="this.value = this.value.toUpperCase()" [ngClass]="{
                 'error-field':
                   submit &&
                   f['PlanName'].errors != null &&
                   f['PlanName'].errors['required']
-              }"
-            />
+              }" />
           </div>
           <div class="mt-3">
             <label class="form-label fw-bold">Plan Description</label>
-            <textarea
-              placeholder="Enter your text"
-              class="form-control"
-              cols="30"
-              rows="3"
-              maxlength="200"
-              oninput="this.value = this.value.toUpperCase()"
-              formControlName="PlanDescription"
-            ></textarea>
+            <textarea placeholder="Enter your text" class="form-control" cols="30" rows="3" maxlength="200"
+              oninput="this.value = this.value.toUpperCase()" formControlName="PlanDescription"></textarea>
           </div>
           <div class="row">
             <div class="col-md-6 mt-3">
               <label class="form-label fw-bold">Entire Leave</label>
               <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  formControlName="IsApplyEntireLeave"
-                />
+                <input class="form-check-input" type="checkbox" formControlName="IsApplyEntireLeave" />
                 <label class="form-check-label">
                   Can employee apply entire leave at a time
                 </label>
               </div>
             </div>
             <div class="mt-3 col-md-6">
-              <label class="form-label fw-bold"
-                >Leave Calendar Year Starts From
-                <i
-                  class="fa-solid fa-circle-exclamation text-secondary ps-2"
-                ></i
-              ></label>
+              <label class="form-label fw-bold">Leave Calendar Year Starts From
+                <i class="fa-solid fa-circle-exclamation text-secondary ps-2"></i></label>
               <div>
                 <form class="row row-cols-sm-auto">
                   <div class="col-12">
                     <div class="input-group">
-                      <input
-                        class="form-control"
-                        placeholder="yyyy-mm-dd"
-                        name="dp"
-                        [(ngModel)]="model"
-                        ngbDatepicker
+                      <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model" ngbDatepicker
                         [ngClass]="{
                           'error-field':
                             submit &&
                             f['PlanStartCalendarDate'].errors != null &&
                             f['PlanStartCalendarDate'].errors['required']
-                        }"
-                        #d="ngbDatepicker"
-                        [minDate]="{ year: 1970, month: 1, day: 1 }"
-                        [maxDate]="maxDate"
-                        (dateSelect)="onDateSelection($event)"
-                      />
-                      <button
-                        class="btn btn-outline-secondary calendar"
-                        (click)="d.toggle()"
-                        type="button"
-                      >
+                        }" #d="ngbDatepicker" [minDate]="{ year: 1970, month: 1, day: 1 }" [maxDate]="maxDate"
+                        (dateSelect)="onDateSelection($event)" />
+                      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
                         <i class="fa-regular fa-calendar-days fa-lg"></i>
                       </button>
                     </div>
@@ -573,28 +404,16 @@
           <div class="mt-3">
             <label class="form-label fw-bold">Leave Policy Explaination</label>
             <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                formControlName="IsShowLeavePolicy"
-              />
+              <input class="form-check-input" type="checkbox" formControlName="IsShowLeavePolicy" />
               <label class="form-check-label">
                 Show leave policy explanation by EMSTUM.
               </label>
             </div>
             <p class="mb-0 d-none mt-2" name="custom-policy">
-              <a
-                href="javascript:void(0)"
-                (click)="fireBrowseOption()"
-                class="text-decoration-none"
-                ><i class="fa-solid fa-paperclip ps-3 pe-2"></i> Upload Document </a
-              ><i class="fa-solid fa-circle-exclamation text-secondary"></i>
-              <input
-                type="file"
-                class="d-none"
-                id="customLeavePolicy"
-                (change)="uploadLeavePolicy($event)"
-              />
+              <a href="javascript:void(0)" (click)="fireBrowseOption()" class="text-decoration-none"><i
+                  class="fa-solid fa-paperclip ps-3 pe-2"></i> Upload Document </a><i
+                class="fa-solid fa-circle-exclamation text-secondary"></i>
+              <input type="file" class="d-none" id="customLeavePolicy" (change)="uploadLeavePolicy($event)" />
             </p>
           </div>
         </form>
@@ -603,17 +422,11 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-primary-c"
-          (click)="addLeavePlan()"
-        >
-          <i
-            [ngClass]="{
+        <button type="button" class="btn btn-primary-c" (click)="addLeavePlan()">
+          <i [ngClass]="{
               'fa-solid fa-spinner fa-spin': isLoading,
               'fa-regular fa-square-plus': !isLoading
-            }"
-          ></i>
+            }"></i>
           <span class="ps-2">{{ isLoading ? "wait" : "Save" }}</span>
         </button>
       </div>
@@ -623,27 +436,15 @@
 <!-- End -->
 
 <!-- Assign Leave Type Modal -->
-<div
-  class="modal fade"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  id="assignLeaveTypeModal"
-  tabindex="-1"
-  aria-labelledby="assignLeaveTypeModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="assignLeaveTypeModal" tabindex="-1"
+  aria-labelledby="assignLeaveTypeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="assignLeaveTypeModalLabel">
           Assign Leave Types to [{{ currentPlan.PlanName }}]
         </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <h5>
@@ -655,14 +456,9 @@
             <nav class="bg-white">
               <div class="d-flex align-items-center border col-md-3 float-end">
                 <i class="fa-solid fa-magnifying-glass pe-2 ps-3"></i>
-                <input
-                  type="text"
-                  placeholder="Search"
-                  class="form-control border-0"
-                  oninput="this.value = this.value.toUpperCase()"
-                  (keyup)="filterLeaveType($event)"
-                  (keyup.esc)="resetFilterLeaveType($event)"
-                />
+                <input type="text" placeholder="Search" class="form-control border-0"
+                  oninput="this.value = this.value.toUpperCase()" (keyup)="filterLeaveType($event)"
+                  (keyup.esc)="resetFilterLeaveType($event)" />
               </div>
             </nav>
           </div>
@@ -689,10 +485,7 @@
             <div class="t-body custom-height">
               <ng-container *ngIf="leaveTypeDateIsReady">
                 <ng-container *ngIf="leaveTypes.length > 0">
-                  <div
-                    *ngFor="let item of leaveTypes"
-                    class="tr align-items-center py-2 ps-2"
-                  >
+                  <div *ngFor="let item of leaveTypes" class="tr align-items-center py-2 ps-2">
                     <div class="td fe-2">
                       <div class="cell-wrapper">
                         {{ item.PlanName }}
@@ -710,20 +503,14 @@
                     </div>
                     <div class="td">
                       <div class="cell-wrapper text-center">
-                        <input
-                          type="checkbox"
-                          [checked]="item.IsActive"
-                          class="form-check-input"
-                          (click)="assignLeaveType($event, item)"
-                        />
+                        <input type="checkbox" [checked]="item.IsActive" class="form-check-input"
+                          (click)="assignLeaveType($event, item)" />
                       </div>
                     </div>
                   </div>
                 </ng-container>
                 <ng-container *ngIf="leaveTypes.length == 0">
-                  <div
-                    class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center"
-                  >
+                  <div class="fs-5 my-5 py-5 d-flex flex-column justify-content-center text-center">
                     No leave type were found. Please add one by using
                     <b class="text-primary-c">Add Leave Type</b> button.
                   </div>
@@ -737,17 +524,11 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-primary-c"
-          (click)="addLeaveType()"
-        >
-          <i
-            [ngClass]="{
+        <button type="button" class="btn btn-primary-c" (click)="addLeaveType()">
+          <i [ngClass]="{
               'fa-plus fa-solid': !isLoading,
               'fa-solid fa-spinner fa-spin': isLoading
-            }"
-          ></i>
+            }"></i>
           <span class="ps-2">{{ isLoading ? "Wait" : "Add Leave Type" }}</span>
         </button>
       </div>
@@ -757,165 +538,95 @@
 <!-- End -->
 
 <!-- Add Leave Plan Modal -->
-<div
-  class="modal fade"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  id="addLeaveTypeModal"
-  tabindex="-1"
-  aria-labelledby="addLeaveTypeModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="addLeaveTypeModal" tabindex="-1"
+  aria-labelledby="addLeaveTypeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title text-dark" id="addLeaveTypeModalLabel">
           Add Leave Type
         </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form action="" [formGroup]="leaveTypeForm">
           <div class="col-md-12 row">
             <div class="col-md-8">
               <label class="form-label">Name</label>
-              <input
-                type="text"
-                maxlength="50"
-                placeholder="Leave Type Name"
-                class="form-control"
-                [ngClass]="{
+              <input type="text" maxlength="50" placeholder="Leave Type Name" class="form-control" [ngClass]="{
                   'error-field':
                     submit &&
                     LeaveTypeConntrol['PlanName'].errors !== null &&
                     LeaveTypeConntrol['PlanName'].errors['required']
-                }"
-                oninput="this.value = this.value.toUpperCase()"
-                formControlName="PlanName"
-              />
+                }" oninput="this.value = this.value.toUpperCase()" formControlName="PlanName" />
             </div>
             <div class="col-md-4">
               <label class="form-label">Code</label>
-              <input
-                type="text"
-                placeholder="Leave Code"
-                class="form-control"
-                maxlength="10"
-                [ngClass]="{
+              <input type="text" placeholder="Leave Code" class="form-control" maxlength="10" [ngClass]="{
                   'error-field':
                     submit &&
                     LeaveTypeConntrol['LeavePlanCode'].errors !== null &&
                     LeaveTypeConntrol['LeavePlanCode'].errors['required']
-                }"
-                oninput="this.value = this.value.toUpperCase()"
-                formControlName="LeavePlanCode"
-              />
+                }" oninput="this.value = this.value.toUpperCase()" formControlName="LeavePlanCode" />
             </div>
           </div>
           <div class="mt-3">
             <label class="form-label">Description</label>
-            <textarea
-              placeholder="Enter your text"
-              maxlength="200"
-              class="form-control"
-              cols="30"
-              rows="3"
-              [ngClass]="{
+            <textarea placeholder="Enter your text" maxlength="200" class="form-control" cols="30" rows="3" [ngClass]="{
                 'error-field':
                   submit &&
                   LeaveTypeConntrol['PlanDescription'].errors !== null &&
                   LeaveTypeConntrol['PlanDescription'].errors['required']
-              }"
-              oninput="this.value = this.value.toUpperCase()"
-              formControlName="PlanDescription"
-            ></textarea>
+              }" oninput="this.value = this.value.toUpperCase()" formControlName="PlanDescription"></textarea>
           </div>
           <div class="form-check mt-3">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              formControlName="ShowDescription"
-            />
+            <input class="form-check-input" type="checkbox" formControlName="ShowDescription" />
             <label class="form-check-label">
               Show leave description while applying leave
             </label>
           </div>
           <div class="form-check mt-3">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              formControlName="IsPaidLeave"
-              (click)="IsPaidLeaveEnable($event)"
-            />
+            <input class="form-check-input" type="checkbox" formControlName="IsPaidLeave"
+              (click)="IsPaidLeaveEnable($event)" />
             <label class="form-check-label"> This is a paid leave </label>
           </div>
-          <fieldset
-            class="mt-3"
-            *ngIf="leaveTypeForm.controls.IsPaidLeave.value == true"
-          >
+          <fieldset class="mt-3" *ngIf="leaveTypeForm.controls.IsPaidLeave.value == true">
             <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                (click)="checkLeaveType($event)"
-                name="IsSickLeave"
-                formControlName="IsSickLeave"
-                [ngClass]="{
+              <input class="form-check-input" type="checkbox" (click)="checkLeaveType($event)" name="IsSickLeave"
+                formControlName="IsSickLeave" [ngClass]="{
                   'error-field':
                     submit &&
                     LeaveTypeConntrol['IsSickLeave'].errors !== null &&
                     LeaveTypeConntrol['IsSickLeave'].errors['required']
-                }"
-              />
+                }" />
               <label class="form-check-label"> This is a sick leave </label>
             </div>
             <div class="form-check mt-3">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                (click)="checkLeaveType($event)"
-                name="IsStatutoryLeave"
-                formControlName="IsStatutoryLeave"
-                [ngClass]="{
+              <input class="form-check-input" type="checkbox" (click)="checkLeaveType($event)" name="IsStatutoryLeave"
+                formControlName="IsStatutoryLeave" [ngClass]="{
                   'error-field':
                     submit &&
                     LeaveTypeConntrol['IsStatutoryLeave'].errors !== null &&
                     LeaveTypeConntrol['IsStatutoryLeave'].errors['required']
-                }"
-              />
+                }" />
               <label class="form-check-label">
                 This is a statutory leave
               </label>
             </div>
           </fieldset>
           <div class="form-check mt-3">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              formControlName="IsRestrictOnGender"
-              (click)="enableRestrictionToGender($event)"
-            />
+            <input class="form-check-input" type="checkbox" formControlName="IsRestrictOnGender"
+              (click)="enableRestrictionToGender($event)" />
             <div class="d-flex align-items-center">
               <label class="form-check-label"> Restrict to </label>
               <div class="col-md-2 ms-3">
-                <select
-                  class="form-select form-select-sm"
-                  aria-label="Default select example"
-                  disabled
-                  name="IsMale"
-                  formControlName="IsMale"
-                  [ngClass]="{
+                <select class="form-select form-select-sm" aria-label="Default select example" disabled name="IsMale"
+                  formControlName="IsMale" [ngClass]="{
                     'error-field':
                       submit &&
                       LeaveTypeConntrol['IsMale'].errors !== null &&
                       LeaveTypeConntrol['IsMale'].errors['required']
-                  }"
-                >
+                  }">
                   <option value="null">Select</option>
                   <option value="true">Male</option>
                   <option value="false">Female</option>
@@ -926,30 +637,20 @@
           </div>
 
           <div class="form-check mt-3">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              formControlName="IsRestrictOnMaritalStatus"
-              (click)="enableRestrictionOnMaritalStatus($event)"
-            />
+            <input class="form-check-input" type="checkbox" formControlName="IsRestrictOnMaritalStatus"
+              (click)="enableRestrictionOnMaritalStatus($event)" />
             <div class="d-flex">
               <label class="form-check-label">
                 Restrict to employees having
               </label>
               <div class="col-md-2 ms-3">
-                <select
-                  class="form-select form-select-sm"
-                  aria-label="Default select example"
-                  disabled
-                  name="IsMarried"
+                <select class="form-select form-select-sm" aria-label="Default select example" disabled name="IsMarried"
                   [ngClass]="{
                     'error-field':
                       submit &&
                       LeaveTypeConntrol['IsMarried'].errors !== null &&
                       LeaveTypeConntrol['IsMarried'].errors['required']
-                  }"
-                  formControlName="IsMarried"
-                >
+                  }" formControlName="IsMarried">
                   <option value="null">Select</option>
                   <option value="true">Married</option>
                   <option value="false">Single</option>
@@ -959,22 +660,11 @@
             </div>
           </div>
           <div class="form-check mt-3">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              (click)="showHideReasonList()"
-            />
+            <input class="form-check-input" type="checkbox" (click)="showHideReasonList()" />
             <label class="form-check-label"> List of reasons </label>
           </div>
-          <div
-            class="col-md-12 d-flex align-items-center mt-3"
-            *ngIf="isListOfReason"
-          >
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Reasons for leave"
-            />
+          <div class="col-md-12 d-flex align-items-center mt-3" *ngIf="isListOfReason">
+            <input type="text" class="form-control" placeholder="Reasons for leave" />
             <i class="fa-solid fa-plus-circle fs-4 ms-2" aria-hidden="true"></i>
           </div>
         </form>
@@ -983,18 +673,11 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-primary-c"
-          (click)="saveLeaveType()"
-        >
-          <i
-            [ngClass]="{
+        <button type="button" class="btn btn-primary-c" (click)="saveLeaveType()">
+          <i [ngClass]="{
               'fa-regular fa-floppy-disk': !isLoading,
               'fa-solid fa-spinner fa-spin': isLoading
-            }"
-          ></i
-          ><span class="ps-2">{{ isLoading ? "Wait" : "Save" }}</span>
+            }"></i><span class="ps-2">{{ isLoading ? "Wait" : "Save" }}</span>
         </button>
       </div>
     </div>
@@ -1002,25 +685,14 @@
 </div>
 
 <!-- Default Plan Modal -->
-<div
-  class="modal fade"
-  id="defaultPlanModal"
-  tabindex="-1"
-  aria-labelledby="defaultPlanModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="defaultPlanModal" tabindex="-1" aria-labelledby="defaultPlanModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content px-4">
       <div class="modal-header border-bottom-0">
         <h5 class="modal-title" id="defaultPlanModalLabel">
           Make Default Plan
         </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <h5 class="text-dark">
@@ -1030,24 +702,13 @@
         </h5>
       </div>
       <div class="modal-footer border-top-0">
-        <a
-          href="javascript:void(0)"
-          class="text-decoration-none text-danger fw-bold"
-          data-bs-dismiss="modal"
-          ><i class="fa-solid fa-xmark pe-2"></i> Close</a
-        >
-        <a
-          href="javascript:void(0)"
-          class="text-decoration-none text-primary ps-3 fw-bold"
-          (click)="saveDefaultPlan(currentPlan)"
-          ><i
-            [ngClass]="{
+        <a href="javascript:void(0)" class="text-decoration-none text-danger fw-bold" data-bs-dismiss="modal"><i
+            class="fa-solid fa-xmark pe-2"></i> Close</a>
+        <a href="javascript:void(0)" class="text-decoration-none text-primary ps-3 fw-bold"
+          (click)="saveDefaultPlan(currentPlan)"><i [ngClass]="{
               'fa-regular fa-floppy-disk': !isLoading,
               'fa-solid fa-spinner fa-spin': isLoading
-            }"
-          ></i
-          ><span class="ps-2">{{ isLoading ? "Wait" : "Save" }}</span></a
-        >
+            }"></i><span class="ps-2">{{ isLoading ? "Wait" : "Save" }}</span></a>
       </div>
     </div>
   </div>
