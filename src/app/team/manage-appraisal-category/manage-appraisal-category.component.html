@@ -67,7 +67,6 @@
             </form>
           </div>
         </div>
-
         <div class="row">
           <div class="col-md-6">
             <fieldset>
@@ -194,7 +193,6 @@
               </div>
             </div>
           </div>
-
           <div class="col-md-6">
             <fieldset>
               <legend>Feedback Process</legend>
@@ -357,6 +355,9 @@
         </button>
       </div>
     </div>
+    <ng-container *ngIf="!isPageReady">
+      <app-page-placeholder></app-page-placeholder>
+    </ng-container>
   </div>
 </div>
 
@@ -417,8 +418,8 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary-c" (click)="saveAppraisallevel()">
+        <button type="button" class="btn btn-secondary" [disabled]="isLoading" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary-c" [disabled]="isLoading" (click)="saveAppraisallevel()">
           <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
           <span class="ps-2">Save Chain</span>
         </button>

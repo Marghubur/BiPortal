@@ -630,7 +630,7 @@ export class ManageAppraisalCategoryComponent implements OnInit {
       })
     }
     if (data && data.length > 0) {
-      this.isLoading = false;
+      this.isLoading = true;
       this.performanceHttp.post("apprisalcatagory/manageAppraisalLevel", data).then((res: ResponseModel) => {
         if (res.ResponseBody) {
           $("#worflowChainModal").modal("hide");

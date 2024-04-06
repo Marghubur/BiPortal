@@ -234,6 +234,9 @@
               </ng-container>
             </div>
           </div>
+          <ng-container *ngIf="!isRecordFound">
+            <app-page-placeholder></app-page-placeholder>
+          </ng-container>
         </ng-template>
       </li>
       <li [ngbNavItem]="2">
@@ -381,6 +384,9 @@
               </ng-container>
             </div>
           </div>
+          <ng-container *ngIf="!isRecordFound">
+            <app-page-placeholder></app-page-placeholder>
+          </ng-container>
         </ng-template>
       </li>
     </ul>

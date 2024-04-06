@@ -473,6 +473,9 @@
           </div>
         </form>
       </div>
+      <ng-container *ngIf="!isLoaded">
+        <app-page-placeholder></app-page-placeholder>
+      </ng-container>
     </div>
   </div>
 </div>

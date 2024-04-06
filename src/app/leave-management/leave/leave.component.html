@@ -102,7 +102,7 @@
               <div class="col-md-9">
                 <div class="x_panel_body border-0">
                   <ng-container *ngIf="isPageReady">
-                    <div class="x_body">
+                    <div class="x_panel_body">
                       <ul ngbNav #nav="ngbNav" [(activeId)]="groupActiveId" class="nav-tabs">
                         <li [ngbNavItem]="1">
                           <a ngbNavLink href="javascript:void(0)" (click)="changeMenu('Config')">
@@ -325,6 +325,9 @@
                       <b class="text-primary-c">Add Leave Type</b> button.
                     </div>
                   </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!leaveTypeDateIsReady">
+                  <app-page-placeholder></app-page-placeholder>
                 </ng-container>
               </div>
             </div>

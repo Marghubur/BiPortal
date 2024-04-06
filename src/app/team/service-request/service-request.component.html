@@ -14,134 +14,122 @@
     </div>
   </div>
 
-  <div class="col-12 row p-0 m-0">
-    <div class="right-panel container col-md-12 p-0">
-      <div class="x_panel">
-        <div class="x_content mt-4">
-          <div class="x_panel">
-            <div [ngSwitch]="isPageReady">
-              <div *ngSwitchCase="false">
-                <div class="mt-5">
-                  <app-page-placeholder></app-page-placeholder>
+  <div class="x_panel">
+    <div [ngSwitch]="isPageReady">
+      <div *ngSwitchCase="false">
+        <div class="mt-5">
+          <app-page-placeholder></app-page-placeholder>
+        </div>
+      </div>
+      <div *ngSwitchDefault>
+        <div class="t-table col-md-12">
+          <div class="t-head">
+            <div class="tr">
+              <div class="th fe-index">
+                <div class="t-index">
+                  <a href="javascript:void()" class="ps-3">#</a>
                 </div>
               </div>
-              <div *ngSwitchDefault>
-                <ng-container>
-                  <div class="x_content">
-                    <div class="t-table t-list col-md-12">
-                      <div class="t-head">
-                        <div class="tr">
-                          <div class="th fe-index">
-                            <div class="t-index">
-                              <a href="javascript:void()" class="ps-3">#</a>
-                            </div>
-                          </div>
-                          <div class="th fe-1">
-                            <div class="cell-wrapper">
-                              <input class="form-control form-control-sm" readonly (keydown.esc)="resetFilter()"
-                                (keyup.enter)="filterRecords()" autofocus placeholder="Search by Name" id="namefilter">
-                              <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ColumnName')">
-                                <a href="javascript:void()" class="pe-2">Request Type</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }"
-                                  aria-hidden="true"></i>
-                                <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }"
-                                  aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-2">
-                            <div class="cell-wrapper">
-                              <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                                (keydown.esc)="resetFilter()" placeholder="Search by Title" readonly>
-                              <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
-                                <a href="javascript:void()" class="pe-2">Title</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }"
-                                  aria-hidden="true"></i>
-                                <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }"
-                                  aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-4">
-                            <div class="cell-wrapper">
-                              <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
-                                (keydown.esc)="resetFilter()" placeholder="Search by Description" readonly>
-                              <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
-                                <a href="javascript:void()" class="pe-2">Description</a>
-                                <i class="fa-solid fa-arrow-down-wide-short"
-                                  [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }"
-                                  aria-hidden="true"></i>
-                                <i class="fa-solid fa-arrow-down-short-wide"
-                                  [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }"
-                                  aria-hidden="true"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="th fe-1 text-center">
-                            <div class="cell-wrapper">
-                              <button class="btn btn-primary-c" (click)="addService()"><i
-                                  class="fa-solid fa-plus pe-1"></i> Add Service</button>
-                              <div class="t-filter align-items-center justify-content-center">
-                                ACTION
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-body">
-                        <ng-container>
-                          <div class="tr py-2" *ngFor="let service of requestDetail;let index = index;">
-                            <div class="td align-middle text-center fe-index">
-                              <div class="cell-wrapper">
-                                {{index + 1}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="cell-wrapper ">
-                                {{service.RequestTypeId}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-2 text-truncate">
-                              <div class="cell-wrapper text-truncate">
-                                {{service.RequestTitle}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-4 text-truncate">
-                              <div class="cell-wrapper text-truncate">
-                                {{service.RequestDescription}}
-                              </div>
-                            </div>
-                            <div class="td align-middle fe-1">
-                              <div class="d-flex flex-row justify-content-evenly">
-                                <a href="javascript:void(0)" (click)="EditCurrent(service)">
-                                  <span class="badge bg-primary"><i class="fa-solid fa-pencil"
-                                      aria-hidden="true"></i></span>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </ng-container>
-                        <ng-container *ngIf="requestDetail == null || requestDetail.length == 0">
-                          <div
-                            class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                            <p class="my-5 py-5">Record Not Found</p>
-                          </div>
-                        </ng-container>
-                      </div>
-                    </div>
+              <div class="th fe-1">
+                <div class="cell-wrapper">
+                  <input class="form-control form-control-sm" readonly (keydown.esc)="resetFilter()"
+                    (keyup.enter)="filterRecords()" autofocus placeholder="Search by Name" id="namefilter">
+                  <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ColumnName')">
+                    <a href="javascript:void()" class="pe-2">Request Type</a>
+                    <i class="fa-solid fa-arrow-down-wide-short"
+                      [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }"
+                      aria-hidden="true"></i>
+                    <i class="fa-solid fa-arrow-down-short-wide"
+                      [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }"
+                      aria-hidden="true"></i>
                   </div>
-                  <div class="mt-3">
-                    <app-pagination [pagination]="requestFilter"
-                      (onPageChange)="GetFilterResult($event)"></app-pagination>
+                </div>
+              </div>
+              <div class="th fe-2">
+                <div class="cell-wrapper">
+                  <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                    (keydown.esc)="resetFilter()" placeholder="Search by Title" readonly>
+                  <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'Mobile')">
+                    <a href="javascript:void()" class="pe-2">Title</a>
+                    <i class="fa-solid fa-arrow-down-wide-short"
+                      [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }"
+                      aria-hidden="true"></i>
+                    <i class="fa-solid fa-arrow-down-short-wide"
+                      [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }"
+                      aria-hidden="true"></i>
                   </div>
-                </ng-container>
+                </div>
+              </div>
+              <div class="th fe-4">
+                <div class="cell-wrapper">
+                  <input class="form-control  form-control-sm" (keyup.enter)="filterRecords()"
+                    (keydown.esc)="resetFilter()" placeholder="Search by Description" readonly>
+                  <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
+                    <a href="javascript:void()" class="pe-2">Description</a>
+                    <i class="fa-solid fa-arrow-down-wide-short"
+                      [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }"
+                      aria-hidden="true"></i>
+                    <i class="fa-solid fa-arrow-down-short-wide"
+                      [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }"
+                      aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="th fe-1 text-center">
+                <div class="cell-wrapper">
+                  <button class="btn btn-primary-c" (click)="addService()"><i
+                      class="fa-solid fa-plus pe-1"></i> Add Service</button>
+                  <div class="t-filter align-items-center justify-content-center">
+                    ACTION
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          <div class="t-body">
+            <ng-container>
+              <div class="tr py-2" *ngFor="let service of requestDetail;let index = index;">
+                <div class="td align-middle text-center fe-index">
+                  <div class="cell-wrapper">
+                    {{index + 1}}
+                  </div>
+                </div>
+                <div class="td align-middle fe-1">
+                  <div class="cell-wrapper ">
+                    {{service.RequestTypeId}}
+                  </div>
+                </div>
+                <div class="td align-middle fe-2 text-truncate">
+                  <div class="cell-wrapper text-truncate">
+                    {{service.RequestTitle}}
+                  </div>
+                </div>
+                <div class="td align-middle fe-4 text-truncate">
+                  <div class="cell-wrapper text-truncate">
+                    {{service.RequestDescription}}
+                  </div>
+                </div>
+                <div class="td align-middle fe-1">
+                  <div class="d-flex flex-row justify-content-evenly">
+                    <a href="javascript:void(0)" (click)="EditCurrent(service)">
+                      <span class="badge bg-primary"><i class="fa-solid fa-pencil"
+                          aria-hidden="true"></i></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="requestDetail == null || requestDetail.length == 0">
+              <div
+                class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                <p class="my-5 py-5">Record Not Found</p>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="mt-3">
+          <app-pagination [pagination]="requestFilter"
+            (onPageChange)="GetFilterResult($event)"></app-pagination>
         </div>
       </div>
     </div>

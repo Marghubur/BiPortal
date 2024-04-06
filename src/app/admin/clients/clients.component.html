@@ -16,17 +16,17 @@
             </a> -->
       </div>
     </div>
-    <div class="col-md-6 d-flex">
+    <div class="col-md-6 d-flex align-items-center">
       <div class="fe-2">
         <input type="text" class="form-control form-control-sm" (keydown.esc)="resetFilter()"
           (keyup.enter)="globalFilter()" placeholder="Search by any: (Client Name, Primary Contact No, Email, City)"
           [(ngModel)]="anyFilter">
       </div>
-      <div class="fe-1">
-        <button class="btn btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
+      <div class="fe-1 ms-2">
+        <button class="btn btn-sm btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
           <i class="fa-solid fa-filter"></i>
         </button>
-        <button class="btn btn-danger ms-2" (click)="resetFilter()">
+        <button class="btn btn-sm btn-danger ms-2" (click)="resetFilter()">
           <i class="fa-solid fa-arrow-rotate-right"></i>
         </button>
       </div>
@@ -40,180 +40,176 @@
     </div>
   </div>
 
-  <div class="col-md-12">
-    <div class="x_panel">
-      <div [ngSwitch]="isClientFound">
-        <div *ngSwitchCase="false">
-          <div class="mt-5">
-            <app-page-placeholder></app-page-placeholder>
-          </div>
+  <div class="x_panel">
+    <div [ngSwitch]="isClientFound">
+      <div *ngSwitchCase="false">
+        <div class="mt-5">
+          <app-page-placeholder></app-page-placeholder>
         </div>
-        <div *ngSwitchDefault>
-          <ng-container>
-            <div class="x_content">
-              <div class="t-table t-list col-md-12">
-                <div class="hide-bar"></div>
-                <div class="t-head">
-                  <div class="tr">
-                    <div class="th fe-index">
-                      <div class="t-filter t-index">
-                        <a href="javascript:void()" class="ps-3">#</a>
-                      </div>
-                    </div>
-                    <div class="th fe-3">
-                      <div class="cell-wrapper">
-                        <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
-                          (keyup.enter)="filterRecords()" [(ngModel)]="clientDetails.ClientName"
-                          placeholder="Search by Name">
-                        <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
-                          <a href="javascript:void()" class="pe-2">Organization Name</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-2">
-                      <div class="cell-wrapper">
-                        <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.PrimaryContactNo"
-                          placeholder="Search by Contact no">
-                        <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'PrimaryPhoneNo')">
-                          <a href="javascript:void()" class="pe-2">Primary Contact No.#</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }"
-                            aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }"
-                            aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-2">
-                      <div class="cell-wrapper">
-                        <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.Email" placeholder="Search by Email">
-                        <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
-                          <a href="javascript:void()" class="pe-2">Email</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1">
-                      <div class="cell-wrapper">
-                        <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.City" placeholder="Search by City">
-                        <div class="t-filter" (click)="arrangeDetails(orderByCityAsc, 'City')">
-                          <a href="javascript:void()" class="pe-3">City</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByCityAsc == null || !orderByCityAsc }" aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByCityAsc == null || orderByCityAsc }" aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-2">
-                      <div class="cell-wrapper">
-                        <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
-                          (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.FirstAddress"
-                          placeholder="Search by First Address">
-                        <div class="t-filter" (click)="arrangeDetails(orderByFirstAddressAsc, 'FirstAddress')">
-                          <a href="javascript:void()" class="pe-3">First Address</a>
-                          <i class="fa-solid fa-arrow-down-wide-short"
-                            [ngClass]="{'d-none': orderByFirstAddressAsc == null || !orderByFirstAddressAsc }"
-                            aria-hidden="true"></i>
-                          <i class="fa-solid fa-arrow-down-short-wide"
-                            [ngClass]="{'d-none': orderByFirstAddressAsc == null || orderByFirstAddressAsc }"
-                            aria-hidden="true"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="th fe-1 text-center">
-                      <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
-                        <i class="fa-solid fa-filter">
-                          <span>Filter</span>
-                        </i>
-                      </a>
-                      <div class="t-filter d-block text-center">
-                        <a href="javascript:void(0)">ACTIONS</a>
-                      </div>
+      </div>
+      <div *ngSwitchDefault>
+        <ng-container>
+          <div class="t-table t-list col-md-12">
+            <div class="hide-bar"></div>
+            <div class="t-head">
+              <div class="tr">
+                <div class="th fe-index">
+                  <div class="t-filter t-index">
+                    <a href="javascript:void()" class="ps-3">#</a>
+                  </div>
+                </div>
+                <div class="th fe-3">
+                  <div class="cell-wrapper">
+                    <input class="form-control form-control-sm" (keydown.esc)="resetFilter()"
+                      (keyup.enter)="filterRecords()" [(ngModel)]="clientDetails.ClientName"
+                      placeholder="Search by Name">
+                    <div class="t-filter" (click)="arrangeDetails(orderByNameAsc, 'ClientName')">
+                      <a href="javascript:void()" class="pe-2">Organization Name</a>
+                      <i class="fa-solid fa-arrow-down-wide-short"
+                        [ngClass]="{'d-none': orderByNameAsc == null || !orderByNameAsc }" aria-hidden="true"></i>
+                      <i class="fa-solid fa-arrow-down-short-wide"
+                        [ngClass]="{'d-none': orderByNameAsc == null || orderByNameAsc }" aria-hidden="true"></i>
                     </div>
                   </div>
                 </div>
-                <div class="t-body">
-                  <ng-container *ngIf="isFileFound">
-                    <div class="tr py-2" *ngFor="let clients of clients; let i = index;">
-                      <div class="td align-middle text-center fe-index">{{clientsData.StartIndex + i}}</div>
-                      <div class="td align-middle fe-3">
-                        <div class="cell-wrapper">
-                          <a href="javascript:void(0)" (click)="EditCurrent(clients)" class="client-name-link">
-                            {{clients.ClientName}}
-                          </a>
-                          <div class="float-end">
-                            <a href="javascript:void(0)" (click)="viewClientFile(clients)">
-                              <span class="ms-2 badge bg-success">
-                                <i class="fa-regular fa-file-lines zoom-2"></i>
-                              </span>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="td align-middle fe-2">
-                        <div class="cell-wrapper">
-                          {{clients.PrimaryPhoneNo}}
-                        </div>
-                      </div>
-                      <div class="td align-middle fe-2">
-                        <div class="cell-wrapper">
-                          {{clients.Email}}
-                        </div>
-                      </div>
-                      <div class="td align-middle fe-1">
-                        <div class="cell-wrapper">
-                          {{clients.City}}
-                        </div>
-                      </div>
-                      <div class="td align-middle fe-2">
-                        <div class="cell-wrapper">
-                          {{clients.FirstAddress}}
-                        </div>
-                      </div>
-                      <div class="td align-middle fe-1">
-                        <div class=" d-flex flex-row justify-content-evenly">
-                          <a href="javascript:void(0)">
-                            <span class="badge bg-success"><i class="fa-regular fa-pen-to-square" aria-hidden="true"
-                                (click)="EditCurrent(clients)"></i></span>
-                          </a>
-                          <a href="javascript:void(0)" (click)="AddEditDocuments(clients)">
-                            <span class="badge bg-dark">
-                              <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
-                            </span>
-                          </a>
-                          <!-- <a href="javascript:void(0)" (click)="CreatePopup()">
-                            <span class="badge bg-danger"><i class="fa-solid fa-trash-can-o" aria-hidden="true"></i></span>
-                          </a> -->
-                        </div>
-                      </div>
+                <div class="th fe-2">
+                  <div class="cell-wrapper">
+                    <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.PrimaryContactNo"
+                      placeholder="Search by Contact no">
+                    <div class="t-filter" (click)="arrangeDetails(orderByMobileAsc, 'PrimaryPhoneNo')">
+                      <a href="javascript:void()" class="pe-2">Primary Contact No.#</a>
+                      <i class="fa-solid fa-arrow-down-wide-short"
+                        [ngClass]="{'d-none': orderByMobileAsc == null || !orderByMobileAsc }"
+                        aria-hidden="true"></i>
+                      <i class="fa-solid fa-arrow-down-short-wide"
+                        [ngClass]="{'d-none': orderByMobileAsc == null || orderByMobileAsc }"
+                        aria-hidden="true"></i>
                     </div>
-                  </ng-container>
-                </div>
-                <ng-container *ngIf="!isFileFound">
-                  <div
-                    class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                    <p class="my-5 py-5">Record Not Found</p>
                   </div>
-                </ng-container>
+                </div>
+                <div class="th fe-2">
+                  <div class="cell-wrapper">
+                    <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.Email" placeholder="Search by Email">
+                    <div class="t-filter" (click)="arrangeDetails(orderByEmailAsc, 'Email')">
+                      <a href="javascript:void()" class="pe-2">Email</a>
+                      <i class="fa-solid fa-arrow-down-wide-short"
+                        [ngClass]="{'d-none': orderByEmailAsc == null || !orderByEmailAsc }" aria-hidden="true"></i>
+                      <i class="fa-solid fa-arrow-down-short-wide"
+                        [ngClass]="{'d-none': orderByEmailAsc == null || orderByEmailAsc }" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="th fe-1">
+                  <div class="cell-wrapper">
+                    <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.City" placeholder="Search by City">
+                    <div class="t-filter" (click)="arrangeDetails(orderByCityAsc, 'City')">
+                      <a href="javascript:void()" class="pe-3">City</a>
+                      <i class="fa-solid fa-arrow-down-wide-short"
+                        [ngClass]="{'d-none': orderByCityAsc == null || !orderByCityAsc }" aria-hidden="true"></i>
+                      <i class="fa-solid fa-arrow-down-short-wide"
+                        [ngClass]="{'d-none': orderByCityAsc == null || orderByCityAsc }" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="th fe-2">
+                  <div class="cell-wrapper">
+                    <input class="form-control form-control-sm" (keyup.enter)="filterRecords()"
+                      (keydown.esc)="resetFilter()" [(ngModel)]="clientDetails.FirstAddress"
+                      placeholder="Search by First Address">
+                    <div class="t-filter" (click)="arrangeDetails(orderByFirstAddressAsc, 'FirstAddress')">
+                      <a href="javascript:void()" class="pe-3">First Address</a>
+                      <i class="fa-solid fa-arrow-down-wide-short"
+                        [ngClass]="{'d-none': orderByFirstAddressAsc == null || !orderByFirstAddressAsc }"
+                        aria-hidden="true"></i>
+                      <i class="fa-solid fa-arrow-down-short-wide"
+                        [ngClass]="{'d-none': orderByFirstAddressAsc == null || orderByFirstAddressAsc }"
+                        aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="th fe-1 text-center">
+                  <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold" (click)="filterRecords()">
+                    <i class="fa-solid fa-filter">
+                      <span>Filter</span>
+                    </i>
+                  </a>
+                  <div class="t-filter d-block text-center">
+                    <a href="javascript:void(0)">ACTIONS</a>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="mt-3">
-              <app-pagination [pagination]="clientsData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+            <div class="t-body">
+              <ng-container *ngIf="isFileFound">
+                <div class="tr py-2" *ngFor="let clients of clients; let i = index;">
+                  <div class="td align-middle text-center fe-index">{{clientsData.StartIndex + i}}</div>
+                  <div class="td align-middle fe-3">
+                    <div class="cell-wrapper">
+                      <a href="javascript:void(0)" (click)="EditCurrent(clients)" class="client-name-link">
+                        {{clients.ClientName}}
+                      </a>
+                      <div class="float-end">
+                        <a href="javascript:void(0)" (click)="viewClientFile(clients)">
+                          <span class="ms-2 badge bg-success">
+                            <i class="fa-regular fa-file-lines zoom-2"></i>
+                          </span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      {{clients.PrimaryPhoneNo}}
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      {{clients.Email}}
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-1">
+                    <div class="cell-wrapper">
+                      {{clients.City}}
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-2">
+                    <div class="cell-wrapper">
+                      {{clients.FirstAddress}}
+                    </div>
+                  </div>
+                  <div class="td align-middle fe-1">
+                    <div class=" d-flex flex-row justify-content-evenly">
+                      <a href="javascript:void(0)">
+                        <span class="badge bg-success"><i class="fa-regular fa-pen-to-square" aria-hidden="true"
+                            (click)="EditCurrent(clients)"></i></span>
+                      </a>
+                      <a href="javascript:void(0)" (click)="AddEditDocuments(clients)">
+                        <span class="badge bg-dark">
+                          <i class="fa-regular fa-folder-open" aria-hidden="true"></i>
+                        </span>
+                      </a>
+                      <!-- <a href="javascript:void(0)" (click)="CreatePopup()">
+                        <span class="badge bg-danger"><i class="fa-solid fa-trash-can-o" aria-hidden="true"></i></span>
+                      </a> -->
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
             </div>
-          </ng-container>
-        </div>
+            <ng-container *ngIf="!isFileFound">
+              <div
+                class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                <p class="my-5 py-5">Record Not Found</p>
+              </div>
+            </ng-container>
+          </div>
+          <div class="mt-3">
+            <app-pagination [pagination]="clientsData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
+        </ng-container>
       </div>
     </div>
   </div>

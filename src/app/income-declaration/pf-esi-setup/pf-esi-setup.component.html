@@ -184,6 +184,9 @@
               </div>
             </div>
           </ng-container>
+          <ng-container *ngIf="!IsReady">
+            <app-page-placeholder></app-page-placeholder>
+          </ng-container>
         </div>
       </div>
     </form>

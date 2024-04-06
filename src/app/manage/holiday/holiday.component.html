@@ -189,7 +189,7 @@
               </div>
             </div>
           </div>
-          <div class="mt-3">
+          <div class="mt-3" *ngIf="allHolidayList.length > 0">
             <app-pagination [pagination]="holidayData" (onPageChange)="GetFilterResult($event)"></app-pagination>
           </div>
         </ng-container>
@@ -323,7 +323,7 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i>
           Close</button>
         <button class="btn btn-success" [disabled]="isLoading" (click)="manageHoliday()">
-          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-plus': !isLoading}"></i>
+          <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-plus': !isLoading}"></i>
           <span class="ps-2" *ngIf="selectedHoliday.CompanyCalendarId == 0">{{ isLoading ? 'Wait' : 'Add' }}</span>
           <span class="ps-2" *ngIf="selectedHoliday.CompanyCalendarId > 0">{{ isLoading ? 'Wait' : 'Update' }}</span>
         </button>
@@ -427,12 +427,10 @@
             </div>
           </div>
           <div class="col-md-6 ps-3 pb-3 rounded">
-            <div class="">
-              <p class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
-                correct format of excel sheet.
-                <a href="javascript:void(0)" (click)="getHolidaySampleFile()">Click to download the sample.</a>
-              </p>
-            </div>
+            <p class="sample-note text-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
+              correct format of excel sheet.
+              <a href="javascript:void(0)" (click)="getHolidaySampleFile()">Click to download the sample.</a>
+            </p>
             <div class="filetitle text-center">Upload File Details</div>
             <div *ngIf="isFileReady">
               <div class="fw-bold">

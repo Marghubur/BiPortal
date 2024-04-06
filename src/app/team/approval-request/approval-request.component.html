@@ -571,7 +571,7 @@
         <li [ngbNavItem]="5">
           <a ngbNavLink class="text-muted" (click)="getReviewAttendanceDetail()">Review Attendance</a>
           <ng-template ngbNavContent>
-            <div class="x_content">
+            <div class="x_content overflow-x-hidden">
               <ng-container *ngIf="!isPageLoading">
                 <div class="row align-items-center justify-content-between">
                   <div class="col-md-11 row">
@@ -608,7 +608,7 @@
                         <a href="javascript:void()" class="pe-2">Year</a>
                       </div>
                       <select class="form-select" [(ngModel)]="attendance.ForYear">
-                        <option value="2023" selected>2023</option>
+                        <option value="{{item}}" *ngFor="let item of filterYears">{{item}}</option>
                       </select>
                     </div>
                   </div>

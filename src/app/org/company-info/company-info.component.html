@@ -250,6 +250,9 @@
         </ng-container>
       </form>
     </div>
+    <ng-container *ngIf="!isPageReady">
+      <app-page-placeholder></app-page-placeholder>
+    </ng-container>
   </div>
 </div>
 

@@ -13,7 +13,7 @@
           </a>
         </div>
       </div>
-      <div class="x_panel mh-auto">
+      <div class="x_panel">
         <div [ngSwitch]="isLoaded">
           <div *ngSwitchCase="false">
             <div class="mt-5">
@@ -388,7 +388,7 @@
                       </div>
                     </ng-container>
                     <ng-container *ngIf="CompanyAccountDetails.length == 0">
-                      <div class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <div class="my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                         <p class="my-5 py-5">Record Not Found</p>
                       </div>
                     </ng-container>

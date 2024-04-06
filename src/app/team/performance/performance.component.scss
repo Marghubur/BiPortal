@@ -36,10 +36,6 @@ textarea {
   100% {height: 100%;}
 }
 
-.x_panel {
-  min-height: 25px !important;
-}
-
 
 .active {
   color: #fff!important;
@@ -72,4 +68,8 @@ textarea {
 ngb-rating {
   font-size: 2rem;
   color: #1d569d !important;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden !important;
 }
