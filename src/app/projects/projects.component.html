@@ -1,5 +1,4 @@
 <div class="col-12 full-v main-container" [ngClass]="{'preload': !isLoaded}">
-
   <div class="content-header">
     <div class="col-8">
       <div class="px-1">
@@ -106,6 +105,15 @@
           </div>
           <div class="mt-3">
             <app-pagination [pagination]="projectData" (onPageChange)="GetFilterResult($event)"></app-pagination>
+          </div>
+
+          <div class="row">
+            <div class="col-auto">
+              Users
+            </div>
+            <div class="col-md-11">
+
+            </div>
           </div>
         </div>
       </div>

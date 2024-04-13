@@ -1,0 +1,169 @@
+<div class="col-12 full-v main-container">
+    <div class="content-header">
+        <div class="col-8">
+            <div class="px-1">
+                <app-breadcrums [title]="'Manage project capacity'"></app-breadcrums>
+            </div>
+        </div>
+    </div>
+
+    <div class="x_panel">
+        <ng-container *ngIf="isPageReady">
+            <ng-container *ngIf="projectDetail.length > 0">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-md-8 d-flex align-items-center">
+                        <div class="col-md-4">
+                            <select class="form-select" (change)="selectProject($event)">
+                                <option value=null selected disabled>Select Project</option>
+                                <option [value]="item.ProjectId" *ngFor="let item of projectDetail">{{item.ProjectName}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-auto mx-2 ms-4">
+                            <form class="form-inline">
+                                <div class="form-group w-100">
+                                    <div class="input-group inline-calendar w-100">
+                                        <input class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                                            [(ngModel)]="model" (dateSelect)="onDateSelection($event)" ngbDatepicker
+                                            [minDate]="{ year: 1970, month: 1, day: 1 }" [maxDate]="{ year: 2070, month: 1, day: 1 }"
+                                            #d="ngbDatepicker" />
+                                        <div class="input-group-append">
+                                            <button class="btn calendar" (click)="d.toggle()" type="button">
+                                                <i class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <button class="btn ms-2 btn-primary-c">Today</button>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-control py-0 my-0 form-control-sm d-flex align-items-center">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" class="form-control form-control-sm border-0" placeholder="Search">
+                        </div>
+                    </div>
+                </div>
+                <ng-container *ngIf="isReady">
+                    <ng-container *ngIf="projectMembers.length > 0">
+                        <div class="mt-3">
+                            <table class="table table-bordered w-auto">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col" rowspan="2" class="align-middle">
+                                            <div class="form-control py-0 my-0 form-control-sm d-flex align-items-center">
+                                                <i class="fa-solid fa-magnifying-glass"></i>
+                                                <input type="text" class="form-control form-control-sm border-0"
+                                                    placeholder="Search">
+                                            </div>
+                                        </th>
+                                        <th scope="col" colspan="24" class="text-center align-middle">{{today | date}}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th class="align-middle text-center" width="3.54%" scope="col"
+                                            *ngFor="let item of shiftTimes">{{item == 0 ? 12 : (item < 13 && item> 0) ?
+                                                item : (item-12)}} {{item < 12 ? 'AM' : 'PM' }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let member of projectMembers">
+                                        <td class="text-truncate"><img [src]="member.ImgUrl" alt="images"
+                                                class="user-img"> {{member.FullName}}</td>
+                                        <td *ngFor="let item of shiftTimes; let i=index;"
+                                            [ngClass]="{'active-working-hrs': (i >= member.From && i <= member.To)}"
+                                            (click)="addWOrkingHrsPopup(i, member)">
+                                            <div *ngIf="i == member.From && member.To != 0"
+                                                class="position-absolute fw-bold text-primary-c">{{member.From == 0 ? 12
+                                                : (member.From > 0 && member.From < 13) ? member.From : (member.From -
+                                                    12)}} {{member.From < 12 ? 'AM' : 'PM' }} - {{member.To==0 ? 12 :
+                                                    (member.To> 0 && member.To < 13) ? member.To : (member.To - 12)}}
+                                                        {{member.To < 12 ? 'AM' : 'PM' }}</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="projectMembers.length ==  0">
+                        <div class="py-5 my-5">
+                            <p class="my-5 py-5 text-center fw-bold fs-3 text-dark">
+                                Project members not found
+                            </p>
+                        </div>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!isReady">
+                    <div class="py-5 my-5">
+                        <p class="my-5 py-5 text-center fw-bold fs-3 text-dark">
+                            Please select Project first.
+                        </p>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <ng-container *ngIf="projectDetail.length == 0">
+                <div class="py-5 my-5">
+                    <p class="my-5 py-5 text-center fw-bold fs-3 text-dark">
+                        The project has not been assigned to you, or the project cannot be found.
+                    </p>
+                </div>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!isPageReady">
+            <app-page-placeholder></app-page-placeholder>
+        </ng-container>
+    </div>
+</div>
+
+<!-- Add Working Hrs Modal -->
+<div class="modal fade" id="workingHrsModal" tabindex="-1" aria-labelledby="workingHrsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content px-4">
+            <div class="modal-header border-bottom-0">
+                <h1 class="modal-title fs-5" id="workingHrsModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" *ngIf="selectedMember != null">
+                <div>
+                    <label class="form-label">Shift Exception Start Date</label>
+                    <div class="input-group">
+                        <div class="input-group-text"><i class="fa-regular fa-calendar-days fa-lg"></i></div>
+                        <input type="text" class="form-control" readonly placeholder="Username" [value]="today | date">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">From</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" readonly placeholder="Username"
+                                [value]="selectedMember.From | number:'1.2-2'">
+                            <div class="input-group-text"><i class="fa-solid fa-clock"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">To</label>
+                        <div class="input-group">
+                            <app-bh-timepicker [(ngModel)]="selectedMember.To"></app-bh-timepicker>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label class="form-label">Days of the week</label>
+                    <div>
+                        <button class="btn me-3" (click)="toggleDays(item.id)"
+                            [ngClass]="{'btn-primary-c': item.isEnabled, 'btn-outline-secondary': !item.isEnabled}"
+                            *ngFor="let item of daysOfWeek">{{item.day}}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary-c" [disabled]="isLoading" (click)="updateTime()">
+                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading,'fa-floppy-disk': !isLoading}"></i>
+                    {{ isLoading ? "Processing" : "Submit" }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,13 +8,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ManageProjectComponent } from './manage-project/manage-project.component';
 import { NgModule } from '@angular/core';
 import { BudgetComponent } from './budget/budget.component';
+import { CapacityManagementComponent } from './capacity-management/capacity-management.component';
 
 @NgModule({
   declarations: [
     ProjectsComponent,
     WikiComponent,
     ManageProjectComponent,
-    BudgetComponent
+    BudgetComponent,
+    CapacityManagementComponent
   ],
   imports: [
     CommonModule,
