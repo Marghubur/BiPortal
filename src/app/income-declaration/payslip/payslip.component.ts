@@ -26,7 +26,7 @@ export class PayslipComponent implements OnInit {
   payslipYear: Array<number> =[];
   payslipschedule: Array<any> = [];
   isFileFound: boolean = false;
-  userDetail: UserDetail = new UserDetail();
+  userDetail: any = null;
   isJoinInCurrentMonth: boolean = false;
 
   constructor(private nav: iNavigation,
@@ -38,7 +38,7 @@ export class PayslipComponent implements OnInit {
     var dt = new Date();
     this.currentYear = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
-    this.userDetail = this.user.getInstance() as UserDetail;
+    this.userDetail = this.user.getInstance();
     this.initData();
   }
 
@@ -59,11 +59,13 @@ export class PayslipComponent implements OnInit {
     this.isPageReady= false;
     if (this.EmployeeId > 0) {
       this.paySlipSchedule = [];
+      this.payslipschedule = [];
       this.payslipYear = [];
       this.isJoinInCurrentMonth = false;;
       this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
         if (res.ResponseBody) {
           this.userDetail = res.ResponseBody.userDetail;
+          this.userDetail.UserId = this.userDetail.EmployeeId;
           let joiningDate = new Date(this.userDetail.CreatedOn);
           this.payslipYear.push(this.currentYear);
           if (joiningDate.getFullYear() != this.currentYear)
