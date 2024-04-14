@@ -205,12 +205,17 @@
         <div class="mt-3 me-4 text-end">
           <button class="btn btn-outline-primary" *ngIf="!this.allRunPayroll.RunPayrollFinalize" [disabled]="isLoading"
             (click)="previewPayroll()">
-            Preview Run Payroll
+            <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
+            <span class="ps-2">{{ isLoading ? "Wait" : "Preview Run Payroll" }}</span>
           </button>
-          <button class="btn btn-outline-primary ms-2" [disabled]="isLoading">Rreview all employees</button>
+          <button class="btn btn-outline-primary ms-2" [disabled]="isLoading">
+            <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
+            <span class="ps-2">{{ isLoading ? "Wait" : "Rreview all employees" }}</span>
+          </button>
           <button class="btn btn-primary-c ms-2" *ngIf="!this.allRunPayroll.RunPayrollFinalize" [disabled]="isLoading"
             (click)="finalizePayrollPopUp()">
-            Finalize Payroll
+            <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
+            <span class="ps-2">{{ isLoading ? "Wait" : "Finalize Payroll" }}</span>
           </button>
         </div>
         <div class="col-md-12">
@@ -771,7 +776,7 @@
                           <tr>
                             <td colspan="31">
                               <div
-                                class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                                class="my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                                 <p class="my-5 py-5">Record Not Found</p>
                               </div>
                             </td>
@@ -850,8 +855,6 @@
                   below. Admin can override LOP days if required.</div>
                 <div class="x_content">
                   <div class="d-flex mb-3 align-items-center justify-content-between">
-                    <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa-solid fa-plus pe-1"></i>
-                      Add Employee</button>
                     <div class="col-md-3 float-end">
                       <div class="form-group has-search">
                         <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>

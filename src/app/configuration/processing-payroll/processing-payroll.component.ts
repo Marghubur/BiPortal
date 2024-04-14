@@ -1067,7 +1067,7 @@ export class ProcessingPayrollComponent implements OnInit {
 
   getLopAdjustment() {
     this.isLoading = true;
-    this.http.get(`Attendance/GetLOPAdjustment/${this.selectedPayrollCalendar.Month}/${this.selectedPayrollCalendar.Year}`)
+    this.http.get(`Attendance/GetLOPAdjustment/${this.selectedPayrollCalendar.Month+1}/${this.selectedPayrollCalendar.Year}`)
       .then((res: ResponseModel) => {
         if (res.ResponseBody) {
           this.lossPayDetail = res.ResponseBody;

@@ -275,6 +275,9 @@
                       </table>
                     </div>
                   </div>
+                  <ng-container *ngIf="isLoading">
+                    <app-page-placeholder></app-page-placeholder>
+                  </ng-container>
                 </ng-template>
               </ng-container>
               <ng-container ngbNavItem>
@@ -410,6 +413,9 @@
                       </div>
                     </ng-container>
                   </ng-container>
+                  <ng-container *ngIf="!isPageReady">
+                    <app-page-placeholder></app-page-placeholder>
+                  </ng-container>
                 </ng-template>
               </ng-container>
 
@@ -522,6 +528,9 @@
                           (onPageChange)="GetFilterResult($event)"></app-pagination>
                       </div>
                     </ng-container>
+                    <ng-container *ngIf="!attendanceRquestPageIsReady">
+                      <app-page-placeholder></app-page-placeholder>
+                    </ng-container>
                   </div>
                 </ng-template>
               </ng-container>
@@ -530,6 +539,9 @@
             <div [ngbNavOutlet]="nav" class="mt-2"></div>
           </div>
         </ng-container>
+      </ng-container>
+      <ng-container *ngIf="isLoading">
+        <app-page-placeholder></app-page-placeholder>
       </ng-container>
     </form>
   </div>

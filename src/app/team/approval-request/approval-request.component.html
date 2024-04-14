@@ -1,5 +1,4 @@
 <div class="main-container">
-
   <div class="content-header">
     <div class="col-6">
       <div class="px-1">
@@ -139,6 +138,9 @@
                 </div>
               </ng-container>
             </ng-container>
+            <ng-container *ngIf="isPageLoading">
+              <app-page-placeholder></app-page-placeholder>
+            </ng-container>
           </ng-template>
         </li>
 
@@ -266,6 +268,9 @@
                   No record found
                 </div>
               </ng-container>
+            </ng-container>
+            <ng-container *ngIf="isPageLoading">
+              <app-page-placeholder></app-page-placeholder>
             </ng-container>
           </ng-template>
         </li>
@@ -414,6 +419,9 @@
                 </div>
               </ng-container>
             </ng-container>
+            <ng-container *ngIf="isPageLoading">
+              <app-page-placeholder></app-page-placeholder>
+            </ng-container>
           </ng-template>
         </li>
 
@@ -554,185 +562,193 @@
                   </tbody>
                 </table>
               </ng-container>
+              <ng-container *ngIf="!attendanceRquestPageIsReady">
+                <app-page-placeholder></app-page-placeholder>
+              </ng-container>
             </div>
           </ng-template>
         </li>
         <li [ngbNavItem]="5">
           <a ngbNavLink class="text-muted" (click)="getReviewAttendanceDetail()">Review Attendance</a>
           <ng-template ngbNavContent>
-            <div class="x_content">
-              <div class="row align-items-center justify-content-between">
-                <div class="col-md-11 row">
-                  <div class="cell-wrapper col-md-4 mb-3">
-                    <div class="t-filter">
-                      <a href="javascript:void()" class="pe-2">Full Name</a>
+            <div class="x_content overflow-x-hidden">
+              <ng-container *ngIf="!isPageLoading">
+                <div class="row align-items-center justify-content-between">
+                  <div class="col-md-11 row">
+                    <div class="cell-wrapper col-md-4 mb-3">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Full Name</a>
+                      </div>
+                      <input class="form-control" (keyup.enter)="filterAttedanceReviewRecords()" autofocus
+                        [(ngModel)]="attendance.EmployeeName" placeholder="Search by Name" id="namefilter"
+                        (keydown.esc)="resetAttedanceReviewFilter()">
                     </div>
-                    <input class="form-control" (keyup.enter)="filterAttedanceReviewRecords()" autofocus
-                      [(ngModel)]="attendance.EmployeeName" placeholder="Search by Name" id="namefilter"
-                      (keydown.esc)="resetAttedanceReviewFilter()">
-                  </div>
-                  <div class="cell-wrapper col-md-1 mb-3">
-                    <div class="t-filter">
-                      <a href="javascript:void()" class="pe-2">Month</a>
+                    <div class="cell-wrapper col-md-1 mb-3">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Month</a>
+                      </div>
+                      <select class="form-select" [(ngModel)]="attendance.ForMonth"
+                        (change)="filterAttedanceReviewRecords()">
+                        <option value="1">Jan</option>
+                        <option value="2">Feb</option>
+                        <option value="3">Mar</option>
+                        <option value="4">Apr</option>
+                        <option value="5">May</option>
+                        <option value="6">Jun</option>
+                        <option value="7">July</option>
+                        <option value="8">Aug</option>
+                        <option value="9">Sep</option>
+                        <option value="10">Oct</option>
+                        <option value="11">Nov</option>
+                        <option value="12">Dec</option>
+                      </select>
                     </div>
-                    <select class="form-select" [(ngModel)]="attendance.ForMonth"
-                      (change)="filterAttedanceReviewRecords()">
-                      <option value="1">Jan</option>
-                      <option value="2">Feb</option>
-                      <option value="3">Mar</option>
-                      <option value="4">Apr</option>
-                      <option value="5">May</option>
-                      <option value="6">Jun</option>
-                      <option value="7">July</option>
-                      <option value="8">Aug</option>
-                      <option value="9">Sep</option>
-                      <option value="10">Oct</option>
-                      <option value="11">Nov</option>
-                      <option value="12">Dec</option>
-                    </select>
-                  </div>
-                  <div class="cell-wrapper col-md-1 mb-3">
-                    <div class="t-filter">
-                      <a href="javascript:void()" class="pe-2">Year</a>
+                    <div class="cell-wrapper col-md-1 mb-3">
+                      <div class="t-filter">
+                        <a href="javascript:void()" class="pe-2">Year</a>
+                      </div>
+                      <select class="form-select" [(ngModel)]="attendance.ForYear">
+                        <option value="{{item}}" *ngFor="let item of filterYears">{{item}}</option>
+                      </select>
                     </div>
-                    <select class="form-select" [(ngModel)]="attendance.ForYear">
-                      <option value="2023" selected>2023</option>
-                    </select>
                   </div>
                 </div>
-              </div>
-              <div class="excel-table" id="excel-table">
-                <table>
-                  <thead>
-                    <ng-container>
-                      <tr>
-                        <th>Name</th>
-                        <th class="text-truncate" *ngFor="let data of monthDays">
-                          {{data}}
-                        </th>
-                        <th>A</th>
-                        <th>B</th>
-                        <th>C</th>
-                        <th>D</th>
-                        <th>E</th>
-                        <th>F</th>
-                        <th>G</th>
-                        <th>H</th>
-                        <th>I</th>
-                        <th>J</th>
-                      </tr>
-                    </ng-container>
-                  </thead>
-                  <tbody>
-                    <ng-container *ngIf="attendanceDetail.length > 0">
-                      <tr *ngFor="let item of attendanceDetail">
-                        <td>
-                          {{item.EmployeeName}}
-                        </td>
-                        <ng-container *ngFor="let data of item.AttendanceDetail">
-                          <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
-                            <ng-container *ngIf="!data.IsOnLeave">
-                              <i class="fa-solid fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
-                              <i class="fa-solid fa-xmark text-white" *ngIf="data.PresentDayStatus == 5"></i>
-                              <a href="javascript:void(0)"
-                                (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
-                                <i class="fa-solid fa-triangle-exclamation text-warning"
-                                  *ngIf="data.PresentDayStatus == 0"></i>
-                              </a>
-                              <i class="fa-regular fa-clock text-danger" *ngIf="data.PresentDayStatus == 2"></i>
-                              <i class="fa-solid fa-gift"
-                                *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
-                            </ng-container>
-                            <ng-container *ngIf="data.IsOnLeave">
-                              <i class="fa-regular fa-flag"></i>
-                            </ng-container>
+                <div class="excel-table" id="excel-table">
+                  <table>
+                    <thead>
+                      <ng-container>
+                        <tr>
+                          <th>Name</th>
+                          <th class="text-truncate" *ngFor="let data of monthDays">
+                            {{data}}
+                          </th>
+                          <th>A</th>
+                          <th>B</th>
+                          <th>C</th>
+                          <th>D</th>
+                          <th>E</th>
+                          <th>F</th>
+                          <th>G</th>
+                          <th>H</th>
+                          <th>I</th>
+                          <th>J</th>
+                        </tr>
+                      </ng-container>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngIf="attendanceDetail.length > 0">
+                        <tr *ngFor="let item of attendanceDetail">
+                          <td>
+                            {{item.EmployeeName}}
                           </td>
-                        </ng-container>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                    </ng-container>
-                    <ng-container *ngIf="attendanceDetail.length == 0">
-                      <tr>
-                        <td colspan="31">
-                          <div
-                            class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                            <p class="my-5 py-5">Record Not Found</p>
-                          </div>
-                        </td>
-                      </tr>
-                    </ng-container>
-                  </tbody>
-                </table>
-              </div>
-              <div class="mt-3 row align-items-center justify-content-between">
-                <div class="col" *ngIf="!isPageLoading">
-                  <app-pagination [pagination]="attendanceReviewData"
-                    (onPageChange)="GetFilterLosspayResult($event)"></app-pagination>
+                          <ng-container *ngFor="let data of item.AttendanceDetail">
+                            <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
+                              <ng-container *ngIf="!data.IsOnLeave">
+                                <i class="fa-solid fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
+                                <i class="fa-solid fa-xmark text-white" *ngIf="data.PresentDayStatus == 5"></i>
+                                <a href="javascript:void(0)"
+                                  (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
+                                  <i class="fa-solid fa-triangle-exclamation text-warning"
+                                    *ngIf="data.PresentDayStatus == 0"></i>
+                                </a>
+                                <i class="fa-regular fa-clock text-danger" *ngIf="data.PresentDayStatus == 2"></i>
+                                <i class="fa-solid fa-gift"
+                                  *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                              </ng-container>
+                              <ng-container *ngIf="data.IsOnLeave">
+                                <i class="fa-regular fa-flag"></i>
+                              </ng-container>
+                            </td>
+                          </ng-container>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </ng-container>
+                      <ng-container *ngIf="attendanceDetail.length == 0">
+                        <tr>
+                          <td colspan="31">
+                            <div
+                              class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                              <p class="my-5 py-5">Record Not Found</p>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
                 </div>
-                <div class="col-auto row align-items-center">
-                  <div class="col-auto text-muted">
-                    Scroll
+                <div class="mt-3 row align-items-center justify-content-between">
+                  <div class="col" *ngIf="!isPageLoading">
+                    <app-pagination [pagination]="attendanceReviewData"
+                      (onPageChange)="GetFilterLosspayResult($event)"></app-pagination>
+                  </div>
+                  <div class="col-auto row align-items-center">
+                    <div class="col-auto text-muted">
+                      Scroll
+                    </div>
+                    <div class="col-auto">
+                      <div id="scroll-dv" class="scroll-bar-dv border-0">
+                        <div class="inner-scroller" id="inner-scroller"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-auto">
+                    <span class="px-2 py-1">
+                      <i class="fa-solid fa-check text-success"></i>
+                    </span>
+                    <span> Approved</span>
                   </div>
                   <div class="col-auto">
-                    <div id="scroll-dv" class="scroll-bar-dv border-0">
-                      <div class="inner-scroller" id="inner-scroller"></div>
-                    </div>
+                    <span class="px-2 py-1">
+                      <i class="fa-solid fa-xmark text-danger"></i>
+                    </span>
+                    <span> Rejected</span>
+                  </div>
+                  <div class="col-auto">
+                    <span class=" px-2 py-1">
+                      <i class="fa-solid fa-ban text-dark"></i>
+                    </span>
+                    <span> Blocked</span>
+                  </div>
+                  <div class="col-auto">
+                    <span class="px-2 py-1">
+                      <i class="fa-regular fa-clock text-warning"></i>
+                    </span>
+                    <span> Submitted</span>
+                  </div>
+                  <div class="col-auto">
+                    <span class="px-2 py-1">
+                      <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+                    </span>
+                    <span> Not Submitted</span>
+                  </div>
+                  <div class="col-auto">
+                    <span class="holiday-color px-2 py-1">
+                      <i class="fa-solid fa-gift"></i>
+                    </span>
+                    <span> WeekOff/ Holiday</span>
+                  </div>
+                  <div class="col-auto">
+                    <span class=" px-2 py-1">
+                      <i class="fa-regular fa-flag"></i>
+                    </span>
+                    <span> Leave</span>
                   </div>
                 </div>
-              </div>
-              <div class="row mt-3">
-                <div class="col-auto">
-                  <span class="px-2 py-1">
-                    <i class="fa-solid fa-check text-success"></i>
-                  </span>
-                  <span> Approved</span>
-                </div>
-                <div class="col-auto">
-                  <span class="px-2 py-1">
-                    <i class="fa-solid fa-xmark text-danger"></i>
-                  </span>
-                  <span> Rejected</span>
-                </div>
-                <div class="col-auto">
-                  <span class=" px-2 py-1">
-                    <i class="fa-solid fa-ban text-dark"></i>
-                  </span>
-                  <span> Blocked</span>
-                </div>
-                <div class="col-auto">
-                  <span class="px-2 py-1">
-                    <i class="fa-regular fa-clock text-warning"></i>
-                  </span>
-                  <span> Submitted</span>
-                </div>
-                <div class="col-auto">
-                  <span class="px-2 py-1">
-                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>
-                  </span>
-                  <span> Not Submitted</span>
-                </div>
-                <div class="col-auto">
-                  <span class="holiday-color px-2 py-1">
-                    <i class="fa-solid fa-gift"></i>
-                  </span>
-                  <span> WeekOff/ Holiday</span>
-                </div>
-                <div class="col-auto">
-                  <span class=" px-2 py-1">
-                    <i class="fa-regular fa-flag"></i>
-                  </span>
-                  <span> Leave</span>
-                </div>
-              </div>
+              </ng-container>
+              <ng-container *ngIf="isPageLoading">
+                <app-page-placeholder></app-page-placeholder>
+              </ng-container>
             </div>
           </ng-template>
         </li>

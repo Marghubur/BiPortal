@@ -125,6 +125,9 @@
           </div>
         </ng-container>
       </ng-container>
+      <ng-container *ngIf="!isEmployeesReady">
+        <app-page-placeholder></app-page-placeholder>
+      </ng-container>
     </div>
   </form>
 </div>

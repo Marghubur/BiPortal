@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminDeclaration, AdminForm12B, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminPreviousIncome, AdminSalary, CustomSalaryStructure, EmployeeDeclarationList, Payroll, PayrollComponents, PFESISetup, SalaryComponentStructure, TaxRegime } from 'src/providers/constants';
-import { CustomsalaryStructureComponent } from './customsalary-structure/customsalary-structure.component';
+import { AdminDeclaration, AdminForm12B, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminPreviousIncome, AdminSalary, EmployeeDeclarationList, Payroll, PayrollComponents, PFESISetup, ProfesssionalTax, SalaryComponentStructure, TaxRegime } from 'src/providers/constants';
 import { DeclarationComponent } from './declaration/declaration.component';
 import { Form12BbComponent } from './form12-bb/form12-bb.component';
 import { IncometaxComponent } from './incometax/incometax.component';
@@ -14,6 +13,7 @@ import { PreviousincomeComponent } from './previousincome/previousincome.compone
 import { SalaryComponent } from './salary/salary.component';
 import { SalarycomponentStructureComponent } from './salarycomponent-structure/salarycomponent-structure.component';
 import { TaxRegimeComponent } from './tax-regime/tax-regime.component';
+import { ProfessionalTaxComponent } from './professional-tax/professional-tax.component';
 import { EmployeeDeclarationlistComponent } from './employee-declarationlist/employee-declarationlist.component';
 
 const routes: Routes = [
@@ -29,8 +29,8 @@ const routes: Routes = [
   { path: PayrollComponents, component: PayrollComponentsComponent},
   { path: TaxRegime, component: TaxRegimeComponent},
   { path: SalaryComponentStructure, component: SalarycomponentStructureComponent},
-  { path: CustomSalaryStructure, component: CustomsalaryStructureComponent},
-  { path: EmployeeDeclarationList, component: EmployeeDeclarationlistComponent},
+  { path: ProfesssionalTax, component: ProfessionalTaxComponent},
+  { path: EmployeeDeclarationList, component: EmployeeDeclarationlistComponent}
 ];
 
 @NgModule({

@@ -1,0 +1,162 @@
+<div class="col-12 full-v main-container">
+    <div class="content-header">
+        <div class="col-8">
+            <div class="px-1">
+                <app-breadcrums [title]="'Professional Tax Details'"></app-breadcrums>
+            </div>
+        </div>
+        <div class="col-auto">
+            <a href="javascript:void(0)" class="text-decoration-none fw-bold pe-4" (click)="pageReload()">
+                <i class="fa-solid fa-arrows-rotate" data-bs-toggle="tooltip" data-bs-placement="right"
+                    title="Reload this page"></i>
+            </a>
+        </div>
+    </div>
+    <div class="x_panel pb-0">
+        <ng-container *ngIf="isPageReady">
+            <div class="row align-items-center justify-content-between mb-3">
+                <div class="col-md-3">
+                    <select class="form-select" [(ngModel)]="selectedState" disabled>
+                        <option [value]=null disabled selected>Select State</option>
+                        <option value="{{item.name}}" *ngFor="let item of stateName">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary-c ms-auto" *ngIf="!isEditable" (click)="editPtax()">
+                        <i class="fa-solid fa-pencil pe-2"></i>
+                        Edit PTax
+                    </button>
+                </div>
+            </div>
+            <form [formGroup]="ptaxForm" *ngIf="ptaxForm">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Min income per month</th>
+                            <th>Max income per month</th>
+                            <th>Tax Rate/Tax Amount (p.m.)</th>
+                            <th>Gender</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container formArrayName="PtaxSlabs">
+                            <tr *ngFor="
+                          let item of ptaxSalab.controls;
+                          let i = index
+                        " [formGroupName]="i">
+                                <td>
+                                    <div [ngClass]="{
+                              'border-0': !isEditable
+                            }" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                ptaxForm.controls[
+                                  'PtaxSlabs'
+                                ].controls[i].controls
+                                  .MinIncome.errors !==
+                                  null &&
+                                ptaxForm.controls[
+                                  'PtaxSlabs'
+                                ].controls[i].controls
+                                  .MinIncome.errors.required
+                            }">
+                                        <i class="fa-solid fa-indian-rupee-sign ps-3"></i>
+                                        <input type="number" [readonly]="!isEditable" placeholder="Minimum income per month"
+                                            class="form-control border-0"
+                                            onkeypress="return event.charCode >=48 && event.charCode <=57"
+                                            formControlName="MinIncome" OnlyNumber="9" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [ngClass]="{
+                              'border-0': !isEditable
+                            }" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                ptaxForm.controls[
+                                  'PtaxSlabs'
+                                ].controls[i].controls
+                                  .MaxIncome.errors !==
+                                  null &&
+                                ptaxForm.controls[
+                                  'PtaxSlabs'
+                                ].controls[i].controls
+                                  .MaxIncome.errors.required
+                            }">
+                                        <i class="fa-solid fa-indian-rupee-sign ps-3"></i>
+                                        <input type="number" [readonly]="!isEditable" placeholder="Maximum income per month"
+                                            class="form-control border-0"
+                                            onkeypress="return event.charCode >=48 && event.charCode <=57" OnlyNumber="9"
+                                            formControlName="MaxIncome" (blur)="
+                                checkToAmount($event, i)
+                              " />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div [ngClass]="{
+                              'border-0': !isEditable
+                            }" class="d-flex align-items-center form-control p-0 m-0" [ngClass]="{
+                              'error-field':
+                                submitted &&
+                                ptaxForm.controls[
+                                  'PtaxSlabs'
+                                ].controls[i].controls
+                                  .TaxAmount.errors !==
+                                  null &&
+                                ptaxForm.controls[
+                                  'PtaxSlabs'
+                                ].controls[i].controls
+                                  .TaxAmount.errors.required
+                            }">
+                                        <i class="fa-solid fa-indian-rupee-sign ps-3"></i>
+                                        <input type="number" [readonly]="!isEditable"
+                                            placeholder="Tax Rate/Tax Amount (p.m.)" class="form-control border-0"
+                                            formControlName="TaxAmount"
+                                            onkeypress="return event.charCode >=48 && event.charCode <=57" OnlyNumber="9" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <select class="form-select" formControlName="Gender" [disabled]="!isEditable" [ngClass]="{
+                              'border-0': !isEditable
+                            }">
+                                        <option value="0">All</option>
+                                        <option value="1">Male</option>
+                                        <option value="2">
+                                            Female
+                                        </option>
+                                    </select>
+                                </td>
+                                <td class="align-middle">
+                                    <a href="javascript:void(0)" class="text-decoration-none pe-2"
+                                        [ngClass]="{'pe-none': !isEditable}" (click)="removePTaxSlab(i, item)">
+                                        <i class="fa-solid fa-trash-can fa-lg text-danger"
+                                            [ngClass]="{'text-muted-c': !isEditable}"></i>
+                                    </a>
+                                    <a *ngIf="ptaxSalab.controls.length ==i + 1" [ngClass]="{'pe-none': !isEditable}"
+                                        href="javascript:void(0)" class="text-decoration-none" (click)="addPTaxSlab()">
+                                        <i class="fa-regular fa-square-plus fa-lg text-success"
+                                            [ngClass]="{'text-muted-c': !isEditable}"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <div class="text-end" *ngIf="isEditable">
+                    <button class="btn btn-danger me-2" (click)="closePTaxSetting()">
+                        <i class="fa-solid fa-xmark pe-2"></i>Cancel
+                    </button>
+                    <button class="btn btn-primary-c" [disabled]="isLoading" (click)="savePtaxSlab()">
+                        <i
+                            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-paper-plane': !isLoading}"></i>
+                        {{ isLoading ? "Wait" : "Save" }}
+                    </button>
+                </div>
+            </form>
+        </ng-container>
+        <ng-container *ngIf="!isPageReady">
+          <app-page-placeholder></app-page-placeholder>
+        </ng-container>
+    </div>
+</div>

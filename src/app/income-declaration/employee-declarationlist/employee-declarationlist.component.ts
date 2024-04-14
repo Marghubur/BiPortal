@@ -81,10 +81,9 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
 
     if (this.scrollDiv == null) {
       this.scrollDiv = document.getElementById("scroll-dv");
-
-      if (this.scrollDiv != null) {
-        this.initHandler();
-      }
+    }
+    if (this.scrollDiv != null) {
+      this.initHandler();
     }
   }
 

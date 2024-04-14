@@ -47,9 +47,9 @@
                         (keydown.esc)="resetFilter()" (keyup.enter)="filterRecords()"
                         [(ngModel)]="apprisalDetail.ObjectiveCatagoryType" />
                     </div>
-                    <div class="d-flex align-items-center justify-content-between my-2">
+                    <div class=" my-2">
                       <h6 class="pt-3 pb-2 ps-2">APPRAISAL GROUP</h6>
-                      <button class="btn btn-primary-c float-end" (click)="addAprisalCyclePopUp()">
+                      <button class="btn mb-2 btn-primary-c float-end" (click)="addAprisalCyclePopUp()">
                         <i class="fa px-2" [ngClass]="{
                               'fa-plus': !isLoading,
                               'fa-solid fa-spinner fa-spin': isLoading
@@ -155,6 +155,9 @@
                           </ng-container>
                         </div>
                       </div>
+                    </ng-container>
+                    <ng-container *ngIf="!isObjectiveFound">
+                      <app-page-placeholder></app-page-placeholder>
                     </ng-container>
                   </div>
                 </div>
@@ -547,62 +550,62 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <ng-container>
-          <div class="x_content">
-            <div class="t-table t-list  col-md-12">
-              <div class="hide-bar"></div>
-              <div class="t-head">
-                <div class="tr">
-                  <div class="th fe-index">
-                    <div class="t-filter t-index">
-                      <a href="javascript:void()" class="ps-3">#</a>
-                    </div>
+        <div class="x_content">
+          <div class="t-table t-list  col-md-12">
+            <div class="hide-bar"></div>
+            <div class="t-head">
+              <div class="tr">
+                <div class="th fe-index">
+                  <div class="t-filter t-index">
+                    <a href="javascript:void()" class="ps-3">#</a>
                   </div>
-                  <div class="th fe-3">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" (keydown.esc)="resetFilterObjective()"
-                        (keyup.enter)="filterRecordsObjective()" [(ngModel)]="objectDetail.Objective"
-                        placeholder="Search by Objective">
-                      <div class="t-filter" (click)="arrangeObjectiveDetails(orderByObjectiveAsc, 'Objective')">
-                        <a href="javascript:void()" class="pe-2">Objectives</a>
-                        <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }"
-                          aria-hidden="true"></i>
-                        <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }"
-                          aria-hidden="true"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-1">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" (keyup.enter)="filterRecordsObjective()"
-                        (keydown.esc)="resetFilterObjective()" [(ngModel)]="objectDetail.TargetValue"
-                        placeholder="Search by Target Value">
-                      <div class="t-filter" (click)="arrangeObjectiveDetails(orderBTargetValueAsc, 'TargetValue')">
-                        <a href="javascript:void()" class="pe-3">Target Value</a>
-                        <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }"
-                          aria-hidden="true"></i>
-                        <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }"
-                          aria-hidden="true"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-index text-center">
-                    <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold"
-                      (click)="filterRecordsObjective()">
-                      <i class="fa-solid fa-filter">
-                        <span>Filter</span>
-                      </i>
-                    </a>
-                    <div class="t-filter d-block text-center">
-                      <a href="javascript:void(0)">ACTIONS</a>
+                </div>
+                <div class="th fe-3">
+                  <div class="cell-wrapper">
+                    <input class="form-control form-control-sm" (keydown.esc)="resetFilterObjective()"
+                      (keyup.enter)="filterRecordsObjective()" [(ngModel)]="objectDetail.Objective"
+                      placeholder="Search by Objective">
+                    <div class="t-filter" (click)="arrangeObjectiveDetails(orderByObjectiveAsc, 'Objective')">
+                      <a href="javascript:void()" class="pe-2">Objectives</a>
+                      <i class="fa-solid fa-arrow-down-wide-short"
+                        [ngClass]="{'d-none': orderByObjectiveAsc == null || !orderByObjectiveAsc }"
+                        aria-hidden="true"></i>
+                      <i class="fa-solid fa-arrow-down-short-wide"
+                        [ngClass]="{'d-none': orderByObjectiveAsc == null || orderByObjectiveAsc }"
+                        aria-hidden="true"></i>
                     </div>
                   </div>
                 </div>
+                <div class="th fe-1">
+                  <div class="cell-wrapper">
+                    <input class="form-control form-control-sm" (keyup.enter)="filterRecordsObjective()"
+                      (keydown.esc)="resetFilterObjective()" [(ngModel)]="objectDetail.TargetValue"
+                      placeholder="Search by Target Value">
+                    <div class="t-filter" (click)="arrangeObjectiveDetails(orderBTargetValueAsc, 'TargetValue')">
+                      <a href="javascript:void()" class="pe-3">Target Value</a>
+                      <i class="fa-solid fa-arrow-down-wide-short"
+                        [ngClass]="{'d-none': orderBTargetValueAsc == null || !orderBTargetValueAsc }"
+                        aria-hidden="true"></i>
+                      <i class="fa-solid fa-arrow-down-short-wide"
+                        [ngClass]="{'d-none': orderBTargetValueAsc == null || orderBTargetValueAsc }"
+                        aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="th fe-index text-center">
+                  <a href="javascript:void(0)" class="a-btn text-success ps-1 fw-bold"
+                    (click)="filterRecordsObjective()">
+                    <i class="fa-solid fa-filter">
+                      <span>Filter</span>
+                    </i>
+                  </a>
+                  <div class="t-filter d-block text-center">
+                    <a href="javascript:void(0)">ACTIONS</a>
+                  </div>
+                </div>
               </div>
+            </div>
+            <ng-container *ngIf="isManegeObjectiveReady">
               <div class="t-body">
                 <ng-container *ngIf="objectiveDetails.length > 0">
                   <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
@@ -630,13 +633,16 @@
                   <p class="my-5 py-5">Record Not Found</p>
                 </div>
               </ng-container>
-            </div>
+            </ng-container>
+            <ng-container *ngIf="!isManegeObjectiveReady">
+              <app-page-placeholder></app-page-placeholder>
+            </ng-container>
           </div>
-          <div class="mt-3" *ngIf="objectiveDetails.length > 0">
-            <app-pagination [pagination]="objectiveData"
-              (onPageChange)="GetFilterObjectiveResult($event)"></app-pagination>
-          </div>
-        </ng-container>
+        </div>
+        <div class="mt-3" *ngIf="objectiveDetails.length > 0">
+          <app-pagination [pagination]="objectiveData"
+            (onPageChange)="GetFilterObjectiveResult($event)"></app-pagination>
+        </div>
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

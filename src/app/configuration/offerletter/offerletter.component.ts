@@ -46,7 +46,6 @@ export class OfferletterComponent implements OnInit {
         ErrorToast("Fail to get company detail. Please contact to admin.");
         return;
       } else {
-        this.isPageReady = true;
         this.companyId = this.currentCompany.CompanyId;
         this.loadData();
       }

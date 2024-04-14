@@ -1,17 +1,15 @@
 <div class="col-12 full-v main-container" [ngClass]="{'preload': !isLoaded}">
-  <div class="x_panel mh-auto">
-    <div class="x_header">
-      <div class="d-flex justify-content-between">
-        <div class="col-8">
-          <div class="px-1">
-            <app-breadcrums [title]="'Project Appraisal Budgest'"></app-breadcrums>
-          </div>
-        </div>
-        <div class="col-4 text-end">
-          <button class="btn btn-primary-c" (click)="addProjectAppraisalPopUp()"><i class="fa-solid fa-plus pe-1"></i> Add Project Appraisal</button>
-        </div>
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Project Appraisal Budgest'"></app-breadcrums>
       </div>
     </div>
+    <div class="col-4 text-end">
+      <button class="btn btn-primary-c" (click)="addProjectAppraisalPopUp()"><i class="fa-solid fa-plus pe-1"></i> Add Project Appraisal</button>
+    </div>
+  </div>
+  <div class="x_panel">
     <div [ngSwitch]="isLoaded">
       <div *ngSwitchCase="false">
         <div class="mt-5">

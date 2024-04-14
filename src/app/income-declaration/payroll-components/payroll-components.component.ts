@@ -14,7 +14,6 @@ declare var $: any;
 })
 export class PayrollComponentsComponent implements OnInit {
   active = 1;
-  activetab = 2;
   NewSalaryForm: FormGroup;
   AdhocForm: FormGroup;
   DeductionForm: FormGroup;
@@ -67,10 +66,6 @@ export class PayrollComponentsComponent implements OnInit {
   pageReload() {
     this.active = 1;
     this.initData();
-  }
-
-  navigate() {
-    this.nav.navigate(PayrollSettings, null)
   }
 
   loadData() {

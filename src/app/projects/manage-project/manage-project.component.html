@@ -1,16 +1,14 @@
 <div class="col-12 full-v main-container">
   <div class="col-12 row p-0 m-0">
     <div class="right-panel container col-md-12 p-0">
-      <div class="x_panel mt-2">
-        <div class="x_header">
-          <div class="d-flex justify-content-between">
-            <div class="col-8">
-              <div class="px-1">
-                <app-breadcrums [title]="'Manage project'" [subtitle]="'Create or update project detail'"></app-breadcrums>
-              </div>
-            </div>
+      <div class="content-header">
+        <div class="col-md-6">
+          <div class="px-1">
+            <app-breadcrums [title]="'Manage project'" [subtitle]="'Create or update project detail'"></app-breadcrums>
           </div>
         </div>
+      </div>
+      <div class="x_panel mt-2">
         <ng-container *ngIf="isReady">
           <div class="x_content mt-4">
             <form [formGroup]="projectForm" autocomplete="off">
@@ -139,6 +137,9 @@
               </div>
             </form>
           </div>
+        </ng-container>
+        <ng-container *ngIf="!isReady">
+          <app-page-placeholder></app-page-placeholder>
         </ng-container>
       </div>
     </div>

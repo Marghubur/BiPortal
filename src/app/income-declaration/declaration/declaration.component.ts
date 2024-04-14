@@ -3,10 +3,9 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { AdminForm12B, AdminFreeTaxFilling, AdminIncomeTax, AdminPreferences, AdminPreviousIncome, AdminSalary, AdminSummary, AdminDeclarationApprovalRule } from 'src/providers/constants';
+import {  AdminIncomeTax } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
-import { MonthlyTax } from '../incometax/incometax.component';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Files } from 'src/app/commonmodal/common-modals';
 import 'bootstrap';
@@ -28,17 +27,10 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
   userDetail: UserDetail = new UserDetail();
-  isPPFSubmitted: boolean = false;
-  exemptions: Array<IncomeDeclaration> = [];
-  otherExemptions: Array<IncomeDeclaration> = [];
-  taxSavingAllowance: Array<IncomeDeclaration> = [];
   taxAmount: TaxAmount = new TaxAmount();
-  myDeclaration: Array<MyDeclaration> = [];
   year: number = 0;
   taxCalender: Array<any> = [];
-  monthlyTaxAmount: MonthlyTax;
   employeeDeclaration: any = {};
-  exemptionComponent: Array<any> = [];
   EmployeeId: number = 0;
   EmployeeDeclarationId: number = 0;
   SectionIsReady: boolean = false;
@@ -373,19 +365,12 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   editDeclaration(item: any, e: any) {
     this.isAmountExceed = false;
-    //this.selectDeclaration = null;
     this.FileDocumentList = [];
     this.FilesCollection = [];
     if (item) {
-      //this.selectDeclaration = item;
       this.uploadDocument(item);
-      //$("#manageDeclarationModal").modal('show');
       item.IsEdit = true;
       item.SlectedDeclarationnFile = this.slectedDeclarationnFile.length;
-      // let elem = e.currentTarget;
-      // elem.parentElement.previousElementSibling.querySelector('input').removeAttribute('readonly');
-      // elem.previousElementSibling.classList.remove('d-none');
-      // elem.classList.add('d-none');
     }
   }
 
@@ -638,10 +623,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   saveDeclaration(item: any, e: any) {
     if (item && this.isAmountExceed == false) {
-      // let elem = e.currentTarget;
-      // elem.parentElement.previousElementSibling.querySelector('input').setAttribute('readonly', '');
-      // elem.parentElement.querySelector('a[name="edit-declaration"]').classList.remove('d-none')
-      // elem.classList.add('d-none');
       let value = {
         ComponentId: item.ComponentId,
         DeclaredValue: item.DeclaredValue,
@@ -792,41 +773,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.FilesCollection = [];
   }
 
-  activateMe(ele: string) {
-    switch (ele) {
-      case "declaration-tab":
-        break;
-      case "salary-tab":
-        this.nav.navigateRoot(AdminSalary, null);
-        break;
-      case "summary-tab":
-        this.nav.navigateRoot(AdminSummary, null);
-        break;
-      case "preference-tab":
-        this.nav.navigateRoot(AdminPreferences, null);
-        break;
-    }
-  }
-
-  activeTab(e: string) {
-    switch (e) {
-      case "declaration-tab":
-        break;
-      case "previous-income-tab":
-        this.nav.navigateRoot(AdminPreviousIncome, null);
-        break;
-      case "form-12-tab":
-        this.nav.navigateRoot(AdminForm12B, null);
-        break;
-      case "free-tax-tab":
-        this.nav.navigateRoot(AdminFreeTaxFilling, null);
-        break;
-      case "approval-rule-tab":
-        this.nav.navigateRoot(AdminDeclarationApprovalRule, null);
-        break;
-    }
-  }
-
   navRentalpage(item: number) {
     if (item == 1)
       this.rentalPage = 1;
@@ -939,30 +885,11 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 }
 
-interface IncomeDeclaration {
-  Section: string;
-  DeductionName: string;
-  DeductionDesc: string;
-  MaxLimit: string;
-  Declaration: number;
-  Proof: any;
-  Status: number;
-}
-
 class TaxAmount {
   NetTaxableAmount: number = 0;
   TotalTaxPayable: number = 0;
   TaxAlreadyPaid: number = 0;
   RemainingTaxAMount: number = 0;
-}
-
-class MyDeclaration {
-  Declaration: string = '';
-  NoOfDeclaration: number = 0;
-  AmountDeclared: number = 0;
-  ProofSUbmitted: number = 0;
-  AmountRejected: number = 0;
-  AmountAccepted: number = 0;
 }
 
 export class HouseRentDetail {

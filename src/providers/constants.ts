@@ -115,6 +115,7 @@ export const ProjectWiki = `${ProjectBaseRoute}/projectlist/wiki`;
 export const ProjectBudget = `${ProjectBaseRoute}/projectlist/budget`;
 export const ProjectList = `${ProjectBaseRoute}/projectlist`;
 export const ManageProject = `${ProjectBaseRoute}/projectlist/manage-project`;
+export const CapacityManagement = `${ProjectBaseRoute}/capacitymanagement`;
 
 // ********************** Project route ends  *******************
 
@@ -136,9 +137,9 @@ export const AdminPaySlip = `${AccountsBaseRoute}/salary/payslip`;
 export const Payroll = `${AccountsBaseRoute}/payrollsettings/payroll`;
 export const PFESISetup = `${AccountsBaseRoute}/payrollsettings/pfesisetup`;
 export const SalaryComponentStructure = `${AccountsBaseRoute}/payrollsettings/salarycomponentstructure`;
-export const CustomSalaryStructure = `${AccountsBaseRoute}/payrollsettings/customsalarystructure`;
 export const PayrollComponents = `${AccountsBaseRoute}/payrollcomponents`;
 export const TaxRegime = `${AccountsBaseRoute}/taxregime`;
+export const ProfesssionalTax = `${AccountsBaseRoute}/professionaltax`;
 
 // ********************** Income Declaration route ends  *******************
 

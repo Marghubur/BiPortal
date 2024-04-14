@@ -691,6 +691,8 @@ export class AttendanceComponent implements OnInit {
     if (!this.isMyAttendance) {
       this.isLoading = false;
       this.isEmployeeSelected = false;
+    } else {
+      this.loadAttendanceData();
     }
   }
 }

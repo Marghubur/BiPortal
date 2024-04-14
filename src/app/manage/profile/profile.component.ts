@@ -592,7 +592,7 @@ export class ManageComponent implements OnInit {
         elem.add('error-field');
       errorcount++;
     }
-    if (this.ExptinMonths == null || this.ExptinMonths == 0) {
+    if (this.ExptinMonths == null) {
       let elem = document.getElementsByName('ExptinMonths')[0].classList;
       if (!elem.contains('error-field'))
         elem.add('error-field');

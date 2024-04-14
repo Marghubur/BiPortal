@@ -318,5 +318,8 @@
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </div>
     </ng-container>
+    <ng-container *ngIf="isPageLoading">
+      <app-page-placeholder></app-page-placeholder>
+    </ng-container>
   </div>
 </div>

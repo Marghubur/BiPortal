@@ -69,13 +69,12 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     private local: ApplicationStorage,
     private userService: UserService) { }
 
-  ngAfterViewChecked(): void {
+    ngAfterViewChecked(): void {
     if (this.scrollDiv == null) {
       this.scrollDiv = document.getElementById("scroll-dv");
-
-      if (this.scrollDiv != null) {
-        this.initHandler();
-      }
+    }
+    if (this.scrollDiv != null) {
+      this.initHandler();
     }
   }
 

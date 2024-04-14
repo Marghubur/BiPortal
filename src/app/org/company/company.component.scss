@@ -7,10 +7,6 @@
   padding-top: 4px;
 }
 
-.x_panel {
-  min-height: 200px;
-}
-
 thead.fixedHeader th {
   background: #c96;
   border-left: 1px solid #eb8;
@@ -60,7 +56,7 @@ tbody.scrollContent tr.alternateRow td {
 }
 
 .t-body {
-  max-height: 49vh !important;
+  max-height: 100% !important;
 }
 
 .cell-wrapper {
@@ -75,10 +71,6 @@ tbody.scrollContent tr.alternateRow td {
 
 .t-filter {
   justify-content: flex-start !important;
-}
-
-.custom-height {
-  height: 43vh !important;
 }
 
 .img-container__box img {

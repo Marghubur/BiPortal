@@ -12,191 +12,178 @@
     </div>
   </div>
   <div class="x_panel pb-0">
-    <ul ngbNav #nav="ngbNav" [(activeId)]="activetab" class="nav-tabs mt-4">
-      <li [ngbNavItem]="1" (click)="navigate()">
-        <a ngbNavLink>COMPANY GROUPS</a>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1">
+        <a ngbNavLink>RECURRING COMPONENTS</a>
         <ng-template ngbNavContent>
-          <p></p>
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="2">
-        <a ngbNavLink>COMPONENTS</a>
-        <ng-template ngbNavContent>
-          <div class="my-3">
-            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-              <li [ngbNavItem]="1">
-                <a ngbNavLink>RECURRING COMPONENTS</a>
-                <ng-template ngbNavContent>
-                  <div class="px-2 pt-3">
-                    <h4>Recurring Components Library</h4>
-                    <p class="mb-0">In this Section you can create all the recurring salary components in your
-                      Organization components like Basic, HRA, Special Allowance are system defined and can't be
-                      edited or removed.</p>
-                    <div class="col-md-12 my-4">
-                      <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa-solid fa-plus pe-2"></i>
-                        ADD NEW COMPONENT</button>
-                      <button class="btn btn-success ms-2"><i class="fa-solid fa-share pe-2" aria-hidden="true"></i>Move to
-                        Add Hoc Component</button>
-                      <a href="javascript:void(0)" class="text-decoration-none text-dark ms-3"
-                        (click)="excelSheetModal()"><i class="fa-solid fa-plus pe-2" aria-hidden="true"></i>Add Excel
-                        Sheet</a>
-                      <div class="col-md-3 float-end">
-                        <div class="form-group has-search">
-                          <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
-                          <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
-                            (keydown.esc)="reloadAllRecurring($event)" (keyup)="filterRecords($event)"
-                            placeholder="Search Component">
+          <div class="px-2 pt-3">
+            <h4>Recurring Components Library</h4>
+            <p class="mb-0">In this Section you can create all the recurring salary components in your
+              Organization components like Basic, HRA, Special Allowance are system defined and can't be
+              edited or removed.</p>
+            <div class="col-md-12 my-4">
+              <button class="btn btn-primary-c" (click)="newComponentPopUp()"><i class="fa-solid fa-plus pe-2"></i>
+                ADD NEW COMPONENT</button>
+              <button class="btn btn-success ms-2"><i class="fa-solid fa-share pe-2" aria-hidden="true"></i>Move to
+                Add Hoc Component</button>
+              <a href="javascript:void(0)" class="text-decoration-none text-dark ms-3"
+                (click)="excelSheetModal()"><i class="fa-solid fa-plus pe-2" aria-hidden="true"></i>Add Excel
+                Sheet</a>
+              <div class="col-md-3 float-end">
+                <div class="form-group has-search">
+                  <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
+                  <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
+                    (keydown.esc)="reloadAllRecurring($event)" (keyup)="filterRecords($event)"
+                    placeholder="Search Component">
+                </div>
+              </div>
+            </div>
+            <div class="t-table t-list col-md-12 my-3">
+              <div class="hide-bar bg-light"></div>
+              <div class="t-head bg-light fw-bold">
+                <div class="tr">
+                  <div class="th text-truncate ps-3 fe-2">
+                    COMPONENT NAME
+                  </div>
+                  <div class="th text-truncate ps-3">
+                    TYPE
+                  </div>
+                  <div class="th text-truncate ps-3">
+                    TAX EXEMPT
+                  </div>
+                  <div class="th text-truncate ps-3">
+                    REQUIRE DOCS
+                  </div>
+                  <div class="th text-truncate ps-3">
+                    ACTIONS
+                  </div>
+                </div>
+              </div>
+              <div class="t-body">
+                <ng-container *ngIf="isReady">
+                  <ng-container *ngIf="RecurringComponent.length > 0">
+                    <div class="tr py-2" *ngFor="let item of RecurringComponent">
+                      <div class="td ps-3 text-truncate fe-2">
+                        <div class="form-check">
+                          <input class="form-check-input me-3" type="checkbox" (click)="addToAdhoc(item)">
+                          <label class="form-check-label text-truncate" for="flexCheckDefault">
+                            {{item.ComponentId}} ({{item.ComponentFullName}})
+                          </label>
                         </div>
                       </div>
-                    </div>
-                    <div class="t-table t-list col-md-12 my-3">
-                      <div class="hide-bar bg-light"></div>
-                      <div class="t-head bg-light fw-bold">
-                        <div class="tr">
-                          <div class="th text-truncate ps-3 fe-2">
-                            COMPONENT NAME
-                          </div>
-                          <div class="th text-truncate ps-3">
-                            TYPE
-                          </div>
-                          <div class="th text-truncate ps-3">
-                            TAX EXEMPT
-                          </div>
-                          <div class="th text-truncate ps-3">
-                            REQUIRE DOCS
-                          </div>
-                          <div class="th text-truncate ps-3">
-                            ACTIONS
-                          </div>
-                        </div>
-                      </div>
-                      <div class="t-body">
-                        <ng-container *ngIf="RecurringComponent.length > 0">
-                          <div class="tr py-2" *ngFor="let item of RecurringComponent">
-                            <div class="td ps-3 text-truncate fe-2">
-                              <div class="form-check">
-                                <input class="form-check-input me-3" type="checkbox" (click)="addToAdhoc(item)">
-                                <label class="form-check-label text-truncate" for="flexCheckDefault">
-                                  {{item.ComponentId}} ({{item.ComponentFullName}})
-                                </label>
-                              </div>
-                            </div>
-                            <div class="td ps-3 text-truncate">
-                              <ng-container [ngSwitch]="item.ComponentTypeId">
-                                <div *ngSwitchCase="2">Allowance (By: Employee)</div>
-                                <div *ngSwitchCase="3">Rembursment</div>
-                                <div *ngSwitchCase="4">Reimursable</div>
-                                <div *ngSwitchCase="6">Perquisite</div>
-                                <div *ngSwitchCase="7">Allowance (By: Employer)</div>
-                              </ng-container>
-                            </div>
-                            <div class="td ps-3 text-truncate">
-                              <div [ngSwitch]="item.TaxExempt">
-                                <div *ngSwitchCase="1">
-                                  <b class="me-2">Tax Exempt</b>
-                                  <small class="ps-2 badge bg-warning text-dark">{{item.Section}}</small>
-                                </div>
-                                <div *ngSwitchDefault>
-                                  <b class="me-2">Taxable</b>
-                                  <small class="ps-2 badge bg-warning text-dark">{{item.Section}}</small>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="td ps-3 text-truncate">
-                              {{item.RequireDocs}}
-                            </div>
-                            <div class="td ps-3">
-                              <a href="javascript:void(0)" class="text-decoration-none"
-                                (click)="editRecurring(item)"><i class="fa-solid fa-pencil pe-lg-1"></i> Edit</a>
-                              <a href="javascript:void(0)" class="text-decoration-none ps-3 text-danger"><i
-                                  class="fa-solid fa-trash-can-o pe-1"></i> Delete</a>
-                            </div>
-                          </div>
-                        </ng-container>
-                        <ng-container *ngIf="RecurringComponent.length <= 0">
-                          <div class="py-5 my-5 d-flex align-items-center justify-content-center">
-                            <h5 class="fw-bold">No Recurruing Component Found.</h5>
-                          </div>
+                      <div class="td ps-3 text-truncate">
+                        <ng-container [ngSwitch]="item.ComponentTypeId">
+                          <div *ngSwitchCase="2">Allowance (By: Employee)</div>
+                          <div *ngSwitchCase="3">Rembursment</div>
+                          <div *ngSwitchCase="4">Reimursable</div>
+                          <div *ngSwitchCase="6">Perquisite</div>
+                          <div *ngSwitchCase="7">Allowance (By: Employer)</div>
                         </ng-container>
                       </div>
-                    </div>
-                  </div>
-                </ng-template>
-              </li>
-              <li [ngbNavItem]="2">
-                <a ngbNavLink>AD HOC CPOMPONENTS</a>
-                <ng-template ngbNavContent>
-                  <div class="px-2 pt-3">
-                    <div class="d-flex justify-content-between">
-                      <h4>Ad Hoc Components Library</h4>
-                      <button class="btn btn-success"><i class="fa-solid fa-share pe-2" aria-hidden="true"></i>Move to
-                        Recurring Component</button>
-                    </div>
-                    <p class="mb-0 py-2">In this Section you can create all the ad hoc components that gets paid in
-                      your organization. Adhoc components are salary components that are typically not paid as regular
-                      monthly components.</p>
-                    <div class="row my-4 justify-content-between">
-                      <div class="col-md-4">
-                        <div class="col-md-12">
-                          <h5 class="fw-bold">ADHOC ALLOWANCES</h5>
-                          <p class="mb-0">These are components that can be configured to be taxable or tax exempt.</p>
-                          <ul class="list-group my-3">
-                            <li class="list-group-item" *ngFor="let item of AdhocAllowance">
-                              <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
-                              <span class="alert alert-danger py-0 float-end m-0"
-                                *ngIf="!item.TaxExempt">Taxable</span>
-                              <span class="alert alert-success py-0 float-end m-0" *ngIf="item.TaxExempt">Non-Taxable
-                                -
-                                {{item.Section}}</span>
-                            </li>
-                          </ul>
-                          <p class="mb-0 my-3">
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="AdhocPopUp()"><i
-                                class="fa-solid fa-plus pe-2"></i>Add Adhoc Allowance</a>
-                          </p>
-                        </div>
-                        <div class="col-md-12 mt-5 py-5">
-                          <h5 class="fw-bold">BONUSES</h5>
-                          <p class="mb-0">Bonuses are one time payments made to an employee and are taxable.</p>
-                          <ul class="list-group my-3">
-                            <li class="list-group-item" *ngFor="let item of AdhocBonus">
-                              <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
-                            </li>
-                          </ul>
-                          <p class="mb-0 my-3">
-                            <a href="javascript:void(0)" class="text-decoration-none" (click)="BonusPopUp()"><i
-                                class="fa-solid fa-plus pe-2"></i>Add Bonuses</a>
-                          </p>
+                      <div class="td ps-3 text-truncate">
+                        <div [ngSwitch]="item.TaxExempt">
+                          <div *ngSwitchCase="1">
+                            <b class="me-2">Tax Exempt</b>
+                            <small class="ps-2 badge bg-warning text-dark">{{item.Section}}</small>
+                          </div>
+                          <div *ngSwitchDefault>
+                            <b class="me-2">Taxable</b>
+                            <small class="ps-2 badge bg-warning text-dark">{{item.Section}}</small>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
-                        <h5 class="f-bold">DEDUCTIONS</h5>
-                        <p class="mb-0">Deductions are component used to deductfrom net salary of employee in a moonth
-                          Ex. Laptop Damange charges etc.</p>
-                        <ul class="list-group my-3">
-                          <li class="list-group-item" *ngFor="let item of AdhocDeduction">
-                            <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
-                          </li>
-                        </ul>
-                        <p class="mb-0 my-3">
-                          <a href="javascript:void(0)" class="text-decoration-none" (click)="DeductionPopUp()"><i
-                              class="fa-solid fa-plus pe-2"></i>AddDeduction</a>
-                        </p>
+                      <div class="td ps-3 text-truncate">
+                        {{item.RequireDocs}}
+                      </div>
+                      <div class="td ps-3">
+                        <a href="javascript:void(0)" class="text-decoration-none"
+                          (click)="editRecurring(item)"><i class="fa-solid fa-pencil pe-lg-1"></i> Edit</a>
+                        <a href="javascript:void(0)" class="text-decoration-none ps-3 text-danger"><i
+                            class="fa-solid fa-trash-can-o pe-1"></i> Delete</a>
                       </div>
                     </div>
-                  </div>
-                </ng-template>
-              </li>
-            </ul>
-
-            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                  </ng-container>
+                  <ng-container *ngIf="RecurringComponent.length <= 0">
+                    <div class="py-5 my-5 d-flex align-items-center justify-content-center">
+                      <h5 class="fw-bold">No Recurruing Component Found.</h5>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngIf="!isReady">
+                  <app-page-placeholder></app-page-placeholder>
+                </ng-container>
+              </div>
+            </div>
           </div>
         </ng-template>
       </li>
-
-      <div [ngbNavOutlet]="nav" class="col-12 mt-2"></div>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink>AD HOC CPOMPONENTS</a>
+        <ng-template ngbNavContent>
+          <div class="px-2 pt-3">
+            <div class="d-flex justify-content-between">
+              <h4>Ad Hoc Components Library</h4>
+              <button class="btn btn-success"><i class="fa-solid fa-share pe-2" aria-hidden="true"></i>Move to
+                Recurring Component</button>
+            </div>
+            <p class="mb-0 py-2">In this Section you can create all the ad hoc components that gets paid in
+              your organization. Adhoc components are salary components that are typically not paid as regular
+              monthly components.</p>
+            <div class="row my-4 justify-content-between">
+              <div class="col-md-4">
+                <div class="col-md-12">
+                  <h5 class="fw-bold">ADHOC ALLOWANCES</h5>
+                  <p class="mb-0">These are components that can be configured to be taxable or tax exempt.</p>
+                  <ul class="list-group my-3">
+                    <li class="list-group-item" *ngFor="let item of AdhocAllowance">
+                      <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
+                      <span class="alert alert-danger py-0 float-end m-0"
+                        *ngIf="!item.TaxExempt">Taxable</span>
+                      <span class="alert alert-success py-0 float-end m-0" *ngIf="item.TaxExempt">Non-Taxable
+                        -
+                        {{item.Section}}</span>
+                    </li>
+                  </ul>
+                  <p class="mb-0 my-3">
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="AdhocPopUp()"><i
+                        class="fa-solid fa-plus pe-2"></i>Add Adhoc Allowance</a>
+                  </p>
+                </div>
+                <div class="col-md-12 mt-5 py-5">
+                  <h5 class="fw-bold">BONUSES</h5>
+                  <p class="mb-0">Bonuses are one time payments made to an employee and are taxable.</p>
+                  <ul class="list-group my-3">
+                    <li class="list-group-item" *ngFor="let item of AdhocBonus">
+                      <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
+                    </li>
+                  </ul>
+                  <p class="mb-0 my-3">
+                    <a href="javascript:void(0)" class="text-decoration-none" (click)="BonusPopUp()"><i
+                        class="fa-solid fa-plus pe-2"></i>Add Bonuses</a>
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <h5 class="f-bold">DEDUCTIONS</h5>
+                <p class="mb-0">Deductions are component used to deductfrom net salary of employee in a moonth
+                  Ex. Laptop Damange charges etc.</p>
+                <ul class="list-group my-3">
+                  <li class="list-group-item" *ngFor="let item of AdhocDeduction">
+                    <span class="fs-6">{{item.ComponentId}} ({{item.ComponentFullName}})</span>
+                  </li>
+                </ul>
+                <p class="mb-0 my-3">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="DeductionPopUp()"><i
+                      class="fa-solid fa-plus pe-2"></i>AddDeduction</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </li>
     </ul>
 
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
   </div>
 </div>
 

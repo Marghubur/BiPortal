@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="col-12 x_panel p-0 m-0">
-    <div [ngClass]="{'blur-section': !SectionIsReady}">
+    <div>
       <div class="blur-section__highlight" [ngClass]="{'d-none': SectionIsReady}">
         <div class="blur-section__content">
           {{isEmployeeSelect? 'Please wait......': 'Please select Employee first'}}
@@ -909,12 +909,6 @@
 </div>
 <!-- End -->
 
-
-<!-- <div class="circle">
-  <div class="checkmark">
-  </div>
-</div> -->
-
 <!-- New Income Tax regime Modal Start-->
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="newIncomeTaxRegime" tabindex="-1"
   aria-labelledby="newIncomeTaxRegimeLabel" aria-hidden="true">
@@ -1215,27 +1209,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="th fe-1">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">DECLARATION</a>
-                </div>
-              </div>
-            </div>
-            <div class="th fe-1">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">PROOF</a>
-                </div>
-              </div>
-            </div>
-            <div class="th">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">STATUS</a>
-                </div>
-              </div>
-            </div> -->
             <div class="th fe-index text-center">ACTIONS</div>
           </div>
         </div>
@@ -1257,54 +1230,6 @@
                       title='{{r.ComponentDescription}}'></i></a>
                 </div>
               </div>
-              <!-- <div class="td align-middle fe-1">
-                <div class="cell-wrapper" name="view-control">
-                  <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
-                    number:'':'en'}}</span>
-                  <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
-                </div>
-                <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
-                  name="edit-control">
-                  <span class="pe-2 d-flex flex-column justify-content-center">
-                    <i class="fa-solid fa-indian-rupee-sign"></i>
-                  </span>
-                  <input [value]="r.DeclaredValue" class="form-control" DecimalNumber="9">
-                </div>
-              </div>
-              <div class="td align-middle fe-1">
-                <div class="cell-wrapper">
-                  <div *ngIf="r.UploadedFileIds != null && r.UploadedFileIds != '[]'">
-                    <a href="javascript:void(0)" name="upload-proof"
-                      class="text-muted pe-none text-decoration-none">
-                      <div class="d-flex align-items-center">
-                        <i class="fa-solid fa-check-circle fa-lg text-success"></i>
-                        <span class="ps-2">Uploaded</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div *ngIf="r.UploadedFileIds == null || r.UploadedFileIds == '[]'">
-                    <a href="javascript:void(0)" name="upload-proof"
-                      class="text-muted pe-none text-decoration-none">
-                      <i class="fa-solid fa-paperclip pe-2"></i>Not Upload
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="td align-middle">
-                <div class="cell-wrapper">
-                  <div class="d-flex align-items-center">
-                    <ng-container *ngIf="r.ComponentId == 'EPF' || r.ComponentId == 'VPF'">
-                      <i class="fa-solid fa-check-circle fa-lg text-success"></i>
-                      <span class="ps-2 fw-bold text-dark">Auto Accepted</span>
-                    </ng-container>
-                    <ng-container *ngIf="r.DeclaredValue > 0 && (r.ComponentId != 'EPF' || r.ComponentId != 'VPF')">
-                      <i class="fa-solid fa-check-circle fa-lg text-success"></i>
-                      <span class="ps-2">Submitted</span>
-                    </ng-container>
-                  </div>
-                  <span *ngIf="r.DeclaredValue <= 0 && (r.ComponentId != 'EPF' && r.ComponentId != 'VPF')">Not Submitted</span>
-                </div>
-              </div> -->
               <div class="td text-center fe-index" *ngIf="r.ComponentId != 'EPF' && r.ComponentId != 'VPF'">
                 <div class="form-check d-inline-block">
                   <input class="form-check-input" [checked]="r.DeclaredValue > 0" (click)="selectOneHalfExemption($event, r)" type="checkbox">
@@ -1387,27 +1312,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="th fe-1">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">DECLARATION</a>
-                </div>
-              </div>
-            </div>
-            <div class="th fe-1">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">PROOF</a>
-                </div>
-              </div>
-            </div>
-            <div class="th">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">STATUS</a>
-                </div>
-              </div>
-            </div> -->
             <div class="th fe-index">ACTIONS</div>
           </div>
         </div>
@@ -1439,50 +1343,6 @@
                   </span>
                 </div>
               </div>
-              <!-- <div class="td align-middle fe-1">
-                <div class="cell-wrapper" name="view-control">
-                  <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
-                    number:'':'en'}}</span>
-                  <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
-                </div>
-                <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
-                  name="edit-control">
-                  <span class="pe-2 d-flex flex-column justify-content-center">
-                    <i class="fa-solid fa-indian-rupee-sign"></i>
-                  </span>
-                  <input [value]="r.DeclaredValue" class="form-control" DecimalNumber="9">
-                </div>
-              </div>
-              <div class="td align-middle fe-1">
-                <div class="cell-wrapper">
-                  <div *ngIf="r.UploadedFileIds != null && r.UploadedFileIds != '[]'">
-                    <a href="javascript:void(0)" name="upload-proof"
-                      class="text-muted pe-none text-decoration-none">
-                      <div class="d-flex align-items-center">
-                        <i class="fa-solid fa-check-circle fa-lg text-success"></i>
-                        <span class="ps-2">Uploaded</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div *ngIf="r.UploadedFileIds == null || r.UploadedFileIds == '[]'">
-                    <a href="javascript:void(0)" name="upload-proof"
-                      class="text-muted pe-none text-decoration-none">
-                      <i class="fa-solid fa-paperclip pe-2"></i>Not Upload
-                    </a>
-                  </div>
-                </div>
-              </div> -->
-              <!-- <div class="td align-middle">
-                <div class="cell-wrapper">
-                  <div class="d-flex align-items-center">
-                    <ng-container *ngIf="r.DeclaredValue > 0">
-                      <i class="fa-solid fa-check-circle fa-lg text-success"></i>
-                      <span class="ps-2">Submitted</span>
-                    </ng-container>
-                  </div>
-                  <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
-                </div>
-              </div> -->
               <div class="td text-center fe-index">
                 <div class="form-check d-inline-block">
                   <input class="form-check-input" [checked]="r.DeclaredValue > 0" (click)="selectOtherExemption($event, r)" type="checkbox">
@@ -1569,27 +1429,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="th fe-1">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">DECLARATION</a>
-                </div>
-              </div>
-            </div>
-            <div class="th fe-1">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">PROOF</a>
-                </div>
-              </div>
-            </div>
-            <div class="th fe-1">
-              <div class="cell-wrapper">
-                <div class="t-filter">
-                  <a href="javascript:void()">STATUS</a>
-                </div>
-              </div>
-            </div> -->
             <div class="th fe-index">ACTIONS</div>
           </div>
         </div>
@@ -1616,50 +1455,6 @@
                   <i class="fa-solid fa-indian-rupee-sign pe-2"></i> {{r.MaxLimit | number:'':'en'}}
                 </div>
               </div>
-              <!-- <div class="td align-middle fe-1">
-                <div class="cell-wrapper" name="view-control">
-                  <span *ngIf="r.DeclaredValue != 0">&#8377; {{r.DeclaredValue |
-                    number:'':'en'}}</span>
-                  <span *ngIf="r.DeclaredValue == 0">Not Declared</span>
-                </div>
-                <div class="cell-wrapper d-flex flex-row justify-content-start d-none"
-                  name="edit-control">
-                  <span class="pe-2 d-flex flex-column justify-content-center">
-                    <i class="fa-solid fa-indian-rupee-sign"></i>
-                  </span>
-                  <input [value]="r.DeclaredValue" class="form-control">
-                </div>
-              </div>
-              <div class="td align-middle fe-1">
-                <div class="cell-wrapper">
-                  <div *ngIf="r.UploadedFileIds != null && r.UploadedFileIds != '[]'">
-                    <a href="javascript:void(0)" name="upload-proof"
-                      class="text-muted pe-none text-decoration-none">
-                      <div class="d-flex align-items-center">
-                        <i class="fa-solid fa-check-circle fa-lg text-success"></i>
-                        <span class="ps-2">Uploaded</span>
-                      </div>
-                    </a>
-                  </div>
-                  <div *ngIf="r.UploadedFileIds == null || r.UploadedFileIds == '[]'">
-                    <a href="javascript:void(0)" name="upload-proof"
-                      class="text-muted pe-none text-decoration-none">
-                      <i class="fa-solid fa-paperclip pe-2"></i><span>Not Upload</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div class="td align-middle">
-                <div class="cell-wrapper">
-                  <div class="d-flex align-items-center">
-                    <ng-container *ngIf="r.DeclaredValue > 0">
-                      <i class="fa-solid fa-check-circle fa-lg text-success"></i>
-                      <span class="ps-2">Submitted</span>
-                    </ng-container>
-                  </div>
-                  <span *ngIf="r.DeclaredValue <= 0">Not Submitted</span>
-                </div>
-              </div> -->
               <div class="td text-center fe-index">
                 <input class="form-check-input" [checked]="r.DeclaredValue > 0" (click)="selectTaxSavingAllowance($event, r)" type="checkbox">
               </div>

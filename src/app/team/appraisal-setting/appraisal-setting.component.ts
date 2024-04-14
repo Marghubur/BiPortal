@@ -45,6 +45,7 @@ export class AppraisalSettingComponent implements OnInit {
   appraisalDetailAndCategory: Array<ApprisalCycle> = [];
   currentApprisalCycle:ApprisalCycle = new ApprisalCycle();
   selectedAppraisalCycle:any = null;
+  isManegeObjectiveReady: boolean = false;
 
   constructor(private http: PerformanceHttpService,
               private fb: FormBuilder,
@@ -214,6 +215,7 @@ export class AppraisalSettingComponent implements OnInit {
         if (res.ResponseBody) {
           this.bindData(res);
           this.isPageReady = true;
+          this.isManegeObjectiveReady = true;
           Toast("Record found");
         }
       }).catch(e => {
@@ -390,6 +392,7 @@ export class AppraisalSettingComponent implements OnInit {
   }
 
   manageAppraisalObjectivePopUp() {
+    this.isManegeObjectiveReady = false;
     this.getAllPerformanceObjective();
     this.selectedObjective = [...this.currentAppraisalObjective]
     $('#addAppraisalObjective').modal('show');

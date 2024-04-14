@@ -56,7 +56,6 @@ export class RegisterclientComponent implements OnInit, OnDestroy {
     } else {
       this.clientModal = new clientModal;
       this.loadData();
-      this.isLoaded = true;
     }
   }
 

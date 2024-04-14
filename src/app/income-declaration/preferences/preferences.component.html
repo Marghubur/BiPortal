@@ -25,116 +25,117 @@
     </div>
   </div>
   <div class="col-12 x_panel p-0 m-0">
-    <div class="right-panel col-md-12 p-0">
-      <div class="container-fluid row" *ngIf="isPageReady">
-        <div class="col-md-6 mt-4">
-          <div class="card">
-            <div class="card-header fs-5 text-dark">
-              PAN Information
-            </div>
-            <div class="ps-3 pt-4">
-              <div class="row">
-                <div class="col-md-4">
-                  <small>NAME ON PAN CARD</small>
-                  <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
-                </div>
-                <div class="col-md-4">
-                  <small>PAN NUMBER</small>
-                  <p class="text-dark">{{employeeDetail.PANNo}}</p>
-                </div>
-                <div class="col-md-3">
-                  <small>DATE OF BIRTH</small>
-                  <p class="text-dark">{{employeeDetail.DOB | date}}</p>
-                </div>
-              </div>
-              <div>
-                <small>FATHER / SPOUSE NAME</small>
-                <p class="text-dark">{{employeeDetail.FatherName}}</p>
-              </div>
-            </div>
+    <div class="container-fluid row" *ngIf="isPageReady">
+      <div class="col-md-6 mt-4">
+        <div class="card">
+          <div class="card-header fs-5 text-dark">
+            PAN Information
           </div>
-        </div>
-        <div class="col-md-6 mt-4">
-          <div class="card">
-            <div class="card-header fs-5 text-dark">
-              Salary Deposit
-            </div>
-            <div class="ps-3 pt-4">
-              <small>SALARY PAYMENT MODE</small>
-              <p class="text-dark">{{salaryDeposit.PaymentMode}}</p>
-              <h5 class="text-dark pb-1">Bank Information</h5>
-              <div class="row">
-                <div class="col-md-4">
-                  <small>BANK</small>
-                  <p class="text-dark">{{employeeDetail.BankName}}</p>
-                </div>
-                <div class="col-md-4">
-                  <small>ACCOUNT NUMBER</small>
-                  <p class="text-dark">{{employeeDetail.AccountNumber}}</p>
-                </div>
-                <div class="col-md-3">
-                  <small>IFSC CODE</small>
-                  <p class="text-dark">{{employeeDetail.IFSCCode}}</p>
-                </div>
+          <div class="ps-3 pt-4">
+            <div class="row">
+              <div class="col-md-4">
+                <small>NAME ON PAN CARD</small>
+                <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
               </div>
-              <div class="pb-3">
-                <small>NAME OF THE ACCOUNT</small>
-                <p class="text-dark mb-0">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
+              <div class="col-md-4">
+                <small>PAN NUMBER</small>
+                <p class="text-dark">{{employeeDetail.PANNo}}</p>
+              </div>
+              <div class="col-md-3">
+                <small>DATE OF BIRTH</small>
+                <p class="text-dark">{{employeeDetail.DOB | date}}</p>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-6 mt-4 mb-4">
-          <div class="card custom-card-height">
-            <div class="card-header fs-5 text-dark">
-              Statutory Information
-            </div>
-            <div class="ps-3 pt-4">
-              <h5 class="text-dark pb-1">PF Account Information</h5>
-              <small>PF Status</small>
-              <p class="text-dark">{{employeeDetail.IsPFEnable ? 'Enable' : 'Disable'}}</p>
-              <div class="row">
-                <div class="col-md-4">
-                  <small>PF NUMBER</small>
-                  <p class="text-dark">{{employeeDetail.PFNumber}}</p>
-                </div>
-                <div class="col-md-4">
-                  <small>UNIVERSAL ACCOUNT NUMBER</small>
-                  <p class="text-dark">{{employeeDetail.UniversalAccountNumber}}</p>
-                </div>
-                <div class="col-md-3">
-                  <small>PF JOIN DATE</small>
-                  <p class="text-dark">{{employeeDetail.PFJoinDate | date}}</p>
-                </div>
-              </div>
-              <h5 class="text-dark pt-3 pb-1">ESI Account Information</h5>
-              <small>NAME OF THE ACCOUNT</small>
-              <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
-              <h5 class="text-dark pt-3 pb-1">PT Details</h5>
-              <div class="row">
-                <div class="col-md-4">
-                  <small>STATE</small>
-                  <p class="text-dark">{{employeeDetail.State}}</p>
-                </div>
-                <div class="col-md-4">
-                  <small>REGISTERED LOCATION</small>
-                  <p class="text-dark">{{employeeDetail.City}}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mt-4 mb-4">
-          <div class="card custom-card-height">
-            <div class="card-header fs-5 text-dark">
-              Identity Information
-            </div>
-            <div class="alert alert-primary mt-4 mx-3" role="alert">
-              Aadhar details are not available
+            <div>
+              <small>FATHER / SPOUSE NAME</small>
+              <p class="text-dark">{{employeeDetail.FatherName}}</p>
             </div>
           </div>
         </div>
       </div>
+      <div class="col-md-6 mt-4">
+        <div class="card">
+          <div class="card-header fs-5 text-dark">
+            Salary Deposit
+          </div>
+          <div class="ps-3 pt-4">
+            <small>SALARY PAYMENT MODE</small>
+            <p class="text-dark">{{salaryDeposit.PaymentMode}}</p>
+            <h5 class="text-dark pb-1">Bank Information</h5>
+            <div class="row">
+              <div class="col-md-4">
+                <small>BANK</small>
+                <p class="text-dark">{{employeeDetail.BankName}}</p>
+              </div>
+              <div class="col-md-4">
+                <small>ACCOUNT NUMBER</small>
+                <p class="text-dark">{{employeeDetail.AccountNumber}}</p>
+              </div>
+              <div class="col-md-3">
+                <small>IFSC CODE</small>
+                <p class="text-dark">{{employeeDetail.IFSCCode}}</p>
+              </div>
+            </div>
+            <div class="pb-3">
+              <small>NAME OF THE ACCOUNT</small>
+              <p class="text-dark mb-0">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-4 mb-4">
+        <div class="card custom-card-height">
+          <div class="card-header fs-5 text-dark">
+            Statutory Information
+          </div>
+          <div class="ps-3 pt-4">
+            <h5 class="text-dark pb-1">PF Account Information</h5>
+            <small>PF Status</small>
+            <p class="text-dark">{{employeeDetail.IsPFEnable ? 'Enable' : 'Disable'}}</p>
+            <div class="row">
+              <div class="col-md-4">
+                <small>PF NUMBER</small>
+                <p class="text-dark">{{employeeDetail.PFNumber}}</p>
+              </div>
+              <div class="col-md-4">
+                <small>UNIVERSAL ACCOUNT NUMBER</small>
+                <p class="text-dark">{{employeeDetail.UniversalAccountNumber}}</p>
+              </div>
+              <div class="col-md-3">
+                <small>PF JOIN DATE</small>
+                <p class="text-dark">{{employeeDetail.PFJoinDate | date}}</p>
+              </div>
+            </div>
+            <h5 class="text-dark pt-3 pb-1">ESI Account Information</h5>
+            <small>NAME OF THE ACCOUNT</small>
+            <p class="text-dark">{{employeeDetail.FirstName}} {{employeeDetail.LastName}}</p>
+            <h5 class="text-dark pt-3 pb-1">PT Details</h5>
+            <div class="row">
+              <div class="col-md-4">
+                <small>STATE</small>
+                <p class="text-dark">{{employeeDetail.State}}</p>
+              </div>
+              <div class="col-md-4">
+                <small>REGISTERED LOCATION</small>
+                <p class="text-dark">{{employeeDetail.City}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-4 mb-4">
+        <div class="card custom-card-height">
+          <div class="card-header fs-5 text-dark">
+            Identity Information
+          </div>
+          <div class="alert alert-primary mt-4 mx-3" role="alert">
+            Aadhar details are not available
+          </div>
+        </div>
+      </div>
     </div>
+    <ng-container *ngIf="!isPageReady">
+      <app-page-placeholder></app-page-placeholder>
+    </ng-container>
   </div>
 </div>

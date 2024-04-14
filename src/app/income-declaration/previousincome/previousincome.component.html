@@ -126,6 +126,9 @@
           </div>
         </div>
       </ng-container>
+      <ng-container *ngIf="!isPageReady">
+        <app-page-placeholder></app-page-placeholder>
+      </ng-container>
     </div>
   </div>
 </div>
