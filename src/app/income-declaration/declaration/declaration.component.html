@@ -215,9 +215,10 @@
                                 <div class="col-auto align-middle float-end">
                                   <a href="javascript:void(0)" class="text-decoration-none text-success" name="save-declaration" placement="top"
                                   ngbTooltip="Save Declaration" [ngClass]="{'d-none': !item.IsEdit}" (click)="saveDeclaration(item, $event)">
-                                    <i class="fa-regular fa-floppy-disk fa-lg px-2"></i>
+                                    <i class="fa-regular fa-floppy-disk fa-lg px-2" *ngIf="!isLoading"></i>
+                                    <i class="fa-solid fa-spinner fa-spin" *ngIf="isLoading"></i>
                                   </a>
-                                  <a href="javascript:void(0)" class="text-decoration-none text-primary-c" name="edit-declaration" 
+                                  <a href="javascript:void(0)" class="text-decoration-none text-primary-c" name="edit-declaration"
                                   placement="top" ngbTooltip="Edit Declaration" [ngClass]="{'d-none': item.IsEdit}" (click)="editDeclaration(item, $event)">
                                     <i class="fa-regular fa-pen-to-square fa-lg px-2"></i>
                                   </a>
@@ -285,7 +286,7 @@
                                   ngbTooltip="Save Declaration" [ngClass]="{'d-none': !item.IsEdit}" (click)="saveDeclaration(item, $event)">
                                     <i class="fa-regular fa-floppy-disk fa-lg px-2"></i>
                                   </a>
-                                  <a href="javascript:void(0)" class="text-decoration-none text-primary-c" name="edit-declaration" 
+                                  <a href="javascript:void(0)" class="text-decoration-none text-primary-c" name="edit-declaration"
                                   placement="top" ngbTooltip="Edit Declaration" [ngClass]="{'d-none': item.IsEdit}" (click)="editDeclaration(item, $event)">
                                     <i class="fa-regular fa-pen-to-square fa-lg px-2"></i>
                                   </a>
@@ -348,7 +349,7 @@
                                   ngbTooltip="Save Declaration" [ngClass]="{'d-none': !item.IsEdit}" (click)="saveDeclaration(item, $event)">
                                     <i class="fa-regular fa-floppy-disk fa-lg px-2"></i>
                                   </a>
-                                  <a href="javascript:void(0)" class="text-decoration-none text-primary-c" name="edit-declaration" 
+                                  <a href="javascript:void(0)" class="text-decoration-none text-primary-c" name="edit-declaration"
                                   placement="top" ngbTooltip="Edit Declaration" [ngClass]="{'d-none': item.IsEdit}" (click)="editDeclaration(item, $event)">
                                     <i class="fa-regular fa-pen-to-square fa-lg px-2"></i>
                                   </a>
@@ -371,7 +372,7 @@
                         </div>
                       </ng-template>
                     </li>
-  
+
                     <li [ngbNavItem]="2">
                       <a ngbNavLink class="custom-text-color">House Property</a>
                       <ng-template ngbNavContent>
@@ -491,7 +492,7 @@
                     </li>
                   </ul>
                   <div [ngbNavOutlet]="nav" class="mt-3"></div>
-  
+
                   <div class="py-3">
                     <h5 class="text-dark ps-2 pb-0 mb-0">Monthly Tax Deductions Details</h5>
                     <p class="mb-0 ps-2">Below deduction are based on your declared amount. Tax amount may change
