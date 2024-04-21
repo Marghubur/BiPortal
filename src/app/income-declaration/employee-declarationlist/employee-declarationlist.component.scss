@@ -76,3 +76,14 @@
     width: 22rem;
   }
 }
+
+.empty-record-icon {
+  width: 6.5rem;
+  height: 6.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  i {
+    font-size: 3rem;
+  }
+}

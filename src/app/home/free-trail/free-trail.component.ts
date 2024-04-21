@@ -28,6 +28,11 @@ export class FreeTrailComponent implements OnInit {
       PhoneNumber: new FormControl(null, [Validators.required]),
       CompanyName: new FormControl(null, [Validators.required]),
       HeadCount: new FormControl(null, [Validators.required]),
+      Country: new FormControl(null, [Validators.required]),
+      State: new FormControl(null, [Validators.required]),
+      City: new FormControl(null, [Validators.required]),
+      FullAddress: new FormControl(null, [Validators.required]),
+      OrganizationName: new FormControl(null, [Validators.required])
     })
   }
 

@@ -62,8 +62,12 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       text: 'All',
       value: 0
     });
+    let empData = GetEmployees();
+    empData.forEach(x => {
+      x.text = `[${x.value}]` + " " + x.text;
+    })
     this.autoCompleteModal = {
-      data: this.autoCompleteModal.data.concat(GetEmployees()),
+      data: this.autoCompleteModal.data.concat(empData),
       placeholder: "Select Employee",
       className: "normal"
     };
@@ -131,12 +135,17 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       text: 'All',
       value: 0
     });
+    let empData = GetEmployees();
+    empData.forEach(x => {
+      x.text = `[${x.value}]` + " " + x.text;
+    })
     this.autoCompleteModal = {
-      data: this.autoCompleteModal.data.concat(GetEmployees()),
+      data: this.autoCompleteModal.data.concat(empData),
       placeholder: "Select Employee",
       className: "normal"
     };
     this.employeeSalaries = [];
+    this.isEmployeeSelected = false;
   }
 
   bindData() {
