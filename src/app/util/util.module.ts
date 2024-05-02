@@ -14,7 +14,8 @@ import { BhTimepickerComponent } from './bh-timepicker/bh-timepicker.component'
 import { NgModule } from '@angular/core';
 import { BotTreeViewComponent } from './bot-tree-view/bot-tree-view.component';
 import { ImageLoaderComponent } from './image-loader/image-loader.component';
-import { PagePlaceholderComponent } from './page-placeholder/page-placeholder.component'
+import { PagePlaceholderComponent } from './page-placeholder/page-placeholder.component';
+import { CardWidgetComponent } from '../util/card-widget/card-widget.component'
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { PagePlaceholderComponent } from './page-placeholder/page-placeholder.co
     BhTimepickerComponent,
     BotTreeViewComponent,
     ImageLoaderComponent,
-    PagePlaceholderComponent
+    PagePlaceholderComponent,
+    CardWidgetComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,8 @@ import { PagePlaceholderComponent } from './page-placeholder/page-placeholder.co
     BhTimepickerComponent,
     BotTreeViewComponent,
     ImageLoaderComponent,
-    PagePlaceholderComponent
+    PagePlaceholderComponent,
+    CardWidgetComponent
   ]
 })
 export class UtilModule {

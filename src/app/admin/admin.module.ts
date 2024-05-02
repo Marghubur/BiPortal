@@ -26,6 +26,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { CronJobComponent } from './cron-job/cron-job.component';
 import { ManageCronjobComponent } from './manage-cronjob/manage-cronjob.component';
 import { InitialSetupComponent } from './initial-setup/initial-setup.component';
+import { CardWidgetComponent } from '../util/card-widget/card-widget.component';
 
 @NgModule({
   declarations: [
