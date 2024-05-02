@@ -1,11 +1,19 @@
 <div class="col-md-12 grid-margin stretch-card mb-2">
-  <div class="card skeleton rounded">
-    <div class="card-body vhide">
+  <div class="card rounded">
+    <div class="card-body">
       <ng-container *ngIf="cardTitle != null">
         <h4 class="card-title card-title-dash mb-4">{{cardTitle}}</h4>
       </ng-container>
-
-      <ng-content></ng-content>
+      <ng-container *ngIf="loading">
+        <div class="fs-5 py-5 my-5 d-flex flex-column justify-content-center align-items-center col-md-12">
+          <div class="col-md-3 modal-container  text-center cog-wheel">
+            <img src="assets/images/cog.gif" alt="" />
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!loading">
+        <ng-content></ng-content>
+      </ng-container>
     </div>
   </div>
 </div>

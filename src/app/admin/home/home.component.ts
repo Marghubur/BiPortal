@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   monthlyGrossIncomeDetail: Array<number> = [];
   months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   isPaymenyPending: boolean = false;
+  isLoading: boolean = true;
 
   constructor(private http: CoreHttpService,
               private nav:iNavigation) { }
