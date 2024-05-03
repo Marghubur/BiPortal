@@ -21,11 +21,16 @@ export class HomeComponent implements OnInit {
   employeeAttandenceDetail: Array<any> = [];
   totalPendingPayment: number = 0;
   totalGSTAmount: number = 0;
-  monthlyGrossIncomeDetail: Array<number> = [];
+  monthlyExpenses: Array<number> = [];
+  monthlyProfit: Array<number> = [];
   months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   isPaymenyPending: boolean = false;
-  isLoading: boolean = true;
-
+  isLoading: boolean = false;
+  leaveDetail: Array<any> = [];
+  projectDetail: Array<any> = [];
+  clientDetail: Array<any> = [];
+  newJoinees: Array<any> = [];
+  
   constructor(private http: CoreHttpService,
               private nav:iNavigation) { }
 
@@ -39,6 +44,7 @@ export class HomeComponent implements OnInit {
   getDeatils() {
     this.isPageReady = false;
     this.isPaymenyPending = false;
+    this.isLoading = true;
     let data = {
       "UserId" : 6,
       "EmployeeUid": 6,
@@ -53,22 +59,47 @@ export class HomeComponent implements OnInit {
         this.clientBillPayment = response.ResponseBody.BillDetail;
         this.gstPaymentDetail = response.ResponseBody.GSTDetail;
         this.employeeAttandenceDetail = response.ResponseBody.AttendaceDetail;
-        let incomeDetail = response.ResponseBody.YearGrossIncome;
-        if(incomeDetail && incomeDetail.length > 0) {
+        this.leaveDetail = response.ResponseBody.leaves;
+        this.projectDetail = response.ResponseBody.projects;
+        this.clientDetail = response.ResponseBody.clients;
+        this.newJoinees = response.ResponseBody.newJoinees;
+        let expenseDetail = response.ResponseBody.expensesModel;
+        let profitDetail = response.ResponseBody.profitModel;
+        if(expenseDetail && expenseDetail.length > 0) {
           let i = 1;
           let elem = null;
           let amount: number = 0;
-          while(i <= 12) {
-            elem = incomeDetail.find(x => x.BillForMonth == i);
+          while(i <= expenseDetail.length) {
+            elem = expenseDetail.find(x => x.Month == i);
             if(elem != null) {
-              amount = Number(elem["PaidAmount"]);
+              amount = Number(elem["Amount"]);
               if (!isNaN(amount)) {
-                this.monthlyGrossIncomeDetail.push(amount);
+                this.monthlyExpenses.push(amount);
               } else {
-                this.monthlyGrossIncomeDetail.push(0);
+                this.monthlyExpenses.push(0);
               }
             } else {
-              this.monthlyGrossIncomeDetail.push(0);
+              this.monthlyExpenses.push(0);
+            }
+            i++;
+          }
+        }
+
+        if(profitDetail && profitDetail.length > 0) {
+          let i = 1;
+          let elem = null;
+          let amount: number = 0;
+          while(i <= profitDetail.length) {
+            elem = profitDetail.find(x => x.Month == i);
+            if(elem != null) {
+              amount = Number(elem["Amount"]);
+              if (!isNaN(amount)) {
+                this.monthlyProfit.push(amount);
+              } else {
+                this.monthlyProfit.push(0);
+              }
+            } else {
+              this.monthlyProfit.push(0);
             }
             i++;
           }
@@ -93,6 +124,7 @@ export class HomeComponent implements OnInit {
 
         this.LoadLineChart();
         this.isPageReady = true;
+        this.isLoading = false;
         Toast("Your dashboard loaded successfully.", 1);
       } else {
         Toast("Fail to inser/update, please contact to admin.");
@@ -117,10 +149,15 @@ export class HomeComponent implements OnInit {
       data: {
         labels: this.months,
         datasets: [{
-          label: '2022 income to company',
-          backgroundColor: 'rgb(255, 99, 132)',
-          borderColor: 'rgb(255, 99, 132)',
-          data: this.monthlyGrossIncomeDetail
+          label: 'monthly expense',
+          backgroundColor: 'blue',
+          borderColor: 'blue',
+          data: this.monthlyExpenses
+      }, {
+        label: 'monthly profit',
+        backgroundColor: 'red',
+        borderColor: 'red',
+        data: this.monthlyProfit
       }]
       }
     })
