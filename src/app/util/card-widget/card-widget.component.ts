@@ -7,10 +7,19 @@ import { Component, Input } from '@angular/core';
 })
 export class CardWidgetComponent {
   cardTitle: string = null;
+  loading: boolean = false;
 
   @Input()
   set title(value: string) {
     this.cardTitle = value;
-    console.log(value)
+  }
+
+  @Input()
+  set isLoading(value: boolean) {
+    this.loading = value;
+  }
+
+  get isLoading(): boolean {
+    return this.loading;
   }
 }
