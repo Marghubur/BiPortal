@@ -505,3 +505,9 @@ svg {
 .checkbox-round:checked {
   background-color: gray;
 }
+
+.right-side-panel {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
