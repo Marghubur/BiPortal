@@ -526,7 +526,7 @@
       </div>
 
       <!-- Dashboard Side pannel -->
-      <div class="col-md-4">
+      <div class="col-md-4 right-side-panel">
         <card-widget [title]="'Employees on Leave'" [isLoading]="isLoading">
           <div class="col-sm-12">
             <ng-container *ngIf="leaveDetail != null && leaveDetail.length > 0">
@@ -646,7 +646,7 @@
                 </tbody>
               </table>
               <div class="text-end mt-3" *ngIf="projectDetail.length > 2">
-                <a href="javascript:void(0)" class="text-decoration-none">view more</a>
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="viewProjects()">view more</a>
               </div>
             </ng-container>
             <ng-container *ngIf="projectDetail == null || projectDetail.length == 0">
@@ -677,7 +677,7 @@
                 </tbody>
               </table>
               <div class="text-end mt-3" *ngIf="clientDetail.length > 2">
-                <a href="javascript:void(0)" class="text-decoration-none">view more</a>
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="viewClients()">view more</a>
               </div>
             </ng-container>
             <ng-container *ngIf="clientDetail == null || clientDetail.length == 0">
@@ -710,7 +710,7 @@
                 </tbody>
               </table>
               <div class="text-end mt-3" *ngIf="newJoinees.length > 2">
-                <a href="javascript:void(0)" class="text-decoration-none">view more</a>
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="viewNewJoinee()">view more</a>
               </div>
             </ng-container>
             <ng-container *ngIf="newJoinees == null || newJoinees.length == 0">
@@ -816,8 +816,6 @@
             </div>
           </div>
         </card-widget> -->
-
-         -->
       </div>
     </div>
   </div>

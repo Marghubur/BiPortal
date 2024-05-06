@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
 import { CoreHttpService } from "src/providers/AjaxServices/core-http.service";
 import { Toast } from "src/providers/common-service/common.service";
-import { BillDetail } from "src/providers/constants";
+import { BillDetail, Clients, Employees, ProjectList } from "src/providers/constants";
 import { iNavigation } from "src/providers/iNavigation";
 declare var $:any;
 
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   projectDetail: Array<any> = [];
   clientDetail: Array<any> = [];
   newJoinees: Array<any> = [];
-  
+
   constructor(private http: CoreHttpService,
               private nav:iNavigation) { }
 
@@ -127,7 +127,7 @@ export class HomeComponent implements OnInit {
         this.isLoading = false;
         Toast("Your dashboard loaded successfully.", 1);
       } else {
-        Toast("Fail to inser/update, please contact to admin.");
+        Toast("Fail to get dashboard data, please contact to admin.");
       }
 
     })
@@ -225,5 +225,15 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  viewProjects() {
+    this.nav.navigate(ProjectList, null);
+  }
 
+  viewClients() {
+    this.nav.navigate(Clients, null);
+  }
+
+  viewNewJoinee() {
+    this.nav.navigate(Employees, null);
+  }
 }
