@@ -22,6 +22,8 @@ export class CompanySettingsComponent implements OnInit {
   menuIndex: number = 1;
   isReady: boolean = false;
   payRollMonth: number = 0;
+  days: Array<number> = [];
+  selectedExcludePayroll: string = "";
 
   constructor(private fb: FormBuilder,
               private local: ApplicationStorage,
@@ -39,6 +41,9 @@ export class CompanySettingsComponent implements OnInit {
       if(this.currentCompany.CompanyId == 0) {
         ErrorToast("Please selecte company first.");
         return;
+      }
+      for (let i = 1; i <= 31; i++) {
+        this.days.push(i);
       }
       this.companySetting.CompanyId = this.currentCompany.CompanyId;
       this.loadPageData();
@@ -70,7 +75,9 @@ export class CompanySettingsComponent implements OnInit {
 
     if (res.roles)
       this.roles = res.roles;
+
     this.initForm();
+    this.changeExcludePayrollDate();
   }
 
   initForm() {
@@ -87,8 +94,13 @@ export class CompanySettingsComponent implements OnInit {
       EveryMonthLastDayOfDeclaration: new FormControl(this.companySetting.EveryMonthLastDayOfDeclaration),
       AttendanceSubmissionLimit: new FormControl(this.companySetting.AttendanceSubmissionLimit),
       IsJoiningBarrierDayPassed: new FormControl(this.companySetting.IsJoiningBarrierDayPassed),
-      IsRunLeaveAccrual: new FormControl(false)
+      IsRunLeaveAccrual: new FormControl(false),
+      ExcludePayrollFromJoinDate: new FormControl(this.companySetting.ExcludePayrollFromJoinDate != null ? this.companySetting.ExcludePayrollFromJoinDate : 20)
     })
+  }
+
+  get f() {
+    return this.companySettingForm.controls;
   }
 
   selectDeclartionStartMonth(e: any) {
@@ -134,5 +146,11 @@ export class CompanySettingsComponent implements OnInit {
       elem[index-1].classList.add('active-tab');
     }
     this.isReady = true;
+  }
+
+  changeExcludePayrollDate() {
+    let value = Number(this.companySettingForm.get("ExcludePayrollFromJoinDate").value);
+    let postValue = (value == (1 || 21 || 31)) ? 'st' : (value == (2 || 22)) ? 'nd' : value == 3 ? 'rd' : 'th';
+    this.selectedExcludePayroll = value.toString() + ""+ postValue;
   }
 }

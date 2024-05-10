@@ -28,6 +28,7 @@ export class InitialSetupComponent implements OnInit {
   FileDocumentList: Array<any> = [];
   companyLogo: any = null;
   FilesCollection: Array<any> = [];
+  endFinancialYear: number = 0;
 
   constructor(private fb: FormBuilder,
               private http: CoreHttpService,
@@ -41,6 +42,7 @@ export class InitialSetupComponent implements OnInit {
     else
       this.defaultFinancialYear = date.getFullYear() - 1;
 
+    this.endFinancialYear = this.defaultFinancialYear + 1;
     this.initDeclaration();
     this.initPayrollSetting();
     this.getLeaveType();
@@ -168,7 +170,7 @@ export class InitialSetupComponent implements OnInit {
       i++;
     }
   }
-  
+
   getLeaveType() {
     this.isLoading = true;
     this.http.get("leave/GetLeaveTypeFilter").then(response => {
@@ -176,7 +178,7 @@ export class InitialSetupComponent implements OnInit {
         this.leaveTypes = response.ResponseBody;
         //$("#leavePlanTypeModal").modal('show');
         this.isLoading = false;
-      } 
+      }
     });
   }
 
@@ -231,7 +233,7 @@ export class InitialSetupComponent implements OnInit {
       this.isLoading = false;
       return;
     }
-    
+
     if (errorcounter === 0) {
       let formData = new FormData();
       formData.append(this.FileDocumentList[0].FileName, this.FilesCollection[0]);
@@ -256,5 +258,11 @@ export class InitialSetupComponent implements OnInit {
 
     }
 
+  }
+
+  changeFinancialYr(e: any) {
+    let value = e.target.value;
+    if (value)
+      this.endFinancialYear = Number(value) + 1;
   }
 }
