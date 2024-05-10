@@ -184,6 +184,16 @@
                         <h2>Payroll Barrier<small>Setup rules.</small></h2>
                       </div>
                     </div>
+                    <div class="col-md-12">
+                      <div class="col-md-12 d-flex align-items-center">
+                        <label class="form-label mb-0">Don't include or run employee(s) payroll if joined after</label>
+                        <select class="form-select-sm w-auto mx-2" (change)="changeExcludePayrollDate()" formControlName="ExcludePayrollFromJoinDate">
+                          <option [value]="item" *ngFor="let item of days">{{item}}</option>
+                        </select>
+                        <label class="form-label mb-0">of the calendar month.</label>
+                      </div>
+                      <small class="text-muted">Note: IF employee join after {{selectedExcludePayroll}} of the calendar month then their payroll will not be include in that month instead the consider of arrear, this arrear amount will be reflected in the next month salary, eg. Suppose, Employees who commence employment before the 20th of the calendar month are eligible for payroll processing within that month. However, those who commence after the 20th will have their salary deferred to the subsequent month, wherein it will be included as arrears. For instance, if an employee like Joan joins on the 23rd of March, their salary will not be processed for March; instead, it will be deferred to the following month and added to their salary then.</small>
+                    </div>
                     <div class="row justify-content-between">
                       <div class="col-md-4 mt-3">
                         <div class="form-check form-switch">

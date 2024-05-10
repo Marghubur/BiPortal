@@ -198,6 +198,7 @@ export class CompanySetting {
     LeaveAccrualRunCronDayOfMonth: number = 0;
     EveryMonthLastDayOfDeclaration: number = 0;
     IsJoiningBarrierDayPassed: boolean = false;
+    ExcludePayrollFromJoinDate: number = 0;
 }
 
 export class UserProfile {

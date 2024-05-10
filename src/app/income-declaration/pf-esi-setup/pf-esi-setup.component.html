@@ -12,7 +12,8 @@
         <div class="col-12 p-2 my-4 row">
           <ng-container *ngIf="IsReady">
             <p class="fs-5 fw-bold text-primary-dc">PROVIDENT FUND & ESI SETTING <button [disabled]="isLoading"
-                class="btn btn-outline-success float-end" (click)="submitPFESISetting()"><i [ngClass]="{'fa-solid fa-gear': !isLoading, 'fa-solid fa-spinner fa-spin': isLoading}"></i>
+                class="btn btn-outline-success float-end" (click)="submitPFESISetting()">
+                <i class="fa-solid" [ngClass]="{'fa-gear': !isLoading, 'fa-spinner fa-spin': isLoading}"></i>
                <span class="ps-2">{{ isLoading ? 'Wait' : 'Save' }}</span></button></p>
             <label>These setting will be used for the different calculatin like, Salary, GST etc.</label>
             <div class="mx-4 my-4 row" [formGroup]="PFandESIForm">
@@ -115,17 +116,19 @@
                             <input OnlyNumber="9" class="form-control" formControlName="MaximumGrossForESI" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
                           </div>
                         </li>
-                        <li class="list-group-item">
+                        <li class="list-group-item d-flex align-items-center">
                           ESI Employee Contribution is
-                          <div class="mx-4 col-md-2 d-inline-block">
-                            <input OnlyNumber="9" class="form-control" formControlName="EsiEmployeeContribution" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                          <div class="mx-4 col-md-2 input-group w-25">
+                            <input [DecimalNumber]="9" class="form-control" formControlName="EsiEmployeeContribution">
+                            <div class="input-group-text">%</div>
                           </div>
                           of gross Salary
                         </li>
-                        <li class="list-group-item">
+                        <li class="list-group-item d-flex align-items-center">
                           ESI Employer Contribution is
-                          <div class="mx-4 col-md-2 d-inline-block">
-                            <input OnlyNumber="9" class="form-control" formControlName="EsiEmployerContribution" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                          <div class="mx-4 col-md-2 input-group w-25">
+                            <input [DecimalNumber]="9" class="form-control" formControlName="EsiEmployerContribution">
+                            <div class="input-group-text">%</div>
                           </div>
                           of gross Salary
                         </li>

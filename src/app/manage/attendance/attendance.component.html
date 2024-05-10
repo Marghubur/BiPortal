@@ -51,8 +51,8 @@
                 <ng-template ngbNavContent>
                   <div class="" *ngIf="!isLoading">
                     <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
-                      <div class="col-md-4 d-flex align-items-center">
-                        <select (change)="filterByStatus()" class="form-select w-50" [(ngModel)]="filterAttendStatus"
+                      <div class="col-md-6 d-flex align-items-center">
+                        <select (change)="filterByStatus()" class="form-select w-25" [(ngModel)]="filterAttendStatus"
                           [ngModelOptions]="{standalone: true}">
                           <option value=null selected disabled>Filter by status</option>
                           <option value="1">All</option>
@@ -68,6 +68,9 @@
                           <i class="fa-solid fa-retweet pe-2" aria-hidden="true"></i>
                           Raise a request
                         </button>
+                        <select class="form-select w-25 ms-2" [(ngModel)]="selectedAttendanceWeek" [ngModelOptions]="{standalone: true}" (change)="selectAttendance()">
+                          <option [value]="i" *ngFor="let item of attendanceGroup; let i=index;">{{item}}</option>
+                        </select>
                       </div>
                       <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
                         <ng-container *ngFor="let month of monthName; let i = index">

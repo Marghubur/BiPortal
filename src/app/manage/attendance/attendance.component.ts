@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
@@ -14,7 +15,8 @@ declare var $: any;
 @Component({
   selector: 'app-attendance',
   templateUrl: './attendance.component.html',
-  styleUrls: ['./attendance.component.scss']
+  styleUrls: ['./attendance.component.scss'],
+  providers: [DatePipe]
 })
 export class AttendanceComponent implements OnInit {
   employeeId: number = 0;
@@ -68,11 +70,15 @@ export class AttendanceComponent implements OnInit {
   isMyAttendance: boolean = true;
   isAdmin: boolean = false;
   attendanceRequestType: number = 2;
+  attendanceGroup: Array<any> = [];
+  weekGroup: Array<any> = [];
+  selectedAttendanceWeek: number = 0;
 
   constructor(private http: CoreHttpService,
     private nav: iNavigation,
     private local: ApplicationStorage,
-    private user: UserService
+    private user: UserService,
+    private datePipe: DatePipe
   ) {
     this.employeesList.placeholder = "Employee";
     this.employeesList.data.push({
@@ -255,9 +261,37 @@ export class AttendanceComponent implements OnInit {
         index++;
       }
       this.allDaysAttendance = data;
-      this.currentDays = data.reverse();
+      this.currentDays = data;
+      this.groupAttendanceByWeek();
     } else {
       WarningToast("Unable to bind data. Please contact admin.");
+    }
+  }
+
+  groupAttendanceByWeek() {
+    if (this.currentDays != null && this.currentDays.length > 0) {
+      let firstDay = this.currentDays[0].AttendanceDay;
+      let daysofweek = firstDay.getDay();
+      let daysToAdd = daysofweek === 1? 0 : daysofweek === 0 ? 1: 8 - daysofweek;
+      this.weekGroup = [];
+      if (daysToAdd > 0)
+        this.weekGroup.push(this.currentDays.splice(0, daysToAdd));
+
+      for (let i = 0; i < this.currentDays.length; i++) {
+        this.weekGroup.push(this.currentDays.splice(0, 7));
+      }
+      if (this.currentDays.length > 0)
+        this.weekGroup.push(this.currentDays);
+
+      this.attendanceGroup = [];
+      this.weekGroup.forEach(x => {
+        let length = x.length - 1;
+        let data = this.datePipe.transform(x[0].AttendanceDay, 'dd.MM.yyyy') + " - " + this.datePipe.transform(x[length].AttendanceDay, 'dd.MM.yyyy');
+        this.attendanceGroup.push(data);
+      });
+
+      this.selectedAttendanceWeek = 1;
+      this.selectAttendance();
     }
   }
 
@@ -694,5 +728,10 @@ export class AttendanceComponent implements OnInit {
     } else {
       this.loadAttendanceData();
     }
+  }
+
+  selectAttendance() {
+    this.currentDays = [];
+    this.currentDays = this.weekGroup[this.selectedAttendanceWeek];
   }
 }

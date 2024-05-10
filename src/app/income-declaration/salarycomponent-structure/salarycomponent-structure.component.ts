@@ -509,7 +509,7 @@ export class SalarycomponentStructureComponent implements OnInit {
     });
   }
 
-  
+
 
   bindData(data: any) {
     if(data) {
@@ -672,7 +672,7 @@ export class SalarycomponentStructureComponent implements OnInit {
       this.isLoading = false;
     });
   }
-  
+
 
   filterComponent(e: any) {
     let value = e.target.value.toUpperCase();
@@ -712,6 +712,25 @@ export class SalarycomponentStructureComponent implements OnInit {
   resetAdHocFilter(e: any) {
     e.target.value = '';
     this.allAdHocComponent = this.salaryComponentFields.filter(x => x.IsAdHoc == true && x.AdHocId > 0);
+  }
+
+  selectIncludepayslip(e: any, item: any) {
+    if (item) {
+      this.isLoading = true;
+      if (e.target.checked)
+        item.IncludeInPayslip = true;
+      else
+        item.IncludeInPayslip = false;
+
+      this.http.put(`Settings/UpdateGroupSalaryComponentDetail/${item.ComponentId}/${this.currentGroup.SalaryGroupId}`, item).then((response:ResponseModel) => {
+        if (response.ResponseBody) {
+          this.isLoading = false;
+          Toast('Updated Successfully')
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    }
   }
 }
 
