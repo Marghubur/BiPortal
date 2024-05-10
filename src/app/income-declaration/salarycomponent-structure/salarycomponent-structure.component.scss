@@ -93,7 +93,19 @@
   color: #aaa;
 }
 
-
 .t-body {
   max-height: 100% !important;
+}
+
+.disable-field {
+  background: #e7e7e7 !important;
+}
+
+.pe-visible {
+  pointer-events: visible !important;
+}
+
+.form-check-input-c:checked {
+  background-color: green !important;
+  border-color: green !important;
 }

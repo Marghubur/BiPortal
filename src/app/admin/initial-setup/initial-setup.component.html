@@ -58,10 +58,10 @@
                                     <label class="form-label">Financial Year</label>
                                     <div class="d-flex form-control align-items-center justify-content-between">
                                         <input maxlength="4" type="text" class="form-control border-0 p-0 m-0" formControlName="FinancialYear"
-                                            placeholder="Enter financial year"
+                                            placeholder="Enter financial year" (input)="changeFinancialYr($event)"
                                             onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
                                         <span class="pe-5">-</span>
-                                        <input maxlength="4" type="text" class="form-control border-0 p-0 m-0" [value]="declarationForm.controls.FinancialYear.value + 1"
+                                        <input maxlength="4" type="text" class="form-control border-0 p-0 m-0" [value]="endFinancialYear"
                                         placeholder="Enter financial year" readonly
                                         onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
                                     </div>
