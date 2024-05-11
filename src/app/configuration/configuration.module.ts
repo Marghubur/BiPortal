@@ -17,6 +17,7 @@ import { ProductsComponent } from './products/products.component';
 import { ProcessingPayrollComponent } from './processing-payroll/processing-payroll.component';
 import { LeaveAttendanceDailywagesComponent } from './leave-attendance-dailywages/leave-attendance-dailywages.component';
 import { ManageActivityComponent } from './manage-activity/manage-activity.component';
+import { ConfigPayrollComponent } from './config-payroll/config-payroll.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ManageActivityComponent } from './manage-activity/manage-activity.compo
     ProductsComponent,
     ManageActivityComponent,
     ProcessingPayrollComponent,
-    LeaveAttendanceDailywagesComponent
+    LeaveAttendanceDailywagesComponent,
+    ConfigPayrollComponent
   ],
   imports: [
     CommonModule,
