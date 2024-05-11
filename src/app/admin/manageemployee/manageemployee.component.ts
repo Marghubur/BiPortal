@@ -203,8 +203,12 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       else
         this.currentCompanyDetail = response.ResponseBody.Companies.find(x => x.IsPrimaryCompany == 1);
 
-      if (response.ResponseBody.SalaryDetail && response.ResponseBody.SalaryDetail.length > 0)
+      if (response.ResponseBody.SalaryDetail && response.ResponseBody.SalaryDetail.length > 0) {
         this.employeeModal.CTC = response.ResponseBody.SalaryDetail[0].CTC;
+        this.employeeModal.SalaryDetailId = response.ResponseBody.SalaryDetail[0].SalaryDetailId;
+      } else {
+        this.employeeModal.SalaryDetailId = 0;
+      }
 
       if(this.allocatedClients.length > 0) {
         this.allocatedClients.map((item, index) => {
@@ -366,7 +370,8 @@ export class ManageemployeeComponent implements OnInit, OnDestroy {
       SalaryGroupId: new FormControl(this.employeeModal.SalaryGroupId),
       PFNumber: new FormControl(this.employeeModal.PFNumber),
       UniversalAccountNumber: new FormControl(this.employeeModal.UniversalAccountNumber),
-      PFJoinDate: new FormControl(this.employeeModal.PFJoinDate)
+      PFJoinDate: new FormControl(this.employeeModal.PFJoinDate),
+      SalaryDetailId: new FormControl(this.employeeModal.SalaryDetailId)
     });
     if (this.employeeModal.IsPayrollOnCTC)
       this.employeeForm.controls['SalaryGroupId'].disable();
