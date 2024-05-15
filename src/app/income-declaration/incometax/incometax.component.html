@@ -42,7 +42,7 @@
                 <p class="fs-4 pt-3 ps-3">
                   Income Tax Computation <i class="fa-solid fa-download ps-3"></i>
                 </p>
-                
+
               </div>
               <p class="ps-3">
                 View complete breakup of payments, deductions and declarations. You can analyze how income tax is
@@ -102,35 +102,6 @@
                         <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime != 1"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
                       </div>
                     </div>
-                    <!-- <div class="t-table t-list border-0 col-md-12 bg-white">
-                      <div class="t-head overflow-hidden">
-                        <div class="tr border-bottom-0">
-                          <div class="th ps-2">NET TAXABLE INCOME</div>
-                          <div class="th">GROSS INCOME TAX</div>
-                          <div class="th">TOTAL SURCHARGE & CESS</div>
-                          <div class="th">NET INCOME TAX PAYABLE</div>
-                          <div class="th">TAX PAID TILL NOW</div>
-                          <div class="th fe-1">REMAINING TAX TO BE PAID</div>
-                        </div>
-                      </div>
-                      <div class="t-head overflow-hidden">
-                        <div class="tr text-dark py-2">
-                          <div class="th ps-2">
-                            <span>INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TotalAmount | number : '1.2-2') : (allDeclarationSalaryDetails.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
-                          </div>
-                          <div class="th ps-2">
-                            <span>INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TotalAmount | number : '1.2-2') : (allDeclarationSalaryDetails.TotalAmountOnNewRegim | number : '1.2-2')}}</span>
-                          </div>
-                          <div class="th ps-2">INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.SurChargesAndCess | number:'1.2-2') : (allDeclarationSalaryDetails.SurChargesAndCessOnNewRegim | number:'1.2-2')}}</div>
-                          <div class="th ps-2">INR {{allDeclarationSalaryDetails.EmployeeCurrentRegime == 1 ? (allDeclarationSalaryDetails.TaxNeedToPay | number : '1.2-2') : (allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim | number : '1.2-2')}}</div>
-                          <div class="th ps-2">INR {{allDeclarationSalaryDetails.TaxPaid | number:'1.2-2'}}</div>
-                          <div class="th ps-2">
-                            <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime == 1">INR {{allDeclarationSalaryDetails.TaxNeedToPay - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
-                            <span *ngIf="allDeclarationSalaryDetails.EmployeeCurrentRegime != 1">INR {{allDeclarationSalaryDetails.TaxNeedToPayOnNewRegim - allDeclarationSalaryDetails.TaxPaid | number : '1.2-2'}}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
                     <div class="d-flex py-3 align-items-center">
                       <div class="pointable-text ms-2 px-2">A</div>
                       <h5 class="fw-bold text-dark ps-2 pb-0 mb-0">Gross Earnings from Employment</h5>
@@ -193,7 +164,13 @@
                               <ng-container *ngIf="item.value">
                                 <div class="td fe-1" *ngFor="let elem of item.value">
                                   <div class="cell-wrapper">
-                                    <i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{elem.FinalAmount | number: '1.0-0'}}
+                                    <i class="fa-solid fa-indian-rupee-sign pe-1"></i>
+                                    <ng-container *ngIf="elem.IsPayrollExecutedForThisMonth || elem.IsPayrollExecutedForThisMonth == null">
+                                      {{elem.FinalAmount | number: '1.0-0'}}
+                                    </ng-container>
+                                    <ng-container *ngIf="!elem.IsPayrollExecutedForThisMonth">
+                                      {{elem.ActualAmount | number: '1.0-0'}}
+                                    </ng-container>
                                   </div>
                                 </div>
                               </ng-container>
