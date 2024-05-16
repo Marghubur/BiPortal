@@ -127,7 +127,11 @@ export class IncometaxComponent implements OnInit {
         while(i < annualSalaryDetail.length) {
           let amount = 0;
           let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC");
-          amount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+          if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
+            amount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
+          } else {
+            amount = salaryComponent.reduce((acc, next) => { return acc + next.ActualAmount }, 0);
+          }
           finalAmount += amount;
           totalAmounts.push({ FinalAmount: amount });
           i++;
@@ -140,17 +144,35 @@ export class IncometaxComponent implements OnInit {
 
           i = 0;
           let value = "";
-          let selectedComponent = [];
           let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName, IsIncludeInPayslip}) => { return { ComponentId, ComponentName, IsIncludeInPayslip} });
           // props = props.filter(x => x.ComponentId != "ECI" && x.ComponentId != "EPER-PF" && x.ComponentId != "GRA");
           while(i < props.length) {
+            let selectedComponent = [];
             value = props[i].ComponentId;
-            selectedComponent = annualSalaryDetail.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
+            let totalAmount = 0;
+            //selectedComponent = annualSalaryDetail.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
+            annualSalaryDetail.forEach(x => {
+              let component = x.SalaryBreakupDetails.find(i => i.ComponentId == value);
+              if (component) {
+                component.IsPayrollExecutedForThisMonth = x.IsPayrollExecutedForThisMonth;
+                selectedComponent.push(component);
+              }
+            });
+            let filterselectedComponent = annualSalaryDetail.filter(x => x.IsPayrollExecutedForThisMonth);
+            if (filterselectedComponent && filterselectedComponent.length > 0) {
+              filterselectedComponent = filterselectedComponent.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
+              totalAmount += filterselectedComponent.reduce((acc, cur) => { return acc + cur.FinalAmount; }, 0);
+            }
+            filterselectedComponent = annualSalaryDetail.filter(x => !x.IsPayrollExecutedForThisMonth);
+            if (filterselectedComponent && filterselectedComponent.length > 0) {
+              filterselectedComponent = filterselectedComponent.map(x => x.SalaryBreakupDetails.find(i => i.ComponentId == value));
+              totalAmount += filterselectedComponent.reduce((acc, cur) => { return acc + cur.ActualAmount; }, 0);
+            }
             if (!selectedComponent.includes(undefined)) {
               this.salaryBreakup.push({
                 id: props[i].ComponentId,
                 key: props[i].ComponentName,
-                total: selectedComponent.reduce((acc, cur) => { return acc + cur.FinalAmount; }, 0),
+                total: totalAmount,
                 value: selectedComponent,
                 isIncludeInPayslip: props[i].IsIncludeInPayslip
               });
