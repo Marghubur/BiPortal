@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   projectDetail: Array<any> = [];
   clientDetail: Array<any> = [];
   newJoinees: Array<any> = [];
+  isChatBotEnable: boolean = false;
 
   constructor(private http: CoreHttpService,
               private nav:iNavigation) { }
@@ -236,4 +237,18 @@ export class HomeComponent implements OnInit {
   viewNewJoinee() {
     this.nav.navigate(Employees, null);
   }
+
+  switchDashboard() {
+    this.isChatBotEnable = !this.isChatBotEnable;
+  }
+
+  executePrompt(e: any) {
+    let value = e.target.value;
+    if (value) {
+      alert(value);
+      //this.generateResponse()
+      e.target.value = "";
+    }
+  }
+
 }

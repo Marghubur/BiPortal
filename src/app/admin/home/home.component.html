@@ -1,822 +1,837 @@
 <div class="layout-container body-curve bg-white" [ngClass]="{ preload: !isPageReady }">
-  <div class="col-md-12 row">
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card skeleton">
-        <div class="card-body vhide p-3">
-          <div class="d-flex flex-row justify-content-between">
-            <div class="numbers">
-              <p class="text-sm mb-0 text-capitalize font-weight-bold">
-                Month Income
-              </p>
-              <h5 class="font-weight-bolder mb-0">
-                &#8377; 53,000
-                <span class="text-success text-sm font-weight-bolder">+55%</span>
-              </h5>
-            </div>
-            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-              <i class="fa-solid fa-database text-lg opacity-10" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card skeleton">
-        <div class="card-body vhide p-3">
-          <div class="d-flex flex-row justify-content-between">
-            <div class="numbers">
-              <p class="text-sm mb-0 text-capitalize font-weight-bold">
-                Pending GST
-              </p>
-              <h5 class="font-weight-bolder mb-0">
-                &#8377; {{ totalGSTAmount | number : "1.2-2" }}
-                <!-- <span class="text-success text-sm font-weight-bolder">+55%</span> -->
-              </h5>
-            </div>
-            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-              <i class="fa-regular fa-money-bill-1 text-lg opacity-10" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card skeleton">
-        <div class="card-body vhide p-3">
-          <div class="row">
-            <div class="col-8">
-              <div class="numbers">
-                <p class="text-sm mb-0 text-capitalize font-weight-bold">
-                  Today's Money
-                </p>
-                <h5 class="font-weight-bolder mb-0">
-                  $53,000
-                  <span class="text-success text-sm font-weight-bolder">+55%</span>
-                </h5>
-              </div>
-            </div>
-            <div class="col-4 text-end">
-              <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                <i class="fa-solid fa-database text-lg opacity-10" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-      <div class="card skeleton">
-        <div class="card-body vhide p-3">
-          <div class="row">
-            <div class="col-8">
-              <div class="numbers">
-                <p class="text-sm mb-0 text-capitalize font-weight-bold">
-                  Today's Money
-                </p>
-                <h5 class="font-weight-bolder mb-0">
-                  $53,000
-                  <span class="text-success text-sm font-weight-bolder">+55%</span>
-                </h5>
-              </div>
-            </div>
-            <div class="col-4 text-end">
-              <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                <i class="fa-solid fa-database text-lg opacity-10" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="text-end mb-3">
+    <button class="btn btn-primary-c" *ngIf="!isChatBotEnable" (click)="switchDashboard()">Switch to AI Chat Bot</button>
+    <button class="btn btn-primary-c" *ngIf="isChatBotEnable" (click)="switchDashboard()">Switch to Dashboard</button>
   </div>
-
-  <div class="col-12 mt-5">
-    <div class="row mt-4">
-      <div class="col-md-8">
-        <div class="">
-          <div class="skeleton rounded-top">
-            <h4 class="vhide pt-2 fs-6 font-weight-bolder">
-              Yearly Performance Chart
-            </h4>
-            <small class="vhide text-muted">Compnany monthly performance at a glance</small>
-          </div>
-          <div class="d-block skeleton rounded-bottom">
-            <div class="vhide">
-              <canvas id="lineChart" width="200" height="60"></canvas>
+  <ng-container *ngIf="!isChatBotEnable">
+    <div class="col-md-12 row">
+      <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card skeleton">
+          <div class="card-body vhide p-3">
+            <div class="d-flex flex-row justify-content-between">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-capitalize font-weight-bold">
+                  Month Income
+                </p>
+                <h5 class="font-weight-bolder mb-0">
+                  &#8377; 53,000
+                  <span class="text-success text-sm font-weight-bolder">+55%</span>
+                </h5>
+              </div>
+              <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                <i class="fa-solid fa-database text-lg opacity-10" aria-hidden="true"></i>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="row flex-grow mt-2">
-          <div class="col-12 skeleton rounded grid-margin stretch-card">
-            <div class="card vhide card-rounded table-darkBGImg">
-              <div class="card-body-p">
-                <div class="col-sm-8">
-                  <h3 class="text-white upgrade-info mb-0">
-                    Enhance your <span class="fw-bold">Campaign</span> for
-                    better outreach
-                  </h3>
-                  <a href="#" class="btn btn-info upgrade-btn">Upgrade Account!</a>
+      <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card skeleton">
+          <div class="card-body vhide p-3">
+            <div class="d-flex flex-row justify-content-between">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-capitalize font-weight-bold">
+                  Pending GST
+                </p>
+                <h5 class="font-weight-bolder mb-0">
+                  &#8377; {{ totalGSTAmount | number : "1.2-2" }}
+                  <!-- <span class="text-success text-sm font-weight-bolder">+55%</span> -->
+                </h5>
+              </div>
+              <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                <i class="fa-regular fa-money-bill-1 text-lg opacity-10" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card skeleton">
+          <div class="card-body vhide p-3">
+            <div class="row">
+              <div class="col-8">
+                <div class="numbers">
+                  <p class="text-sm mb-0 text-capitalize font-weight-bold">
+                    Today's Money
+                  </p>
+                  <h5 class="font-weight-bolder mb-0">
+                    $53,000
+                    <span class="text-success text-sm font-weight-bolder">+55%</span>
+                  </h5>
+                </div>
+              </div>
+              <div class="col-4 text-end">
+                <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                  <i class="fa-solid fa-database text-lg opacity-10" aria-hidden="true"></i>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="row flex-grow">
-          <div class="col-12 grid-margin stretch-card">
-            <div class="card skeleton card-rounded">
-              <div class="card-body vhide">
-                <div class="d-sm-flex justify-content-between align-items-start">
-                  <div>
-                    <h4 class="card-title card-title-dash">Pending Requests</h4>
-                    <p class="card-subtitle card-subtitle-dash">
-                      You have 50+ new requests
-                    </p>
-                  </div>
-                  <div>
-                    <button class="btn btn-primary-c btn-sm text-white mb-0 me-0" type="button">
-                      <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
-                      Add new member
-                    </button>
+      <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        <div class="card skeleton">
+          <div class="card-body vhide p-3">
+            <div class="row">
+              <div class="col-8">
+                <div class="numbers">
+                  <p class="text-sm mb-0 text-capitalize font-weight-bold">
+                    Today's Money
+                  </p>
+                  <h5 class="font-weight-bolder mb-0">
+                    $53,000
+                    <span class="text-success text-sm font-weight-bolder">+55%</span>
+                  </h5>
+                </div>
+              </div>
+              <div class="col-4 text-end">
+                <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                  <i class="fa-solid fa-database text-lg opacity-10" aria-hidden="true"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 mt-5">
+      <div class="row mt-4">
+        <div class="col-md-8">
+          <div class="">
+            <div class="skeleton rounded-top">
+              <h4 class="vhide pt-2 fs-6 font-weight-bolder">
+                Yearly Performance Chart
+              </h4>
+              <small class="vhide text-muted">Compnany monthly performance at a glance</small>
+            </div>
+            <div class="d-block skeleton rounded-bottom">
+              <div class="vhide">
+                <canvas id="lineChart" width="200" height="60"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="row flex-grow mt-2">
+            <div class="col-12 skeleton rounded grid-margin stretch-card">
+              <div class="card vhide card-rounded table-darkBGImg">
+                <div class="card-body-p">
+                  <div class="col-sm-8">
+                    <h3 class="text-white upgrade-info mb-0">
+                      Enhance your <span class="fw-bold">Campaign</span> for
+                      better outreach
+                    </h3>
+                    <a href="#" class="btn btn-info upgrade-btn">Upgrade Account!</a>
                   </div>
                 </div>
-                <div class="overflow-auto mt-1">
-                  <table class="table select-table">
-                    <thead>
-                      <tr>
-                        <th>
-                          <!-- <div class="form-check form-check-flat mt-0">
-                            <label class="form-check-label">
+              </div>
+            </div>
+          </div>
+
+          <div class="row flex-grow">
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card skeleton card-rounded">
+                <div class="card-body vhide">
+                  <div class="d-sm-flex justify-content-between align-items-start">
+                    <div>
+                      <h4 class="card-title card-title-dash">Pending Requests</h4>
+                      <p class="card-subtitle card-subtitle-dash">
+                        You have 50+ new requests
+                      </p>
+                    </div>
+                    <div>
+                      <button class="btn btn-primary-c btn-sm text-white mb-0 me-0" type="button">
+                        <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                        Add new member
+                      </button>
+                    </div>
+                  </div>
+                  <div class="overflow-auto mt-1">
+                    <table class="table select-table">
+                      <thead>
+                        <tr>
+                          <th>
+                            <!-- <div class="form-check form-check-flat mt-0">
+                              <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
+                            </div> -->
+                          </th>
+                          <th>Customer</th>
+                          <th>Company</th>
+                          <th>Progress</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <div class="form-check form-check-flat mt-0">
+                              <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
+                              <input type="checkbox" class="checkbox-round" />
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex">
+                              <div>
+                                <app-image-loader [url]="'assets/faces/face.jpg'"></app-image-loader>
+                              </div>
+                              <div class="ps-3">
+                                <h6 class="table-text-size">
+                                  Brandon Washington
+                                </h6>
+                                <small class="text-muted">Head admin</small>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <h6 class="table-text-size">Company name 1</h6>
+                            <small class="text-muted">company type</small>
+                          </td>
+                          <td>
+                            <div class="pt-2">
+                              <div class="d-flex justify-content-between align-items-center max-width-progress-wrap">
+                                <p class="text-success">79%</p>
+                                <p>85/162</p>
+                              </div>
+                              <div class="progress progress-md">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 85%"
+                                  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="badge badge-opacity-warning mt-2">
+                              In progress
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="form-check form-check-flat mt-0">
+                              <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
+                              <input type="checkbox" class="checkbox-round" />
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex">
+                              <div>
+                                <app-image-loader></app-image-loader>
+                              </div>
+                              <div class="ps-3">
+                                <h6 class="table-text-size">Laura Brooks</h6>
+                                <small class="text-muted">Head admin</small>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <h6 class="table-text-size">Company name 1</h6>
+                            <small class="text-muted">company type</small>
+                          </td>
+                          <td>
+                            <div class="pt-2">
+                              <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
+                                <p class="text-success">65%</p>
+                                <p>85/162</p>
+                              </div>
+                              <div class="progress progress-md">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
+                                  aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="badge badge-opacity-warning mt-2">
+                              In progress
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="form-check form-check-flat mt-0">
+                              <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
+                              <input type="checkbox" class="checkbox-round" />
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex">
+                              <div>
+                                <app-image-loader></app-image-loader>
+                              </div>
+                              <div class="ps-3">
+                                <h6 class="table-text-size">Wayne Murphy</h6>
+                                <small class="text-muted">Head admin</small>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <h6 class="table-text-size">Company name 1</h6>
+                            <small class="text-muted">company type</small>
+                          </td>
+                          <td>
+                            <div class="pt-2">
+                              <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
+                                <p class="text-success">65%</p>
+                                <p>85/162</p>
+                              </div>
+                              <div class="progress progress-md">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 38%"
+                                  aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="badge badge-opacity-warning mt-2">
+                              In progress
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="form-check form-check-flat mt-0">
+                              <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
+                              <input type="checkbox" class="checkbox-round" />
+                            </div>
+                          </td>
+                          <td>
+                            <div class="d-flex">
+                              <div>
+                                <app-image-loader></app-image-loader>
+                              </div>
+                              <div class="ps-3">
+                                <h6 class="table-text-size">Matthew Bailey</h6>
+                                <small class="text-muted">Head admin</small>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <h6 class="table-text-size">Company name 1</h6>
+                            <small class="text-muted">company type</small>
+                          </td>
+                          <td>
+                            <div class="pt-2">
+                              <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
+                                <p class="text-success">65%</p>
+                                <p>85/162</p>
+                              </div>
+                              <div class="progress progress-md">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 15%"
+                                  aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="badge badge-opacity-danger mt-2">
+                              Pending
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <!-- <div class="form-check form-check-flat mt-0">
+                              <label class="form-check-label">
                               <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
-                          </div> -->
-                        </th>
-                        <th>Customer</th>
-                        <th>Company</th>
-                        <th>Progress</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="form-check form-check-flat mt-0">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
-                            <input type="checkbox" class="checkbox-round" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex">
-                            <div>
-                              <app-image-loader [url]="'assets/faces/face.jpg'"></app-image-loader>
+                            </div> -->
+                            <div class="form-check form-check-flat mt-0">
+                              <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
+                              <input type="checkbox" class="checkbox-round" />
                             </div>
-                            <div class="ps-3">
-                              <h6 class="table-text-size">
-                                Brandon Washington
-                              </h6>
-                              <small class="text-muted">Head admin</small>
+                          </td>
+                          <td>
+                            <div class="d-flex">
+                              <div>
+                                <app-image-loader></app-image-loader>
+                              </div>
+                              <div class="ps-3">
+                                <h6 class="table-text-size">Katherine Butler</h6>
+                                <small class="text-muted">Head admin</small>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td>
-                          <h6 class="table-text-size">Company name 1</h6>
-                          <small class="text-muted">company type</small>
-                        </td>
-                        <td>
-                          <div class="pt-2">
-                            <div class="d-flex justify-content-between align-items-center max-width-progress-wrap">
-                              <p class="text-success">79%</p>
-                              <p>85/162</p>
+                          </td>
+                          <td>
+                            <h6 class="table-text-size">Company name 1</h6>
+                            <small class="text-muted">company type</small>
+                          </td>
+                          <td>
+                            <div class="pt-2">
+                              <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
+                                <p class="text-success">65%</p>
+                                <p>85/162</p>
+                              </div>
+                              <div class="progress progress-md">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
+                                  aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
                             </div>
-                            <div class="progress progress-md">
-                              <div class="progress-bar bg-success" role="progressbar" style="width: 85%"
-                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                          </td>
+                          <td>
+                            <div class="badge badge-opacity-success mt-2">
+                              Completed
                             </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="badge badge-opacity-warning mt-2">
-                            In progress
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="form-check form-check-flat mt-0">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
-                            <input type="checkbox" class="checkbox-round" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex">
-                            <div>
-                              <app-image-loader></app-image-loader>
-                            </div>
-                            <div class="ps-3">
-                              <h6 class="table-text-size">Laura Brooks</h6>
-                              <small class="text-muted">Head admin</small>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <h6 class="table-text-size">Company name 1</h6>
-                          <small class="text-muted">company type</small>
-                        </td>
-                        <td>
-                          <div class="pt-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                              <p class="text-success">65%</p>
-                              <p>85/162</p>
-                            </div>
-                            <div class="progress progress-md">
-                              <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="badge badge-opacity-warning mt-2">
-                            In progress
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="form-check form-check-flat mt-0">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
-                            <input type="checkbox" class="checkbox-round" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex">
-                            <div>
-                              <app-image-loader></app-image-loader>
-                            </div>
-                            <div class="ps-3">
-                              <h6 class="table-text-size">Wayne Murphy</h6>
-                              <small class="text-muted">Head admin</small>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <h6 class="table-text-size">Company name 1</h6>
-                          <small class="text-muted">company type</small>
-                        </td>
-                        <td>
-                          <div class="pt-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                              <p class="text-success">65%</p>
-                              <p>85/162</p>
-                            </div>
-                            <div class="progress progress-md">
-                              <div class="progress-bar bg-warning" role="progressbar" style="width: 38%"
-                                aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="badge badge-opacity-warning mt-2">
-                            In progress
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="form-check form-check-flat mt-0">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
-                            <input type="checkbox" class="checkbox-round" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex">
-                            <div>
-                              <app-image-loader></app-image-loader>
-                            </div>
-                            <div class="ps-3">
-                              <h6 class="table-text-size">Matthew Bailey</h6>
-                              <small class="text-muted">Head admin</small>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <h6 class="table-text-size">Company name 1</h6>
-                          <small class="text-muted">company type</small>
-                        </td>
-                        <td>
-                          <div class="pt-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                              <p class="text-success">65%</p>
-                              <p>85/162</p>
-                            </div>
-                            <div class="progress progress-md">
-                              <div class="progress-bar bg-danger" role="progressbar" style="width: 15%"
-                                aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="badge badge-opacity-danger mt-2">
-                            Pending
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <!-- <div class="form-check form-check-flat mt-0">
-                            <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input" aria-checked="false"><i class="input-helper"></i></label>
-                          </div> -->
-                          <div class="form-check form-check-flat mt-0">
-                            <label class="form-check-label">
-                              <input type="checkbox" class="form-check-input" aria-checked="false" /></label>
-                            <input type="checkbox" class="checkbox-round" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="d-flex">
-                            <div>
-                              <app-image-loader></app-image-loader>
-                            </div>
-                            <div class="ps-3">
-                              <h6 class="table-text-size">Katherine Butler</h6>
-                              <small class="text-muted">Head admin</small>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <h6 class="table-text-size">Company name 1</h6>
-                          <small class="text-muted">company type</small>
-                        </td>
-                        <td>
-                          <div class="pt-2">
-                            <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                              <p class="text-success">65%</p>
-                              <p>85/162</p>
-                            </div>
-                            <div class="progress progress-md">
-                              <div class="progress-bar bg-success" role="progressbar" style="width: 65%"
-                                aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="badge badge-opacity-success mt-2">
-                            Completed
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row flex-grow">
+            <div class="col-md-6 col-lg-6 grid-margin stretch-card">
+              <div class="card skeleton card-rounded">
+                <div class="card-body vhide card-rounded">
+                  <h4 class="card-title card-title-dash">Recent Events</h4>
+                  <div class="list align-items-center border-bottom py-2">
+                    <div class="wrapper w-100">
+                      <p class="mb-2 font-weight-medium">Change in Directors</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <i class="mdi mdi-calendar text-muted me-1"></i>
+                          <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="list align-items-center border-bottom py-2">
+                    <div class="wrapper w-100">
+                      <p class="mb-2 font-weight-medium">Other Events</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <i class="mdi mdi-calendar text-muted me-1"></i>
+                          <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="list align-items-center border-bottom py-2">
+                    <div class="wrapper w-100">
+                      <p class="mb-2 font-weight-medium">Quarterly Report</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <i class="mdi mdi-calendar text-muted me-1"></i>
+                          <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="list align-items-center border-bottom py-2">
+                    <div class="wrapper w-100">
+                      <p class="mb-2 font-weight-medium">Change in Directors</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <i class="mdi mdi-calendar text-muted me-1"></i>
+                          <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="list align-items-center pt-2">
+                    <div class="wrapper w-100">
+                      <p class="mb-0">
+                        <a href="#" class="fw-bold text-primary">Show all <i class="mdi mdi-arrow-right ms-2"></i></a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6 grid-margin stretch-card">
+              <div class="card skeleton card-rounded">
+                <div class="card-body vhide">
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h4 class="card-title card-title-dash">Activities</h4>
+                    <p class="mb-0">20 finished, 5 remaining</p>
+                  </div>
+                  <ul class="bullet-line-list">
+                    <li>
+                      <div class="d-flex justify-content-between text-small">
+                        <div>
+                          <span class="text-light-green">Ben Tossell</span> assign
+                          you a task
+                        </div>
+                        <p>Just now</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-between text-small">
+                        <div>
+                          <span class="text-light-green">Oliver Noah</span> assign
+                          you a task
+                        </div>
+                        <p>1h</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-between text-small">
+                        <div>
+                          <span class="text-light-green">Jack William</span>
+                          assign you a task
+                        </div>
+                        <p>1h</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-between text-small">
+                        <div>
+                          <span class="text-light-green">Leo Lucas</span> assign
+                          you a task
+                        </div>
+                        <p>1h</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-between text-small">
+                        <div>
+                          <span class="text-light-green">Thomas Henry</span>
+                          assign you a task
+                        </div>
+                        <p>1h</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-between text-small">
+                        <div>
+                          <span class="text-light-green">Ben Tossell</span> assign
+                          you a task
+                        </div>
+                        <p>1h</p>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="d-flex justify-content-between text-small">
+                        <div>
+                          <span class="text-light-green">Ben Tossell</span> assign
+                          you a task
+                        </div>
+                        <p>1h</p>
+                      </div>
+                    </li>
+                  </ul>
+                  <div class="list align-items-center pt-3">
+                    <div class="wrapper w-100">
+                      <p class="mb-0">
+                        <a href="#" class="fw-bold text-primary">Show all <i class="mdi mdi-arrow-right ms-2"></i></a>
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row flex-grow">
-          <div class="col-md-6 col-lg-6 grid-margin stretch-card">
-            <div class="card skeleton card-rounded">
-              <div class="card-body vhide card-rounded">
-                <h4 class="card-title card-title-dash">Recent Events</h4>
-                <div class="list align-items-center border-bottom py-2">
-                  <div class="wrapper w-100">
-                    <p class="mb-2 font-weight-medium">Change in Directors</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="d-flex align-items-center">
-                        <i class="mdi mdi-calendar text-muted me-1"></i>
-                        <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
-                      </div>
-                    </div>
-                  </div>
+        <!-- Dashboard Side pannel -->
+        <div class="col-md-4 right-side-panel">
+          <card-widget [title]="'Employees on Leave'" [isLoading]="isLoading">
+            <div class="col-sm-12">
+              <ng-container *ngIf="leaveDetail != null && leaveDetail.length > 0">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>From</th>
+                      <th>To</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of leaveDetail | slice:0:2; let i=index;">
+                      <td>{{i+1}}</td>
+                      <td>{{item.FullName}}</td>
+                      <td>{{item.FromDate | date}}</td>
+                      <td>{{item.ToDate | date}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-end mt-3" *ngIf="leaveDetail.length > 2">
+                  <a href="javascript:void(0)" class="text-decoration-none">view more</a>
                 </div>
-                <div class="list align-items-center border-bottom py-2">
-                  <div class="wrapper w-100">
-                    <p class="mb-2 font-weight-medium">Other Events</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="d-flex align-items-center">
-                        <i class="mdi mdi-calendar text-muted me-1"></i>
-                        <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="list align-items-center border-bottom py-2">
-                  <div class="wrapper w-100">
-                    <p class="mb-2 font-weight-medium">Quarterly Report</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="d-flex align-items-center">
-                        <i class="mdi mdi-calendar text-muted me-1"></i>
-                        <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="list align-items-center border-bottom py-2">
-                  <div class="wrapper w-100">
-                    <p class="mb-2 font-weight-medium">Change in Directors</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                      <div class="d-flex align-items-center">
-                        <i class="mdi mdi-calendar text-muted me-1"></i>
-                        <p class="mb-0 text-small text-muted">Mar 14, 2019</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              </ng-container>
+              <ng-container *ngIf="leaveDetail == null || leaveDetail.length == 0">
+                <p class="mb-0 text-center fw-bold text-dark">Record not found.</p>
+              </ng-container>
+            </div>
+          </card-widget>
 
-                <div class="list align-items-center pt-2">
-                  <div class="wrapper w-100">
-                    <p class="mb-0">
-                      <a href="#" class="fw-bold text-primary">Show all <i class="mdi mdi-arrow-right ms-2"></i></a>
-                    </p>
+          <card-widget [title]="'Projects'" [isLoading]="isLoading">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
+                  <div class="circle-progress-width">
+                    <div id="totalVisitors" class="progressbar-js-circle pr-2">
+                      <svg viewBox="0 0 100 100" style="display: block; width: 100%">
+                        <path d="M 50,50 m 0,-42.5 a 42.5,42.5 0 1 1 0,85 a 42.5,42.5 0 1 1 0,-85" stroke="#eee"
+                          stroke-width="15" fill-opacity="0"></path>
+                        <path d="M 50,50 m 0,-42.5 a 42.5,42.5 0 1 1 0,85 a 42.5,42.5 0 1 1 0,-85"
+                          stroke="rgb(99,137,233)" stroke-width="15" fill-opacity="0" style="
+                            stroke-dasharray: 267.132, 267.132;
+                            stroke-dashoffset: 96.1674;
+                          "></path>
+                      </svg>
+                      <div class="progressbar-text" style="
+                          position: absolute;
+                          left: 50%;
+                          top: 50%;
+                          padding: 0px;
+                          margin: 0px;
+                          transform: translate(-50%, -50%);
+                          color: rgb(255, 255, 255);
+                          font-size: 0rem;
+                        ">
+                        64
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="text-small mb-2">Total Visitors</p>
+                    <h4 class="mb-0 fw-bold">26.80%</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="circle-progress-width">
+                    <div id="visitperday" class="progressbar-js-circle pr-2">
+                      <svg viewBox="0 0 100 100" style="display: block; width: 100%">
+                        <path d="M 50,50 m 0,-42.5 a 42.5,42.5 0 1 1 0,85 a 42.5,42.5 0 1 1 0,-85" stroke="#eee"
+                          stroke-width="15" fill-opacity="0"></path>
+                        <path d="M 50,50 m 0,-42.5 a 42.5,42.5 0 1 1 0,85 a 42.5,42.5 0 1 1 0,-85"
+                          stroke="rgb(60,168,179)" stroke-width="15" fill-opacity="0" style="
+                            stroke-dasharray: 267.132, 267.132;
+                            stroke-dashoffset: 176.307;
+                          "></path>
+                      </svg>
+                      <div class="progressbar-text" style="
+                          position: absolute;
+                          left: 50%;
+                          top: 50%;
+                          padding: 0px;
+                          margin: 0px;
+                          transform: translate(-50%, -50%);
+                          color: rgb(255, 255, 255);
+                          font-size: 0rem;
+                        ">
+                        34
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="text-small mb-2">Visits per day</p>
+                    <h4 class="mb-0 fw-bold">9065</h4>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-6 col-lg-6 grid-margin stretch-card">
-            <div class="card skeleton card-rounded">
-              <div class="card-body vhide">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                  <h4 class="card-title card-title-dash">Activities</h4>
-                  <p class="mb-0">20 finished, 5 remaining</p>
+            <div class="col-sm-12">
+              <ng-container *ngIf="projectDetail != null && projectDetail.length > 0">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Project Name</th>
+                      <th width="29%">Started On</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of projectDetail | slice:0:2; let i=index">
+                      <td>{{i+1}}</td>
+                      <td >{{item.ProjectName}}</td>
+                      <td>{{item.ProjectStartedOn | date}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-end mt-3" *ngIf="projectDetail.length > 2">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewProjects()">view more</a>
                 </div>
-                <ul class="bullet-line-list">
-                  <li>
-                    <div class="d-flex justify-content-between text-small">
-                      <div>
-                        <span class="text-light-green">Ben Tossell</span> assign
-                        you a task
+              </ng-container>
+              <ng-container *ngIf="projectDetail == null || projectDetail.length == 0">
+                <p class="mb-0 text-center fw-bold text-dark">Record not found.</p>
+              </ng-container>
+            </div>
+          </card-widget>
+
+          <card-widget [title]="'Clients'" [isLoading]="isLoading">
+            <div class="col-sm-12">
+              <ng-container *ngIf="clientDetail != null && clientDetail.length > 0">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Mobile</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of clientDetail | slice:0:2; let i=index;">
+                      <td>{{i+1}}</td>
+                      <td>{{item.ClientName}}</td>
+                      <td>{{item.Email}}</td>
+                      <td>{{item.Mobile}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-end mt-3" *ngIf="clientDetail.length > 2">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewClients()">view more</a>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="clientDetail == null || clientDetail.length == 0">
+                <p class="mb-0 text-center fw-bold text-dark">Record not found.</p>
+              </ng-container>
+            </div>
+          </card-widget>
+
+          <card-widget [title]="'New Joinee'" [isLoading]="isLoading">
+            <div class="col-sm-12">
+              <ng-container *ngIf="newJoinees != null && newJoinees.length > 0">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Mobile</th>
+                      <th>DOJ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of newJoinees | slice:0:2; let i=index;">
+                      <td>{{i+1}}</td>
+                      <td>{{item.FullName}}</td>
+                      <td>{{item.Email}}</td>
+                      <td>{{item.Mobile}}</td>
+                      <td>{{item.CreatedOn | date}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-end mt-3" *ngIf="newJoinees.length > 2">
+                  <a href="javascript:void(0)" class="text-decoration-none" (click)="viewNewJoinee()">view more</a>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="newJoinees == null || newJoinees.length == 0">
+                <p class="mb-0 text-center fw-bold text-dark">Record not found.</p>
+              </ng-container>
+            </div>
+          </card-widget>
+
+          <card-widget [title]="'Pending payment (Receive)'" [isLoading]="isLoading">
+            <div class="col-lg-12">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="add-items d-flex mb-0">
+                  <button class="btn" (click)="editPendingPayment()">
+                    <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="list-wrapper" *ngIf="isPaymenyPending">
+                <ul class="todo-list todo-list-rounded">
+                  <li *ngFor="let p of clientBillPayment" class="d-block">
+                    <div class="form-check w-100">
+                      <label class="d-block">
+                        {{ p.ClientName }} &nbsp;
+                        <small>[{{ p.FirstName }}]</small>
+                        <span class="float-end">&#8377; {{ p.PaidAmount }}</span>
+                      </label>
+                      <div class="d-flex mt-2">
+                        <div class="text-small me-3">
+                          {{ p.BillUpdatedOn | date }}
+                        </div>
+                        <div [ngSwitch]="p.BillStatusId">
+                          <div *ngSwitchCase="1" class="badge badge-opacity-success me-3">
+                            Done
+                          </div>
+                          <div *ngSwitchDefault class="badge badge-opacity-warning me-3">
+                            Due
+                          </div>
+                        </div>
+                        <i class="mdi mdi-flag ms-2 flag-color"></i>
                       </div>
-                      <p>Just now</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="d-flex justify-content-between text-small">
-                      <div>
-                        <span class="text-light-green">Oliver Noah</span> assign
-                        you a task
-                      </div>
-                      <p>1h</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="d-flex justify-content-between text-small">
-                      <div>
-                        <span class="text-light-green">Jack William</span>
-                        assign you a task
-                      </div>
-                      <p>1h</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="d-flex justify-content-between text-small">
-                      <div>
-                        <span class="text-light-green">Leo Lucas</span> assign
-                        you a task
-                      </div>
-                      <p>1h</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="d-flex justify-content-between text-small">
-                      <div>
-                        <span class="text-light-green">Thomas Henry</span>
-                        assign you a task
-                      </div>
-                      <p>1h</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="d-flex justify-content-between text-small">
-                      <div>
-                        <span class="text-light-green">Ben Tossell</span> assign
-                        you a task
-                      </div>
-                      <p>1h</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="d-flex justify-content-between text-small">
-                      <div>
-                        <span class="text-light-green">Ben Tossell</span> assign
-                        you a task
-                      </div>
-                      <p>1h</p>
                     </div>
                   </li>
                 </ul>
-                <div class="list align-items-center pt-3">
-                  <div class="wrapper w-100">
-                    <p class="mb-0">
-                      <a href="#" class="fw-bold text-primary">Show all <i class="mdi mdi-arrow-right ms-2"></i></a>
-                    </p>
-                  </div>
+                <div class="ps-4 mt-2 fw-bold text-dark">
+                  <label>
+                    Total: &#8377;
+                    {{ this.totalPendingPayment | number : "1.2-2" }}
+                  </label>
+                </div>
+              </div>
+              <div class="form-check w-100 fw-bold text-primary fs-4 py-5" *ngIf="!isPaymenyPending">
+                There are no pending payments.
+              </div>
+            </div>
+          </card-widget>
+
+          <card-widget [title]="'Missing attendance(s)'" [isLoading]="isLoading">
+            <div class="col-lg-12">
+              <div class="d-flex justify-content-between align-items-center">
+                <h4 class="card-title-dash"></h4>
+                <div class="add-items d-flex mb-0">
+                  <button class="btn">
+                    <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="list-wrapper">
+                <ul class="todo-list todo-list-rounded">
+                  <li *ngFor="let p of clientBillPayment" class="d-block">
+                    <div class="form-check w-100">
+                      <label class="">
+                        {{ p.ClientName }} &nbsp;
+                        <small>[{{ p.FirstName }}]</small>
+                      </label>
+                      <div class="d-flex mt-2">
+                        <div class="text-small me-3">
+                          {{ p.BillUpdatedOn | date }}
+                        </div>
+                        <div [ngSwitch]="p.BillStatusId">
+                          <div *ngSwitchCase="1" class="badge badge-opacity-success me-3">
+                            Done
+                          </div>
+                          <div *ngSwitchDefault class="badge badge-opacity-warning me-3">
+                            Due
+                          </div>
+                        </div>
+                        <i class="mdi mdi-flag ms-2 flag-color"></i>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+                <div class="ps-4 mt-2">
+                  <label> Total: &#8377; 150000 </label>
                 </div>
               </div>
             </div>
-          </div>
+          </card-widget>
+
+          <!-- <card-widget [title]="'Type By Amount(s)'" [isLoading]="isLoading">
+            <div class="d-flex align-items-center justify-content-center mt-3">
+              <div class="d-block">
+                <canvas id="doughnutchart" width="280" height="280"></canvas>
+              </div>
+            </div>
+          </card-widget> -->
         </div>
       </div>
-
-      <!-- Dashboard Side pannel -->
-      <div class="col-md-4 right-side-panel">
-        <card-widget [title]="'Employees on Leave'" [isLoading]="isLoading">
-          <div class="col-sm-12">
-            <ng-container *ngIf="leaveDetail != null && leaveDetail.length > 0">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>From</th>
-                    <th>To</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of leaveDetail | slice:0:2; let i=index;">
-                    <td>{{i+1}}</td>
-                    <td>{{item.FullName}}</td>
-                    <td>{{item.FromDate | date}}</td>
-                    <td>{{item.ToDate | date}}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="text-end mt-3" *ngIf="leaveDetail.length > 2">
-                <a href="javascript:void(0)" class="text-decoration-none">view more</a>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="leaveDetail == null || leaveDetail.length == 0">
-              <p class="mb-0 text-center fw-bold text-dark">Record not found.</p>
-            </ng-container>
-          </div>
-        </card-widget>
-
-        <card-widget [title]="'Projects'" [isLoading]="isLoading">
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="d-flex justify-content-between align-items-center mb-2 mb-sm-0">
-                <div class="circle-progress-width">
-                  <div id="totalVisitors" class="progressbar-js-circle pr-2">
-                    <svg viewBox="0 0 100 100" style="display: block; width: 100%">
-                      <path d="M 50,50 m 0,-42.5 a 42.5,42.5 0 1 1 0,85 a 42.5,42.5 0 1 1 0,-85" stroke="#eee"
-                        stroke-width="15" fill-opacity="0"></path>
-                      <path d="M 50,50 m 0,-42.5 a 42.5,42.5 0 1 1 0,85 a 42.5,42.5 0 1 1 0,-85"
-                        stroke="rgb(99,137,233)" stroke-width="15" fill-opacity="0" style="
-                          stroke-dasharray: 267.132, 267.132;
-                          stroke-dashoffset: 96.1674;
-                        "></path>
-                    </svg>
-                    <div class="progressbar-text" style="
-                        position: absolute;
-                        left: 50%;
-                        top: 50%;
-                        padding: 0px;
-                        margin: 0px;
-                        transform: translate(-50%, -50%);
-                        color: rgb(255, 255, 255);
-                        font-size: 0rem;
-                      ">
-                      64
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <p class="text-small mb-2">Total Visitors</p>
-                  <h4 class="mb-0 fw-bold">26.80%</h4>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="circle-progress-width">
-                  <div id="visitperday" class="progressbar-js-circle pr-2">
-                    <svg viewBox="0 0 100 100" style="display: block; width: 100%">
-                      <path d="M 50,50 m 0,-42.5 a 42.5,42.5 0 1 1 0,85 a 42.5,42.5 0 1 1 0,-85" stroke="#eee"
-                        stroke-width="15" fill-opacity="0"></path>
-                      <path d="M 50,50 m 0,-42.5 a 42.5,42.5 0 1 1 0,85 a 42.5,42.5 0 1 1 0,-85"
-                        stroke="rgb(60,168,179)" stroke-width="15" fill-opacity="0" style="
-                          stroke-dasharray: 267.132, 267.132;
-                          stroke-dashoffset: 176.307;
-                        "></path>
-                    </svg>
-                    <div class="progressbar-text" style="
-                        position: absolute;
-                        left: 50%;
-                        top: 50%;
-                        padding: 0px;
-                        margin: 0px;
-                        transform: translate(-50%, -50%);
-                        color: rgb(255, 255, 255);
-                        font-size: 0rem;
-                      ">
-                      34
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <p class="text-small mb-2">Visits per day</p>
-                  <h4 class="mb-0 fw-bold">9065</h4>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-12">
-            <ng-container *ngIf="projectDetail != null && projectDetail.length > 0">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Project Name</th>
-                    <th width="29%">Started On</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of projectDetail | slice:0:2; let i=index">
-                    <td>{{i+1}}</td>
-                    <td >{{item.ProjectName}}</td>
-                    <td>{{item.ProjectStartedOn | date}}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="text-end mt-3" *ngIf="projectDetail.length > 2">
-                <a href="javascript:void(0)" class="text-decoration-none" (click)="viewProjects()">view more</a>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="projectDetail == null || projectDetail.length == 0">
-              <p class="mb-0 text-center fw-bold text-dark">Record not found.</p>
-            </ng-container>
-          </div>
-        </card-widget>
-
-        <card-widget [title]="'Clients'" [isLoading]="isLoading">
-          <div class="col-sm-12">
-            <ng-container *ngIf="clientDetail != null && clientDetail.length > 0">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of clientDetail | slice:0:2; let i=index;">
-                    <td>{{i+1}}</td>
-                    <td>{{item.ClientName}}</td>
-                    <td>{{item.Email}}</td>
-                    <td>{{item.Mobile}}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="text-end mt-3" *ngIf="clientDetail.length > 2">
-                <a href="javascript:void(0)" class="text-decoration-none" (click)="viewClients()">view more</a>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="clientDetail == null || clientDetail.length == 0">
-              <p class="mb-0 text-center fw-bold text-dark">Record not found.</p>
-            </ng-container>
-          </div>
-        </card-widget>
-
-        <card-widget [title]="'New Joinee'" [isLoading]="isLoading">
-          <div class="col-sm-12">
-            <ng-container *ngIf="newJoinees != null && newJoinees.length > 0">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>
-                    <th>DOJ</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of newJoinees | slice:0:2; let i=index;">
-                    <td>{{i+1}}</td>
-                    <td>{{item.FullName}}</td>
-                    <td>{{item.Email}}</td>
-                    <td>{{item.Mobile}}</td>
-                    <td>{{item.CreatedOn | date}}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div class="text-end mt-3" *ngIf="newJoinees.length > 2">
-                <a href="javascript:void(0)" class="text-decoration-none" (click)="viewNewJoinee()">view more</a>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="newJoinees == null || newJoinees.length == 0">
-              <p class="mb-0 text-center fw-bold text-dark">Record not found.</p>
-            </ng-container>
-          </div>
-        </card-widget>
-
-        <card-widget [title]="'Pending payment (Receive)'" [isLoading]="isLoading">
-          <div class="col-lg-12">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="add-items d-flex mb-0">
-                <button class="btn" (click)="editPendingPayment()">
-                  <i class="fa-solid fa-pencil" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list-wrapper" *ngIf="isPaymenyPending">
-              <ul class="todo-list todo-list-rounded">
-                <li *ngFor="let p of clientBillPayment" class="d-block">
-                  <div class="form-check w-100">
-                    <label class="d-block">
-                      {{ p.ClientName }} &nbsp;
-                      <small>[{{ p.FirstName }}]</small>
-                      <span class="float-end">&#8377; {{ p.PaidAmount }}</span>
-                    </label>
-                    <div class="d-flex mt-2">
-                      <div class="text-small me-3">
-                        {{ p.BillUpdatedOn | date }}
-                      </div>
-                      <div [ngSwitch]="p.BillStatusId">
-                        <div *ngSwitchCase="1" class="badge badge-opacity-success me-3">
-                          Done
-                        </div>
-                        <div *ngSwitchDefault class="badge badge-opacity-warning me-3">
-                          Due
-                        </div>
-                      </div>
-                      <i class="mdi mdi-flag ms-2 flag-color"></i>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-              <div class="ps-4 mt-2 fw-bold text-dark">
-                <label>
-                  Total: &#8377;
-                  {{ this.totalPendingPayment | number : "1.2-2" }}
-                </label>
-              </div>
-            </div>
-            <div class="form-check w-100 fw-bold text-primary fs-4 py-5" *ngIf="!isPaymenyPending">
-              There are no pending payments.
-            </div>
-          </div>
-        </card-widget>
-
-        <card-widget [title]="'Missing attendance(s)'" [isLoading]="isLoading">
-          <div class="col-lg-12">
-            <div class="d-flex justify-content-between align-items-center">
-              <h4 class="card-title-dash"></h4>
-              <div class="add-items d-flex mb-0">
-                <button class="btn">
-                  <i class="fa-solid fa-pencil" aria-hidden="true"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list-wrapper">
-              <ul class="todo-list todo-list-rounded">
-                <li *ngFor="let p of clientBillPayment" class="d-block">
-                  <div class="form-check w-100">
-                    <label class="">
-                      {{ p.ClientName }} &nbsp;
-                      <small>[{{ p.FirstName }}]</small>
-                    </label>
-                    <div class="d-flex mt-2">
-                      <div class="text-small me-3">
-                        {{ p.BillUpdatedOn | date }}
-                      </div>
-                      <div [ngSwitch]="p.BillStatusId">
-                        <div *ngSwitchCase="1" class="badge badge-opacity-success me-3">
-                          Done
-                        </div>
-                        <div *ngSwitchDefault class="badge badge-opacity-warning me-3">
-                          Due
-                        </div>
-                      </div>
-                      <i class="mdi mdi-flag ms-2 flag-color"></i>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-              <div class="ps-4 mt-2">
-                <label> Total: &#8377; 150000 </label>
-              </div>
-            </div>
-          </div>
-        </card-widget>
-
-        <!-- <card-widget [title]="'Type By Amount(s)'" [isLoading]="isLoading">
-          <div class="d-flex align-items-center justify-content-center mt-3">
-            <div class="d-block">
-              <canvas id="doughnutchart" width="280" height="280"></canvas>
-            </div>
-          </div>
-        </card-widget> -->
-      </div>
     </div>
-  </div>
+  </ng-container>
+  <ng-container *ngIf="isChatBotEnable">
+    <div class="pt-5 chatbox-container d-flex flex-column justify-content-between align-items-center">
+      <div class="col-dm-12">
+        <h1 class="text-center fw-bolder text-fs-4 mt-5 pt-5">Welcome to Emstum</h1>
+        <h1 class="text-center text-muted text-fs-3">How can I help you?</h1>
+      </div>
+      <input type="text" id="searchInput" autofocus class="mt-5 w-50 form-control rounded-pill py-3" (keyup.enter)="executePrompt($event)" placeholder="Enter a prompt here">
+    </div>
+  </ng-container>
 </div>
