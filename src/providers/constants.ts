@@ -162,6 +162,12 @@ export const DocumentsPage = `${CommonBaseRoute}/documentspage/:path`;
 
 // ********************** Project route ends  *******************
 
+// ********************** Feature route pages  *******************
+export const FeatureBaseRoute = `${BaseSubUrlPath}/ems/feature`;
+export const CharDashboard = `${FeatureBaseRoute}/chat-dashboard`;
+
+// ********************** Feature route ends  *******************
+
 
 // ********************** Admin route pages  *******************
 

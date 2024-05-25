@@ -1,0 +1,49 @@
+  <div class="layout-container overflow-hidden body-curve bg-white">
+    <div class="text-end">
+      <button class="btn btn-primary-c" (click)="switchtoDashboard()">Switch to Dashboard</button>
+    </div>
+    <div class="pt-5 d-flex flex-column justify-content-between align-items-center">
+      <div class=" chatbox-container mb-2 overflow-auto">
+        <ng-container *ngIf=" chatData == null || chatData.length == 0">
+          <div class="col-md-12">
+            <h1 class="text-center fw-bolder text-fs-4 mt-5 pt-5 hello-text">
+              Hi {{currentUser.FirstName}} {{currentUser.LastName != null ? currentUser.LastName : ""}}, Welcome to Emstum
+            </h1>
+            <h1 class="text-center text-muted text-fs-3">How can I help you?</h1>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="chatData.length > 0">
+          <div class="col-md-6 mx-auto">
+            <ng-container *ngFor="let item of chatData">
+              <div class="request-box mt-3 d-inline-block rounded rounded-5 bg-light border py-2 px-3">
+                {{item.Request}}
+              </div>
+              <div class="my-4 col-md-12 d-flex align-items-top">
+                <div class="col-sm-1">
+                  <img src="assets/images/logo-1.png" alt="img" width="35%">
+                </div>
+                <div class="col">
+                  {{item.Response}}
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+      <div class="d-flex form-control rounded rounded-5 align-items-center w-50 ">
+        <input
+          [(ngModel)]="gemeniRequestText"
+          type="text" rows="1"
+          id="searchInput"
+          autofocus [readOnly]="isLoading"
+          class="border-0 form-control-c py-3"
+          (keyup.enter)="generateResponse()"
+          placeholder="Enter your request here ..."
+        />
+        <a href="javascript:void(0) text-secondary" (click)="generateResponse()" [ngClass]="{'pe-none': isLoading}">
+          <i *ngIf="!isLoading" class="fa-regular fa-circle-play fa-2x" [ngClass]="{'disable-buttom': gemeniRequestText == null || gemeniRequestText == ''}"></i>
+          <i *ngIf="isLoading" class="fa-solid fa-spinner fa-spin fa-1x" style="color: #c8c8c8;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
