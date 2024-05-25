@@ -1,32 +1,29 @@
 import {
   HttpClient,
   HttpResponse,
-  HttpErrorResponse
-} from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { JwtService, ResponseModel } from "src/auth/jwtService";
-import { environment } from "src/environments/environment";
-import { SERVICE } from "../constants";
+  HttpErrorResponse,
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { JwtService, ResponseModel } from 'src/auth/jwtService';
+import { environment } from 'src/environments/environment';
+import { SERVICE } from '../constants';
 
 @Injectable()
 export class AjaxService {
   IsTokenByPass: boolean = true;
 
-  constructor(
-    private tokenHelper: JwtService,
-    private http: HttpClient
-  ) {
+  constructor(private tokenHelper: JwtService, private http: HttpClient) {
     if (environment.production) {
       console.log(`[Bottomhalf]: BiPortal Running on ${environment.env}`);
     } else {
-      console.log("[Bottomhalf]: BiPortal Running on localhost");
+      console.log('[Bottomhalf]: BiPortal Running on localhost');
     }
   }
 
   public GetImageBasePath() {
-    let ImageBaseUrl = environment.baseDotNetUrl.replace("/core/api", "/Files");
+    let ImageBaseUrl = environment.baseDotNetUrl.replace('/core/api', '/Files');
     // let ImageBaseUrl = ("https://www.emstum.com/bot/dn/").replace("/core/api", "/Files");
-    ImageBaseUrl = ImageBaseUrl + "Files/";
+    ImageBaseUrl = ImageBaseUrl + 'Files/';
     return ImageBaseUrl;
   }
 
@@ -35,8 +32,9 @@ export class AjaxService {
     return new Promise((resolve, reject) => {
       this.http
         .post(Url, Param, {
-          observe: "response"
-        }).subscribe({
+          observe: 'response',
+        })
+        .subscribe({
           next: (res: HttpResponse<any>) => {
             try {
               if (this.tokenHelper.IsValidResponse(res.body)) {
@@ -51,12 +49,13 @@ export class AjaxService {
               }
             } catch (e) {
               reject(e);
-            } 0
+            }
+            0;
           },
           error: (e: HttpErrorResponse) => {
             this.tokenHelper.HandleResponseStatus(e);
             reject(e.error);
-          }
+          },
         });
     });
   }
@@ -65,7 +64,7 @@ export class AjaxService {
     return new Promise((resolve, reject) => {
       return this.http
         .get(Url, {
-          observe: "response"
+          observe: 'response',
         })
         .subscribe({
           next: (res: any) => {
@@ -78,7 +77,7 @@ export class AjaxService {
           error: (e: HttpErrorResponse) => {
             this.tokenHelper.HandleResponseStatus(e);
             reject(e.error);
-          }
+          },
         });
     });
   }
@@ -87,8 +86,9 @@ export class AjaxService {
     return new Promise((resolve, reject) => {
       this.http
         .post(Url, Param, {
-          observe: "response"
-        }).subscribe({
+          observe: 'response',
+        })
+        .subscribe({
           next: (res: HttpResponse<any>) => {
             try {
               if (!this.tokenHelper.IsValidResponse(res.body)) {
@@ -102,7 +102,7 @@ export class AjaxService {
           error: (e: HttpErrorResponse) => {
             this.tokenHelper.HandleResponseStatus(e);
             reject(e.error);
-          }
+          },
         });
     });
   }
@@ -111,7 +111,7 @@ export class AjaxService {
     return new Promise((resolve, reject) => {
       this.http
         .put(Url, Param, {
-          observe: "response"
+          observe: 'response',
         })
         .subscribe({
           next: (res: HttpResponse<any>) => {
@@ -127,42 +127,52 @@ export class AjaxService {
           error: (e: HttpErrorResponse) => {
             this.tokenHelper.HandleResponseStatus(e);
             reject(e.error);
-          }
+          },
         });
     });
   }
 
-  async delete(Url: string, Param?: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+  async delete(
+    Url: string,
+    Param?: any,
+    ServiceName: SERVICE = SERVICE.CORE
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.http.delete(Url, {
-        headers: {
-          observe: "response",
-        },
-        body: Param
-      }).subscribe({
-        next: (res: any) => {
-          try {
-            if (!this.tokenHelper.IsValidResponse(res)) {
-              reject(null);
+      this.http
+        .delete(Url, {
+          headers: {
+            observe: 'response',
+          },
+          body: Param,
+        })
+        .subscribe({
+          next: (res: any) => {
+            try {
+              if (!this.tokenHelper.IsValidResponse(res)) {
+                reject(null);
+              }
+            } catch (e) {
+              reject(e);
             }
-          } catch (e) {
-            reject(e);
-          }
-          resolve(res);
-        },
-        error: (e: HttpErrorResponse) => {
-          this.tokenHelper.HandleResponseStatus(e);
-          reject(e.error);
-        }
-      });
+            resolve(res);
+          },
+          error: (e: HttpErrorResponse) => {
+            this.tokenHelper.HandleResponseStatus(e);
+            reject(e.error);
+          },
+        });
     });
   }
 
-  async upload(Url: string, Param: any, ServiceName: SERVICE = SERVICE.CORE): Promise<any> {
+  async upload(
+    Url: string,
+    Param: any,
+    ServiceName: SERVICE = SERVICE.CORE
+  ): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
         .post(Url, Param, {
-          observe: "response"
+          observe: 'response',
         })
         .subscribe({
           next: (res: HttpResponse<any>) => {
@@ -178,7 +188,7 @@ export class AjaxService {
           error: (e: HttpErrorResponse) => {
             this.tokenHelper.HandleResponseStatus(e);
             reject(e.error);
-          }
+          },
         });
     });
   }
@@ -187,9 +197,26 @@ export class AjaxService {
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return this.post(Url, Param);
   }
+
+  async postService(Url: string, Param: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(Url, Param, {
+          observe: 'response',
+        })
+        .subscribe({
+          next: (res: HttpResponse<any>) => {
+            resolve(res.body);
+          },
+          error: (e: HttpErrorResponse) => {
+            reject(e.error);
+          },
+        });
+    });
+  }
 }
 
 export interface iconConfig {
   iconName: string;
-  fn?: Function
+  fn?: Function;
 }
