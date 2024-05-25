@@ -14,8 +14,8 @@ export class CoreHttpService {
     if (environment.production) {
       return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
     } else {
-      // return `https://www.emstum.com/bot/dn/api/${SERVICE.CORE}/${Url}`;
-      return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
+      return `https://www.emstum.com/bot/dn/api/${SERVICE.CORE}/${Url}`;
+      //return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
     }
   }
 
