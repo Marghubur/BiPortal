@@ -51,6 +51,7 @@ export class HomeComponent implements OnInit {
   clientDetail: Array<any> = [];
   newJoinees: Array<any> = [];
   isChatBotEnable: boolean = false;
+  gemeniRequestText: String = '';
 
   constructor(
     private http: CoreHttpService,
@@ -271,12 +272,17 @@ export class HomeComponent implements OnInit {
     this.isChatBotEnable = !this.isChatBotEnable;
   }
 
-  executePrompt(e: any) {
-    let value = e.target.value;
-    if (value) {
-      alert(value);
-      //this.generateResponse()
-      e.target.value = '';
-    }
+  generateResponse() {
+    this.ajax
+      .postService('https://www.bottomhalf.in/api/b_files/query', {
+        query: this.gemeniRequestText,
+      })
+      .then((res: any) => {
+        if (res.content) {
+          alert(res.content);
+        } else {
+          ErrorToast('Server error. Please contact to admin.');
+        }
+      });
   }
 }
