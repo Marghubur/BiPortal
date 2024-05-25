@@ -5,17 +5,17 @@ import { environment } from '../../environments/environment';
 import { ResponseModel } from '../../auth/jwtService';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CoreHttpService {
-  constructor(private http: AjaxService) { }
+  constructor(private http: AjaxService) {}
 
   private GetUrl(Url: string) {
     if (environment.production) {
       return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
     } else {
       return `https://www.emstum.com/bot/dn/api/${SERVICE.CORE}/${Url}`;
-      //return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
+      // return `${environment.baseDotNetUrl}api/${SERVICE.CORE}/${Url}`;
     }
   }
 
