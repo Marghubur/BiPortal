@@ -511,15 +511,3 @@ svg {
   position: sticky;
   top: 0;
 }
-
-.text-fs-4 {
-  font-size: 4rem !important;
-}
-
-.text-fs-3 {
-  font-size: 3rem !important;
-}
-
-.chatbox-container {
-  height: calc(100vh - var(--navbar-height) - var(--content-header-height) - 3.5rem) !important;
-}

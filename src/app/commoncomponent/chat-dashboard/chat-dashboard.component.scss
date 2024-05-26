@@ -1,0 +1,55 @@
+.text-fs-4 {
+  font-size: 4rem !important;
+}
+
+.text-fs-3 {
+  font-size: 3rem !important;
+}
+
+.layout-container {
+  height: calc(100vh - var(--navbar-height)) !important;
+}
+
+.chatbox-container {
+  height: calc(100vh - var(--navbar-height) - var(--content-header-height) - 8.8rem) !important;
+}
+
+.disable-buttom {
+  color: #c8c8c8 !important;
+}
+
+textarea {
+  resize: none;
+}
+
+.form-control-c {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  -webkit-appearance: none;
+  max-height: 25dvh !important;
+  appearance: none;
+  border-radius: .375rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.request-box {
+  max-width: 60% !important;
+  text-align: justify;
+}
+
+.hello-text {
+  color: transparent;
+  background: -webkit-linear-gradient(16deg, #4285f4 0, #9b72cb 9%, #d96570 20%, #d96570 24%, #9b72cb 35%, #4285f4 44%, #9b72cb 50%, #d96570 56%, #fff 75%, #fff 100%);
+  background: linear-gradient(74deg, #4285f4 0, #9b72cb 9%, #d96570 20%, #d96570 24%, #9b72cb 35%, #4285f4 44%, #9b72cb 50%, #d96570 56%, #fff 75%, #fff 100%);
+  background-size: 400% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

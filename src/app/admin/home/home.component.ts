@@ -6,6 +6,7 @@ import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import {
   BillDetail,
+  CharDashboard,
   Clients,
   Employees,
   ProjectList,
@@ -50,8 +51,6 @@ export class HomeComponent implements OnInit {
   projectDetail: Array<any> = [];
   clientDetail: Array<any> = [];
   newJoinees: Array<any> = [];
-  isChatBotEnable: boolean = false;
-  gemeniRequestText: String = '';
 
   constructor(
     private http: CoreHttpService,
@@ -268,21 +267,7 @@ export class HomeComponent implements OnInit {
     this.nav.navigate(Employees, null);
   }
 
-  switchDashboard() {
-    this.isChatBotEnable = !this.isChatBotEnable;
-  }
-
-  generateResponse() {
-    this.ajax
-      .postService('https://www.bottomhalf.in/api/b_files/query', {
-        query: this.gemeniRequestText,
-      })
-      .then((res: any) => {
-        if (res.content) {
-          alert(res.content);
-        } else {
-          ErrorToast('Server error. Please contact to admin.');
-        }
-      });
+  switchtoChatDashboard() {
+    this.nav.navigate(CharDashboard, null);
   }
 }

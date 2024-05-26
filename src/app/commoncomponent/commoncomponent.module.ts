@@ -8,11 +8,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { documentspageComponent } from './documentspage/documentspage.component';
 import { documentsComponent } from './documents/documents.component';
+import { ChatDashboardComponent } from './chat-dashboard/chat-dashboard.component';
 
 @NgModule({
   declarations: [
     documentspageComponent,
     documentsComponent,
+    ChatDashboardComponent,
   ],
   imports: [
     CommonModule,
