@@ -61,7 +61,7 @@ export class ManageReviewComponent implements OnInit {
 
         this.appraisalReviewDetail = res.ResponseBody.ReviewDetail;
         if (this.appraisalReviewDetail && this.appraisalReviewDetail.length > 0) {
-          if (this.appraisalReviewDetail.findIndex(x => x.AppraisalStatus == 9 && x.IsActive) >= 0)
+          if (this.appraisalReviewDetail.findIndex(x => x.AppraisalStatus == 9) >= 0)
             this.isSubmitted = true;
           else
             this.isSubmitted = false;

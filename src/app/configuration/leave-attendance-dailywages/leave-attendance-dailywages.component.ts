@@ -137,7 +137,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
       Reason: this.selectedLeave.Reason
     }
     let filterId = 0;
-    this.http.post(`${endPoint}/${filterId}`, currentResponse).then((response:ResponseModel) => {
+    this.http.put(`${endPoint}/${filterId}`, currentResponse).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         $('#leaveActionModal').modal('hide');
         Toast("Submitted Successfully");

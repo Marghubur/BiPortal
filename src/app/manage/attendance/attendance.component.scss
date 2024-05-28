@@ -232,3 +232,6 @@ tbody > tr {
   border-spacing:0 10px !important;
 }
 
+input[readonly] {
+  background-color: #e9ecef;
+}
