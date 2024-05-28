@@ -15,11 +15,12 @@ import {
   UserDetail,
   WarningToast,
 } from 'src/providers/common-service/common.service';
-import { UserType } from 'src/providers/constants';
+import { ItemStatus, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { AttendanceService } from 'src/providers/AttendanceService/attendance.service';
 import { Employee, AttendacePageResponse, Weeks, Attendance } from 'src/models/interfaces';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 declare var $: any;
 
 @Component({
@@ -77,13 +78,17 @@ export class AttendanceComponent implements OnInit {
   projects: Array<any> = [];
   weeks: Array<Weeks> = [];
   attendanceDetail: Array<Attendance> = [];
+  selectedProjectId: number = 0;
+  attandanceForm: FormGroup;
+  attendanceStatus: number = 0;
 
   constructor(
     private http: CoreHttpService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService,
-    private attendaceService: AttendanceService
+    private attendaceService: AttendanceService,
+    private fb: FormBuilder
   ) {
     this.employeesList.placeholder = 'Employee';
     this.employeesList.data.push({
@@ -102,8 +107,8 @@ export class AttendanceComponent implements OnInit {
     if (user.RoleId == UserType.Admin) this.isAdmin = true;
     this.clientDetail = new autoCompleteModal('Select Organization');
     this.employeesList = new autoCompleteModal('Select Employee');
-    for (let i = 0; i <= 20; i++) {
-      this.workingHrs.push(i * 30);
+    for (let i = 0; i <= 12; i++) {
+      this.workingHrs.push(i);
     }
     this.loadAutoComplete();
     if (
@@ -628,12 +633,8 @@ export class AttendanceComponent implements OnInit {
       .filter((x) => !x.IsHoliday && !x.IsOnLeave && !x.IsWeekend)
       .map((x) => Number(x.TotalMinutes))
       .reduce((acc, curr) => {
-        return acc + curr;
+        return (acc + curr);
       }, 0);
-  }
-
-  saveWeeklyAttendance() {
-    console.log(this.currentDays);
   }
 
   async getConfigDetail() {
@@ -643,6 +644,9 @@ export class AttendanceComponent implements OnInit {
     if (response) {
       this.employee = response.EmployeeDetail;
       this.projects = response.Projects;
+      if (this.projects.length == 1)
+        this.selectedProjectId = this.projects[0].ProjectId;
+
       this.weeks = response.Weeks;
       this.selectedAttendanceWeek = 0;
     }
@@ -655,10 +659,144 @@ export class AttendanceComponent implements OnInit {
   async selectAttendance() {
     let selectedWeek = this.weeks.find(x => x.WeekIndex == this.selectedAttendanceWeek);
     let response: AttendacePageResponse =  await this.attendaceService.getSelectedWeekAttendace(selectedWeek);
-    this.attendanceDetail = response.DailyAttendances;
+    this.bindData(response.DailyAttendances)
+  }
+
+  async saveWeeklyAttendance() {
     this.attendanceDetail.forEach(x => {
-      x.AttendanceDate = ToLocateDate(x.AttendanceDate)
+      x.ProjectId = this.selectedProjectId,
+      x.TotalMinutes = Number(x.TotalMinutes) * 60
     });
+
+    let response = await this.attendaceService.saveWeekAttendace(
+      this.attendanceDetail
+    );
+    this.bindData(response);
+  }
+
+  bindData(response: Array<Attendance>) {
+    this.attendanceStatus = 0;
+    this.attendanceDetail = response
+    this.attendanceDetail.forEach(x => {
+      x.AttendanceDate = ToLocateDate(x.AttendanceDate);
+      if (x.TotalMinutes >= 60)
+        x.TotalMinutes = x.TotalMinutes/60;
+    });
+    let status = this.attendanceDetail.map(x => x.AttendanceStatus);
+    if (status.findIndex(x => x == ItemStatus.Submitted) > -1)
+      this.attendanceStatus = ItemStatus.Submitted;
+    else if (status.findIndex(x => x == ItemStatus.Approved) > -1)
+      this.attendanceStatus = ItemStatus.Approved;
+    else if (status.findIndex(x => x == ItemStatus.Rejected) > -1)
+      this.attendanceStatus = ItemStatus.Rejected;
+
     this.calculateWorkedHrs();
+  }
+
+
+
+  initAttendanceForm() {
+    this.attandanceForm = this.fb.group({
+      attendance: this.buildAttendanceForm()
+    })
+  }
+
+  buildAttendanceForm(): FormArray {
+    let data: Array<Attendance> = [];
+    let dataArray: FormArray = this.fb.array([]);
+
+    if(data != null && data.length > 0) {
+      let i = 0;
+      while(i < data.length) {
+        dataArray.push(this.fb.group({
+          AttendanceId: new FormControl(data[i].AttendanceId),
+          EmployeeId: new FormControl(data[i].EmployeeId),
+          EmployeeName: new FormControl(data[i].EmployeeName),
+          EmployeeEmail: new FormControl(data[i].EmployeeEmail),
+          ReviewerId: new FormControl(data[i].ReviewerId),
+          ReviewerName: new FormControl(data[i].ReviewerName),
+          ReviewerEmail: new FormControl(data[i].ReviewerEmail),
+          ProjectId: new FormControl(data[i].ProjectId),
+          TaskId: new FormControl(data[i].TaskId),
+          TaskType: new FormControl(data[i].TaskType),
+          LogOn: new FormControl(data[i].LogOn),
+          LogOff: new FormControl(data[i].LogOff),
+          TotalMinutes: new FormControl(data[i].TotalMinutes),
+          Comments: new FormControl(data[i].Comments),
+          AttendanceStatus: new FormControl(data[i].AttendanceStatus),
+          WeekOfYear: new FormControl(data[i].WeekOfYear),
+          AttendanceDate: new FormControl(data[i].AttendanceDate),
+          WorkTypeId: new FormControl(data[i].WorkTypeId),
+          IsHoliday: new FormControl(data[i].IsHoliday),
+          HolidayId: new FormControl(data[i].HolidayId),
+          IsOnLeave: new FormControl(data[i].IsOnLeave),
+          LeaveId: new FormControl(data[i].LeaveId),
+          IsWeekend: new FormControl(data[i].IsWeekend),
+        }));
+        i++;
+      }
+    } else {
+      dataArray.push(this.createAttendanceForm());
+    }
+
+    return dataArray;
+  }
+
+  createAttendanceForm(): FormGroup {
+    return this.fb.group({
+      AttendanceId: new FormControl(this.attendanceDetail[0].AttendanceId),
+      EmployeeId: new FormControl(this.attendanceDetail[0].EmployeeId),
+      EmployeeName: new FormControl(this.attendanceDetail[0].EmployeeName),
+      EmployeeEmail: new FormControl(this.attendanceDetail[0].EmployeeEmail),
+      ReviewerId: new FormControl(this.attendanceDetail[0].ReviewerId),
+      ReviewerName: new FormControl(this.attendanceDetail[0].ReviewerName),
+      ReviewerEmail: new FormControl(this.attendanceDetail[0].ReviewerEmail),
+      ProjectId: new FormControl(this.attendanceDetail[0].ProjectId),
+      TaskId: new FormControl(this.attendanceDetail[0].TaskId),
+      TaskType: new FormControl(this.attendanceDetail[0].TaskType),
+      LogOn: new FormControl(this.attendanceDetail[0].LogOn),
+      LogOff: new FormControl(this.attendanceDetail[0].LogOff),
+      TotalMinutes: new FormControl(this.attendanceDetail[0].TotalMinutes),
+      Comments: new FormControl(this.attendanceDetail[0].Comments),
+      AttendanceStatus: new FormControl(this.attendanceDetail[0].AttendanceStatus),
+      WeekOfYear: new FormControl(this.attendanceDetail[0].WeekOfYear),
+      AttendanceDate: new FormControl(this.attendanceDetail[0].AttendanceDate),
+      WorkTypeId: new FormControl(this.attendanceDetail[0].WorkTypeId),
+      IsHoliday: new FormControl(this.attendanceDetail[0].IsHoliday),
+      HolidayId: new FormControl(this.attendanceDetail[0].HolidayId),
+      IsOnLeave: new FormControl(this.attendanceDetail[0].IsOnLeave),
+      LeaveId: new FormControl(this.attendanceDetail[0].LeaveId),
+      IsWeekend: new FormControl(this.attendanceDetail[0].IsWeekend)
+    });
+  }
+
+  addAttendanceForm() {
+    let item = this.attandanceForm.get('attendance') as FormArray;
+    item.push(this.createAttendanceForm());
+  }
+
+  removeOldTaxSlab(i: number) {
+    let item = this.attandanceForm.get('attendance') as FormArray;
+    if (item.length > 1) {
+      let taxregimeId = item.value[i];
+      if (taxregimeId > 0) {
+        this.http.delete(`TaxRegime/DeleteTaxRegime/${taxregimeId}`).then(res => {
+          if (res.ResponseBody) {
+            Toast("Regime deleted successfully");
+          }
+        }).catch(e => {
+          ErrorToast(e.error.HttpStatusMessage);
+        })
+      }
+      item.removeAt(i);
+    }
+    if (i > 0) {
+      let value = (item.value[i-1].MaxTaxSlab) + 1;
+      (<FormArray>item).controls[i].get('MinTaxSlab').setValue(value);
+    }
+  }
+
+  get attendance() {
+    return this.attandanceForm.get('attendance') as FormArray;
   }
 }

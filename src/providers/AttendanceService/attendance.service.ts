@@ -32,4 +32,12 @@ export class AttendanceService {
     }
     return null;
   }
+
+  public async saveWeekAttendace(attendances: Array<Attendance>): Promise<any> {
+    var result = await this.http.put(`Attendance/SubmitDailyAttendance`, attendances);
+    if (result.ResponseBody) {
+      return result.ResponseBody;
+    }
+    return null;
+  }
 }
