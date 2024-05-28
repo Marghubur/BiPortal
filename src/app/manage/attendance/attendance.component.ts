@@ -73,6 +73,10 @@ export class AttendanceComponent implements OnInit {
   attendanceGroup: Array<any> = [];
   weekGroup: Array<any> = [];
   selectedAttendanceWeek: number = 0;
+  totalWorkedMin: number = 0;
+  totalLeavedMin: number = 0;
+  workingHrs: Array<number> = [];
+  projects: Array<any> = [];
 
   constructor(private http: CoreHttpService,
     private nav: iNavigation,
@@ -106,6 +110,9 @@ export class AttendanceComponent implements OnInit {
     this.toModel = null;
     this.time = new Date();
     this.DayValue = this.time.getDay();
+    for (let i = 0; i <= 20; i++) {
+      this.workingHrs.push(i*30);
+    }
     this.loadAutoComplete();
     if(this.userDetail || user.RoleId != UserType.Admin || this.isMyAttendance) {
       this.isRedirected = true;
@@ -205,6 +212,7 @@ export class AttendanceComponent implements OnInit {
 
   loadMappedData(data: any) {
     this.isAttendanceDataLoaded = false;
+    this.projects = [];
     this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
       if(!response.ResponseBody.EmployeeDetail && response.ResponseBody.AttendanceId <= 0) {
         ErrorToast("Fail to get employee detail. Please contact to admin.")
@@ -215,6 +223,7 @@ export class AttendanceComponent implements OnInit {
 
       this.AttendanceId = response.ResponseBody.AttendanceId;
       this.employee = response.ResponseBody.EmployeeDetail;
+      this.projects = response.ResponseBody.Projects;
       let doj = new Date(this.employee.CreatedOn);
       if (doj.getFullYear() == new Date().getFullYear() && doj.getMonth() == new Date().getMonth()) {
         this.monthName = [];
@@ -286,8 +295,10 @@ export class AttendanceComponent implements OnInit {
       this.attendanceGroup = [];
       this.weekGroup.forEach(x => {
         let length = x.length - 1;
-        let data = this.datePipe.transform(x[0].AttendanceDay, 'dd.MM.yyyy') + " - " + this.datePipe.transform(x[length].AttendanceDay, 'dd.MM.yyyy');
-        this.attendanceGroup.push(data);
+        this.attendanceGroup.push({
+          FromDate: this.datePipe.transform(x[0].AttendanceDay, 'dd.MM.yyyy'),
+          ToDate: this.datePipe.transform(x[length].AttendanceDay, 'dd.MM.yyyy')
+        });
       });
 
       this.selectedAttendanceWeek = 1;
@@ -733,5 +744,16 @@ export class AttendanceComponent implements OnInit {
   selectAttendance() {
     this.currentDays = [];
     this.currentDays = this.weekGroup[this.selectedAttendanceWeek];
+    this.calculateWorkedHrs();
+    this.totalLeavedMin = this.currentDays.filter(x => !x.IsHoliday && x.IsOnLeave && !x.IsWeekend).map(x => x.TotalMinutes).reduce((acc, curr) => {return acc + curr}, 0);
+  }
+
+  calculateWorkedHrs() {
+    this.totalWorkedMin = this.currentDays.filter(x => !x.IsHoliday && !x.IsOnLeave && !x.IsWeekend).map(x => Number(x.TotalMinutes)).reduce((acc, curr) => {return acc + curr}, 0);
+  }
+
+  saveWeeklyAttendance() {
+    console.log(this.currentDays)
+
   }
 }

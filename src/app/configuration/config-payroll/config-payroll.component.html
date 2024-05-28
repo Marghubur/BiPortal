@@ -2422,7 +2422,7 @@
           <label class="form-label">Comment</label>
           <textarea rows="3" placeholder="Comments" class="form-control" [(ngModel)]="selectedLOP.Comment"></textarea>
         </div>
-        <div class="text-end">
+        <div class="text-end mt-3">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary-c ms-1" [disabled]="isLoading" (click)="saveLOPAjustment()">
             <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
@@ -2520,10 +2520,10 @@
         <button type="button" class="btn btn-primary-c" [disabled]="isLoading"
           (click)="submitActionForLeave('Approved')">
           <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-          {{ isLoading ? 'Wait' : 'Save' }}
+          {{ isLoading ? 'Wait' : 'Approve' }}
         </button>
         <button type="button" class="btn btn-danger" [disabled]="isLoading" (click)="submitActionForLeave('Rejected')">
-          <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-solid fa-xmark': !isLoading}"></i>
+          <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-xmark': !isLoading}"></i>
           {{ isLoading ? 'Wait' : 'Reject' }}
         </button>
       </div>
