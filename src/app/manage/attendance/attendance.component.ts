@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
@@ -11,6 +10,7 @@ import {
 } from 'src/providers/ApplicationStorage';
 import {
   ErrorToast,
+  ToLocateDate,
   Toast,
   UserDetail,
   WarningToast,
@@ -19,7 +19,7 @@ import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { AttendanceService } from 'src/providers/AttendanceService/attendance.service';
-import { Employee, AttendacePageResponse, Weeks } from 'src/models/interfaces';
+import { Employee, AttendacePageResponse, Weeks, Attendance } from 'src/models/interfaces';
 declare var $: any;
 
 @Component({
@@ -31,14 +31,8 @@ declare var $: any;
 export class AttendanceComponent implements OnInit {
   employeeId: number = 0;
   userName: string = '';
-  fromModel: NgbDateStruct;
-  toModel: NgbDateStruct;
-  fromDate: any = null;
-  toDate: any = null;
   isEmployeesReady: boolean = false;
   userDetail: any = null;
-  time = new Date();
-  DayValue: number = 0;
   clientId: number = 0;
   clientDetail: autoCompleteModal = null;
   employeesList: autoCompleteModal = new autoCompleteModal();
@@ -46,10 +40,6 @@ export class AttendanceComponent implements OnInit {
   isPageReady: boolean = false;
   NoClient: boolean = false;
   isAttendanceDataLoaded: boolean = false;
-  divisionCode: number = 0;
-  daysInMonth: number = 0;
-  monthName: Array<any> = [];
-  presentMonth: boolean = true;
   isRedirected: boolean = false;
   currentEmployee: any = null;
   applicationData: any = [];
@@ -76,25 +66,23 @@ export class AttendanceComponent implements OnInit {
   emails: Array<any> = [];
   employees: Array<Employee> = [];
   shiftDetail: any = null;
-  activeMonth: number = 0;
   isMyAttendance: boolean = true;
   isAdmin: boolean = false;
   attendanceRequestType: number = 2;
-  attendanceGroup: Array<any> = [];
   weekGroup: Array<any> = [];
-  selectedAttendanceWeek: number = 1;
+  selectedAttendanceWeek: number = 0;
   totalWorkedMin: number = 0;
   totalLeavedMin: number = 0;
   workingHrs: Array<number> = [];
   projects: Array<any> = [];
   weeks: Array<Weeks> = [];
+  attendanceDetail: Array<Attendance> = [];
 
   constructor(
     private http: CoreHttpService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService,
-    private datePipe: DatePipe,
     private attendaceService: AttendanceService
   ) {
     this.employeesList.placeholder = 'Employee';
@@ -112,16 +100,8 @@ export class AttendanceComponent implements OnInit {
   initData() {
     let user = this.user.getInstance() as UserDetail;
     if (user.RoleId == UserType.Admin) this.isAdmin = true;
-    var dt = new Date();
-    var month = dt.getMonth();
-    var year = dt.getFullYear();
-    this.daysInMonth = new Date(year, month + 1, 0).getDate();
     this.clientDetail = new autoCompleteModal('Select Organization');
     this.employeesList = new autoCompleteModal('Select Employee');
-    this.fromModel = null;
-    this.toModel = null;
-    this.time = new Date();
-    this.DayValue = this.time.getDay();
     for (let i = 0; i <= 20; i++) {
       this.workingHrs.push(i * 30);
     }
@@ -153,34 +133,6 @@ export class AttendanceComponent implements OnInit {
 
   pageReload() {
     this.initData();
-  }
-
-  previousMonthAttendance(month: number, index: number) {
-    let doj = new Date(this.userDetail.CreatedOn);
-    let startDate = new Date(new Date().getFullYear(), month, 1);
-    if (
-      doj.getFullYear() == new Date().getFullYear() &&
-      doj.getMonth() == new Date().getMonth()
-    ) {
-      if (doj.getMonth() - 1 == month) {
-        WarningToast('You join in this current month');
-        return;
-      } else {
-        startDate = new Date(doj.getFullYear(), doj.getMonth(), 1);
-      }
-    }
-    let endDate;
-    if (month == new Date().getMonth()) endDate = new Date();
-    else endDate = new Date(new Date().getFullYear(), month + 1, 0);
-
-    let data = {
-      EmployeeId: Number(this.employeeId),
-      AttendanceDay: startDate,
-      ForYear: new Date().getFullYear(),
-      ForMonth: month + 1,
-    };
-    this.activeMonth = index;
-    this.loadAttendaceConfigDetail(data);
   }
 
   findEmployeeCompany() {
@@ -218,82 +170,7 @@ export class AttendanceComponent implements OnInit {
       return;
     }
     this.findEmployeeCompany();
-    let now = new Date();
-    this.fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
-    this.toDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    let data = {
-      EmployeeId: Number(this.employeeId),
-      AttendanceDay: this.fromDate,
-      ForYear: this.fromDate.getFullYear(),
-      ForMonth: this.fromDate.getMonth() + 1,
-    };
-
     this.getConfigDetail();
-  }
-
-  groupAttendanceByWeek() {
-    if (this.currentDays != null && this.currentDays.length > 0) {
-      let firstDay = this.currentDays[0].AttendanceDay;
-      let daysofweek = firstDay.getDay();
-      let daysToAdd =
-        daysofweek === 1 ? 0 : daysofweek === 0 ? 1 : 8 - daysofweek;
-      this.weekGroup = [];
-      if (daysToAdd > 0)
-        this.weekGroup.push(this.currentDays.splice(0, daysToAdd));
-
-      for (let i = 0; i < this.currentDays.length; i++) {
-        this.weekGroup.push(this.currentDays.splice(0, 7));
-      }
-      if (this.currentDays.length > 0) this.weekGroup.push(this.currentDays);
-
-      this.attendanceGroup = [];
-      this.weekGroup.forEach((x) => {
-        let length = x.length - 1;
-        let data =
-          this.datePipe.transform(x[0].AttendanceDay, 'dd.MM.yyyy') +
-          ' - ' +
-          this.datePipe.transform(x[length].AttendanceDay, 'dd.MM.yyyy');
-        this.attendanceGroup.push(data);
-      });
-
-      this.selectedAttendanceWeek = 1;
-      this.selectAttendance();
-    }
-  }
-
-  getMonths() {
-    this.monthName = [];
-    var dt = new Date();
-    var month = dt.getMonth() + 1;
-    var year = dt.getFullYear();
-    let i = 1;
-    if (year == new Date().getFullYear()) {
-      //this.daysInMonth = new Date(year, month, dt.getDate()).getDate();
-      i = month - 1;
-    }
-    while (i <= new Date().getMonth() + 1) {
-      var mnth = Number((i + 1 > 9 ? '' : '0') + i);
-      month++;
-      this.monthName.push({
-        name: new Date(year, mnth - 1, 1).toLocaleString('en-us', {
-          month: 'short',
-        }),
-        value: mnth - 1,
-      }); // result: Aug
-      i++;
-    }
-    this.monthName.reverse();
-  }
-
-  getMonday(d: Date) {
-    if (d) {
-      d = new Date(d);
-      var day = d.getDay(),
-        diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
-      return new Date(d.setDate(diff));
-    }
-    return null;
   }
 
   applyWorkFromHome(e: any) {
@@ -747,7 +624,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   calculateWorkedHrs() {
-    this.totalWorkedMin = this.currentDays
+    this.totalWorkedMin = this.attendanceDetail
       .filter((x) => !x.IsHoliday && !x.IsOnLeave && !x.IsWeekend)
       .map((x) => Number(x.TotalMinutes))
       .reduce((acc, curr) => {
@@ -759,24 +636,6 @@ export class AttendanceComponent implements OnInit {
     console.log(this.currentDays);
   }
 
-  async loadAttendaceConfigDetail(data: any) {
-    try {
-      let response: AttendacePageResponse =
-        await this.attendaceService.getAttendenceData(data);
-
-      this.isAttendanceDataLoaded = true;
-      this.isEmployeeSelected = true;
-      this.divisionCode = 1;
-      this.isLoading = false;
-      this.isEmployeesReady = true;
-      Toast('Attendance record found');
-    } catch (e) {
-      this.isAttendanceDataLoaded = true;
-      this.isLoading = false;
-      ErrorToast(e);
-    }
-  }
-
   async getConfigDetail() {
     let response = await this.attendaceService.getAttendaceConfigDetail(
       this.employeeId
@@ -785,7 +644,7 @@ export class AttendanceComponent implements OnInit {
       this.employee = response.EmployeeDetail;
       this.projects = response.Projects;
       this.weeks = response.Weeks;
-      this.selectedAttendanceWeek = this.weeks.length;
+      this.selectedAttendanceWeek = 0;
     }
 
     this.isEmployeeSelected = true;
@@ -793,16 +652,13 @@ export class AttendanceComponent implements OnInit {
     this.isLoading = false;
   }
 
-  selectAttendance() {
-    alert(this.selectedAttendanceWeek);
-    this.currentDays = [];
-    this.currentDays = this.weekGroup[this.selectedAttendanceWeek];
+  async selectAttendance() {
+    let selectedWeek = this.weeks.find(x => x.WeekIndex == this.selectedAttendanceWeek);
+    let response: AttendacePageResponse =  await this.attendaceService.getSelectedWeekAttendace(selectedWeek);
+    this.attendanceDetail = response.DailyAttendances;
+    this.attendanceDetail.forEach(x => {
+      x.AttendanceDate = ToLocateDate(x.AttendanceDate)
+    });
     this.calculateWorkedHrs();
-    this.totalLeavedMin = this.currentDays
-      .filter((x) => !x.IsHoliday && x.IsOnLeave && !x.IsWeekend)
-      .map((x) => x.TotalMinutes)
-      .reduce((acc, curr) => {
-        return acc + curr;
-      }, 0);
   }
 }

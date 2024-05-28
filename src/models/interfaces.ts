@@ -80,7 +80,7 @@ export interface Attendance {
 
 export interface AttendacePageResponse {
   employee: Employee;
-  attendances: Array<Attendance>;
+  DailyAttendances: Array<Attendance>;
 }
 
 export interface AttendanceConfig {

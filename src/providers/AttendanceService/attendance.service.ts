@@ -5,6 +5,7 @@ import {
   Employee,
   Attendance,
   AttendacePageResponse,
+  Weeks,
 } from 'src/models/interfaces';
 
 @Injectable({
@@ -12,57 +13,6 @@ import {
 })
 export class AttendanceService {
   constructor(private http: CoreHttpService) {}
-
-  private employees: Array<Employee> = [];
-  private attendances: Array<Attendance> = [];
-  private response: AttendacePageResponse = {
-    attendances: [],
-    employee: {},
-  };
-
-  public async getAttendenceData(data: any): Promise<AttendacePageResponse> {
-    var result = await this.http.post(
-      'Attendance/GetDailyAttendanceByUserId',
-      data
-    );
-
-    if (result) {
-      if (!result.ResponseBody.EmployeeDetail) {
-        throw 'Fail to get employee detail';
-      }
-
-      this.response.employee = result.ResponseBody.EmployeeDetail;
-      if (result.ResponseBody.DailyAttendances) {
-        this.response.attendances = this.getAttendace(
-          result.ResponseBody.DailyAttendances
-        );
-      }
-    }
-
-    return this.response;
-  }
-
-  private getAttendace(data: Array<Attendance>) {
-    if (data && data.length > 0) {
-      let index = 0;
-      while (index < data.length) {
-        data[index].AttendanceDate = new Date(data[index].AttendanceDate);
-        if (data[index].IsHoliday) {
-          data[index].AttendanceStatus = 4;
-          data[index].AttendanceStatus = 4;
-        } else if (data[index].IsWeekend) {
-          data[index].AttendanceStatus = 3;
-          data[index].AttendanceStatus = 3;
-        }
-
-        index++;
-      }
-
-      return data;
-    } else {
-      throw 'Unable to bind data';
-    }
-  }
 
   public async getAttendaceConfigDetail(employeeId: number): Promise<any> {
     var result = await this.http.get(
@@ -73,5 +23,13 @@ export class AttendanceService {
     }
 
     return result.ResponseBody;
+  }
+
+  public async getSelectedWeekAttendace(week: Weeks): Promise<any> {
+    var result = await this.http.post(`Attendance/GetWeeklyAttendanceByUserId`, week);
+    if (result.ResponseBody) {
+      return result.ResponseBody;
+    }
+    return null;
   }
 }
