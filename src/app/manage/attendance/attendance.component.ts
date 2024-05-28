@@ -18,6 +18,8 @@ import {
 import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
+import { AttendanceService } from 'src/providers/AttendanceService/attendance.service';
+import { Employee, AttendacePageResponse, Weeks } from 'src/models/interfaces';
 declare var $: any;
 
 @Component({
@@ -69,10 +71,10 @@ export class AttendanceComponent implements OnInit {
   filterAttendStatus: number = 1;
   AttendanceId: number = 0;
   allDaysAttendance: Array<any> = [];
-  employee: any = null;
+  employee: Employee = null;
   sessionvalue: number = 1;
   emails: Array<any> = [];
-  employees: Array<any> = [];
+  employees: Array<Employee> = [];
   shiftDetail: any = null;
   activeMonth: number = 0;
   isMyAttendance: boolean = true;
@@ -80,18 +82,20 @@ export class AttendanceComponent implements OnInit {
   attendanceRequestType: number = 2;
   attendanceGroup: Array<any> = [];
   weekGroup: Array<any> = [];
-  selectedAttendanceWeek: number = 0;
+  selectedAttendanceWeek: number = 1;
   totalWorkedMin: number = 0;
   totalLeavedMin: number = 0;
   workingHrs: Array<number> = [];
   projects: Array<any> = [];
+  weeks: Array<Weeks> = [];
 
   constructor(
     private http: CoreHttpService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private attendaceService: AttendanceService
   ) {
     this.employeesList.placeholder = 'Employee';
     this.employeesList.data.push({
@@ -176,7 +180,7 @@ export class AttendanceComponent implements OnInit {
       ForMonth: month + 1,
     };
     this.activeMonth = index;
-    this.loadMappedData(data);
+    this.loadAttendaceConfigDetail(data);
   }
 
   findEmployeeCompany() {
@@ -224,79 +228,8 @@ export class AttendanceComponent implements OnInit {
       ForYear: this.fromDate.getFullYear(),
       ForMonth: this.fromDate.getMonth() + 1,
     };
-    this.loadMappedData(data);
-  }
 
-  loadMappedData(data: any) {
-    this.isAttendanceDataLoaded = false;
-    //this.http.post("Attendance/GetAttendanceByUserId", data).then((response: ResponseModel) => {
-    this.http
-      .post('Attendance/GetDailyAttendanceByUserId', data)
-      .then((response: ResponseModel) => {
-        if (
-          !response.ResponseBody.EmployeeDetail &&
-          response.ResponseBody.AttendanceId <= 0
-        ) {
-          ErrorToast('Fail to get employee detail. Please contact to admin.');
-          this.isAttendanceDataLoaded = true;
-          this.isLoading = false;
-          return;
-        }
-
-        this.AttendanceId = response.ResponseBody.AttendanceId;
-        this.employee = response.ResponseBody.EmployeeDetail;
-        let doj = new Date(this.employee.CreatedOn);
-        if (
-          doj.getFullYear() == new Date().getFullYear() &&
-          doj.getMonth() == new Date().getMonth()
-        ) {
-          this.monthName = [];
-        } else this.getMonths();
-
-        if (response.ResponseBody.AttendacneDetails) {
-          this.bindAttendace(response.ResponseBody.AttendacneDetails);
-          this.isAttendanceDataLoaded = true;
-        }
-        this.isEmployeeSelected = true;
-        this.divisionCode = 1;
-        Toast('Attendance record found');
-        this.isLoading = false;
-        this.isEmployeesReady = true;
-      })
-      .catch((err) => {
-        this.isLoading = false;
-        WarningToast(err.error.HttpStatusMessage);
-      });
-  }
-
-  bindAttendace(data: Array<any>) {
-    if (data && data.length > 0) {
-      this.currentDays = [];
-      this.presentMonth = true;
-      let index = 0;
-      while (index < data.length) {
-        data[index].AttendanceDay = new Date(data[index].AttendanceDay);
-        if (data[index].IsHoliday) {
-          data[index].PresentDayStatus = 4;
-          data[index].AttendenceStatus = 4;
-        } else if (data[index].IsWeekend) {
-          data[index].PresentDayStatus = 3;
-          data[index].AttendenceStatus = 3;
-        }
-        // let logon = data[index].LogOn.split(':');
-        // let logontime = 0;
-        // for (let i = 0; i < logon.length; i++) {
-        //   logontime += Number(logon[i]);
-        // }
-        // data[index].GrossHour = Number(data[index].LogOn) - (data[index].LunchBreanInMinutes/60)
-        index++;
-      }
-      this.allDaysAttendance = data;
-      this.currentDays = data;
-      this.groupAttendanceByWeek();
-    } else {
-      WarningToast('Unable to bind data. Please contact admin.');
-    }
+    this.getConfigDetail();
   }
 
   groupAttendanceByWeek() {
@@ -461,7 +394,7 @@ export class AttendanceComponent implements OnInit {
     if (this.employees.length > 0) {
       for (let i = 0; i < this.employees.length; i++) {
         notify.push({
-          Id: this.employees[i].Id,
+          Id: this.employees[i].EmployeeUid,
           Email: this.employees[i].Email,
         });
       }
@@ -581,8 +514,8 @@ export class AttendanceComponent implements OnInit {
     let employee = this.applicationData.find((x) => x.value == value);
     this.emails.push(employee.email);
     this.employees.push({
-      Id: employee.value,
-      Name: employee.text,
+      EmployeeUid: employee.value,
+      FirstName: employee.text,
       Email: employee.email,
     });
     let index = this.employeesList.data.findIndex((x) => x.value == value);
@@ -592,8 +525,8 @@ export class AttendanceComponent implements OnInit {
   removeEmail(index: number) {
     if (index > -1) {
       this.employeesList.data.push({
-        value: this.employees[index].Id,
-        text: this.employees[index].Name,
+        value: this.employees[index].EmployeeUid,
+        text: this.employees[index].FirstName,
       });
       this.employees.splice(index, 1);
     }
@@ -813,18 +746,6 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
-  selectAttendance() {
-    this.currentDays = [];
-    this.currentDays = this.weekGroup[this.selectedAttendanceWeek];
-    this.calculateWorkedHrs();
-    this.totalLeavedMin = this.currentDays
-      .filter((x) => !x.IsHoliday && x.IsOnLeave && !x.IsWeekend)
-      .map((x) => x.TotalMinutes)
-      .reduce((acc, curr) => {
-        return acc + curr;
-      }, 0);
-  }
-
   calculateWorkedHrs() {
     this.totalWorkedMin = this.currentDays
       .filter((x) => !x.IsHoliday && !x.IsOnLeave && !x.IsWeekend)
@@ -836,5 +757,52 @@ export class AttendanceComponent implements OnInit {
 
   saveWeeklyAttendance() {
     console.log(this.currentDays);
+  }
+
+  async loadAttendaceConfigDetail(data: any) {
+    try {
+      let response: AttendacePageResponse =
+        await this.attendaceService.getAttendenceData(data);
+
+      this.isAttendanceDataLoaded = true;
+      this.isEmployeeSelected = true;
+      this.divisionCode = 1;
+      this.isLoading = false;
+      this.isEmployeesReady = true;
+      Toast('Attendance record found');
+    } catch (e) {
+      this.isAttendanceDataLoaded = true;
+      this.isLoading = false;
+      ErrorToast(e);
+    }
+  }
+
+  async getConfigDetail() {
+    let response = await this.attendaceService.getAttendaceConfigDetail(
+      this.employeeId
+    );
+    if (response) {
+      this.employee = response.EmployeeDetail;
+      this.projects = response.Projects;
+      this.weeks = response.Weeks;
+      this.selectedAttendanceWeek = this.weeks.length;
+    }
+
+    this.isEmployeeSelected = true;
+    this.isAttendanceDataLoaded = true;
+    this.isLoading = false;
+  }
+
+  selectAttendance() {
+    alert(this.selectedAttendanceWeek);
+    this.currentDays = [];
+    this.currentDays = this.weekGroup[this.selectedAttendanceWeek];
+    this.calculateWorkedHrs();
+    this.totalLeavedMin = this.currentDays
+      .filter((x) => !x.IsHoliday && x.IsOnLeave && !x.IsWeekend)
+      .map((x) => x.TotalMinutes)
+      .reduce((acc, curr) => {
+        return acc + curr;
+      }, 0);
   }
 }
