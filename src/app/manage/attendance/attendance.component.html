@@ -106,51 +106,9 @@
                           </select>
                         </div>
                       </div>
-                      <!-- <div class="col-md-2 d-flex align-items-center">
-                        <select (change)="filterByStatus()" class="form-select w-25" [(ngModel)]="filterAttendStatus"
-                          [ngModelOptions]="{standalone: true}">
-                          <option value=null selected disabled>Filter by status</option>
-                          <option value="1">All</option>
-                          <option value="0">Not Applied</option>
-                          <option value="2">Pending</option>
-                          <option value="3">Weekend</option>
-                          <option value="4">Holiday</option>
-                          <option value="9">Approved</option>
-                          <option value="5">Rejected</option>
-                          <option value="10">Blocked</option>
-                        </select>
-                        <button *ngIf="filterStatus == 10" class="btn btn-primary-c ms-2" (click)="requestPopUp()">
-                          <i class="fa-solid fa-retweet pe-2" aria-hidden="true"></i>
-                          Raise a request
-                        </button>
-                        <select class="form-select ms-2" [(ngModel)]="selectedAttendanceWeek" [ngModelOptions]="{standalone: true}" (change)="selectAttendance()">
-                          <option [value]="i" *ngFor="let item of attendanceGroup; let i=index;">{{item}}</option>
-                        </select>
-                      </div> -->
-                      <!-- <div
-                        class="btn-group pe-5"
-                        role="group"
-                        aria-label="Basic radio toggle button group"
-                      >
-                        <ng-container
-                          *ngFor="let month of monthName; let i = index"
-                        >
-                          <input
-                            type="radio"
-                            class="btn-check"
-                            name="btnradio"
-                            (click)="previousMonthAttendance(month.value, i)"
-                            id="btnradio{{ i }}"
-                            autocomplete="off"
-                          />
-                          <label
-                            class="btn btn-light month-btn"
-                            [ngClass]="{ 'active-month': i == activeMonth }"
-                            for="btnradio{{ i }}"
-                            >{{ month.name }}</label
-                          >
-                        </ng-container>
-                      </div> -->
+                      <div class="col-auto fw-bold" *ngIf="attendanceStatus > 0">
+                        {{attendanceStatus == 8 ? 'Submitted' : attendanceStatus == 5 ? 'Rejected' : 'Approved'}}
+                      </div>
                     </div>
                     <div class="bg-white">
                       <div class="card p-4">
@@ -252,6 +210,74 @@
                           </div>
                         </ng-container>
                       </div>
+                      <!-- <form [formGroup]="attandanceForm" *ngIf="attandanceForm">
+                        <ng-container *ngIf="projects.length > 0">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <label class="form-label">Project</label>
+                              <select class="form-select" [(ngModel)]="selectedProjectId" [ngModelOptions]="{standalone: true}">
+                                <option [value]="item.ProjectId" *ngFor="let item of projects">
+                                  {{ item.ProjectName }}
+                                </option>
+                              </select>
+                            </div>
+                            <div class="col-md-3">
+                              <label class="form-label">Tasks</label>
+                              <select class="form-select"></select>
+                            </div>
+                            <div class="col-md-3">
+                              <label class="form-label">Work Item</label>
+                              <input
+                                type="number"
+                                placeholder="Work Item"
+                                class="form-control"
+                              />
+                            </div>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="attendanceDetail.length > 0">
+                          <ng-container formArrayName="attendance">
+                            <div class="row row-cols-8" *ngFor="let item of attendance.controls; let i = index"
+                            [formGroupName]="i">
+                              <div class="col mt-4"*ngFor="let item of attendanceDetail">
+                                <label class="form-label">
+                                  {{item.AttendanceDate | date : "EEE: d MMM"}}
+                                </label>
+                                <select
+                                  class="form-select"
+                                  (change)="calculateWorkedHrs()"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  [(ngModel)]="item.TotalMinutes"
+                                  [disabled]="item.IsWeekend || item.IsOnLeave || item.IsHoliday"
+                                >
+                                  <option
+                                    [value]="workingHr"
+                                    *ngFor="let workingHr of workingHrs"
+                                  >
+                                    {{ workingHr }} hrs
+                                  </option>
+                                </select>
+                                <label class="form-label mt-1">Year:
+                                  {{ item.AttendanceDate | date : "YYYY" }}
+                                </label>
+                                <label class="form-label float-end fw-bold mt-1" [ngClass]="{'text-success': (item.IsWeekend || item.IsHoliday), 'text-danger': item.IsOnLeave }" *ngIf="item.IsWeekend || item.IsOnLeave || item.IsHoliday">
+                                  {{ item.IsWeekend ? 'Weekend' : item.IsOnLeave ? 'On Leave' : 'Holiday' }}
+                                  <span *ngIf="item.IsOnLeave">[{{item.LeaveId}}]</span>
+                                </label>
+                              </div>
+                              <div class="col-auto mt-4">
+                                <label class="form-label fw-bold">Total</label>
+                                <p class="mb-0 fw-bold">{{totalWorkedMin}} hrs</p>
+                                </div>
+                            </div>
+                            <div class="text-end mt-2">
+                              <a href="javascript:void(0)" class="text-decoration-none" (click)="addAttendanceForm()">
+                                <i class="fa-solid fa-plus pe-1"></i> Add row
+                              </a>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+                      </form> -->
                       <!-- <table class="table table-hover">
                         <thead>
                           <tr>
