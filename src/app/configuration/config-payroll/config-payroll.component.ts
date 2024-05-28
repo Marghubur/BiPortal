@@ -629,10 +629,10 @@ export class ConfigPayrollComponent implements OnInit {
 
     switch (requestState) {
       case 'Approved':
-        endPoint = `LeaveRequest/ApproveLeaveRequest`;
+        endPoint = `LeaveRequest/ApproveAppliedLeave`;
         break;
       case 'Rejected':
-        endPoint = `LeaveRequest/RejectLeaveRequest`;
+        endPoint = `LeaveRequest/CancelAppliedLeave`;
         break;
     }
 
@@ -645,9 +645,9 @@ export class ConfigPayrollComponent implements OnInit {
       LeaveTypeId: this.selectedLeave.LeaveTypeId,
       Reason: this.selectedLeave.Reason
     }
-    let filterId = 0;
-    this.http.post(`${endPoint}/${filterId}`, currentResponse).then((response: ResponseModel) => {
+    this.http.post(endPoint, currentResponse).then((response: ResponseModel) => {
       if (response.ResponseBody) {
+        this.selectedLeave.RequestStatusId = requestState == "Approved" ? ItemStatus.Approved : ItemStatus.Rejected;
         $('#leaveActionModal').modal('hide');
         Toast("Submitted Successfully");
       }

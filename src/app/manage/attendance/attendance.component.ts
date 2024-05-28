@@ -81,6 +81,10 @@ export class AttendanceComponent implements OnInit {
   attendanceGroup: Array<any> = [];
   weekGroup: Array<any> = [];
   selectedAttendanceWeek: number = 0;
+  totalWorkedMin: number = 0;
+  totalLeavedMin: number = 0;
+  workingHrs: Array<number> = [];
+  projects: Array<any> = [];
 
   constructor(
     private http: CoreHttpService,
@@ -114,6 +118,9 @@ export class AttendanceComponent implements OnInit {
     this.toModel = null;
     this.time = new Date();
     this.DayValue = this.time.getDay();
+    for (let i = 0; i <= 20; i++) {
+      this.workingHrs.push(i * 30);
+    }
     this.loadAutoComplete();
     if (
       this.userDetail ||
@@ -809,5 +816,25 @@ export class AttendanceComponent implements OnInit {
   selectAttendance() {
     this.currentDays = [];
     this.currentDays = this.weekGroup[this.selectedAttendanceWeek];
+    this.calculateWorkedHrs();
+    this.totalLeavedMin = this.currentDays
+      .filter((x) => !x.IsHoliday && x.IsOnLeave && !x.IsWeekend)
+      .map((x) => x.TotalMinutes)
+      .reduce((acc, curr) => {
+        return acc + curr;
+      }, 0);
+  }
+
+  calculateWorkedHrs() {
+    this.totalWorkedMin = this.currentDays
+      .filter((x) => !x.IsHoliday && !x.IsOnLeave && !x.IsWeekend)
+      .map((x) => Number(x.TotalMinutes))
+      .reduce((acc, curr) => {
+        return acc + curr;
+      }, 0);
+  }
+
+  saveWeeklyAttendance() {
+    console.log(this.currentDays);
   }
 }

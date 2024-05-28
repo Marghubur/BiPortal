@@ -17,16 +17,18 @@
               <div class="card mb-3">
                 <div class="card-body">
                   <h6 class="card-title fw-bold text-dark">Project: {{submittedEmpObj[0].ProjectName}} </h6>
-                  <p class="card-text text-dark" *ngIf="projectAppraisalBudget != null">
-                    Project Budget: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.ProjectAppraisalBudget | number: '1.2-2'}}
-                    <span class="px-2">|</span>
-                    Total Proposed Hike Amount: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.TotalHikeAmount | number: '1.2-2'}}
-                    <span class="px-2">|</span>
-                    Remaining Budget: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.ProjectAppraisalBudget - projectAppraisalBudget.TotalHikeAmount | number: '1.2-2'}}
-                  </p>
-                  <div class="alert alert-danger mb-0" role="alert" *ngIf="projectAppraisalBudget.TotalHikeAmount > projectAppraisalBudget.ProjectAppraisalBudget">
-                    Proposed hike amount is exceed from project appraisal budget.
-                  </div>
+                  <ng-container *ngIf="projectAppraisalBudget != null">
+                    <p class="card-text text-dark" >
+                      Project Budget: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.ProjectAppraisalBudget | number: '1.2-2'}}
+                      <span class="px-2">|</span>
+                      Total Proposed Hike Amount: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.TotalHikeAmount | number: '1.2-2'}}
+                      <span class="px-2">|</span>
+                      Remaining Budget: <i class="fa-solid fa-indian-rupee-sign me-1"></i> {{projectAppraisalBudget.ProjectAppraisalBudget - projectAppraisalBudget.TotalHikeAmount | number: '1.2-2'}}
+                    </p>
+                    <div class="alert alert-danger mb-0" role="alert" *ngIf="projectAppraisalBudget.TotalHikeAmount > projectAppraisalBudget.ProjectAppraisalBudget">
+                      Proposed hike amount is exceed from project appraisal budget.
+                    </div>
+                  </ng-container>
                 </div>
               </div>
               <ng-container>

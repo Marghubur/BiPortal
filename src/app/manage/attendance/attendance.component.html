@@ -51,7 +51,20 @@
                 <ng-template ngbNavContent>
                   <div class="" *ngIf="!isLoading">
                     <div class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3 ">
-                      <div class="col-md-6 d-flex align-items-center">
+                      <div class="card col-md-3 d-flex flex-row align-items-center px-2 py-3">
+                        Select Week:
+                        <div class="col-md-4">
+                          <select class="form-select ms-2" [(ngModel)]="selectedAttendanceWeek" [ngModelOptions]="{standalone: true}" (change)="selectAttendance()">
+                            <option [value]="i" *ngFor="let item of attendanceGroup; let i=index;">{{item.FromDate}}</option>
+                          </select>
+                        </div>
+                        <div class="col-md-4 ms-2">
+                          <select class="form-select ms-2" [(ngModel)]="selectedAttendanceWeek" [ngModelOptions]="{standalone: true}" disabled>
+                            <option [value]="i" *ngFor="let item of attendanceGroup; let i=index;">{{item.ToDate}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- <div class="col-md-2 d-flex align-items-center">
                         <select (change)="filterByStatus()" class="form-select w-25" [(ngModel)]="filterAttendStatus"
                           [ngModelOptions]="{standalone: true}">
                           <option value=null selected disabled>Filter by status</option>
@@ -68,10 +81,10 @@
                           <i class="fa-solid fa-retweet pe-2" aria-hidden="true"></i>
                           Raise a request
                         </button>
-                        <select class="form-select w-25 ms-2" [(ngModel)]="selectedAttendanceWeek" [ngModelOptions]="{standalone: true}" (change)="selectAttendance()">
+                        <select class="form-select ms-2" [(ngModel)]="selectedAttendanceWeek" [ngModelOptions]="{standalone: true}" (change)="selectAttendance()">
                           <option [value]="i" *ngFor="let item of attendanceGroup; let i=index;">{{item}}</option>
                         </select>
-                      </div>
+                      </div> -->
                       <div class="btn-group pe-5" role="group" aria-label="Basic radio toggle button group">
                         <ng-container *ngFor="let month of monthName; let i = index">
                           <input type="radio" class="btn-check" name="btnradio"
@@ -81,8 +94,56 @@
                         </ng-container>
                       </div>
                     </div>
-                    <div class="">
-                      <table class="table table-hover">
+                    <div class="bg-white">
+                      <div class="card p-4">
+                        <div class="row">
+                          <div class="col-md-3">
+                            <label class="form-label">Project</label>
+                            <select class="form-select">
+                              <option value="" *ngFor="let item of projects">{{item.ProjectName}}</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Tasks</label>
+                            <select class="form-select"></select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Work Item</label>
+                            <input type="number" placeholder="Work Item" class="form-control">
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Work Item Note</label>
+                            <input type="text" placeholder="Work Item Note" class="form-control">
+                          </div>
+                        </div>
+                        <div class="row row-cols-8">
+                          <div class="col mt-4" *ngFor="let item of currentDays;">
+                            <label class="form-label">{{item.AttendanceDay | date: 'EEE: d MMM'}}</label>
+                            <!-- <input type="text" class="form-control" [readOnly]="item.PresentDayStatus == 3" [value]="item.TotalMinutes + ' min'"> -->
+                            <select class="form-select" (change)="calculateWorkedHrs()" [ngModelOptions]="{standalone: true}" [(ngModel)]="item.TotalMinutes" [disabled]="item.PresentDayStatus == 3">
+                              <option [value]="workingHr" *ngFor="let workingHr of workingHrs">{{workingHr}} min</option>
+                            </select>
+                            <label class="form-label mt-1">Year: {{item.AttendanceDay | date: 'YYYY'}}</label>
+                          </div>
+                          <div class="col mt-4">
+                            <label class="form-label">Total</label>
+                            <input type="text" class="form-control" readonly [value]="totalWorkedMin + ' min'">
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="row row-cols-8">
+                          <div class="col mt-4" *ngFor="let item of currentDays;">
+                            <label class="form-label">{{item.AttendanceDay | date: 'EEE: d MMM'}}</label>
+                            <input type="text" class="form-control text-center" readonly [value]="item.IsOnLeave ? item.TotalMinutes + ' min' : '--'">
+                            <label class="form-label mt-1">Year: {{item.AttendanceDay | date: 'YYYY'}}</label>
+                          </div>
+                          <div class="col mt-4">
+                            <label class="form-label">Total</label>
+                            <input type="text" class="form-control" readonly [value]="totalLeavedMin + ' min'">
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <table class="table table-hover">
                         <thead>
                           <tr>
                             <th class="custom-th index-col">DATE</th>
@@ -150,7 +211,6 @@
                                     <ngb-progressbar *ngIf="item.PresentDayStatus == 3 || item.PresentDayStatus == 4"
                                       type="warning" [value]="100" [striped]="true"
                                       style="width: 40%;"></ngb-progressbar>
-                                    <!-- <ngb-progressbar type="info" [value]="100" style="width: 40%;"></ngb-progressbar> -->
                                   </ng-container>
                                 </p>
                               </td>
@@ -275,7 +335,11 @@
                             </ng-template>
                           </tr>
                         </tbody>
-                      </table>
+                      </table> -->
+                      <div class="text-end mb-2 mt-3">
+                        <button class="btn btn-primary-c" (click)="saveWeeklyAttendance()">Save</button>
+                        <button class="btn btn-primary-c ms-2">Submit for Approval</button>
+                      </div>
                     </div>
                   </div>
                   <ng-container *ngIf="isLoading">
@@ -283,6 +347,30 @@
                   </ng-container>
                 </ng-template>
               </ng-container>
+
+              <ng-container ngbNavItem>
+                <a ngbNavLink class="text-dark">Recent Attendance</a>
+                <ng-template ngbNavContent>
+                  <ng-container class="" *ngIf="isPageReady">
+                    <ng-container>
+                      <div class="col-md-12">
+
+
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="shiftDetail == null">
+                      <div
+                        class="custom-height fw-bold fs-3 text-danger my-5 py-5 d-flex align-items-center justify-content-center">
+                        <p class="my-5 py-5">Record Not Found</p>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngIf="!isPageReady">
+                    <app-page-placeholder></app-page-placeholder>
+                  </ng-container>
+                </ng-template>
+              </ng-container>
+
               <ng-container ngbNavItem>
                 <a ngbNavLink class="text-dark" (click)="loadShiftDetail()">Shift Detail</a>
                 <ng-template ngbNavContent>
