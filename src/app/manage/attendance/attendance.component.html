@@ -158,11 +158,8 @@
                           <div class="row">
                             <div class="col-md-3">
                               <label class="form-label">Project</label>
-                              <select class="form-select">
-                                <option
-                                  [value]="item.ProjectId"
-                                  *ngFor="let item of projects"
-                                >
+                              <select class="form-select" [(ngModel)]="selectedProjectId" [ngModelOptions]="{standalone: true}">
+                                <option [value]="item.ProjectId" *ngFor="let item of projects">
                                   {{ item.ProjectName }}
                                 </option>
                               </select>
@@ -195,28 +192,26 @@
                                 (change)="calculateWorkedHrs()"
                                 [ngModelOptions]="{ standalone: true }"
                                 [(ngModel)]="item.TotalMinutes"
-                                [disabled]="item.IsWeekend"
+                                [disabled]="item.IsWeekend || item.IsOnLeave || item.IsHoliday"
                               >
                                 <option
                                   [value]="workingHr"
                                   *ngFor="let workingHr of workingHrs"
                                 >
-                                  {{ workingHr }} min
+                                  {{ workingHr }} hrs
                                 </option>
                               </select>
-                              <label class="form-label mt-1"
-                                >Year:
-                                {{ item.AttendanceDate | date : "YYYY" }}</label
-                              >
+                              <label class="form-label mt-1">Year:
+                                {{ item.AttendanceDate | date : "YYYY" }}
+                              </label>
+                              <label class="form-label float-end fw-bold mt-1" [ngClass]="{'text-success': (item.IsWeekend || item.IsHoliday), 'text-danger': item.IsOnLeave }" *ngIf="item.IsWeekend || item.IsOnLeave || item.IsHoliday">
+                                {{ item.IsWeekend ? 'Weekend' : item.IsOnLeave ? 'On Leave' : 'Holiday' }}
+                                <span *ngIf="item.IsOnLeave">[{{item.LeaveId}}]</span>
+                              </label>
                             </div>
-                            <div class="col mt-4">
-                              <label class="form-label">Total</label>
-                              <input
-                                type="text"
-                                class="form-control"
-                                readonly
-                                [value]="totalWorkedMin + ' min'"
-                                />
+                            <div class="col-auto mt-4">
+                              <label class="form-label fw-bold">Total</label>
+                              <p class="mb-0 fw-bold">{{totalWorkedMin}} hrs</p>
                               </div>
                             </div>
                           </ng-container>

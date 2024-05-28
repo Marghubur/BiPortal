@@ -77,6 +77,7 @@ export class AttendanceComponent implements OnInit {
   projects: Array<any> = [];
   weeks: Array<Weeks> = [];
   attendanceDetail: Array<Attendance> = [];
+  selectedProjectId: number = 0;
 
   constructor(
     private http: CoreHttpService,
@@ -102,8 +103,8 @@ export class AttendanceComponent implements OnInit {
     if (user.RoleId == UserType.Admin) this.isAdmin = true;
     this.clientDetail = new autoCompleteModal('Select Organization');
     this.employeesList = new autoCompleteModal('Select Employee');
-    for (let i = 0; i <= 20; i++) {
-      this.workingHrs.push(i * 30);
+    for (let i = 0; i <= 12; i++) {
+      this.workingHrs.push(i);
     }
     this.loadAutoComplete();
     if (
@@ -628,12 +629,8 @@ export class AttendanceComponent implements OnInit {
       .filter((x) => !x.IsHoliday && !x.IsOnLeave && !x.IsWeekend)
       .map((x) => Number(x.TotalMinutes))
       .reduce((acc, curr) => {
-        return acc + curr;
+        return (acc + curr);
       }, 0);
-  }
-
-  saveWeeklyAttendance() {
-    console.log(this.currentDays);
   }
 
   async getConfigDetail() {
@@ -643,6 +640,9 @@ export class AttendanceComponent implements OnInit {
     if (response) {
       this.employee = response.EmployeeDetail;
       this.projects = response.Projects;
+      if (this.projects.length == 1)
+        this.selectedProjectId = this.projects[0].ProjectId;
+
       this.weeks = response.Weeks;
       this.selectedAttendanceWeek = 0;
     }
@@ -660,5 +660,14 @@ export class AttendanceComponent implements OnInit {
       x.AttendanceDate = ToLocateDate(x.AttendanceDate)
     });
     this.calculateWorkedHrs();
+  }
+
+  saveWeeklyAttendance() {
+    this.attendanceDetail.forEach(x => {
+      x.ProjectId = this.selectedProjectId,
+      x.TotalMinutes = Number(x.TotalMinutes) * 60
+    })
+    console.log(this.attendanceDetail);
+
   }
 }
