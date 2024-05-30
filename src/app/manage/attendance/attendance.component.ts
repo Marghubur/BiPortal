@@ -663,15 +663,32 @@ export class AttendanceComponent implements OnInit {
   }
 
   async saveWeeklyAttendance() {
-    this.attendanceDetail.forEach(x => {
-      x.ProjectId = this.selectedProjectId,
-      x.TotalMinutes = Number(x.TotalMinutes) * 60
-    });
+    if (this.attendanceDetail.length > 0) {
+      this.isLoading = true;
+      this.attendanceDetail.forEach(x => {
+        x.ProjectId = this.selectedProjectId,
+        x.TotalMinutes = Number(x.TotalMinutes) * 60
+      });
+      let response = await this.attendaceService.saveWeekAttendace(
+        this.attendanceDetail
+      );
+      this.bindData(response);
+    }
+  }
 
-    let response = await this.attendaceService.saveWeekAttendace(
-      this.attendanceDetail
-    );
-    this.bindData(response);
+  async submitWeeklyAttendance() {
+    if (this.attendanceDetail.length > 0) {
+      this.isLoading = true;
+      this.attendanceDetail.forEach(x => {
+        x.ProjectId = this.selectedProjectId,
+        x.TotalMinutes = Number(x.TotalMinutes) * 60
+      });
+
+      let response = await this.attendaceService.submitWeekAttendace(
+        this.attendanceDetail
+      );
+      this.bindData(response);
+    }
   }
 
   bindData(response: Array<Attendance>) {
@@ -689,8 +706,11 @@ export class AttendanceComponent implements OnInit {
       this.attendanceStatus = ItemStatus.Approved;
     else if (status.findIndex(x => x == ItemStatus.Rejected) > -1)
       this.attendanceStatus = ItemStatus.Rejected;
+    else if (status.findIndex(x => x == ItemStatus.Saved) > -1)
+      this.attendanceStatus = ItemStatus.Saved;
 
     this.calculateWorkedHrs();
+    this.isLoading = false;
   }
 
 

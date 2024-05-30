@@ -106,8 +106,8 @@
                           </select>
                         </div>
                       </div>
-                      <div class="col-auto fw-bold" *ngIf="attendanceStatus > 0">
-                        {{attendanceStatus == 8 ? 'Submitted' : attendanceStatus == 5 ? 'Rejected' : 'Approved'}}
+                      <div class="col-auto fw-bold" *ngIf="attendanceStatus > 0" [ngClass]="{'text-success': attendanceStatus == 9, 'text-danger': attendanceStatus == 5, 'text-primary': (attendanceStatus == 13 || attendanceStatus == 8)}">
+                        {{attendanceStatus == 8 ? 'Submitted' : attendanceStatus == 5 ? 'Rejected' : attendanceStatus == 5 ? 'Approved': 'Saved'}}
                       </div>
                     </div>
                     <div class="bg-white">
@@ -471,15 +471,26 @@
                           </tr>
                         </tbody>
                       </table> -->
-                      <div class="text-end mb-2 mt-3" *ngIf="attendanceDetail.length > 0">
-                        <button
-                          class="btn btn-primary-c"
+                      <div class="text-end mb-2 mt-3" *ngIf="attendanceDetail.length > 0 && attendanceStatus != 9">
+                        <button [disabled]="isLoading"
+                          class="btn btn-success"
                           (click)="saveWeeklyAttendance()"
                         >
-                          Save
+                        <i
+                        [ngClass]="{
+                          'fa-solid fa-spinner fa-spin': isLoading,
+                          'fa-regular fa-circle-user': !isLoading
+                        }"
+                      ></i>
+                      {{ isLoading ? "Wait" : "Save" }}
                         </button>
-                        <button class="btn btn-primary-c ms-2">
-                          Submit for Approval
+                        <button class="btn btn-primary-c ms-2" [disabled]="isLoading" (click)="submitWeeklyAttendance()">
+                          <i [ngClass]="{
+                              'fa-solid fa-spinner fa-spin': isLoading,
+                              'fa-regular fa-circle-user': !isLoading
+                            }"
+                          ></i>
+                          {{ isLoading ? "Wait" : "Submit for Approval" }}
                         </button>
                       </div>
                     </div>
