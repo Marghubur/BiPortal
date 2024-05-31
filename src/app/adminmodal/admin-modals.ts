@@ -340,8 +340,7 @@ export class DocumentUser {
   export class CompanyHoliday {
     CompanyCalendarId: number = 0;
     CompanyId: number = 0;
-    StartDate: Date = null;
-    EndDate: Date = null;
+    HolidayDate: Date = null;
     EventName: string = null;
     IsHoliday: boolean = true;
     IsHalfDay: boolean = false;

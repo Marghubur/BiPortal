@@ -303,7 +303,7 @@ export class AttendanceComponent implements OnInit {
     }
     this.currentDays.map((item) => {
       request.push({
-        TargetOffset: item.AttendenceDetailId,
+        TargetId: item.AttendenceDetailId,
         AttendanceDate: item.AttendanceDay,
         EmployeeMessage: this.commentValue,
         NotifyList: notify,

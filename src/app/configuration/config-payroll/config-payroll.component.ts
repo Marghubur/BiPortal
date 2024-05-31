@@ -777,11 +777,12 @@ export class ConfigPayrollComponent implements OnInit {
 
     this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
-        if (attendance) {
-          attendance.AttendanceDetail = [];
-          attendance.AttendanceDetail = res.ResponseBody;
-        }
+        // let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
+        // if (attendance) {
+        //   attendance.AttendanceDetail = [];
+        //   attendance.AttendanceDetail = res.ResponseBody;
+        // }
+        this.selectedAttendance.PresentDayStatus = res.ResponseBody.AttendanceStatus;
         $('#attendanceAdjustment').modal('hide');
         Toast("Attendace apply successfully.");
         this.isLoading = false;
