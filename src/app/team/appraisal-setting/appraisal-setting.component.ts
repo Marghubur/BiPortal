@@ -46,6 +46,7 @@ export class AppraisalSettingComponent implements OnInit {
   currentApprisalCycle:ApprisalCycle = new ApprisalCycle();
   selectedAppraisalCycle:any = null;
   isManegeObjectiveReady: boolean = false;
+  isShowDefaultObjective: boolean = false;
 
   constructor(private http: PerformanceHttpService,
               private fb: FormBuilder,
@@ -58,7 +59,7 @@ export class AppraisalSettingComponent implements OnInit {
     this.designation = GetRoles();
     this.currentCompny = this.local.findRecord("Companies")[0];
     this.userDetail = this.user.getInstance();
-    this.objectiveData.SearchString += ` And CompanyId = ${this.currentCompny.CompanyId}`;
+    this.objectiveData.SearchString += ` And CompanyId = ${this.currentCompny.CompanyId} And IsDefaultObjective = false`;
     if (this.userDetail.UserId <= 0) {
       ErrorToast("Invalid user. Please login again;")
       return;
@@ -469,6 +470,20 @@ export class AppraisalSettingComponent implements OnInit {
         this.isLoading = false;
       })
     }
+  }
+
+  showDefaultObjective() {
+    this.isShowDefaultObjective = !this.isShowDefaultObjective;
+    this.isPageReady = false;
+    this.objectiveData.SearchString = `1=1 And CompanyId = ${this.currentCompny.CompanyId} And IsDefaultObjective = true`;
+    this.getAllPerformanceObjective();
+  }
+
+  hideDefaultObjective() {
+    this.isShowDefaultObjective = !this.isShowDefaultObjective;
+    this.isPageReady = false;
+    this.objectiveData.SearchString = `1=1 And CompanyId = ${this.currentCompny.CompanyId} And IsDefaultObjective = false`;
+    this.getAllPerformanceObjective();
   }
 }
 

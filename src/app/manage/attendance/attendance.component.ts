@@ -79,7 +79,6 @@ export class AttendanceComponent implements OnInit {
   weeks: Array<Weeks> = [];
   attendanceDetail: Array<Attendance> = [];
   selectedProjectId: number = 0;
-  attandanceForm: FormGroup;
   attendanceStatus: number = 0;
 
   constructor(
@@ -693,6 +692,7 @@ export class AttendanceComponent implements OnInit {
 
   bindData(response: Array<Attendance>) {
     this.attendanceStatus = 0;
+    this.attendanceDetail = [];
     this.attendanceDetail = response
     this.attendanceDetail.forEach(x => {
       x.AttendanceDate = ToLocateDate(x.AttendanceDate);
@@ -711,112 +711,5 @@ export class AttendanceComponent implements OnInit {
 
     this.calculateWorkedHrs();
     this.isLoading = false;
-  }
-
-
-
-  initAttendanceForm() {
-    this.attandanceForm = this.fb.group({
-      attendance: this.buildAttendanceForm()
-    })
-  }
-
-  buildAttendanceForm(): FormArray {
-    let data: Array<Attendance> = [];
-    let dataArray: FormArray = this.fb.array([]);
-
-    if(data != null && data.length > 0) {
-      let i = 0;
-      while(i < data.length) {
-        dataArray.push(this.fb.group({
-          AttendanceId: new FormControl(data[i].AttendanceId),
-          EmployeeId: new FormControl(data[i].EmployeeId),
-          EmployeeName: new FormControl(data[i].EmployeeName),
-          EmployeeEmail: new FormControl(data[i].EmployeeEmail),
-          ReviewerId: new FormControl(data[i].ReviewerId),
-          ReviewerName: new FormControl(data[i].ReviewerName),
-          ReviewerEmail: new FormControl(data[i].ReviewerEmail),
-          ProjectId: new FormControl(data[i].ProjectId),
-          TaskId: new FormControl(data[i].TaskId),
-          TaskType: new FormControl(data[i].TaskType),
-          LogOn: new FormControl(data[i].LogOn),
-          LogOff: new FormControl(data[i].LogOff),
-          TotalMinutes: new FormControl(data[i].TotalMinutes),
-          Comments: new FormControl(data[i].Comments),
-          AttendanceStatus: new FormControl(data[i].AttendanceStatus),
-          WeekOfYear: new FormControl(data[i].WeekOfYear),
-          AttendanceDate: new FormControl(data[i].AttendanceDate),
-          WorkTypeId: new FormControl(data[i].WorkTypeId),
-          IsHoliday: new FormControl(data[i].IsHoliday),
-          HolidayId: new FormControl(data[i].HolidayId),
-          IsOnLeave: new FormControl(data[i].IsOnLeave),
-          LeaveId: new FormControl(data[i].LeaveId),
-          IsWeekend: new FormControl(data[i].IsWeekend),
-        }));
-        i++;
-      }
-    } else {
-      dataArray.push(this.createAttendanceForm());
-    }
-
-    return dataArray;
-  }
-
-  createAttendanceForm(): FormGroup {
-    return this.fb.group({
-      AttendanceId: new FormControl(this.attendanceDetail[0].AttendanceId),
-      EmployeeId: new FormControl(this.attendanceDetail[0].EmployeeId),
-      EmployeeName: new FormControl(this.attendanceDetail[0].EmployeeName),
-      EmployeeEmail: new FormControl(this.attendanceDetail[0].EmployeeEmail),
-      ReviewerId: new FormControl(this.attendanceDetail[0].ReviewerId),
-      ReviewerName: new FormControl(this.attendanceDetail[0].ReviewerName),
-      ReviewerEmail: new FormControl(this.attendanceDetail[0].ReviewerEmail),
-      ProjectId: new FormControl(this.attendanceDetail[0].ProjectId),
-      TaskId: new FormControl(this.attendanceDetail[0].TaskId),
-      TaskType: new FormControl(this.attendanceDetail[0].TaskType),
-      LogOn: new FormControl(this.attendanceDetail[0].LogOn),
-      LogOff: new FormControl(this.attendanceDetail[0].LogOff),
-      TotalMinutes: new FormControl(this.attendanceDetail[0].TotalMinutes),
-      Comments: new FormControl(this.attendanceDetail[0].Comments),
-      AttendanceStatus: new FormControl(this.attendanceDetail[0].AttendanceStatus),
-      WeekOfYear: new FormControl(this.attendanceDetail[0].WeekOfYear),
-      AttendanceDate: new FormControl(this.attendanceDetail[0].AttendanceDate),
-      WorkTypeId: new FormControl(this.attendanceDetail[0].WorkTypeId),
-      IsHoliday: new FormControl(this.attendanceDetail[0].IsHoliday),
-      HolidayId: new FormControl(this.attendanceDetail[0].HolidayId),
-      IsOnLeave: new FormControl(this.attendanceDetail[0].IsOnLeave),
-      LeaveId: new FormControl(this.attendanceDetail[0].LeaveId),
-      IsWeekend: new FormControl(this.attendanceDetail[0].IsWeekend)
-    });
-  }
-
-  addAttendanceForm() {
-    let item = this.attandanceForm.get('attendance') as FormArray;
-    item.push(this.createAttendanceForm());
-  }
-
-  removeOldTaxSlab(i: number) {
-    let item = this.attandanceForm.get('attendance') as FormArray;
-    if (item.length > 1) {
-      let taxregimeId = item.value[i];
-      if (taxregimeId > 0) {
-        this.http.delete(`TaxRegime/DeleteTaxRegime/${taxregimeId}`).then(res => {
-          if (res.ResponseBody) {
-            Toast("Regime deleted successfully");
-          }
-        }).catch(e => {
-          ErrorToast(e.error.HttpStatusMessage);
-        })
-      }
-      item.removeAt(i);
-    }
-    if (i > 0) {
-      let value = (item.value[i-1].MaxTaxSlab) + 1;
-      (<FormArray>item).controls[i].get('MinTaxSlab').setValue(value);
-    }
-  }
-
-  get attendance() {
-    return this.attandanceForm.get('attendance') as FormArray;
   }
 }

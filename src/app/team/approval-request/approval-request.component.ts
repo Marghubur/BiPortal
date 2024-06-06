@@ -3,7 +3,7 @@ import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.comp
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus, UserType } from 'src/providers/constants';
 import { Filter, UserService } from 'src/providers/userService';
@@ -126,11 +126,11 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.itemStatus = 2;
     this.attendanceRecord = {
       EmployeeId: 0,
-      ForMonth: date.getMonth() + 1,
-      ForYear: date.getFullYear(),
+      ForMonth: 4,
+      ForYear: 2023,
       PageIndex: 1,
       ReportingManagerId: this.currentUser.UserId,
-      PresentDayStatus: 2,
+      PresentDayStatus: ItemStatus.Submitted,
       TotalDays: 0
     };
     this.leaveRecord = {
@@ -153,7 +153,9 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     for (let i = 1; i <= days; i++) {
       this.monthDays.push(i);
     }
-    this.attendanceReviewData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
+    this.attendanceReviewData.ForMonth = this.attendance.ForMonth + 1;
+    this.attendanceReviewData.ForYear = this.attendance.ForYear ;
+    this.attendanceReviewData.SearchString = ` 1=1 `;
     this.getAttendanceRequest();
   }
 
@@ -185,7 +187,8 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.requestState = state;
     this.requestModal = 3; // attendance
     this.currentRequest = request;
-    this.currentRequest.RequestStatusId = request.PresentDayStatus;
+    this.currentRequest.RequestStatusId = request.AttendanceStatus;
+    this.currentRequest.PresentDayStatus = request.AttendanceStatus;
     this.currentRequest["EmployeeName"] = request.EmployeeName;
     this.currentRequest["Email"] = request.Email;
     this.currentRequest["Mobile"] = request.Mobile;
@@ -315,7 +318,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       this.currentRequest.PresentDayStatus = this.attendanceRecord.PresentDayStatus;
       this.currentRequest.TotalDays = this.attendanceRecord.TotalDays;
 
-      this.http.put(`${endPoint}/${this.filterId}`, this.currentRequest).then((response: ResponseModel) => {
+      this.http.put(`${endPoint}/${this.attendanceRecord.PresentDayStatus}`, this.currentRequest).then((response: ResponseModel) => {
         if (response.ResponseBody) {
           this.attendanceDetail = response.ResponseBody.FilteredAttendance;
           if (this.attendanceDetail.length > 0)
@@ -612,10 +615,25 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   resetAttendanceRequest() {
     this.attendanceRecord.PageIndex = 1;
     this.attendanceRecord.EmployeeId = 0;
-    this.attendanceRecord.PresentDayStatus = 2;
+    this.attendanceRecord.PresentDayStatus = ItemStatus.Submitted;
     this.attendanceRecord.TotalDays = 0;
     this.attendanceData = new Filter();
     this.getAttendanceRequest();
+  }
+
+  reviewAttendanceLoad() {
+    this.employeeList.data = GetEmployees();
+    this.employeeId = 0;
+  }
+
+  onEmloyeeChange(event: any) {
+    if (this.employeeId > 0) {
+      this.attendanceReviewData.reset();
+      this.attendanceReviewData.ForMonth = this.attendance.ForMonth;
+      this.attendanceReviewData.ForYear = this.attendance.ForYear;
+      this.attendanceReviewData.SearchString = `1=1 and EmployeeId = ${this.employeeId}`;
+      this.getReviewAttendanceDetail();
+    }
   }
 
   getTimesheetRequest() {
@@ -702,22 +720,22 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   getReviewAttendanceDetail() {
     this.isPageLoading = true;
-    this.filterHttp.post("runpayroll/getAttendancePage", this.attendanceReviewData).then((res: ResponseModel) => {
+    this.attendanceDetail = [];
+    this.http.post("Attendance/getAttendancePage", this.attendanceReviewData).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
-        this.attendanceDetail = res.ResponseBody;
-        if (this.attendanceDetail.length > 0) {
-
-          this.attendanceDetail.forEach(x => {
-            x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
+        let attendanceDictionary = res.ResponseBody;
+        let keys = Object.keys(attendanceDictionary);
+        let total = 0;
+        keys.forEach(x => {
+          this.attendanceDetail.push({
+            EmployeeId: Number(x),
+            EmployeeName: attendanceDictionary[x][0].EmployeeName,
+            AttendanceDetail: attendanceDictionary[x],
+            total: attendanceDictionary[x][0].Total
           });
-
-          this.attendanceReviewData.TotalRecords = this.attendanceDetail[0].Total;
-        } else {
-          this.attendanceReviewData.TotalRecords = 0;
-        }
-
-        console.log(this.attendanceDetail);
+        })
+        this.attendanceReviewData.TotalRecords = total;
         this.isPageLoading = false;
         Toast("Attendance detail loaded");
       }
@@ -762,7 +780,9 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   resetAttedanceReviewFilter() {
     this.attendanceReviewData.reset();
-    this.attendanceReviewData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
+    this.attendanceReviewData.ForMonth = this.attendance.ForMonth + 1;
+    this.attendanceReviewData.ForYear = this.attendance.ForYear ;
+    this.attendanceReviewData.SearchString = ` 1=1 `;
     let date = new Date();
     this.attendance = {
       EmployeeName: "",
@@ -794,7 +814,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    if (this.selectedAttendance.AttendanceId <= 0 || this.selectedAttendance.AttendanceDay == null) {
+    if (this.selectedAttendance.AttendanceId <= 0 || this.selectedAttendance.AttendanceDate == null) {
       this.isLoading = false;
       return;
     }
@@ -806,7 +826,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
         //   attendance.AttendanceDetail = [];
         //   attendance.AttendanceDetail = res.ResponseBody;
         // }
-        this.selectedAttendance.PresentDayStatus = res.ResponseBody.AttendanceStatus;
+        this.selectedAttendance.AttendanceStatus = res.ResponseBody.AttendanceStatus;
         $('#attendanceAdjustment').modal('hide');
         Toast("Attendace apply successfully.");
         this.isLoading = false;

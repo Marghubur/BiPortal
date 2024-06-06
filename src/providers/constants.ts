@@ -318,3 +318,12 @@ export enum CronJobType {
   Monthly = 3,
   Yearly = 4
 }
+
+export enum SalaryComponentItems {
+  Gross = "Gross",
+  EPF = "EPF",
+  ESI = "ESI",
+  CTC = "CTC",
+  PTAX = "PTAX",
+  HRA = "HRA"
+}

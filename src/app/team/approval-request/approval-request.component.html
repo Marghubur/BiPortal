@@ -86,7 +86,7 @@
                       </p>
                       <p class="ms-2 mb-0 fs-6">
                         <span class="">Attendance Date: </span>
-                        <span>{{item.AttendanceDay | date}}</span>
+                        <span>{{item.AttendanceDate | date}}</span>
                       </p>
                       <div class="ms-3 col-auto">
                         <span class="fw-bold pe-1">Manager:</span>
@@ -94,12 +94,12 @@
                         <span class="mb-0"><i class="fa-solid fa-envelope pe-1"></i> {{item.ManagerEmail}} | <i
                             class="fa-solid fa-phone pe-1"></i> {{item.ManagerMobile}}</span>
                         <span class="badge ms-3"
-                          [ngClass]="{'bg-danger': item.PresentDayStatus == 5, 'bg-success': item.PresentDayStatus == 9, 'bg-primary': (item.PresentDayStatus != 9 && item.PresentDayStatus !=5)}">
-                          <i class="fa-solid fa-ban pe-1" *ngIf="item.PresentDayStatus == 5,"></i>
-                          <i class="fa-solid fa-check pe-1" *ngIf="item.PresentDayStatus == 9"></i>
+                          [ngClass]="{'bg-danger': item.AttendanceStatus == 5, 'bg-success': item.AttendanceStatus == 9, 'bg-primary': (item.AttendanceStatus != 9 && item.AttendanceStatus !=5)}">
+                          <i class="fa-solid fa-ban pe-1" *ngIf="item.AttendanceStatus == 5,"></i>
+                          <i class="fa-solid fa-check pe-1" *ngIf="item.AttendanceStatus == 9"></i>
                           <i class="fa-regular fa-clock pe-1"
-                            *ngIf="(item.PresentDayStatus != 9 && item.PresentDayStatus !=5)"></i>
-                          {{item.PresentDayStatus == 5 ? "Rejectd" : item.PresentDayStatus == 9 ? "Approved" :
+                            *ngIf="(item.AttendanceStatus != 9 && item.AttendanceStatus !=5)"></i>
+                          {{item.AttendanceStatus == 5 ? "Rejectd" : item.AttendanceStatus == 9 ? "Approved" :
                           "Pending"}}
                         </span>
                       </div>
@@ -569,7 +569,7 @@
           </ng-template>
         </li>
         <li [ngbNavItem]="5">
-          <a ngbNavLink class="text-muted" (click)="getReviewAttendanceDetail()">Review Attendance</a>
+          <a ngbNavLink class="text-muted" (click)="reviewAttendanceLoad()">Review Attendance</a>
           <ng-template ngbNavContent>
             <div class="x_content overflow-x-hidden">
               <ng-container *ngIf="!isPageLoading">
@@ -579,16 +579,18 @@
                       <div class="t-filter">
                         <a href="javascript:void()" class="pe-2">Full Name</a>
                       </div>
-                      <input class="form-control" (keyup.enter)="filterAttedanceReviewRecords()" autofocus
+                      <bot-autocomplete [data]="employeeList" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChange($event)" (keydown.esc)="resetFilter()">
+                      </bot-autocomplete>
+                      <!-- <input class="form-control" (keyup.enter)="filterAttedanceReviewRecords()" autofocus
                         [(ngModel)]="attendance.EmployeeName" placeholder="Search by Name" id="namefilter"
-                        (keydown.esc)="resetAttedanceReviewFilter()">
+                        (keydown.esc)="resetAttedanceReviewFilter()"> -->
                     </div>
                     <div class="cell-wrapper col-md-1 mb-3">
                       <div class="t-filter">
                         <a href="javascript:void()" class="pe-2">Month</a>
                       </div>
                       <select class="form-select" [(ngModel)]="attendance.ForMonth"
-                        (change)="filterAttedanceReviewRecords()">
+                        (change)="onEmloyeeChange()">
                         <option value="1">Jan</option>
                         <option value="2">Feb</option>
                         <option value="3">Mar</option>
@@ -607,7 +609,7 @@
                       <div class="t-filter">
                         <a href="javascript:void()" class="pe-2">Year</a>
                       </div>
-                      <select class="form-select" [(ngModel)]="attendance.ForYear">
+                      <select class="form-select" [(ngModel)]="attendance.ForYear" (change)="onEmloyeeChange()">
                         <option value="{{item}}" *ngFor="let item of filterYears">{{item}}</option>
                       </select>
                     </div>
@@ -642,18 +644,19 @@
                             {{item.EmployeeName}}
                           </td>
                           <ng-container *ngFor="let data of item.AttendanceDetail">
-                            <td [ngClass]="{'holiday-color': data.PresentDayStatus == 3}">
+                            <td [ngClass]="{'holiday-color': data.AttendanceStatus == 3}">
                               <ng-container *ngIf="!data.IsOnLeave">
-                                <i class="fa-solid fa-check text-success" *ngIf="data.PresentDayStatus == 9"></i>
-                                <i class="fa-solid fa-xmark text-white" *ngIf="data.PresentDayStatus == 5"></i>
+                                <i class="fa-solid fa-check text-success" *ngIf="data.AttendanceStatus == 9"></i>
+                                <i class="fa-solid fa-xmark text-white" *ngIf="data.AttendanceStatus == 5"></i>
                                 <a href="javascript:void(0)"
-                                  (click)="showAttendanceHandler(data, item.EmployeeId, item.EmployeeName)">
+                                  (click)="showAttendanceHandler(data, data.AttendanceId, item.EmployeeName)">
                                   <i class="fa-solid fa-triangle-exclamation text-warning"
-                                    *ngIf="data.PresentDayStatus == 0"></i>
+                                    *ngIf="data.AttendanceStatus == 0"></i>
                                 </a>
-                                <i class="fa-regular fa-clock text-danger" *ngIf="data.PresentDayStatus == 2"></i>
+                                <i class="fa-regular fa-clock text-danger"
+                                  *ngIf="data.AttendanceStatus == 2 || data.AttendanceStatus == 12"></i>
                                 <i class="fa-solid fa-gift"
-                                  *ngIf="data.PresentDayStatus == 3 || data.PresentDayStatus == 4"></i>
+                                  *ngIf="data.AttendanceStatus == 3 || data.AttendanceStatus == 4 || data.IsHoliday"></i>
                               </ng-container>
                               <ng-container *ngIf="data.IsOnLeave">
                                 <i class="fa-regular fa-flag"></i>
@@ -686,9 +689,7 @@
                   </table>
                 </div>
                 <div class="mt-3 row align-items-center justify-content-between">
-                  <div class="col" *ngIf="!isPageLoading">
-                    <app-pagination [pagination]="attendanceReviewData"
-                      (onPageChange)="GetFilterLosspayResult($event)"></app-pagination>
+                  <div class="col">
                   </div>
                   <div class="col-auto row align-items-center">
                     <div class="col-auto text-muted">
@@ -799,12 +800,14 @@
             <p class="mb-0">{{currentRequest.Email}}</p>
             <p class="mb-0">{{currentRequest.Mobile}}</p>
           </div>
-          <div class="col-md-1">
-            <ng-container [ngSwitch]="currentRequest.PresentDayStatus">
+          <div class="col-md-1 fw-bold">
+            {{(currentRequest.PresentDayStatus == 2 || currentRequest.PresentDayStatus == 8) ? 'Pending' : currentRequest.PresentDayStatus == 9 ? 'Approved' : 'Rejected'}}
+            <!-- <ng-container [ngSwitch]="currentRequest.PresentDayStatus">
               <p *ngSwitchCase="2">Pending</p>
               <p *ngSwitchCase="9">Approved</p>
               <p *ngSwitchCase="5">Rejected</p>
-            </ng-container>
+              <p *ngSwitchCase="8">Pending</p>
+            </ng-container> -->
           </div>
         </div>
         <div class="col-md-6 mb-3" *ngIf="requestState == 'Othermember'">
@@ -1029,7 +1032,7 @@
           </div>
           <div class="col-md-12 mt-2">
             <label class="form-label">Date</label>
-            <span>: {{selectedAttendance.AttendanceDay | date}} </span>
+            <span>: {{selectedAttendance.AttendanceDate | date}} </span>
           </div>
           <div class="col-md-12 mt-2">
             <label class="form-label">Submitted By</label>
