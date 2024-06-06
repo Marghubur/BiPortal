@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
-import { Holiday, UserType } from 'src/providers/constants';
+import { UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
@@ -26,7 +26,6 @@ export class HolidayComponent implements OnInit {
   companyId: number = 0;
   currentCompany: any = null;
   fromModel: NgbDateStruct;
-  toModel: NgbDateStruct;
   year: number = 0;
   holidayData: Filter = null;
   holidayDetail: CompanyHoliday= null;
@@ -50,8 +49,7 @@ export class HolidayComponent implements OnInit {
   constructor(private http: CoreHttpService,
               private fb: FormBuilder,
               private local: ApplicationStorage,
-              private user: UserService,
-              private nav: iNavigation) { }
+              private user: UserService) { }
 
   ngOnInit(): void {
     this.year = new Date().getFullYear();
@@ -112,11 +110,7 @@ export class HolidayComponent implements OnInit {
     this.allHolidayList = res;
     if (this.allHolidayList.length > 0) {
       for (let i = 0; i < this.allHolidayList.length; i++) {
-        this.allHolidayList[i].StartDate = ToLocateDate(this.allHolidayList[i].StartDate);
-        this.allHolidayList[i].EndDate = ToLocateDate(this.allHolidayList[i].EndDate);
-        let timeDiffer =  new Date(this.allHolidayList[i].EndDate).setHours(0,0,0,0) - new Date(this.allHolidayList[i].StartDate).setHours(0,0,0,0);
-        let totalDays = timeDiffer / (1000*60*60*24);
-        this.allHolidayList[i].TotalDays = totalDays + 1;
+        this.allHolidayList[i].HolidayDate = ToLocateDate(this.allHolidayList[i].HolidayDate);
       }
       this.holidayData.TotalRecords= this.allHolidayList[0].Total;
     } else {
@@ -129,8 +123,7 @@ export class HolidayComponent implements OnInit {
       CompanyCalendarId: new FormControl(this.selectedHoliday.CompanyCalendarId),
       CompanyId: new FormControl(this.companyId, [Validators.required]),
       CompanyName: new FormControl(this.currentCompany.CompanyName),
-      StartDate: new FormControl(this.selectedHoliday.StartDate, [Validators.required]),
-      EndDate: new FormControl(this.selectedHoliday.EndDate, [Validators.required]),
+      HolidayDate: new FormControl(this.selectedHoliday.HolidayDate, [Validators.required]),
       EventName: new FormControl(this.selectedHoliday.EventName, [Validators.required]),
       IsHoliday: new FormControl(this.selectedHoliday.IsHoliday),
       IsHalfDay: new FormControl(this.selectedHoliday.IsHalfDay, [Validators.required]),
@@ -147,8 +140,7 @@ export class HolidayComponent implements OnInit {
   manageHoliday() {
     this.isLoading = true;
     this.submitted = true;
-    let startDate = new Date(this.holidayForm.get('StartDate').value).setHours(0,0,0,0);
-    let endDate = new Date(this.holidayForm.get('EndDate').value).setHours(0,0,0,0);
+    let startDate = new Date(this.holidayForm.get('HolidayDate').value).setHours(0,0,0,0);
     let holidaytype = this.holidayForm.get('IsPublicHoliday').value;
     if (Number(holidaytype) == 1) {
       this.holidayForm.get('IsPublicHoliday').setValue(true);
@@ -162,11 +154,6 @@ export class HolidayComponent implements OnInit {
       this.holidayForm.get('IsPublicHoliday').setValue(false);
       this.holidayForm.get('IsHoliday').setValue(false);
       this.holidayForm.get('IsCompanyCustomHoliday').setValue(true);
-    }
-    if (startDate > endDate) {
-      this.isLoading = false;
-      ErrorToast("End date must be greater than or equal to start date");
-      return;
     }
     if (this.holidayForm.invalid) {
       this.isLoading = false;
@@ -193,8 +180,7 @@ export class HolidayComponent implements OnInit {
   editHoliday(data: CompanyHoliday) {
     if (data) {
       this.selectedHoliday = data;
-      this.fromModel = { day: this.selectedHoliday.StartDate.getDate(), month:this.selectedHoliday.StartDate.getMonth() + 1, year:this.selectedHoliday.StartDate.getFullYear()};
-      this.toModel = { day: this.selectedHoliday.EndDate.getDate(), month:this.selectedHoliday.EndDate.getMonth() + 1, year:this.selectedHoliday.EndDate.getFullYear()};
+      this.fromModel = { day: this.selectedHoliday.HolidayDate.getDate(), month:this.selectedHoliday.HolidayDate.getMonth() + 1, year:this.selectedHoliday.HolidayDate.getFullYear()};
       if (data.IsPublicHoliday) {
         data.HolidayType = 1;
       } else if (data.IsHoliday) {
@@ -210,7 +196,6 @@ export class HolidayComponent implements OnInit {
   addHolidayPopup() {
     this.submitted = false;
     this.fromModel = { day: new Date().getDate(), month:new Date().getMonth() + 1, year:new Date().getFullYear()};
-    this.toModel = { day: new Date().getDate(), month:new Date().getMonth() + 1, year:new Date().getFullYear()};
     this.selectedHoliday = new CompanyHoliday();
     this.initForm();
     $('#manageHolidayModal').modal('show');
@@ -247,19 +232,9 @@ export class HolidayComponent implements OnInit {
 
   onfromDateSelection(e: NgbDateStruct) {
     let date = new Date(e.year, e.month - 1, e.day);
-    this.holidayForm.controls["StartDate"].setValue(date);
+    this.holidayForm.controls["HolidayDate"].setValue(date);
   }
 
-  ontoDateSelection(e: NgbDateStruct) {
-    let startDate = new Date(this.holidayForm.get('StartDate').value).setHours(0,0,0,0);
-    let date = new Date(e.year, e.month - 1, e.day);
-    if (startDate > date.setHours(0,0,0,0)) {
-      this.holidayForm.get('EndDate').setValue(null);
-      ErrorToast("End date must be greater than or equal to start date");
-    }
-    else
-      this.holidayForm.get('EndDate').setValue(date);
-  }
 
   GetFilterResult(e: Filter) {
     if(e != null) {
@@ -321,16 +296,10 @@ export class HolidayComponent implements OnInit {
       this.orderByEndDateAsc = null;
       this.orderByDescriptionNoteAsc = null;
       this.orderByFullDayAsc = null;
-    } else if (FieldName == 'StartDate') {
+    } else if (FieldName == 'HolidayDate') {
       this.orderByCountryAsc = null;
       this.orderByStartDateAsc = !flag;
       this.orderByEndDateAsc = null;
-      this.orderByDescriptionNoteAsc = null;
-      this.orderByFullDayAsc = null;
-    } else if (FieldName == 'EndDate') {
-      this.orderByCountryAsc = null;
-      this.orderByStartDateAsc = null;
-      this.orderByEndDateAsc = !flag;
       this.orderByDescriptionNoteAsc = null;
       this.orderByFullDayAsc = null;
     } else if (FieldName == 'IsHalfDay') {

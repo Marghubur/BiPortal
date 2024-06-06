@@ -52,27 +52,13 @@
                   <div class="th fe-1">
                     <div class="cell-wrapper">
                       <input class="form-control form-control-sm" autofocus readonly placeholder="Search by Start Date">
-                      <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'StartDate')">
-                        <a href="javascript:void()" class="pe-2">Start Date</a>
+                      <div class="t-filter" (click)="arrangeDetails(orderByStartDateAsc, 'HolidayDate')">
+                        <a href="javascript:void()" class="pe-2">HolidayDate</a>
                         <i class="fa-solid fa-arrow-down-wide-short"
                           [ngClass]="{'d-none': orderByStartDateAsc == null || !orderByStartDateAsc }"
                           aria-hidden="true"></i>
                         <i class="fa-solid fa-arrow-down-short-wide"
                           [ngClass]="{'d-none': orderByStartDateAsc == null || orderByStartDateAsc }"
-                          aria-hidden="true"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="th fe-1">
-                    <div class="cell-wrapper">
-                      <input class="form-control form-control-sm" autofocus readonly placeholder="Search by End date">
-                      <div class="t-filter" (click)="arrangeDetails(orderByEndDateAsc, 'EndDate')">
-                        <a href="javascript:void()" class="pe-2">End Date</a>
-                        <i class="fa-solid fa-arrow-down-wide-short"
-                          [ngClass]="{'d-none': orderByEndDateAsc == null || !orderByEndDateAsc }"
-                          aria-hidden="true"></i>
-                        <i class="fa-solid fa-arrow-down-short-wide"
-                          [ngClass]="{'d-none': orderByEndDateAsc == null || orderByEndDateAsc }"
                           aria-hidden="true"></i>
                       </div>
                     </div>
@@ -135,7 +121,7 @@
                   <div class="tr py-3" *ngFor="let holiday of allHolidayList; let i = index;">
                     <div class="td align-middle text-center fe-index">
                       <div class="cell-wrapper">
-                        {{holiday.Index}}
+                        {{holiday.RowIndex}}
                       </div>
                     </div>
                     <div class="td align-middle fe-2">
@@ -145,17 +131,12 @@
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper">
-                        {{holiday.StartDate | date}}
-                      </div>
-                    </div>
-                    <div class="td align-middle fe-1">
-                      <div class="cell-wrapper">
-                        {{holiday.EndDate | date}}
+                        {{holiday.HolidayDate | date}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
                       <div class="cell-wrapper ">
-                        {{holiday.TotalDays | number: '1.2-2'}}
+                        {{'1' | number: '1.2-2'}}
                       </div>
                     </div>
                     <div class="td align-middle fe-1">
@@ -242,30 +223,12 @@
               <form class="form-inline">
                 <div class="form-group w-100">
                   <div class="input-group w-100"
-                    [ngClass]="{'error-field': submitted && f.StartDate.errors !== null && f.StartDate.errors.required}">
+                    [ngClass]="{'error-field': submitted && f.HolidayDate.errors !== null && f.HolidayDate.errors.required}">
                     <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="fromModel"
                       (dateSelect)="onfromDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate"
                       #fd="ngbDatepicker">
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary calendar" (click)="fd.toggle()" type="button"><i
-                          class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="col-md-4 mt-3">
-              <label class="form-label">End Date *</label>
-              <form class="form-inline">
-                <div class="form-group w-100">
-                  <div class="input-group w-100"
-                    [ngClass]="{'error-field': submitted && f.EndDate.errors !== null && f.EndDate.errors.required}">
-                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="toModel"
-                      (dateSelect)="ontoDateSelection($event)" ngbDatepicker [minDate]="mindate" [maxDate]="maxdate"
-                      #d="ngbDatepicker">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i
                           class="fa-regular fa-calendar-days fa-lg" aria-hidden="true"></i>
                       </button>
                     </div>
@@ -281,8 +244,6 @@
                 <option value="false">No</option>
               </select>
             </div>
-          </div>
-          <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
               <label class="form-label">Description Name *</label>
               <input type="text" class="form-control"
@@ -290,6 +251,8 @@
                 oninput="this.value = this.value.toUpperCase()" formControlName="DescriptionNote"
                 placeholder="Description Note">
             </div>
+          </div>
+          <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
               <label class="form-label">Applicable For</label>
               <select class="form-select" formControlName="ApplicableFor"
@@ -307,8 +270,6 @@
                 <option value="Afghanistan">Afghanistan</option>
               </select>
             </div>
-          </div>
-          <div class="col-md-12 row">
             <div class="col-md-4 mt-3">
               <label class="form-label">Year</label>
               <select class="form-select" formControlName="Year" disabled=""
@@ -356,8 +317,7 @@
           <tbody>
             <tr>
               <td>{{selectedHoliday.DescriptionNote}}</td>
-              <td>{{selectedHoliday.StartDate | date}}</td>
-              <td>{{selectedHoliday.EndDate | date}}</td>
+              <td>{{selectedHoliday.HolidayDate | date}}</td>
               <td>{{selectedHoliday.TotalDays}}</td>
               <td>{{selectedHoliday.IsHalfDay ? 'HalfDay' : 'FullDay'}}</td>
               <td>{{selectedHoliday.Country}}</td>

@@ -4,7 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
-import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
+import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary, ItemStatus, SalaryComponentItems } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -126,7 +126,7 @@ export class IncometaxComponent implements OnInit {
         let totalAmounts: Array<any> = [];
         while(i < annualSalaryDetail.length) {
           let amount = 0;
-          let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC");
+          let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != SalaryComponentItems.Gross && x.ComponentId != SalaryComponentItems.CTC && x.ComponentId != SalaryComponentItems.ESI && x.ComponentId != SalaryComponentItems.EPF);
           if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
             amount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
           } else {
@@ -139,9 +139,8 @@ export class IncometaxComponent implements OnInit {
 
         if (annualSalaryDetail && annualSalaryDetail.length == 12) {
           annualSalaryDetail.map((com) => {
-            com.SalaryBreakupDetails = com.SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != 'CTC' && x.ComponentId != "PTAX" && x.ComponentId != "ESI")
+            com.SalaryBreakupDetails = com.SalaryBreakupDetails.filter(x => x.ComponentId != SalaryComponentItems.Gross && x.ComponentId != SalaryComponentItems.CTC && x.ComponentId != SalaryComponentItems.PTAX && x.ComponentId != SalaryComponentItems.ESI &&  x.ComponentId != SalaryComponentItems.EPF)
           });
-
           i = 0;
           let value = "";
           let props = annualSalaryDetail[i].SalaryBreakupDetails.map(({ComponentId, ComponentName, IsIncludeInPayslip}) => { return { ComponentId, ComponentName, IsIncludeInPayslip} });
@@ -191,7 +190,7 @@ export class IncometaxComponent implements OnInit {
         }
 
         let hraAmount = 0;
-        let hraComponent = this.allDeclarationSalaryDetails.SalaryComponentItems.find(x => x.ComponentId == "HRA" && x.DeclaredValue > 0);
+        let hraComponent = this.allDeclarationSalaryDetails.SalaryComponentItems.find(x => x.ComponentId == SalaryComponentItems.HRA && x.DeclaredValue > 0);
         if (hraComponent) {
           this.TaxSavingAlloance.push(hraComponent);
           this.hraCalculation();
@@ -211,10 +210,10 @@ export class IncometaxComponent implements OnInit {
 
         i = 0;
         let typeId = 0;
-        while( i < annualSalaryDetail.length) {
+        while( i < this.TaxDetails.length) {
           let date = new Date(annualSalaryDetail[i].PresentMonthDate);
           if(annualSalaryDetail[i].IsActive) {
-            if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
+            if (this.TaxDetails[i].IsPayrollCompleted) {
               typeId = 1;
             } else {
               typeId = 2;
@@ -225,7 +224,7 @@ export class IncometaxComponent implements OnInit {
 
           this.taxCalender.push({
             month: new Date(date.getFullYear(), date.getMonth(), 1).toLocaleString("en-us", { month: "short" }), // result: Aug
-            year: Number(date.getFullYear().toString().slice(-2)),
+            year: Number(this.TaxDetails[i].Year.toString().slice(-2)),
             isActive: annualSalaryDetail[i].IsActive,
             type: typeId
           });

@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Arrear, ESIOverRide, LWFOverRide, PTOverRide, RunPayroll, SalaryProcessing, Salaryout, TDSOverRide } from '../processing-payroll/processing-payroll.component';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import { Filter } from 'src/providers/userService';
+import { Filter, UserService } from 'src/providers/userService';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { ItemStatus } from 'src/providers/constants';
+import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { GetEmployees } from 'src/providers/ApplicationStorage';
 declare var $: any;
 
 @Component({
@@ -88,11 +90,15 @@ export class ConfigPayrollComponent implements OnInit {
   esiOverrideDetail: Array<any> = [];
   tdsOverrideDetail: Array<any> = [];
   lwfOverrideDetail: Array<any> = [];
+  employeeData: autoCompleteModal = new autoCompleteModal();
+  employeeId: number = 0;
+  currentUser: any = null;
 
   constructor(private nav:iNavigation,
               private http: CoreHttpService,
               private filterHttp: EmployeeFilterHttpService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder,
+              private userService: UserService) {
 
   }
   ngOnInit(): void {
@@ -101,6 +107,7 @@ export class ConfigPayrollComponent implements OnInit {
       this.isPageReady = true;
       this.selectedPayrollCalendar = data;
       let runPayroll = new RunPayroll();
+      this.currentUser = this.userService.getInstance();
       runPayroll.SalaryProcessing = new SalaryProcessing();
       runPayroll.SalaryPayout = new Salaryout();
       runPayroll.Arrear = new Arrear();
@@ -117,7 +124,11 @@ export class ConfigPayrollComponent implements OnInit {
       this.esiOverrideDetail.push(this.allRunPayroll.ESIOverRide);
       this.tdsOverrideDetail.push(this.allRunPayroll.TDSOverRide);
       this.lwfOverrideDetail.push(this.allRunPayroll.LWFOverRide);
+      this.employeeData.data = GetEmployees();
+      this.employeeData.placeholder = "Search by name";
+      this.employeeData.className = "";
       this.viewleaveAttendanceWages();
+
     } else {
       ErrorToast("Please select payroll month first");
     }
@@ -252,8 +263,10 @@ export class ConfigPayrollComponent implements OnInit {
       ForMonth: this.selectedPayrollCalendar.Month,
       ForYear: this.selectedPayrollCalendar.Year
     }
+    this.attendanceData.ForMonth = this.attendance.ForMonth + 1;
+    this.attendanceData.ForYear = this.attendance.ForYear ;
 
-    this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth + 1} `;
+    this.attendanceData.SearchString = ` 1=1`;
     this.loadLeaveData();
     this.active = 1;
     this.activePayrollTab = 1;
@@ -657,10 +670,15 @@ export class ConfigPayrollComponent implements OnInit {
   }
 
   lopAdjustmentPopUp(item: any) {
-    this.selectedLOP = item;
+    this.selectedLOP = null;
     this.http.get(`Leave/GetLeaveDetailByEmpId/${item.EmployeeId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.leaveQuota = JSON.parse(res.ResponseBody.LeaveQuotaDetail);
+        this.selectedLOP = item;
+        this.selectedLOP.LOPAdjusment = 0;
+        this.selectedLOP.Comment = "";
+        this.selectedLOP.LeavePlanTypeId = null;
+        this.availLopAdjusmentDay = []
         $('#lopAdjustment').modal('show');
         this.isLoading = false;
       }
@@ -671,13 +689,24 @@ export class ConfigPayrollComponent implements OnInit {
 
   getAttendanceDetail() {
     this.isLoading = true;
-    this.filterHttp.post("runpayroll/getAttendancePage", this.attendanceData).then((res: ResponseModel) => {
+    this.attendanceDetail = [];
+    this.http.post("Attendance/getAttendancePage", this.attendanceData).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
-        this.attendanceDetail = res.ResponseBody;
+        let attendanceDictionary = res.ResponseBody;
+        let keys = Object.keys(attendanceDictionary);
+        let total = 0;
+        keys.forEach(x => {
+          this.attendanceDetail.push({
+            EmployeeId: Number(x),
+            EmployeeName: attendanceDictionary[x][0].EmployeeName,
+            AttendanceDetail: attendanceDictionary[x],
+            total: attendanceDictionary[x][0].Total
+          });
+        })
         if (this.attendanceDetail.length > 0) {
           this.attendanceDetail.forEach(x => {
-            x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
+            // x.AttendanceDetail = JSON.parse(x.AttendanceDetail);
             if (this.appliedLeaveDetail && this.appliedLeaveDetail.length > 0) {
               x.AttendanceDetail.forEach(i => {
                 var item = this.appliedLeaveDetail.find(z => (new Date(z.FromDate).getTime() - new Date(i.AttendanceDay).getTime()) / (1000 * 60 * 60 * 24) <= 0 &&
@@ -688,7 +717,7 @@ export class ConfigPayrollComponent implements OnInit {
             }
           });
 
-          this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
+          this.attendanceData.TotalRecords = total;
         } else {
           this.attendanceData.TotalRecords = 0;
         }
@@ -703,6 +732,14 @@ export class ConfigPayrollComponent implements OnInit {
   GetFilterLosspayResult(e: Filter) {
     if (e != null) {
       this.attendanceData = e;
+      this.getAttendanceDetail();
+    }
+  }
+
+  onEmloyeeChanged() {
+    if (this.employeeId > 0) {
+      this.attendanceData.reset();
+      this.attendanceData.SearchString = `1=1 and EmployeeId = ${this.employeeId}`;
       this.getAttendanceDetail();
     }
   }
@@ -739,13 +776,16 @@ export class ConfigPayrollComponent implements OnInit {
 
   resetFilter() {
     this.attendanceData.reset();
-    this.attendanceData.SearchString = ` 1=1 and ForYear = ${this.attendance.ForYear} and ForMonth = ${this.attendance.ForMonth} `;
+    this.attendanceData.ForMonth = this.attendance.ForMonth;
+    this.attendanceData.ForYear = this.attendance.ForYear ;
+    this.attendanceData.SearchString = "";
     this.attendance = {
       EmployeeName: "",
       ForMonth: this.selectedPayrollCalendar.Month,
       ForYear: this.selectedPayrollCalendar.Year
     }
-    this.getAttendanceDetail()
+    this.employeeId = 0;
+    this.attendanceDetail = [];
   }
 
   showAttendanceHandler(item: any, id: number, name: string) {
@@ -770,18 +810,19 @@ export class ConfigPayrollComponent implements OnInit {
       return;
     }
 
-    if (this.selectedAttendance.AttendanceId <= 0 || this.selectedAttendance.AttendanceDay == null) {
+    if (this.selectedAttendance.AttendanceId <= 0 || this.selectedAttendance.AttendanceDate == null) {
       this.isLoading = false;
       return;
     }
 
     this.http.post('Attendance/AdjustAttendance', this.selectedAttendance).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
-        if (attendance) {
-          attendance.AttendanceDetail = [];
-          attendance.AttendanceDetail = res.ResponseBody;
-        }
+        // let attendance = this.attendanceDetail.find(x => x.AttendanceId == this.selectedAttendance.AttendanceId);
+        // if (attendance) {
+        //   attendance.AttendanceDetail = [];
+        //   attendance.AttendanceDetail = res.ResponseBody;
+        // }
+        this.selectedAttendance.AttendanceStatus = res.ResponseBody.AttendanceStatus;
         $('#attendanceAdjustment').modal('hide');
         Toast("Attendace apply successfully.");
         this.isLoading = false;
@@ -815,6 +856,9 @@ export class ConfigPayrollComponent implements OnInit {
     this.selectedLOP.LeavePlanName = this.selectedLeaveType.LeavePlanTypeName
     this.http.post('Leave/AdjustLOPAsLeave', this.selectedLOP).then((res: ResponseModel) => {
       if (res.ResponseBody) {
+        let lopadjust = this.lossPayDetail.find(x => x.EmployeeId == this.selectedLOP.EmployeeId);
+        lopadjust.ActualLOP = lopadjust.ActualLOP - Number(this.selectedLOP.LOPAdjusment);
+        lopadjust.LOPAdjusment = 0;
         $('#lopAdjustment').modal('hide');
         Toast("Leave apply successfully.");
         this.isLoading = false;
@@ -852,6 +896,7 @@ export class ConfigPayrollComponent implements OnInit {
 
   getLopAdjustment() {
     this.isLoading = true;
+    this.lossPayDetail = [];
     this.http.get(`Attendance/GetLOPAdjustment/${this.selectedPayrollCalendar.Month+1}/${this.selectedPayrollCalendar.Year}`)
       .then((res: ResponseModel) => {
         if (res.ResponseBody) {

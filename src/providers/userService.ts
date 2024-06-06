@@ -33,6 +33,8 @@ export class Filter {
   isReUseSame?: boolean = false;
   isActive?: boolean = true;
   SortDirection?: string = null;
+  ForYear?: number = 0;
+  ForMonth?: number = 0;
 
   update(total: any) {
     if(!isNaN(Number(total))) {
