@@ -690,7 +690,7 @@ export class ConfigPayrollComponent implements OnInit {
   getAttendanceDetail() {
     this.isLoading = true;
     this.attendanceDetail = [];
-    this.attendanceData.PageIndex = 31;
+    this.attendanceData.PageSize = 31;
     this.http.post("Attendance/getAttendancePage", this.attendanceData).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
