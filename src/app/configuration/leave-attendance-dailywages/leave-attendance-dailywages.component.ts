@@ -162,6 +162,7 @@ export class LeaveAttendanceDailywagesComponent implements OnInit, AfterViewChec
 
   getAttendanceDetail() {
     this.isLoading = true;
+    this.attendanceData.PageSize = 31;
     this.filterHttp.post("runpayroll/getAttendancePage", this.attendanceData).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];

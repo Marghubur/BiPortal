@@ -76,16 +76,16 @@
         </ng-container>
         <ng-container *ngIf="isEmployeeSelected">
           <div class="col-md-12 mt-3 bg-light">
-            <nav ngbNav #nav="ngbNav" class="nav-tabs">
-              <ng-container ngbNavItem>
-                <a ngbNavLink class="text-dark">Attendance Log</a>
+            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs align-items-center">
+              <li [ngbNavItem]="1">
+                <button ngbNavLink class="text-dark">Attendance Log</button>
                 <ng-template ngbNavContent>
                   <div class="" *ngIf="!isLoading">
                     <div
                       class="col-md-12 d-flex align-items-center bg-white justify-content-between mt-4 py-3"
                     >
                       <div
-                        class="card col-md-3 d-flex flex-row align-items-center px-2 py-3"
+                        class="col-md-3 d-flex flex-row align-items-center px-2 py-3"
                       >
                         Select Week:
                         <div class="col-md-8">
@@ -137,56 +137,270 @@
                             </div>
                           </div>
                         </ng-container>
-                        <ng-container *ngIf="attendanceDetail.length > 0">
-                          <div class="row row-cols-8">
-                            <div
-                              class="col mt-4"
-                              *ngFor="let item of attendanceDetail"
-                            >
-                              <label class="form-label">{{
-                                item.AttendanceDate | date : "EEE: d MMM"
-                              }}</label>
-                              <select
-                                class="form-select"
-                                (change)="calculateWorkedHrs()"
-                                [ngModelOptions]="{ standalone: true }"
-                                [(ngModel)]="item.TotalMinutes"
-                                [disabled]="item.IsWeekend || item.IsOnLeave || item.IsHoliday"
+                        <ng-container *ngIf="!isDailyAttendanceView">
+                          <ng-container *ngIf="attendanceDetail.length > 0">
+                            <div class="row row-cols-8">
+                              <div
+                                class="col mt-4"
+                                *ngFor="let item of attendanceDetail"
                               >
-                                <option
-                                  [value]="workingHr"
-                                  *ngFor="let workingHr of workingHrs"
+                                <label class="form-label">{{
+                                  item.AttendanceDate | date : "EEE: d MMM"
+                                }}</label>
+                                <select
+                                  class="form-select"
+                                  (change)="calculateWorkedHrs()"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  [(ngModel)]="item.TotalMinutes"
+                                  [disabled]="item.IsWeekend || item.IsOnLeave || item.IsHoliday"
                                 >
-                                  {{ workingHr }} hrs
-                                </option>
-                              </select>
-                              <label class="form-label mt-1">Year:
-                                {{ item.AttendanceDate | date : "YYYY" }}
-                              </label>
-                              <label class="form-label float-end fw-bold mt-1" [ngClass]="{'text-success': (item.IsWeekend || item.IsHoliday), 'text-danger': item.IsOnLeave }" *ngIf="item.IsWeekend || item.IsOnLeave || item.IsHoliday">
-                                {{ item.IsWeekend ? 'Weekend' : item.IsOnLeave ? 'On Leave' : 'Holiday' }}
-                                <span *ngIf="item.IsOnLeave">[{{item.LeaveId}}]</span>
-                              </label>
-                            </div>
-                            <div class="col-auto mt-4">
-                              <label class="form-label fw-bold">Total</label>
-                              <p class="mb-0 fw-bold">{{totalWorkedMin}} hrs</p>
+                                  <option
+                                    [value]="workingHr"
+                                    *ngFor="let workingHr of workingHrs"
+                                  >
+                                    {{ workingHr }} hrs
+                                  </option>
+                                </select>
+                                <label class="form-label mt-1">Year:
+                                  {{ item.AttendanceDate | date : "YYYY" }}
+                                </label>
+                                <label class="form-label float-end fw-bold mt-1" [ngClass]="{'text-success': (item.IsWeekend || item.IsHoliday), 'text-danger': item.IsOnLeave }" *ngIf="item.IsWeekend || item.IsOnLeave || item.IsHoliday">
+                                  {{ item.IsWeekend ? 'Weekend' : item.IsOnLeave ? 'On Leave' : 'Holiday' }}
+                                  <span *ngIf="item.IsOnLeave">[{{item.LeaveId}}]</span>
+                                </label>
                               </div>
-                            </div>
-                            <ng-container *ngIf="attendanceStatus == 9 || attendanceStatus == 5">
-                              <div class="mt-3">
-                                  Status : <span class="fw-bold" [ngClass]="{'text-success': attendanceStatus == 9, 'text-danger': attendanceStatus == 5}">{{attendanceStatus == 9 ? 'Approved' : 'Rejected'}}</span>
-                                <span class="ms-1">
-                                  | Approved By : {{attendanceDetail[0].ReviewerName}}
-                                </span>
-                                <span class="ms-1">
-                                  | Approved On : {{attendanceDetail[0].UpdatedOn | date}}
-                                </span>
+                              <div class="col-auto mt-4">
+                                <label class="form-label fw-bold">Total</label>
+                                <p class="mb-0 fw-bold">{{totalWorkedMin}} hrs</p>
+                                </div>
                               </div>
-                            </ng-container>
+                              <ng-container *ngIf="attendanceStatus == 9 || attendanceStatus == 5">
+                                <div class="mt-3">
+                                    Status : <span class="fw-bold" [ngClass]="{'text-success': attendanceStatus == 9, 'text-danger': attendanceStatus == 5}">{{attendanceStatus == 9 ? 'Approved' : 'Rejected'}}</span>
+                                  <span class="ms-1">
+                                    | Approved By : {{attendanceDetail[0].ReviewerName}}
+                                  </span>
+                                  <span class="ms-1">
+                                    | Approved On : {{attendanceDetail[0].UpdatedOn | date}}
+                                  </span>
+                                </div>
+                              </ng-container>
+                          </ng-container>
+                          <ng-container *ngIf="attendanceDetail.length == 0">
+                            <div class=" fw-bold text-center text-danger fs-5 my-5 py-5">
+                              Attendance Not Found.
+                            </div>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="isDailyAttendanceView">
+                          <div class="" *ngIf="attendanceDetail.length > 0">
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th class="custom-th index-col">DATE</th>
+                                  <th class="custom-th"></th>
+                                  <th class="custom-th">ATTENDANCE VISUAL</th>
+                                  <th class="custom-th">EFFECTIVE HOURS</th>
+                                  <th class="custom-th">GROSS HOURS</th>
+                                  <th class="custom-th">ARRIVAL</th>
+                                  <th class="custom-th">STATUS</th>
+                                  <th class="custom-th" *ngIf="isMyAttendance">LOG</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of attendanceDetail; let index = index"
+                                  [ngClass]="{'leave-bg': item.IsOnLeave, 'empt-table-ht' : (item.AttendanceStatus == 3 || item.AttendanceStatus == 4 || item.IsOnLeave)}">
+                                  <td class="align-middle">{{item.AttendanceDate | date: 'MMM d, EEE'}}
+                                  </td>
+                                  <td class="align-middle">
+                                    <div class="d-inline" [ngSwitch]="item.AttendanceStatus">
+                                      <ng-container *ngIf="item.IsOnLeave">
+                                        <span class="badge leave-bg-d ms-2">LEAVE</span>
+                                      </ng-container>
+                                      <ng-container *ngIf="!item.IsOnLeave">
+                                        <span class="badge text-bg-success ms-2" *ngSwitchCase="3">W-OFF</span>
+                                        <span class="badge bg-secondary ms-2" *ngIf="item.AttendanceStatus == 4">HLDY</span>
+                                        <ng-container
+                                          *ngIf="(item.AttendanceStatus != 3 || (item.AttendanceStatus == 4 && item.IsHoliday))">
+                                          <span class="badge bg-danger ms-2" *ngIf="item.WorkTypeId == 0">EMPTY</span>
+                                          <span class="badge text-bg-success ms-2" *ngIf="item.WorkTypeId == 1">WFH</span>
+                                          <span class="badge text-bg-success ms-2" *ngIf="item.WorkTypeId == 2">WFO</span>
+                                        </ng-container>
+                                      </ng-container>
+                                    </div>
+                                  </td>
+                                  <ng-container
+                                    *ngIf="(item.AttendanceStatus == 3 || (item.AttendanceStatus == 4 && !item.IsHalfDay) || item.IsOnLeave); else viewcontainer">
+                                    <td colspan="6" class="align-middle">
+                                      <div class="fw-bold text-success text-center">{{item.AttendanceStatus == 3 ?
+                                        "Weekly-Off" : item.AttendanceStatus == 4 ? "Holiday" : "Leave"}}
+                                        ({{item.AttendanceDate | date: 'EEEE'}})</div>
+                                    </td>
+                                  </ng-container>
+                                  <ng-template #viewcontainer>
+                                    <td class="align-middle">
+                                      <p class="pt-3">
+                                        <ng-container *ngIf="item.IsOnLeave">
+                                          <ngb-progressbar type="danger" [value]="100" [striped]="true"
+                                            style="width: 40%;"></ngb-progressbar>
+                                        </ng-container>
+                                        <ng-container *ngIf="!item.IsOnLeave">
+                                          <ngb-progressbar *ngIf="item.AttendanceStatus == 12" type="info" [value]="100"
+                                            [striped]="true" style="width: 40%;"></ngb-progressbar>
+                                          <ngb-progressbar *ngIf="item.AttendanceStatus == 9" type="success"
+                                            [value]="100" [striped]="true"
+                                            style="width: 40%;"></ngb-progressbar>
+                                          <ngb-progressbar *ngIf="item.AttendanceStatus == 2 || item.AttendanceStatus == 8" type="info"
+                                            [value]="100" [striped]="true"
+                                            style="width: 40%;"></ngb-progressbar>
+                                          <ngb-progressbar
+                                            *ngIf="(!item.IsOpen && item.AttendanceStatus == 0) || item.AttendanceStatus == 5"
+                                            type="danger" [value]="100" [striped]="true"
+                                            style="width: 40%;"></ngb-progressbar>
+                                          <ngb-progressbar *ngIf="item.IsOpen && item.AttendanceStatus == 0" type="primary"
+                                            [value]="100" [striped]="true" style="width: 40%;"></ngb-progressbar>
+                                          <ngb-progressbar *ngIf="item.AttendanceStatus == 3 || item.AttendanceStatus == 4"
+                                            type="warning" [value]="100" [striped]="true"
+                                            style="width: 40%;"></ngb-progressbar>
+                                        </ng-container>
+                                      </p>
+                                    </td>
+                                    <td class="align-middle"><i class="fa-solid fa-circle pe-3 text-info"></i>
+                                      {{item.TotalMinutes}}hrs
+                                    </td>
+                                    <td class="align-middle">{{item.TotalMinutes}}hrs</td>
+                                    <td class="align-middle">
+                                      <div class="d-inline" [ngSwitch]="item.AttendanceStatus">
+                                        <ng-container *ngIf="item.IsOnLeave">
+                                          Leave
+                                        </ng-container>
+                                        <ng-container *ngIf="!item.IsOnLeave">
+                                          <span class="" *ngSwitchCase="2">Pending</span>
+                                          <span class="" *ngSwitchCase="1">Not applied</span>
+                                          <span class="" *ngSwitchCase="0">-</span>
+                                          <span class="" *ngSwitchCase="5">00:00</span>
+                                          <span class="" *ngSwitchCase="8">Pending</span>
+                                          <span class="" *ngSwitchCase="9">
+                                            <i class="fa-solid fa-check pe-2 text-success"></i> On Time
+                                          </span>
+                                          <span class="" *ngSwitchCase="12">
+                                            <i class="fa-solid fa-share" aria-hidden="true"></i> Pending
+                                          </span>
+                                        </ng-container>
+                                      </div>
+                                    </td>
+                                    <td class="align-middle">
+                                      <div class="" [ngSwitch]="item.AttendanceStatus">
+                                        <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngSwitchCase="2">
+                                          <i class="fa-regular fa-thumbs-up pe-2 text-secoundry"></i> Submitted
+                                        </div>
+                                        <div placement="top" ngbTooltip="waiting" aria-expanded="false" *ngSwitchCase="8">
+                                          <i class="fa-regular fa-thumbs-up pe-2 text-secoundry"></i> Submitted
+                                        </div>
+                                        <div placement="top" ngbTooltip="Not Applied" aria-expanded="false" *ngSwitchCase="0">
+                                          <i class="fa-regular fa-clock pe-2 text-warning"></i>
+                                          <span>Not Applied</span>
+                                          <!-- <ng-container *ngIf="item.IsOpen">
+                                          </ng-container>
+                                          <ng-container *ngIf="!item.IsOpen">
+                                            <i class="fa-solid fa-ban pe-2 text-danger"></i>
+                                            <span>Blocked</span>
+                                          </ng-container> -->
+                                        </div>
+                                        <div placement="top" ngbTooltip="Weekend" aria-expanded="false" *ngSwitchCase="3">
+                                          <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Weekend
+                                        </div>
+                                        <div placement="top" ngbTooltip="Weekend" aria-expanded="false" *ngSwitchCase="4">
+                                          <i class="fa zoom-2 fa-gift pe-2 text-success"></i> Holiday
+                                        </div>
+                                        <div placement="top" ngbTooltip="Approved" aria-expanded="false" *ngSwitchCase="9">
+                                          <i class="fa-regular fa-square-check pe-2 text-success"></i> Approved
+                                        </div>
+                                        <div placement="top" ngbTooltip="Rejected" aria-expanded="false" *ngSwitchCase="5">
+                                          <i class="fa-solid fa-xmark pe-2 text-danger"></i> Rejected
+                                        </div>
+                                        <div placement="top" ngbTooltip="Rejected" aria-expanded="false" *ngSwitchCase="12">
+                                          <i class="fa-solid fa-paper-plane-o pe-2 text-danger"></i> Request raised
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td class="align-middle" *ngIf="isMyAttendance">
+                                      <div class="d-flex align-items-center">
+                                        <ng-container *ngIf="!item.IsOnLeave">
+                                          <div class="col"
+                                            *ngIf="(item.AttendanceStatus == 0 || item.AttendanceStatus == 5 || item.AttendanceStatus == 4 )">
+                                            <div ngbDropdown class="d-inline-block">
+                                              <button type="button" class="btn btn-sm" placement="top" ngbTooltip="Apply"
+                                                id="dropdownBasic1" ngbDropdownToggle>
+                                                <i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i>
+                                              </button>
+                                              <div class="dropdown-menu p-0 m-0" ngbDropdownMenu
+                                                aria-labelledby="dropdownBasic1">
+                                                <button ngbDropdownItem>
+                                                  <a class="dropdown-item" href="javascript:void(0)"
+                                                    (click)="applyWorkFromHome(item)">Apply WFH Request</a>
+                                                </button>
+                                                <!-- <button ngbDropdownItem *ngIf="!item.IsOpen">
+                                                  <a class="dropdown-item" href="javascript:void(0)"
+                                                    (click)="requestPopUp(item)">
+                                                    Attendance is block. Please raise request if not absent
+                                                  </a>
+                                                </button> -->
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <ng-container *ngIf="item.AttendanceStatus == 9">
+                                            <span class="ms-2">
+                                              <div placement="top" ngbTooltip="Approved" aria-expanded="false">
+                                                <i class="fa-regular fa-square-check zoom-2 text-success"
+                                                  aria-hidden="true"></i>
+                                              </div>
+                                            </span>
+                                          </ng-container>
+                                          <span class=" ms-2" *ngIf="item.AttendanceStatus == 3">
+                                            <div placement="top" ngbTooltip="Weekend" aria-expanded="false">
+                                              <i class="fa zoom-2 fa-gift text-primary-c" aria-hidden="true"></i>
+                                            </div>
+                                          </span>
+                                          <span class=" ms-2" *ngIf="item.AttendanceStatus == 4 && !item.IsHalfDay">
+                                            <div placement="top" ngbTooltip="Holiday" aria-expanded="false">
+                                              <i class="fa zoom-2 fa-gift text-primary-c" aria-hidden="true"></i>
+                                            </div>
+                                          </span>
+                                          <span class="ms-2" *ngIf="item.AttendanceStatus == 2">
+                                            <div placement="top" ngbTooltip="Pending" aria-expanded="false">
+                                              <i class="fa-regular fa-clock zoom-2 text-warning" aria-hidden="true"></i>
+                                            </div>
+                                          </span>
+                                          <span class="ms-2" *ngIf="item.AttendanceStatus == 12">
+                                            <div placement="left" ngbTooltip="Your request for blocked attendance is raised"
+                                              aria-expanded="false">
+                                              <i class="fa-regular fa-comment-dots zoom-2 text-dark" aria-hidden="true"></i>
+                                            </div>
+                                          </span>
+                                        </ng-container>
+                                        <ng-container *ngIf="item.IsOnLeave">
+                                          <span class="ms-2">
+                                            <div placement="left" ngbTooltip="On Leave" aria-expanded="false">
+                                              <i class="fa-regular fa-flag zoom-2 text-dark" aria-hidden="true"></i>
+                                            </div>
+                                          </span>
+                                        </ng-container>
+                                      </div>
+                                    </td>
+                                  </ng-template>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <ng-container *ngIf="attendanceDetail.length == 0" >
+                            <div class=" fw-bold text-center text-danger fs-5 my-5 py-5">
+                              Attendance Not Found.
+                            </div>
+                          </ng-container>
                         </ng-container>
                       </div>
-                      <div class="text-end mb-2 mt-3" *ngIf="attendanceDetail.length > 0">  <!--- && attendanceStatus != 9---->
+                      <div class="text-end mb-2 mt-3" *ngIf="attendanceDetail.length > 0">
                         <button [disabled]="isLoading"
                           class="btn btn-success"
                           (click)="saveWeeklyAttendance()"
@@ -214,33 +428,72 @@
                     <app-page-placeholder></app-page-placeholder>
                   </ng-container>
                 </ng-template>
-              </ng-container>
+              </li>
 
-              <ng-container ngbNavItem>
-                <a ngbNavLink class="text-dark">Recent Attendance</a>
+              <li [ngbNavItem]="2">
+                <button ngbNavLink class="text-dark" (click)="loadRecentAttendance()">Recent Attendance</button>
                 <ng-template ngbNavContent>
                   <ng-container class="" *ngIf="isPageReady">
-                    <ng-container>
-                      <div class="col-md-12"></div>
-                    </ng-container>
-                    <ng-container *ngIf="shiftDetail == null">
-                      <div
-                        class="custom-height fw-bold fs-3 text-danger my-5 py-5 d-flex align-items-center justify-content-center"
-                      >
-                        <p class="my-5 py-5">Record Not Found</p>
-                      </div>
-                    </ng-container>
+                    <div class="bg-white">
+                      <ng-container *ngIf="recentAttendance.length > 0">
+                        <ng-container *ngFor="let items of recentAttendance">
+                          <div class="card p-4 mt-3">
+                            <div class="row row-cols-8">
+                              <div
+                                class="col mt-4"
+                                *ngFor="let item of items.Attendances"
+                              >
+                                <label class="form-label">{{
+                                  item.AttendanceDate | date : "EEE: d MMM"
+                                }}</label>
+                                <select
+                                  class="form-select"
+                                  disabled [ngModelOptions]="{ standalone: true }"
+                                  [(ngModel)]="item.TotalMinutes"
+                                >
+                                  <option
+                                    [value]="workingHr"
+                                    *ngFor="let workingHr of workingHrs"
+                                  >
+                                    {{ workingHr }} hrs
+                                  </option>
+                                </select>
+                                <label class="form-label mt-1">Year:
+                                  {{ item.AttendanceDate | date : "YYYY" }}
+                                </label>
+                                <label class="form-label float-end fw-bold mt-1" [ngClass]="{'text-success': (item.IsWeekend || item.IsHoliday), 'text-danger': item.IsOnLeave }" *ngIf="item.IsWeekend || item.IsOnLeave || item.IsHoliday">
+                                  {{ item.IsWeekend ? 'Weekend' : item.IsOnLeave ? 'On Leave' : 'Holiday' }}
+                                  <span *ngIf="item.IsOnLeave">[{{item.LeaveId}}]</span>
+                                </label>
+                              </div>
+                              <div class="col-auto mt-4">
+                                <label class="form-label fw-bold">Total</label>
+                                <p class="mb-0 fw-bold">{{items.TotalHrs}} hrs</p>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                Status : <span class="fw-bold" [ngClass]="{'text-success': items.Attendances[0].AttendanceStatus == 9, 'text-danger': items.Attendances[0].AttendanceStatus == 5}">{{items.Attendances[0].AttendanceStatus == 9 ? 'Approved' : 'Rejected'}}</span>
+                              <span class="ms-1">
+                                | Approved By : {{items.Attendances[0].ReviewerName}}
+                              </span>
+                              <span class="ms-1">
+                                | Approved On : {{items.Attendances[0].UpdatedOn | date}}
+                              </span>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
                   </ng-container>
                   <ng-container *ngIf="!isPageReady">
                     <app-page-placeholder></app-page-placeholder>
                   </ng-container>
                 </ng-template>
-              </ng-container>
+              </li>
 
-              <ng-container ngbNavItem>
-                <a ngbNavLink class="text-dark" (click)="loadShiftDetail()"
-                  >Shift Detail</a
-                >
+              <li [ngbNavItem]="3">
+                <button ngbNavLink class="text-dark" (click)="loadShiftDetail()"
+                  >Shift Detail</button>
                 <ng-template ngbNavContent>
                   <ng-container class="" *ngIf="isPageReady">
                     <ng-container *ngIf="shiftDetail !== null">
@@ -596,9 +849,9 @@
                     <app-page-placeholder></app-page-placeholder>
                   </ng-container>
                 </ng-template>
-              </ng-container>
+              </li>
 
-              <ng-container ngbNavItem>
+              <!-- <ng-container ngbNavItem>
                 <a
                   ngbNavLink
                   class="text-dark"
@@ -825,8 +1078,18 @@
                     </ng-container>
                   </div>
                 </ng-template>
-              </ng-container>
-            </nav>
+              </ng-container> -->
+              <div class="text-deoration-none me-1 text-end ms-auto" [ngClass]="{'d-none': active > 1}">
+                <a href="javascript:void(0)" class="text-decoration-none" (click)="changeAttendanceLayout()">
+                  <ng-container *ngIf="!isDailyAttendanceView">
+                    <i class="fa-solid fa-bars me-1"></i> Daily Attendance
+                  </ng-container>
+                  <ng-container *ngIf="isDailyAttendanceView">
+                    <i class="fa-solid fa-grip me-1"></i> Weekly Attendance
+                  </ng-container>
+                </a>
+              </div>
+            </ul>
 
             <div [ngbNavOutlet]="nav" class="mt-2"></div>
           </div>

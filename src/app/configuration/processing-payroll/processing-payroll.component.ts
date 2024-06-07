@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import { GetEmployees } from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -36,12 +36,11 @@ export class ProcessingPayrollComponent implements OnInit {
   processingPayrollDetail: Array<any> = [];
   selectedPayrollDetail: any = null;
 
-
-
   constructor(private http: CoreHttpService,
               private filterHttp: EmployeeFilterHttpService,
               private user: UserService,
-              private nav: iNavigation) { }
+              private nav: iNavigation,
+              private local: ApplicationStorage) { }
 
   ngOnInit(): void {
     this.loadData();
@@ -91,7 +90,7 @@ export class ProcessingPayrollComponent implements OnInit {
       Year: (new Date).getFullYear(),
       Month: (new Date).getMonth() + 1
     }
-    let year = 2023;
+    let year = this.local.findRecord("Companies")[0].FinancialYear;
     let startMonth = 4;
     for (let i = 0; i < 12; i++) {
       if (startMonth > 12) {
