@@ -126,8 +126,8 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.itemStatus = 2;
     this.attendanceRecord = {
       EmployeeId: 0,
-      ForMonth: 4,
-      ForYear: 2023,
+      ForMonth: date.getMonth() + 1,
+      ForYear: date.getFullYear(),
       PageIndex: 1,
       ReportingManagerId: this.currentUser.UserId,
       PresentDayStatus: ItemStatus.Submitted,
@@ -632,6 +632,8 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
       this.attendanceReviewData.ForMonth = this.attendance.ForMonth;
       this.attendanceReviewData.ForYear = this.attendance.ForYear;
       this.attendanceReviewData.SearchString = `1=1 and EmployeeId = ${this.employeeId}`;
+      this.attendanceReviewData.EmployeeId = this.employeeId;
+
       this.getReviewAttendanceDetail();
     }
   }
@@ -721,6 +723,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   getReviewAttendanceDetail() {
     this.isPageLoading = true;
     this.attendanceDetail = [];
+    this.attendanceReviewData.PageSize = 31;
     this.http.post("Attendance/getAttendancePage", this.attendanceReviewData).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];

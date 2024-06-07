@@ -7,6 +7,7 @@ import {
   AttendacePageResponse,
   Weeks,
 } from 'src/models/interfaces';
+import { Filter } from '../userService';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +44,14 @@ export class AttendanceService {
 
   public async submitWeekAttendace(attendances: Array<Attendance>): Promise<any> {
     var result = await this.http.put(`Attendance/SubmitDailyAttendance`, attendances);
+    if (result.ResponseBody) {
+      return result.ResponseBody;
+    }
+    return null;
+  }
+
+  public async getRecentAttendance(requsetData: Filter): Promise<any> {
+    var result = await this.http.post("Attendance/GetFilteredDetailAttendance", requsetData);
     if (result.ResponseBody) {
       return result.ResponseBody;
     }

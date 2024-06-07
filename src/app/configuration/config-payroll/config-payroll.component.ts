@@ -690,6 +690,7 @@ export class ConfigPayrollComponent implements OnInit {
   getAttendanceDetail() {
     this.isLoading = true;
     this.attendanceDetail = [];
+    this.attendanceData.PageIndex = 31;
     this.http.post("Attendance/getAttendancePage", this.attendanceData).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         this.attendanceDetail = [];
@@ -740,6 +741,7 @@ export class ConfigPayrollComponent implements OnInit {
     if (this.employeeId > 0) {
       this.attendanceData.reset();
       this.attendanceData.SearchString = `1=1 and EmployeeId = ${this.employeeId}`;
+      this.attendanceData.EmployeeId = this.employeeId;
       this.getAttendanceDetail();
     }
   }

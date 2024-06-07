@@ -4,23 +4,13 @@ import { Subject } from 'rxjs';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import {
-  ApplicationStorage,
-  GetEmployees,
-} from 'src/providers/ApplicationStorage';
-import {
-  ErrorToast,
-  ToLocateDate,
-  Toast,
-  UserDetail,
-  WarningToast,
-} from 'src/providers/common-service/common.service';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
+import { ErrorToast, ToLocateDate, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { ItemStatus, UserType } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { AttendanceService } from 'src/providers/AttendanceService/attendance.service';
 import { Employee, AttendacePageResponse, Weeks, Attendance } from 'src/models/interfaces';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 declare var $: any;
 
 @Component({
@@ -80,14 +70,16 @@ export class AttendanceComponent implements OnInit {
   attendanceDetail: Array<Attendance> = [];
   selectedProjectId: number = 0;
   attendanceStatus: number = 0;
+  isDailyAttendanceView: boolean = false;
+  activeId: number = 1;
+  recentAttendance: Array<any> = [];
 
   constructor(
     private http: CoreHttpService,
     private nav: iNavigation,
     private local: ApplicationStorage,
     private user: UserService,
-    private attendaceService: AttendanceService,
-    private fb: FormBuilder
+    private attendaceService: AttendanceService
   ) {
     this.employeesList.placeholder = 'Employee';
     this.employeesList.data.push({
@@ -109,7 +101,7 @@ export class AttendanceComponent implements OnInit {
     for (let i = 0; i <= 12; i++) {
       this.workingHrs.push(i);
     }
-    this.loadAutoComplete();
+    //this.loadAutoComplete();
     if (
       this.userDetail ||
       user.RoleId != UserType.Admin ||
@@ -627,9 +619,8 @@ export class AttendanceComponent implements OnInit {
     }
   }
 
-  calculateWorkedHrs() {
-    this.totalWorkedMin = this.attendanceDetail
-      .filter((x) => !x.IsHoliday && !x.IsOnLeave && !x.IsWeekend)
+  calculateWorkedHrs(attendances: Array<Attendance>) {
+    return attendances.filter((x) => !x.IsHoliday && !x.IsOnLeave && !x.IsWeekend)
       .map((x) => Number(x.TotalMinutes))
       .reduce((acc, curr) => {
         return (acc + curr);
@@ -651,12 +642,14 @@ export class AttendanceComponent implements OnInit {
     }
 
     this.isEmployeeSelected = true;
+    this.isEmployeesReady = true;
     this.isAttendanceDataLoaded = true;
     this.isLoading = false;
   }
 
   async selectAttendance() {
     let selectedWeek = this.weeks.find(x => x.WeekIndex == this.selectedAttendanceWeek);
+    this.attendanceDetail = [];
     let response: AttendacePageResponse =  await this.attendaceService.getSelectedWeekAttendace(selectedWeek);
     this.bindData(response.DailyAttendances)
   }
@@ -692,13 +685,13 @@ export class AttendanceComponent implements OnInit {
 
   bindData(response: Array<Attendance>) {
     this.attendanceStatus = 0;
-    this.attendanceDetail = [];
     this.attendanceDetail = response
     this.attendanceDetail.forEach(x => {
       x.AttendanceDate = ToLocateDate(x.AttendanceDate);
       if (x.TotalMinutes >= 60)
         x.TotalMinutes = x.TotalMinutes/60;
     });
+
     let status = this.attendanceDetail.map(x => x.AttendanceStatus);
     if (status.findIndex(x => x == ItemStatus.Submitted) > -1)
       this.attendanceStatus = ItemStatus.Submitted;
@@ -709,7 +702,43 @@ export class AttendanceComponent implements OnInit {
     else if (status.findIndex(x => x == ItemStatus.Saved) > -1)
       this.attendanceStatus = ItemStatus.Saved;
 
-    this.calculateWorkedHrs();
+    this.totalWorkedMin = this.calculateWorkedHrs(this.attendanceDetail);
+    console.log(this.attendanceDetail);
     this.isLoading = false;
+  }
+
+  changeAttendanceLayout() {
+    this.isDailyAttendanceView = !this.isDailyAttendanceView;
+  }
+
+  async loadRecentAttendance() {
+    this.request = new Filter();
+    this.recentAttendance = [];
+    this.isPageReady = false;
+    this.request.SearchString = `1=1 and EmployeeId = ${this.employeeId} and (AttendanceStatus = ${ItemStatus.Approved} OR AttendanceStatus = ${ItemStatus.Rejected})`;
+    this.request.EmployeeId = 1;
+    this.request.PageSize = 60;
+    let response = await this.attendaceService.getRecentAttendance(
+      this.request
+    );
+    this.bindReviewAttendanceData(response);
+  }
+
+  bindReviewAttendanceData(response:any) {
+    let keys = Object.keys(response);
+    let j = keys.length - 1;
+    for (let i = 0; i < keys.length; i++) {
+      let attendance = response[keys[j-i]];
+      attendance.forEach(x => {
+        x.AttendanceDate = ToLocateDate(x.AttendanceDate);
+        if (x.TotalMinutes >= 60)
+          x.TotalMinutes = x.TotalMinutes/60;
+      });
+      this.recentAttendance.push( {
+        Attendances: attendance,
+        TotalHrs: this.calculateWorkedHrs(attendance.filter(x => x.AttendanceStatus != 3))
+      })
+    }
+    this.isPageReady = true;
   }
 }
