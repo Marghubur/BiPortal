@@ -14,7 +14,6 @@ import { UserService } from 'src/providers/userService';
 export class PayslipComponent implements OnInit {
   cachedData: any = null;
   paySlipSchedule: Array<any> = [];
-  currentYear: number = 0;
   EmployeeId: number = 0;
   isReady: boolean = false;
   isPageReady: boolean = false;
@@ -35,8 +34,6 @@ export class PayslipComponent implements OnInit {
               private http: CoreHttpService) { }
 
   ngOnInit(): void {
-    var dt = new Date();
-    this.currentYear = dt.getFullYear();
     this.basePath = this.http.GetImageBasePath();
     this.userDetail = this.user.getInstance();
     this.initData();
@@ -67,17 +64,20 @@ export class PayslipComponent implements OnInit {
           this.userDetail = res.ResponseBody.userDetail;
           this.userDetail.UserId = this.userDetail.EmployeeId;
           let joiningDate = new Date(this.userDetail.CreatedOn);
-          this.payslipYear.push(this.currentYear);
-          if (joiningDate.getFullYear() != this.currentYear)
-            this.payslipYear.push(this.currentYear-1);
-
-          if (joiningDate.getMonth() == new Date().getMonth() && joiningDate.getFullYear() == new Date().getFullYear()) {
+          let data = res.ResponseBody.completeSalaryBreakup
+          this.payslipYear.push(data.FinancialStartYear);
+          // if (joiningDate.getFullYear() != new Date().getFullYear())
+          //   this.payslipYear.push(this.currentYear-1);
+          let date = new Date();
+          if (joiningDate.getMonth() == date.getMonth() && joiningDate.getFullYear() == date.getFullYear()) {
             WarningToast("Joining month of the employee is current month");
             this.isJoinInCurrentMonth = true;
             this.isPageReady= true;
             return;
           }
-          let data = res.ResponseBody.completeSalaryBreakup
+          if (date.getFullYear() != data.FinancialStartYear)
+            this.payslipYear.push(data.FinancialStartYear+1);
+
           let annulSalaryBreakup = JSON.parse(data.CompleteSalaryDetail);
           if (annulSalaryBreakup.length > 0) {
             for (let i = 0; i < annulSalaryBreakup.length; i++) {
@@ -89,7 +89,7 @@ export class PayslipComponent implements OnInit {
                 });
               }
             }
-            this.changeYear(this.currentYear);
+            this.changeYear(date.getFullYear());
           }
           this.isPageReady= true;
         }
