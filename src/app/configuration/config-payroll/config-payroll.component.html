@@ -6,8 +6,6 @@
       </div>
     </div>
     <div class="col-3 d-flex align-items-center me-2" *ngIf="isPageReady">
-      <!-- <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged($event)" (keydown.esc)="resetFilter()">
-      </bot-autocomplete> -->
       <div class="col-auto blink fw-semibold me-3">
         {{selectedPayrollCalendar.Status == 15 ? 'PROCESSING' : selectedPayrollCalendar.Status == 14 ? 'COMPLETED' :
         selectedPayrollCalendar.Status == 16 ? 'PENDING' : selectedPayrollCalendar.Status == 4 ? 'CURRENT' :
@@ -31,13 +29,13 @@
           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewleaveAttendanceWages()"
             data-bs-toggle="tooltip" data-bs-placement="right" title="Leave, Attendance & Daily Wages">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 1}">
-              <div class="row py-4 px-2">
-                <div class="col-md-3">
+              <div class="d-flex align-items-center py-4 justify-content-between px-2">
+                <div class="col-md-2">
                   <div class="d-flex align-items-center justify-content-center bg-c rounded-pill rounded-icon">
                     <span><i class="fa-regular fa-calendar-days fa-lg fa-lg text-white"></i></span>
                   </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col ms-4 overflow-hidden">
                   <h6 class="mb-0 text-truncate">Leave, Attendance & Daily Wages
                     <i class="fa float-end"
                       [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.LeaveAttendanceCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
@@ -52,13 +50,13 @@
           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewNewJoineeExist()"
             data-bs-toggle="tooltip" data-bs-placement="right" title="New Joinee & Exits">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 2}">
-              <div class="row py-4 px-2">
+              <div class="d-flex align-items-center justify-content-between py-4 px-2">
                 <div class="col-md-3">
                   <div class="d-flex align-items-center justify-content-center bg-c rounded-pill rounded-icon">
                     <span><i class="fa-regular fa-user fa-lg text-white"></i></span>
                   </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col ms-3 overflow-hidden">
                   <h6 class="mb-0 text-truncate">New Joinee & Exits
                     <i class="fa float-end"
                       [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.EmployeeChangeseCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
@@ -73,13 +71,13 @@
           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewBonusSalaryRevisionOT()"
             data-bs-toggle="tooltip" data-bs-placement="right" title="Bonus, Salary Revision & Overtime">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 3}">
-              <div class="row py-4 px-2">
+              <div class="d-flex align-items-center justify-content-center py-4 px-2">
                 <div class="col-md-3">
                   <div class="d-flex align-items-center justify-content-center bg-c rounded-pill rounded-icon">
                     <span><i class="fa-solid fa-cake-candles fa-lg text-white"></i></span>
                   </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col overflow-hidden ms-3">
                   <h6 class="mb-0 text-truncate">Bonus, Salary Revision & Overtime
                     <i class="fa float-end"
                       [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.BonusSalaryOvertimeCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
@@ -94,13 +92,13 @@
           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewReimbursementAdhocDeduction()"
             data-bs-toggle="tooltip" data-bs-placement="right" title="Reimbursement, Adhoc Payment, Deduction">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 4}">
-              <div class="row py-4 px-2">
+              <div class="d-flex align-items-center justify-content-center py-4 px-2">
                 <div class="col-md-3">
                   <div class="d-flex align-items-center justify-content-center bg-c rounded-pill rounded-icon">
                     <span><i class="fa-regular fa-object-group fa-lg text-white"></i></span>
                   </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col overflow-hidden ms-3">
                   <h6 class="mb-0 text-truncate">Reimbursement, Adhoc Payment, Deduction
                     <i class="fa float-end"
                       [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.ReimbursementAdhicDeductCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
@@ -115,13 +113,13 @@
           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewSalaryOnHoldArrear()"
             data-bs-toggle="tooltip" data-bs-placement="right" title="Salaries on Hold & Arrears">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 5}">
-              <div class="row py-4 px-2">
+              <div class="d-flex align-items-center justify-content-center py-4 px-2">
                 <div class="col-md-3">
                   <div class="d-flex align-items-center justify-content-center bg-c rounded-pill rounded-icon">
                     <span><i class="fa-solid fa-trophy fa-lg text-white"></i></span>
                   </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col overflow-hidden ms-3">
                   <h6 class="mb-0 text-truncate">Salaries on Hold & Arrears
                     <i class="fa float-end"
                       [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.SalaryHoldArrearsCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
@@ -136,13 +134,13 @@
           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewOveridePTESI()"
             data-bs-toggle="tooltip" data-bs-placement="right" title="Override (PT, ESI, TDS, LWF)">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 6}">
-              <div class="row py-4 px-2">
+              <div class="d-flex align-items-center justify-content-center py-4 px-2">
                 <div class="col-md-3">
                   <div class="d-flex align-items-center justify-content-center bg-c rounded-pill rounded-icon">
                     <span><i class="fa-solid fa-user-xmark fa-lg text-white"></i></span>
                   </div>
                 </div>
-                <div class="col-md-9">
+                <div class="col overflow-hidden ms-3">
                   <h6 class="mb-0 text-truncate">Override (PT, ESI, TDS, LWF)
                     <i class="fa float-end"
                       [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.OverrideCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
@@ -286,8 +284,8 @@
                   </div>
                   <ng-container *ngIf="appliedLeaveDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">No Record Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">No Record Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -393,7 +391,7 @@
                   <ng-container *ngIf="lossPayDetail.length == 0">
                     <div
                       class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -406,8 +404,6 @@
           <li [ngbNavItem]="3">
             <button ngbNavLink>ATTENDANCE</button>
             <ng-template ngbNavContent>
-              <div class="alert alert-info">All employees attendance summaries for this month will be
-                displayed below. Admin can override if required.</div>
               <div class="x_content">
                 <div class="row align-items-center justify-content-between">
                   <div class="col-md-11 row">
@@ -494,10 +490,10 @@
                       </ng-container>
                       <ng-container *ngIf="attendanceDetail.length == 0">
                         <tr>
-                          <td colspan="31">
+                          <td [attr.colspan]="daysInMonth.length + 10" class="bg-white">
                             <div
-                              class="my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                              <p class="my-5 py-5">Record Not Found</p>
+                              class="my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                              <p class="my-5">Record Not Found</p>
                             </div>
                           </td>
                         </tr>
@@ -633,7 +629,7 @@
                   <ng-container *ngIf="newJoineeDetail.length == 0">
                     <div
                       class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -711,7 +707,7 @@
                   <ng-container *ngIf="exitEmpDetail.length == 0">
                     <div
                       class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -796,7 +792,7 @@
                   <ng-container *ngIf="settlementDetail.length == 0">
                     <div
                       class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -881,7 +877,7 @@
                   <ng-container *ngIf="bonusDetail.length == 0">
                     <div
                       class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -950,8 +946,8 @@
                   </ng-container>
                   <ng-container *ngIf="overTimePaymentDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1043,8 +1039,8 @@
                   </ng-container>
                   <ng-container *ngIf="overTimePaymentDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1128,8 +1124,8 @@
                   </ng-container>
                   <ng-container *ngIf="salaryComponentsDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1198,8 +1194,8 @@
                   </ng-container>
                   <ng-container *ngIf="adhocPaymentDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1272,8 +1268,8 @@
                   </ng-container>
                   <ng-container *ngIf="adhocDeductionDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1413,8 +1409,8 @@
                   </div>
                   <ng-container *ngIf="salaryProcessingDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1548,8 +1544,8 @@
                   </div>
                   <ng-container *ngIf="salaryPayoutDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1654,8 +1650,8 @@
                   </div>
                   <ng-container *ngIf="arraersDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1816,8 +1812,8 @@
                   </div>
                   <ng-container *ngIf="ptOverrideDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -1995,8 +1991,8 @@
                   </div>
                   <ng-container *ngIf="esiOverrideDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -2149,8 +2145,8 @@
                   </div>
                   <ng-container *ngIf="tdsOverrideDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
@@ -2328,8 +2324,8 @@
                   </div>
                   <ng-container *ngIf="lwfOverrideDetail.length == 0">
                     <div
-                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5 py-5">Record Not Found</p>
+                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
