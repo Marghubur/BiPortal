@@ -186,9 +186,14 @@
                                 </div>
                               </ng-container>
                           </ng-container>
-                          <ng-container *ngIf="attendanceDetail.length == 0">
+                          <ng-container *ngIf="attendanceDetail.length == 0 && selectedAttendanceWeek > 0">
                             <div class=" fw-bold text-center text-danger fs-5 my-5 py-5">
                               Attendance Not Found.
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="selectedAttendanceWeek == 0">
+                            <div class=" fw-bold text-center text-danger fs-5 my-5 py-5">
+                              Please select attendance week.
                             </div>
                           </ng-container>
                         </ng-container>
@@ -338,7 +343,7 @@
                                                 aria-labelledby="dropdownBasic1">
                                                 <button ngbDropdownItem>
                                                   <a class="dropdown-item" href="javascript:void(0)"
-                                                    (click)="applyWorkFromHome(item)">Apply WFH Request</a>
+                                                    (click)="applyDailyAttendance(item)">Apply Attendance</a>
                                                 </button>
                                                 <!-- <button ngbDropdownItem *ngIf="!item.IsOpen">
                                                   <a class="dropdown-item" href="javascript:void(0)"
@@ -367,7 +372,7 @@
                                               <i class="fa zoom-2 fa-gift text-primary-c" aria-hidden="true"></i>
                                             </div>
                                           </span>
-                                          <span class="ms-2" *ngIf="item.AttendanceStatus == 2">
+                                          <span class="ms-2" *ngIf="item.AttendanceStatus == 2 || item.AttendanceStatus == 8">
                                             <div placement="top" ngbTooltip="Pending" aria-expanded="false">
                                               <i class="fa-regular fa-clock zoom-2 text-warning" aria-hidden="true"></i>
                                             </div>
@@ -393,14 +398,19 @@
                               </tbody>
                             </table>
                           </div>
-                          <ng-container *ngIf="attendanceDetail.length == 0" >
+                          <ng-container *ngIf="attendanceDetail.length == 0 && selectedAttendanceWeek > 0">
                             <div class=" fw-bold text-center text-danger fs-5 my-5 py-5">
                               Attendance Not Found.
                             </div>
                           </ng-container>
+                          <ng-container *ngIf="selectedAttendanceWeek == 0">
+                            <div class=" fw-bold text-center text-danger fs-5 my-5 py-5">
+                              Please select attendance week.
+                            </div>
+                          </ng-container>
                         </ng-container>
                       </div>
-                      <div class="text-end mb-2 mt-3" *ngIf="attendanceDetail.length > 0">
+                      <div class="text-end mb-2 mt-3" *ngIf="attendanceDetail.length > 0 && !isDailyAttendanceView">
                         <button [disabled]="isLoading"
                           class="btn btn-success"
                           (click)="saveWeeklyAttendance()"

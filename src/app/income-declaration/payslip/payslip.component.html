@@ -55,7 +55,7 @@
             <div class="d-flex px-3 justify-content-between">
               <div class="col-md-2 pt-3 pe-3">
                 <select class="form-select" (change)="changeYear($event.target.value)">
-                  <option value="{{ item }}" [selected]="i == 0" *ngFor="let item of payslipYear; let i = index">
+                  <option value="{{ item }}" [selected]="i == 1" *ngFor="let item of payslipYear; let i = index">
                     Year {{ item }}
                   </option>
                 </select>

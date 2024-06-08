@@ -707,6 +707,26 @@ export class AttendanceComponent implements OnInit {
     this.isLoading = false;
   }
 
+  async applyDailyAttendance(attendance: Attendance) {
+    if (attendance) {
+      let data: Array<Attendance> = [];
+      this.isLoading = true;
+      attendance.ProjectId = this.selectedProjectId;
+      attendance.TotalMinutes = Number(attendance.TotalMinutes) * 60;
+      data.push(attendance);
+      let response = await this.attendaceService.submitWeekAttendace(
+        data
+      );
+      if (response) {
+        attendance.AttendanceStatus = ItemStatus.Submitted;
+        if (attendance.TotalMinutes >= 60)
+          attendance.TotalMinutes = attendance.TotalMinutes/60;
+      }
+      // this.attendanceDetail.find(x => x.AttendanceId == )
+      this.isLoading = false;
+    }
+  }
+
   changeAttendanceLayout() {
     this.isDailyAttendanceView = !this.isDailyAttendanceView;
   }
