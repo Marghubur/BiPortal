@@ -1,27 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
-import {
-  ApplicationStorage,
-  GetEmployees,
-} from 'src/providers/ApplicationStorage';
+import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import {
-  ErrorToast,
-  Toast,
-  WarningToast,
-} from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { ConfigPayroll, ItemStatus } from 'src/providers/constants';
+import { ConfigPayroll } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -48,6 +34,7 @@ export class ProcessingPayrollComponent implements OnInit {
   employeeData: autoCompleteModal = new autoCompleteModal();
   processingPayrollDetail: Array<any> = [];
   selectedPayrollDetail: any = null;
+  payrollDates: any = null;
 
   constructor(
     private http: CoreHttpService,
@@ -76,9 +63,15 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 
   callApiLoadData() {
+    let startDate = new Date(this.selectedPayrollCalendar.Year, this.selectedPayrollCalendar.Month, 1);
+    let endDate = new Date(this.selectedPayrollCalendar.Year, this.selectedPayrollCalendar.Month + 1, 0);
+    this.payrollDates = {
+      StartDate: startDate,
+      EndDate: endDate
+    };
     this.filterHttp
       .get(
-        `runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Year}`
+        `runpayroll/getPayrollProcessingDetail/${this.selectedPayrollCalendar.Month+1}/${this.selectedPayrollCalendar.Year}`
       )
       .then((response: ResponseModel) => {
         if (response.ResponseBody) {
@@ -96,6 +89,7 @@ export class ProcessingPayrollComponent implements OnInit {
                 x.ForMonth == this.selectedPayrollCalendar.Month + 1 &&
                 x.ForYear == this.selectedPayrollCalendar.Year
             );
+            console.log(this.processingPayrollDetail);
           }
           Toast('Page data loaded successfully.');
         }

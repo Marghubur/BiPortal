@@ -50,19 +50,20 @@
               <p>DRAFT</p>
               <span>Regular payroll</span>
               <div class="fw-bold">
-                01 Mar 2024 to 31 Mar 2024
+                {{payrollDates != null ? (payrollDates.StartDate | date) : ""}} to
+                {{payrollDates != null ? (payrollDates.EndDate | date): ""}}
               </div>
             </div>
             <div class="fe-1 d-flex flex-column justify-content-end">
               <span>Pay Date</span>
               <div class="fw-bold">
-                31 Mar 2024
+                {{selectedPayrollDetail != null ? selectedPayrollDetail.ProcessOn: "--"}}
               </div>
             </div>
             <div class="fe-1 d-flex flex-column justify-content-end">
               <span>Employees</span>
               <div class="fw-bold">
-                {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}}
+                {{selectedPayrollDetail != null ? selectedPayrollDetail.EmployeeCount : "0"}}
               </div>
             </div>
             <div class="fe-2 d-flex flex-column justify-content-end">
@@ -102,7 +103,7 @@
                       Pay Date
                     </span>
                     <div class="fw-bold">
-                      31 Mar 2024
+                      {{selectedPayrollDetail != null ? selectedPayrollDetail.ProcessOn: ""}}
                     </div>
                   </div>
                 </div>
@@ -120,7 +121,7 @@
                   </div>
                   <div>
                     <div class="card-box">
-                      {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}} /
+                      {{selectedPayrollDetail != null ? selectedPayrollDetail.EmployeeCount : "0"}} /
                       {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalEmployees : "0"}}
                     </div>
                     <span class="fw-bold">
@@ -130,7 +131,7 @@
                   </div>
                   <div class="d-flex flex-column justify-content-end">
                     <div class="card-box">
-                      Pending
+                      {{selectedPayrollDetail == null ? "Not Run" : selectedPayrollDetail.PayrollStatus == 15 ? "Processing" : "Done"}}
                     </div>
                     <span>
                       <i class="fa-solid fa-list-check pe-2"></i>
@@ -166,13 +167,13 @@
                       <tr>
                         <td>Total Deduction</td>
                         <td>
-                          INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPFByEmployer : "0.00"}}
+                          INR {{selectedPayrollDetail != null ? (selectedPayrollDetail.TotalDeduction + selectedPayrollDetail.TotalPFByEmployee + selectedPayrollDetail.TotalProfessionalTax) : "0.00"}}
                         </td>
                       </tr>
                       <tr>
                         <td>Employer Contribution</td>
                         <td>
-                          INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalProfessionalTax : "0.00"}}
+                          INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPFByEmployer : "0.00"}}
                         </td>
                       </tr>
                     </tbody>
@@ -231,7 +232,9 @@
                     </div>
                     <div class="d-flex justify-content-between">
                       <div>
-                        <div class="card-box">120533</div>
+                        <div class="card-box">
+                          INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPayableToEmployees : "0.00"}}
+                        </div>
                         <span class="fw-bold">
                           <i class="pe-1 fa-solid fa-indian-rupee-sign"></i>
                           BANK TRANSFER
@@ -252,7 +255,9 @@
                         </span>
                       </div>
                       <div>
-                        <div class="card-box">120533</div>
+                        <div class="card-box">
+                          INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPayableToEmployees : "0.00"}}
+                        </div>
                         <span class="fw-bold">
                           <i class="pe-1 fa-solid fa-indian-rupee-sign"></i>
                           TOTAL
@@ -283,14 +288,18 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <div>
-                    <div class="card-box">0</div>
+                    <div class="card-box">
+                      INR {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalDeduction : "0.00"}}
+                    </div>
                     <span class="fw-bold">
                       <i class="pe-1 fa-solid fa-indian-rupee-sign"></i>
                       TDS PAYABLE
                     </span>
                   </div>
                   <div>
-                    <div class="card-box">0</div>
+                    <div class="card-box">
+                      {{selectedPayrollDetail != null ? selectedPayrollDetail.EmployeeCount : "0"}}
+                    </div>
                     <span class="fw-bold">
                       <i class="fa-solid fa-users-gear pe-2"></i>
                       Employees
@@ -310,21 +319,25 @@
                   </div>
                   <div class="d-flex justify-content-between">
                     <div>
-                      <div class="card-box">1800</div>
+                      <div class="card-box">
+                        {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPFByEmployee : "0"}}
+                      </div>
                       <span class="fw-bold">
                         <i class="pe-1 fa-solid fa-indian-rupee-sign"></i>
                         EMPLOYEE SHARE
                       </span>
                     </div>
                     <div>
-                      <div class="card-box">1800</div>
+                      <div class="card-box">
+                        {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalPFByEmployer : "0"}}
+                      </div>
                       <span class="fw-bold">
                         <i class="pe-1 fa-solid fa-indian-rupee-sign"></i>
                         EMPLOYER SHARE
                       </span>
                     </div>
                     <div>
-                      <div class="card-box">180</div>
+                      <div class="card-box">0</div>
                       <span class="fw-bold">
                         <i class="pe-1 fa-solid fa-indian-rupee-sign"></i>
                         OTHER CHARGES
@@ -343,15 +356,18 @@
                   </div>
                   <div class="d-flex justify-content-between">
                     <div>
-                      <div class="card-box">1800</div>
+                      <div class="card-box">
+                        {{selectedPayrollDetail != null ? selectedPayrollDetail.TotalProfessionalTax : "0"}}
+                      </div>
                       <span class="fw-bold">
                         <i class="pe-1 fa-solid fa-indian-rupee-sign"></i>
                         TAX PAYABLE
-
                       </span>
                     </div>
                     <div>
-                      <div class="card-box">18</div>
+                      <div class="card-box">
+                        {{selectedPayrollDetail != null ? selectedPayrollDetail.EmployeeCount : "0"}}
+                      </div>
                       <span class="fw-bold">
                         <i class="fa-solid fa-users-gear pe-2"></i>
                         NUMBER OF EMPLOYEES
