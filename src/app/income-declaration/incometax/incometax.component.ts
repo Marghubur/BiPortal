@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminPaySlip, AdminPreferences, AdminSalary, AdminSummary, ItemStatus, SalaryComponentItems } from 'src/providers/constants';
@@ -45,7 +46,8 @@ export class IncometaxComponent implements OnInit {
   constructor(private nav: iNavigation,
               private local: ApplicationStorage,
               private http: CoreHttpService,
-              private user: UserService) { }
+              private user: UserService,
+              private salaryHttp: SalaryDeclarationHttpService) { }
 
   ngOnInit(): void {
     this.currentYear = new Date().getFullYear();
@@ -92,7 +94,7 @@ export class IncometaxComponent implements OnInit {
     this.isPageReady = false;
     this.isEmployeeSelect = false;
     this.totalAllowTaxExemptAmount = 0;
-    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`)
+    this.salaryHttp.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.allDeclarationSalaryDetails = response.ResponseBody;
@@ -347,8 +349,7 @@ export class IncometaxComponent implements OnInit {
   saveTaxDetail() {
       let presentMonth = new Date().getMonth() + 1;
       let presentYear = new Date().getFullYear();
-      let formData = new FormData();
-      this.http.get(`Declaration/UpdateTaxDetail/
+      this.salaryHttp.get(`Declaration/UpdateTaxDetail/
           ${this.EmployeeId}/${presentMonth}/${presentYear}`).then(res => {
         if (res.ResponseBody) {
           Toast("Salary breakup added successfully.");

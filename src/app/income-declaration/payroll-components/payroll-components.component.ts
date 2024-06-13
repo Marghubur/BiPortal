@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { PayrollSettings } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -43,6 +44,7 @@ export class PayrollComponentsComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private http: CoreHttpService,
+              private salaryHttp: SalaryDeclarationHttpService,
               private nav:iNavigation) { }
 
   ngOnInit(): void {
@@ -70,7 +72,7 @@ export class PayrollComponentsComponent implements OnInit {
 
   loadData() {
     this.isReady = false;
-    this.http.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
+    this.salaryHttp.get("SalaryComponent/GetSalaryComponentsDetail").then((response:ResponseModel) => {
       if (response.ResponseBody && response.ResponseBody.length > 0) {
         this.AllComponents = response.ResponseBody;
         this.RecurringComponent = this.AllComponents.filter (x => x.IsAdHoc == false);
@@ -223,7 +225,7 @@ export class PayrollComponentsComponent implements OnInit {
     if (errroCounter === 0) {
       let value:PayrollComponentsModal = this.NewSalaryForm.value;
       if (value) {
-        this.http.post("SalaryComponent/AddUpdateRecurringComponents", value).then((response:ResponseModel) => {
+        this.salaryHttp.post("SalaryComponent/AddUpdateRecurringComponents", value).then((response:ResponseModel) => {
           if (response.ResponseBody) {
             let data = response.ResponseBody;
             if (data.length > 0) {
@@ -295,7 +297,7 @@ export class PayrollComponentsComponent implements OnInit {
     }
 
     if (value) {
-      this.http.post("SalaryComponent/AddDeductionComponents", value).then((response:ResponseModel) => {
+      this.salaryHttp.post("SalaryComponent/AddDeductionComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {
           this.AdhocDeduction = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 3);
           $('#CreateDeductionModal').modal('hide');
@@ -320,7 +322,7 @@ export class PayrollComponentsComponent implements OnInit {
     let value = this.BonusForm.value;
     value.AdHocId = 0;
     if (value) {
-      this.http.post("SalaryComponent/AddBonusComponents", value).then((response:ResponseModel) => {
+      this.salaryHttp.post("SalaryComponent/AddBonusComponents", value).then((response:ResponseModel) => {
         if (response.ResponseBody && response.ResponseBody.length > 0) {
           this.AdhocBonus = response.ResponseBody.filter(x => x.IsAdHoc == true && x.AdHocId == 2);
           $('#CreateBonusModal').modal('hide');
@@ -402,7 +404,7 @@ export class PayrollComponentsComponent implements OnInit {
     if (this.file) {
       let formData = new FormData();
       formData.append("componentdata", this.file);
-      this.http.post("SalaryComponent/InsertUpdateSalaryComponentsByExcel", formData)
+      this.salaryHttp.post("SalaryComponent/InsertUpdateSalaryComponentsByExcel", formData)
       .then((response: ResponseModel) => {
         if (response.ResponseBody) {
           let data = response.ResponseBody;

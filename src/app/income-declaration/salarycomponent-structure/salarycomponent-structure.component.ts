@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 declare var $: any;
 
@@ -41,7 +42,8 @@ export class SalarycomponentStructureComponent implements OnInit {
   currentGroup: any = null;
 
   constructor(private fb: FormBuilder,
-              private http: CoreHttpService) { }
+              private http: CoreHttpService,
+              private salaryHttp: SalaryDeclarationHttpService) { }
 
   ngOnInit(): void {
     this.ActivatedPage = 1;
@@ -53,7 +55,7 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   loadSalaryGroupComponent() {
     this.isPageReady = false;
-    this.http.get('SalaryComponent/GetSalaryGroupAndComponent').then(res => {
+    this.salaryHttp.get('SalaryComponent/GetSalaryGroupAndComponent').then(res => {
       if(res.ResponseBody && res.ResponseBody.SalaryComponents != null && res.ResponseBody.SalaryGroup != null) {
         this.groupComponents = res.ResponseBody.SalaryGroup.GroupComponents;
         this.currentGroup = res.ResponseBody.SalaryGroup;
@@ -156,7 +158,7 @@ export class SalarycomponentStructureComponent implements OnInit {
       SalaryGroupId: this.currentGroup.SalaryGroupId
     };
 
-    this.http.post("SalaryComponent/UpdateSalaryGroupComponents", updateStructure).then ((response:ResponseModel) => {
+    this.salaryHttp.post("SalaryComponent/UpdateSalaryGroupComponents", updateStructure).then ((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.groupComponents = response.ResponseBody;
         this.salaryComponentFields = this.allComponentFields;
@@ -449,7 +451,7 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   removeFromSalaryGroup() {
     this.isLoading = true;
-    this.http.delete(`SalaryComponent/RemoveAndUpdateSalaryGroup/${this.componentFields.ComponentId}/${this.currentGroup.SalaryGroupId}`)
+    this.salaryHttp.delete(`SalaryComponent/RemoveAndUpdateSalaryGroup/${this.componentFields.ComponentId}/${this.currentGroup.SalaryGroupId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.groupComponents = JSON.parse(response.ResponseBody.SalaryComponents);

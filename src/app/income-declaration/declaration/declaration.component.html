@@ -194,13 +194,13 @@
                                 <ng-container *ngIf="item.IsEdit">
                                   <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="addAttechmentModal(item)"><i class="fa-solid fa-paperclip pe-2"></i>Add Attachment</a>
                                 </ng-container>
-                                <ng-container *ngIf="slectedDeclarationnFile.length > 0 && item.SlectedDeclarationnFile != null && item.SlectedDeclarationnFile > 0">
+                                <ng-container *ngIf="item.FileDocumentList != null && item.FileDocumentList.length > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <span>{{item.SlectedDeclarationnFile}} File Attached</span>
+                                  <span>{{item.FileDocumentList.length - (item.FilesCollection != null ? item.FilesCollection.length : 0)}} File Attached</span>
                                 </ng-container>
-                                <ng-container *ngIf="FileDocumentList.length > 0">
+                                <ng-container *ngIf="item.FilesCollection != null && item.FilesCollection.length > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <span>{{FileDocumentList.length}} File Selected</span>
+                                  <span>{{item.FilesCollection.length}} File Selected</span>
                                 </ng-container>
                               </div>
                               <div class="row col-md-4 justify-content-between">
@@ -263,13 +263,13 @@
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
                                   <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="addAttechmentModal(item)"><i class="fa-solid fa-paperclip pe-2"></i>Add Attachment</a>
                                 </ng-container>
-                                <ng-container *ngIf="slectedDeclarationnFile.length > 0 && item.SlectedDeclarationnFile != null && item.SlectedDeclarationnFile > 0">
+                                <ng-container *ngIf="item.FileDocumentList != null && item.FileDocumentList.length > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <span>{{item.SlectedDeclarationnFile}} File Attached</span>
+                                  <span>{{item.FileDocumentList.length - (item.FilesCollection != null ? item.FilesCollection.length : 0)}} File Attached</span>
                                 </ng-container>
-                                <ng-container *ngIf="FileDocumentList.length > 0">
+                                <ng-container *ngIf="item.FilesCollection != null && item.FilesCollection.length > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <span>{{FileDocumentList.length}} File Selected</span>
+                                  <span>{{item.FilesCollection.length}} File Selected</span>
                                 </ng-container>
                               </div>
                               <div class="row col-md-4 justify-content-between">
@@ -327,13 +327,13 @@
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
                                   <a href="javascript:void(0)" class="text-decoration-none mx-2" (click)="addAttechmentModal(item)"><i class="fa-solid fa-paperclip pe-2"></i>Add Attachment</a>
                                 </ng-container>
-                                <ng-container *ngIf="slectedDeclarationnFile.length > 0 && item.SlectedDeclarationnFile != null && item.SlectedDeclarationnFile > 0">
+                                <ng-container *ngIf="item.FileDocumentList != null && item.FileDocumentList.length > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <span>{{item.SlectedDeclarationnFile}} File Attached</span>
+                                  <span>{{item.FileDocumentList.length - (item.FilesCollection != null ? item.FilesCollection.length : 0)}} File Attached</span>
                                 </ng-container>
-                                <ng-container *ngIf="FileDocumentList.length > 0">
+                                <ng-container *ngIf="item.FilesCollection != null && item.FilesCollection.length > 0">
                                   <i class="fa-solid fa-grip-lines-vertical px-2"></i>
-                                  <span>{{FileDocumentList.length}} File Selected</span>
+                                  <span>{{item.FilesCollection.length}} File Selected</span>
                                 </ng-container>
                               </div>
                               <div class="row col-md-4 justify-content-between">
@@ -395,7 +395,7 @@
                                   <p class="mb-0">{{houseRentDetail.RentedFrom}} - {{houseRentDetail.RentedTo}}</p>
                                   <div class="custom-bg text-dark d-flex align-items-center py-2 my-3 rounded" *ngIf="houseRentDetail.TotalRent > 0">
                                     <a href="javascript:void(0)" class="text-decoration-none" (click)="showrentedDetail()">
-                                      <i class="fa-lg ps-4" [ngClass]="{'fa-solid fa-caret-right': !isShowRentedDetail, 'fa-solid fa-caret-down': isShowRentedDetail}"></i>
+                                      <i class="fa-lg fa-solid ps-4" [ngClass]="{'fa-caret-right': !isShowRentedDetail, 'fa-caret-down': isShowRentedDetail}"></i>
                                     </a>
                                     <div class="pe-2 ps-4">
                                       <small>MONTH</small>
@@ -578,7 +578,7 @@
       <div class="modal-body" *ngIf="selectDeclaration != null">
         <div class="col-12 row m-0">
           <div class="col-md-12 overflow-auto" style="height: 33vh">
-            <ng-container *ngIf="slectedDeclarationnFile.length > 0">
+            <ng-container *ngIf="selectDeclaration.FileDocumentList != null && selectDeclaration.FileDocumentList.length > 0">
               <table class="table" border="1">
                 <thead>
                   <tr class="table-simple">
@@ -589,7 +589,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of slectedDeclarationnFile; let i = index">
+                  <tr *ngFor="let item of selectDeclaration.FileDocumentList; let i = index">
                     <td class="counterCell">{{i+1}}</td>
                     <td>{{item.FileName}}</td>
                     <td>
@@ -612,8 +612,8 @@
                 </tbody>
               </table>
             </ng-container>
-            <ng-container *ngIf="slectedDeclarationnFile.length == 0">
-              <table class="table" border="1" *ngIf="FilesCollection.length > 0">
+            <ng-container *ngIf="selectDeclaration.FilesCollection != null && selectDeclaration.FileDocumentList.length == 0">
+              <table class="table" border="1" *ngIf="selectDeclaration.FilesCollection.length > 0">
                 <thead>
                   <tr class="table-simple">
                     <th width="8%">#</th>
@@ -623,7 +623,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of FilesCollection; let i=index;">
+                  <tr *ngFor="let item of selectDeclaration.FilesCollection; let i=index;">
                     <td>{{i+1}}</td>
                     <td>{{item.name}}</td>
                     <td>{{item.size/1024 | number: '1.2-2'}}</td>
@@ -642,7 +642,7 @@
             <div class="text-danger text-center fw-bold" *ngIf="isLargeFile">
               File size is greater than 2028KB i.e 2 MB, so please remove some file
             </div>
-            <div class="select-message" *ngIf="FilesCollection.length == 0  && slectedDeclarationnFile.length == 0">
+            <div class="select-message" *ngIf="FilesCollection.length == 0  && selectDeclaration.FileDocumentList.length == 0">
               <h3>
                 Please upload at least one file and You will see their details here.
               </h3>

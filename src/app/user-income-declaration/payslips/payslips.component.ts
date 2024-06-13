@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { Declaration, IncomeTax, Preferences, Salary, Summary, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
@@ -29,6 +30,7 @@ export class PayslipsComponent implements OnInit {
 
   constructor(private nav: iNavigation,
               private user: UserService,
+              private salaryHttp: SalaryDeclarationHttpService,
               private http: CoreHttpService) { }
 
   ngOnInit(): void {
@@ -56,7 +58,7 @@ export class PayslipsComponent implements OnInit {
         return;
       }
 
-      this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
+      this.salaryHttp.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
         if (res.ResponseBody) {
           let annulSalaryBreakup = JSON.parse(res.ResponseBody.CompleteSalaryDetail);
           if (annulSalaryBreakup.length > 0) {

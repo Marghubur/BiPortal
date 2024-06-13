@@ -66,17 +66,11 @@
                 {{selectedPayrollDetail != null ? selectedPayrollDetail.EmployeeCount : "0"}}
               </div>
             </div>
-            <div class="fe-2 d-flex flex-column justify-content-end">
-              <div class="d-flex justify-content-end">
-                <button class="btn btn-outline-danger me-2" (click)="gotoConfigPayroll()">
-                  Config Run Payroll
-                </button>
-                <button class="btn btn-primary-c">
-                  <i class="pe-2 fa-solid fa-indian-rupee-sign"></i>
-                  Start Payroll
-                </button>
-              </div>
-              <div class="mt-2 d-flex justify-content-start">
+            <div class="fe-2 text-end">
+              <button class="btn btn-outline-danger me-2" (click)="gotoConfigPayroll()">
+                Config Run Payroll
+              </button>
+              <div class="mt-2 d-flex justify-content-start align-items-center">
                 <i class="fa-solid fa-circle-info pe-2" style="color: #a1c3dd;"></i>
                 <span>
                   Before run payroll please complete pre-processing of leave, attendance etc.
@@ -204,19 +198,15 @@
           </a>
         </div>
         <div class="mt-3 me-4 text-end">
-          <button class="btn btn-outline-primary" *ngIf="!this.allRunPayroll.RunPayrollFinalize" [disabled]="isLoading"
+          <button class="btn btn-outline-primary" *ngIf="!this.allRunPayroll.RunPayrollFinalize" [disabled]="isLoading || selectedPayrollDetail == null || selectedPayrollDetail.ProcessingStatus == 0"
             (click)="previewPayroll()">
             <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
             <span class="ps-2">{{ isLoading ? "Wait" : "Preview Run Payroll" }}</span>
           </button>
-          <button class="btn btn-outline-primary ms-2" [disabled]="isLoading">
-            <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
-            <span class="ps-2">{{ isLoading ? "Wait" : "Rreview all employees" }}</span>
-          </button>
-          <button class="btn btn-primary-c ms-2" *ngIf="!this.allRunPayroll.RunPayrollFinalize" [disabled]="isLoading"
+          <button class="btn btn-primary-c ms-2" *ngIf="!this.allRunPayroll.RunPayrollFinalize" [disabled]="isLoading || selectedPayrollDetail == null || selectedPayrollDetail.ProcessingStatus == 0"
             (click)="finalizePayrollPopUp()">
-            <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-gear': !isLoading}"></i>
-            <span class="ps-2">{{ isLoading ? "Wait" : "Finalize Payroll" }}</span>
+            <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-indian-rupee-sign': !isLoading}"></i>
+            <span class="ps-2">{{ isLoading ? "Wait" : "Start Payroll" }}</span>
           </button>
         </div>
         <div class="col-md-12">

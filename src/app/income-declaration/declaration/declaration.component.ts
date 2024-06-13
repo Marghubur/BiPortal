@@ -10,6 +10,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Files } from 'src/app/commonmodal/common-modals';
 import 'bootstrap';
 import { NgbOffcanvas, OffcanvasDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 declare var $: any;
 
 @Component({
@@ -22,7 +23,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   rentResidenceForm: FormGroup;
   isPanEnable: boolean = false;
   isSignDeclareEnable: boolean = false;
-  fileDetail: Array<any> = [];
   isLargeFile: boolean = false;
   FileDocumentList: Array<Files> = [];
   FilesCollection: Array<any> = [];
@@ -82,8 +82,9 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
               private fb: FormBuilder,
               private nav: iNavigation,
               private http: CoreHttpService,
-              private offcanvasService: NgbOffcanvas) { 
-                
+              private offcanvasService: NgbOffcanvas,
+              private salaryHttp: SalaryDeclarationHttpService) {
+
               }
 
   ngOnInit(): void {
@@ -177,7 +178,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.EmployeeId = id;
     this.SectionIsReady = false;
     this.isEmployeeSelect = true;
-    this.http.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
+    this.salaryHttp.get(`Declaration/GetEmployeeDeclarationDetailById/${this.EmployeeId}`).then((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.local.setByKey("EmployeeId", this.EmployeeId);
         this.bindData(response.ResponseBody);
@@ -212,7 +213,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         this.employeeEmail = response.Email;
         this.oldTaxRegimeSlab = Object.entries(this.employeeDeclaration.IncomeTaxSlab).reverse();
         this.newTaxRegimeSlab = Object.entries(this.employeeDeclaration.NewRegimIncomeTaxSlab).reverse();
-
         if(this.employeeDeclaration !== null && this.employeeDeclaration.Declarations != null) {
           let rentDetail = this.employeeDeclaration.SalaryComponentItems.filter (x => x.ComponentId == "HRA");
           for (let index = 0; index < this.employeeDeclaration.Declarations.length; index++) {
@@ -220,23 +220,59 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
             switch (component) {
               case "1.5 Lac Exemptions":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted = this.calculatedTotalUploadFile(this.ExemptionDeclaration);
-                this.selectedOneHalfExemption = this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0);
                 if (this.selectedOneHalfExemption.length > 0) {
-                  this.selectedOneHalfExemption.map(x => x.IsEdit = false);
+                  let exemptDeclaration = this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0);
+                  exemptDeclaration.forEach(x => {
+                    let changeDeclarationComponent = this.selectedOneHalfExemption.find(i => i.ComponentId == x.ComponentId);
+                    if (changeDeclarationComponent) {
+                      changeDeclarationComponent.DeclaredValue = x.DeclaredValue;
+                      changeDeclarationComponent.UploadedFileIds = x.UploadedFileIds;
+                      changeDeclarationComponent.IsEdit = false;
+                    }
+                  })
+                } else {
+                  this.selectedOneHalfExemption = this.ExemptionDeclaration.filter(x => x.DeclaredValue > 0);;
+                  if (this.selectedOneHalfExemption.length > 0) {
+                    this.selectedOneHalfExemption.map(x => x.IsEdit = false);
+                  }
                 }
                 break;
               case "Other Exemptions":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.OtherDeclaration);
-                this.selectedOtherExemptions = this.OtherDeclaration.filter(x => x.DeclaredValue > 0);
                 if (this.selectedOtherExemptions.length > 0) {
-                  this.selectedOtherExemptions.map(x => x.IsEdit = false);
+                  let otherExemptDeclaration = this.OtherDeclaration.filter(x => x.DeclaredValue > 0);
+                  otherExemptDeclaration.forEach(x => {
+                    let changeDeclarationComponent = this.selectedOtherExemptions.find(i => i.ComponentId == x.ComponentId);
+                    if (changeDeclarationComponent) {
+                      changeDeclarationComponent.DeclaredValue = x.DeclaredValue;
+                      changeDeclarationComponent.UploadedFileIds = x.UploadedFileIds;
+                      changeDeclarationComponent.IsEdit = false;
+                    }
+                  })
+                } else {
+                  this.selectedOtherExemptions = this.OtherDeclaration.filter(x => x.DeclaredValue > 0);
+                  if (this.selectedOtherExemptions.length > 0) {
+                    this.selectedOtherExemptions.map(x => x.IsEdit = false);
+                  }
                 }
                 break;
               case "Tax Saving Allowance":
                 this.employeeDeclaration.Declarations[index].NumberOfProofSubmitted =  this.calculatedTotalUploadFile(this.TaxSavingAlloance);
-                this.selectedTaxSavingAllowance = this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0);
                 if (this.selectedTaxSavingAllowance.length > 0) {
-                  this.selectedTaxSavingAllowance.map(x => x.IsEdit = false);
+                  let taxSavingAllowance = this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0);
+                  taxSavingAllowance.forEach(x => {
+                    let changeDeclarationComponent = this.selectedTaxSavingAllowance.find(i => i.ComponentId == x.ComponentId);
+                    if (changeDeclarationComponent) {
+                      changeDeclarationComponent.DeclaredValue = x.DeclaredValue;
+                      changeDeclarationComponent.UploadedFileIds = x.UploadedFileIds;
+                      changeDeclarationComponent.IsEdit = false;
+                    }
+                  })
+                } else {
+                  this.selectedTaxSavingAllowance = this.TaxSavingAlloance.filter(x => x.DeclaredValue > 0);
+                  if (this.selectedTaxSavingAllowance.length > 0) {
+                    this.selectedTaxSavingAllowance.map(x => x.IsEdit = false);
+                  }
                 }
                 break;
               case "HRA":
@@ -342,7 +378,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       }
       formData.append('declaration', JSON.stringify(value));
       formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
-      this.http.upload(`Declaration/HouseRentDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
+      this.salaryHttp.upload(`Declaration/HouseRentDeclaration/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
         if (response.ResponseBody) {
           this.bindData(response.ResponseBody);
           Toast("Rent deatils added successfully.");
@@ -365,8 +401,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
   editDeclaration(item: any, e: any) {
     this.isAmountExceed = false;
-    this.FileDocumentList = [];
-    this.FilesCollection = [];
     if (item) {
       this.uploadDocument(item);
       item.IsEdit = true;
@@ -404,7 +438,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   deleteDeclaration() {
     this.isLoading = true;
     if (this.deleteFile) {
-      this.http.delete(`Declaration/DeleteDeclarationValue/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.ComponentId}`).then(res => {
+      this.salaryHttp.delete(`Declaration/DeleteDeclarationValue/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.ComponentId}`).then(res => {
         if (res.ResponseBody) {
           this.bindData(res.ResponseBody);
           $('#deleteAttachmentModal').modal('hide');
@@ -418,39 +452,62 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
   }
 
   deleteOnlyFile() {
-    this.isLoading = true;
-    if (this.deleteFile) {
-      this.http.delete(`Declaration/DeleteDeclarationFile/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.FileId}/${this.attachmentForDeclaration}`).then(res => {
+    if (this.deleteFile && this.deleteFile.FileId > 0) {
+      this.isLoading = true;
+      this.salaryHttp.delete(`Declaration/DeleteDeclarationFile/${this.employeeDeclaration.EmployeeDeclarationId}/${this.deleteFile.FileId}/${this.attachmentForDeclaration}`).then(res => {
         if (res.ResponseBody) {
           $('#deleteAttachmentModal').modal('hide');
           $('#addAttachmentModal').modal('hide');
           $('#rentFileModal').modal('hide');
           $('#rentedResidenceModal').modal('hide');
           this.bindData(res.ResponseBody);
+          this.uploadDocument(this.selectDeclaration);
           Toast("Declaration file is deleted successfully");
         }
         this.isLoading = false;
       }).catch(e => {
         this.isLoading = false;
       })
+    } else {
+      let index = this.selectDeclaration.FileDocumentList.findIndex(x => x.DocumentId == this.deleteFile.DocumentId);
+      this.selectDeclaration.FileDocumentList.splice(index, 1);
+      index = this.selectDeclaration.FilesCollection.findIndex(x => x.DocumentId == this.deleteFile.DocumentId);
+      this.selectDeclaration.FilesCollection.splice(index, 1);
+      this.totalFileSize = 0;
+      let i = 0;
+      while (i < this.selectDeclaration.FilesCollection.length) {
+        this.totalFileSize += this.selectDeclaration.FilesCollection[i].size / 1024;
+        i++;
+      }
+      if (this.totalFileSize > 2048) {
+        this.isLargeFile = true;
+      } else {
+        this.isLargeFile = false;
+      }
+      $('#deleteAttachmentModal').modal('hide');
+      $('#addAttachmentModal').modal('hide');
+      $('#rentFileModal').modal('hide');
+      $('#rentedResidenceModal').modal('hide');
     }
   }
 
   uploadDocument(item: any) {
-    this.slectedDeclarationnFile = [];
     if (item) {
+      if (!item.FileDocumentList)
+        item.FileDocumentList = [];
+
       this.attachmentForDeclaration = item.ComponentId ;
       this.isLargeFile = false;
-      this.slectedDeclarationnFile = [];
       if(item.UploadedFileIds != null && item.UploadedFileIds.length > 0) {
         if (isNaN(item.UploadedFileIds[0]))
-          item.UploadedFileIds = JSON.parse(item.UploadedFileIds)
+          item.UploadedFileIds = JSON.parse(item.UploadedFileIds);
+
         let fileIds = item.UploadedFileIds as Array<number>;
         if (fileIds.length > 0 && this.declarationFiles.length > 0) {
           fileIds.map(x => {
             let currentFile = this.declarationFiles.find(i => i.FileId == x);
-            if(currentFile != null){
-              this.slectedDeclarationnFile.push(currentFile);
+            if(currentFile != null && item.FileDocumentList.findIndex(x => x.FileId == currentFile.FileId) == -1){
+              item.FileDocumentList.push(currentFile);
             }
           });
         }
@@ -463,17 +520,16 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.FilesCollection.splice(index, 1);
     this.slectedDeclarationnFile.splice(index, 1);
     this.totalFileSize = 0;
-      let i = 0;
-      while (i < this.FilesCollection.length) {
-        this.totalFileSize += this.FilesCollection[i].size / 1024;
-        i++;
-      }
-      if (this.totalFileSize > 2048) {
-        this.isLargeFile = true;
-        this.fileDetail = [];
-      } else {
-        this.isLargeFile = false;
-      }
+    let i = 0;
+    while (i < this.FilesCollection.length) {
+      this.totalFileSize += this.FilesCollection[i].size / 1024;
+      i++;
+    }
+    if (this.totalFileSize > 2048) {
+      this.isLargeFile = true;
+    } else {
+      this.isLargeFile = false;
+    }
   }
 
   UploadAttachment(fileInput: any) {
@@ -489,15 +545,24 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
         item.FileType = file.type;
         item.FileSize = (Number(file.size) / 1024);
         item.FileExtension = file.type;
-        item.DocumentId = 0;
+        item.DocumentId = new Date().getTime() + index;
         //item.FilePath = this.getRelativePath(this.routeParam);
         item.ParentFolder = '';
         item.Email = this.employeeEmail;
         item.UserId = this.EmployeeId;
+        file.DocumentId = item.DocumentId;
         this.FileDocumentList.push(item);
         this.FilesCollection.push(file);
-        if (this.slectedDeclarationnFile.length > 0)
-          this.slectedDeclarationnFile.push(item);
+        if (!this.selectDeclaration.FileDocumentList) {
+          this.selectDeclaration.FileDocumentList = [];
+        }
+        if (!this.selectDeclaration.FilesCollection) {
+          this.selectDeclaration.FilesCollection = [];
+        }
+        this.selectDeclaration.FileDocumentList.push(item);
+        this.selectDeclaration.FilesCollection.push(file);
+        // if (this.slectedDeclarationnFile.length > 0)
+        //   this.slectedDeclarationnFile.push(item);
         index++;
       };
       this.totalFileSize = 0;
@@ -508,7 +573,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       }
       if (this.totalFileSize > 2048) {
         this.isLargeFile = true;
-        this.fileDetail = [];
       }
     } else {
       ErrorToast("You are not slected the file")
@@ -572,7 +636,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       }
       if (this.totalFileSize > 2048) {
         this.isLargeFile = true;
-        this.fileDetail = [];
       }
     } else {
       ErrorToast("You are not slected the file")
@@ -610,7 +673,6 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
       }
       if (this.totalFileSize > 2048) {
         this.isLargeFile = true;
-        this.fileDetail = [];
       }
     } else {
       ErrorToast("You are not slected the file")
@@ -632,19 +694,21 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
       let formData = new FormData();
       if (this.EmployeeId > 0 && this.EmployeeDeclarationId > 0) {
-        if (this.FileDocumentList.length > 0) {
+        if (item.FileDocumentList && item.FileDocumentList.length > 0) {
           let i = 0;
-          while (i < this.FileDocumentList.length) {
-            formData.append(this.FileDocumentList[i].FileName, this.FilesCollection[i]);
+          while (i < item.FileDocumentList.length) {
+            formData.append(item.FileDocumentList[i].FileName, item.FilesCollection[i]);
             i++;
           }
         }
         this.isLoading = true;
         formData.append('declaration', JSON.stringify(value));
-        formData.append('fileDetail', JSON.stringify(this.FileDocumentList));
-        
-        this.http.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
+        formData.append('fileDetail', JSON.stringify(item.FileDocumentList));
+
+        this.salaryHttp.upload(`Declaration/UpdateDeclarationDetail/${this.EmployeeDeclarationId}`, formData).then((response: ResponseModel) => {
           if (response.ResponseBody) {
+            item.FileDocumentList = [];
+            item.FilesCollection = [];
             this.bindData(response.ResponseBody);
             this.FileDocumentList = [];
             this.FilesCollection = [];
@@ -745,7 +809,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
     this.houseRentDetailFile = [];
     this.hraLetterList = [];
     this.houseRentDetailLetterFile = [];
-    this.http.delete(`Declaration/DeleteDeclaredHRA/${this.employeeDeclaration.EmployeeDeclarationId}`).then(res => {
+    this.salaryHttp.delete(`Declaration/DeleteDeclaredHRA/${this.employeeDeclaration.EmployeeDeclarationId}`).then(res => {
       if (res.ResponseBody) {
         $('#deleteRentDeclrModal').modal('hide');
         $('#rentedResidenceModal').modal('hide');

@@ -10,6 +10,7 @@ import 'bootstrap';
 import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 
 @Component({
   selector: 'app-employee-declarationlist',
@@ -39,9 +40,9 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   employeeId: number = null;
 
   constructor(private http: CoreHttpService,
-    private filterHttp: EmployeeFilterHttpService,
-    private nav: iNavigation,
-    private local: ApplicationStorage) { }
+              private filterHttp: EmployeeFilterHttpService,
+              private nav: iNavigation,
+              private salaryHttp: SalaryDeclarationHttpService) { }
 
   ngOnInit(): void {
     this.basePath = this.http.GetImageBasePath();
@@ -106,7 +107,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
 
   LoadData() {
     this.isEmpPageReady = false;
-    this.http.post("SalaryComponent/GetAllSalaryDetail", this.employeeData).
+    this.salaryHttp.post("SalaryComponent/GetAllSalaryDetail", this.employeeData).
       then((response: ResponseModel) => {
         if (response.ResponseBody) {
           this.employeeDetail = response.ResponseBody.SalaryDetail;
@@ -291,7 +292,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   downloadDeclaration() {
     this.isLoading = true;
     let empId = this.employeeSalaries.map(x => x.EmployeeId);
-    this.http.post('Declaration/ExportEmployeeDeclaration', empId).then(res => {
+    this.salaryHttp.post('Declaration/ExportEmployeeDeclaration', empId).then(res => {
       if (res.ResponseBody) {
         let fileLocation = `${this.basePath}${res.ResponseBody}`;
         this.downlodexcelFilePath = fileLocation;

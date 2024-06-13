@@ -24,8 +24,8 @@
   </div>
   <div class="x_panel">
     <div class="x_content mt-0 overflow-x-hidden">
-      <div class="row col-md-12 mb-4">
-        <div class="col-md-2 mt-3">
+      <div class="row col-md-12 row-cols-5 mb-4">
+        <div class="col mt-3">
           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewleaveAttendanceWages()"
             data-bs-toggle="tooltip" data-bs-placement="right" title="Leave, Attendance & Daily Wages">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 1}">
@@ -46,9 +46,9 @@
             </div>
           </a>
         </div>
-        <div class="col-md-2 mt-3">
+        <div class="col mt-3">
           <a href="javascript:void(0)" class="text-decoration-none" (click)="viewNewJoineeExist()"
-            data-bs-toggle="tooltip" data-bs-placement="right" title="New Joinee & Exits">
+            data-bs-toggle="tooltip" data-bs-placement="right" title="New Joinee & Exits" [ngClass]="{'pe-none': activePayrollTab <= 1}">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 2}">
               <div class="d-flex align-items-center justify-content-between py-4 px-2">
                 <div class="col-md-3">
@@ -67,9 +67,9 @@
             </div>
           </a>
         </div>
-        <div class="col-md-2 mt-3">
-          <a href="javascript:void(0)" class="text-decoration-none" (click)="viewBonusSalaryRevisionOT()"
-            data-bs-toggle="tooltip" data-bs-placement="right" title="Bonus, Salary Revision & Overtime">
+        <div class="col mt-3">
+          <a href="javascript:void(0)" class="text-decoration-none" (click)="viewBonusSalaryRevisionOT()" [ngClass]="{'pe-none': activePayrollTab <=2}"
+            data-bs-toggle="tooltip" data-bs-placement="right" title="Bonus & Overtime">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 3}">
               <div class="d-flex align-items-center justify-content-center py-4 px-2">
                 <div class="col-md-3">
@@ -78,7 +78,7 @@
                   </div>
                 </div>
                 <div class="col overflow-hidden ms-3">
-                  <h6 class="mb-0 text-truncate">Bonus, Salary Revision & Overtime
+                  <h6 class="mb-0 text-truncate">Bonus & Overtime
                     <i class="fa float-end"
                       [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.BonusSalaryOvertimeCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
                   </h6>
@@ -88,8 +88,8 @@
             </div>
           </a>
         </div>
-        <div class="col-md-2 mt-3">
-          <a href="javascript:void(0)" class="text-decoration-none" (click)="viewReimbursementAdhocDeduction()"
+        <div class="col mt-3">
+          <a href="javascript:void(0)" class="text-decoration-none" (click)="viewReimbursementAdhocDeduction()" [ngClass]="{'pe-none': activePayrollTab <= 3}"
             data-bs-toggle="tooltip" data-bs-placement="right" title="Reimbursement, Adhoc Payment, Deduction">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 4}">
               <div class="d-flex align-items-center justify-content-center py-4 px-2">
@@ -109,8 +109,8 @@
             </div>
           </a>
         </div>
-        <div class="col-md-2 mt-3">
-          <a href="javascript:void(0)" class="text-decoration-none" (click)="viewSalaryOnHoldArrear()"
+        <div class="col mt-3">
+          <a href="javascript:void(0)" class="text-decoration-none" (click)="viewSalaryOnHoldArrear()" [ngClass]="{'pe-none': activePayrollTab <= 4}"
             data-bs-toggle="tooltip" data-bs-placement="right" title="Salaries on Hold & Arrears">
             <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 5}">
               <div class="d-flex align-items-center justify-content-center py-4 px-2">
@@ -130,30 +130,9 @@
             </div>
           </a>
         </div>
-        <div class="col-md-2 mt-3">
-          <a href="javascript:void(0)" class="text-decoration-none" (click)="viewOveridePTESI()"
-            data-bs-toggle="tooltip" data-bs-placement="right" title="Override (PT, ESI, TDS, LWF)">
-            <div class="custom-card ps-3" [ngClass]="{'inactive-payroll-tab': activePayrollTab != 6}">
-              <div class="d-flex align-items-center justify-content-center py-4 px-2">
-                <div class="col-md-3">
-                  <div class="d-flex align-items-center justify-content-center bg-c rounded-pill rounded-icon">
-                    <span><i class="fa-solid fa-user-xmark fa-lg text-white"></i></span>
-                  </div>
-                </div>
-                <div class="col overflow-hidden ms-3">
-                  <h6 class="mb-0 text-truncate">Override (PT, ESI, TDS, LWF)
-                    <i class="fa float-end"
-                      [ngClass]="{'fa-check-square-o text-success': this.allRunPayroll.OverrideCompleted && !this.allRunPayroll.RunPayrollFinalize, 'fa-lock text-primary-c': this.allRunPayroll.RunPayrollFinalize}"></i>
-                  </h6>
-                  <p class="text-muted text-truncate mb-0">No Action Taken </p>
-                </div>
-              </div>
-            </div>
-          </a>
-        </div>
       </div>
       <ng-container *ngIf="activePayrollTab == 1">
-        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs align-items-center">
           <li [ngbNavItem]="1">
             <button ngbNavLink (click)="loadLeaveData()">LEAVE APPLIED</button>
             <ng-template ngbNavContent>
@@ -413,9 +392,6 @@
                       </div>
                       <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged()" (keydown.esc)="resetFilter()">
                       </bot-autocomplete>
-                      <!-- <input class="form-control" (keyup.enter)="filterRecords()" autofocus
-                        [(ngModel)]="attendance.EmployeeName" placeholder="Search by Name" id="namefilter"
-                        (keydown.esc)="resetFilter()"> -->
                     </div>
                   </div>
                   <div class="col-auto">
@@ -562,13 +538,16 @@
               </div>
             </ng-template>
           </li>
+          <div class="d-inline-block ms-auto">
+            <button class="btn btn-primary-c" *ngIf="active > 1" (click)="backActivePages()"><i class="fa-solid fa-arrow-left pe-2"></i>Prev</button>
+            <button class="btn btn-primary-c ms-2" (click)="nextActiveLeaveAttendanceLOPPage()">Next<i class="fa-solid fa-arrow-right ps-2"></i></button>
+          </div>
         </ul>
-
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </ng-container>
 
       <ng-container *ngIf="activePayrollTab == 2">
-        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs align-items-center">
           <li [ngbNavItem]="1">
             <button ngbNavLink (click)="getNewJoineeRecord()">NEW JOINEES</button>
             <ng-template ngbNavContent>
@@ -632,12 +611,6 @@
                       <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
-                </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveNewJoineeExitsFinalSattlement()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
                 </div>
               </div>
             </ng-template>
@@ -711,16 +684,6 @@
                     </div>
                   </ng-container>
                 </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" (click)="saveNewJoineeExitsFinalSattlement()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                </div>
               </div>
             </ng-template>
           </li>
@@ -731,7 +694,7 @@
                 done will be displayed here.</div>
               <div class="x_content">
                 <div class="t-table t-list  col-md-12">
-                  <ng-container *ngIf="settlementDetail.length > 0">
+                  <!-- <ng-container *ngIf="settlementDetail.length > 0">
                     <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
                       <ng-container formArrayName="RunPayroll">
                         <div class="t-body">
@@ -788,38 +751,32 @@
                         </div>
                       </ng-container>
                     </form>
-                  </ng-container>
-                  <ng-container *ngIf="settlementDetail.length == 0">
+                  </ng-container> -->
+                  <!-- <ng-container *ngIf="settlementDetail.length == 0">
                     <div
                       class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                       <p class="my-5">Record Not Found</p>
                     </div>
-                  </ng-container>
-                </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c mx-1" (click)="saveNewJoineeExitsFinalSattlement()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Next</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="markEmpChangeComplete()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
+                  </ng-container> -->
+                  <div
+                      class="custom-height my-5 py-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
+                      <p class="my-5">Record Not Found</p>
+                    </div>
                 </div>
               </div>
             </ng-template>
           </li>
+          <div class="d-inline-block ms-auto">
+            <button class="btn btn-primary-c" *ngIf="active > 1" (click)="backActivePages()"><i class="fa-solid fa-arrow-left pe-2"></i>Prev</button>
+            <button class="btn btn-primary-c ms-2" (click)="saveNewJoineeExitsFinalSattlement()">Next<i class="fa-solid fa-arrow-right ps-2"></i></button>
+          </div>
         </ul>
 
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </ng-container>
 
       <ng-container *ngIf="activePayrollTab == 3">
-        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs align-items-center">
           <li [ngbNavItem]="1">
             <button ngbNavLink (click)="getBonusEmpRecord()">BONUS</button>
             <ng-template ngbNavContent>
@@ -881,90 +838,10 @@
                     </div>
                   </ng-container>
                 </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveBonusSalaryRevisionOvertime()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                </div>
               </div>
             </ng-template>
           </li>
           <li [ngbNavItem]="2">
-            <button ngbNavLink (click)="getSalaryRevisionEmpRecord()">Salary Revision</button>
-            <ng-template ngbNavContent>
-              <div class="alert alert-info">All pending revisions (including on-hold revisions from past months) will
-                be displayed here.</div>
-              <div class="x_content">
-                <div class="t-table t-list  col-md-12">
-                  <ng-container *ngIf="salaryRevisionDetail.length > 0">
-                    <form [formGroup]="runPayrollForm" *ngIf="runPayrollForm">
-                      <ng-container formArrayName="RunPayroll">
-                        <div class="t-body">
-                          <div class="tr p-4 d-flex justify-content-between" *ngFor="let item of RunPayroll.controls; let i=index;" [formGroupName]="i">
-                            <div class="td d-flex flex-column justify-content-end">
-                              <div class="td align-middle fe-1 text-truncate">
-                                <a href="javascript:void(0)">
-                                  <i class="fa-regular fa-circle-user pe-2" style="color: #63E6BE;"></i>
-                                  {{item.get('FirstName').value}} {{item.get('LastName').value}}
-                                </a>
-                              </div>
-                              <div class="td align-middle fe-1">
-                                <b>Bonus Type:</b>
-                                {{item.get('ComponentFullName').value}}
-                              </div>
-                              <div class="td align-middle fe-1">
-                                <b>Payout Month & Year:</b>
-                                {{item.get('ForMonth').value}} {{item.get('ForYear').value}}
-                              </div>
-                            </div>
-                            <div class="td d-flex flex-column justify-content-end">
-                              <b>Amount</b>
-                              <div class="cell-wrapper pt-2 ps-0">
-                                <i class="fa-solid fa-indian-rupee-sign px-1"></i>
-                                {{item.get('Amount').value | number: '1.2-2'}}
-                              </div>
-                            </div>
-                            <div class="td d-flex justify-content-end">
-                              <div>
-                                <div class="cell-wrapper">
-                                  <select class="form-select" formControlName="PaymentActionType">
-                                    <option [value]="null" disabled>Select Payment Action Type</option>
-                                    <option value="Hold salary revision processing this month">Hold salary revision processing this month</option>
-                                    <option value="Process salary revision this month">Process salary revision this month</option>
-                                  </select>
-                                </div>
-                                <div class="cell-wrapper mt-2">
-                                  <input type="text" class="form-control" formControlName="Comments" placeholder="Comments">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </form>
-                  </ng-container>
-                  <ng-container *ngIf="overTimePaymentDetail.length == 0">
-                    <div
-                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5">Record Not Found</p>
-                    </div>
-                  </ng-container>
-                </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c me-1" (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveBonusSalaryRevisionOvertime()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                </div>
-              </div>
-            </ng-template>
-          </li>
-          <li [ngbNavItem]="3">
             <button ngbNavLink (click)="getOverTimeEmpRecord()">OVERTIME</button>
             <ng-template ngbNavContent>
               <div class="alert alert-info">Overtime details, including amount and OT dates will be displayed here
@@ -1044,23 +921,13 @@
                     </div>
                   </ng-container>
                 </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c mx-1" (click)="saveBonusSalaryRevisionOvertime()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
-                </div>
               </div>
             </ng-template>
           </li>
+          <div class="d-inline-block ms-auto">
+            <button class="btn btn-primary-c" *ngIf="active > 1" (click)="backActivePages()"><i class="fa-solid fa-arrow-left pe-2"></i>Prev</button>
+            <button class="btn btn-primary-c ms-2" (click)="saveBonusOvertime()">Next<i class="fa-solid fa-arrow-right ps-2"></i></button>
+          </div>
         </ul>
 
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
@@ -1129,12 +996,6 @@
                     </div>
                   </ng-container>
                 </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveReimbursementAdhocPaymentDeduction()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                </div>
               </div>
             </ng-template>
           </li>
@@ -1198,16 +1059,6 @@
                       <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
-                </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c me-1" (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="saveReimbursementAdhocPaymentDeduction()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
                 </div>
               </div>
             </ng-template>
@@ -1273,23 +1124,13 @@
                     </div>
                   </ng-container>
                 </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c mx-1" (click)="saveReimbursementAdhocPaymentDeduction()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" (click)="markReimburseAdhocDeductionComplete()">
-                    <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
-                </div>
               </div>
             </ng-template>
           </li>
+          <div class="d-inline-block ms-auto">
+            <button class="btn btn-primary-c" *ngIf="active > 1" (click)="backActivePages()"><i class="fa-solid fa-arrow-left pe-2"></i>Prev</button>
+            <button class="btn btn-primary-c ms-2" (click)="saveReimbursementAdhocPaymentDeduction()">Next<i class="fa-solid fa-arrow-right ps-2"></i></button>
+          </div>
         </ul>
 
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
@@ -1298,24 +1139,12 @@
       <ng-container *ngIf="activePayrollTab == 5">
         <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
           <li [ngbNavItem]="1">
-            <button ngbNavLink>SALARY PROCESSING ON HOLD</button>
+            <button ngbNavLink (click)="getOnHoldSalary()">SALARY ON HOLD</button>
             <ng-template ngbNavContent>
-              <h5>Salary Processing on Hold</h5>
-              <div class="alert alert-info">In case of employer who are absconding or are on uninformed leave, you
-                might want to hold/stop the processing of their salary. use the 'Salary processing on hold'
-                the processing of salary for selected employees. They will also be excluded from PF/ESI/TDS
-                calculation and will only be considered if you decide to process their salary in the future.</div>
               <div class="x_content">
-                <div class="d-flex mb-3 align-items-center justify-content-between">
-                  <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa-solid fa-plus pe-1"></i> Add
-                    Employee</button>
-                  <div class="col-md-3 float-end">
-                    <div class="form-group has-search">
-                      <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
-                      <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
-                        placeholder="Search Component">
-                    </div>
-                  </div>
+                <div class="mb-3 col-md-3">
+                  <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onAddEmployee()" (keydown.esc)="resetFilter()">
+                  </bot-autocomplete>
                 </div>
                 <div class="t-table t-list  col-md-12">
                   <div class="t-head">
@@ -1349,13 +1178,6 @@
                       <div class="th fe-1">
                         <div class="cell-wrapper">
                           <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Pay Action</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Comments</a>
                           </div>
                         </div>
@@ -1370,100 +1192,59 @@
                     </div>
                   </div>
                   <div class="t-body">
-                    <ng-container *ngIf="salaryProcessingDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of salaryProcessingDetail; let i=index;">
+                    <ng-container *ngIf="salaryOnHoldDetail.length > 0">
+                      <div class="tr align-items-center py-2" *ngFor="let item of salaryOnHoldDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
                         <div class="td align-middle fe-1 text-truncate">
-                          {{item.EmployeeName}}
+                          {{item.FullName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.PayPeriod}}
+                            {{selectedPayrollCalendar.MonthName}} {{selectedPayrollCalendar.Year}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="item.Amount">
+                            {{item.Amount}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            <select class="form-select" [(ngModel)]="item.PayAction">
-                              <option value="1">Action</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="item.Comment">
+                            <input type="text" class="form-control" placeholder="Comments" [(ngModel)]="item.Comments">
                           </div>
                         </div>
                         <div class="td align-middle fe-index text-center ">
-                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                            title="Delete Salary Processing on Hold">
-                            <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
+                          <a href="javascript:void(0)" class="me-2" data-bs-toggle="tooltip" data-bs-placement="right"
+                            title="Save Salary on Hold" (click)="saveOnHoldSalary(item)" [ngClass]="{'pe-none': isLoading}">
+                            <i class="fa-solid fa-floppy-disk fa-lg" *ngIf="!isLoading"></i>
+                            <i class="fa-solid fa-spinner fa-spin" *ngIf="isLoading"></i>
+                          </a>
+                          <a href="javascript:void(0)" class="ms-2" data-bs-toggle="tooltip" data-bs-placement="right"
+                            title="Delete Salary Processing on Hold" (click)="deleteOnHoldSalary(item)" [ngClass]="{'pe-none': isLoading}">
+                            <i class="fa-regular fa-trash-can text-danger fa-lg" *ngIf="!isLoading"></i>
+                            <i class="fa-solid fa-spinner fa-spin" *ngIf="isLoading"></i>
                           </a>
                         </div>
                       </div>
                     </ng-container>
                   </div>
-                  <ng-container *ngIf="salaryProcessingDetail.length == 0">
+                  <ng-container *ngIf="salaryOnHoldDetail.length == 0">
                     <div
                       class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
                       <p class="my-5">Record Not Found</p>
                     </div>
                   </ng-container>
                 </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c me-1" *ngIf="active > 1"
-                    (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 3"
-                    (click)="saveSalariesArrears()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 3"
-                    (click)="saveSalariesArrears()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 3"
-                    (click)="markSalariesArrearsComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
-                </div>
               </div>
             </ng-template>
           </li>
           <li [ngbNavItem]="2">
-            <button ngbNavLink>SALARY PAYOUT ON HOLD</button>
+            <button ngbNavLink (click)="getArrearDetail()">ARREARS</button>
             <ng-template ngbNavContent>
-              <h5>Salary Payout on Hold</h5>
-              <div class="alert alert-info">In case you wish to process the ssalary bit hold the payout of employees
-                (in cases such as, employee is under notice period, on uninformed leave for a while etc)
-                use "Salary payout on hold" option. The salary of such employees will be processed, i.e they will be
-                include for PF/ESI/TDS calculation and only the payout of salary will be put on hold. you
-                can decide to payout this salary anytime in future.
-              </div>
+              <h5>Arrears</h5>
+              <div class="alert alert-info">Employees arraers, either due to past dated revisions or due to salary on
+                holds will be displayed here.</div>
               <div class="x_content">
-                <div class="d-flex mb-3 align-items-center justify-content-between">
-                  <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa-solid fa-plus pe-1"></i> Add
-                    Employee</button>
-                  <div class="col-md-3 float-end">
-                    <div class="form-group has-search">
-                      <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
-                      <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
-                        placeholder="Search Component">
-                    </div>
-                  </div>
-                </div>
                 <div class="t-table t-list  col-md-12">
                   <div class="t-head">
                     <div class="tr">
@@ -1489,126 +1270,6 @@
                       <div class="th fe-1">
                         <div class="cell-wrapper">
                           <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Pay Action</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Comments</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-index">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Action</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="t-body">
-                    <ng-container *ngIf="salaryPayoutDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of salaryPayoutDetail; let i=index;">
-                        <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate">
-                          {{item.EmployeeName}}
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.PayPeriod}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <select class="form-select" [(ngModel)]="item.PayAction">
-                              <option value="1">Action</option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" class="form-control" placeholder="Amount" [(ngModel)]="item.Comment">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-index text-center ">
-                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                            title="Delete Salary Payout on Hold">
-                            <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </div>
-                  <ng-container *ngIf="salaryPayoutDetail.length == 0">
-                    <div
-                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5">Record Not Found</p>
-                    </div>
-                  </ng-container>
-                </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c me-1" *ngIf="active > 1"
-                    (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 3"
-                    (click)="saveSalariesArrears()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 3"
-                    (click)="saveSalariesArrears()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 3"
-                    (click)="markSalariesArrearsComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
-                </div>
-              </div>
-            </ng-template>
-          </li>
-          <li [ngbNavItem]="3">
-            <button ngbNavLink>ARREARS</button>
-            <ng-template ngbNavContent>
-              <h5>Arrears</h5>
-              <div class="alert alert-info">Employees arraers, either due to past dated revisions or due to salary on
-                holds will be displayed here.</div>
-              <div class="x_content">
-                <div class="t-table t-list  col-md-12">
-                  <div class="t-head">
-                    <div class="tr">
-                      <div class="th fe-index">
-                        <div class="t-filter t-index">
-                          <a href="javascript:void(0)" class="ps-3">#</a>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Date Joined</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
                             <a href="javascript:void(0)" class="pe-2">Total Arrear Amount</a>
                           </div>
                         </div>
@@ -1627,22 +1288,21 @@
                       <div class="tr py-2" *ngFor="let item of arraersDetail; let i=index;">
                         <div class="td align-middle text-center fe-index">{{i+1}}</div>
                         <div class="td align-middle fe-1 text-truncate">
-                          {{item.EmployeeName}}
+                          {{item.FullName}}
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            {{item.DOJ | date}}
+                            {{selectedPayrollCalendar.MonthName}} {{selectedPayrollCalendar.Year}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            <input type="text" class="form-control" placeholder="Amount"
-                              [(ngModel)]="item.TotalArrearAmount">
+                           {{item.Amount}}
                           </div>
                         </div>
                         <div class="td align-middle fe-1">
                           <div class="cell-wrapper">
-                            <input type="text" class="form-control" placeholder="Reason" [(ngModel)]="item.Reason">
+                            {{item.Comments}}
                           </div>
                         </div>
                       </div>
@@ -1655,707 +1315,14 @@
                     </div>
                   </ng-container>
                 </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c me-1" *ngIf="active > 1"
-                    (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 3"
-                    (click)="saveSalariesArrears()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 3"
-                    (click)="saveSalariesArrears()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 3"
-                    (click)="markSalariesArrearsComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
-                </div>
               </div>
             </ng-template>
           </li>
-        </ul>
-
-        <div [ngbNavOutlet]="nav" class="mt-2"></div>
-      </ng-container>
-
-      <ng-container *ngIf="activePayrollTab == 6">
-        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-          <li [ngbNavItem]="1">
-            <button ngbNavLink>PT OVERRIDE</button>
-            <ng-template ngbNavContent>
-              <h5>PT Overrides</h5>
-              <div class="alert alert-info">All Professional Tax overrides that were added for this month will be
-                shown here. New overrides can be added as well from here</div>
-              <div class="x_content">
-                <div class="d-flex mb-3 align-items-center justify-content-between">
-                  <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa-solid fa-plus pe-1"></i> Add
-                    Employee</button>
-                  <div class="col-md-3 float-end">
-                    <div class="form-group has-search">
-                      <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
-                      <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
-                        placeholder="Search Component">
-                    </div>
-                  </div>
-                </div>
-                <div class="t-table t-list  col-md-12">
-                  <div class="t-head">
-                    <div class="tr">
-                      <div class="th fe-index">
-                        <div class="t-filter t-index">
-                          <a href="javascript:void(0)" class="ps-3">#</a>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Gross Salary</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Regular PT</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">PT Override Amount</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Override Month</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Comment</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-index">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Action</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="t-body">
-                    <ng-container *ngIf="ptOverrideDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of ptOverrideDetail; let i=index;">
-                        <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate">
-                          {{item.EmployeeName}}
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.GrossSalary | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.RegularPT | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="PT Override Amount" class="form-control"
-                              [(ngModel)]="item.PTOverRideAmount">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.PTOverRideMonth}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="PT Override Amount" class="form-control"
-                              [(ngModel)]="item.Comment">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-index text-center ">
-                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                            title="Delete PT Override">
-                            <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </div>
-                  <ng-container *ngIf="ptOverrideDetail.length == 0">
-                    <div
-                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5">Record Not Found</p>
-                    </div>
-                  </ng-container>
-                </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c me-1" *ngIf="active > 1"
-                    (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 4"
-                    (click)="saveOverride()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 4" (click)="saveOverride()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 4"
-                    (click)="markOverrideComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
-                </div>
-              </div>
-            </ng-template>
-          </li>
-          <li [ngbNavItem]="2">
-            <button ngbNavLink>ESI OVERRIDE</button>
-            <ng-template ngbNavContent>
-              <h5>ESI Overrides</h5>
-              <div class="alert alert-info">All ESI overrides that were added for this month will be shown here. New
-                overrides can be added as well from here.</div>
-              <div class="x_content">
-                <div class="d-flex mb-3 align-items-center justify-content-between">
-                  <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa-solid fa-plus pe-1"></i> Add
-                    Employee</button>
-                  <div class="col-md-3 float-end">
-                    <div class="form-group has-search">
-                      <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
-                      <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
-                        placeholder="Search Component">
-                    </div>
-                  </div>
-                </div>
-                <div class="t-table t-list  col-md-12">
-                  <div class="t-head">
-                    <div class="tr">
-                      <div class="th fe-index">
-                        <div class="t-filter t-index">
-                          <a href="javascript:void(0)" class="ps-3">#</a>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Gross Salary</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">ESI Employee</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee(Override)</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">ESI Employer</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employer(Override)</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Override Month</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Comment</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Action</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="t-body">
-                    <ng-container *ngIf="esiOverrideDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of esiOverrideDetail; let i=index;">
-                        <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate">
-                          {{item.EmployeeName}}
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.GrossSalary | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.ESIEmployee | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="ESI employee Override Amount" class="form-control"
-                              [(ngModel)]="item.EmployeeOverride">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.ESIEmployer | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="ESI employee Override Amount" class="form-control"
-                              [(ngModel)]="item.EmployerOverride">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.OverRideMonth}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="PT Override Amount" class="form-control"
-                              [(ngModel)]="item.Comment">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-index text-center ">
-                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                            title="Delete ESI Override">
-                            <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </div>
-                  <ng-container *ngIf="esiOverrideDetail.length == 0">
-                    <div
-                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5">Record Not Found</p>
-                    </div>
-                  </ng-container>
-                </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c me-1" *ngIf="active > 1"
-                    (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 4"
-                    (click)="saveOverride()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 4" (click)="saveOverride()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 4"
-                    (click)="markOverrideComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
-                </div>
-              </div>
-            </ng-template>
-          </li>
-          <li [ngbNavItem]="3">
-            <button ngbNavLink>TDS OVVERRIDE</button>
-            <ng-template ngbNavContent>
-              <h5>TDS Overrides</h5>
-              <div class="alert alert-info">The Tds overrides that were added for this month will be shown here. New
-                overrides can be addded as well from here.</div>
-              <div class="x_content">
-                <div class="d-flex mb-3 align-items-center justify-content-between">
-                  <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa-solid fa-plus pe-1"></i> Add
-                    Employee</button>
-                  <div class="col-md-3 float-end">
-                    <div class="form-group has-search">
-                      <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
-                      <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
-                        placeholder="Search Component">
-                    </div>
-                  </div>
-                </div>
-                <div class="t-table t-list  col-md-12">
-                  <div class="t-head">
-                    <div class="tr">
-                      <div class="th fe-index">
-                        <div class="t-filter t-index">
-                          <a href="javascript:void(0)" class="ps-3">#</a>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Gross Salary</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Regular TDS</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">TDS Override Amount</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Override Month</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Comment</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-index">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Action</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="t-body">
-                    <ng-container *ngIf="tdsOverrideDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of tdsOverrideDetail; let i=index;">
-                        <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate">
-                          {{item.EmployeeName}}
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.GrossSalary | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.RegularTDS | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="PT Override Amount" class="form-control"
-                              [(ngModel)]="item.TDSOverRideAmount">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.TDSOverRideMonth}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="PT Override Amount" class="form-control"
-                              [(ngModel)]="item.Comment">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-index text-center ">
-                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                            title="Delete TDS Override">
-                            <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </div>
-                  <ng-container *ngIf="tdsOverrideDetail.length == 0">
-                    <div
-                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5">Record Not Found</p>
-                    </div>
-                  </ng-container>
-                </div>
-                <div class="text-end">
-                  <button [disabled]="isLoading" class="btn btn-primary-c me-1" *ngIf="active > 1"
-                    (click)="backActivePages()">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                    <span class="ps-2">Back</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 4"
-                    (click)="saveOverride()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Continue</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 4" (click)="saveOverride()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                    <span class="ps-2">Save & Close</span>
-                  </button>
-                  <button [disabled]="isLoading" class="btn btn-primary-c ms-1" *ngIf="active == 4"
-                    (click)="markOverrideComplete()">
-                    <i
-                      [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                    <span class="ps-2">Mark as Completed</span>
-                  </button>
-                </div>
-              </div>
-            </ng-template>
-          </li>
-          <li [ngbNavItem]="4">
-            <button ngbNavLink>LWS OVVERRIDE</button>
-            <ng-template ngbNavContent>
-              <h5>LWF Overrides</h5>
-              <div class="alert alert-info">All LWF overrides that were added for this month will be shown here. New
-                overrides can be added as well from here.</div>
-              <div class="x_content">
-                <div class="d-flex mb-3 align-items-center justify-content-between">
-                  <button [disabled]="isLoading" class="btn btn-primary-c"><i class="fa-solid fa-plus pe-1"></i> Add
-                    Employee</button>
-                  <div class="col-md-3 float-end">
-                    <div class="form-group has-search">
-                      <span class="fa-solid fa-magnifying-glass form-control-feedback"></span>
-                      <input type="text" class="form-control" oninput="this.value = this.value.toUpperCase()"
-                        placeholder="Search Component">
-                    </div>
-                  </div>
-                </div>
-                <div class="t-table t-list  col-md-12">
-                  <div class="t-head">
-                    <div class="tr">
-                      <div class="th fe-index">
-                        <div class="t-filter t-index">
-                          <a href="javascript:void(0)" class="ps-3">#</a>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee Name</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Gross Salary</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">LWF Employee</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employee(Override)</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">LWF Employer</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Employer(Override)</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Override Month</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Comment</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="th fe-1">
-                        <div class="cell-wrapper">
-                          <div class="t-filter">
-                            <a href="javascript:void(0)" class="pe-2">Action</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="t-body">
-                    <ng-container *ngIf="lwfOverrideDetail.length > 0">
-                      <div class="tr py-2" *ngFor="let item of lwfOverrideDetail; let i=index;">
-                        <div class="td align-middle text-center fe-index">{{i+1}}</div>
-                        <div class="td align-middle fe-1 text-truncate">
-                          {{item.EmployeeName}}
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.GrossSalary | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.LWFEmployee | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="ESI employee Override Amount" class="form-control"
-                              [(ngModel)]="item.EmployeeOverride">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.LWFEmployer | number: '1.2-2'}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="ESI employee Override Amount" class="form-control"
-                              [(ngModel)]="item.EmployerOverride">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            {{item.OverRideMonth}}
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-1">
-                          <div class="cell-wrapper">
-                            <input type="text" placeholder="PT Override Amount" class="form-control"
-                              [(ngModel)]="item.Comment">
-                          </div>
-                        </div>
-                        <div class="td align-middle fe-index text-center ">
-                          <a href="javascript:void(0)" class="" data-bs-toggle="tooltip" data-bs-placement="right"
-                            title="Delete ESI Override">
-                            <i class="fa-solid fa-trash-can-o text-danger" aria-hidden="true"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </div>
-                  <ng-container *ngIf="lwfOverrideDetail.length == 0">
-                    <div
-                      class="custom-height my-5 fw-bold fs-3 text-danger d-flex align-items-center justify-content-center">
-                      <p class="my-5">Record Not Found</p>
-                    </div>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="">
-                <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active > 1"
-                  (click)="backActivePages()">
-                  <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-left': !isLoading}"></i>
-                  <span class="ps-2">Back</span>
-                </button>
-                <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active >= 1 && active < 4"
-                  (click)="saveOverride()">
-                  <i
-                    [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                  <span class="ps-2">Save & Continue</span>
-                </button>
-                <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 4" (click)="saveOverride()">
-                  <i
-                    [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-                  <span class="ps-2">Save & Close</span>
-                </button>
-                <button [disabled]="isLoading" class="btn btn-primary-c" *ngIf="active == 4"
-                  (click)="markOverrideComplete()">
-                  <i
-                    [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-check': !isLoading}"></i>
-                  <span class="ps-2">Mark as Completed</span>
-                </button>
-              </div>
-            </ng-template>
-          </li>
+          <div class="d-inline-block ms-auto">
+            <button class="btn btn-primary-c" *ngIf="active > 1" (click)="backActivePages()"><i class="fa-solid fa-arrow-left pe-2"></i>Prev</button>
+            <button class="btn btn-primary-c ms-2" *ngIf="active == 1" (click)="nextActiveSalaryHoldArrearPage()">Next<i class="fa-solid fa-arrow-right ps-2"></i></button>
+            <button class="btn btn-primary-c ms-2" *ngIf="active == 2" (click)="configPayrollFinalSubmit()">Final Submit<i class="fa-solid fa-arrow-right ps-2"></i></button>
+          </div>
         </ul>
 
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
