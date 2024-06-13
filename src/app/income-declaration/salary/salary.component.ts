@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminIncomeTax, AdminPaySlip, AdminPreferences, AdminSummary, AdminTaxcalculation, ItemStatus } from 'src/providers/constants';
@@ -41,7 +42,8 @@ export class SalaryComponent implements OnInit {
               private user: UserService,
               private local: ApplicationStorage,
               private fb:FormBuilder,
-              private employeeFilterHttp: EmployeeFilterHttpService) { }
+              private employeeFilterHttp: EmployeeFilterHttpService,
+              private salaryHttp: SalaryDeclarationHttpService) { }
 
   ngOnInit(): void {
     let empid = this.local.getByKey("EmployeeId");
@@ -62,7 +64,7 @@ export class SalaryComponent implements OnInit {
   getSalaryBreakup() {
     this.isReady = false;
     this.myAnnualSalary = new MyAnnualSalary();
-    this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
+    this.salaryHttp.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
       let completeSalaryDetail = [];
       if(res.ResponseBody) {
         this.salaryDetail = res.ResponseBody.completeSalaryBreakup;
@@ -195,7 +197,7 @@ export class SalaryComponent implements OnInit {
       EmployeeId: this.EmployeeId,
       EmployeeCurrentRegime: this.active
     }
-    this.http.post("Declaration/SwitchEmployeeTaxRegime", value).then(res => {
+    this.salaryHttp.post("Declaration/SwitchEmployeeTaxRegime", value).then(res => {
       if (res.ResponseBody) {
         this.currentEmployee.EmployeeCurrentRegime = this.active;
         Toast("Tax regime switced successfully");
@@ -277,7 +279,7 @@ export class SalaryComponent implements OnInit {
 
   getBonusComponent() {
     this.isLoading = true;
-    this.http.get('SalaryComponent/GetBonusComponents').then(res => {
+    this.salaryHttp.get('SalaryComponent/GetBonusComponents').then(res => {
       if (res.ResponseBody) {
         this.bonusComponent = res.ResponseBody;
         this.isLoading = false;

@@ -7,6 +7,7 @@ import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail } from 'src/providers/common-service/common.service';
 import { UserService } from 'src/providers/userService';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 declare var $: any;
 
 @Component({
@@ -33,7 +34,7 @@ export class PreviousincomeComponent implements OnInit {
   constructor(private nav: iNavigation,
               private user: UserService,
               private local: ApplicationStorage,
-              private http: CoreHttpService,
+              private salaryHttp: SalaryDeclarationHttpService,
               private fb: FormBuilder) { }
 
   ngAfterViewChecked(): void {
@@ -75,7 +76,7 @@ export class PreviousincomeComponent implements OnInit {
       ErrorToast("Invalid employee. Please login again");
       return;
     }
-    this.http.get(`Declaration/GetPreviousEmployemnt/${this.employeeId}`).then(res => {
+    this.salaryHttp.get(`Declaration/GetPreviousEmployemnt/${this.employeeId}`).then(res => {
       this.bindPageData(res);
     })
   }
@@ -202,7 +203,7 @@ export class PreviousincomeComponent implements OnInit {
     this.isLoading = true;
     let value = this.previousIncomForm.value.PreviousIncomes;
     if (value) {
-      this.http.post(`Declaration/PreviousEmployemnt/${this.employeeId}`, value).then(res => {
+      this.salaryHttp.post(`Declaration/PreviousEmployemnt/${this.employeeId}`, value).then(res => {
         this.bindPageData(res);
         Toast("Previous employment details added/updated successfully");
         this.isLoading = false;

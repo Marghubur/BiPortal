@@ -7,6 +7,8 @@ import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
+
 import { ConfigPayroll } from 'src/providers/constants';
 declare var $: any;
 
@@ -39,6 +41,7 @@ export class ProcessingPayrollComponent implements OnInit {
   constructor(
     private http: CoreHttpService,
     private filterHttp: EmployeeFilterHttpService,
+    private salaryHttp: SalaryDeclarationHttpService,
     private user: UserService,
     private nav: iNavigation,
     private local: ApplicationStorage
@@ -137,13 +140,7 @@ export class ProcessingPayrollComponent implements OnInit {
     this.userDetail = this.user.getInstance();
     this.userName = this.userDetail.FirstName + ' ' + this.userDetail.LastName;
     let runPayroll = new RunPayroll();
-    runPayroll.SalaryProcessing = new SalaryProcessing();
-    runPayroll.SalaryPayout = new Salaryout();
     runPayroll.Arrear = new Arrear();
-    runPayroll.PTOverRide = new PTOverRide();
-    runPayroll.ESIOverRide = new ESIOverRide();
-    runPayroll.TDSOverRide = new TDSOverRide();
-    runPayroll.LWFOverRide = new LWFOverRide();
     localStorage.setItem(this.runpayroll, JSON.stringify(runPayroll));
     this.allRunPayroll = JSON.parse(localStorage.getItem(this.runpayroll));
 
@@ -225,23 +222,6 @@ export class ProcessingPayrollComponent implements OnInit {
   }
 }
 
-export class SalaryProcessing {
-  SalaryProcessingId: number = 1;
-  EmployeeName: string = 'Sarfaraz Nawaz';
-  PayPeriod: string = null;
-  Amount: number = 0;
-  PayAction: number = 1;
-  Comment: string = null;
-}
-
-export class Salaryout {
-  SalaryoutId: number = 1;
-  EmployeeName: string = 'Sarfaraz Nawaz';
-  PayPeriod: string = null;
-  PayAction: number = 1;
-  Comment: string = null;
-}
-
 export class Arrear {
   ArrearId: number = 1;
   EmployeeName: string = 'Sarfaraz Nawaz';
@@ -250,58 +230,8 @@ export class Arrear {
   Reason: string = null;
 }
 
-export class PTOverRide {
-  PTOverRideId: number = 1;
-  EmployeeName: string = 'Sarfaraz Nawaz';
-  GrossSalary: number = 0;
-  RegularPT: number = 0;
-  PTOverRideAmount: number = 0;
-  PTOverRideMonth: number = 0;
-  Comment: string = null;
-}
-
-export class ESIOverRide {
-  ESIOverRideId: number = 1;
-  EmployeeName: string = 'Sarfaraz Nawaz';
-  GrossSalary: number = 0;
-  ESIEmployee: number = 0;
-  EmployeeOverride: number = 0;
-  ESIEmployer: number = 0;
-  EmployerOverride: number = 0;
-  OverRideMonth: number = 0;
-  Comment: string = null;
-}
-
-export class TDSOverRide {
-  TDSOverRideId: number = 1;
-  EmployeeName: string = 'Sarfaraz Nawaz';
-  GrossSalary: number = 0;
-  RegularTDS: number = 0;
-  TDSOverRideAmount: number = 0;
-  TDSOverRideMonth: number = 0;
-  Comment: string = null;
-}
-
-export class LWFOverRide {
-  LWFOverRideId: number = 1;
-  EmployeeName: string = 'Sarfaraz Nawaz';
-  GrossSalary: number = 0;
-  LWFEmployee: number = 0;
-  EmployeeOverride: number = 0;
-  LWFEmployer: number = 0;
-  EmployerOverride: number = 0;
-  OverRideMonth: number = 0;
-  Comment: string = null;
-}
-
 export class RunPayroll {
-  SalaryProcessing: SalaryProcessing;
-  SalaryPayout: Salaryout;
   Arrear: Arrear;
-  PTOverRide: PTOverRide;
-  ESIOverRide: ESIOverRide;
-  TDSOverRide: TDSOverRide;
-  LWFOverRide: LWFOverRide;
   LeaveAttendanceCompleted: boolean = false;
   EmployeeChangeseCompleted: boolean = false;
   BonusSalaryOvertimeCompleted: boolean = false;

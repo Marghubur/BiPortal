@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
 import { ResponseModel } from "src/auth/jwtService";
 import { CoreHttpService } from "src/providers/AjaxServices/core-http.service";
+import { SalaryDeclarationHttpService } from "src/providers/AjaxServices/salary-declaration-http.service";
 import { ApplicationStorage } from "src/providers/ApplicationStorage";
 import { Toast, UserDetail } from "src/providers/common-service/common.service";
 import { AccessTokenExpiredOn, AdminDeclaration, AdminIncomeTax } from "src/providers/constants";
@@ -29,7 +30,7 @@ export class UserDashboardComponent implements OnInit {
   taxDetails: Array<any> = [];
   employeeTaxDetail: any = null;
 
-  constructor(private http: CoreHttpService,
+  constructor(private salaryHttp: SalaryDeclarationHttpService,
               private local: ApplicationStorage,
               private nav: iNavigation,
               private user: UserService) { }
@@ -62,7 +63,7 @@ export class UserDashboardComponent implements OnInit {
 
   loadData() {
     this.isPageReady = false;
-    this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.employeeUid}`).then((res:ResponseModel) => {
+    this.salaryHttp.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.employeeUid}`).then((res:ResponseModel) => {
       if (res.ResponseBody) {
         this.completeSalaryBreakup = res.ResponseBody.completeSalaryBreakup;
         this.completeSalaryDetail = JSON.parse(this.completeSalaryBreakup.CompleteSalaryDetail);

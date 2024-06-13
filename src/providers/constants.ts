@@ -279,7 +279,8 @@ export enum SERVICE {
   PROJECT = "ps",
   PERFORMANCE = "eps",
   FILTER = "ef",
-  JOBS = "jobs"
+  JOBS = "jobs",
+  SALARYDECLARATION = "salarydeclaration"
 }
 
 

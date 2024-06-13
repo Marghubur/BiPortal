@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ErrorToast, Toast, ToFixed, UserDetail } from 'src/providers/common-service/common.service';
-import { AccessTokenExpiredOn, AdminSalary, Declaration, IncomeTax, PaySlip, Preferences, Salary, Summary, Taxcalculation, UserAccountsBaseRoute } from 'src/providers/constants';
+import { Declaration, IncomeTax, PaySlip, Preferences, Summary, Taxcalculation, UserAccountsBaseRoute } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -36,7 +36,8 @@ export class MysalaryComponent implements OnInit {
   constructor(private nav: iNavigation,
               private user: UserService,
               private http: CoreHttpService,
-              private fb: FormBuilder) { }
+              private fb: FormBuilder,
+              private salaryHttp: SalaryDeclarationHttpService) { }
 
   ngOnInit(): void {
     var dt = new Date();
@@ -72,7 +73,7 @@ export class MysalaryComponent implements OnInit {
     this.SectionIsReady= false;
     this.isReady = false;
     this.myAnnualSalary = new MyAnnualSalary();
-    this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
+    this.salaryHttp.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
       let completeSalaryDetail = [];
       if(res.ResponseBody) {
         this.salaryDetail = res.ResponseBody;
@@ -205,7 +206,7 @@ export class MysalaryComponent implements OnInit {
       EmployeeId: this.EmployeeId,
       EmployeeCurrentRegime: this.active
     }
-    this.http.post("Declaration/SwitchEmployeeTaxRegime", value).then(res => {
+    this.salaryHttp.post("Declaration/SwitchEmployeeTaxRegime", value).then(res => {
       if (res.ResponseBody) {
         let emp = this.currentEmployee;
         emp.EmployeeCurrentRegime = this.active;

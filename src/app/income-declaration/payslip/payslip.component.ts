@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
+import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, AdminIncomeTax, AdminPreferences, AdminSalary, AdminSummary } from 'src/providers/constants';
@@ -31,7 +32,8 @@ export class PayslipComponent implements OnInit {
   constructor(private nav: iNavigation,
               private local: ApplicationStorage,
               private user: UserService,
-              private http: CoreHttpService) { }
+              private http: CoreHttpService,
+              private salaryHttp: SalaryDeclarationHttpService) { }
 
   ngOnInit(): void {
     this.basePath = this.http.GetImageBasePath();
@@ -59,7 +61,7 @@ export class PayslipComponent implements OnInit {
       this.payslipschedule = [];
       this.payslipYear = [];
       this.isJoinInCurrentMonth = false;;
-      this.http.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
+      this.salaryHttp.get(`SalaryComponent/GetSalaryBreakupByEmpId/${this.EmployeeId}`).then(res => {
         if (res.ResponseBody) {
           this.userDetail = res.ResponseBody.userDetail;
           this.userDetail.UserId = this.userDetail.EmployeeId;
