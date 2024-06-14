@@ -15,8 +15,8 @@ export class EmployeeFilterHttpService {
     if (environment.production) {
       return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
     } else {
-      // return `https://www.emstum.com/bot/sb/api/${SERVICE.FILTER}/${Url}`;
-      return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
+      return `https://www.emstum.com/bot/sb/api/${SERVICE.FILTER}/${Url}`;
+      //return `${environment.baseSpringUrl}api/${SERVICE.FILTER}/${Url}`;
     }
   }
 
@@ -30,10 +30,7 @@ export class EmployeeFilterHttpService {
 
   async filter(Param: any) {
     let result: Array<pairData> = [];
-    let response: ResponseModel = await this.post(
-      this.GetUrl(`filter/employeeFilterByName`),
-      Param
-    );
+    let response: ResponseModel = await this.post(`filter/employeeFilterByName`,Param);
     if (response.ResponseBody && response.ResponseBody instanceof Array) {
       result = response.ResponseBody;
     }

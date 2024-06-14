@@ -8,7 +8,7 @@ import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/co
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ResponseModel } from 'src/auth/jwtService';
 import { ItemStatus, ProcessingPayroll, SalaryComponentItems } from 'src/providers/constants';
-import { autoCompleteModal } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
 import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 declare var $: any;
@@ -735,6 +735,25 @@ export class ConfigPayrollComponent implements OnInit {
       this.attendanceData.EmployeeId = this.employeeId;
       this.getAttendanceDetail();
     }
+  }
+
+  async serverFilter(query: string) {
+    if(query == null) {
+      query = "";
+    }
+
+    let filter: Filter = new Filter();
+    filter.SearchString = query;
+    filter.PageIndex = 1;
+    filter.PageSize = 100;
+    filter.CompanyId = 1;
+
+    let result: Array<pairData> = await this.filterHttp.filter(filter);
+    this.employeeData = {
+        data: result,
+        placeholder: "Select Employee",
+        className: "normal"
+    };
   }
 
   filterRecords() {

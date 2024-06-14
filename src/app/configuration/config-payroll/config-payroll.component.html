@@ -390,7 +390,7 @@
                       <div class="t-filter">
                         <a href="javascript:void()" class="pe-2">Full Name</a>
                       </div>
-                      <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged()" (keydown.esc)="resetFilter()">
+                      <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onEmloyeeChanged()" (keydown.esc)="resetFilter()" (OnServerFilter)="serverFilter($event)">
                       </bot-autocomplete>
                     </div>
                   </div>
@@ -1143,7 +1143,7 @@
             <ng-template ngbNavContent>
               <div class="x_content">
                 <div class="mb-3 col-md-3">
-                  <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onAddEmployee()" (keydown.esc)="resetFilter()">
+                  <bot-autocomplete [data]="employeeData" [(ngModel)]="employeeId" (OnSelect)="onAddEmployee()" (keydown.esc)="resetFilter()" (OnServerFilter)="serverFilter($event)">
                   </bot-autocomplete>
                 </div>
                 <div class="t-table t-list  col-md-12">

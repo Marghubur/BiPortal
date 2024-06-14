@@ -694,7 +694,7 @@ export class DeclarationComponent implements OnInit, AfterViewChecked {
 
       let formData = new FormData();
       if (this.EmployeeId > 0 && this.EmployeeDeclarationId > 0) {
-        if (item.FileDocumentList && item.FileDocumentList.length > 0) {
+        if (item.FileDocumentList && item.FileDocumentList.length > 0 && item.FilesCollection && item.FilesCollection.length > 0) {
           let i = 0;
           while (i < item.FileDocumentList.length) {
             formData.append(item.FileDocumentList[i].FileName, item.FilesCollection[i]);
