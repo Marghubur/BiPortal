@@ -164,9 +164,9 @@ export class ProcessingPayrollComponent implements OnInit {
 
   runPayrollCalculation(flagId: number) {
     this.isLoading = true;
-    this.http
+    this.salaryHttp
       .get(
-        `Company/RunPayroll/${this.selectedPayrollCalendar.Month + 1}/${
+        `Payroll/RunPayroll/${this.selectedPayrollCalendar.Month + 1}/${
           this.selectedPayrollCalendar.Year
         }/${flagId}`
       )
