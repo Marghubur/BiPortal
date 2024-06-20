@@ -13,7 +13,7 @@
       <div class="x_content mt-4 overflow-x-hidden">
         <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
           <li [ngbNavItem]="1">
-            <a ngbNavLink>Objectives</a>
+            <a ngbNavLink (click)="loadData()">Objectives</a>
             <ng-template ngbNavContent>
               <ng-container *ngIf="!isPageLoading">
                 <div class="col-md-12 row pe-0 align-items-center justify-content-end">

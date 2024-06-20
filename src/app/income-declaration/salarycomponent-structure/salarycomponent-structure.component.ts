@@ -28,8 +28,6 @@ export class SalarycomponentStructureComponent implements OnInit {
   inactiveComponentDeatil: SalaryComponentFields = new SalaryComponentFields();
   allAdHocComponent: Array<AdHocComponentsModal> = [];
   isPageReady: boolean = true;
-
-// ----------------------------------------
   groupComponents: Array<any> = [];
   allComponentFields: Array<any> = [];
   salaryCompFilterData: string = null;
@@ -39,7 +37,6 @@ export class SalarycomponentStructureComponent implements OnInit {
   activeComponent: Array<any> = [];
   groupAllComponents: Array<any> = [];
   submitted: boolean = false;
-  currentGroup: any = null;
 
   constructor(private fb: FormBuilder,
               private http: CoreHttpService,
@@ -55,14 +52,13 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   loadSalaryGroupComponent() {
     this.isPageReady = false;
-    this.salaryHttp.get('SalaryComponent/GetSalaryGroupAndComponent').then(res => {
-      if(res.ResponseBody && res.ResponseBody.SalaryComponents != null && res.ResponseBody.SalaryGroup != null) {
-        this.groupComponents = res.ResponseBody.SalaryGroup.GroupComponents;
-        this.currentGroup = res.ResponseBody.SalaryGroup;
-        this.activeComponent = res.ResponseBody.SalaryGroup.GroupComponents;
-        this.groupAllComponents = res.ResponseBody.SalaryGroup.GroupComponents;
+    this.salaryHttp.get('SalaryComponent/GetSalaryAndComponent').then(res => {
+      if(res.ResponseBody) {
+        this.groupComponents = res.ResponseBody.SalaryGroupComponents;
+        this.activeComponent = res.ResponseBody.SalaryGroupComponents;
+        this.groupAllComponents = res.ResponseBody.SalaryGroupComponents;
         this.salaryCompFilterData = null;
-        this.allComponentFields = res.ResponseBody.SalaryGroup.GroupComponents;
+        this.allComponentFields = res.ResponseBody.SalaryGroupComponents;
         this.buildSalaryComponentDetail(res.ResponseBody.SalaryComponents);
         this.isPageReady = true;
         this.isReady = true;
@@ -147,28 +143,21 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   addComponents() {
     this.componentsAvailable = false;
-    let updateStructure: SalaryStructureType = {
-      GroupComponents: this.activeComponent,
-      CompanyId: this.currentGroup.CompanyId,
-      ComponentId: null,
-      GroupDescription: this.currentGroup.GroupDescription,
-      GroupName: this.currentGroup.GroupName,
-      MaxAmount: this.currentGroup.MaxAmount,
-      MinAmount: this.currentGroup.MinAmount,
-      SalaryGroupId: this.currentGroup.SalaryGroupId
-    };
-
-    this.salaryHttp.post("SalaryComponent/UpdateSalaryGroupComponents", updateStructure).then ((response:ResponseModel) => {
+    this.isLoading = true;
+    this.salaryHttp.post("SalaryComponent/UpdateSalaryGroupComponents", this.activeComponent).then ((response:ResponseModel) => {
       if (response.ResponseBody) {
         this.groupComponents = response.ResponseBody;
         this.salaryComponentFields = this.allComponentFields;
         Toast("Salary Group added suuccessfully.");
+        $('#addComponentModal').modal('hide');
         this.componentsAvailable = true;
+        this.isLoading = false;
       } else {
-        ErrorToast("Unable to add salary group.")
+        ErrorToast("Unable to add salary group.");
+        $('#addComponentModal').modal('hide');
+        this.isLoading = false;
       }
     })
-    $('#addComponentModal').modal('hide');
   }
 
   formulaAppliedOn(item: string) {
@@ -230,10 +219,9 @@ export class SalarycomponentStructureComponent implements OnInit {
 
     let isincludeInPayslip = (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked;
     value.IncludeInPayslip = isincludeInPayslip;
-    if (this.currentGroup.SalaryGroupId > 0) {
-        this.http.put(`Settings/UpdateGroupSalaryComponentDetail/
-            ${this.componentFields.ComponentId}/
-            ${this.currentGroup.SalaryGroupId}`, value).then((response:ResponseModel) => {
+    if (this.componentFields.ComponentId) {
+        this.salaryHttp.put(`SalaryComponent/UpdateComponentFormula/
+            ${this.componentFields.ComponentId}`, value).then((response:ResponseModel) => {
           if (response.ResponseBody) {
             this.isLoading = false;
             Toast('Updated Successfully')
@@ -451,10 +439,13 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   removeFromSalaryGroup() {
     this.isLoading = true;
-    this.salaryHttp.delete(`SalaryComponent/RemoveAndUpdateSalaryGroup/${this.componentFields.ComponentId}/${this.currentGroup.SalaryGroupId}`)
+    this.salaryHttp.delete(`SalaryComponent/RemoveAndUpdateSalaryGroup/${this.componentFields.ComponentId}`)
     .then((response:ResponseModel) => {
       if (response.ResponseBody) {
-        this.groupComponents = JSON.parse(response.ResponseBody.SalaryComponents);
+        let index = this.groupComponents.findIndex(x => x.ComponentId === this.componentFields.ComponentId);
+        if (index > -1)
+          this.groupComponents.splice(index, 1);
+
         Toast("Component removed from salary group successfully");
         $('#componentDeleteOrUpdateModel').modal('hide');
         this.isLoading = false;
@@ -472,7 +463,8 @@ export class SalarycomponentStructureComponent implements OnInit {
     if (value && value != '') {
       this.groupComponents =  this.groupAllComponents.filter(x => x.ComponentId.toUpperCase().indexOf(value) != -1 || x.ComponentFullName.toUpperCase().indexOf(value) != -1)
     } else
-    this.groupComponents =  this.groupAllComponents;
+      this.groupComponents =  this.groupAllComponents;
+
     this.isReady = true;
   }
 
@@ -724,7 +716,7 @@ export class SalarycomponentStructureComponent implements OnInit {
       else
         item.IncludeInPayslip = false;
 
-      this.http.put(`Settings/UpdateGroupSalaryComponentDetail/${item.ComponentId}/${this.currentGroup.SalaryGroupId}`, item).then((response:ResponseModel) => {
+      this.salaryHttp.put(`SalaryComponent/UpdateComponentFormula/${item.ComponentId}`, item).then((response:ResponseModel) => {
         if (response.ResponseBody) {
           this.isLoading = false;
           Toast('Updated Successfully')
@@ -791,13 +783,3 @@ class UpdateSalaryComponent {
   FormulaBasedOn: string = 'CTC';
 }
 
-class SalaryStructureType {
-  SalaryGroupId: number = 0;
-  CompanyId: number = 0;
-  ComponentId: string = null;
-  GroupComponents: Array<any> = [];
-  GroupName: string = null;
-  GroupDescription: string = null;
-  MinAmount: number = 0;
-  MaxAmount: number = 0;
-}

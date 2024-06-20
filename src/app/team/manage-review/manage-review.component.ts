@@ -7,7 +7,7 @@ import { UserService } from 'src/providers/userService';
 declare var $: any;
 declare var bootstrap: any;
 import 'bootstrap';
-import { ItemStatus, SERVICE } from 'src/providers/constants';
+import { ItemStatus } from 'src/providers/constants';
 import { ResponseModel } from 'src/auth/jwtService';
 import { ProjectHttpService } from 'src/providers/AjaxServices/project-http.service';
 import { PerformanceHttpService } from 'src/providers/AjaxServices/performance-http.service';
@@ -38,6 +38,7 @@ export class ManageReviewComponent implements OnInit {
   submittedEmpObj: Array<any> = [];
   isRevisedEnable: boolean = true;
   revisedAppraisalComment: string = null;
+  allAppraisalReviewsDetail: AppraisalReviewsDetail = {Budget: 0, NoOfEmployee: 0, ProjectManagerName: "", SalaryAmountAfterHike: 0, SalaryAmountBeforeHike: 0};
 
   constructor(private nav:iNavigation,
               private projectHttp: ProjectHttpService,
@@ -69,6 +70,13 @@ export class ManageReviewComponent implements OnInit {
 
         if (this.submittedEmpObj.length > 0) {
           this.initAppraisalHike();
+          this.allAppraisalReviewsDetail = {
+            NoOfEmployee : this.appraisalHikeForm.value.ProjectMemberHike.length,
+            ProjectManagerName: "dsdf",
+            Budget: this.projectAppraisalBudget != null ? this.projectAppraisalBudget.ProjectAppraisalBudget : 0,
+            SalaryAmountAfterHike: this.appraisalHikeForm.value.ProjectMemberHike.map(x => x.EstimatedSalary).reduce((acc, curr) => { return acc + curr; }, 0),
+            SalaryAmountBeforeHike: this.appraisalHikeForm.value.ProjectMemberHike.map(x => x.CTC).reduce((acc, curr) => { return acc + curr; }, 0)
+          }
           this.isPageReady = true;
           Toast("Project details found");
         } else {
@@ -442,4 +450,12 @@ export class ManageReviewComponent implements OnInit {
       });
     }
   }
+}
+
+interface AppraisalReviewsDetail {
+  ProjectManagerName: string,
+  NoOfEmployee: number,
+  SalaryAmountBeforeHike: number,
+  SalaryAmountAfterHike: number,
+  Budget: number
 }
