@@ -395,11 +395,15 @@
         </div>
       </div>
       <div class="modal-footer border-top-0">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="closeAddCompPopUp()">
+        <button type="button" class="btn btn-danger" [disabled]="isLoading" data-bs-dismiss="modal" (click)="closeAddCompPopUp()">
           Close
         </button>
         <button type="button" class="btn btn-primary-c" (click)="addComponents()">
-          <i class="fa-solid fa-plus pe-2"></i> Add
+          <i [ngClass]="{
+            'fa-solid fa-spinner fa-spin': isLoading,
+            'fa-regular fa-square-plus': !isLoading
+          }"></i>
+          <span class="ps-2">{{ isLoading ? "wait" : "Add" }}</span>
         </button>
       </div>
     </div>
