@@ -55,7 +55,7 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   loadSalaryGroupComponent() {
     this.isPageReady = false;
-    this.salaryHttp.get('SalaryComponent/GetSalaryGroupAndComponent').then(res => {
+    this.salaryHttp.get('SalaryComponent/GetSalaryAndComponent').then(res => {
       if(res.ResponseBody && res.ResponseBody.SalaryComponents != null && res.ResponseBody.SalaryGroup != null) {
         this.groupComponents = res.ResponseBody.SalaryGroup.GroupComponents;
         this.currentGroup = res.ResponseBody.SalaryGroup;

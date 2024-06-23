@@ -26,6 +26,7 @@ import { ShiftManagementComponent } from './shift-management/shift-management.co
 import { EmployeefinanceComponent } from './employeefinance/employeefinance.component';
 import { PerformancemanagementComponent } from './performancemanagement/performancemanagement.component';
 import { DocumentmanagementComponent } from './documentmanagement/documentmanagement.component';
+import { BtButtonComponent } from '../util/bt-button/bt-button.component';
 
 
 @NgModule({

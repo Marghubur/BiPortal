@@ -15,7 +15,9 @@ import { NgModule } from '@angular/core';
 import { BotTreeViewComponent } from './bot-tree-view/bot-tree-view.component';
 import { ImageLoaderComponent } from './image-loader/image-loader.component';
 import { PagePlaceholderComponent } from './page-placeholder/page-placeholder.component';
-import { CardWidgetComponent } from '../util/card-widget/card-widget.component'
+import { CardWidgetComponent } from '../util/card-widget/card-widget.component';
+import { BtButtonComponent } from '../util/bt-button/bt-button.component';
+import { BtChipComponent } from '../util/bt-chip/bt-chip.component'
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { CardWidgetComponent } from '../util/card-widget/card-widget.component'
     BotTreeViewComponent,
     ImageLoaderComponent,
     PagePlaceholderComponent,
-    CardWidgetComponent
+    CardWidgetComponent,
+    BtButtonComponent,
+    BtChipComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +56,9 @@ import { CardWidgetComponent } from '../util/card-widget/card-widget.component'
     BotTreeViewComponent,
     ImageLoaderComponent,
     PagePlaceholderComponent,
-    CardWidgetComponent
+    CardWidgetComponent,
+    BtButtonComponent,
+    BtChipComponent
   ]
 })
 export class UtilModule {

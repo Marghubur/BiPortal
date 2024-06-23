@@ -82,8 +82,23 @@
             </li>
           </ul>
           <div class="d-flex" role="search">
-            <button class="btn me-3 btn-light text-dark rounded-pill fw-semibold" routerLink="/login"><i class="fa-solid fa-circle-user pe-1"></i> Login</button>
-            <button class="btn btn-primary-c rounded-pill" routerLink="/freetrial">Start now, its, free!</button>
+            <!-- <button class="btn me-3 btn-light text-dark rounded-pill fw-semibold" routerLink="/login">
+              <i class="fa-solid fa-circle-user pe-1"></i> Login</button>
+            <button class="btn btn-primary-c rounded-pill" routerLink="/freetrial">Start now, its, free!</button> -->
+            <bt-button 
+              lable="Login" 
+              [class]="'me-3 btn-light text-dark fw-semibold'"
+              icon="fa-solid fa-circle-user" 
+              rounded="true"
+              redirect="/login">            
+            </bt-button>
+
+            <bt-button 
+              lable="Start now, its, free!" 
+              [redirect]="'/freetrial'"
+              rounded="true"
+              [class]="'btn-primary-c'">
+            </bt-button>
           </div>
         </div>
       </div>
