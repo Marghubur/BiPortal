@@ -125,7 +125,7 @@
                   </div>
                   <div class="d-flex flex-column justify-content-end">
                     <div class="card-box">
-                      {{selectedPayrollDetail == null ? "Not Run" : selectedPayrollDetail.PayrollStatus == 15 ? "Processing" : "Done"}}
+                      {{(selectedPayrollDetail == null || selectedPayrollDetail.PayrollStatus <= 1) ? "Not Run" : selectedPayrollDetail.PayrollStatus == 15 ? "Processing" : "Done"}}
                     </div>
                     <span>
                       <i class="fa-solid fa-list-check pe-2"></i>

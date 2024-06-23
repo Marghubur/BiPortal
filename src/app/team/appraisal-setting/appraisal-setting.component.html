@@ -437,12 +437,18 @@
                     </div>
                     <div class="t-body">
                       <ng-container *ngIf="objectiveDetails.length > 0">
-                        <div class="tr py-2" *ngFor="let item of objectiveDetails; let i=index;">
+                        <div class="tr py-2 align-items-center" *ngFor="let item of objectiveDetails; let i=index;">
                           <div class="td align-middle ps-3 fe-index">{{item.RowIndex}}</div>
-                          <div class="td align-middle fe-4 text-truncate d-flex align-items-center">
-                            <div class="col-md-11 text-truncate">{{item.Objective}}: {{item.Description}}</div>
-                            <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right"
-                              title="{{item.Description}}"></i>
+                          <div class="td align-middle fe-4 text-truncate">
+                            <span class="fw-bold text-dark">{{item.Objective}}: </span>
+                            <div class="d-flex align-items-center mt-2">
+                              <div class="col-md-11 text-truncate text-muted-c">
+                                {{item.Description}}
+                              </div>
+                              <i class=" ps-2 fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="right"
+                                title="{{item.Description}}">
+                              </i>
+                            </div>
                           </div>
                           <div class="td align-middle fe-1">
                             <div class="cell-wrapper">

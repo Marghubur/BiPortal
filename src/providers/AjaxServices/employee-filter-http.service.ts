@@ -30,10 +30,7 @@ export class EmployeeFilterHttpService {
 
   async filter(Param: any) {
     let result: Array<pairData> = [];
-    let response: ResponseModel = await this.post(
-      this.GetUrl(`filter/employeeFilterByName`),
-      Param
-    );
+    let response: ResponseModel = await this.post(`filter/employeeFilterByName`,Param);
     if (response.ResponseBody && response.ResponseBody instanceof Array) {
       result = response.ResponseBody;
     }

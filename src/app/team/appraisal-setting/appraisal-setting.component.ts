@@ -59,7 +59,7 @@ export class AppraisalSettingComponent implements OnInit {
     this.designation = GetRoles();
     this.currentCompny = this.local.findRecord("Companies")[0];
     this.userDetail = this.user.getInstance();
-    this.objectiveData.SearchString += ` And CompanyId = ${this.currentCompny.CompanyId} And IsDefaultObjective = false`;
+    this.objectiveData.SearchString += ` And CompanyId = ${this.currentCompny.CompanyId}`;
     if (this.userDetail.UserId <= 0) {
       ErrorToast("Invalid user. Please login again;")
       return;
