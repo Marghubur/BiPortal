@@ -66,17 +66,6 @@
   }
 }
 
-.scroll-bar-dv {
-  border: 1px solid #d9d9d9;
-  width: 10rem;
-  height: 11px;
-  overflow-x: auto;
-
-  .inner-scroller {
-    width: 22rem;
-  }
-}
-
 .empty-record-icon {
   width: 6.5rem;
   height: 6.5rem;
@@ -86,4 +75,74 @@
   i {
     font-size: 3rem;
   }
+}
+
+.table-scroll {
+  position: relative;
+  width:100%;
+  z-index: 1;
+  margin: auto;
+  overflow: auto;
+}
+
+.table-scroll table {
+  width: 100%;
+  min-width: 1280px;
+  margin: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-wrap {
+  position: relative;
+}
+
+.table-scroll th,
+.table-scroll td {
+  padding: 12px 10px;
+  border: 1px solid #dedede;
+  background: #fff;
+  // vertical-align: top;
+  vertical-align: middle;
+}
+
+.table-scroll thead th {
+  background: #666;
+  color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+/* safari and ios need the tfoot itself to be position:sticky also */
+.table-scroll tfoot,
+.table-scroll tfoot th,
+.table-scroll tfoot td {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background: #666;
+  color: #fff;
+  z-index:4;
+}
+
+th:first-child {
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #ccc;
+}
+
+thead th:first-child,
+tfoot th:first-child {
+  z-index: 5;
+}
+
+.parent-div {
+   width: 100%;
+}
+
+th {
+  width: 10rem !important;
 }

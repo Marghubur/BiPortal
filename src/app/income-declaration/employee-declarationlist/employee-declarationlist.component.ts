@@ -83,26 +83,6 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     $('[data-bs-toggle="tooltip"]').on('click', function () {
       $(this).tooltip('dispose');
     });
-
-    if (this.scrollDiv == null) {
-      this.scrollDiv = document.getElementById("scroll-dv");
-    }
-    if (this.scrollDiv != null) {
-      this.initHandler();
-    }
-  }
-
-  initHandler() {
-    this.scrollDiv.addEventListener('scroll', function (e) {
-      var elem = document.getElementById("excel-table");
-      var innerElem = document.getElementById("inner-scroller");
-      var left = ((elem.clientWidth) / (innerElem.clientWidth)) * e.currentTarget.scrollLeft;
-      if (e.currentTarget.scrollLeft > 0)
-        elem.scrollLeft = left;
-      else
-        elem.scrollLeft = left;
-      //console.log('Excel: ' + left + ', Inner: ' + e.currentTarget.scrollLeft);
-    });
   }
 
   LoadData() {
@@ -292,7 +272,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   downloadDeclaration() {
     this.isLoading = true;
     let empId = this.employeeSalaries.map(x => x.EmployeeId);
-    this.salaryHttp.post('Declaration/ExportEmployeeDeclaration', empId).then(res => {
+    this.salaryHttp.post(`Declaration/ExportEmployeeDeclaration/${this.selectedPayrollCalendar.Month+1}`, empId).then(res => {
       if (res.ResponseBody) {
         let fileLocation = `${this.basePath}${res.ResponseBody}`;
         this.downlodexcelFilePath = fileLocation;
