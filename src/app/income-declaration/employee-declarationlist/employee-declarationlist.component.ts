@@ -8,7 +8,7 @@ import { Filter } from 'src/providers/userService';
 declare var $: any;
 import 'bootstrap';
 import { autoCompleteModal, pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
-import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
+import { GetEmployees } from 'src/providers/ApplicationStorage';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 

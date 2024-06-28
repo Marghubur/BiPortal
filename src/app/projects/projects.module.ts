@@ -9,6 +9,7 @@ import { ManageProjectComponent } from './manage-project/manage-project.componen
 import { NgModule } from '@angular/core';
 import { BudgetComponent } from './budget/budget.component';
 import { CapacityManagementComponent } from './capacity-management/capacity-management.component';
+import { ProjectperformanceComponent } from './projectperformance/projectperformance.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { CapacityManagementComponent } from './capacity-management/capacity-mana
     WikiComponent,
     ManageProjectComponent,
     BudgetComponent,
-    CapacityManagementComponent
+    CapacityManagementComponent,
+    ProjectperformanceComponent
   ],
   imports: [
     CommonModule,

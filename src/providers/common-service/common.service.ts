@@ -602,6 +602,7 @@ export class UserDetail {
   CompanyName: string = null;
   CreatedOn: Date = null;
   Designation: string = null;
+  DesignationId: number = 0;
   DOB: Date = null;
   EmailId: string = null;
   ManagerEmail: string = null;

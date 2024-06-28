@@ -117,6 +117,7 @@ export const ProjectBudget = `${ProjectBaseRoute}/projectlist/budget`;
 export const ProjectList = `${ProjectBaseRoute}/projectlist`;
 export const ManageProject = `${ProjectBaseRoute}/projectlist/manage-project`;
 export const CapacityManagement = `${ProjectBaseRoute}/capacitymanagement`;
+export const ProjectPerformance = `${ProjectBaseRoute}/projectperformance`;
 
 // ********************** Project route ends  *******************
 

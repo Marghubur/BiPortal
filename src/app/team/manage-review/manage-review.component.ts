@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GetRoles } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 declare var $: any;
@@ -24,7 +24,7 @@ export class ManageReviewComponent implements OnInit {
   isAmountExceed: boolean = false;
   projectAppraisalBudget: any = null;
   appraisalReviewDetail: Array<any> = [];
-  userDetail: any = null;
+  userDetail: UserDetail = null;
   designation: Array<any> = null;
   currentProjectAppraisal: any = null;
   objectives: Array<any> = [];
@@ -72,7 +72,7 @@ export class ManageReviewComponent implements OnInit {
           this.initAppraisalHike();
           this.allAppraisalReviewsDetail = {
             NoOfEmployee : this.appraisalHikeForm.value.ProjectMemberHike.length,
-            ProjectManagerName: "dsdf",
+            ProjectManagerName: "---",
             Budget: this.projectAppraisalBudget != null ? this.projectAppraisalBudget.ProjectAppraisalBudget : 0,
             SalaryAmountAfterHike: this.appraisalHikeForm.value.ProjectMemberHike.map(x => x.EstimatedSalary).reduce((acc, curr) => { return acc + curr; }, 0),
             SalaryAmountBeforeHike: this.appraisalHikeForm.value.ProjectMemberHike.map(x => x.CTC).reduce((acc, curr) => { return acc + curr; }, 0)
