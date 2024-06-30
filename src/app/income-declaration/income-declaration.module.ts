@@ -21,6 +21,7 @@ import { CommonmodalModule } from '../commonmodal/commonmodal.module';
 import { NgModule } from '@angular/core';
 import { EmployeeDeclarationlistComponent } from '../income-declaration/employee-declarationlist/employee-declarationlist.component';
 import { ProfessionalTaxComponent } from './professional-tax/professional-tax.component';
+import { SalaryAdjustmentComponent } from './salary-adjustment/salary-adjustment.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { ProfessionalTaxComponent } from './professional-tax/professional-tax.co
     SalarycomponentStructureComponent,
     EmployeeDeclarationlistComponent,
     ProfessionalTaxComponent,
+    SalaryAdjustmentComponent,
   ],
   imports: [
     CommonModule,

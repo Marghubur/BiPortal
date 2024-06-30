@@ -142,6 +142,7 @@ export const SalaryComponentStructure = `${AccountsBaseRoute}/payrollsettings/sa
 export const PayrollComponents = `${AccountsBaseRoute}/payrollcomponents`;
 export const TaxRegime = `${AccountsBaseRoute}/taxregime`;
 export const ProfesssionalTax = `${AccountsBaseRoute}/professionaltax`;
+export const SalaryAdjustment = `${AccountsBaseRoute}/salaryadjustment`;
 
 // ********************** Income Declaration route ends  *******************
 
@@ -327,5 +328,8 @@ export enum SalaryComponentItems {
   ESI = "ESI",
   CTC = "CTC",
   PTAX = "PTAX",
-  HRA = "HRA"
+  HRA = "HRA",
+  EEPF = "EPER-PF",
+  EESI = "EPER-SI",
+  Auto = "[AUTO]"
 }
