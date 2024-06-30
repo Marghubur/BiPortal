@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CapacityManagement, ManageProject, ProjectBudget, ProjectList, ProjectWiki, UserProjectList } from 'src/providers/constants';
+import { CapacityManagement, ManageProject, ProjectBudget, ProjectList, ProjectPerformance, ProjectWiki, UserProjectList } from 'src/providers/constants';
 import { ManageProjectComponent } from './manage-project/manage-project.component';
 import { ProjectsComponent } from './projects.component';
 import { WikiComponent } from './wiki/wiki.component';
 import { BudgetComponent } from './budget/budget.component';
 import { CapacityManagementComponent } from './capacity-management/capacity-management.component';
+import { ProjectperformanceComponent } from './projectperformance/projectperformance.component';
 
 const routes: Routes = [
   { path: ProjectWiki, component: WikiComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: UserProjectList, component: ProjectsComponent },
   { path: ProjectBudget, component: BudgetComponent },
   { path: ManageProject, component: ManageProjectComponent },
-  { path: CapacityManagement, component: CapacityManagementComponent }
+  { path: CapacityManagement, component: CapacityManagementComponent },
+  { path: ProjectPerformance, component: ProjectperformanceComponent }
 ];
 
 @NgModule({

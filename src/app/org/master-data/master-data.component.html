@@ -1,60 +1,54 @@
 <div class="main-container">
-  <div class="x_panel">
-    <div class="col-12 row m-0 p-0 mb-4">
-      <div class="x_header">
-        <div class="d-flex justify-content-between mt-3">
-          <div class="col-8">
-            <div class="px-1">
-              <app-breadcrums [title]="'Master Data'"></app-breadcrums>
-            </div>
-          </div>
-        </div>
+  <div class="content-header">
+    <div class="col-8">
+      <div class="px-1">
+        <app-breadcrums [title]="'Master Data'" ></app-breadcrums>
       </div>
     </div>
-    <ng-container >
-      <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-        <li [ngbNavItem]="1">
-          <a ngbNavLink (click)="cleanFileHandler()">Employee</a>
-          <ng-template ngbNavContent>
-            <div class="x_content">
-              <div class="x_header_title">
-                <div class="d-flex align-items-center justify-content-between">
-                  <h5>Uploaded Employee Records</h5>
-                  <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
-                    correct format of excel sheet.
-                    <a href="javascript:void(0)" (click)="getEmployeeSampleFile()">Click to download the sample.</a>
-                  </p>
-                </div>
+  </div>
+  <div class="x_panel">
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1">
+        <a ngbNavLink (click)="cleanFileHandler()">Employee</a>
+        <ng-template ngbNavContent>
+          <div class="x_content">
+            <div class="x_header_title">
+              <div class="d-flex align-items-center justify-content-between">
+                <h5>Uploaded Employee Records</h5>
+                <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
+                  correct format of excel sheet.
+                  <a href="javascript:void(0)" (click)="getEmployeeSampleFile()">Click to download the sample.</a>
+                </p>
+              </div>
 
-                <div class="col-md-12 row x_content fade show">
-                  <div class=" col-md-6">
-                    <input type="file" id="uploadexcelreader" (change)="readExcelData($event)" class="d-none" *ngIf="isUploadFile"
-                      accept=".xlx, .xlsx" />
-                    <div class="page-card">
-                      <div class="card">
-                        <div class="col-md-12 p-0">
-                          <div class="table-responsive">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                              <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
-                                aria-labelledby="home-tab">
-                                <div id="classmasterdata" class="col-md-12">
-                                  <div name="ifilezone" class="ifilezone mb-4" (click)="excelfireBrowserFile()">
-                                    <div class="col-md-12 py-5 custom-bg justify-content-center" *ngIf="isFileReady"
-                                      name="uploading">
-                                      <img src="assets/img/ExcelFile.png" />
-                                      <div class="filetitle">
-                                        File:
-                                        <div name="filename" style="display: inline-block !important;">
-                                          {{ fileName }}
-                                        </div>
+              <div class="col-md-12 row x_content fade show">
+                <div class=" col-md-6">
+                  <input type="file" id="uploadexcelreader" (change)="readExcelData($event)" class="d-none" *ngIf="isUploadFile"
+                    accept=".xlx, .xlsx" />
+                  <div class="page-card">
+                    <div class="card">
+                      <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                              aria-labelledby="home-tab">
+                              <div id="classmasterdata" class="col-md-12">
+                                <div name="ifilezone" class="ifilezone mb-4" (click)="excelfireBrowserFile()">
+                                  <div class="col-md-12 py-5 custom-bg justify-content-center" *ngIf="isFileReady"
+                                    name="uploading">
+                                    <img src="assets/img/ExcelFile.png" />
+                                    <div class="filetitle">
+                                      File:
+                                      <div name="filename" style="display: inline-block !important;">
+                                        {{ fileName }}
                                       </div>
-                                      <div>
-                                        File size: &nbsp;
-                                        <div name="filesize" style="display: inline-block !important;">
-                                          {{ fileSize }}
-                                        </div>
-                                        KB
+                                    </div>
+                                    <div>
+                                      File size: &nbsp;
+                                      <div name="filesize" style="display: inline-block !important;">
+                                        {{ fileSize }}
                                       </div>
+                                      KB
                                     </div>
                                   </div>
                                 </div>
@@ -65,103 +59,103 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6 mt-3 solid-bg pt-2 ps-3 pb-3 rounded">
-                    <div class="filetitle text-center">Upload File Details</div>
-                    <div *ngIf="isFileReady">
-                      <div class="fw-bold">
-                        File:
-                        <div name="filename" style="display: inline-block !important;">
-                          {{ fileName }}
+                </div>
+                <div class="col-md-6 mt-3 solid-bg pt-2 ps-3 pb-3 rounded">
+                  <div class="filetitle text-center">Upload File Details</div>
+                  <div *ngIf="isFileReady">
+                    <div class="fw-bold">
+                      File:
+                      <div name="filename" style="display: inline-block !important;">
+                        {{ fileName }}
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        File size: &nbsp;
+                        <div name="filesize" style="display: inline-block !important;">
+                          {{ fileSize }}
                         </div>
+                        KB
                       </div>
                       <div>
-                        <div>
-                          File size: &nbsp;
-                          <div name="filesize" style="display: inline-block !important;">
-                            {{ fileSize }}
-                          </div>
-                          KB
-                        </div>
-                        <div>
-                          File type: &nbsp;
-                          <div name="uploadingdatetime" style="display: inline-block !important;">
-                            {{ file.type }}
-                          </div>
+                        File type: &nbsp;
+                        <div name="uploadingdatetime" style="display: inline-block !important;">
+                          {{ file.type }}
                         </div>
                       </div>
                     </div>
-                    <div *ngIf="!isFileReady">
-                      <div class="fw-bold">
-                        File: NA
+                  </div>
+                  <div *ngIf="!isFileReady">
+                    <div class="fw-bold">
+                      File: NA
+                    </div>
+                    <div>
+                      <div>
+                        File size: &nbsp; NA
                       </div>
                       <div>
-                        <div>
-                          File size: &nbsp; NA
-                        </div>
-                        <div>
-                          No. of record(s): &nbsp; NA
-                        </div>
-                        <div>
-                          File type: &nbsp; NA
-                        </div>
+                        No. of record(s): &nbsp; NA
+                      </div>
+                      <div>
+                        File type: &nbsp; NA
                       </div>
                     </div>
-                    <div class="mt-4">
-                      <button type="button" class="btn btn-primary-c" (click)="uploadEmployeeExcelSheet()" [disabled]="isDisable || isLoading">
-                        <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, ' fa-upload': !isLoading}"></i>
-                        <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
-                      </button>
-                      <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
-                        [disabled]="isDisable || isLoading">
-                        <i class="fa-solid fa-eraser pe-2"></i> Cancel
-                      </button>
-                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <button type="button" class="btn btn-primary-c" (click)="uploadEmployeeExcelSheet()" [disabled]="isDisable || isLoading">
+                      <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, ' fa-upload': !isLoading}"></i>
+                      <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
+                    </button>
+                    <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
+                      [disabled]="isDisable || isLoading">
+                      <i class="fa-solid fa-eraser pe-2"></i> Cancel
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
-          </ng-template>
-        </li>
-        <li [ngbNavItem]="2">
-          <a ngbNavLink (click)="cleanFileHandler()">Payroll Data</a>
-          <ng-template ngbNavContent>
-            <div class="x_content">
-              <div class="x_header_title">
-                <div class="d-flex align-items-center justify-content-between">
-                  <h5>Uploaded Payroll Records</h5>
-                  <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
-                    correct format of excel sheet. <a href="javascript:void(0)" (click)="getEmployeeWithPayrollSampleFile()">Click to download the sample.</a></p>
-                </div>
+          </div>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink (click)="cleanFileHandler()">Payroll Data</a>
+        <ng-template ngbNavContent>
+          <div class="x_content">
+            <div class="x_header_title">
+              <div class="d-flex align-items-center justify-content-between">
+                <h5>Uploaded Payroll Records</h5>
+                <p *ngIf="!isAvailable" class="sample-note float-end"><i class="fa-regular fa-circle-dot me-2"></i> Upload
+                  correct format of excel sheet. <a href="javascript:void(0)" (click)="getEmployeeWithPayrollSampleFile()">Click to download the sample.</a></p>
+              </div>
 
-                <div class="col-md-12 row x_content fade show">
-                  <div class=" col-md-6">
-                    <input type="file" id="uploadexcelreader" (change)="readExcelData($event)" class="d-none" *ngIf="isUploadFile"
-                      accept=".xlx, .xlsx" />
-                    <div class="page-card">
-                      <div class="card">
-                        <div class="col-md-12 p-0">
-                          <div class="table-responsive">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                              <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
-                                aria-labelledby="home-tab">
-                                <div id="classmasterdata" class="col-md-12">
-                                  <div name="ifilezone" class="ifilezone mb-4" (click)="excelfireBrowserFile()">
-                                    <div class="col-md-12 py-5 custom-bg justify-content-center" *ngIf="isFileReady"
-                                      name="uploading">
-                                      <img src="assets/img/ExcelFile.png" />
-                                      <div class="filetitle">
-                                        File:
-                                        <div name="filename" style="display: inline-block !important;">
-                                          {{ fileName }}
-                                        </div>
+              <div class="col-md-12 row x_content fade show">
+                <div class=" col-md-6">
+                  <input type="file" id="uploadexcelreader" (change)="readExcelData($event)" class="d-none" *ngIf="isUploadFile"
+                    accept=".xlx, .xlsx" />
+                  <div class="page-card">
+                    <div class="card">
+                      <div class="col-md-12 p-0">
+                        <div class="table-responsive">
+                          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div role="tabpanel" class="active in mt-4 ps-4 pe-4" id="tab_content1"
+                              aria-labelledby="home-tab">
+                              <div id="classmasterdata" class="col-md-12">
+                                <div name="ifilezone" class="ifilezone mb-4" (click)="excelfireBrowserFile()">
+                                  <div class="col-md-12 py-5 custom-bg justify-content-center" *ngIf="isFileReady"
+                                    name="uploading">
+                                    <img src="assets/img/ExcelFile.png" />
+                                    <div class="filetitle">
+                                      File:
+                                      <div name="filename" style="display: inline-block !important;">
+                                        {{ fileName }}
                                       </div>
-                                      <div>
-                                        File size: &nbsp;
-                                        <div name="filesize" style="display: inline-block !important;">
-                                          {{ fileSize }}
-                                        </div>
-                                        KB
+                                    </div>
+                                    <div>
+                                      File size: &nbsp;
+                                      <div name="filesize" style="display: inline-block !important;">
+                                        {{ fileSize }}
                                       </div>
+                                      KB
                                     </div>
                                   </div>
                                 </div>
@@ -172,67 +166,67 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6 mt-3 solid-bg pt-2 ps-3 pb-3 rounded">
-                    <div class="filetitle text-center">Upload File Details</div>
-                    <div *ngIf="isFileReady">
-                      <div class="fw-bold">
-                        File:
-                        <div name="filename" style="display: inline-block !important;">
-                          {{ fileName }}
+                </div>
+                <div class="col-md-6 mt-3 solid-bg pt-2 ps-3 pb-3 rounded">
+                  <div class="filetitle text-center">Upload File Details</div>
+                  <div *ngIf="isFileReady">
+                    <div class="fw-bold">
+                      File:
+                      <div name="filename" style="display: inline-block !important;">
+                        {{ fileName }}
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        File size: &nbsp;
+                        <div name="filesize" style="display: inline-block !important;">
+                          {{ fileSize }}
                         </div>
+                        KB
                       </div>
                       <div>
-                        <div>
-                          File size: &nbsp;
-                          <div name="filesize" style="display: inline-block !important;">
-                            {{ fileSize }}
-                          </div>
-                          KB
-                        </div>
-                        <div>
-                          File type: &nbsp;
-                          <div name="uploadingdatetime" style="display: inline-block !important;">
-                            {{ file.type }}
-                          </div>
+                        File type: &nbsp;
+                        <div name="uploadingdatetime" style="display: inline-block !important;">
+                          {{ file.type }}
                         </div>
                       </div>
                     </div>
-                    <div *ngIf="!isFileReady">
-                      <div class="fw-bold">
-                        File: NA
+                  </div>
+                  <div *ngIf="!isFileReady">
+                    <div class="fw-bold">
+                      File: NA
+                    </div>
+                    <div>
+                      <div>
+                        File size: &nbsp; NA
                       </div>
                       <div>
-                        <div>
-                          File size: &nbsp; NA
-                        </div>
-                        <div>
-                          No. of record(s): &nbsp; NA
-                        </div>
-                        <div>
-                          File type: &nbsp; NA
-                        </div>
+                        No. of record(s): &nbsp; NA
+                      </div>
+                      <div>
+                        File type: &nbsp; NA
                       </div>
                     </div>
-                    <div class="mt-4">
-                      <button type="button" class="btn btn-primary-c" (click)="uploadExcelSheet()" [disabled]="isDisable || isLoading">
-                        <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-upload': !isLoading}"></i>
-                        <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
-                      </button>
-                      <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
-                        [disabled]="isDisable || isLoading">
-                        <i class="fa-solid fa-eraser pe-2"></i> Cancel
-                      </button>
-                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <button type="button" class="btn btn-primary-c" (click)="uploadExcelSheet()" [disabled]="isDisable || isLoading">
+                      <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-upload': !isLoading}"></i>
+                      <span class="ps-2">{{ isLoading ? 'Wait ...' : 'Upload' }}</span>
+                    </button>
+                    <button type="button" class="btn btn-outline-info ms-2" (click)="cleanFileHandler()"
+                      [disabled]="isDisable || isLoading">
+                      <i class="fa-solid fa-eraser pe-2"></i> Cancel
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
-          </ng-template>
-        </li>
-      </ul>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
 
-      <div [ngbNavOutlet]="nav" class="mt-2"></div>
-    </ng-container>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
   </div>
 </div>
 
