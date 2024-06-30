@@ -62,9 +62,9 @@
                           <th width="10%" scope="col">
                             Full Name
                           </th>
+                          <th scope="col" class="text-truncate">CTC</th>
                           <th scope="col" class="text-truncate">Gross</th>
                           <th scope="col" class="text-truncate">Arrear</th>
-                          <th scope="col" class="text-truncate">Gross Total</th>
                           <th scope="col" class="text-truncate">Pre Mnth Gross<i class="fa-solid fa-circle-exclamation ps-2" data-bs-toggle="tooltip"
                             data-bs-placement="right" title="Previous Month Gross"></i>
                           </th>
@@ -72,21 +72,6 @@
                             {{data.ComponentId}} <i class="fa-solid fa-circle-exclamation ps-2" data-bs-toggle="tooltip"
                             data-bs-placement="right" title="{{data.ComponentName}}"></i>
                           </th>
-                          <th>Others</th>
-                          <th>A</th>
-                          <th>B</th>
-                          <th>C</th>
-                          <th>D</th>
-                          <th>E</th>
-                          <th>F</th>
-                          <th>G</th>
-                          <th>H</th>
-                          <th>I</th>
-                          <th>J</th>
-                          <th>K</th>
-                          <th>L</th>
-                          <th>M</th>
-                          <th>N</th>
                         </tr>
                       </ng-container>
                     </thead>
@@ -94,35 +79,29 @@
                       <ng-container *ngIf="employeeSalaries.length > 0">
                         <tr *ngFor="let item of employeeSalaries">
                           <th>
-                            <div class="d-flex align-items-center text-truncate">
-                              <i class="fa-solid fa-user"></i>
-                              <a href="javascript:void(0)" class="text-decoration-none ms-2" (click)="viewDeclaration(item)">
-                                <span class="text-decoration-underline">{{item.FullName}}</span>
-                                <span class="text-muted  pe-1">
-                                  [{{item.EmployeeId}}]
-                                </span>
-                              </a>
+                            <div class="d-flex align-items-center text-truncate justify-content-between">
+                              <div class="col-auto">
+                                <i class="fa-solid fa-user"></i>
+                                <a href="javascript:void(0)" class="text-decoration-none ms-2" (click)="viewDeclaration(item)">
+                                  <span class="text-decoration-underline">{{item.FullName}}</span>
+                                  <span class="text-muted  pe-1">
+                                    [{{item.EmployeeId}}]
+                                  </span>
+                                </a>
+                              </div>
+                              <div class="col-auto">
+                                <a href="javascript:void(0)" class="text-decoration-none float-end" data-bs-toggle="tooltip"
+                                  data-bs-placement="right" title="Adjust Salary" (click)="navToSalaryAdjustment(item)">
+                                  <i class="fa-solid fa-money-bill-trend-up fa-lg"></i>
+                                </a>
+                              </div>
                             </div>
                           </th>
+                          <td class="text-truncate"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.CTC | number : "1.0-0") : "0"}}</td>
                           <td class="text-truncate"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.Gross | number : "1.0-0") : "0"}}</td>
-                          <td class="text-truncate"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearGross | number : "1.0-0") : "0"}}</td>
-                          <td class="text-truncate"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearGross + item.Gross | number : "1.0-0") : "0"}}</td>
+                          <td class="text-truncate"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.ArrearAmount | number : "1.0-0") : "0"}}</td>
                           <td class="text-truncate"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (item.PreMonthGross | number : "1.0-0") : "0"}}</td>
                           <td class="text-truncate" *ngFor="let data of item.Salary"><i class="fa-solid fa-indian-rupee-sign pe-1"></i> {{item.IsActive ? (data.FinalAmount | number : "1.0-0") : "0"}}</td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
                         </tr>
                       </ng-container>
                       <ng-container *ngIf="employeeSalaries.length == 0">

@@ -1,8 +1,8 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { AdminDeclaration } from 'src/providers/constants';
+import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { AdminDeclaration, SalaryAdjustment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -132,6 +132,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   bindData() {
     let currentMonth = new Date().getMonth() + 1;
     this.employeeSalaries = [];
+    this.getSalaryComponents();
     this.employeeDetail.forEach(x => {
       let data = JSON.parse(x.CompleteSalaryDetail)
       let prsentMonth = data.find(x => x.MonthNumber == currentMonth);
@@ -148,9 +149,11 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
         EmployeeId: x.EmployeeId,
         Salary: this.buildSalaryDetail(value),
         Gross: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
-        ArrearGross: (prevMonth && prevMonth.IsArrearMonth) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+        CTC: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "CTC").FinalAmount,
+        ArrearAmount: prsentMonth.ArrearAmount,
         PreMonthGross: (prevMonth && prevMonth.IsActive) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
-        IsActive: prsentMonth.IsActive
+        IsActive: prsentMonth.IsActivem,
+        IsPayrollExecutedForThisMonth: prsentMonth.IsPayrollExecutedForThisMonth
       });
     });
     if (this.companySetting) {
@@ -189,44 +192,14 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     if (Salary.length > 0) {
       this.salaryComponents.forEach(x => {
         let value = Salary.find(i => i.ComponentId == x.ComponentId);
-        if (value) {
-          salaryBreakup.push({
-            ComponentId: value.ComponentId,
-            FinalAmount: value.FinalAmount,
-            IsIncludeInPayslip: value.IsIncludeInPayslip
-          });
-        } else {
-          salaryBreakup.push({
-            ComponentId: x.ComponentId,
-            FinalAmount: 0,
-            IsIncludeInPayslip: true
-          });
-        }
-      });
-      let otherAmount = 0;
-      let others = Salary.filter(x => {
-        return !this.salaryComponents.some(i => {
-          return x.ComponentId === i.ComponentId;
-        })
-      });
-      if (others && others.length > 0) {
-        otherAmount = others.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
-      }
-      salaryBreakup.push({
-        ComponentId: "Others",
-        FinalAmount: otherAmount,
-        IsIncludeInPayslip: false
+        salaryBreakup.push({
+          ComponentId: value.ComponentId,
+          FinalAmount: value.FinalAmount,
+          IsIncludeInPayslip: value.IsIncludeInPayslip
+        });
       });
     }
     return salaryBreakup;
-  }
-
-  globalFilter() {
-    let searchQuery = "";
-    // this.employeeData.reset();
-    searchQuery = `emp.FirstName like '%${this.anyFilter}%' OR emp.Email like '%${this.anyFilter}%' OR emp.Mobile like '%${this.anyFilter}%'`;
-    // this.employeeData.SearchString = `1=1 And ${searchQuery}`;
-    // this.LoadData();
   }
 
   GetFilterResult(e: Filter) {
@@ -244,6 +217,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     if (item) {
       this.selectedPayrollCalendar = item;
       this.employeeSalaries = [];
+      this.getSalaryComponents();
       this.employeeDetail.forEach(x => {
         let data = JSON.parse(x.CompleteSalaryDetail)
         let prsentMonth = data.find(x => x.MonthNumber == item.Month + 1);
@@ -261,9 +235,11 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
           EmployeeId: x.EmployeeId,
           Salary: this.buildSalaryDetail(value),
           Gross: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount,
-          ArrearGross: (prevMonth && prevMonth.IsArrearMonth) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
+          CTC: prsentMonth.SalaryBreakupDetails.find(x => x.ComponentId == "CTC").FinalAmount,
+          ArrearAmount: prsentMonth.ArrearAmount,
           PreMonthGross: (prevMonth && prevMonth.IsActive) ? prevMonth.SalaryBreakupDetails.find(x => x.ComponentId == "Gross").FinalAmount : 0,
-          IsActive: prsentMonth.IsActive
+          IsActive: prsentMonth.IsActive,
+          IsPayrollExecutedForThisMonth: prsentMonth.IsPayrollExecutedForThisMonth
         });
       });
     }
@@ -322,5 +298,26 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       placeholder: "Select Employee",
       className: "normal"
     };
+  }
+
+  getSalaryComponents() {
+    this.salaryComponents = [];
+    let data = JSON.parse(this.employeeDetail[0].CompleteSalaryDetail);
+    this.salaryComponents = data[0].SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC").map(x => {return {ComponentId:x.ComponentId, ComponentName:x.ComponentName};})
+  }
+
+  navToSalaryAdjustment(item: any) {
+    if (item && item.IsPayrollExecutedForThisMonth) {
+      let data = {
+        EmployeeId: item.EmployeeId,
+        Month: this.selectedPayrollCalendar.Month + 1,
+        MonthName: this.selectedPayrollCalendar.MonthName,
+        Year: this.selectedPayrollCalendar.Year,
+        EmployeeName: item.FullName
+      };
+      this.nav.navigate(SalaryAdjustment, data);
+    } else {
+      WarningToast("Payrol doesn't run of this month");
+    }
   }
 }
