@@ -1,4 +1,4 @@
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
 import { Attendance, Leave, Timesheet } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $:any;
@@ -49,6 +49,7 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
   selectedWorkFlowDetail: any = null;
   employeesAutoComplete: autoCompleteModal = new autoCompleteModal();
   isWorkFlownChainShow: boolean = false;
+  active: number = 1;
 
   constructor(private nav: iNavigation,
               private fb: FormBuilder,
@@ -227,16 +228,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       elem.classList.remove('d-none');
     else
       elem.classList.add('d-none');
-  }
-
-  AccrualLevelVary(e: any) {
-    let value = e.target.value;
-    if (value) {
-      if (value == 'true')
-        document.querySelector('div[name="AccrualLevelVary"]').classList.remove('d-none');
-      else
-        document.querySelector('div[name="AccrualLevelVary"]').classList.add('d-none');
-    }
   }
 
   findDay(e: any) {
@@ -425,7 +416,6 @@ export class ManageLeaveplanComponent implements OnInit, AfterViewChecked {
       ExitMonthLeaveDistribution: this.buildFormArrayBetweenProbationPeriod(),
       IsNotAllowProratedOnNotice: new FormControl(this.leaveAccrual.IsNotAllowProratedOnNotice ?'true' : 'false'),
       IsNoLeaveOnNoticePeriod: new FormControl(this.leaveAccrual.IsNoLeaveOnNoticePeriod?'true' : 'false'),
-      IsVaryOnProbationOrExprience: new FormControl(this.leaveAccrual.IsVaryOnProbationOrExprience ?'true' : 'false'),
       IsAccrualStartsAfterJoining: new FormControl(this.leaveAccrual.IsAccrualStartsAfterJoining ?'true' : 'false'),
       IsAccrualStartsAfterProbationEnds: new FormControl(this.leaveAccrual.IsAccrualStartsAfterProbationEnds ?'true' : 'false'),
       AccrualDaysAfterJoining: new FormControl(this.leaveAccrual.AccrualDaysAfterJoining),
@@ -1115,7 +1105,6 @@ class LeaveAccrual {
   IsNotAllowProratedOnNotice: boolean = null;
   BreakMonthLeaveAllocationId: number = 0;
   IsNoLeaveOnNoticePeriod: boolean = null;
-  IsVaryOnProbationOrExprience: boolean = false;;
   IsAccrualStartsAfterJoining: boolean = false;
   IsAccrualStartsAfterProbationEnds: boolean = false;
   AccrualDaysAfterJoining: number = 0;

@@ -14,8 +14,8 @@ export class JobsHttpService {
     if (environment.production) {
       return `${environment.baseSpringUrl}api/${SERVICE.JOBS}/${Url}`;
     } else {
-      return `https://www.emstum.com/bot/sb/api/${SERVICE.JOBS}/${Url}`;
-      // return `${environment.baseSpringUrl}api/${SERVICE.JOBS}/${Url}`;
+      // return `https://www.emstum.com/bot/sb/api/${SERVICE.JOBS}/${Url}`;
+      return `${environment.baseSpringUrl}api/${SERVICE.JOBS}/${Url}`;
     }
   }
 

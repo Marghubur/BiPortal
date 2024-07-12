@@ -71,6 +71,7 @@ export const Holiday = `${ManageBaseRoute}/planholidays`;
 export const Attendance = `${ManageBaseRoute}/attendance`;
 export const Timesheet = `${ManageBaseRoute}/timesheet`;
 export const AdminManageTimesheet = `${ManageBaseRoute}/managetimesheet`;
+export const DecisionMaking = `${ManageBaseRoute}/decisionmaking`;
 
 // ********************** Manage route ends  *******************
 

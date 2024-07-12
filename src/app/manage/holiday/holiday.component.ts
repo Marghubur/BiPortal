@@ -7,7 +7,6 @@ import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { ApplicationStorage } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast, ToLocateDate, UserDetail, WarningToast } from 'src/providers/common-service/common.service';
 import { UserType } from 'src/providers/constants';
-import { iNavigation } from 'src/providers/iNavigation';
 import { Filter, UserService } from 'src/providers/userService';
 declare var $: any;
 

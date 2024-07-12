@@ -135,3 +135,10 @@ content: '';
 textarea {
   resize: none;
 }
+
+
+.sticky-sidebar {
+  position: sticky;
+  left: 0;
+  top: 1.5rem;
+}

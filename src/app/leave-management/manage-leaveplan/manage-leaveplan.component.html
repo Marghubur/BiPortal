@@ -11,8 +11,8 @@
       <ng-container *ngIf="isDataLoaded">
         <div class="x_content pb-0">
           <div class="row mt-3">
-            <div class="col-md-3 panel-h">
-              <div class="x_panel px-3 pt-3 pb-1">
+            <div class="col-md-3">
+              <div class="x_panel_body px-3 pt-3 pb-1 sticky-sidebar">
                 <ul class="d-flex justify-content-center flex-column list-unstyled config-tab"
                   id="leaveConfigModal">
                   <li class="py-3 px-3 active-index" name="tab-index" [attr.index]="1">
@@ -81,8 +81,8 @@
                 </ul>
               </div>
             </div>
-            <div class="col-md-9 panel-h">
-              <div class="x_panel px-4">
+            <div class="col-md-9">
+              <div class="x_panel_body px-4">
                 <ng-container *ngIf="configPageNo == 1">
                   <form [formGroup]="leaveDetailForm">
                     <div class="mt-3">
@@ -456,7 +456,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="my-4">
+                    <!-- <div class="my-4">
                       <h6 class="fw-bold text-dark">Does Leave accrual vary based on probation period or experience? <i
                           class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
                           data-bs-placement="right"
@@ -486,8 +486,8 @@
                           <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'false'}"></i>
                         </div>
                       </div>
-                    </div>
-                    <div class="my-4"
+                    </div> -->
+                    <!-- <div class="my-4"
                       [ngClass]="{'d-none': leaveAccrualForm.controls.IsVaryOnProbationOrExprience.value == 'false'}"
                       name="AccrualLevelVary">
                       <h6 class="fw-bold text-dark">From when does the accrual start? <i
@@ -534,8 +534,8 @@
                           <i name="success-icon" class="fa-solid fa-check text-success" [ngClass]="{'invisible': leaveAccrualForm.controls.IsAccrualStartsAfterProbationEnds.value == 'false'}"></i>
                         </div>
                       </div>
-                    </div>
-                    <div class="my-4">
+                    </div> -->
+                    <!-- <div class="my-4">
                       <h6 class="fw-bold text-dark">Is leave accrual impacted by employee's attendance/number of days
                         worked
                         every month? <i class="fa-solid fa-circle-exclamation text-secondary ps-2" data-bs-toggle="tooltip"
@@ -590,7 +590,7 @@
                           <label  class="form-label">days in a Month.</label>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                     <div class="my-4">
                       <h6 class="fw-bold text-dark">Can employees apply leave for a future date based on leave accrual
                         balance projected as of that date?</h6>
@@ -1601,7 +1601,7 @@
                         <div class="mt-3 p-2 bg-light" *ngIf="selectedWorkflow != null">
                           <span>Workflow Description: {{selectedWorkflow.TitleDescription | titlecase}}</span>
                           <a href="javascript:void(0)" class="text-end text-decoration-none float-end" (click)="viewWorkflowChain()">
-                            <i  [ngClass]="{'fa-regular fa-eye': isWorkFlownChainShow, 'fa-regular fa-eye-slash': !isWorkFlownChainShow}"></i>
+                            <i class="fa-regular"  [ngClass]="{'fa-eye': isWorkFlownChainShow, 'fa-eye-slash': !isWorkFlownChainShow}"></i>
                           </a>
                           <div class="row m-3" *ngIf="selectedWorkFlowDetail != null && isWorkFlownChainShow">
                             <div class="card px-4 pt-4 mt-3 pb-3 ">
@@ -1633,13 +1633,13 @@
                                                   <fieldset class="mt-2">
                                                     <div class="row ps-2">
                                                       <div class="form-check col-auto">
-                                                        <input class="form-check-input" type="radio"[checked]="item.IsRequired" [ngModelOptions]="{standalone: true}">
+                                                        <input class="form-check-input" disabled type="radio"[checked]="item.IsRequired" [ngModelOptions]="{standalone: true}">
                                                         <label class="form-check-label">
                                                           Required
                                                         </label>
                                                       </div>
                                                       <div class="form-check col-auto">
-                                                        <input class="form-check-input" type="radio"[checked]="!item.IsRequired" [ngModelOptions]="{standalone: true}">
+                                                        <input class="form-check-input" disabled type="radio"[checked]="!item.IsRequired" [ngModelOptions]="{standalone: true}">
                                                         <label class="form-check-label" >
                                                           Optional
                                                         </label>
