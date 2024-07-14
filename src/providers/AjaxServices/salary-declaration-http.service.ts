@@ -36,6 +36,10 @@ export class SalaryDeclarationHttpService {
     return this.http.upload(this.GetUrl(Url), Param);
   }
 
+  download(Url: string, Param: any) {
+    return this.http.downloadExcel(this.GetUrl(Url), Param)
+  }
+
   GetImageBasePath(): string {
     return this.http.GetImageBasePath();
   }

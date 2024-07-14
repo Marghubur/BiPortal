@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 import { JwtService, ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
 import { SERVICE } from '../constants';
+import { map, Observable } from 'rxjs';
 
 @Injectable()
 export class AjaxService {
@@ -213,6 +214,14 @@ export class AjaxService {
           },
         });
     });
+  }
+
+  downloadExcel(Url: string, data: any): Observable<Blob> {
+    return this.http.post(Url, data, { responseType: 'blob' }).pipe(
+      map((res: Blob) => {
+        return res;
+      })
+    )
   }
 }
 

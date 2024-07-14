@@ -73,16 +73,16 @@
                     </div>
                   </div>
                   <div class="col-md-2 text-end d-flex align-items-center justify-content-end">
-                    <button (click)="openAttendacneModal('Approved')"
-                      class="btn btn-success me-1 btn-sm"><i class="fa-solid pe-1"
+                    <button (click)="openAttendacneModal('Approved')" *ngIf="attendanceRecord.PresentDayStatus != 9"
+                      class="btn btn-success me-1 btn-sm" [disabled]="attendanceDetail == null || attendanceDetail.length == 0"><i class="fa-solid pe-1"
                       [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-check': !isLoading}"></i> Approve
                     </button>
-                    <button (click)="openAttendacneModal('Rejected')"
-                      class="btn btn-outline-danger mx-2 btn-sm"><i class="fa-solid pe-1"
+                    <button (click)="openAttendacneModal('Rejected')" *ngIf="attendanceRecord.PresentDayStatus != 5"
+                      class="btn btn-outline-danger mx-2 btn-sm" [disabled]="attendanceDetail == null || attendanceDetail.length == 0"><i class="fa-solid pe-1"
                       [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-ban': !isLoading}"></i> Reject
                     </button>
                     <div class="form-check ms-2 me-3">
-                      <input class="form-check-input" type="checkbox" (click)="selectAllAttendance($event)">
+                      <input class="form-check-input" type="checkbox" [disabled]="attendanceDetail == null || attendanceDetail.length == 0" (click)="selectAllAttendance($event)">
                     </div>
                   </div>
                 </div>
@@ -99,7 +99,11 @@
                       </p>
                       <p class="ms-2 mb-0 fs-6">
                         <span class="">Attendance Date: </span>
-                        <span>{{item.AttendanceDate | date}}</span>
+                        <span>{{item.AttendanceDate | date}} | </span>
+                      </p>
+                      <p class="ms-2 mb-0 fs-6">
+                        <i class="fa-regular fw-bold fa-clock"></i>
+                        <span class="ps-2">{{item.TotalMinutes}} minutes</span>
                       </p>
                       <div class="ms-3 col-auto">
                         <span class="fw-bold pe-1">Manager:</span>
