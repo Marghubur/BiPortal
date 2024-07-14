@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import { ApplicationStorage } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, MonthName, Toast } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 declare var $: any;
 
@@ -15,7 +14,7 @@ declare var $: any;
 export class ManageActivityComponent implements OnInit {
   companyId: number = 0;
   isLoading: boolean = false;
-  active = 1;
+  active = 3;
   model: NgbDateStruct;
   attendanceStartDate: Date = null;
   attendanceEndDate: Date = null;
@@ -26,6 +25,10 @@ export class ManageActivityComponent implements OnInit {
 	timesheetFromDate: NgbDate | null;
 	timesheetToDate: NgbDate | null;
   employeeName: string = null;
+  months: Array<{Month: string, Value: number}> = [];
+  currentYear: number = new Date().getFullYear();
+  selectedMonth: number = 0;
+  selectedYear: number = this.currentYear;
 
   constructor(private http: CoreHttpService,
               private nav: iNavigation,
@@ -36,6 +39,12 @@ export class ManageActivityComponent implements OnInit {
               }
 
   ngOnInit(): void {
+    for (let i = 1; i <= 12; i++) {
+      this.months.push({
+        Month: MonthName(i),
+        Value: i
+      });
+    }
     let data = this.nav.getValue();
     this.maxDate = {year: new Date().getFullYear(), month: new Date().getMonth()+1, day: new Date().getDate()};
     if (data) {
@@ -161,6 +170,24 @@ export class ManageActivityComponent implements OnInit {
     }).catch(e => {
       this.isLoading = false;
     })
+  }
+
+  generateLeave() {
+    if (this.selectedMonth > 0 && this.selectedYear > 0) {
+      this.isLoading = true;
+      this.http.get(`AutoTrigger/RunEmployeeLeaveAccrual/${this.selectedMonth}/${this.selectedYear}`).then((res: ResponseModel) => {
+        if (res.ResponseBody) {
+          this.selectedMonth = 0;
+          this.selectedYear = this.currentYear;
+          Toast("Leave generated successfully");
+          this.isLoading = false;
+        }
+      }).catch(e => {
+        this.isLoading = false;
+      })
+    } else {
+      ErrorToast("Please select month and year");
+    }
   }
 
 }

@@ -130,6 +130,39 @@
           <li [ngbNavItem]="3">
             <button ngbNavLink (click)="activeTab()">Manage Leave</button>
             <ng-template ngbNavContent>
+              <div class="px-5">
+                <h3 class="fw-bold text-center text-dark mt-4">Important Notice: Please Read Before Proceeding</h3>
+                <div class="text-center my-4">
+                  <img src="assets/images/arrow.png" alt="" width="10%">
+                </div>
+                <p>By initiating this process, you will run the accrual for leave for the specified month. This action will automatically add leave to all employees' accounts based on the accrual formula defined in the leave settings. It is crucial to understand that once this operation is executed, it cannot be undone. Therefore, please ensure that all leave settings are correctly configured before proceeding.
+                  <br><br>If the accrual for the specified month has already been processed, running this operation again will have no effect on any user's leave accrual. This safeguard is in place to prevent any duplication or errors in leave allocation.
+                  <br><br>Please review all details carefully and confirm your understanding and agreement before starting the accrual process. Your acknowledgement of this message indicates that you have read, understood, and agree to proceed with the operation as described.
+                </p>
+                <div class="row align-items-end justify-content-start mt-5">
+                  <div class="col-md-3">
+                    <label class="form-label">Month</label>
+                    <select class="form-select" [(ngModel)]="selectedMonth">
+                      <option [value]="0" disabled>Select Month</option>
+                      <option [value]="item.Value" *ngFor="let item of months">{{item.Month}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Year</label>
+                    <select class="form-select" [(ngModel)]="selectedYear">
+                      <option [value]="0" disabled>Select Year</option>
+                      <option [value]="currentYear" >{{currentYear}}</option>
+                      <option [value]="currentYear-1" >{{currentYear - 1}}</option>
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <button class="btn btn-primary-c" [disabled]="isLoading" (click)="generateLeave()">
+                      <i [ngClass]="{'fa-solid fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-square-plus': !isLoading}"></i>
+                      <span class="ps-2">{{ isLoading ? 'Generating' : 'Generate Leave' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </ng-template>
           </li>
         </ul>
