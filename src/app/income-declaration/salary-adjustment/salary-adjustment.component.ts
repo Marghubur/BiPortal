@@ -15,9 +15,12 @@ export class SalaryAdjustmentComponent implements OnInit {
   isEmployeeSelected: boolean = false;
   isPageReady: boolean = false;
   salaryComponents: Array<any> = [];
+  salaryBreakupComponents: Array<any> = [];
   isLoading: boolean = false;
   selectedData: any = null;
   currentCompny:any = null;
+  netSalary: number = 0;
+  totalEarning: number = 0;
 
   constructor(private salaryHttp: SalaryDeclarationHttpService,
               private nav: iNavigation,
@@ -39,13 +42,47 @@ export class SalaryAdjustmentComponent implements OnInit {
     if (this.selectedData.EmployeeId > 0 && this.selectedData.Month > 0) {
       this.salaryHttp.get(`SalaryComponent/GetEmployeeSalaryDetail/${this.selectedData.Month}/${this.selectedData.EmployeeId}`).then((res: ResponseModel) => {
         if (res.ResponseBody) {
-          this.salaryComponents = res.ResponseBody;
+          this.salaryBreakupComponents = res.ResponseBody;
+          this.bindDate(res.ResponseBody);
           this.isPageReady = true;
         }
       }).catch(e => {
 
       })
     }
+  }
+
+  bindDate(res: Array<any>) {
+    this.salaryComponents = [];
+    this.salaryComponents.push({
+      Label: '',
+      Components: res.filter(x => x.ComponentId == SalaryComponentItems.CTC)
+    });
+    this.salaryComponents.push({
+      Label: 'Employer Deduction',
+      Components: res.filter(x => x.ComponentId == SalaryComponentItems.EEPF || x.ComponentId == SalaryComponentItems.EESI)
+    });
+    this.salaryComponents.push({
+      Label: 'Actual Gross',
+      Components: res.filter(x => x.ComponentId == SalaryComponentItems.Gross)
+    });
+    this.salaryComponents.push({
+      Label: 'Employee Earnings',
+      Components: res.filter(x => x.ComponentId != SalaryComponentItems.Gross && x.ComponentId != SalaryComponentItems.CTC && x.ComponentId != SalaryComponentItems.PTAX && x.ComponentId != SalaryComponentItems.EPF && x.ComponentId != SalaryComponentItems.ESI && x.ComponentId != SalaryComponentItems.EEPF && x.ComponentId != SalaryComponentItems.EESI)
+    });
+    this.salaryComponents.push({
+      Label: 'Deduction',
+      Components: res.filter(x => x.ComponentId == SalaryComponentItems.PTAX || x.ComponentId == SalaryComponentItems.EPF || x.ComponentId == SalaryComponentItems.ESI)
+    });
+
+    this.calculateEarningAndNetSalary();
+  }
+
+  calculateEarningAndNetSalary() {
+    this.totalEarning = this.salaryComponents.find(x => x.Label == "Employee Earnings").Components.map(x => x.FinalAmount).reduce((acc, next) => {return acc + next;}, 0);
+    let totalDeduction = this.salaryComponents.find(x => x.Label == "Deduction").Components.map(x => x.FinalAmount).reduce((acc, next) => {return acc + next;}, 0);
+
+    this.netSalary = this.totalEarning - totalDeduction;
   }
 
   selectIncludepayslip(e: any, item: any) {
@@ -57,28 +94,33 @@ export class SalaryAdjustmentComponent implements OnInit {
 
   changeSalaryAmount(item: any, e: any) {
     let amount = Number(e.target.value);
-    if (item && amount) {
+    if (item) {
       item.FinalAmount = amount;
+      item.Formula = amount.toString();
       if (item.ComponentId == SalaryComponentItems.EESI || item.ComponentId == SalaryComponentItems.EEPF) {
-        let ctc = this.salaryComponents.find(x => x.ComponentId == SalaryComponentItems.CTC).FinalAmount;
-        let grossAmount = this.salaryComponents.find(x => x.ComponentId == SalaryComponentItems.Gross);
-        let deductionComponent = this.salaryComponents.filter(x => x.ComponentId == SalaryComponentItems.EESI || x.ComponentId == SalaryComponentItems.EEPF);
-        let deductionAmount = deductionComponent.map(x => x.FinalAmount).reduce((acc, pre) => {return acc + pre;}, 0);
-        grossAmount.FinalAmount = ctc - deductionAmount;
+        let ctc = this.salaryBreakupComponents.find(x => x.ComponentId == SalaryComponentItems.CTC).FinalAmount;
+        let grossComponent = this.salaryComponents.find(x => x.Label == 'Actual Gross').Components[0];
+        let deductionAmount = this.salaryComponents.find(x => x.Label == "Employer Deduction").Components.map(x => x.FinalAmount).reduce((acc, next) => {return acc + next;}, 0)
+        grossComponent.FinalAmount = ctc - deductionAmount;
         this.calculateSpecialAllowance();
-      } else if (item.ComponentId != SalaryComponentItems.ESI && item.ComponentId != SalaryComponentItems.EPF) {
+      } else if (item.ComponentId != SalaryComponentItems.ESI || item.ComponentId != SalaryComponentItems.EPF) {
         this.calculateSpecialAllowance();
       }
+
+      this.calculateEarningAndNetSalary();
     }
   }
 
   calculateSpecialAllowance() {
-    let autoComponent = this.salaryComponents.find(x => x.Formula == SalaryComponentItems.Auto);
+    let autoComponent = this.salaryComponents.find(x => x.Label == 'Employee Earnings').Components.find(x => x.Formula == SalaryComponentItems.Auto);
     if (autoComponent) {
-      let grossComponent = this.salaryComponents.find(x => x.ComponentId == SalaryComponentItems.Gross).FinalAmount;
-      let components = this.salaryComponents.filter(x => x.ComponentId != SalaryComponentItems.Gross && x.ComponentId != SalaryComponentItems.CTC && x.ComponentId != SalaryComponentItems.ESI && x.ComponentId != SalaryComponentItems.EESI && x.ComponentId != SalaryComponentItems.EEPF && x.ComponentId != SalaryComponentItems.EPF && x.Formula != SalaryComponentItems.Auto && x.ComponentId != SalaryComponentItems.PTAX);
+      let grossComponent = this.salaryComponents.find(x => x.Label == 'Actual Gross').Components[0].FinalAmount;
+      let components = this.salaryComponents.find(x => x.Label == "Employee Earnings").Components.filter(x => x.Formula != '[AUTO]');
+
       let compoentsAmount = components.map(x => x.FinalAmount).reduce((acc, next) => { return acc + next;}, 0);
       autoComponent.FinalAmount = (grossComponent - compoentsAmount);
+
+      this.totalEarning = this.salaryComponents.find(x => x.Label == "Employee Earnings").Components.map(x => x.FinalAmount).reduce((acc, next) => {return acc + next;}, 0);
     } else {
       ErrorToast("Auto component not found");
     }
@@ -86,7 +128,7 @@ export class SalaryAdjustmentComponent implements OnInit {
 
   saveSalaryDetail() {
     this.isLoading = true;
-    this.salaryHttp.put(`SalaryComponent/UpdateEmployeeSalaryDetail/${4}/${35}`, this.salaryComponents).then((res: ResponseModel) => {
+    this.salaryHttp.put(`SalaryComponent/UpdateEmployeeSalaryDetail/${this.selectedData.Month}/${this.selectedData.EmployeeId}`, this.salaryBreakupComponents).then((res: ResponseModel) => {
       if (res.ResponseBody) {
         Toast("Salary detail updated successfully");
         this.isLoading = false;
@@ -96,17 +138,20 @@ export class SalaryAdjustmentComponent implements OnInit {
     })
   }
 
-  editComponent(e: any, i: number, item: any) {
-    e.currentTarget.classList.add("d-none");
-    document.querySelectorAll('input[data-name="FinalAmount"]')[i].removeAttribute('readonly');
-    document.querySelectorAll('input[data-name="IncludeInPayslip"]')[i].removeAttribute('disabled');
-    if (item.ComponentId != SalaryComponentItems.CTC && item.ComponentId != SalaryComponentItems.Gross && item.ComponentId != SalaryComponentItems.ESI && item.ComponentId != SalaryComponentItems.EESI && item.ComponentId != SalaryComponentItems.EPF && item.ComponentId != SalaryComponentItems.EEPF)
-      document.querySelectorAll('input[data-name="AutoComponent"]')[i].removeAttribute("disabled");
+  editComponent(e: any) {
+    e.currentTarget.parentElement.classList.add('d-none');
+    document.querySelectorAll('input[data-name="FinalAmount"]').forEach(x => {
+      x.removeAttribute('readonly');
+      x.classList.remove('border-0');
+    });
+    document.querySelectorAll('input[data-name="IncludeInPayslip"]').forEach(x => x.removeAttribute('disabled'));
+    document.querySelector('div[data-name="savebutton"]').classList.remove('d-none');
+    document.querySelectorAll('input[data-name="AutoComponent"]').forEach(x => x.removeAttribute("disabled"));
   }
 
   changeAutoComponent(e: any, item: any) {
     if (e.target.checked) {
-      let autoComponent = this.salaryComponents.find(x => x.Formula == SalaryComponentItems.Auto);
+      let autoComponent = this.salaryComponents.find(x => x.Label == 'Employee Earnings').Components.find(x => x.Formula == SalaryComponentItems.Auto);
       document.querySelectorAll('input[data-name="AutoComponent"]').forEach(x => {
         x.removeAttribute("checked");
       })

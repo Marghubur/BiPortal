@@ -1,0 +1,35 @@
+.flip-card {
+  cursor: pointer;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  // left: 50%;
+  // top: 50%;
+  // transform: translate(-50%, -50%);
+}
+
+.flip-card.flipped {
+  transform: rotateY( 180deg );
+}
+
+.card-front, .card-back {
+  backface-visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+.c-height {
+  min-height: 20vh;
+}
+
+.custom-card-width {
+  width: 80px !important;
+}
+
+.bar-box {
+  width: 1.2rem;
+}

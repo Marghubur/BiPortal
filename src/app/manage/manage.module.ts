@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgChartsModule } from 'ng2-charts';
 import { UtilModule } from '../util/util.module';
+import { DecisionMakingComponent } from './decision-making/decision-making.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { UtilModule } from '../util/util.module';
     TimesheetComponent,
     ManagetimesheetComponent,
     HolidayComponent,
-    ApplyLeaveComponent
+    ApplyLeaveComponent,
+    DecisionMakingComponent
   ],
   imports: [
     CommonModule,

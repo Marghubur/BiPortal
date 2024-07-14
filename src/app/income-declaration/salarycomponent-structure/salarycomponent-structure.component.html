@@ -468,11 +468,16 @@
             </div>
           </div>
           <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
-            onkeypress="return (event.charCode != 8 && event.charCode == 0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.key == '%' || event.key == '*' ||event.charCode == 43 || event.charCode == 45 ||event.charCode == 60 ||event.charCode == 61 ||event.charCode == 62)"
+            onkeypress="return (event.charCode != 8 && event.charCode == 0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.key == '%' || event.key == '*' ||event.charCode == 43 || event.charCode == 45 ||event.charCode == 60 ||event.charCode == 61 ||event.charCode == 62 ||event.key == '.')"
             (keyup)="addFormula()"></div>
         </div>
-        <div class="border-0 mt-2 form-control">
-          <h6 class="form-label py-2 fw-bold">{{ componentFields.Formula }}</h6>
+        <div class="border-0 mt-2 form-control d-flex align-items-center justify-content-between">
+          <h6 class="form-label py-2 fw-bold">
+            {{ componentFields.Formula }}
+            <i class="fa-solid fa-check text-success ps-1" *ngIf="isFormulaValidate && isFormulaValidate != null"></i>
+            <i class="fa-solid fa-xmark ps-1 text-danger" *ngIf="!isFormulaValidate && isFormulaValidate != null"></i>
+          </h6>
+          <button (click)="validateFormula()" [disabled]="componentFields.Formula == null || componentFields.Formula == ''" class="btn btn-primary-c">Validate Formula</button>
         </div>
         <div class="col-md-12 mt-3">
           <input type="checkbox" class="form-check-input me-1" name="include-in-payslip" />

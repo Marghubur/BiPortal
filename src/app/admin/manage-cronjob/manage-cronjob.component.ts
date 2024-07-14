@@ -4,7 +4,6 @@ import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { ResponseModel } from 'src/auth/jwtService';
 import { JobsHttpService } from 'src/providers/AjaxServices/jobs-http.service';
 import { ErrorToast, ToLocateDate, Toast } from 'src/providers/common-service/common.service';
-import { SERVICE } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 
 @Component({
@@ -22,9 +21,9 @@ export class ManageCronjobComponent implements OnInit {
   isSubmitted: boolean = false;
   isPageReady: boolean = false;
   jobDetail: Jobs = {
-    GroupId : "",
+    GroupId : "dailyJobGroup",
     IsActiveJob : false,
-    JobDayOfMonth : 0,
+    JobDayOfMonth : 1,
     JobDayOfWeek : 0,
     JobEndDate : null,
     JobId : 0,
@@ -35,7 +34,7 @@ export class ManageCronjobComponent implements OnInit {
     JobTypeDescription : "",
     KafkaServiceNameId : 0,
     Template : "",
-    TopicName : "",
+    TopicName : "daily-jobs-manager",
     JobTypeName: ""
   };
   cronJobId: number = 0;
@@ -51,15 +50,17 @@ export class ManageCronjobComponent implements OnInit {
     this.initform();
     if (data) {
       this.cronJobId = data.JobId;
-      this.initData();
     }
+    this.initData();
   }
 
   loadData() {
     this.isPageReady = false;
     this.http.get(`manager/getJobsById/${this.cronJobId}`).then((res: ResponseModel) => {
       if (res.ResponseBody) {
-        this.jobDetail = res.ResponseBody["Job"];
+        if (res.ResponseBody["Job"])
+          this.jobDetail = res.ResponseBody["Job"];
+
         this.serviceTypes = res.ResponseBody["ServiceType"];
         let date = ToLocateDate(this.jobDetail.JobStartDate);
         this.jobstartdateModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
@@ -91,15 +92,15 @@ export class ManageCronjobComponent implements OnInit {
       KafkaServiceNameId: new FormControl(this.jobDetail.KafkaServiceNameId, [Validators.required]),
       JobTypeDescription: new FormControl(this.jobDetail.JobTypeDescription, [Validators.required]),
       IsActiveJob: new FormControl(this.jobDetail.IsActiveJob),
-      JobStartDate: new FormControl(this.jobDetail.JobStartDate, [Validators.required]),
+      JobStartDate: new FormControl(this.jobDetail.JobStartDate),
       JobEndDate: new FormControl(this.jobDetail.JobEndDate),
       JobTime: new FormControl(this.jobDetail.JobTime),
       JobDayOfWeek: new FormControl(this.jobDetail.JobDayOfWeek),
       JobDayOfMonth: new FormControl(this.jobDetail.JobDayOfMonth),
       JobMonthOfYear: new FormControl(this.jobDetail.JobMonthOfYear),
       JobOccurrenceType: new FormControl(this.jobDetail.JobOccurrenceType),
-      TopicName: new FormControl(this.jobDetail.TopicName, [Validators.required]),
-      GroupId: new FormControl(this.jobDetail.GroupId, [Validators.required]),
+      TopicName: new FormControl(this.jobDetail.TopicName),
+      GroupId: new FormControl(this.jobDetail.GroupId),
       Template: new FormControl(this.jobDetail.Template),
       JobTypeName: new FormControl("")
     })
@@ -129,6 +130,9 @@ export class ManageCronjobComponent implements OnInit {
     }
 
     let value = this.jobsForm.value;
+    if (value.JobStartDate == null)
+      value.JobStartDate = new Date();
+
     value.JobTypeName = this.serviceTypes.find(x => x.ServiceTypeId == value.KafkaServiceNameId).ServiceName;
     this.http.post("manager/manageJobs", value).then((res:ResponseModel) => {
       if (res.ResponseBody) {

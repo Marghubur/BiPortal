@@ -4,6 +4,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { FomulaConverterService } from 'src/providers/common-service/fomula-converter.service';
 declare var $: any;
 
 @Component({
@@ -37,10 +38,13 @@ export class SalarycomponentStructureComponent implements OnInit {
   activeComponent: Array<any> = [];
   groupAllComponents: Array<any> = [];
   submitted: boolean = false;
+  isFormulaValidate: boolean = null;
+  operators = ['+', '-', '*', '/', '%'];
 
   constructor(private fb: FormBuilder,
               private http: CoreHttpService,
-              private salaryHttp: SalaryDeclarationHttpService) { }
+              private salaryHttp: SalaryDeclarationHttpService,
+              private fomulaConverter: FomulaConverterService) { }
 
   ngOnInit(): void {
     this.ActivatedPage = 1;
@@ -194,6 +198,24 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   addFormula() {
     let elem = document.querySelector('[name="addedFormula"]') as HTMLInputElement;
+    if (elem.innerText.length > 1) {
+      for (let i = 0; i < elem.innerText.length; i++) {
+        if (this.operators.includes(elem.innerText[i])) {
+          if (this.operators.includes(elem.innerText[i-1])) {
+            elem.innerText = this.componentFields.Formula
+            const element = document.getElementById('addedFormula');
+            element.focus();
+            const range = document.createRange();
+            const sel = window.getSelection();
+            range.selectNodeContents(element);
+            range.collapse(false);
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+        }
+
+      }
+    }
     this.componentFields.Formula = elem.innerText;
   }
 
@@ -207,12 +229,28 @@ export class SalarycomponentStructureComponent implements OnInit {
     }
 
     if(this.componentFields.Formula != "([AUTO])") {
-      let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
-      if (isNaN(formula)) {
+      // let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
+      if (this.componentFields.Formula.includes('[CTC]'))
+        this.componentFields.Formula = this.componentFields.Formula.replace('[CTC]', 'CTC');
+      else if(this.componentFields.Formula.includes('[BASIC]'))
+        this.componentFields.Formula = this.componentFields.Formula.replace('[BASIC]', 'BASIC');
+
+      if (this.operators.includes(this.componentFields.Formula[this.componentFields.Formula.length - 1])) {
+        this.componentFields.Formula = this.componentFields.Formula.slice(0, -1);
+      }
+
+      let isValid = this.fomulaConverter.validateFormula(this.componentFields.Formula);
+      if (!isValid) {
         ErrorToast("Invalid formula entered");
         this.isLoading = false;
         return;
       }
+
+      // if (isNaN(formula)) {
+      //   ErrorToast("Invalid formula entered");
+      //   this.isLoading = false;
+      //   return;
+      // }
     } else {
       this.componentFields.Formula = this.componentFields.Formula.replace(/\(/g, '').replace(/\)/g, '');
     }
@@ -220,16 +258,16 @@ export class SalarycomponentStructureComponent implements OnInit {
     let isincludeInPayslip = (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked;
     value.IncludeInPayslip = isincludeInPayslip;
     if (this.componentFields.ComponentId) {
-        this.salaryHttp.put(`SalaryComponent/UpdateComponentFormula/
-            ${this.componentFields.ComponentId}`, value).then((response:ResponseModel) => {
-          if (response.ResponseBody) {
-            this.isLoading = false;
-            Toast('Updated Successfully')
-          }
-          $('#updateCalculationModal').modal('hide');
-        }).catch(e => {
+      this.salaryHttp.put(`SalaryComponent/UpdateComponentFormula/
+          ${this.componentFields.ComponentId}`, value).then((response:ResponseModel) => {
+        if (response.ResponseBody) {
           this.isLoading = false;
-        })
+          Toast('Updated Successfully')
+        }
+        $('#updateCalculationModal').modal('hide');
+      }).catch(e => {
+        this.isLoading = false;
+      })
     } else {
       WarningToast("Group not selected.");
     }
@@ -474,8 +512,6 @@ export class SalarycomponentStructureComponent implements OnInit {
     this.groupComponents = this.groupAllComponents;
     this.isReady = true;
   }
-
-
 
 
   loadOnChange() {
@@ -725,6 +761,22 @@ export class SalarycomponentStructureComponent implements OnInit {
         this.isLoading = false;
       })
     }
+  }
+
+  validateFormula() {
+    let formula = this.componentFields.Formula;
+    if (formula.includes('[CTC]'))
+      formula = formula.replace('[CTC]', 'CTC');
+    else if(formula.includes('[BASIC]'))
+      formula = formula.replace('[BASIC]', 'BASIC');
+    else if (formula.includes('[AUTO]')) {
+      this.isFormulaValidate = true;
+      return;
+    }
+    if (this.operators.includes(this.componentFields.Formula[this.componentFields.Formula.length - 1])) {
+      this.componentFields.Formula = this.componentFields.Formula.slice(0, -1);
+    }
+    this.isFormulaValidate = this.fomulaConverter.validateFormula(formula)
   }
 }
 

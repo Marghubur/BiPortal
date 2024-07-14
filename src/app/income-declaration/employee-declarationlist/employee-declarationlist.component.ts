@@ -1,7 +1,7 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { ErrorToast, MonthName, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { AdminDeclaration, SalaryAdjustment } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
@@ -248,24 +248,18 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   downloadDeclaration() {
     this.isLoading = true;
     let empId = this.employeeSalaries.map(x => x.EmployeeId);
-    this.salaryHttp.post(`Declaration/ExportEmployeeDeclaration/${this.selectedPayrollCalendar.Month+1}`, empId).then(res => {
-      if (res.ResponseBody) {
-        let fileLocation = `${this.basePath}${res.ResponseBody}`;
-        this.downlodexcelFilePath = fileLocation;
-        $('#downloadAllDeclarationExcel').click();
-        let link = document.createElement('a');
-        link.setAttribute('target', '_blank');
-        link.setAttribute('type', 'hidden');
-        link.href = fileLocation;
-        link.download = `${this.downlodexcelFilePath}`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        Toast("Declaration exported successfully");
+    this.salaryHttp.download(`Payroll/ExportPayrollRegister/${this.selectedPayrollCalendar.Month+1}`, empId).subscribe(res => {
+      if (res) {
+        const url = window.URL.createObjectURL(res);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `payslip_register_${MonthName(this.selectedPayrollCalendar.Month+1)}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        Toast("Payroll register exported successfully");
         this.isLoading = false;
       }
-    }).catch(e => {
-      ErrorToast(e.HttpStatusMessage);
+    }, error => {
       this.isLoading = false;
     })
   }

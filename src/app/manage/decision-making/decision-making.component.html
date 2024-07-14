@@ -1,0 +1,353 @@
+<div class="col-12 full-v main-container">
+  <div class="content-header">
+    <div class="col-8">
+      <app-breadcrums [title]="'Decision Making'"></app-breadcrums>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary-c" (click)="questionPopup()">Add Question</button>
+      <button class="btn btn-primary-c ms-2" (click)="addUserPopup()" [disabled]="allUsers.length == 50">Add User</button>
+    </div>
+  </div>
+
+  <div class="x_panel">
+    <div class="x_panel_body c-height">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-md-4">
+          <div class="row justify-content-end ">
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box50">
+                A
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box49">
+                B
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box48">
+                C
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box47">
+                D
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box46">
+                E
+              </div>
+            </div>
+            <div class="col-md-3 d-flex flex-column justify-content-end">
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box32">
+                F
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box31">
+                G
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box30">
+                H
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box29">
+                I
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box28">
+                J
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box33">
+                K
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box10">
+                L
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box9">
+                M
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box8">
+                N
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box27">
+                O
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box34">
+              AO
+            </div>
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box35">
+              AP
+            </div>
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box36">
+              AQ
+            </div>
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box37">
+              AR
+            </div>
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box38">
+              AS
+            </div>
+          </div>
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box11">
+              AT
+            </div>
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box12">
+              AU
+            </div>
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box13">
+              AV
+            </div>
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box14">
+              AW
+            </div>
+            <div class="custom-card-width mb-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box15">
+              AX
+            </div>
+          </div>
+          <div class="card text-center py-5 fs-4 col-md-12 shadow flip-card " [class.flipped]="isFlipped" (click)="viewAnswer()">
+            <div class="card-front" *ngIf="!isFlipped">
+              Revel Answer
+            </div>
+            <div class="card-back" *ngIf="isFlipped">
+              <ng-container *ngIf="!selectedQuestion.IsPointType">
+                {{(dichotomousAnswer.Yes / answers.length) * 100 | number: '1.2-2'}} %
+              </ng-container>
+            </div>
+          </div>
+          <div class="row">
+            <div class="d-flex align-items-center justify-content-end">
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box7">
+                AE
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box6">
+                AF
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box5">
+                AG
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box4">
+                AH
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box3">
+                AI
+              </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-end">
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box26">
+                AJ
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box25">
+                AK
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box24">
+                AL
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box23">
+                AM
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 mx-auto text-center" id="box22">
+                AN
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box39">
+                P
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box16">
+                Q
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box1">
+                R
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box2">
+                S
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box21">
+                T
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box40">
+                U
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box17">
+                V
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box18">
+                W
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box19">
+                X
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box20">
+                Y
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box41">
+                Z
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box42">
+                AA
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box43">
+                AB
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box44">
+                AC
+              </div>
+              <div class="custom-card-width mt-3 px-2 text-truncate card shadow py-5 opacity-0 text-center" id="box45">
+                AD
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="x_panel_body mt-4" *ngIf="selectedQuestion.Question != null && selectedQuestion.Question != ''">
+          <span class="fw-bold">Question: {{selectedQuestion.Question}} ?</span>
+          <div class="row align-items-center justify-content-between mt-3">
+            <div class="col-md-9">
+              <ng-container *ngIf="selectedQuestion.IsPointType">
+                <ng-container *ngFor="let item of pointsRange">
+                  <button (click)="changeAnswer($event)" value="{{item}}" class="btn btn-outline-success me-2" [ngClass]="{'btn-success text-white': item == selectAnswer}" *ngIf="item <= selectedQuestion.MaxPoint">{{item}}</button>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngIf="!selectedQuestion.IsPointType">
+                <div class="d-flex ">
+                  <div class="form-check">
+                    <input class="form-check-input" value="true" (click)="changeAnswer($event)" type="radio" name="selectDicotomusAnswer" id="flexRadioDefault1" checked>
+                    <label class="form-check-label" for="flexRadioDefault1">
+                      Yes
+                    </label>
+                  </div>
+                  <div class="form-check ms-3">
+                    <input class="form-check-input" value="false" (click)="changeAnswer($event)" type="radio" name="selectDicotomusAnswer" id="flexRadioDefault2">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                      No
+                    </label>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="col-auto" *ngIf="!isAnswerSubmitte">
+              <button class="btn btn-success" (click)="saveAnswer()">
+                <i class="fa-regular fa-floppy-disk"></i>
+                <span class="ps-1">Save</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6" *ngIf="isFlipped">
+        <div class="x_panel_body mt-4">
+          <div class="row align-items-baseline">
+            <ng-container *ngIf="!this.selectedQuestion.IsPointType">
+              <div class="col-auto">
+                <div [ngStyle]="{height: dichotomousAnswer.YesBar + 'rem'}" class="bar-box mb-2 bg-success"></div>
+                <span>Yes</span>
+              </div>
+              <div class="col-auto">
+                <div [ngStyle]="{height: dichotomousAnswer.NoBar + 'rem'}" class="bar-box mb-2 bg-danger"></div>
+                <span>No</span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="this.selectedQuestion.IsPointType">
+              <div class="col-auto" *ngFor="let item of pointTypeAnwer">
+                <div [ngStyle]="{height: item.GraphHeight + 'rem'}" class="bar-box mb-2 bg-success"></div>
+                <span>{{item.Key}}</span>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add User -->
+<div class="modal fade" id="addDecisionMakerUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addDecisionMakerUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-3">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="addDecisionMakerUserModalLabel">User Detail</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+          <label class="form-label">Name <span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="user.Name" placeholder="Enter your name" class="form-control">
+        </div>
+        <div class="col-md-12 mt-3">
+          <label class="form-label">Email <span class="text-danger">*</span></label>
+          <input type="email" [(ngModel)]="user.Email" (keyup.enter)="addUser()" placeholder="Enter your email id" class="form-control">
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-success" [disabled]="isLoading" (click)="addUser()">
+          <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-plus': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Wait' : 'Add User' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Question -->
+<div class="modal fade" id="generateQuestionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="generateQuestionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content px-3">
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="generateQuestionModalLabel">Question</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+          <label class="form-label">Company Name <span class="text-danger">*</span></label>
+          <input type="text" [(ngModel)]="question.CompanyName" placeholder="Enter your name" class="form-control">
+        </div>
+        <div class="col-md-12 mt-3">
+          <label class="form-label">User Name <span class="text-danger">*</span></label>
+          <input type="email" [(ngModel)]="question.UserName" placeholder="Enter your email id" class="form-control">
+        </div>
+        <div class="col-md-12 mt-3">
+          <label class="form-label">User Name <span class="text-danger">*</span></label>
+          <textarea class="form-control" [(ngModel)]="question.Question" placeholder="Enter your question"></textarea>
+        </div>
+        <div class="col-md-12 mt-3">
+          <label class="form-label">Response Type <span class="text-danger">*</span></label>
+          <select class="form-select" [(ngModel)]="question.IsPointType">
+            <option [value]="false">Dichotomous Type</option>
+            <option [value]="true">Point-Based Type</option>
+          </select>
+        </div>
+        <div class="col-md-12 mt-3 row" [hidden]="!question.IsPointType">
+          <div class="col-md-6">
+            <label class="form-label">Min Point <span class="text-danger">*</span></label>
+            <select class="form-select" [(ngModel)]="question.MinPoint">
+              <option [value]="item" *ngFor="let item of pointsRange">{{item}}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Min Point <span class="text-danger">*</span></label>
+            <select class="form-select" [(ngModel)]="question.MaxPoint">
+              <option [value]="item" *ngFor="let item of pointsRange">{{item}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-success" [disabled]="isLoading" (click)="addQuestion()">
+          <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-plus': !isLoading}"></i>
+          <span class="ps-2">{{ isLoading ? 'Wait' : 'Generate Question' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

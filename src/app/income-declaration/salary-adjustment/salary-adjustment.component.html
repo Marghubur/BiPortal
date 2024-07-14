@@ -18,36 +18,42 @@
           <span class="fw-bold fs-4">Salary Details</span>
           </div>
           <div class="card mt-3 shadow p-3 me-2 ms-1">
-          <div class="row row-cols-7 justify-content-between">
-            <div class="col">
-              <label class="form-label fw-bold">Company Name</label>
-              <p class="mb-0 text-primary-dc fw-bold">{{currentCompny.CompanyName}}</p>
-            </div>
-            <div class="col">
-              <label class="form-label fw-bold">Payroll Provider</label>
-              <p class="mb-0 text-primary-dc fw-bold">Emstum</p>
-            </div>
-            <div class="col">
-              <label class="form-label fw-bold">Employee Name</label>
-              <p class="mb-0 text-primary-dc fw-bold">{{selectedData.EmployeeName}}</p>
-            </div>
-            <div class="col">
-              <label class="form-label fw-bold">Pay Frequency</label>
-              <p class="mb-0 text-primary-dc fw-bold">Monthly</p>
-            </div>
-            <div class="col">
-              <label class="form-label fw-bold">Pay Month</label>
-              <p class="mb-0 text-primary-dc fw-bold">{{selectedData.MonthName}}</p>
-            </div>
-            <div class="col">
-              <label class="form-label fw-bold">Pay Year</label>
-              <p class="mb-0 text-primary-dc fw-bold">{{selectedData.Year}}</p>
-            </div>
-            <div class="col">
-              <label class="form-label fw-bold">Currency</label>
-              <p class="mb-0 text-primary-dc fw-bold">Indian Rupee</p>
+            <div class="row row-cols-7 justify-content-between">
+              <div class="col">
+                <label class="form-label fw-bold">Company Name</label>
+                <p class="mb-0 text-primary-dc fw-bold">{{currentCompny.CompanyName}}</p>
+              </div>
+              <div class="col">
+                <label class="form-label fw-bold">Payroll Provider</label>
+                <p class="mb-0 text-primary-dc fw-bold">Emstum</p>
+              </div>
+              <div class="col">
+                <label class="form-label fw-bold">Employee Name</label>
+                <p class="mb-0 text-primary-dc fw-bold">{{selectedData.EmployeeName}}</p>
+              </div>
+              <div class="col">
+                <label class="form-label fw-bold">Pay Frequency</label>
+                <p class="mb-0 text-primary-dc fw-bold">Monthly</p>
+              </div>
+              <div class="col">
+                <label class="form-label fw-bold">Pay Month</label>
+                <p class="mb-0 text-primary-dc fw-bold">{{selectedData.MonthName}}</p>
+              </div>
+              <div class="col">
+                <label class="form-label fw-bold">Pay Year</label>
+                <p class="mb-0 text-primary-dc fw-bold">{{selectedData.Year}}</p>
+              </div>
+              <div class="col">
+                <label class="form-label fw-bold">Currency</label>
+                <p class="mb-0 text-primary-dc fw-bold">Indian Rupee</p>
+              </div>
             </div>
           </div>
+          <div class="text-end mt-3 me-2">
+            <button class="btn btn-primary-c" (click)="editComponent($event)">
+              <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-pencil': !isLoading}"></i>
+              <span class="ps-1">{{isLoading ? 'Wait' : 'Edit'}}</span>
+            </button>
           </div>
           <div class="t-table t-list col-md-12 mb-3 mt-4">
             <div class="t-head bg-light fw-bold ms-1">
@@ -58,42 +64,79 @@
                 <div class="th fe-1">Auto Component</div>
                 <div class="th fe-1">Include in Payslip</div>
                 <div class="th fe-1">Final Amount</div>
-                <div class="th text-center fe-index">Actions</div>
               </div>
             </div>
             <div class="t-body">
-              <div class="tr py-2 align-items-center" *ngFor="let item of salaryComponents; let i = index;" [ngClass]="{'disable-field': (item.ComponentId == 'Gross' || item.ComponentId == 'CTC' || item.ComponentId == 'PTAX' || item.Formula == '[AUTO]')}">
-                <div class="td ps-3 fe-1">
-                  {{ item.ComponentId }}
+              <ng-container *ngFor="let items of salaryComponents; let i = index;">
+                <div class=" ps-2 fw-bold text-dark pt-3 align-items-center" *ngIf="items.Label != ''">
+                  {{items.Label}}
                 </div>
-                <div class="td ps-1 text-truncate fe-2">
-                  {{ item.ComponentName }}
-                </div>
-                <div class="td text-truncate fe-1">
-                  {{(item.Formula == null || item.Formula == "") ? '--' : item.Formula}}
-                </div>
-                <div class="td text-truncate fe-1 ps-2">
-                  <input type="checkbox" data-name="AutoComponent" (click)="changeAutoComponent($event, item)" class="form-check" [checked]="item.Formula == '[AUTO]'" disabled>
-                </div>
-                <div class="td fe-1">
-                  <div class="form-check form-switch">
-                    <input class="form-check-input form-check-input-c pe-visible" disabled data-name="IncludeInPayslip" (click)="selectIncludepayslip($event, item)" type="checkbox" role="switch" id="flexSwitchCheckChecked" [checked]="item.IsIncludeInPayslip">
-                    <label class="form-check-label" for="flexSwitchCheckChecked">{{ item.IsIncludeInPayslip ? "Yes" : "No" }}</label>
+                <div class="tr py-2 align-items-center" *ngFor="let item of items.Components" [ngClass]="{'disable-field': (item.ComponentId == 'Gross' || item.ComponentId == 'CTC' || item.ComponentId == 'PTAX' || item.Formula == '[AUTO]')}">
+                  <div class="td ps-3 fe-1">
+                    {{ item.ComponentId }}
+                  </div>
+                  <div class="td ps-1 text-truncate fe-2">
+                    {{ item.ComponentName }}
+                  </div>
+                  <div class="td text-truncate fe-1">
+                    {{(item.Formula == null || item.Formula == "") ? '--' : item.Formula}}
+                  </div>
+                  <div class="td text-truncate fe-1 ps-2">
+                    <ng-container *ngIf="item.ComponentId != 'CTC' && item.ComponentId != 'Gross' && item.ComponentId != 'PTAX' && item.ComponentId != 'EPF' && item.ComponentId != 'EPER-PF' && item.ComponentId != 'ESI' && item.ComponentId != 'EPER-SI'">
+                      <input type="checkbox" data-name="AutoComponent" (click)="changeAutoComponent($event, item)" class="form-check" [checked]="item.Formula == '[AUTO]'" disabled>
+                    </ng-container>
+                    <ng-container *ngIf="item.ComponentId == 'CTC' || item.ComponentId == 'Gross' || item.ComponentId == 'PTAX' || item.ComponentId == 'EPF' || item.ComponentId == 'EPER-PF' || item.ComponentId == 'ESI' || item.ComponentId == 'EPER-SI'">
+                      --
+                    </ng-container>
+                  </div>
+                  <div class="td fe-1">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input form-check-input-c pe-visible" disabled data-name="IncludeInPayslip" (click)="selectIncludepayslip($event, item)" type="checkbox" role="switch" id="flexSwitchCheckChecked" [checked]="item.IsIncludeInPayslip">
+                      <label class="form-check-label" for="flexSwitchCheckChecked">{{ item.IsIncludeInPayslip ? "Yes" : "No" }}</label>
+                    </div>
+                  </div>
+                  <div class="td ps-1 fe-1">
+                    <ng-container *ngIf="item.ComponentId != 'CTC' && item.ComponentId != 'Gross' && item.ComponentId != 'PTAX' && item.Formula != '[AUTO]'">
+                      <input type="text" class="form-control w-75 border-0" [value]="item.FinalAmount" readonly data-name="FinalAmount"
+                      (keyup)="changeSalaryAmount(item, $event)">
+                    </ng-container>
+                    <ng-container *ngIf="item.ComponentId == 'CTC' || item.ComponentId == 'Gross' || item.ComponentId == 'PTAX' || item.Formula == '[AUTO]'">
+                      {{item.FinalAmount}}
+                    </ng-container>
                   </div>
                 </div>
-                <div class="td ps-1 fe-1">
-                  <input type="text" class="form-control w-75" [value]="item.FinalAmount" readonly data-name="FinalAmount"
-                  (keyup)="changeSalaryAmount(item, $event)">
+                <div class="tr py-2 align-items-center disable-field" *ngIf="items.Label == 'Employee Earnings'">
+                  <div class="td fw-bold text-dark ps-3 fe-1">
+                    Total Earning
+                  </div>
+                  <div class="td ps-1 fe-2"></div>
+                  <div class="td fe-1"></div>
+                  <div class="td fe-1 ps-2"></div>
+                  <div class="td fe-1">
+                    <input type="text" class="form-control border-0 w-75" readonly >
+                  </div>
+                  <div class="td fw-bold text-dark ps-1 fe-1">
+                    <i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{totalEarning | number: '1.2-2'}}
+                  </div>
                 </div>
-                <div class="td fe-index text-center">
-                  <a class="text-decoration-none text-muted" (click)="editComponent($event, i, item)" href="javascript:void(0)" [ngClass]="{'pe-none text-muted': (item.ComponentId == 'Gross' || item.ComponentId == 'CTC' || item.ComponentId == 'PTAX' || item.Formula == '[AUTO]')}">
-                    <i class="fa-solid" [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-pencil': !isLoading}"></i>
-                  </a>
+              </ng-container>
+              <div class="tr py-2 align-items-center disable-field">
+                <div class="td fw-bold text-dark ps-3 fe-1">
+                  Net Salary
+                </div>
+                <div class="td ps-1 fe-2"></div>
+                <div class="td fe-1"></div>
+                <div class="td fe-1 ps-2"></div>
+                <div class="td fe-1">
+                  <input type="text" class="form-control border-0 w-75" readonly >
+                </div>
+                <div class="td fw-bold text-dark ps-1 fe-1">
+                  <i class="fa-solid fa-indian-rupee-sign pe-1"></i>{{netSalary | number: '1.2-2'}}
                 </div>
               </div>
             </div>
           </div>
-          <div class="text-end">
+          <div class="text-end d-none" data-name="savebutton">
             <button class="btn btn-primary-c me-2" (click)="saveSalaryDetail()">
               <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
               <span class="ps-1">{{isLoading ? 'Wait' : 'Save'}}</span>

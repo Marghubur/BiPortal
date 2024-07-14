@@ -63,6 +63,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   attendanceReviewData: Filter = new Filter();
   selectedAttendance: any = null;
   filterYears: Array<number> = [];
+  selectedAttendanceRequest: Array<any> = [];
 
   constructor(private http: CoreHttpService,
     private filterHttp: EmployeeFilterHttpService,
@@ -183,16 +184,18 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     $('#timesheetModal').modal('show');
   }
 
-  openAttendacneModal(state: string, request: any) {
+  openAttendacneModal(state: string) {
     this.requestState = state;
     this.requestModal = 3; // attendance
-    this.currentRequest = request;
-    this.currentRequest.RequestStatusId = request.AttendanceStatus;
-    this.currentRequest.PresentDayStatus = request.AttendanceStatus;
-    this.currentRequest["EmployeeName"] = request.EmployeeName;
-    this.currentRequest["Email"] = request.Email;
-    this.currentRequest["Mobile"] = request.Mobile;
-    $('#leaveModal').modal('show');
+    if (this.selectedAttendanceRequest.length > 0) {
+      $('#leaveModal').modal('show');
+    }
+    // this.currentRequest = request;
+    // this.currentRequest.RequestStatusId = request.AttendanceStatus;
+    // this.currentRequest.PresentDayStatus = request.AttendanceStatus;
+    // this.currentRequest["EmployeeName"] = request.EmployeeName;
+    // this.currentRequest["Email"] = request.Email;
+    // this.currentRequest["Mobile"] = request.Mobile;
   }
 
   submitRequest() {
@@ -300,7 +303,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   submitActionForAttendance() {
     this.isLoading = true;
-    if (this.currentRequest) {
+    if (this.selectedAttendanceRequest.length > 0) {
       let endPoint = "";
       switch (this.requestState) {
         case 'Approved':
@@ -313,12 +316,15 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
           endPoint = `${this.attendanceController}/ReAssigneAttendanceRequest`;
           break;
       }
-      this.currentRequest.PageIndex = this.attendanceRecord.PageIndex;
-      this.currentRequest.EmployeeId = this.attendanceRecord.EmployeeId;
-      this.currentRequest.PresentDayStatus = this.attendanceRecord.PresentDayStatus;
-      this.currentRequest.TotalDays = this.attendanceRecord.TotalDays;
 
-      this.http.put(`${endPoint}/${this.attendanceRecord.PresentDayStatus}`, this.currentRequest).then((response: ResponseModel) => {
+      this.selectedAttendanceRequest.forEach(x => {
+        x.PageIndex = this.attendanceRecord.PageIndex;
+        x.EmployeeId = this.attendanceRecord.EmployeeId;
+        x.PresentDayStatus = this.attendanceRecord.PresentDayStatus;
+        x.TotalDays = this.attendanceRecord.TotalDays;
+      });
+
+      this.http.put(`${endPoint}/${this.attendanceRecord.PresentDayStatus}`, this.selectedAttendanceRequest).then((response: ResponseModel) => {
         if (response.ResponseBody) {
           this.attendanceDetail = response.ResponseBody.FilteredAttendance;
           if (this.attendanceDetail.length > 0)
@@ -342,7 +348,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
         this.isLoading = false;
       })
     } else {
-      ErrorToast("Attendance detail not found. Please contact to admin.");
+      ErrorToast("Please select attendance first");
     }
   }
 
@@ -837,6 +843,32 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     }).catch(e => {
       this.isLoading = false;
     });
+  }
+
+  selectAllAttendance(e: any) {
+    let value = e.target.checked;
+    let elem = document.querySelectorAll('input[data-name="attendance-checkbox"]') ;
+    elem.forEach(x => {
+      (x as HTMLInputElement).checked = value;
+    });
+    if (value) {
+      this.selectedAttendanceRequest = this.attendanceDetail;
+    } else {
+      this.selectedAttendanceRequest = [];
+    }
+
+  }
+
+  selectAttendance(e: any, item: any) {
+    let value = e.target.checked;
+    if (value) {
+      this.selectedAttendanceRequest.push(item)
+    } else {
+      let index = this.selectedAttendanceRequest.findIndex(x => x.AttendanceId == item.AttendanceId);
+      this.selectedAttendanceRequest.splice(index, 1);
+    }
+
+    console.log(this.selectedAttendanceRequest);
   }
 }
 
