@@ -434,7 +434,10 @@
               salary.</label>
           </div>
         </div>
-        <div class="col-12 mt-4 row">
+        <div class="mt-3 text-end">
+          <button class="btn btn-primary-c" (click)="switchFormula()">Switch Formula</button>
+        </div>
+        <div class="col-12 mt-4 row" *ngIf="!isConditionalFormula">
           <div class="col-md-4">
             <div class="list-group" name="formulaComponent">
               <a href="javascript:void(0)" (click)="formulaAppliedOn('ctc')"
@@ -444,13 +447,6 @@
                 </div>
                 <p class="mb-1">Formula will be applied on CTC</p>
               </a>
-              <!-- <a href="javascript:void(0)" (click)="formulaAppliedOn('gross')"
-                class="list-group-item list-group-item-action">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">GROSS</h5>
-                </div>
-                <p class="mb-1">Formula will be applied on CTC</p>
-              </a> -->
               <a href="javascript:void(0)" (click)="formulaAppliedOn('basic')"
                 class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
@@ -469,15 +465,103 @@
           </div>
           <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
             onkeypress="return (event.charCode != 8 && event.charCode == 0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.key == '%' || event.key == '*' ||event.charCode == 43 || event.charCode == 45 ||event.charCode == 60 ||event.charCode == 61 ||event.charCode == 62 ||event.key == '.')"
-            (keyup)="addFormula()"></div>
+            (keyup)="addFormula()">
+          </div>
+          <div class="border-0 mt-2 form-control d-flex align-items-center justify-content-between">
+            <h6 class="form-label py-2 fw-bold">
+              {{ componentFields.Formula }}
+              <i class="fa-solid fa-check text-success ps-1" *ngIf="isFormulaValidate && isFormulaValidate != null"></i>
+              <i class="fa-solid fa-xmark ps-1 text-danger" *ngIf="!isFormulaValidate && isFormulaValidate != null"></i>
+            </h6>
+            <button (click)="validateFormula()" [disabled]="componentFields.Formula == null || componentFields.Formula == ''" class="btn btn-primary-c">Validate Formula</button>
+          </div>
         </div>
-        <div class="border-0 mt-2 form-control d-flex align-items-center justify-content-between">
-          <h6 class="form-label py-2 fw-bold">
-            {{ componentFields.Formula }}
-            <i class="fa-solid fa-check text-success ps-1" *ngIf="isFormulaValidate && isFormulaValidate != null"></i>
-            <i class="fa-solid fa-xmark ps-1 text-danger" *ngIf="!isFormulaValidate && isFormulaValidate != null"></i>
-          </h6>
-          <button (click)="validateFormula()" [disabled]="componentFields.Formula == null || componentFields.Formula == ''" class="btn btn-primary-c">Validate Formula</button>
+        <div class="col-md-12 border p-2 mt-4" *ngIf="isConditionalFormula">
+          <label class="form-label">If condition as follows</label>
+          <div class="row align-items-center ps-3">
+            If
+            <div class="col-auto">
+              <select class="form-select" [(ngModel)]="conditionalFormula.ConditionType">
+                <option value="CTC">CTC</option>
+                <option value="Gross">Gross</option>
+                <option value="BS">Basic</option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <select class="form-select" [(ngModel)]="conditionalFormula.Operator">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">x</option>
+                <option value="/">/</option>
+                <option value="%">%</option>
+                <option value="=">=</option>
+                <option value=">">></option>
+                <option value="<"><</option>
+                <option value=">=">>=</option>
+                <option value="<="><=</option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <input type="number" placeholder="condition" class="form-control " [(ngModel)]="conditionalFormula.ConditionValue">
+            </div>
+          </div>
+          <div class="ps-3 row mt-2 align-items-center">
+            then use this formula
+            <div class="col-auto">
+              <input type="number" class=" form-control " placeholder="fomula" [(ngModel)]="conditionalFormula.IfFormulaValue" (keyup)="validateConditionalFormula()">
+            </div>
+            <div class="col-auto">
+              <select class="form-select" [(ngModel)]="conditionalFormula.IfFormulaOperator">
+                <option value="Fixed">Fixed</option>
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">x</option>
+                <option value="/">/</option>
+                <option value="%">%</option>
+                <option value="=">=</option>
+                <option value=">">></option>
+                <option value="<"><</option>
+                <option value=">=">>=</option>
+                <option value="<="><=</option>
+              </select>
+            </div>
+            <div class="col-auto" [ngClass]="{'d-none': conditionalFormula.IfFormulaOperator == 'Fixed'}">
+              <select class="form-select" [(ngModel)]="conditionalFormula.IfFormulaField">
+                <option value="CTC">CTC</option>
+                <option value="Gross">Gross</option>
+                <option value="BASIC">Basic</option>
+              </select>
+            </div>
+          </div>
+          <label class="form-label mt-3">else condition as follows</label>
+          <div class="ps-3 row align-items-center">
+            then use this formula
+            <div class="col-auto">
+              <input type="number" class="form-control" placeholder="fomula" [(ngModel)]="conditionalFormula.ElseFormulaValue" (keyup)="validateConditionalFormula()">
+            </div>
+            <div class="col-auto">
+              <select class="form-select" [(ngModel)]="conditionalFormula.ElseFormulaOperator">
+                <option value="Fixed">Fixed</option>
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">x</option>
+                <option value="/">/</option>
+                <option value="%">%</option>
+                <option value="=">=</option>
+                <option value=">">></option>
+                <option value="<"><</option>
+                <option value=">=">>=</option>
+                <option value="<="><=</option>
+              </select>
+            </div>
+            <div class="col-auto" [ngClass]="{'d-none': conditionalFormula.ElseFormulaOperator == 'Fixed'}">
+              <select class="form-select" [(ngModel)]="conditionalFormula.ElseFormulaField">
+                <option value="CTC">CTC</option>
+                <option value="Gross">Gross</option>
+                <option value="BASIC">Basic</option>
+              </select>
+            </div>
+          </div>
         </div>
         <div class="col-md-12 mt-3">
           <input type="checkbox" class="form-check-input me-1" name="include-in-payslip" />

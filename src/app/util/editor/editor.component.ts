@@ -40,6 +40,9 @@ export class EditorComponent implements AfterViewInit  {
     if (textContent && textContent != "") {
       this.innerHtmlText = this.sanitizer.bypassSecurityTrustHtml(textContent);
       console.log(this.innerHtmlText);
+    } else {
+      this.innerHtmlText = '';
+      this.editor.nativeElement.innerHTML = '';
     }
   }
 

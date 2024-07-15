@@ -40,6 +40,9 @@ export class SalarycomponentStructureComponent implements OnInit {
   submitted: boolean = false;
   isFormulaValidate: boolean = null;
   operators = ['+', '-', '*', '/', '%'];
+  isConditionalFormula: boolean = false;
+  conditionalFormula: ConditionalFormula = {ConditionType: "CTC", Operator: ">", ConditionValue: 0, IfFormulaValue: 0, IfFormulaOperator: "Fixed", IfFormulaField: "CTC",
+    ElseFormulaValue: 0, ElseFormulaOperator: "Fixed", ElseFormulaField: "CTC"};
 
   constructor(private fb: FormBuilder,
               private http: CoreHttpService,
@@ -228,32 +231,41 @@ export class SalarycomponentStructureComponent implements OnInit {
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
 
-    if(this.componentFields.Formula != "([AUTO])") {
-      // let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
-      if (this.componentFields.Formula.includes('[CTC]'))
-        this.componentFields.Formula = this.componentFields.Formula.replace('[CTC]', 'CTC');
-      else if(this.componentFields.Formula.includes('[BASIC]'))
-        this.componentFields.Formula = this.componentFields.Formula.replace('[BASIC]', 'BASIC');
-
-      if (this.operators.includes(this.componentFields.Formula[this.componentFields.Formula.length - 1])) {
-        this.componentFields.Formula = this.componentFields.Formula.slice(0, -1);
-      }
-
-      let isValid = this.fomulaConverter.validateFormula(this.componentFields.Formula);
-      if (!isValid) {
-        ErrorToast("Invalid formula entered");
-        this.isLoading = false;
-        return;
-      }
-
-      // if (isNaN(formula)) {
-      //   ErrorToast("Invalid formula entered");
-      //   this.isLoading = false;
-      //   return;
-      // }
+    if (this.isConditionalFormula) {
+      console.log(this.conditionalFormula);
+      let ifStatementValue = this.conditionalFormula.IfFormulaOperator == 'Fixed' ? this.conditionalFormula.IfFormulaValue : this.conditionalFormula.IfFormulaValue + this.conditionalFormula.IfFormulaOperator + this.conditionalFormula.IfFormulaField;
+      let elseStatementValue = this.conditionalFormula.ElseFormulaOperator == 'Fixed' ? this.conditionalFormula.ElseFormulaValue : this.conditionalFormula.ElseFormulaValue + this.conditionalFormula.ElseFormulaOperator + this.conditionalFormula.ElseFormulaField;
+      let formula = `${this.conditionalFormula.ConditionType} ${this.conditionalFormula.Operator} ${this.conditionalFormula.ConditionValue} ? ${ifStatementValue} : ${elseStatementValue}`;
+      this.componentFields.Formula = formula
     } else {
-      this.componentFields.Formula = this.componentFields.Formula.replace(/\(/g, '').replace(/\)/g, '');
+      if(this.componentFields.Formula != "([AUTO])") {
+        // let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
+        if (this.componentFields.Formula.includes('[CTC]'))
+          this.componentFields.Formula = this.componentFields.Formula.replace('[CTC]', 'CTC');
+        else if(this.componentFields.Formula.includes('[BASIC]'))
+          this.componentFields.Formula = this.componentFields.Formula.replace('[BASIC]', 'BASIC');
+
+        if (this.operators.includes(this.componentFields.Formula[this.componentFields.Formula.length - 1])) {
+          this.componentFields.Formula = this.componentFields.Formula.slice(0, -1);
+        }
+
+        let isValid = this.fomulaConverter.validateFormula(this.componentFields.Formula);
+        if (!isValid) {
+          ErrorToast("Invalid formula entered");
+          this.isLoading = false;
+          return;
+        }
+
+        // if (isNaN(formula)) {
+        //   ErrorToast("Invalid formula entered");
+        //   this.isLoading = false;
+        //   return;
+        // }
+      } else {
+        this.componentFields.Formula = this.componentFields.Formula.replace(/\(/g, '').replace(/\)/g, '');
+      }
     }
+
 
     let isincludeInPayslip = (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked;
     value.IncludeInPayslip = isincludeInPayslip;
@@ -446,26 +458,50 @@ export class SalarycomponentStructureComponent implements OnInit {
     if(this.componentFields.CalculateInPercentage == true) {
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
-    let elem = document.querySelectorAll('div[name="formulaComponent"] a');
-    let i = 0;
-    while (i < elem.length) {
-      elem[i].classList.remove('active');
-      i++;
+    if (!this.componentFields.Formula.includes("?") && !this.componentFields.Formula.includes(":")) {
+      let elem = document.querySelectorAll('div[name="formulaComponent"] a');
+      let i = 0;
+      while (i < elem.length) {
+        elem[i].classList.remove('active');
+        i++;
+      }
+
+      let tag = document.getElementById('addedFormula');
+      if (this.componentFields.Formula){
+        tag.innerText = `${this.componentFields.Formula}`;
+        this.componentFields.Formula =`${this.componentFields.Formula}`;
+      } else {
+        tag.innerText = '';
+        this.componentFields.Formula = '';
+      }
+      tag.focus();
+      this.isConditionalFormula = false;
+    } else {
+      const regex = /([a-zA-Z_][a-zA-Z0-9_]*|[0-9]+|[><\?\:\%\+\-])/g;
+      let comp = this.componentFields.Formula.match(regex);
+      let statement = this.componentFields.Formula.split(/[?:]/);
+      let condition = statement[0].match(regex);
+      let ifstatement = statement[1].match(regex);
+      let elsestatement = statement[2].match(regex);
+      console.log(comp);
+      this.conditionalFormula = {
+        ConditionType: condition[0],
+        Operator: condition[1],
+        ConditionValue: Number(condition[2]),
+        IfFormulaValue: Number(ifstatement[0]),
+        IfFormulaOperator: ifstatement.length > 1 ? ifstatement[1] : 'Fixed',
+        IfFormulaField: ifstatement.length > 1 ? ifstatement[1] : 'CTC',
+        ElseFormulaValue: Number(elsestatement[0]),
+        ElseFormulaOperator: elsestatement.length > 1 ? elsestatement[1] : 'Fixed',
+        ElseFormulaField: elsestatement.length > 1 ? elsestatement[1] : 'CTC'
+      }
+      this.isConditionalFormula = true;
     }
 
-    let tag = document.getElementById('addedFormula');
-    if (this.componentFields.Formula){
-      tag.innerText = `${this.componentFields.Formula}`;
-      this.componentFields.Formula =`${this.componentFields.Formula}`;
-    } else {
-      tag.innerText = '';
-      this.componentFields.Formula = '';
-    }
     if (this.componentFields.IncludeInPayslip)
       (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked = true;
     else
       (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked = false;
-    tag.focus();
     this.submitted = false;
     $('#updateCalculationModal').modal('show');
   }
@@ -778,6 +814,14 @@ export class SalarycomponentStructureComponent implements OnInit {
     }
     this.isFormulaValidate = this.fomulaConverter.validateFormula(formula)
   }
+
+  switchFormula() {
+    this.isConditionalFormula = !this.isConditionalFormula;
+  }
+
+  validateConditionalFormula() {
+    //alert(this.fomulaConverter.validateFormula(this.customFormula.IfFormula));
+  }
 }
 
 export class SalaryComponentFields {
@@ -835,3 +879,15 @@ class UpdateSalaryComponent {
   FormulaBasedOn: string = 'CTC';
 }
 
+
+interface ConditionalFormula {
+  ConditionType: string,
+  Operator: string,
+  ConditionValue: number,
+  IfFormulaValue: number,
+  IfFormulaOperator: string,
+  IfFormulaField: string,
+  ElseFormulaValue: number,
+  ElseFormulaOperator: string,
+  ElseFormulaField: string,
+}

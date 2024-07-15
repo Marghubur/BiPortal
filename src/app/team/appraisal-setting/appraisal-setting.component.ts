@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ResponseModel } from 'src/auth/jwtService';
 import { ApplicationStorage, GetRoles } from 'src/providers/ApplicationStorage';
 import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
-import { ConfigPerformance, ManageAppraisalCategory, SERVICE } from 'src/providers/constants';
+import { ConfigPerformance, ManageAppraisalCategory } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { UserService } from 'src/providers/userService';
 import { ApprisalCycle } from '../manage-appraisal-category/manage-appraisal-category.component';
@@ -265,6 +265,7 @@ export class AppraisalSettingComponent implements OnInit {
   addObjectivePopUp() {
     this.isSubmitted = false;
     this.currentObject = new Objective();
+    this.htmlText = "";
     this.initObjetiveForm();
     $('#addObjectiveModal').modal('show');
   }

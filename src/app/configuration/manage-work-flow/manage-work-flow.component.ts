@@ -29,6 +29,7 @@ export class ManageWorkFlowComponent implements OnInit {
   deleteAprrovalChain: any = null;
   approvalLevel: Array<number> = [];
   initApprovalLevel: Array<number> = [];
+  approvalWorkFlowId: number = 0;
 
   constructor(private fb: FormBuilder,
               private http: CoreHttpService,
@@ -38,13 +39,16 @@ export class ManageWorkFlowComponent implements OnInit {
     this.isPageReady = false;
     this.navRecord = this.nav.getValue();
     this.employeesAutoComplete.placeholder = "Level";
-    this.employeesAutoComplete.className = "normal";
-    let approvalWorkFlowId = 0;
     this.approvalLevel.push(0);
     this.approvalLevel.push(1);
-    if (this.navRecord )
-      approvalWorkFlowId = this.navRecord.ApprovalWorkFlowId;
-    this.loadRecord(approvalWorkFlowId);
+    this.employeesAutoComplete.className = "normal";
+    if (this.navRecord ) {
+      this.approvalWorkFlowId = this.navRecord.ApprovalWorkFlowId;
+      if (this.approvalWorkFlowId == 1)
+        this.employeesAutoComplete.className = "disabled-input"
+    }
+
+    this.loadRecord(this.approvalWorkFlowId);
   }
 
   loadRecord(approvalWorkFlowId: number) {
@@ -74,13 +78,13 @@ export class ManageWorkFlowComponent implements OnInit {
   initForm() {
     this.workFlowForm = this.fb.group({
       ApprovalChainDetails: this.workFlowArray(),
-      Title: new FormControl(this.approvalChainDetail.Title, [Validators.required]),
-      TitleDescription: new FormControl(this.approvalChainDetail.TitleDescription, [Validators.required]),
-      AutoExpireAfterDays: new FormControl(this.approvalChainDetail.AutoExpireAfterDays, [Validators.required]),
-      IsSilentListner: new FormControl(this.approvalChainDetail.IsSilentListner),
-      ListnerDetail: new FormControl(this.approvalChainDetail.ListnerDetail),
-      IsAutoExpiredEnabled: new FormControl(this.approvalChainDetail.IsAutoExpiredEnabled),
-      NoOfApprovalLevel: new FormControl(this.approvalChainDetail.NoOfApprovalLevel)
+      Title: new FormControl({value:this.approvalChainDetail.Title, disabled: this.approvalWorkFlowId == 1}, [Validators.required]),
+      TitleDescription: new FormControl({value:this.approvalChainDetail.TitleDescription, disabled: this.approvalWorkFlowId == 1}, [Validators.required]),
+      AutoExpireAfterDays: new FormControl({value:this.approvalChainDetail.AutoExpireAfterDays, disabled: this.approvalWorkFlowId == 1}, [Validators.required]),
+      IsSilentListner: new FormControl({value:this.approvalChainDetail.IsSilentListner, disabled: this.approvalWorkFlowId == 1}),
+      ListnerDetail: new FormControl({value:this.approvalChainDetail.ListnerDetail, disabled: this.approvalWorkFlowId == 1}),
+      IsAutoExpiredEnabled: new FormControl({value:this.approvalChainDetail.IsAutoExpiredEnabled, disabled: this.approvalWorkFlowId == 1}),
+      NoOfApprovalLevel: new FormControl({value:this.approvalChainDetail.NoOfApprovalLevel, disabled: this.approvalWorkFlowId == 1})
     });
     this.isReady = true;
   }
@@ -153,7 +157,7 @@ export class ManageWorkFlowComponent implements OnInit {
     return this.fb.group({
       ApprovalWorkFlowId: new FormControl(record.ApprovalWorkFlowId),
       AssignieId: new FormControl(record.AssignieId),
-      IsRequired: new FormControl(record.IsRequired ? 'true' : 'false'),
+      IsRequired: new FormControl({value:record.IsRequired ? 'true' : 'false', disabled: this.approvalWorkFlowId == 1}),
       ApprovalChainDetailId :new FormControl(record.ApprovalChainDetailId)
     });
   }
