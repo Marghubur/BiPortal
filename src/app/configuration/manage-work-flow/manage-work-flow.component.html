@@ -115,7 +115,7 @@
                           </div>
                         </fieldset>
                       </div>
-                      <a
+                      <a [ngClass]="{'pe-none': approvalWorkFlowId == 1}"
                         href="javascript:void(0)"
                         class="text-decoration-none text-secondary"
                         (click)="deleteChainPopUp(item)"
@@ -128,7 +128,7 @@
                   </div>
 
                   <ng-container *ngIf="isEnableAddNew">
-                    <a
+                    <a [ngClass]="{'pe-none': approvalWorkFlowId == 1}"
                       href="javascript:void(0)"
                       class="text-decoration-none mt-4"
                       (click)="addNewLevel()"
@@ -138,7 +138,7 @@
                     </a>
                   </ng-container>
                   <ng-container *ngIf="!isEnableAddNew">
-                    <a
+                    <a [ngClass]="{'pe-none': approvalWorkFlowId == 1}"
                       href="javascript:void(0)"
                       class="text-decoration-none text-muted mt-4"
                       (click)="addNewLevel()"
@@ -222,7 +222,7 @@
             <div class="mt-4 d-flex justify-content-end">
               <button
                 class="btn btn-primary-c"
-                [disabled]="isLoading"
+                [disabled]="isLoading || approvalWorkFlowId == 1"
                 (click)="addApprovalWorkFlow()"
               >
                 <i

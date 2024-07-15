@@ -328,7 +328,7 @@
           <div class="col-md-6 mt-3" *ngIf="selectedRoles != null && selectedRoles.length > 0">
             <div class="row">
               <div class="col-md-6">
-                <a href="javascript:void(0)" class="text-primary-dc" (click)="viewApprovalChainFlow()">Approval chain
+                <a href="javascript:void(0)" [ngClass]="{'pe-none': currentApprisalCycle.AppraisalDetailId == 0}" class="text-primary-dc" (click)="viewApprovalChainFlow()">Approval chain
                   flow</a>
               </div>
               <div class="col-md-6">
