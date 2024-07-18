@@ -49,7 +49,7 @@
               </div>
             </div>
             <div class="t-body custom-height">
-              <div class="tr py-2" *ngFor="let item of groupComponents" [ngClass]="{'disable-field': (item.ComponentId == 'EPER-SI' || item.ComponentId == 'ESI' || item.ComponentId == 'EPER-PF' || item.ComponentId == 'EPF')}">
+              <div class="tr py-2" *ngFor="let item of groupComponents" >
                 <div class="td ps-3 text-truncate fe-2">
                   {{ item.ComponentId }} ({{ item.ComponentFullName }})
                 </div>
@@ -76,10 +76,13 @@
                 </div>
                 <ng-container>
                   <div class="td ps-3 fe-index">
-                    <a class="text-decoration-none text-muted" href="javascript:void(0)" [ngClass]="{'pe-none text-muted': (item.ComponentId == 'EPER-SI' || item.ComponentId == 'ESI' || item.ComponentId == 'EPER-PF' || item.ComponentId == 'EPF')}"
+                    <a class="text-decoration-none text-muted" href="javascript:void(0)" *ngIf="item.ComponentId != 'EPER-SI' && item.ComponentId != 'ESI' && item.ComponentId != 'EPER-PF' && item.ComponentId != 'EPF'"
                       (click)="updateCalcModel(item)"><i class="fa-solid fa-ellipsis fa-lg" aria-hidden="true"></i>
                     </a>
-                    <a class="text-decoration-none text-danger ms-4" href="javascript:void(0)" [ngClass]="{'pe-none text-muted': (item.ComponentId == 'EPER-SI' || item.ComponentId == 'ESI' || item.ComponentId == 'EPER-PF' || item.ComponentId == 'EPF')}"
+                    <a class="text-decoration-none text-muted " href="javascript:void(0)" *ngIf="item.ComponentId == 'EPER-SI' || item.ComponentId == 'ESI' || item.ComponentId == 'EPER-PF' || item.ComponentId == 'EPF'"
+                      (click)="updatePfEsiCalcModel(item)"><i class="fa-solid fa-ellipsis fa-lg" aria-hidden="true"></i>
+                    </a>
+                    <a class="text-decoration-none text-danger ms-4" href="javascript:void(0)" *ngIf="item.ComponentId != 'EPER-SI' && item.ComponentId != 'ESI' && item.ComponentId != 'EPER-PF' && item.ComponentId != 'EPF'"
                       (click)="openComponentDeleteOrUpdateModel(item)"><i class="fa-solid fa-trash-can fa-lg"
                         aria-hidden="true"></i>
                     </a>
@@ -438,7 +441,7 @@
           <button class="btn btn-primary-c" (click)="switchFormula()">Switch Formula</button>
         </div>
         <div class="col-12 mt-4 row" *ngIf="!isConditionalFormula">
-          <div class="col-md-4">
+          <!-- <div class="col-md-4">
             <div class="list-group" name="formulaComponent">
               <a href="javascript:void(0)" (click)="formulaAppliedOn('ctc')"
                 class="list-group-item list-group-item-action" aria-current="true">
@@ -462,9 +465,13 @@
                 <p class="mb-1">Calculate automatically on remaning CTC</p>
               </a>
             </div>
+          </div> -->
+          <div class="col-md-12 ms-0 ps-0 mb-3">
+            <button (click)="formulaAppliedOn(item)" class="btn btn-sm btn-outline-success me-2"  *ngFor="let item of componentsId">
+              <i class="fa-solid fa-plus pe-2"></i> {{item}}
+            </button>
           </div>
-          <div class="col-md-8 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
-            onkeypress="return (event.charCode != 8 && event.charCode == 0  || (event.charCode >= 47 && event.charCode <= 57 ) || event.key == '%' || event.key == '*' ||event.charCode == 43 || event.charCode == 45 ||event.charCode == 60 ||event.charCode == 61 ||event.charCode == 62 ||event.key == '.')"
+          <div class="col-md-12 py-2 border b-less" id="addedFormula" name="addedFormula" contenteditable="true"
             (keyup)="addFormula()">
           </div>
           <div class="border-0 mt-2 form-control d-flex align-items-center justify-content-between">
@@ -482,18 +489,12 @@
             If
             <div class="col-auto">
               <select class="form-select" [(ngModel)]="conditionalFormula.ConditionType">
-                <option value="CTC">CTC</option>
-                <option value="Gross">Gross</option>
-                <option value="BS">Basic</option>
+                <option value="[CTC]">CTC</option>
+                <option value="[BASIC]">Basic</option>
               </select>
             </div>
             <div class="col-auto">
               <select class="form-select" [(ngModel)]="conditionalFormula.Operator">
-                <option value="+">+</option>
-                <option value="-">-</option>
-                <option value="*">x</option>
-                <option value="/">/</option>
-                <option value="%">%</option>
                 <option value="=">=</option>
                 <option value=">">></option>
                 <option value="<"><</option>
@@ -508,7 +509,7 @@
           <div class="ps-3 row mt-2 align-items-center">
             then use this formula
             <div class="col-auto">
-              <input type="number" class=" form-control " placeholder="fomula" [(ngModel)]="conditionalFormula.IfFormulaValue" (keyup)="validateConditionalFormula()">
+              <input type="number" class=" form-control " placeholder="fomula" [(ngModel)]="conditionalFormula.IfFormulaValue" >
             </div>
             <div class="col-auto">
               <select class="form-select" [(ngModel)]="conditionalFormula.IfFormulaOperator">
@@ -518,18 +519,12 @@
                 <option value="*">x</option>
                 <option value="/">/</option>
                 <option value="%">%</option>
-                <option value="=">=</option>
-                <option value=">">></option>
-                <option value="<"><</option>
-                <option value=">=">>=</option>
-                <option value="<="><=</option>
               </select>
             </div>
             <div class="col-auto" [ngClass]="{'d-none': conditionalFormula.IfFormulaOperator == 'Fixed'}">
               <select class="form-select" [(ngModel)]="conditionalFormula.IfFormulaField">
-                <option value="CTC">CTC</option>
-                <option value="Gross">Gross</option>
-                <option value="BASIC">Basic</option>
+                <option value="[CTC]">CTC</option>
+                <option value="[BASIC]">Basic</option>
               </select>
             </div>
           </div>
@@ -537,7 +532,7 @@
           <div class="ps-3 row align-items-center">
             then use this formula
             <div class="col-auto">
-              <input type="number" class="form-control" placeholder="fomula" [(ngModel)]="conditionalFormula.ElseFormulaValue" (keyup)="validateConditionalFormula()">
+              <input type="number" class="form-control" placeholder="fomula" [(ngModel)]="conditionalFormula.ElseFormulaValue">
             </div>
             <div class="col-auto">
               <select class="form-select" [(ngModel)]="conditionalFormula.ElseFormulaOperator">
@@ -547,18 +542,12 @@
                 <option value="*">x</option>
                 <option value="/">/</option>
                 <option value="%">%</option>
-                <option value="=">=</option>
-                <option value=">">></option>
-                <option value="<"><</option>
-                <option value=">=">>=</option>
-                <option value="<="><=</option>
               </select>
             </div>
             <div class="col-auto" [ngClass]="{'d-none': conditionalFormula.ElseFormulaOperator == 'Fixed'}">
               <select class="form-select" [(ngModel)]="conditionalFormula.ElseFormulaField">
-                <option value="CTC">CTC</option>
-                <option value="Gross">Gross</option>
-                <option value="BASIC">Basic</option>
+                <option value="[CTC]">CTC</option>
+                <option value="[BASIC]">Basic</option>
               </select>
             </div>
           </div>
@@ -666,3 +655,29 @@
   </div>
 </div>
 <!-- End -->
+
+<!-- Modal -->
+<div class="modal fade" id="alertPfESiModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="alertPfESiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content px-3" >
+      <div class="modal-header border-bottom-0">
+        <h1 class="modal-title fs-5" id="alertPfESiModalLabel">Override {{overrideComponent != null ? overrideComponent.ComponentId : ''}} Setting?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="alertpfesisetting" (click)="selectOverrideOption($event)">
+          <label class="form-check-label fw-bold text-danger" for="alertpfesisetting"  *ngIf="overrideComponent != null">
+            Do you want to override the {{overrideComponent.ComponentId}}({{overrideComponent.ComponentFullName}}) settings? If you override these settings, the calculation will be based on this formula instead of the default one. To confirm and proceed, check the box and click 'OK'. Otherwise, click 'Cancel'.
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary-c" disabled data-name="confirm-override-btn" (click)="overrideFormula()">
+          <i class="fa-regular fa-square-plus pe-2"></i> Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
