@@ -128,7 +128,7 @@ export class IncometaxComponent implements OnInit {
         let totalAmounts: Array<any> = [];
         while(i < annualSalaryDetail.length) {
           let amount = 0;
-          let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != SalaryComponentItems.Gross && x.ComponentId != SalaryComponentItems.CTC && x.ComponentId != SalaryComponentItems.ESI && x.ComponentId != SalaryComponentItems.EPF);
+          let salaryComponent = annualSalaryDetail[i].SalaryBreakupDetails.filter(x => x.ComponentId != SalaryComponentItems.Gross && x.ComponentId != SalaryComponentItems.CTC && x.ComponentId != SalaryComponentItems.ESI && x.ComponentId != SalaryComponentItems.EPF && x.ComponentId != SalaryComponentItems.PTAX);
           if (annualSalaryDetail[i].IsPayrollExecutedForThisMonth) {
             amount = salaryComponent.reduce((acc, next) => { return acc + next.FinalAmount }, 0);
           } else {
@@ -294,26 +294,39 @@ export class IncometaxComponent implements OnInit {
 
   viewProTaxPopUp(amount: number) {
     this.proTaxDetails = [];
-    var monthlyPTax = 0;
-    let emptyMonth = (12 - this.allDeclarationSalaryDetails.TotalMonths) - 1;
-    if (amount > 0)
-      monthlyPTax = amount/this.allDeclarationSalaryDetails.TotalMonths;
-
-    for (let i = 0; i < this.taxCalender.length; i++) {
-      if (i == emptyMonth) {
-        this.proTaxDetails.push({
-          Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
-          Amount: 0,
-          Source: 'Proceed'
-        })
-      } else {
-        this.proTaxDetails.push({
-          Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
-          Amount: monthlyPTax,
-          Source: 'Proceed'
-        })
+    let annualSalaryDetail = JSON.parse(this.salaryDetail.CompleteSalaryDetail);
+    annualSalaryDetail.forEach(x => {
+      let ptax = x.SalaryBreakupDetails.find(x => x.ComponentId == SalaryComponentItems.PTAX);
+      if (!ptax) {
+        ErrorToast("PTax not found");
+        return;
       }
-    }
+      this.proTaxDetails.push({
+        Month: x.MonthName + " "+ new Date(x.PresentMonthDate).getFullYear(),
+        Amount: ptax.FinalAmount == 0 ? ptax.ActualAmount : ptax.FinalAmount,
+        Source: x.IsPayrollExecutedForThisMonth ? 'Proceed' : 'Projected'
+      })
+    });
+    // var monthlyPTax = 0;
+    // let emptyMonth = (12 - this.allDeclarationSalaryDetails.TotalMonths) - 1;
+    // if (amount > 0)
+    //   monthlyPTax = amount/this.allDeclarationSalaryDetails.TotalMonths;
+
+    // for (let i = 0; i < this.taxCalender.length; i++) {
+    //   if (i == emptyMonth) {
+    //     this.proTaxDetails.push({
+    //       Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
+    //       Amount: 0,
+    //       Source: 'Proceed'
+    //     })
+    //   } else {
+    //     this.proTaxDetails.push({
+    //       Month: this.taxCalender[i].month + " "+ this.taxCalender[i].year,
+    //       Amount: monthlyPTax,
+    //       Source: 'Proceed'
+    //     })
+    //   }
+    // }
     $('#proTaxModal').modal('show');
   }
 

@@ -46,18 +46,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
 
   ngOnInit(): void {
     this.basePath = this.http.GetImageBasePath();
-    this.salaryComponents = [
-      { "ComponentId": "BS", "ComponentName": "BASIC SALARY" },
-      { "ComponentId": "CA", "ComponentName": "CONVEYANCE ALLOWANCE" },
-      { "ComponentId": "EPER-PF", "ComponentName": "EMPLOYER CONTRIBUTION TOWARDS PF" },
-      { "ComponentId": "HRA", "ComponentName": "HOUSE RENT ALLOWANCE" },
-      { "ComponentId": "MA", "ComponentName": "MEDICAL ALLOWANCE" },
-      { "ComponentId": "SHA", "ComponentName": "SHIFT ALLOWANCE" },
-      { "ComponentId": "LTA", "ComponentName": "TRAVEL REIMBURSSEMENT" },
-      { "ComponentId": "CRA", "ComponentName": "CAR RUNNING ALLOWANCE" },
-      { "ComponentId": "TIA", "ComponentName": "TELEPHONE AND INTERNET ALLOWANCE" },
-      { "ComponentId": "SPA", "ComponentName": "SPECIAL ALLOWANCE" }
-    ];
+    this.salaryComponents = [];
     this.autoCompleteModal = new autoCompleteModal();
     this.autoCompleteModal.data.push({
       text: 'All',
@@ -192,11 +181,19 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     if (Salary.length > 0) {
       this.salaryComponents.forEach(x => {
         let value = Salary.find(i => i.ComponentId == x.ComponentId);
-        salaryBreakup.push({
-          ComponentId: value.ComponentId,
-          FinalAmount: value.FinalAmount,
-          IsIncludeInPayslip: value.IsIncludeInPayslip
-        });
+        if (value) {
+          salaryBreakup.push({
+            ComponentId: value.ComponentId,
+            FinalAmount: value.FinalAmount,
+            IsIncludeInPayslip: value.IsIncludeInPayslip
+          });
+        } else {
+          salaryBreakup.push({
+            ComponentId: x.ComponentId,
+            FinalAmount: 0,
+            IsIncludeInPayslip: x.IsIncludeInPayslip
+          });
+        }
       });
     }
     return salaryBreakup;
