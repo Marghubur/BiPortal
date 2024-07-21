@@ -175,7 +175,7 @@ export class ManageActivityComponent implements OnInit {
   generateLeave() {
     if (this.selectedMonth > 0 && this.selectedYear > 0) {
       this.isLoading = true;
-      this.http.get(`AutoTrigger/RunEmployeeLeaveAccrual/${this.selectedMonth}/${this.selectedYear}`).then((res: ResponseModel) => {
+      this.http.get(`Leave/RunEmployeeLeaveAccrual/${this.selectedMonth}/${this.selectedYear}`).then((res: ResponseModel) => {
         if (res.ResponseBody) {
           this.selectedMonth = 0;
           this.selectedYear = this.currentYear;
