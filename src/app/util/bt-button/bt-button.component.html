@@ -1,6 +1,6 @@
-<button [ngClass]="bt_class" routerLink={{bt_link}} (click)="handleClick($event)">
-    <ng-container *ngIf="icon_required">
-        <i class="{{bt_icon}} pe-1"></i>
+<button [ngClass]="className" class="fw-semibold" routerLink={{redirect}} (click)="handleClick()">
+    <ng-container *ngIf="icon != ''">
+        <i class="{{icon}} pe-1"></i>
     </ng-container>
-    {{bt_lable}}
+    {{text}}
 </button>
