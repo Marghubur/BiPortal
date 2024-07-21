@@ -64,11 +64,11 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
   selectedAttendance: any = null;
   filterYears: Array<number> = [];
   selectedAttendanceRequest: Array<any> = [];
+  activePageNumber: number = 1;
 
   constructor(private http: CoreHttpService,
-    private filterHttp: EmployeeFilterHttpService,
-    private local: ApplicationStorage,
-    private userService: UserService) { }
+              private local: ApplicationStorage,
+              private userService: UserService) { }
 
     ngAfterViewChecked(): void {
     if (this.scrollDiv == null) {
@@ -157,6 +157,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.attendanceReviewData.ForMonth = this.attendance.ForMonth + 1;
     this.attendanceReviewData.ForYear = this.attendance.ForYear ;
     this.attendanceReviewData.SearchString = ` 1=1 `;
+    this.activePageNumber = 1;
     this.getAttendanceRequest();
   }
 
@@ -333,6 +334,8 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
             this.attendanceData.TotalRecords = 0;
           this.employeeList.data = response.ResponseBody.AutoCompleteEmployees;
           this.applicationData = response.ResponseBody.AutoCompleteEmployees;
+          (document.querySelector('input[data-name="selectall-checkbox"]')as HTMLInputElement).checked = false;
+
           if (this.requestState == "Approved")
             Toast("Attendance approved successfully");
           else
@@ -595,6 +598,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
         this.attendanceDetail = response.ResponseBody.FilteredAttendance;
         if (this.attendanceDetail && this.attendanceDetail.length > 0) {
           this.attendanceData.TotalRecords = this.attendanceDetail[0].Total;
+          this.attendanceData.ActivePageNumber = this.activePageNumber;
         } else {
           this.attendanceData.TotalRecords = 0;
         }
@@ -613,6 +617,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
 
   GetAttendanceFilterResult(e: Filter) {
     if (e != null) {
+      this.activePageNumber = e.ActivePageNumber;
       this.attendanceRecord.PageIndex = e.ActivePageNumber;
       this.getAttendanceRequest();
     }
@@ -624,6 +629,7 @@ export class ApprovalRequestComponent implements OnInit, AfterViewChecked {
     this.attendanceRecord.PresentDayStatus = ItemStatus.Submitted;
     this.attendanceRecord.TotalDays = 0;
     this.attendanceData = new Filter();
+    this.activePageNumber = 1;
     this.getAttendanceRequest();
   }
 

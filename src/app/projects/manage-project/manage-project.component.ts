@@ -6,7 +6,7 @@ import { ResponseModel } from 'src/auth/jwtService';
 import { ProjectHttpService } from 'src/providers/AjaxServices/project-http.service';
 import { EmployeeFilterHttpService } from 'src/providers/AjaxServices/employee-filter-http.service';
 import { ApplicationStorage, GetEmployees } from 'src/providers/ApplicationStorage';
-import { ErrorToast, Toast } from 'src/providers/common-service/common.service';
+import { ErrorToast, Toast, ToLocateDate } from 'src/providers/common-service/common.service';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -103,9 +103,9 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   bindProjectData(res: any) {
     if (res.Project && res.Project.length > 0) {
       this.projectDetail = res.Project[0];
-      let date = new Date(this.projectDetail.ProjectStartedOn);
+      let date = ToLocateDate(this.projectDetail.ProjectStartedOn);
       this.startedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
-      date = new Date(this.projectDetail.ProjectEndedOn);
+      date = ToLocateDate(this.projectDetail.ProjectEndedOn);
       this.endedOnModel = { day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear()};
     } else {
       this.projectDetail = new ProjectModal();
@@ -256,6 +256,16 @@ export class ManageProjectComponent implements OnInit, DoCheck {
   }
 
   closeAddMemberPopUp() {
+    if (this.teamName == null || this.teamName == "") {
+      ErrorToast("Please add team name");
+      return;
+    }
+
+    if (this.teamMembers.length == 0) {
+      ErrorToast("Please add team members");
+      return;
+    }
+
     if (this.isAddingTeam) {
       this.projectMembers.push({
         key: this.teamName,

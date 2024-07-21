@@ -14,7 +14,7 @@ declare var $: any;
 export class ManageActivityComponent implements OnInit {
   companyId: number = 0;
   isLoading: boolean = false;
-  active = 3;
+  active = 1;
   model: NgbDateStruct;
   attendanceStartDate: Date = null;
   attendanceEndDate: Date = null;

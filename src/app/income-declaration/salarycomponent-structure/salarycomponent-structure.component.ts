@@ -5,6 +5,7 @@ import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
 import { SalaryDeclarationHttpService } from 'src/providers/AjaxServices/salary-declaration-http.service';
 import { ErrorToast, Toast, WarningToast } from 'src/providers/common-service/common.service';
 import { FomulaConverterService } from 'src/providers/common-service/fomula-converter.service';
+import { SalaryComponentItems } from 'src/providers/constants';
 declare var $: any;
 
 @Component({
@@ -40,6 +41,11 @@ export class SalarycomponentStructureComponent implements OnInit {
   submitted: boolean = false;
   isFormulaValidate: boolean = null;
   operators = ['+', '-', '*', '/', '%'];
+  isConditionalFormula: boolean = false;
+  conditionalFormula: ConditionalFormula = {ConditionType: "[CTC]", Operator: ">", ConditionValue: 0, IfFormulaValue: 0, IfFormulaOperator: "Fixed", IfFormulaField: "CTC",
+    ElseFormulaValue: 0, ElseFormulaOperator: "Fixed", ElseFormulaField: "[CTC]"};
+  overrideComponent: UpdateSalaryComponent = null;
+  componentsId: Array<string> = ['[CTC]', '[BASIC]', '[AUTO]', '[EPER-PF]', '[EPER-SI]', '[ESI]', '[EPF]'];
 
   constructor(private fb: FormBuilder,
               private http: CoreHttpService,
@@ -166,33 +172,43 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   formulaAppliedOn(item: string) {
     if (item && item != '') {
-      let index = 0;
-      switch (item) {
-        case 'ctc':
-          index = 0;
-          break;
-        case 'basic':
-          index = 1;
-          break;
-        // case 'gross':
-        //   index = 1;
-        //   break;
-        case 'auto':
-          index = 2;
-          break;
-      }
+      // let index = 0;
+      // switch (item) {
+      //   case 'ctc':
+      //     index = 0;
+      //     break;
+      //   case 'basic':
+      //     index = 1;
+      //     break;
+      //   // case 'gross':
+      //   //   index = 1;
+      //   //   break;
+      //   case 'auto':
+      //     index = 2;
+      //     break;
+      // }
 
-      let elem = document.querySelectorAll('div[name="formulaComponent"] a');
-      let i = 0;
-      while (i < elem.length) {
-        elem[i].classList.remove('active');
-        i++;
-      }
-      elem[index].classList.add('active');
+      // let elem = document.querySelectorAll('div[name="formulaComponent"] a');
+      // let i = 0;
+      // while (i < elem.length) {
+      //   elem[i].classList.remove('active');
+      //   i++;
+      // }
+      // elem[index].classList.add('active');
       let tag = document.getElementById('addedFormula');
-      tag.innerText = `[${item.toLocaleUpperCase()}]`
-      this.componentFields.Formula =`([${item.toLocaleUpperCase()}])`;
+      if (item == SalaryComponentItems.Auto)
+        tag.innerText = `${item}`
+      else
+        tag.innerText += `${item}`
+
+      this.componentFields.Formula =`${tag.innerText}`;
       tag.focus();
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.selectNodeContents(tag);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
     }
   }
 
@@ -228,32 +244,36 @@ export class SalarycomponentStructureComponent implements OnInit {
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
 
-    if(this.componentFields.Formula != "([AUTO])") {
-      // let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
-      if (this.componentFields.Formula.includes('[CTC]'))
-        this.componentFields.Formula = this.componentFields.Formula.replace('[CTC]', 'CTC');
-      else if(this.componentFields.Formula.includes('[BASIC]'))
-        this.componentFields.Formula = this.componentFields.Formula.replace('[BASIC]', 'BASIC');
-
-      if (this.operators.includes(this.componentFields.Formula[this.componentFields.Formula.length - 1])) {
-        this.componentFields.Formula = this.componentFields.Formula.slice(0, -1);
-      }
-
-      let isValid = this.fomulaConverter.validateFormula(this.componentFields.Formula);
-      if (!isValid) {
-        ErrorToast("Invalid formula entered");
-        this.isLoading = false;
-        return;
-      }
-
-      // if (isNaN(formula)) {
-      //   ErrorToast("Invalid formula entered");
-      //   this.isLoading = false;
-      //   return;
-      // }
+    if (this.isConditionalFormula) {
+      console.log(this.conditionalFormula);
+      let ifStatementValue = this.conditionalFormula.IfFormulaOperator == 'Fixed' ? this.conditionalFormula.IfFormulaValue : this.conditionalFormula.IfFormulaValue + this.conditionalFormula.IfFormulaOperator + this.conditionalFormula.IfFormulaField;
+      let elseStatementValue = this.conditionalFormula.ElseFormulaOperator == 'Fixed' ? this.conditionalFormula.ElseFormulaValue : this.conditionalFormula.ElseFormulaValue + this.conditionalFormula.ElseFormulaOperator + this.conditionalFormula.ElseFormulaField;
+      let formula = `${this.conditionalFormula.ConditionType} ${this.conditionalFormula.Operator} ${this.conditionalFormula.ConditionValue} ? ${ifStatementValue} : ${elseStatementValue}`;
+      this.componentFields.Formula = formula
     } else {
-      this.componentFields.Formula = this.componentFields.Formula.replace(/\(/g, '').replace(/\)/g, '');
+      if(this.componentFields.Formula != "([AUTO])") {
+        // let formula = this.calculateExpressionUsingInfixDS(this.componentFields.Formula);
+        if (this.operators.includes(this.componentFields.Formula[this.componentFields.Formula.length - 1])) {
+          this.componentFields.Formula = this.componentFields.Formula.slice(0, -1);
+        }
+
+        this.validateFormula();
+        if (!this.isFormulaValidate) {
+          ErrorToast("Invalid formula entered");
+          this.isLoading = false;
+          return;
+        }
+
+        // if (isNaN(formula)) {
+        //   ErrorToast("Invalid formula entered");
+        //   this.isLoading = false;
+        //   return;
+        // }
+      } else {
+        this.componentFields.Formula = this.componentFields.Formula.replace(/\(/g, '').replace(/\)/g, '');
+      }
     }
+
 
     let isincludeInPayslip = (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked;
     value.IncludeInPayslip = isincludeInPayslip;
@@ -446,26 +466,47 @@ export class SalarycomponentStructureComponent implements OnInit {
     if(this.componentFields.CalculateInPercentage == true) {
       this.componentFields.MaxLimit = this.componentFields.PercentageValue;
     }
-    let elem = document.querySelectorAll('div[name="formulaComponent"] a');
-    let i = 0;
-    while (i < elem.length) {
-      elem[i].classList.remove('active');
-      i++;
+    if (!this.componentFields.Formula.includes("?") && !this.componentFields.Formula.includes(":")) {
+      // let elem = document.querySelectorAll('div[name="formulaComponent"] a');
+      // let i = 0;
+      // while (i < elem.length) {
+      //   elem[i].classList.remove('active');
+      //   i++;
+      // }
+      this.isConditionalFormula = false;
+      let tag = document.getElementById('addedFormula');
+      if (this.componentFields.Formula){
+        tag.innerText = `${this.componentFields.Formula}`;
+        this.componentFields.Formula =`${this.componentFields.Formula}`;
+      } else {
+        tag.innerText = '';
+        this.componentFields.Formula = '';
+      }
+      tag.focus();
+    } else {
+      this.isConditionalFormula = true;
+      const regex = /([a-zA-Z_][a-zA-Z0-9_]*|[0-9]+|[><\?\:\%\+\-])/g;
+      let statement = this.componentFields.Formula.split(/[?:]/);
+      let condition = statement[0].match(regex);
+      let ifstatement = statement[1].match(regex);
+      let elsestatement = statement[2].match(regex);
+      this.conditionalFormula = {
+        ConditionType: `[${condition[0]}]`,
+        Operator: condition[1],
+        ConditionValue: Number(condition[2]),
+        IfFormulaValue: Number(ifstatement[0]),
+        IfFormulaOperator: ifstatement.length > 1 ? ifstatement[1] : 'Fixed',
+        IfFormulaField: ifstatement.length > 1 ? `[${ifstatement[2]}]` : '[CTC]',
+        ElseFormulaValue: Number(elsestatement[0]),
+        ElseFormulaOperator: elsestatement.length > 1 ? elsestatement[1] : 'Fixed',
+        ElseFormulaField: elsestatement.length > 1 ? `[${elsestatement[2]}]` : '[CTC]'
+      }
     }
 
-    let tag = document.getElementById('addedFormula');
-    if (this.componentFields.Formula){
-      tag.innerText = `${this.componentFields.Formula}`;
-      this.componentFields.Formula =`${this.componentFields.Formula}`;
-    } else {
-      tag.innerText = '';
-      this.componentFields.Formula = '';
-    }
     if (this.componentFields.IncludeInPayslip)
       (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked = true;
     else
       (document.getElementsByName("include-in-payslip")[0] as HTMLInputElement).checked = false;
-    tag.focus();
     this.submitted = false;
     $('#updateCalculationModal').modal('show');
   }
@@ -765,18 +806,41 @@ export class SalarycomponentStructureComponent implements OnInit {
 
   validateFormula() {
     let formula = this.componentFields.Formula;
-    if (formula.includes('[CTC]'))
-      formula = formula.replace('[CTC]', 'CTC');
-    else if(formula.includes('[BASIC]'))
-      formula = formula.replace('[BASIC]', 'BASIC');
-    else if (formula.includes('[AUTO]')) {
+    if (formula.includes('[AUTO]')) {
       this.isFormulaValidate = true;
       return;
     }
+    if (formula.includes('[') || formula.includes('}'))
+      formula = formula.replaceAll("[", "").replaceAll("]", "");
+
     if (this.operators.includes(this.componentFields.Formula[this.componentFields.Formula.length - 1])) {
       this.componentFields.Formula = this.componentFields.Formula.slice(0, -1);
     }
     this.isFormulaValidate = this.fomulaConverter.validateFormula(formula)
+  }
+
+  switchFormula() {
+    this.isConditionalFormula = !this.isConditionalFormula;
+  }
+
+  updatePfEsiCalcModel(item) {
+    this.overrideComponent = item;
+    (document.getElementById("alertpfesisetting") as HTMLInputElement).checked = false;
+    document.querySelector("button[data-name='confirm-override-btn']").setAttribute("disabled", "");
+    $("#alertPfESiModal").modal('show');
+  }
+
+  selectOverrideOption(e: any) {
+    if (e.target.checked) {
+      document.querySelector("button[data-name='confirm-override-btn']").removeAttribute("disabled");
+    } else {
+      document.querySelector("button[data-name='confirm-override-btn']").setAttribute("disabled", "");
+    }
+  }
+
+  overrideFormula() {
+    $("#alertPfESiModal").modal('hide');
+    this.updateCalcModel(this.overrideComponent)
   }
 }
 
@@ -835,3 +899,15 @@ class UpdateSalaryComponent {
   FormulaBasedOn: string = 'CTC';
 }
 
+
+interface ConditionalFormula {
+  ConditionType: string,
+  Operator: string,
+  ConditionValue: number,
+  IfFormulaValue: number,
+  IfFormulaOperator: string,
+  IfFormulaField: string,
+  ElseFormulaValue: number,
+  ElseFormulaOperator: string,
+  ElseFormulaField: string,
+}
