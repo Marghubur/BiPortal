@@ -255,7 +255,7 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   downloadDeclaration() {
     this.isLoading = true;
     let empId = this.employeeSalaries.map(x => x.EmployeeId);
-    this.salaryHttp.download(`Payroll/ExportPayrollRegister/${this.selectedPayrollCalendar.Month+1}`, empId).subscribe(res => {
+    this.salaryHttp.downloadExcel(`Payroll/ExportPayrollRegister/${this.selectedPayrollCalendar.Month+1}`, empId).subscribe(res => {
       if (res) {
         const url = window.URL.createObjectURL(res);
         const a = document.createElement('a');

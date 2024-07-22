@@ -54,8 +54,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private http: CoreHttpService,
-    private nav: iNavigation,
-    private ajax: AjaxService
+    private nav: iNavigation
   ) {}
 
   ngOnInit() {

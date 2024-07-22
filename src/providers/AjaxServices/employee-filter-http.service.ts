@@ -2,14 +2,17 @@ import { Injectable } from '@angular/core';
 import { AjaxService } from './ajax.service';
 import { SERVICE } from '../constants';
 import { environment } from '../../environments/environment';
-import { ResponseModel } from '../../auth/jwtService';
+import { JwtService, ResponseModel } from '../../auth/jwtService';
 import { pairData } from 'src/app/util/iautocomplete/iautocomplete.component';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EmployeeFilterHttpService {
-  constructor(private http: AjaxService) {}
+export class EmployeeFilterHttpService extends AjaxService {
+  constructor(tokenHelper: JwtService, http: HttpClient) {
+    super(tokenHelper, http, `https://www.emstum.com/bot/sb/api/${SERVICE.FILTER}/`);
+ }
 
   private GetUrl(Url: string) {
     if (environment.production) {
@@ -20,13 +23,13 @@ export class EmployeeFilterHttpService {
     }
   }
 
-  async login(Url: string, Param: any): Promise<ResponseModel> {
-    return this.http.login(this.GetUrl(Url), Param);
-  }
+  // async login(Url: string, Param: any): Promise<ResponseModel> {
+  //   return this.http.login(this.GetUrl(Url), Param);
+  // }
 
-  async post(Url: string, Param: any): Promise<ResponseModel> {
-    return this.http.post(this.GetUrl(Url), Param);
-  }
+  // async post(Url: string, Param: any): Promise<ResponseModel> {
+  //   return this.http.post(this.GetUrl(Url), Param);
+  // }
 
   async filter(Param: any) {
     let result: Array<pairData> = [];
@@ -38,19 +41,19 @@ export class EmployeeFilterHttpService {
     return result;
   }
 
-  async put(Url: string, Param: any): Promise<ResponseModel> {
-    return this.http.put(this.GetUrl(Url), Param);
-  }
+  // async put(Url: string, Param: any): Promise<ResponseModel> {
+  //   return this.http.put(this.GetUrl(Url), Param);
+  // }
 
-  async delete(Url: string, Param?: any): Promise<ResponseModel> {
-    return this.http.delete(this.GetUrl(Url), Param);
-  }
+  // async delete(Url: string, Param?: any): Promise<ResponseModel> {
+  //   return this.http.delete(this.GetUrl(Url), Param);
+  // }
 
-  async upload(Url: string, Param: any): Promise<ResponseModel> {
-    return this.http.upload(this.GetUrl(Url), Param);
-  }
+  // async upload(Url: string, Param: any): Promise<ResponseModel> {
+  //   return this.http.upload(this.GetUrl(Url), Param);
+  // }
 
-  async get(Url: string): Promise<ResponseModel> {
-    return this.http.get(this.GetUrl(Url));
-  }
+  // async get(Url: string): Promise<ResponseModel> {
+  //   return this.http.get(this.GetUrl(Url));
+  // }
 }

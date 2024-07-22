@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { ResponseModel } from 'src/auth/jwtService';
+import { JwtService, ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
 import { SERVICE } from '../constants';
 import { AjaxService } from './ajax.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SalaryDeclarationHttpService {
-
-  constructor(private http: AjaxService) {}
+export class SalaryDeclarationHttpService extends AjaxService {
+  constructor(tokenHelper: JwtService, http: HttpClient) {
+    super(tokenHelper, http, `https://www.emstum.com/bot/dn/api/${SERVICE.SALARYDECLARATION}/`);
+ }
 
   private GetUrl(Url: string) {
     if (environment.production) {
@@ -20,31 +22,31 @@ export class SalaryDeclarationHttpService {
     }
   }
 
-  async post(Url: string, Param: any): Promise<ResponseModel> {
-    return this.http.post(this.GetUrl(Url), Param);
-  }
+  // async post(Url: string, Param: any): Promise<ResponseModel> {
+  //   return this.http.post(this.GetUrl(Url), Param);
+  // }
 
-  async put(Url: string, Param: any): Promise<ResponseModel> {
-    return this.http.put(this.GetUrl(Url), Param);
-  }
+  // async put(Url: string, Param: any): Promise<ResponseModel> {
+  //   return this.http.put(this.GetUrl(Url), Param);
+  // }
 
-  async delete(Url: string, Param?: any): Promise<ResponseModel> {
-    return this.http.delete(this.GetUrl(Url), Param);
-  }
+  // async delete(Url: string, Param?: any): Promise<ResponseModel> {
+  //   return this.http.delete(this.GetUrl(Url), Param);
+  // }
 
-  async upload(Url: string, Param: any): Promise<ResponseModel> {
-    return this.http.upload(this.GetUrl(Url), Param);
-  }
+  // async upload(Url: string, Param: any): Promise<ResponseModel> {
+  //   return this.http.upload(this.GetUrl(Url), Param);
+  // }
 
-  download(Url: string, Param: any) {
-    return this.http.downloadExcel(this.GetUrl(Url), Param)
-  }
+  // download(Url: string, Param: any) {
+  //   return this.http.downloadExcel(this.GetUrl(Url), Param)
+  // }
 
-  GetImageBasePath(): string {
-    return this.http.GetImageBasePath();
-  }
+  // GetImageBasePath(): string {
+  //   return this.http.GetImageBasePath();
+  // }
 
-  async get(Url: string): Promise<ResponseModel> {
-    return this.http.get(this.GetUrl(Url));
-  }
+  // async get(Url: string): Promise<ResponseModel> {
+  //   return this.http.get(this.GetUrl(Url));
+  // }
 }
