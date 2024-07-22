@@ -1,6 +1,16 @@
-<button [ngClass]="className" class="fw-semibold" routerLink={{redirect}} (click)="handleClick()">
-    <ng-container *ngIf="icon != ''">
-        <i class="{{icon}} pe-1"></i>
-    </ng-container>
-    {{text}}
-</button>
+<ng-container *ngIf="redirect != ''; else enableClick">
+    <button [ngClass]="className" class="fw-semibold" routerLink={{redirect}}>
+        <ng-container *ngIf="icon != ''">
+            <i class="{{icon}} pe-1"></i>
+        </ng-container>
+        {{text}}
+    </button>
+</ng-container>
+<ng-template #enableClick>
+    <button [ngClass]="className" class="fw-semibold" (click)="handleClick()">
+        <ng-container *ngIf="icon != ''">
+            <i class="{{icon}} pe-1"></i>
+        </ng-container>
+        {{text}}
+    </button>
+</ng-template>

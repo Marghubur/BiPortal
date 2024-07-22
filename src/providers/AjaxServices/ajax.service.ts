@@ -12,8 +12,10 @@ import { map, Observable } from 'rxjs';
 @Injectable()
 export class AjaxService {
   IsTokenByPass: boolean = true;
+  private baseUrl: string = "";
 
-  constructor(private tokenHelper: JwtService, private http: HttpClient) {
+  constructor(protected tokenHelper: JwtService, protected http: HttpClient, protected BaseUrl: string) {
+    this.baseUrl = BaseUrl;
     if (environment.production) {
       console.log(`[Bottomhalf]: BiPortal Running on ${environment.env}`);
     } else {
@@ -32,7 +34,7 @@ export class AjaxService {
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
       this.http
-        .post(Url, Param, {
+        .post(`${this.baseUrl}/${Url}`, Param, {
           observe: 'response',
         })
         .subscribe({
