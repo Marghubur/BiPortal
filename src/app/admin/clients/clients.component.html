@@ -23,20 +23,12 @@
           [(ngModel)]="anyFilter">
       </div>
       <div class="fe-1 ms-2">
-        <button class="btn btn-sm btn-primary-c" (click)="globalFilter()" (keydown.esc)="resetFilter()">
-          <i class="fa-solid fa-filter"></i>
-        </button>
-        <button class="btn btn-sm btn-danger ms-2" (click)="resetFilter()">
-          <i class="fa-solid fa-arrow-rotate-right"></i>
-        </button>
+        <button-submit className="btn-primary ms-2 rounded-0" icon="fa-solid fa-filter" (onClick)="globalFilter()"></button-submit>
+        <button-submit className="btn-danger ms-2 rounded-0" icon="fa-solid fa-arrow-rotate-right" (onClick)="resetFilter()"></button-submit>
       </div>
     </div>
     <div class="col-md-2 inline-row d-r p-0 m-0">
-      <div class="">
-        <button class="btn btn-sp btn-lightorange" (click)="navtoRegisterClient()"
-          routerLinkActive="router-link-active"> <i class="fa-regular fa-square-plus ps-2" aria-hidden="true"></i>Add
-          Client</button>
-      </div>
+      <button-submit className="btn-lightorange" icon="fa-regular fa-square-plus ps-2" text="Add Client" (onClick)="navtoRegisterClient()"></button-submit>
     </div>
   </div>
 

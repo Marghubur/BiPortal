@@ -66,7 +66,7 @@ export class AjaxService {
   async get(Url: string): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
       return this.http
-        .get(Url, {
+        .get(`${this.baseUrl}/${Url}`, {
           observe: 'response',
         })
         .subscribe({
@@ -88,7 +88,7 @@ export class AjaxService {
   async post(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .post(Url, Param, {
+        .post(`${this.baseUrl}/${Url}`, Param, {
           observe: 'response',
         })
         .subscribe({
@@ -113,7 +113,7 @@ export class AjaxService {
   async put(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .put(Url, Param, {
+        .put(`${this.baseUrl}/${Url}`, Param, {
           observe: 'response',
         })
         .subscribe({

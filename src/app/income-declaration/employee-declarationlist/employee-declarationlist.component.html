@@ -59,6 +59,13 @@
                     <thead>
                       <ng-container *ngIf="employeeSalaries.length > 0">
                         <tr>
+                          <th width="10%" scope="col" class="bg-white border-0"></th>
+                          <th colspan="4" class="text-center rounded-top">CTC, GROSS, ARREAR</th>
+                          <th [attr.colspan]="employeeEarningComp" class="text-center rounded-top">EMPLOYEE EARNING</th>
+                          <th [attr.colspan]="employeeDeductionComp" class="text-center rounded-top">EMPLOYEE DEDUCTION</th>
+                          <th [attr.colspan]="employerDeductionComp" class="text-center rounded-top">EMPLOYER DEDUCTION</th>
+                        </tr>
+                        <tr>
                           <th width="10%" scope="col">
                             Full Name
                           </th>

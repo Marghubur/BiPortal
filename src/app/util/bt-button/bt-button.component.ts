@@ -14,13 +14,13 @@ export class BtButtonComponent {
   @Input() buttonType: number = 0;
   @Input() redirect: string = "";
   @Input() icon: string = "";
-  
+
   @Input() set className(value: string) {
-    this._className = ` btn rounded-pill 
+    this._className = ` btn rounded-pill
                         ${
-                            value.includes('bt-success') ? `btn-success ${value}` : 
-                            value.includes('bt-dark') ? `btn-primary-dark  ${value}` : 
-                            value == '' ? 'btn-primary-c' : value} `;    
+                            value.includes('bt-success') ? `btn-success ${value}` :
+                            value.includes('bt-dark') ? `btn-primary-dark  ${value}` :
+                            value.includes('bt-primary') ? 'btn-primary-c' : value} `;
   }
 
   get className(): string {

@@ -3,12 +3,12 @@
   [ngClass]="{ preload: !isPageReady }"
 >
   <div class="text-end mb-3">
-    <button
-      class="btn btn-primary-c"
-      (click)="switchtoChatDashboard()"
-    >
-      Switch to AI Chat Bot
-    </button>
+    <button-submit
+      text="Switch to AI Chat Bot"
+      className="bt-primary"
+      icon="fa-solid fa-arrow-right-to-bracket"
+      (onClick)="switchtoChatDashboard()">
+    </button-submit>
   </div>
   <div class="col-md-12 row">
     <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -183,13 +183,12 @@
                     </p>
                   </div>
                   <div>
-                    <button
-                      class="btn btn-primary-c btn-sm text-white mb-0 me-0"
-                      type="button"
-                    >
-                      <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
-                      Add new member
-                    </button>
+                    <button-submit
+                      text="Add new member"
+                      className="bt-primary"
+                      icon="fa-solid fa-user-plus"
+                      (onClick)="switchtoChatDashboard()">
+                    </button-submit>
                   </div>
                 </div>
                 <div class="overflow-auto mt-1">

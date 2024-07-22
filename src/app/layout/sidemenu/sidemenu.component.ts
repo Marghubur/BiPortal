@@ -165,6 +165,8 @@ export class SidemenuComponent implements OnInit, AfterViewChecked {
   cleanupEmpId(link: string) {
     if (link == "accounts/declaration" || link == "accounts/salary" || link == "accounts/preferences")
       this.local.removeByKey("EmployeeId");
+
+    this.nav.navigateRoot(link, null);
   }
 
   activeSmallMenu(link: string, e: any) {

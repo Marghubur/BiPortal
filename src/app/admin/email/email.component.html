@@ -7,13 +7,7 @@
     <div class="col-12 row p-0 m-0">
       <div class="col-md-2 e-mail-side-menu">
         <div class="mb-5">
-          <button
-            class="btn btn-outline-success btn-lg w-100 btn-round"
-            (click)="composeMailPopUp()"
-          >
-            <i class="fa-solid fa-pencil px-2"></i>
-            Compose
-          </button>
+          <button-submit className="btn-outline-success w-100" icon="fa-solid fa-pencil px-2" text="Compose" (onClick)="composeMailPopUp()"></button-submit>
         </div>
         <ng-container *ngFor="let c of mailItems; let i = index">
           <div
@@ -124,14 +118,7 @@
         <ng-container *ngIf="isBodyRequested">
           <div class="col-12">
             <div class="col-12">
-              <button
-                class="btn btn-outline-dark border back-btn"
-                (click)="showInbox()"
-              >
-                <i class="fa-solid fa-arrow-left" aria-hidden="true">
-                  <span class="px-2">Back</span>
-                </i>
-              </button>
+              <button-submit className="btn-outline-dard w-100" icon="fa-solid fa-arrow-left" text="Compose" (onClick)="showInbox()"></button-submit>
             </div>
             <div class="mt-4">
               <div [innerHTML]="bodyContent"></div>
@@ -176,11 +163,7 @@
           >
             <i class="fa-regular fa-window-maximize px-2 text-dark"></i>
           </a>
-          <button
-            type="button"
-            class="btn-close"
-            (click)="closeModalpopup()"
-          ></button>
+          <button-cancel (onClick)="closeModalpopup()"></button-cancel>
         </div>
       </div>
       <div class="modal-body">
