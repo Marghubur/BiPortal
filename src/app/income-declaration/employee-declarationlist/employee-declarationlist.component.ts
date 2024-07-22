@@ -1,8 +1,8 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ResponseModel } from 'src/auth/jwtService';
 import { CoreHttpService } from 'src/providers/AjaxServices/core-http.service';
-import { ErrorToast, MonthName, Toast, WarningToast } from 'src/providers/common-service/common.service';
-import { AdminDeclaration, SalaryAdjustment } from 'src/providers/constants';
+import { MonthName, Toast, WarningToast } from 'src/providers/common-service/common.service';
+import { AdminDeclaration, SalaryAdjustment, SalaryComponentItems } from 'src/providers/constants';
 import { iNavigation } from 'src/providers/iNavigation';
 import { Filter } from 'src/providers/userService';
 declare var $: any;
@@ -38,6 +38,9 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   isEmployeeSelected: boolean = false;
   autoCompleteModal: autoCompleteModal = null;
   employeeId: number = null;
+  employerDeductionComp: number = 0;
+  employeeEarningComp: number = 0;
+  employeeDeductionComp: number = 0;
 
   constructor(private http: CoreHttpService,
               private filterHttp: EmployeeFilterHttpService,
@@ -61,7 +64,6 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
       placeholder: "Select Employee",
       className: "normal"
     };
-    this.LoadData();
   }
 
   ngAfterViewChecked(): void {
@@ -81,6 +83,16 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
         if (response.ResponseBody) {
           this.employeeDetail = response.ResponseBody.SalaryDetail;
           this.companySetting = response.ResponseBody.CompanySetting[0];
+          let activeSalaryComponents = response.ResponseBody.SalaryComponents;
+          this.salaryComponents = [];
+          let employerDeduction = activeSalaryComponents.filter(x => x.ComponentId == SalaryComponentItems.EEPF || x.ComponentId == SalaryComponentItems.EESI);
+          let employeeearning = activeSalaryComponents.filter(x => x.ComponentId != SalaryComponentItems.EEPF && x.ComponentId != SalaryComponentItems.EPF && x.ComponentId != SalaryComponentItems.EESI
+            && x.ComponentId != SalaryComponentItems.ESI && x.ComponentId != SalaryComponentItems.PTAX);
+          let employeeDeduction = activeSalaryComponents.filter(x => x.ComponentId == SalaryComponentItems.EPF || x.ComponentId == SalaryComponentItems.ESI  || x.ComponentId == SalaryComponentItems.PTAX);
+          this.salaryComponents = [...employeeearning, ...employeeDeduction, ...employerDeduction];
+          this.employerDeductionComp = employerDeduction.length;
+          this.employeeEarningComp = employeeearning.length;
+          this.employeeDeductionComp = employeeDeduction.length;
           if (this.employeeDetail.length > 0) {
             this.employeeData.TotalRecords = this.employeeDetail[0].Total;
             this.isEmpPageReady = true;
@@ -121,7 +133,6 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
   bindData() {
     let currentMonth = new Date().getMonth() + 1;
     this.employeeSalaries = [];
-    this.getSalaryComponents();
     this.employeeDetail.forEach(x => {
       let data = JSON.parse(x.CompleteSalaryDetail)
       let prsentMonth = data.find(x => x.MonthNumber == currentMonth);
@@ -214,7 +225,6 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     if (item) {
       this.selectedPayrollCalendar = item;
       this.employeeSalaries = [];
-      this.getSalaryComponents();
       this.employeeDetail.forEach(x => {
         let data = JSON.parse(x.CompleteSalaryDetail)
         let prsentMonth = data.find(x => x.MonthNumber == item.Month + 1);
@@ -291,11 +301,11 @@ export class EmployeeDeclarationlistComponent implements OnInit, AfterViewChecke
     };
   }
 
-  getSalaryComponents() {
-    this.salaryComponents = [];
-    let data = JSON.parse(this.employeeDetail[0].CompleteSalaryDetail);
-    this.salaryComponents = data[0].SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC").map(x => {return {ComponentId:x.ComponentId, ComponentName:x.ComponentName};})
-  }
+  // getSalaryComponents() {
+  //   this.salaryComponents = [];
+  //   let data = JSON.parse(this.employeeDetail[0].CompleteSalaryDetail);
+  //   this.salaryComponents = data[0].SalaryBreakupDetails.filter(x => x.ComponentId != "Gross" && x.ComponentId != "CTC").map(x => {return {ComponentId:x.ComponentId, ComponentName:x.ComponentName};})
+  // }
 
   navToSalaryAdjustment(item: any) {
     if (item && item.IsPayrollExecutedForThisMonth) {
