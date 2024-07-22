@@ -71,7 +71,6 @@ export class LoginComponent implements OnInit {
   }
 
   UserLogin() {
-    this.isLoading = true;
     if (this.UserForm) {
       this.isLoading = true;
       this.loginValue = {
@@ -125,15 +124,15 @@ export class LoginComponent implements OnInit {
           if (result.ResponseBody) {
             let Data = result.ResponseBody;
             this.jwtService.setLoginDetail(Data);
-            
+
             if(!Data.SetupStatus) {
               this.nav.navigate(InitialSetup, null);
             } else {
               Toast("Please wait loading dashboard ...", 15);
               if(Data.UserTypeId == 1)
-                this.nav.navigate(Dashboard, null);
+                this.nav.navigateRoot(Dashboard, null);
               else
-                this.nav.navigate(UserDashboard, null);
+                this.nav.navigateRoot(UserDashboard, null);
             }
           } else {
             ErrorToast("Incorrect username or password. Please try again.");
@@ -142,8 +141,6 @@ export class LoginComponent implements OnInit {
           this.isLoading = false;
         });
       }
-    } else {
-      this.isLoading = false;
     }
   }
 

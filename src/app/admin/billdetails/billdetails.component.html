@@ -306,7 +306,12 @@
             <div class="t-body">
               <div class="tr py-2">
                 <div class="th fe-2 justify-content-start align-items-start">
-                  <button class="btn btn-success btn-sm ms-2" (click)="calculation()">&#8377; &nbsp; Amount</button>
+                  <button-submit
+                    text="Amount"
+                    className="bt-success ms-2"
+                    icon="fa-solid fa-user-plus"
+                    (onClick)="calculation()">
+                  </button-submit>
                 </div>
                 <div class="th fe-small"></div>
                 <div class="th fe-1 justify-content-center align-items-start">
@@ -418,11 +423,12 @@
       </div>
       <div class="modal-footer border-top-0">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary-c" [disabled]="isLoading" (click)="submitGSTStatusDetail()">
-          <i class="pe-2"
-            [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}"></i>
-          {{ isLoading ? 'Processing' : 'Submit' }}
-        </button>
+        <button-submit
+          text="Submit"
+          className="bt-primary ms-2"
+          icon="fa-regular fa-floppy-disk"
+          (onClick)="submitGSTStatusDetail()">
+        </button-submit>
       </div>
     </div>
   </div>

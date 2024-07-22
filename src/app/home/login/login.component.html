@@ -116,10 +116,10 @@
                             <i class="fa-solid"  [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-right-to-bracket': !isLoading}"></i>
                             {{ isLoading ? 'Signing' : 'Sign In' }}</button>
                            -->
-                          <button-submit 
-                            text="Sign In" 
-                            className="bt-success"
-                            icon="fa-solid fa-arrow-right-to-bracket" 
+                          <button-submit
+                            text="Sign In"
+                            className="bt-dark"
+                            icon="fa-solid fa-arrow-right-to-bracket"
                             (onClick)="UserLogin()">
                           </button-submit>
                         </div>
