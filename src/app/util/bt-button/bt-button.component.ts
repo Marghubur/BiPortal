@@ -12,7 +12,7 @@ export class BtButtonComponent {
 
   @Input() text: string = ""
   @Input() buttonType: number = 0;
-  @Input() redirect: string = "#";
+  @Input() redirect: string = "";
   @Input() icon: string = "";
 
   @Input() set className(value: string) {
