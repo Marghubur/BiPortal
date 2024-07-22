@@ -633,10 +633,10 @@ export class ConfigPayrollComponent implements OnInit {
 
     switch (requestState) {
       case 'Approved':
-        endPoint = `LeaveRequest/ApproveAppliedLeave`;
+        endPoint = `LeaveRequest/ConfigPayrollApproveAppliedLeave`;
         break;
       case 'Rejected':
-        endPoint = `LeaveRequest/CancelAppliedLeave`;
+        endPoint = `LeaveRequest/ConfigPayrollCancelAppliedLeave`;
         break;
     }
 

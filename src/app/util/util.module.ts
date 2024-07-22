@@ -17,7 +17,9 @@ import { ImageLoaderComponent } from './image-loader/image-loader.component';
 import { PagePlaceholderComponent } from './page-placeholder/page-placeholder.component';
 import { CardWidgetComponent } from '../util/card-widget/card-widget.component';
 import { BtButtonComponent } from '../util/bt-button/bt-button.component';
-import { BtChipComponent } from '../util/bt-chip/bt-chip.component'
+import { BtChipComponent } from '../util/bt-chip/bt-chip.component';
+import { ButtonSubmitComponent } from './button-submit/button-submit.component';
+import { ButtonCancelComponent } from './button-cancel/button-cancel.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { BtChipComponent } from '../util/bt-chip/bt-chip.component'
     PagePlaceholderComponent,
     CardWidgetComponent,
     BtButtonComponent,
-    BtChipComponent
+    BtChipComponent,
+    ButtonSubmitComponent,
+    ButtonCancelComponent
   ],
   imports: [
     CommonModule,
@@ -58,7 +62,9 @@ import { BtChipComponent } from '../util/bt-chip/bt-chip.component'
     PagePlaceholderComponent,
     CardWidgetComponent,
     BtButtonComponent,
-    BtChipComponent
+    ButtonSubmitComponent,
+    BtChipComponent,
+    ButtonCancelComponent
   ]
 })
 export class UtilModule {

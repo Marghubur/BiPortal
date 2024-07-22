@@ -111,10 +111,17 @@
                           <a href="javascript:void(0)" (click)="forgotPasswordModal()" class="ml-auto mb-0 text-sm">Forgot Password?</a>
                         </div>
                         <div class="mb-3">
-                          <button type="button" (click)="UserLogin()" [disabled]="isLoading"
+                          <!-- <button type="button" (click)="UserLogin()" [disabled]="isLoading"
                             class="btn btn-primary-dark text-center">
                             <i class="fa-solid"  [ngClass]="{'fa-spinner fa-spin': isLoading, 'fa-arrow-right-to-bracket': !isLoading}"></i>
                             {{ isLoading ? 'Signing' : 'Sign In' }}</button>
+                           -->
+                          <button-submit 
+                            text="Sign In" 
+                            className="bt-success"
+                            icon="fa-solid fa-arrow-right-to-bracket" 
+                            (onClick)="UserLogin()">
+                          </button-submit>
                         </div>
                       </div>
                       <div class="position-relative border-top d-flex justify-content-center divider-box">

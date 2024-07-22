@@ -15,8 +15,8 @@ export class SalaryDeclarationHttpService {
     if (environment.production) {
       return `${environment.baseDotNetUrl}api/${SERVICE.SALARYDECLARATION}/${Url}`;
     } else {
-      //return `https://www.emstum.com/bot/dn/api/${SERVICE.SALARYDECLARATION}/${Url}`;
-      return `${environment.baseDotNetUrl}api/${SERVICE.SALARYDECLARATION}/${Url}`;
+      return `https://www.emstum.com/bot/dn/api/${SERVICE.SALARYDECLARATION}/${Url}`;
+      // return `${environment.baseDotNetUrl}api/${SERVICE.SALARYDECLARATION}/${Url}`;
     }
   }
 
