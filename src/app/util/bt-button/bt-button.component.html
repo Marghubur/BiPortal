@@ -3,6 +3,8 @@
         <ng-container *ngIf="icon != ''">
             <i class="{{icon}} pe-1"></i>
         </ng-container>
+        <i [ngClass]="{'fa-solid fa-spinner fa-spin': isLoading, 'fa-regular fa-floppy-disk': !isLoading}">
+        </i>
         {{text}}
     </button>
 </ng-container>

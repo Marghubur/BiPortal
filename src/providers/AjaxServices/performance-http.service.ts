@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PerformanceHttpService  extends AjaxService {
   constructor(tokenHelper: JwtService, http: HttpClient) {
-    super(tokenHelper, http, `https://www.emstum.com/bot/sb/api/${SERVICE.PERFORMANCE}/`);
+    super(tokenHelper, http, SERVICE.PERFORMANCE);
  }
 
   private GetUrl(Url: string) {

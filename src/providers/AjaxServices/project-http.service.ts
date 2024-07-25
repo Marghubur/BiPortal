@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProjectHttpService extends AjaxService {
   constructor(tokenHelper: JwtService, http: HttpClient) {
-    super(tokenHelper, http, `https://www.emstum.com/bot/sb/api/${SERVICE.PROJECT}/`);
+    super(tokenHelper, http, SERVICE.PROJECT);
  }
 
   private GetUrl(Url: string) {

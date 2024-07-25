@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class EmployeeFilterHttpService extends AjaxService {
   constructor(tokenHelper: JwtService, http: HttpClient) {
-    super(tokenHelper, http, `https://www.emstum.com/bot/sb/api/${SERVICE.FILTER}/`);
+    super(tokenHelper, http, SERVICE.FILTER);
  }
 
   private GetUrl(Url: string) {

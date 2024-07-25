@@ -11,17 +11,17 @@ import { HttpClient } from '@angular/common/http';
 export class AuthHttpService extends AjaxService {
 
     constructor(tokenHelper: JwtService, http: HttpClient) {
-        super(tokenHelper, http, `https://www.emstum.com/bot/dn/api/${SERVICE.AUTH}/`);
+        super(tokenHelper, http, SERVICE.AUTH);
      }
 
-    private GetUrl(Url: string = "") {
-        if (environment.production) {
-            return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
-        } else {
-            return `https://www.emstum.com/bot/dn/api/${SERVICE.AUTH}/${Url}`;
-            //return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
-        }
-    }
+    // private GetUrl(Url: string = "") {
+    //     if (environment.production) {
+    //         return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
+    //     } else {
+    //         return `https://www.emstum.com/bot/dn/api/${SERVICE.AUTH}/${Url}`;
+    //         //return `${environment.baseDotNetUrl}api/${SERVICE.AUTH}/${Url}`;
+    //     }
+    // }
 
     // async login(Url: string, Param: any): Promise<ResponseModel> {
     //     return this.http.login(this.GetUrl(Url), Param);

@@ -14,6 +14,7 @@ export class BtButtonComponent {
   @Input() buttonType: number = 0;
   @Input() redirect: string = "";
   @Input() icon: string = "";
+  @Input() isLoading: boolean = true;
 
   @Input() set className(value: string) {
     this._className = ` btn rounded-pill

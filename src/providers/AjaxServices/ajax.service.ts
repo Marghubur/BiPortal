@@ -12,10 +12,10 @@ import { map, Observable } from 'rxjs';
 @Injectable()
 export class AjaxService {
   IsTokenByPass: boolean = true;
-  private baseUrl: string = "";
+  private serviceName: string = "";
 
-  constructor(protected tokenHelper: JwtService, protected http: HttpClient, protected BaseUrl: string) {
-    this.baseUrl = BaseUrl;
+  constructor(protected tokenHelper: JwtService, protected http: HttpClient, protected ServiceName: string) {
+    this.serviceName = ServiceName;
     if (environment.production) {
       console.log(`[Bottomhalf]: BiPortal Running on ${environment.env}`);
     } else {
@@ -34,7 +34,7 @@ export class AjaxService {
     this.tokenHelper.setCompanyCode(Param.CompanyCode);
     return new Promise((resolve, reject) => {
       this.http
-        .post(`${this.baseUrl}/${Url}`, Param, {
+        .post(this.getServiceUrl(Url), Param, {
           observe: 'response',
         })
         .subscribe({
@@ -66,7 +66,7 @@ export class AjaxService {
   async get(Url: string): Promise<ResponseModel> {
     return new Promise((resolve, reject) => {
       return this.http
-        .get(`${this.baseUrl}/${Url}`, {
+        .get(this.getServiceUrl(Url), {
           observe: 'response',
         })
         .subscribe({
@@ -88,7 +88,7 @@ export class AjaxService {
   async post(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .post(`${this.baseUrl}/${Url}`, Param, {
+        .post(this.getServiceUrl(Url), Param, {
           observe: 'response',
         })
         .subscribe({
@@ -113,7 +113,7 @@ export class AjaxService {
   async put(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .put(`${this.baseUrl}/${Url}`, Param, {
+        .put(this.getServiceUrl(Url), Param, {
           observe: 'response',
         })
         .subscribe({
@@ -142,7 +142,7 @@ export class AjaxService {
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .delete(Url, {
+        .delete(this.getServiceUrl(Url), {
           headers: {
             observe: 'response',
           },
@@ -174,7 +174,7 @@ export class AjaxService {
   ): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .post(Url, Param, {
+        .post(this.getServiceUrl(Url), Param, {
           observe: 'response',
         })
         .subscribe({
@@ -204,7 +204,7 @@ export class AjaxService {
   async postService(Url: string, Param: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http
-        .post(Url, Param, {
+        .post(this.getServiceUrl(Url), Param, {
           observe: 'response',
         })
         .subscribe({
@@ -218,6 +218,43 @@ export class AjaxService {
     });
   }
 
+  getServiceUrl(Url: string): string {
+    let coreUrlPath = `https://www.emstum.com/bot/dn/api`;
+    let localCoreUrlPath = `${environment.baseDotNetUrl}api`;
+
+    let bootUrlPath = `https://www.emstum.com/bot/sb/api`;
+    let localBootUrlPath = `${environment.baseSpringUrl}api`;
+
+    switch(this.serviceName) {
+      // Dotnet microservice
+      case SERVICE.CORE:
+        return `${coreUrlPath}/${SERVICE.CORE}/${Url}`;
+        // return `${localCoreUrlPath}/${SERVICE.CORE}/${Url}`;
+      case SERVICE.AUTH:
+        return `${coreUrlPath}/${SERVICE.AUTH}/${Url}`;
+        // return `${localCoreUrlPath}/${SERVICE.AUTH}/${Url}`;
+      case SERVICE.SALARYDECLARATION:
+          return `${coreUrlPath}/${SERVICE.SALARYDECLARATION}/${Url}`;
+          // return `${localCoreUrlPath}/${SERVICE.SALARYDECLARATION}/${Url}`;
+
+      // Spring boot microservice
+      case SERVICE.FILTER:
+        return `${bootUrlPath}/${SERVICE.FILTER}/${Url}`;
+        // return `${localBootUrlPath}/${SERVICE.FILTER}/${Url}`;
+      case SERVICE.JOBS:
+        return `${bootUrlPath}/${SERVICE.JOBS}/${Url}`;
+        // return `${localBootUrlPath}/${SERVICE.JOBS}/${Url}`;
+      case SERVICE.PERFORMANCE:
+        return `${bootUrlPath}/${SERVICE.PERFORMANCE}/${Url}`;
+        // return `${localBootUrlPath}/${SERVICE.PERFORMANCE}/${Url}`;
+      case SERVICE.PROJECT:
+        return `${bootUrlPath}/${SERVICE.PROJECT}/${Url}`;
+        // return `${localBootUrlPath}/${SERVICE.PROJECT}/${Url}`;
+      default:
+        throw "Not found";
+    }
+  }
+ 
   downloadExcel(Url: string, data: any): Observable<Blob> {
     return this.http.post(Url, data, { responseType: 'blob' }).pipe(
       map((res: Blob) => {
