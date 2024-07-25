@@ -107,21 +107,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "odbui:build"
+            "buildTarget": "odbui:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "odbui:build:production"
+              "buildTarget": "odbui:build:production"
             },
             "staging": {
-              "browserTarget": "odbui:build:staging"
+              "buildTarget": "odbui:build:staging"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "odbui:build"
+            "buildTarget": "odbui:build"
           }
         },
         "test": {
