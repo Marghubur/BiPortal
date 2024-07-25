@@ -1,4 +1,4 @@
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { iNavigation } from 'src/providers/iNavigation';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,36 +16,30 @@ import { RegisterNewOrgComponent } from './register-new-org/register-new-org.com
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AjaxService } from 'src/providers/AjaxServices/ajax.service';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    ToastComponent,
-    RegisterNewOrgComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    RouterModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HomeModule
-  ],
-  providers: [
-    AjaxService,
-    iNavigation,
-    JwtService,
-    ApplicationStorage,
-    UserService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AppHttpIntercepter,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        ToastComponent,
+        RegisterNewOrgComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        RouterModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HomeModule], providers: [
+        AjaxService,
+        iNavigation,
+        JwtService,
+        ApplicationStorage,
+        UserService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AppHttpIntercepter,
+            multi: true
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {
   constructor(){
     console.log("App module loaded");

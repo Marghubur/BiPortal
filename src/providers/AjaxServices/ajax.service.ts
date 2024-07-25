@@ -1,8 +1,4 @@
-import {
-  HttpClient,
-  HttpResponse,
-  HttpErrorResponse,
-} from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtService, ResponseModel } from 'src/auth/jwtService';
 import { environment } from 'src/environments/environment';
